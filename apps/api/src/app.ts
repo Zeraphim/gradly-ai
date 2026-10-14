@@ -10,10 +10,18 @@ import {
   type Provider,
 } from "./feedback.js";
 export function createApp(
-  options: { provider?: Provider; preview?: boolean; webRoot?: string } = {},
+  options: {
+    provider?: Provider;
+    preview?: boolean;
+    webRoot?: string;
+    serveStatic?: boolean;
+    trustProxy?: number;
+  } = {},
 ) {
   const app = express();
   app.disable("x-powered-by");
+  if (options.trustProxy !== undefined)
+    app.set("trust proxy", options.trustProxy);
   app.use(
     helmet({
       contentSecurityPolicy: {
@@ -43,16 +51,14 @@ export function createApp(
       standardHeaders: "draft-7",
       legacyHeaders: false,
       handler: (_req, res) =>
-        res
-          .status(429)
-          .json({
-            error: {
-              code: "rate_limit",
-              message:
-                "You have reached the feedback limit. Your answer is saved. Try again in 15 minutes.",
-              retryable: true,
-            },
-          }),
+        res.status(429).json({
+          error: {
+            code: "rate_limit",
+            message:
+              "You have reached the feedback limit. Your answer is saved. Try again in 15 minutes.",
+            retryable: true,
+          },
+        }),
     }),
     async (req, res, next) => {
       try {
@@ -64,18 +70,16 @@ export function createApp(
     },
   );
   app.use("/api", (_req, res) =>
-    res
-      .status(404)
-      .json({
-        error: {
-          code: "not_found",
-          message: "This lesson route does not exist.",
-          retryable: false,
-        },
-      }),
+    res.status(404).json({
+      error: {
+        code: "not_found",
+        message: "This lesson route does not exist.",
+        retryable: false,
+      },
+    }),
   );
   const webRoot = options.webRoot ?? resolve(process.cwd(), "apps/web/dist");
-  if (existsSync(webRoot)) {
+  if (options.serveStatic !== false && existsSync(webRoot)) {
     app.use(express.static(webRoot));
     app.get("/{*path}", (_req, res) =>
       res.sendFile(resolve(webRoot, "index.html")),
@@ -89,15 +93,13 @@ export function createApp(
       _next: express.NextFunction,
     ) => {
       if (error instanceof ServiceError) {
-        res
-          .status(error.status)
-          .json({
-            error: {
-              code: error.code,
-              message: error.message,
-              retryable: error.retryable,
-            },
-          });
+        res.status(error.status).json({
+          error: {
+            code: error.code,
+            message: error.message,
+            retryable: error.retryable,
+          },
+        });
         return;
       }
       const bodyError = error as { type?: string };
@@ -105,27 +107,23 @@ export function createApp(
         bodyError?.type === "entity.too.large" ||
         bodyError?.type === "entity.parse.failed"
       ) {
-        res
-          .status(400)
-          .json({
-            error: {
-              code: "invalid_request",
-              message: "The request is too large or contains invalid data.",
-              retryable: false,
-            },
-          });
-        return;
-      }
-      res
-        .status(500)
-        .json({
+        res.status(400).json({
           error: {
-            code: "service_error",
-            message:
-              "Feedback could not complete. Your answer is saved. Try again.",
-            retryable: true,
+            code: "invalid_request",
+            message: "The request is too large or contains invalid data.",
+            retryable: false,
           },
         });
+        return;
+      }
+      res.status(500).json({
+        error: {
+          code: "service_error",
+          message:
+            "Feedback could not complete. Your answer is saved. Try again.",
+          retryable: true,
+        },
+      });
     },
   );
   return app;

@@ -11,5 +11,11 @@
     "noUncheckedIndexedAccess": true,
     "jsx": "react-jsx"
   },
-  "include": ["apps/api/src", "packages/*/src", "tests", "scripts/*.ts"]
+  "include": [
+    "apps/api/src",
+    "packages/*/src",
+    "tests",
+    "scripts/*.ts",
+    "server.ts"
+  ]
 }

@@ -8,7 +8,7 @@
   ],
   "type": "module",
   "engines": {
-    "node": ">=22.18.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit && npm run typecheck --workspace @paperquest/web",
     "test": "node --import tsx --test tests/*.test.ts",
     "check": "npm run typecheck && npm test && npm run build",
-    "test:live": "node --env-file-if-exists=.env --import tsx scripts/verify-live.ts"
+    "test:live": "node --env-file-if-exists=.env --import tsx scripts/verify-live.ts",
+    "build:vercel": "npm run build --workspace @paperquest/web && node scripts/prepare-vercel.mjs"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.3",
@@ -28,5 +29,8 @@
     "prettier": "3.9.10",
     "tsx": "4.23.15",
     "typescript": "7.0.2"
+  },
+  "dependencies": {
+    "express": "5.3.0"
   }
 }

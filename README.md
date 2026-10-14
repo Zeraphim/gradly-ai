@@ -11,7 +11,7 @@ A research-reading MVP based on the supplied PaperQuest designs. Choose a curate
 
 ## Run
 
-Requires Node.js **22.18 or newer** and npm.
+Requires Node.js **22.18 or newer within version 22** and npm.
 
 ```sh
 npm ci
@@ -53,7 +53,7 @@ npm run build
 npm start
 ```
 
-The production server serves the built interface and routes together at **http://127.0.0.1:3001**. Set `HOST=0.0.0.0` and the host-provided `PORT` when deploying. Keep `.env` and credentials out of the browser and source control. This repository does not include a hosted deployment.
+The production server serves the built interface and routes together at **http://127.0.0.1:3001**. Set `HOST=0.0.0.0` and the host-provided `PORT` when deploying. Keep `.env` and credentials out of the browser and source control. Vercel hosting uses the root `server.ts` adapter and `vercel.json`. The existing local server remains available with `npm start`.
 
 An opt-in live check makes up to seven billed model requests plus one curated missing-evidence response, with no automatic retries:
 
@@ -73,8 +73,21 @@ Start with the sample card or the paper’s digital object identifier `10.1177/0
 
 Answers and progress use versioned browser-local storage. Uploaded files are not stored. Downloadable notes include your explanations. Live mode sends explanations to Nebius for assessment. The application keeps a bounded, in-memory request cache for 15 minutes and does not persist learner answers on the server. Local progress is for a pilot, not tamper-resistant assessment.
 
-Repeated identical attempts share a request and cached result within one server process. Edited text must use a new attempt identifier. Failures preserve the answer, award no progress, and remain retryable where appropriate. Limits are 2,000 explanation characters, two concurrent model calls, 20 feedback submissions per client per 15 minutes, and 120 model calls per process per hour. Cache, concurrency, and budget limits reset on restart and are not shared across replicas. Run a single server process for this pilot.
+Repeated identical attempts share a request and cached result within one server process. Edited text must use a new attempt identifier. Failures preserve the answer, award no progress, and remain retryable where appropriate. Limits are 2,000 explanation characters, two concurrent model calls, 20 feedback submissions per client per 15 minutes, and 120 model calls per process per hour. Cache, concurrency, and budget limits reset on restart and are not shared across replicas. Vercel can run multiple function instances. These in-memory limits and duplicate-request protection apply separately to each instance, not across the whole deployment.
 
 Motion includes button compression, quest entrances, evidence reveals, progress updates, a dialog transition, and a once-only completion celebration. Movement uses transforms and opacity. Reduced-motion preferences disable motion. Typography is self-hosted Plus Jakarta Sans.
 
 Application code is licensed under MIT. Third-party fonts, packages, and the referenced paper retain their own licenses.
+
+## Deploy to Vercel
+
+Deploy this repository root as one Express project. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function has a 60-second execution limit, longer than the bounded model request.
+
+Configure `NEBIUS_API_KEY` as a sensitive production environment variable and `PREVIEW_MODE=false` for live reasoning feedback. Credentials stay on the server. Preview deployments can explicitly use `PREVIEW_MODE=true` without a model credential. The adapter trusts Vercel's immediate proxy so per-client request limits use the forwarded client address.
+
+```sh
+npx vercel link --yes --project nebius-hackathon-submission --scope <your-workspace>
+npx vercel deploy --prod
+```
+
+The local `.vercel/` link, pulled environment files, and generated assets are ignored by source control.

@@ -202,3 +202,32 @@ test("same-origin request flow returns safe errors, source evidence, and securit
     );
   }
 });
+
+test("hosted adapter leaves static files to Vercel and separates client limits behind its proxy", async () => {
+  const app = createApp({ preview: true, serveStatic: false, trustProxy: 1 });
+  const server = app.listen(0, "127.0.0.1");
+  await new Promise<void>((resolve) => server.once("listening", resolve));
+  const address = server.address();
+  assert.ok(address && typeof address !== "string");
+  const base = `http://127.0.0.1:${address.port}`;
+  const post = (client: string) =>
+    fetch(base + "/api/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Forwarded-For": client,
+      },
+      body: JSON.stringify(request()),
+    });
+  try {
+    assert.equal((await fetch(base + "/")).status, 404);
+    for (let index = 0; index < 20; index++)
+      assert.equal((await post("203.0.113.1")).status, 200);
+    assert.equal((await post("203.0.113.1")).status, 429);
+    assert.equal((await post("203.0.113.2")).status, 200);
+  } finally {
+    await new Promise<void>((resolve, reject) =>
+      server.close((error) => (error ? reject(error) : resolve())),
+    );
+  }
+});

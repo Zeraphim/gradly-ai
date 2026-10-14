@@ -1,0 +1,9 @@
+node_modules
+.git
+.env
+.env.*
+.vercel
+apps/web/dist
+apps/api/dist
+public
+tests
