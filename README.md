@@ -7,6 +7,8 @@
 
 # PaperQuest
 
+[Live production demo](https://nebius-hackathon-submission.vercel.app)
+
 A research-reading MVP based on the supplied PaperQuest designs. Choose a curated study, justify a decision, get feedback, reveal the evidence, revise, and try two fictional transfer scenarios.
 
 ## Run
@@ -92,3 +94,5 @@ npx vercel deploy --prod
 ```
 
 Build before uploading with the command above so Vercel receives the generated static assets. The local `.vercel/` link, pulled environment files, and generated assets are ignored by source control.
+
+Production hosting verified October 14, 2026: the public page, lesson, and real reasoning feedback are accessible without sign-in. Seven hosted feedback cases covered all six quests and incorrect reasoning, followed by a separate anonymous production check. The hosting changes passed 16 automated checks. Automatic deployments from GitHub remain unconfigured because Vercel could not connect to this repository; allow repository access in the project’s Git integration settings to enable them.
