@@ -12,13 +12,15 @@
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
-    "build": "npm run build --workspace @paperquest/web && npm run build --workspace @paperquest/api",
+    "build": "npm run build --workspace @paperquest/contracts && npm run build --workspace @paperquest/web && npm run build --workspace @paperquest/api",
     "start": "node --env-file-if-exists=.env apps/api/dist/apps/api/src/index.js",
     "typecheck": "tsc --noEmit && npm run typecheck --workspace @paperquest/web",
     "test": "node --import tsx --test tests/*.test.ts",
     "check": "npm run typecheck && npm test && npm run build",
     "test:live": "node --env-file-if-exists=.env --import tsx scripts/verify-live.ts",
-    "build:vercel": "npm run build --workspace @paperquest/web && node scripts/prepare-vercel.mjs"
+    "build:vercel": "npm run build --workspace @paperquest/contracts && npm run build --workspace @paperquest/web && node scripts/prepare-vercel.mjs",
+    "predev": "npm run build --workspace @paperquest/contracts",
+    "pretest": "npm run build --workspace @paperquest/contracts"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.3",

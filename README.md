@@ -81,13 +81,14 @@ Application code is licensed under MIT. Third-party fonts, packages, and the ref
 
 ## Deploy to Vercel
 
-Deploy this repository root as one Express project. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function has a 60-second execution limit, longer than the bounded model request.
+Deploy this repository root as one Express project. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The shared contracts package is compiled to JavaScript before bundling so the hosted function imports a runtime file instead of TypeScript source. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function has a 60-second execution limit, longer than the bounded model request.
 
 Configure `NEBIUS_API_KEY` as a sensitive production environment variable and `PREVIEW_MODE=false` for live reasoning feedback. Credentials stay on the server. Preview deployments can explicitly use `PREVIEW_MODE=true` without a model credential. The adapter trusts Vercel's immediate proxy so per-client request limits use the forwarded client address.
 
 ```sh
 npx vercel link --yes --project nebius-hackathon-submission --scope <your-workspace>
+npm run build:vercel
 npx vercel deploy --prod
 ```
 
-The local `.vercel/` link, pulled environment files, and generated assets are ignored by source control.
+Build before uploading with the command above so Vercel receives the generated static assets. The local `.vercel/` link, pulled environment files, and generated assets are ignored by source control.
