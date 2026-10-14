@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Gradly</title>
+  <g stroke="#233553" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m24 55-2 6q5 1 7-6m14 0-1 6q5 1 7-7" fill="#233553"/>
+    <path d="M16 26q-3 0-3 5l2 23q1 5 6 5l32-5-1-5" fill="#087fac"/>
+    <path d="m16 42-8 8q-2 4 2 4l9-6m30-7 8 6q5 2 4 5l-10-2" fill="#12acd6"/>
+    <path d="m19 25 6-1q8-3 12 0l9-4q6-2 7 4l3 25q0 4-5 4l-30 4Z" fill="#13b2dc"/>
+    <path d="m20 26 3 28" fill="none" stroke="#087fac"/>
+    <path d="m22 52 28-4q3 0 4 3l-1 4-30 4q-5 0-5-3t4-4Z" fill="#fff"/>
+    <path d="m25 55 24-3" fill="none" stroke="#c6d4df" stroke-width="1.8"/>
+    <path d="m4 14 25-11 27 7-23 15Z" fill="#3c456c"/>
+    <path d="m10 14 19-8 20 5" fill="none" stroke="#62739c" stroke-width="2"/>
+    <path d="M21 17q10-7 20-3l3 8q-10-3-17 3l-6-2Z" fill="#30395f"/>
+    <path d="M10 15v13" fill="none"/>
+    <path d="m9 31-3 9 7-1-2-9" fill="#13b2dc"/>
+    <circle cx="10" cy="29" r="3" fill="#13b2dc"/>
+  </g>
+  <ellipse cx="30" cy="35" rx="4" ry="5" fill="#233553"/>
+  <ellipse cx="44" cy="33" rx="4" ry="5" fill="#233553"/>
+  <circle cx="31" cy="33" r="1.6" fill="#fff"/>
+  <circle cx="45" cy="31" r="1.6" fill="#fff"/>
+  <path d="M34 41q4 2 8-1-1 9-7 5Z" fill="#233553"/>
+  <path d="M36 45q2-2 4-1" stroke="#ff7373" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="m27 29 3-1m12-3 3 1" stroke="#233553" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="27" cy="41" rx="3" ry="1.6" fill="#78dcf0"/>
+  <ellipse cx="48" cy="39" rx="3" ry="1.6" fill="#78dcf0"/>
+</svg>
