@@ -3,7 +3,6 @@
   "framework": "express",
   "buildCommand": "npm run build:vercel",
   "installCommand": "npm ci",
-  "outputDirectory": "public",
   "functions": {
     "server.ts": {
       "maxDuration": 60
