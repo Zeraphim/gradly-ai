@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import type { FeedbackResponse, Lesson, Question } from "@paperquest/contracts";
 import { emptyQuestion, type Session } from "@paperquest/lesson-state";
-import { Owl } from "./Owl.js";
+import { Mascot, type MascotPose } from "./Mascot.js";
 import { Progress } from "./Progress.js";
 export function LessonView({
   lesson,
@@ -58,6 +58,19 @@ export function LessonView({
     const timer = setTimeout(() => setProlonged(true), 8000);
     return () => clearTimeout(timer);
   }, [pending]);
+  const pose: MascotPose = pending
+    ? "studying"
+    : error || response?.feedback.outcome === "needs_revision"
+      ? "caring"
+      : response?.feedback.outcome === "insufficient_evidence"
+        ? "thinking"
+        : response?.feedback.outcome === "correct"
+          ? "approving"
+          : hint
+            ? "teaching"
+            : question.transfer
+              ? "determined"
+              : "guiding";
   const valid = !!state.choice && !!state.explanation.trim();
   return (
     <main id="main" className="lesson-layout">
@@ -100,7 +113,7 @@ export function LessonView({
           })}
         </ol>
         <div className="sidebar-note">
-          <Owl size="small" />
+          <Mascot size="small" pose="reading" />
           <p>
             A good answer says <strong>why.</strong>
             <br />
@@ -123,7 +136,7 @@ export function LessonView({
         </div>
         <div className="quest-content page-enter" key={question.id}>
           <div className="guide-row compact">
-            <Owl size="small" />
+            <Mascot size="small" pose={pose} />
             <div className="speech">
               <p>
                 {question.transfer

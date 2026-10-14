@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import type { Lesson } from "@paperquest/contracts";
-import { Owl } from "./Owl.js";
+import { Mascot } from "./Mascot.js";
 import { Progress } from "./Progress.js";
 export function Prepare({
   lesson,
@@ -29,7 +29,7 @@ export function Prepare({
   return (
     <main id="main" className="prepare page-enter">
       <div className="guide-row">
-        <Owl />
+        <Mascot pose={error ? "caring" : lesson ? "teaching" : "thinking"} />
         <div className="speech">
           <p>
             {lesson

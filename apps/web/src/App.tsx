@@ -1,4 +1,5 @@
 import React from "react";
+import { BrandLogo } from "./components/BrandLogo.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BookOpen, Check, CircleHelp, Flag, Sparkles, X } from "lucide-react";
 import {
@@ -232,12 +233,9 @@ export function App() {
             onClick={() =>
               pending ? setDialog("pause") : changeScreen("welcome")
             }
-            aria-label="PaperQuest home"
+            aria-label="Gradly home"
           >
-            <span className="brand-icon">
-              <BookOpen size={24} />
-            </span>
-            <span>PaperQuest</span>
+            <BrandLogo />
           </button>
           <nav aria-label="Main navigation">
             <button
@@ -260,7 +258,7 @@ export function App() {
             </span>
             <button
               className="icon-button help-button"
-              aria-label="How PaperQuest works"
+              aria-label="How Gradly works"
               onClick={() => setDialog("help")}
             >
               <CircleHelp size={23} />
@@ -346,8 +344,9 @@ export function App() {
         )
       ) : null}
       <footer className="app-footer">
-        <span>
-          <strong>PaperQuest</strong> · Stay curious. Follow the evidence.
+        <span className="footer-brand">
+          <BrandLogo />
+          <span>Stay curious. Follow the evidence.</span>
         </span>
         <button className="text-button" onClick={() => setDialog("help")}>
           About this pilot <ArrowFooter />

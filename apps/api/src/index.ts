@@ -12,7 +12,7 @@ const app = createApp({
 });
 const server = app.listen(port, host, () =>
   console.log(
-    `PaperQuest server: http://${host}:${port} (${preview ? "explicit local preview" : key ? "Nebius feedback" : "feedback unconfigured"})`,
+    `Gradly server: http://${host}:${port} (${preview ? "explicit local preview" : key ? "Nebius feedback" : "feedback unconfigured"})`,
   ),
 );
 function shutdown() {

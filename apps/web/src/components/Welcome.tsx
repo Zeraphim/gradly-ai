@@ -10,7 +10,7 @@ import {
   Sparkles,
   Clock3,
 } from "lucide-react";
-import { Owl } from "./Owl.js";
+import { Mascot } from "./Mascot.js";
 import type { Session } from "@paperquest/lesson-state";
 const PAPER_DIGEST =
   "6df5c8f670f4cf8ac0044e0f26111f479a130ce62d5a7d31d763ea5beee7b178";
@@ -86,7 +86,7 @@ export function Welcome({
   return (
     <main id="main" className="welcome page-enter">
       <div className="welcome-intro">
-        <Owl />
+        <Mascot pose="approving" />
         <div className="speech">
           <span className="eyebrow">MEET YOUR RESEARCH GUIDE</span>
           <p>

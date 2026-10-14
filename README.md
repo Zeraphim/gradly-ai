@@ -5,11 +5,11 @@
 | PDF          | Portable Document Format          | The optional paper file checked locally in the browser. |
 | npm          | No established expansion          | The package manager used for the workspaces.            |
 
-# PaperQuest
+# Gradly
 
 [Live production demo](https://nebius-hackathon-submission.vercel.app)
 
-A research-reading MVP based on the supplied PaperQuest designs. Choose a curated study, justify a decision, get feedback, reveal the evidence, revise, and try two fictional transfer scenarios.
+A research-reading MVP based on the supplied study-adventure designs, with the Gradly logo and mascot. Choose a curated study, justify a decision, get feedback, reveal the evidence, revise, and try two fictional transfer scenarios.
 
 ## Run
 

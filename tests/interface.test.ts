@@ -69,6 +69,8 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
   const user = userEvent.setup({ document: dom.window.document });
   try {
     render(createElement(App));
+    assert.ok(screen.getByRole("button", { name: "Gradly home" }));
+    assert.ok(document.querySelector('[data-pose="approving"]'));
     await user.click(
       screen.getByRole("button", { name: /Can you text and still learn/ }),
     );
@@ -86,6 +88,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
         .hasAttribute("disabled"),
     );
     assert.equal(screen.queryByText("Evidence revealed"), null);
+    assert.ok(document.querySelector('[data-pose="guiding"]'));
     await user.click(
       screen.getByRole("radio", { name: /Paired measurements/ }),
     );
@@ -121,6 +124,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
       assert.ok(screen.getByText("Let’s make that reasoning stronger.")),
     );
     assert.ok(screen.getByText("Evidence revealed"));
+    assert.ok(document.querySelector('[data-pose="caring"]'));
     assert.equal(screen.queryByRole("button", { name: /^Continue$/ }), null);
     await user.click(screen.getByRole("radio", { name: /Separate groups/ }));
     fireEvent.change(
@@ -136,6 +140,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
     await waitFor(() =>
       assert.ok(screen.getByRole("button", { name: /^Continue$/ })),
     );
+    assert.ok(document.querySelector('[data-pose="approving"]'));
     await user.click(screen.getByRole("button", { name: /^Continue$/ }));
     cleanup();
     render(createElement(App));
@@ -194,6 +199,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
       screen.getByRole("heading", { name: "Curiosity, meet evidence." }),
     );
     assert.ok(screen.getByText("50 / 50"));
+    assert.ok(document.querySelector('[data-pose="celebrating"]'));
     assert.ok(screen.getByText(/These results do not measure learning/));
     assert.ok(failedOnce);
     const saved = JSON.parse(localStorage.getItem("paperquest.session.v1")!);

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import type { Lesson } from "@paperquest/contracts";
 import { points, type Session } from "@paperquest/lesson-state";
-import { Owl } from "./Owl.js";
+import { Mascot } from "./Mascot.js";
 export function Complete({
   lesson,
   session,
@@ -32,7 +32,7 @@ export function Complete({
   const scoringCount = lesson.questions.length - 1;
   function download() {
     const text = [
-      "PaperQuest · Adventure notes",
+      "Gradly · Adventure notes",
       lesson.title,
       lesson.authors,
       lesson.sourceUrl,
@@ -60,7 +60,7 @@ export function Complete({
     );
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "paperquest-adventure-notes.txt";
+    anchor.download = "gradly-adventure-notes.txt";
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     setNotice("Your adventure notes are ready to keep.");
@@ -73,7 +73,7 @@ export function Complete({
             <i key={i} style={{ "--i": i } as React.CSSProperties} />
           ))}
         </div>
-        <Owl size="large" celebrate />
+        <Mascot size="large" pose="celebrating" />
         <span className="badge green">
           <Check size={15} /> ADVENTURE COMPLETE
         </span>
