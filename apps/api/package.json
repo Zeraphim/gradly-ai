@@ -1,0 +1,19 @@
+{
+  "name": "@paperquest/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=../../.env src/index.ts",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "express": "5.3.0",
+    "helmet": "8.3.0",
+    "express-rate-limit": "8.7.1",
+    "@paperquest/contracts": "*"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6"
+  }
+}
