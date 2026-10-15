@@ -9,17 +9,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "lucide-react": "1.57.0",
     "@fontsource-variable/plus-jakarta-sans": "5.3.0",
     "@paperquest/contracts": "*",
-    "@paperquest/lesson-state": "*"
+    "@paperquest/lesson-state": "*",
+    "lucide-react": "1.57.0",
+    "motion": "^14.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
-    "vite": "8.3.4",
-    "@vitejs/plugin-react": "6.1.2",
     "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0"
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "vite": "8.3.4"
   }
 }

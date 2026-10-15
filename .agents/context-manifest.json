@@ -624,6 +624,120 @@
         "at": null,
         "by": null
       }
+    },
+    {
+      "id": "scene-authoring",
+      "kind": "runbook",
+      "title": "Reusable research scene contract and integration",
+      "path": "docs/SCENE_AUTHORING.md",
+      "status": "Documented",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/**",
+        "apps/api/src/research/**",
+        "packages/contracts/src/scenes.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "requirements"
+        },
+        {
+          "type": "related",
+          "target": "design"
+        }
+      ],
+      "implementationRefs": [
+        "packages/contracts/src/scenes.ts",
+        "apps/api/src/research/scene-authoring.ts",
+        "apps/api/src/research/engine.ts",
+        "apps/web/src/research/scenes"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "fresh-adventure-ui",
+      "kind": "ui",
+      "title": "Fresh Adventure visual scenes and verification limits",
+      "path": "docs/ui/FRESH_ADVENTURE.md",
+      "status": "Proposed",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/**",
+        "apps/api/src/research/**",
+        "packages/contracts/src/scenes.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "requirements"
+        },
+        {
+          "type": "related",
+          "target": "design"
+        }
+      ],
+      "implementationRefs": [
+        "apps/api/src/research/featured-scenes.ts",
+        "apps/web/src/research/scenes",
+        "tests/research/scenes-ui.test.ts",
+        "tests/research/scenes-workspace.test.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "fresh-adventure-motion",
+      "kind": "ui",
+      "title": "Fresh Adventure shared motion and interaction coverage",
+      "path": "docs/ui/FRESH_ADVENTURE_MOTION.md",
+      "status": "Proposed",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/scenes/**",
+        "apps/web/src/research/ResearchApp.tsx",
+        "tests/research/scene-motion.test.ts",
+        "tests/research/flow-connectors.test.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "fresh-adventure-ui"
+        },
+        {
+          "type": "related",
+          "target": "design"
+        },
+        {
+          "type": "related",
+          "target": "scene-authoring"
+        }
+      ],
+      "implementationRefs": [
+        "apps/web/src/research/scenes/scene-motion.tsx",
+        "apps/web/src/research/scenes/EvidenceCard.tsx",
+        "apps/web/src/research/scenes/FlowDiagram.tsx",
+        "apps/web/src/research/scenes/flow-connectors.ts",
+        "apps/web/src/research/scenes/SceneDisclosure.tsx",
+        "tests/research/scene-motion.test.ts",
+        "tests/research/flow-connectors.test.ts",
+        "tests/research/scenes-workspace.test.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
     }
   ]
 }

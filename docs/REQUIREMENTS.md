@@ -53,3 +53,12 @@ With explicit local preview flags, a checked upload must offer a working sample-
 ## Release conditions
 
 Local implementation/testing does not establish hosted persistence, new live generation quality or Vercel OCR execution. The user requested setup instructions because credentials are not configured. Test those paths after setting the documented variables. The PR's automatic Vercel preview is reported blocked, and the current CLI account cannot access that project's details. A release must resolve that external restriction before relying on preview evidence.
+
+## Fresh Adventure scene requirements
+
+Eight featured challenges and the bonus receive meaningful visual scenes. Scene
+renderers must be independent of paper content, and generated papers use the same
+validated contract. Preserve legacy lessons, server-side reveal gates, ownership,
+versioning, retries, drafts, reasoning revisions and once-per-solved-challenge
+points. Exploration does not establish correctness or learning benefit.
+See [scene authoring](SCENE_AUTHORING.md) and [local design evidence](ui/FRESH_ADVENTURE.md).

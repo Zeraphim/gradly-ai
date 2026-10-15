@@ -2,6 +2,17 @@
 
 Gradly keeps the existing React/Vite + Express TypeScript workspaces, shared contracts and Node 22 runtime. `server.ts` exports the Express application for Vercel; `scripts/prepare-vercel.mjs` copies Vite assets into generated `public/`. No Next.js runtime or second application server was added.
 
+## Optional research scenes
+
+`packages/contracts/src/scenes.ts` owns the shared versioned scene schema and
+projection. Research challenges carry optional scene content through the existing
+job storage and learning routes. The generation and review pipeline uses bounded
+scene authoring rules. `publicSession` removes gated content before serialization.
+`apps/web/src/research/scenes/` renders four generic families without paper-specific
+branches. Selections use existing option identifiers and scoring. Exploration uses
+optional tab-draft fields rather than a second progress store.
+See [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for a complete integration example.
+
 ## Current public experience
 
 `App.tsx` is a small hash router. Root and `#/research/lab` render the upload-first `LegacyApp` entry, which retains the real PDF/processing/learning service. Retired `#/research/lab/{caseId}` URLs also return to the upload home. Research workspace routes keep their original extraction, ownership, consent and saved-state boundaries.

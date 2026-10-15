@@ -5,6 +5,15 @@ requirements, runtime documentation, design evidence, and references. Use
 [../README.md](../README.md) for setup and [../AGENTS.md](../AGENTS.md) for agent routing.
 Unlinked code paths in these documents are relative to the repository root.
 
+## Research scene development
+
+[SCENE_AUTHORING.md](SCENE_AUTHORING.md) explains the reusable scene contract,
+generation instructions, public-response gates and backend setup.
+[Fresh Adventure evidence](ui/FRESH_ADVENTURE.md) maps all nine visual challenges
+to source components and names the verification limits.
+[The motion review](ui/FRESH_ADVENTURE_MOTION.md) inventories interaction coverage
+and records shared motion rules and the remaining browser review.
+
 ## Adopted documents
 
 The ten uppercase-named documents here were introduced by merged pull request 2

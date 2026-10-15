@@ -23,7 +23,7 @@ const draft = {
   paper: { ...featured.paper, url: null },
   challenges: featured.challenges
     .slice(0, 3)
-    .map((c) => ({ ...c, refs: ["source1"] })),
+    .map((c) => ({ ...c, scene: undefined, refs: ["source1"] })),
   bonus: null,
 };
 function provider(outputs: unknown[]): ModelProvider {

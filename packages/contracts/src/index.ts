@@ -1,3 +1,4 @@
+export * from "./scenes.js";
 export const LESSON_VERSION = "texting-study-v1";
 export const assessmentCodes = [
   "sound_reasoning",

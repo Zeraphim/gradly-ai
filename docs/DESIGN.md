@@ -12,6 +12,22 @@ controls retain 44px targets on narrow screens, including 320px widths.
 
 The header shows My documents, practice points and help. Research adventures display their server-derived points and retain the original challenge sequence. Ten points are awarded once per solved challenge per adventure, with no claim of mastery. Root and the previously shared lab index now lead to upload. The detailed paper-example flow described below remains available at its saved case URLs.
 
+## Fresh Adventure visual scenes
+
+Research challenges now support optional data-driven flow, connection, comparison
+and design-comparison scenes. The featured eight challenges and bonus use these
+shared renderers. Evidence inspection, reasoning pins and optional predictions are
+exploration; submitted selections use the existing assessment and progress system.
+The scene layer uses shared Motion layout, presence and gesture behavior for card
+expansion, selection, pins, reveals, feedback and saved review, extending the earlier
+no-additional-animation-dependency convention below. Input state remains immediate,
+server-forbidden content is removed immediately, and live reduced-motion preferences
+settle movement without resetting exploration. The canonical visual tokens remain
+in effect. [The motion review](ui/FRESH_ADVENTURE_MOTION.md) records the interaction
+inventory, shared timings and verification limits.
+See [the scene review](ui/FRESH_ADVENTURE.md) for the storyboard and verification
+limits, and [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for content and reveal contracts.
+
 ## Paper exploration
 
 **Start → Read → Choose → Try → Recap** replaces the free-form evidence board. Reading presents one short note at a time; full detail and source information remain available. Saving notes is optional. The duplicate claim dial, evidence filters, required pinning, repeated instructions and visible writing/confidence forms are removed from the main path. Feedback appears after an explicit answer check, and editing an answer invalidates that check.

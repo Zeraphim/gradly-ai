@@ -22,7 +22,12 @@ anywhere; it does not depend on a parent context repository or personal skill pa
 - `apps/api`: Express 5. `src/app.ts` composes the curated service and research
   router. `src/research/` owns document extraction, bounded English OCR, schemas,
   sequential generation/review stages, ownership, storage, and learning state.
-- `packages/contracts`: curated shared types and compiled runtime exports.
+- `packages/contracts`: curated shared types, versioned runtime-validated research
+  scene contracts, and compiled runtime exports. Research scenes use Zod and the
+  frontend uses the scoped Motion layer in `scene-motion.tsx` for scene layout,
+  gestures, presence and live reduced-motion handling. Motion is frontend policy,
+  not generated scene data. Read
+  `docs/SCENE_AUTHORING.md` for the data, generation and projection contract.
   `packages/lesson-state`: curated attempts, progress, and unique rewards.
   Keep the existing `@paperquest/*` package identifiers despite Gradly branding.
 - `server.ts`: hosted Express export. `vercel.json`: explicit static and server

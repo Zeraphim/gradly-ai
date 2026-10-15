@@ -1,4 +1,5 @@
 import { type Lesson, type LearningSession } from "./contracts.js";
+import { projectScene } from "@paperquest/contracts";
 /** Practice credit, once per solved challenge in this adventure. */
 export function learningPoints(session: LearningSession): number {
   return (
@@ -128,6 +129,14 @@ export function publicSession(s: LearningSession, l: Lesson) {
         options: c.options,
         hint: c.hint,
         evidence: c.evidence,
+        scene: projectScene(
+          c.scene,
+          showFeedback,
+          showFeedback && (!!last?.correct || a.length >= 2),
+          c.options.map((o) => o.id),
+          c.refs,
+        ),
+        firstSelection: a[0]?.selected ?? [],
         references: c.refs
           .map((id) => l.evidence.find((r) => r.id === id))
           .filter(Boolean)
@@ -155,10 +164,18 @@ export function publicSession(s: LearningSession, l: Lesson) {
     ? active.map((c) => ({
         id: c.id,
         title: c.title,
+        type: c.type,
         options: c.options,
         attempts: s.answers[c.id] ?? [],
         accepted: c.accepted,
         explanation: c.explanation,
+        scene: projectScene(
+          c.scene,
+          true,
+          true,
+          c.options.map((o) => o.id),
+          c.refs,
+        ),
       }))
     : null;
   const firstCorrect = active.filter(

@@ -142,3 +142,30 @@ it("keeps a changed motion preference when reads work but storage writes fail", 
   state.writeReducedMotion(true);
   expect(state.readReducedMotion()).toBe(true);
 });
+
+it("persists bounded scene exploration with the existing session/version/challenge binding", async () => {
+  const saved = {
+    ...draft(),
+    scene: {
+      inspectedId: "outcome",
+      prediction: "No-texting group higher",
+      pinnedIds: ["outcome", "groups"],
+      revealed: true,
+    },
+  };
+  state.writeDraft("scene-draft", saved);
+  vi.resetModules();
+  state = await import("../../apps/web/src/research/client-state.js");
+  expect(state.readDraft("scene-draft", 3, "q3")).toEqual(saved);
+  expect(state.readDraft("scene-draft", 4, "q3")).toBeNull();
+  expect(state.readDraft("scene-draft", 3, "q4")).toBeNull();
+  state.writeDraft("invalid-scene", {
+    ...draft(),
+    scene: {
+      inspectedId: null,
+      prediction: null,
+      pinnedIds: Array(13).fill("outcome"),
+    },
+  });
+  expect(state.readDraft("invalid-scene", 3, "q3")).toBeNull();
+});
