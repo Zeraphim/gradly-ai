@@ -1,0 +1,595 @@
+{
+  "$schema": "./context-manifest.schema.json",
+  "schemaVersion": 1,
+  "project": {
+    "name": "Gradly",
+    "root": "."
+  },
+  "authorityDomains": {
+    "product-intent": {
+      "description": "What the product should do",
+      "sources": [
+        "Explicit current task clarification",
+        "docs/REQUIREMENTS.md; distinguish documented requirements from approved proposals"
+      ]
+    },
+    "architecture": {
+      "description": "Why the system is shaped this way",
+      "sources": ["Accepted records under docs/adr/; none currently accepted"]
+    },
+    "visual-intent": {
+      "description": "Approved interface direction",
+      "sources": [
+        "Explicitly approved local design evidence; no approval event established for adopted documents"
+      ]
+    },
+    "runtime": {
+      "description": "What currently executes",
+      "sources": ["Current code", "Passing tests"]
+    },
+    "delivery-status": {
+      "description": "What work is active or complete",
+      "sources": [
+        "Explicit current task and verified change state; no active tracker nominated in this repository"
+      ]
+    },
+    "operating-procedure": {
+      "description": "How contributors and agents work",
+      "sources": ["AGENTS.md", "Project-local skills"]
+    }
+  },
+  "scopes": [
+    {
+      "path": ".",
+      "agents": "AGENTS.md",
+      "skills": [
+        "project-context",
+        "documentation-maintenance",
+        "vercel-delivery"
+      ]
+    },
+    {
+      "path": "apps/web",
+      "agents": "apps/web/AGENTS.md",
+      "skills": []
+    },
+    {
+      "path": "apps/api",
+      "agents": "apps/api/AGENTS.md",
+      "skills": []
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "root-instructions",
+      "kind": "instruction",
+      "title": "Repository agent instructions",
+      "path": "AGENTS.md",
+      "status": "Active",
+      "authorityDomains": ["operating-procedure"],
+      "owners": [],
+      "appliesTo": [
+        "AGENTS.md",
+        "apps/*/AGENTS.md",
+        ".agents/skills/*/SKILL.md"
+      ],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "project-context"
+        },
+        {
+          "type": "depends-on",
+          "target": "documentation-maintenance"
+        },
+        {
+          "type": "depends-on",
+          "target": "vercel-delivery"
+        },
+        {
+          "type": "depends-on",
+          "target": "documentation-guide"
+        },
+        {
+          "type": "depends-on",
+          "target": "web-instructions"
+        },
+        {
+          "type": "depends-on",
+          "target": "api-instructions"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "web-instructions",
+      "kind": "instruction",
+      "title": "Learner interface instructions",
+      "path": "apps/web/AGENTS.md",
+      "status": "Active",
+      "authorityDomains": ["operating-procedure"],
+      "owners": [],
+      "appliesTo": ["apps/web/**"],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "api-instructions",
+      "kind": "instruction",
+      "title": "Application server instructions",
+      "path": "apps/api/AGENTS.md",
+      "status": "Active",
+      "authorityDomains": ["operating-procedure"],
+      "owners": [],
+      "appliesTo": ["apps/api/**", "packages/contracts/**"],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "project-context",
+      "kind": "skill",
+      "title": "Stack, layout, commands, and configuration",
+      "path": ".agents/skills/project-context/SKILL.md",
+      "status": "Active",
+      "authorityDomains": ["runtime"],
+      "owners": [],
+      "appliesTo": [
+        "package.json",
+        "package-lock.json",
+        "apps/*/package.json",
+        "packages/*/package.json",
+        "tsconfig.json",
+        "scripts/dev.mjs",
+        "apps/web/src/App.tsx",
+        "apps/api/src/app.ts",
+        "apps/api/src/nebius-config.ts",
+        "vercel.json",
+        "server.ts"
+      ],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "vercel-delivery"
+        },
+        {
+          "type": "depends-on",
+          "target": "contributor-readme"
+        },
+        {
+          "type": "depends-on",
+          "target": "testing"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "documentation-maintenance",
+      "kind": "skill",
+      "title": "Documentation and context lifecycle",
+      "path": ".agents/skills/documentation-maintenance/SKILL.md",
+      "status": "Active",
+      "authorityDomains": ["operating-procedure"],
+      "owners": [],
+      "appliesTo": [
+        ".agents/context-manifest.json",
+        ".agents/context-manifest.schema.json",
+        ".agents/scripts/context-audit.mjs",
+        "docs/adr/**",
+        "docs/ui/**",
+        ".agents/skills/documentation-maintenance/**"
+      ],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "contributor-readme"
+        },
+        {
+          "type": "depends-on",
+          "target": "documentation-guide"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "vercel-delivery",
+      "kind": "skill",
+      "title": "Vercel packaging and delivery checks",
+      "path": ".agents/skills/vercel-delivery/SKILL.md",
+      "status": "Active",
+      "authorityDomains": ["operating-procedure"],
+      "owners": [],
+      "appliesTo": [
+        "vercel.json",
+        "server.ts",
+        ".vercelignore",
+        "package.json",
+        "package-lock.json",
+        "scripts/prepare-vercel.mjs",
+        "apps/api/src/research/ocr*",
+        "apps/api/src/research/pdf.ts"
+      ],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "contributor-readme"
+        },
+        {
+          "type": "depends-on",
+          "target": "testing"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "contributor-readme",
+      "kind": "runbook",
+      "title": "Setup and contributor entrypoint",
+      "path": "README.md",
+      "status": "Active",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "package.json",
+        "apps/*/package.json",
+        "scripts/dev.mjs",
+        "vercel.json",
+        "server.ts",
+        "docs/**"
+      ],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "documentation-guide"
+        },
+        {
+          "type": "depends-on",
+          "target": "testing"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "documentation-guide",
+      "kind": "runbook",
+      "title": "Documentation provenance and shared agent setup",
+      "path": "docs/README.md",
+      "status": "Active",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": ["docs/**", ".agents/**", "AGENTS.md", "apps/**/AGENTS.md"],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "architecture",
+      "kind": "runbook",
+      "title": "Current module and data-flow descriptions",
+      "path": "docs/ARCHITECTURE.md",
+      "status": "Descriptive",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/**",
+        "packages/**",
+        "server.ts",
+        "scripts/dev.mjs",
+        "vercel.json"
+      ],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "research-integration"
+        }
+      ],
+      "implementationRefs": [
+        "apps/web/src/App.tsx",
+        "apps/api/src/app.ts",
+        "apps/api/src/research/pipeline.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "requirements",
+      "kind": "requirement",
+      "title": "Product requirements and acceptance",
+      "path": "docs/REQUIREMENTS.md",
+      "status": "Documented",
+      "authorityDomains": ["product-intent"],
+      "owners": [],
+      "appliesTo": ["apps/**", "packages/**", "tests/**"],
+      "relationships": [],
+      "implementationRefs": [
+        "apps/web/src/App.tsx",
+        "apps/api/src/research/contracts.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "product-direction",
+      "kind": "plan",
+      "title": "Product direction and evaluation proposals",
+      "path": "docs/PRODUCT_DIRECTION.md",
+      "status": "Reference",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": ["apps/web/src/App.tsx", "apps/api/src/research/engine.ts"],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "requirements"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "design",
+      "kind": "ui",
+      "title": "Interface conventions and retained historical design sections",
+      "path": "docs/DESIGN.md",
+      "status": "Proposed",
+      "authorityDomains": ["visual-intent"],
+      "owners": [],
+      "appliesTo": ["apps/web/**"],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "requirements"
+        }
+      ],
+      "implementationRefs": [
+        "apps/web/src/styles.css",
+        "apps/web/src/research/styles.css"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "interaction-references",
+      "kind": "other",
+      "title": "Historical interaction research and design proposals",
+      "path": "docs/INTERACTION_REFERENCES.md",
+      "status": "Reference",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": ["apps/web/src/research/**"],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "reasoning-preview",
+      "kind": "requirement",
+      "title": "Authored showcase and proposed live-review contract",
+      "path": "docs/REASONING_PREVIEW.md",
+      "status": "Mixed current behavior and proposed contract",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/reasoning-preview*",
+        "apps/web/src/research/ReasoningPreview.tsx",
+        "apps/api/src/research/provider.ts",
+        "apps/api/src/research/contracts.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "requirements"
+        }
+      ],
+      "implementationRefs": ["apps/web/src/research/ReasoningPreview.tsx"],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "research-integration",
+      "kind": "runbook",
+      "title": "Research configuration, boundaries, and historical integration checks",
+      "path": "docs/RESEARCH_INTEGRATION.md",
+      "status": "Documented",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/api/**",
+        "apps/web/src/research/**",
+        "server.ts",
+        "vercel.json",
+        "package.json",
+        "scripts/dev.mjs"
+      ],
+      "relationships": [],
+      "implementationRefs": [
+        "apps/api/src/research/auth.ts",
+        "apps/api/src/research/store.ts",
+        "apps/api/src/research/demo.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "research-learning-design",
+      "kind": "other",
+      "title": "Learning research and future content proposals",
+      "path": "docs/RESEARCH_LEARNING_DESIGN.md",
+      "status": "Reference",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/**",
+        "apps/api/src/research/pipeline.ts"
+      ],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "testing",
+      "kind": "runbook",
+      "title": "Validation commands and retained historical test reports",
+      "path": "docs/TESTING.md",
+      "status": "Documented",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "tests/**",
+        "package.json",
+        "playwright.config.ts",
+        "vitest.config.ts",
+        "scripts/**"
+      ],
+      "relationships": [],
+      "implementationRefs": [
+        "tests",
+        "playwright.config.ts",
+        "vitest.config.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "ui-polish-review",
+      "kind": "validation",
+      "title": "Historical source and browser polish review",
+      "path": "docs/UI_POLISH_REVIEW.md",
+      "status": "Historical report",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": ["apps/web/**", "tests/browser/**"],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "adr-template",
+      "kind": "other",
+      "title": "Architecture decision template",
+      "path": "docs/adr/TEMPLATE.md",
+      "status": "Template",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "adr-0001",
+      "kind": "adr",
+      "title": "Proposed architecture decision record process",
+      "path": "docs/adr/ADR-0001-we-use-adrs.md",
+      "status": "Proposed",
+      "authorityDomains": ["architecture"],
+      "owners": [],
+      "appliesTo": ["docs/adr/**", ".agents/context-manifest.json"],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "documentation-maintenance"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "ui-template",
+      "kind": "other",
+      "title": "Local interface evidence template",
+      "path": "docs/ui/TEMPLATE.md",
+      "status": "Template",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [],
+      "relationships": [],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    }
+  ]
+}

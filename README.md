@@ -6,15 +6,23 @@ PDF validation, text extraction, review, saved processing and learning history w
 
 Research adventures award **10 practice points per solved challenge**, once per challenge in that adventure, including successful retries and an optional bonus. Refreshing, duplicate submissions and explanation edits cannot duplicate that reward. Points derive from saved answer records; they do not grade free-form writing or certify learning. The home balance includes these saved research-adventure points and the existing curated-session points.
 
-The separate paper-case prototype has been removed to keep one primary workflow. Its old links return to the upload home. See [PRODUCT_DIRECTION.md](PRODUCT_DIRECTION.md) for scope and [RESEARCH_LEARNING_DESIGN.md](RESEARCH_LEARNING_DESIGN.md) for the learning rationale and limits.
+The separate paper-case prototype has been removed to keep one primary workflow. Its old links return to the upload home. See [PRODUCT_DIRECTION.md](docs/PRODUCT_DIRECTION.md) for scope and [RESEARCH_LEARNING_DESIGN.md](docs/RESEARCH_LEARNING_DESIGN.md) for the learning rationale and limits.
 
 ## Learning workspaces
 
 The six-quest curated adventure remains at `/#/classic`, the eight-challenge/upload workspace at `/#/research/learn`, and the authored explanation showcase at `/#/research/reasoning`. Existing saved links keep working when their API is available. The root sample action uses the familiar curated journey. The [earlier curated production demo](https://nebius-hackathon-submission.vercel.app) predates this research integration.
 
-The research API retains PDF extraction/OCR, guest history and reviewed generation. Its prompts now adapt to a paper’s research approach without requiring statistical tests for qualitative or conceptual material. This orchestration is tested with synthetic fixtures; new live generation remains unverified. See [RESEARCH_INTEGRATION.md](RESEARCH_INTEGRATION.md) for configuration and [REASONING_PREVIEW.md](REASONING_PREVIEW.md) for future live-review guardrails.
+The research API retains PDF extraction/OCR, guest history and reviewed generation. Its prompts now adapt to a paper’s research approach without requiring statistical tests for qualitative or conceptual material. This orchestration is tested with synthetic fixtures; new live generation remains unverified. See [RESEARCH_INTEGRATION.md](docs/RESEARCH_INTEGRATION.md) for configuration and [REASONING_PREVIEW.md](docs/REASONING_PREVIEW.md) for future live-review guardrails.
 
-Design, module boundaries, acceptance and verification are in [DESIGN.md](DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [TESTING.md](TESTING.md).
+Design, module boundaries, acceptance and verification are in [DESIGN.md](docs/DESIGN.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [REQUIREMENTS.md](docs/REQUIREMENTS.md) and [TESTING.md](docs/TESTING.md).
+
+## Contributors and agents
+
+Open this repository root in Codex or Google Antigravity. Shared rules live in
+[AGENTS.md](AGENTS.md), reusable project skills in `.agents/skills/`, and the
+maintained documentation index in [docs/CONTEXT.md](docs/CONTEXT.md). No personal
+agent setup or private planning checkout is required. See [docs/README.md](docs/README.md)
+for documentation provenance and context-maintenance commands.
 
 ## Run
 
@@ -80,7 +88,7 @@ npm run test:live
 
 Verified October 14, 2026: type checking, production builds, and 15 automated checks passed. The simulated learner flow covers initial answer hiding, a failed request and retry, wrong-answer revision, saved-progress resumption, six completed quests, independent transfer answers, and dialog cancellation. All eight live cases produced the expected outcomes. Seven model-request durations ranged from 0.595 to 1.900 seconds in that run. This small check does not establish statistical teaching quality or a learning benefit.
 
-See [TESTING.md](TESTING.md) for the retained test suites and hosted/live acceptance requirements. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
+See [TESTING.md](docs/TESTING.md) for the retained test suites and hosted/live acceptance requirements. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
 
 ## Scope and data
 
@@ -98,7 +106,7 @@ Application code is licensed under MIT. Third-party fonts, packages, and the ref
 
 ## Deploy to Vercel
 
-Deploy this repository root as one Express project. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The shared contracts package is compiled to JavaScript before bundling so the hosted function imports a runtime file instead of TypeScript source. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function now has a 240-second execution limit for bounded document/OCR work; the original model request retains its 45-second timeout.
+Deploy this repository root using the explicit static and Node builders in `vercel.json`. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The shared contracts package is compiled to JavaScript before bundling so the hosted function imports a runtime file instead of TypeScript source. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function now has a 240-second execution limit for bounded document/OCR work; the original model request retains its 45-second timeout.
 
 Configure `NEBIUS_API_KEY` as a sensitive production environment variable and `PREVIEW_MODE=false` for live reasoning feedback. Credentials stay on the server. Preview deployments can explicitly use `PREVIEW_MODE=true` without a model credential. The adapter trusts Vercel's immediate proxy so per-client request limits use the forwarded client address.
 
@@ -108,6 +116,6 @@ npm run build:vercel
 npx vercel deploy --prod
 ```
 
-Build before uploading with the command above so Vercel receives the generated static assets. The local `.vercel/` link, pulled environment files, and generated assets are ignored by source control.
+Vercel runs the `vercel-build` script and collects `public/` after generation, including on a clean checkout. The local build command above is optional preparation, not a prerequisite for Git-based deployment. The local `.vercel/` link, pulled environment files, and generated assets are ignored by source control.
 
-Production hosting verified October 14, 2026: the public page, lesson, and real reasoning feedback are accessible without sign-in. Seven hosted feedback cases covered all six quests and incorrect reasoning, followed by a separate anonymous production check. The hosting changes passed 16 automated checks. Automatic deployments from GitHub remain unconfigured because Vercel could not connect to this repository; allow repository access in the project’s Git integration settings to enable them.
+Production hosting verified October 14, 2026: the public page, lesson, and real reasoning feedback are accessible without sign-in. Seven hosted feedback cases covered all six quests and incorrect reasoning, followed by a separate anonymous production check. The hosting changes passed 16 automated checks. That dated result does not verify the current release. For Git-triggered deployments, inspect the current project integration and contributor access; verify the actual commit, static assets and function behavior using the repository’s [delivery skill](.agents/skills/vercel-delivery/SKILL.md).

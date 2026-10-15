@@ -25,7 +25,10 @@
     "pretest": "npm run build --workspace @paperquest/contracts",
     "test:research": "vitest run",
     "test:e2e": "playwright test",
-    "vercel-build": "npm run build:vercel"
+    "vercel-build": "npm run build:vercel",
+    "context:check": "node .agents/scripts/context-audit.mjs check",
+    "context:index": "node .agents/scripts/context-audit.mjs index",
+    "context:acknowledge": "node .agents/scripts/context-audit.mjs acknowledge"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

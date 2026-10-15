@@ -1,0 +1,62 @@
+# Gradly documentation
+
+Start with [CONTEXT.md](CONTEXT.md), the generated registry of instructions,
+requirements, runtime documentation, design evidence, and references. Use
+[../README.md](../README.md) for setup and [../AGENTS.md](../AGENTS.md) for agent routing.
+Unlinked code paths in these documents are relative to the repository root.
+
+## Adopted documents
+
+The ten uppercase-named documents here were introduced by merged pull request 2
+(`7a85e5c`, consolidated upload-first research learning) and moved from the repository
+root without changing their content. Their reported test counts, design reviews,
+external references, and rollout restrictions describe their original scope and
+point in time. They are not fresh verification of today's checkout or environment.
+
+- PRODUCT_DIRECTION.md and REQUIREMENTS.md describe product intent and acceptance.
+- ARCHITECTURE.md describes module boundaries. RESEARCH_INTEGRATION.md records setup,
+  configuration, and original integration limits. TESTING.md lists verification paths.
+- DESIGN.md mixes the retained interface conventions with historical paper-case
+  sections. Current requirements and route code retire that standalone case flow.
+  No design-approval owner/event is established by the document's wording alone.
+- REASONING_PREVIEW.md separates an authored browser showcase from future live review.
+  RESEARCH_LEARNING_DESIGN.md and INTERACTION_REFERENCES.md retain research and design
+  proposals; they do not commit the team to implementing them.
+- UI_POLISH_REVIEW.md is a historical source/browser review. Its "Approve" statement
+  is not independent maintainer approval or proof of current hosted behavior.
+
+Report contradictions between documented intent, retained historical proposals, and
+current code before changing behavior. Do not create a competing work-status tracker.
+
+## Shared agent setup
+
+Open this application repository as the workspace, regardless of where it was
+cloned. Project instructions are tracked in `AGENTS.md`, with scoped rules under
+`apps/web/` and `apps/api/`. Shared skills are in `.agents/skills/`; there is no
+required personal skill installation, private parent repository, or account setting.
+
+Codex reads [AGENTS.md instructions](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
+and [repository skills](https://learn.chatgpt.com/docs/build-skills).
+Google Antigravity is a separate tool with support for the same
+[rule files](https://www.antigravity.google/docs/rules) and
+[skill directory](https://antigravity.google/docs/skills). Current versions can share
+these canonical files. If an older client does not discover them, check its version
+and official discovery documentation before creating a second copy of the rules.
+
+## Context maintenance
+
+```sh
+npm run context:index
+npm run context:check
+npm run context:acknowledge -- <artifact-id>
+```
+
+The index is deterministic and generated from `.agents/context-manifest.json`.
+Check is read-only. Acknowledge records an explicit review of committed affected
+paths; it does not accept an architecture proposal or approve a design. New scaffold
+files may have no committed review baseline until reviewed and committed.
+
+Use [adr/TEMPLATE.md](adr/TEMPLATE.md) and [ui/TEMPLATE.md](ui/TEMPLATE.md) for future
+decisions and local design evidence. The initial architecture-record proposal is
+Proposed. No acceptance, interface approval, delivery ownership, or continuous
+integration enforcement was inferred during scaffolding.
