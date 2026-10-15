@@ -1,3 +1,4 @@
+/// <reference path="./ocr-data.d.ts" />
 import { createWorker, type Worker } from "tesseract.js";
 import english from "@tesseract.js-data/eng";
 import type { PDFParse } from "pdf-parse";
