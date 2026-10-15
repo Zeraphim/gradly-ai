@@ -39,6 +39,14 @@ Keep challenge content centered and reserve space for the persistent action area
 
 Research learning-path pages reset the original hero's inherited width/padding within `.research-lab`. The path choice is more compact, mobile navigation stays on one row below the brand, and document review uses a single page selector with previous/next actions. Text stays left-aligned at a readable size. Desktop pairs the original PDF with the review/confirmation area; mobile prioritizes the review before the PDF. Secondary privacy/format details are expandable. The ready action appears above the audit stack.
 
+## Motion and icon system
+
+Research controls use the same Lucide SVG family as the original application, including actions, agent roles, selection marks and page navigation. Icons remain decorative beside descriptive text; icon-only controls retain accessible labels.
+
+Use short transform-based arrivals for route/question changes, a small stagger for response choices, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons depress through transforms without changing their border size/margins or moving neighboring controls. Hover cues apply to fine pointers. No background decorative loops or additional animation dependency are introduced.
+
+OS reduced-motion preferences and the saved interface setting disable entrances, spinners and hover/press movement. Text labels and progress values remain available when motion is disabled.
+
 ## Visual verification
 
 Hero and research workspace screenshots were inspected at 1440, 768 and 390 CSS pixels. Browser assertions check overflow, PDF/link order and automated accessibility rules. This establishes responsive behavior for those cases; it is not a claim of pixel-identical Stitch reproduction or complete WCAG conformance. See `TESTING.md` for the checks and remaining limits.

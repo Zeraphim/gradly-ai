@@ -1,51 +1,87 @@
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  ChartNoAxesCombined,
+  Check,
+  ChevronDown,
+  ClipboardCheck,
+  FileText,
+  FlaskConical,
+  LayoutTemplate,
+  LoaderCircle,
+  MessagesSquare,
+  RotateCcw,
+  Search,
+  ShieldCheck,
+  Smartphone,
+  Sparkles,
+  Star,
+  Upload,
+  X,
+} from "lucide-react";
+
+const icons = {
+  book: BookOpen,
+  document: FileText,
+  phone: Smartphone,
+  check: Check,
+  star: Star,
+  retry: RotateCcw,
+  arrow: ArrowRight,
+  back: ArrowLeft,
+  upload: Upload,
+  search: Search,
+  layout: LayoutTemplate,
+  chart: ChartNoAxesCombined,
+  coach: MessagesSquare,
+  shield: ShieldCheck,
+  close: X,
+  chevron: ChevronDown,
+  loading: LoaderCircle,
+  research: FlaskConical,
+  verify: ClipboardCheck,
+  sparkle: Sparkles,
+};
+export type IconName = keyof typeof icons;
 export function Icon({
   name,
+  size = 24,
+  className,
 }: {
-  name: "book" | "document" | "phone" | "check" | "star" | "retry";
+  name: IconName;
+  size?: number;
+  className?: string;
 }) {
-  const paths = {
-    book: (
-      <>
-        <path d="M12 6c-3-3-7-3-10-1v14c3-2 7-2 10 1 3-3 7-3 10-1V5c-3-2-7-2-10 1Z" />
-        <path d="M12 6v14M5 9h4M5 12h4M15 9h4M15 12h4" />
-      </>
-    ),
-    document: (
-      <>
-        <path d="M6 2h8l5 5v15H6Z" />
-        <path d="M14 2v6h5M9 12h7M9 16h7" />
-      </>
-    ),
-    phone: (
-      <>
-        <rect x="6" y="2" width="12" height="20" rx="2" />
-        <path d="M9 5h6M10 18h4" />
-        <circle cx="10" cy="9" r=".4" />
-        <circle cx="14" cy="9" r=".4" />
-        <path d="M10 12h4" />
-      </>
-    ),
-    check: <path d="m4 12 5 5L20 6" />,
-    star: <path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z" />,
-    retry: (
-      <>
-        <path d="M20 8a8 8 0 1 0 1 7M20 3v6h-6" />
-      </>
-    ),
-  };
+  const Component = icons[name];
   return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+    <Component
+      size={size}
+      strokeWidth={1.9}
+      className={className}
       aria-hidden="true"
-    >
-      {paths[name]}
-    </svg>
+      focusable="false"
+    />
+  );
+}
+
+export function ActionLabel({
+  children,
+  icon = "arrow",
+  busy = false,
+}: {
+  children: React.ReactNode;
+  icon?: IconName;
+  busy?: boolean;
+}) {
+  return (
+    <>
+      <span className="action-label">{children}</span>
+      <Icon
+        name={busy ? "loading" : icon}
+        size={19}
+        className={busy ? "action-icon is-spinning" : "action-icon"}
+      />
+    </>
   );
 }

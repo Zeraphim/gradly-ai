@@ -605,3 +605,109 @@ test("learning paths and nine-page document review fit desktop, tablet and mobil
     });
   }
 });
+
+test("tactile actions stay stable, show real loading, and honor both motion preferences", async ({
+  page,
+}) => {
+  const consoleErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(message.text());
+  });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/#/research/learn");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-reduced-motion",
+    "false",
+  );
+  const start = page.locator(".featured-card button");
+  await expect(start).toBeEnabled();
+  await page.locator(".main").evaluate(async (element) => {
+    await Promise.all(
+      element
+        .getAnimations({ subtree: true })
+        .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => {})),
+    );
+  });
+  expect(
+    await page
+      .locator(".main")
+      .evaluate((el) => getComputedStyle(el).animationName),
+  ).toBe("gradly-arrive");
+  const other = page.locator(".path-card").nth(1);
+  const initial = await other.boundingBox();
+  const height = await start.evaluate(
+    (el) => el.getBoundingClientRect().height,
+  );
+  await start.hover();
+  await expect
+    .poll(() =>
+      start
+        .locator(".action-icon")
+        .evaluate((el) => getComputedStyle(el).transform),
+    )
+    .not.toBe("none");
+  await page.mouse.down();
+  expect(await start.evaluate((el) => el.getBoundingClientRect().height)).toBe(
+    height,
+  );
+  expect((await other.boundingBox())!.y).toBe(initial!.y);
+  await page.mouse.move(4, 4);
+  await page.mouse.up();
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/research/learning", async (route) => {
+    if (route.request().method() === "POST") await gate;
+    await route.continue();
+  });
+  try {
+    await start.click();
+    await expect(start).toBeDisabled();
+    await expect(start).toHaveAttribute("aria-busy", "true");
+    await expect(start.locator(".is-spinning")).toBeVisible();
+    expect(
+      await start
+        .locator(".is-spinning")
+        .evaluate((el) => getComputedStyle(el).animationName),
+    ).toBe("gradly-spin");
+  } finally {
+    release();
+  }
+  await expect(
+    page.getByRole("heading", { name: "Your investigation briefing" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Begin investigation" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Frame the Research Question" }),
+  ).toBeVisible();
+  expect(consoleErrors).toEqual([]);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/#/research/learn");
+  await expect(start).toBeEnabled();
+  expect(
+    await page
+      .locator(".main")
+      .evaluate((el) => getComputedStyle(el).animationName),
+  ).toBe("none");
+  await start.hover();
+  expect(
+    await start
+      .locator(".action-icon")
+      .evaluate((el) => getComputedStyle(el).transform),
+  ).toBe("none");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/#/research/settings");
+  await page.getByLabel("Reduce interface motion").check();
+  await page.goto("/#/research/learn");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-reduced-motion",
+    "true",
+  );
+  expect(
+    await page
+      .locator(".main")
+      .evaluate((el) => getComputedStyle(el).animationName),
+  ).toBe("none");
+});

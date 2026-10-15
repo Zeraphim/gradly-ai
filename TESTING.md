@@ -18,13 +18,15 @@ npm audit --audit-level=moderate
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `tests/*.test.ts` — 18 tests                    | Original six-quest interface, guarded service, transitions, duplicate attempts, model override and hosted research isolation                                                                                                  |
 | `tests/research/` — 28 tests                    | Eight-challenge engine, disclosures/revisions, PDF and real OCR, bounded worker behavior, provider schemas/errors, sequential generation/review, ownership-aware retention                                                    |
-| `tests/browser/research.spec.ts` — 11 scenarios | Full reference adventure, retries, bonus/reveal/review/history, owner/version boundaries, consent, upload/extraction/OCR, interruption/deletion, support routes, responsive/keyboard/axe checks and original hero/PDF handoff |
+| `tests/browser/research.spec.ts` — 12 scenarios | Full reference adventure, retries, bonus/reveal/review/history, owner/version boundaries, consent, upload/extraction/OCR, interruption/deletion, support routes, responsive/keyboard/axe checks and original hero/PDF handoff |
 
 Provider and orchestration tests explicitly mock model outputs. PDF and OCR tests process real synthetic PDF files, including an image-only fixture. These categories must not be described as live model verification. Demo tests additionally exercise explicit local gating, production/Vercel rejection, immutable document modes, sample identity, no-provider-call guarantees, saved processing and disabled-demo rejection. Browser coverage includes a real nine-page PDF, page navigation, sample processing through completion/history, sample reasoning guidance and viewport/axe checks on the checked-document state.
 
 The hero handoff assertion reads the PDF blob used by the preview, so an iframe pointing at a revoked object URL cannot satisfy the test. It complements file-name visibility and extraction checks.
 
 Format modified files with the installed Prettier (`npx prettier --check <paths>`). TypeScript is the static correctness gate; a separate semantic ESLint configuration is not currently installed.
+
+The motion/button browser scenario checks that pressing an action preserves its height and neighboring layout, a deliberately delayed request exposes a disabled busy state and spinner, rendering produces no console errors, and both OS and saved application reduced-motion settings remove animation and hover movement.
 
 ## Runtime and visual evidence
 

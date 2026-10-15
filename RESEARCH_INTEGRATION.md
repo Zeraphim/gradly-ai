@@ -90,7 +90,7 @@ npm run test:e2e
 npm run build:vercel
 ```
 
-Locally verified on Node 22: 18 original/integration tests, 28 research tests and all 11 browser scenarios passed. `npm run check`, `npm run build:vercel`, and `npm audit --audit-level=moderate` passed with zero reported vulnerabilities. The compiled Express server also passed real searchable/scanned PDF extraction and deletion smoke checks.
+Locally verified on Node 22: 18 original/integration tests, 28 research tests and all 12 browser scenarios passed. `npm run check`, `npm run build:vercel`, and `npm audit --audit-level=moderate` passed with zero reported vulnerabilities. The compiled Express server also passed real searchable/scanned PDF extraction and deletion smoke checks.
 
 The check command includes the repository’s original tests, the ported research tests, type checking and production builds. Browser tests cover the full reference adventure, retries/bonus, persisted revisions, ownership/conflicts, consent, real PDF/OCR upload and recovery, deletion, responsive layouts and accessibility. The research routes share a persistent limit of 120 logical AI requests per hour, in addition to per-guest limits. Provider retries can make additional inference calls, so this is not an exact billing cap. Model tests are explicitly mocked; they do not establish live generation quality.
 

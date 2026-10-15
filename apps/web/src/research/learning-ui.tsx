@@ -1,3 +1,4 @@
+import { Icon } from "./icon.js";
 import { useState } from "react";
 import { Mascot as ExistingMascot } from "../components/Mascot.js";
 export function Mascot({ small = false }: { small?: boolean }) {
@@ -28,7 +29,7 @@ export function Progress({
     <div className="progress-wrap">
       <div className="progress-label">
         <strong>{label}</strong>
-        <span>
+        <span aria-live="polite">
           {value} of {max} complete
         </span>
       </div>
@@ -76,7 +77,7 @@ export function ExtractedPages({
             disabled={index === 0}
             onClick={() => setIndex((i) => i - 1)}
           >
-            ←
+            <Icon name="back" size={17} />
           </button>
           <button
             className="btn compact outline"
@@ -84,7 +85,7 @@ export function ExtractedPages({
             disabled={index >= pages.length - 1}
             onClick={() => setIndex((i) => i + 1)}
           >
-            →
+            <Icon name="arrow" size={17} />
           </button>
         </div>
       </div>

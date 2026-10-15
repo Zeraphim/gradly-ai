@@ -5,7 +5,7 @@ import {
   useResearchRouter,
 } from "./navigation.js";
 import { BrandLogo } from "../components/BrandLogo.js";
-import { Icon } from "./icon.js";
+import { ActionLabel, Icon } from "./icon.js";
 import {
   Mascot,
   Speech,
@@ -546,9 +546,12 @@ function GradlyWorkspace({
                   <button
                     disabled={busy}
                     className="btn primary"
+                    aria-busy={busy}
                     onClick={() => act("start")}
                   >
-                    {busy ? "Opening…" : "Start investigation →"}
+                    <ActionLabel busy={busy}>
+                      {busy ? "Opening…" : "Start investigation"}
+                    </ActionLabel>
                   </button>
                 </article>
                 <article className="path-card">
@@ -576,7 +579,9 @@ function GradlyWorkspace({
                     </span>
                   </div>
                   <Link className="btn outline" href="/upload">
-                    Upload a research paper ↑
+                    <ActionLabel icon="upload">
+                      Upload a research paper
+                    </ActionLabel>
                   </Link>
                 </article>
               </div>
@@ -629,7 +634,9 @@ function GradlyWorkspace({
                 disabled={busy}
                 onClick={() => input.current?.click()}
               >
-                {file ? "Replace PDF" : "Choose PDF File ↑"}
+                <ActionLabel icon="upload">
+                  {file ? "Replace PDF" : "Choose PDF File"}
+                </ActionLabel>
               </button>
               {file ? (
                 <div className="file-preview">
@@ -663,7 +670,7 @@ function GradlyWorkspace({
                     <div className="notice document-review">
                       <div className="review-heading">
                         <span className="review-check" aria-hidden="true">
-                          ✓
+                          <Icon name="check" size={19} />
                         </span>
                         <div>
                           <h2>Document checked</h2>
@@ -716,13 +723,15 @@ function GradlyWorkspace({
                             }
                           }}
                         >
-                          {busy
-                            ? "Opening…"
-                            : config?.liveAI
-                              ? "Confirm AI processing →"
-                              : config?.demoAvailable
-                                ? "Start sample preview →"
-                                : "Confirm AI processing →"}
+                          <ActionLabel busy={busy}>
+                            {busy
+                              ? "Opening…"
+                              : config?.liveAI
+                                ? "Confirm AI processing"
+                                : config?.demoAvailable
+                                  ? "Start sample preview"
+                                  : "Confirm AI processing"}
+                          </ActionLabel>
                         </button>
                         <small>
                           Original PDF stays in this browser. Extracted text is
@@ -741,9 +750,11 @@ function GradlyWorkspace({
                         className="btn secondary"
                         onClick={upload}
                       >
-                        {busy
-                          ? "Uploading & validating…"
-                          : "Check this document"}
+                        <ActionLabel busy={busy} icon="verify">
+                          {busy
+                            ? "Uploading & validating…"
+                            : "Check this document"}
+                        </ActionLabel>
                       </button>
                       {busy ? (
                         <>
@@ -783,7 +794,9 @@ function GradlyWorkspace({
                 scans need a clearer searchable copy. Password-protected and
                 corrupt PDFs receive a recoverable error.
               </p>
-              <Link href="/privacy">Privacy & AI processing →</Link>
+              <Link className="inline-action" href="/privacy">
+                <ActionLabel icon="shield">Privacy & AI processing</ActionLabel>
+              </Link>
             </details>
             {!uploaded ? (
               <section className="alternative">
@@ -799,7 +812,7 @@ function GradlyWorkspace({
                     interpretation.
                   </p>
                   <span className="text-link">
-                    Begin the featured adventure →
+                    <ActionLabel>Begin the featured adventure</ActionLabel>
                   </span>
                 </button>
               </section>
@@ -853,7 +866,7 @@ function GradlyWorkspace({
                       disabled={busy}
                       onClick={() => act("start", { lessonId: job.id })}
                     >
-                      Begin investigation →
+                      <ActionLabel>Begin investigation</ActionLabel>
                     </button>
                   </div>
                 ) : null}
@@ -868,7 +881,19 @@ function GradlyWorkspace({
                     >
                       <summary>
                         <span className={`symbol ${i % 2 ? "blue" : "green"}`}>
-                          {["⌕", "▤", "∑", "☏", "✓"][i]}
+                          <Icon
+                            name={
+                              (
+                                [
+                                  "search",
+                                  "layout",
+                                  "chart",
+                                  "coach",
+                                  "shield",
+                                ] as const
+                              )[i]!
+                            }
+                          />
                         </span>
                         <div>
                           <strong>{a.role}</strong>
@@ -877,8 +902,22 @@ function GradlyWorkspace({
                         <span
                           className={`status ${a.status.toLowerCase().replace(" ", "-")}`}
                         >
+                          {a.status === "Completed" ? (
+                            <Icon name="check" size={13} />
+                          ) : ["Processing", "Retrying"].includes(a.status) ? (
+                            <Icon
+                              name="loading"
+                              size={13}
+                              className="is-spinning"
+                            />
+                          ) : null}
                           {a.status}
                         </span>
+                        <Icon
+                          name="chevron"
+                          size={18}
+                          className="disclosure-chevron"
+                        />
                       </summary>
                       <div className="agent-details">
                         <p>{a.summary}</p>
@@ -908,11 +947,15 @@ function GradlyWorkspace({
                       disabled={busy}
                       onClick={() => step(false, true)}
                     >
-                      {config?.liveAI
-                        ? "Confirm AI processing →"
-                        : config?.demoAvailable
-                          ? "Start sample preview →"
-                          : "Confirm AI processing →"}
+                      <ActionLabel busy={busy}>
+                        {busy
+                          ? "Opening…"
+                          : config?.liveAI
+                            ? "Confirm AI processing"
+                            : config?.demoAvailable
+                              ? "Start sample preview"
+                              : "Confirm AI processing"}
+                      </ActionLabel>
                     </button>
                   </div>
                 ) : null}
@@ -928,7 +971,7 @@ function GradlyWorkspace({
                       className="btn primary"
                       onClick={() => act("start")}
                     >
-                      Start reference investigation →
+                      <ActionLabel>Start reference investigation</ActionLabel>
                     </button>
                   </div>
                 ) : null}
@@ -1050,7 +1093,7 @@ function GradlyWorkspace({
                   className="btn primary"
                   onClick={() => act("begin")}
                 >
-                  Begin investigation →
+                  <ActionLabel>Begin investigation</ActionLabel>
                 </button>
               </>
             ) : null}
@@ -1062,7 +1105,7 @@ function GradlyWorkspace({
                     className="exit"
                     aria-label="Save and exit investigation"
                   >
-                    ×
+                    <Icon name="close" size={22} />
                   </Link>
                   <Progress
                     value={
@@ -1098,7 +1141,12 @@ function GradlyWorkspace({
                       : "Choose one response"}
                   </span>
                 </div>
-                <h1 ref={heading} tabIndex={-1}>
+                <h1
+                  ref={heading}
+                  tabIndex={-1}
+                  key={`${c.id}-heading`}
+                  className="challenge-heading"
+                >
                   {c.title}
                 </h1>
                 {c.evidence.length ? (
@@ -1151,11 +1199,16 @@ function GradlyWorkspace({
                   </section>
                 ) : null}
                 <p className="question">{c.prompt}</p>
-                <fieldset disabled={busy || !!c.feedback} className="choices">
+                <fieldset
+                  key={`${c.id}-choices`}
+                  disabled={busy || !!c.feedback}
+                  className="choices"
+                >
                   <legend className="sr-only">{c.prompt}</legend>
-                  {c.options.map((o) => (
+                  {c.options.map((o, index) => (
                     <label
                       key={o.id}
+                      style={{ animationDelay: `${index * 35}ms` }}
                       className={`choice ${selected.includes(o.id) ? "selected" : ""}`}
                     >
                       <input
@@ -1176,14 +1229,23 @@ function GradlyWorkspace({
                       <span className="keycap">{o.id}</span>
                       <span>{o.text}</span>
                       <span aria-hidden="true" className="selection-mark">
-                        {selected.includes(o.id) ? "✓" : ""}
+                        {selected.includes(o.id) ? (
+                          <Icon name="check" size={19} />
+                        ) : null}
                       </span>
                     </label>
                   ))}
                 </fieldset>
                 <div className="support-grid">
                   <details className="support">
-                    <summary>Study Details</summary>
+                    <summary className="icon-summary">
+                      Study Details
+                      <Icon
+                        name="chevron"
+                        size={17}
+                        className="disclosure-chevron"
+                      />
+                    </summary>
                     {session.source !== "generated" ? (
                       <p>
                         Random assignment; separate participant groups;
@@ -1201,7 +1263,14 @@ function GradlyWorkspace({
                     )}
                   </details>
                   <details className="support">
-                    <summary>Hint</summary>
+                    <summary className="icon-summary">
+                      Hint
+                      <Icon
+                        name="chevron"
+                        size={17}
+                        className="disclosure-chevron"
+                      />
+                    </summary>
                     <p>{c.hint}</p>
                   </details>
                 </div>
@@ -1444,7 +1513,7 @@ function GradlyWorkspace({
                         disabled={busy}
                         onClick={() => act("bonus")}
                       >
-                        Try the bonus →
+                        <ActionLabel icon="sparkle">Try the bonus</ActionLabel>
                       </button>
                     ) : null}
                     <button
@@ -1569,7 +1638,7 @@ function GradlyWorkspace({
                       disabled={busy}
                       onClick={() => act("finish", { reflection })}
                     >
-                      Finish adventure →
+                      <ActionLabel icon="check">Finish adventure</ActionLabel>
                     </button>
                   </div>
                 ) : (
@@ -1701,7 +1770,7 @@ function GradlyWorkspace({
                   decision is saved.
                 </p>
                 <Link className="btn primary" href="/learn">
-                  Choose a learning path →
+                  <ActionLabel>Choose a learning path</ActionLabel>
                 </Link>
               </div>
             ) : (
@@ -1716,10 +1785,11 @@ function GradlyWorkspace({
                     <p>Started {new Date(h.created).toLocaleDateString()}</p>
                   </div>
                   <Link className="btn outline" href={`/adventure/${h.id}`}>
-                    {h.phase === "complete"
-                      ? "Review adventure"
-                      : "Resume investigation"}{" "}
-                    →
+                    <ActionLabel>
+                      {h.phase === "complete"
+                        ? "Review adventure"
+                        : "Resume investigation"}
+                    </ActionLabel>
                   </Link>
                 </article>
               ))
@@ -1763,12 +1833,19 @@ function GradlyWorkspace({
             <p>A few ideas to keep beside your investigation.</p>
             {Object.entries(glossary).map(([term, definition]) => (
               <details className="card glossary" key={term}>
-                <summary>{term}</summary>
+                <summary className="icon-summary">
+                  {term}
+                  <Icon
+                    name="chevron"
+                    size={17}
+                    className="disclosure-chevron"
+                  />
+                </summary>
                 <p>{definition}</p>
               </details>
             ))}
             <Link className="btn primary" href="/learn">
-              Continue learning →
+              <ActionLabel>Continue learning</ActionLabel>
             </Link>
           </>
         ) : null}
@@ -1831,7 +1908,7 @@ function GradlyWorkspace({
               </p>
             </details>
             <Link className="btn primary" href="/learn">
-              Choose a learning path →
+              <ActionLabel>Choose a learning path</ActionLabel>
             </Link>
           </>
         ) : null}
@@ -1872,7 +1949,9 @@ function GradlyWorkspace({
               </p>
               <p>{config?.model}</p>
               <Link href="/privacy">
-                Read processing and retention information →
+                <ActionLabel icon="shield">
+                  Read processing and retention information
+                </ActionLabel>
               </Link>
             </div>
           </>
@@ -1973,6 +2052,7 @@ function GradlyWorkspace({
             </div>
             <button
               className="btn primary"
+              aria-busy={busy}
               disabled={
                 busy || editingReasoning || (!c.feedback && !selected.length)
               }
@@ -1982,13 +2062,24 @@ function GradlyWorkspace({
                   : act("submit", { selected, reasoning })
               }
             >
-              {busy
-                ? "Saving…"
-                : c.feedback
-                  ? c.feedback.retryAvailable
-                    ? "Try again ↻"
-                    : "Continue →"
-                  : "Check Answer"}
+              <ActionLabel
+                busy={busy}
+                icon={
+                  c.feedback
+                    ? c.feedback.retryAvailable
+                      ? "retry"
+                      : "arrow"
+                    : "check"
+                }
+              >
+                {busy
+                  ? "Saving…"
+                  : c.feedback
+                    ? c.feedback.retryAvailable
+                      ? "Try again"
+                      : "Continue"
+                    : "Check Answer"}
+              </ActionLabel>
             </button>
           </div>
         </footer>
