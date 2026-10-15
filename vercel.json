@@ -6,7 +6,7 @@
   "functions": {
     "server.ts": {
       "maxDuration": 240,
-      "includeFiles": "node_modules/{tesseract.js,tesseract.js-core,@tesseract.js-data/eng}/**/*"
+      "includeFiles": "node_modules/{tesseract.js,tesseract.js-core,@tesseract.js-data/eng,@napi-rs/canvas,@napi-rs/canvas-*}/**/*"
     }
   }
 }
