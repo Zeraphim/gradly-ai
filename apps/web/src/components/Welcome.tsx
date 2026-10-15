@@ -181,11 +181,11 @@ export function Welcome({
             </>
           ) : null}
         </div>
-        <span className="eyebrow green-text">
-          {uploadFirst
-            ? "START WITH YOUR PAPER"
-            : "YOUR NEXT RESEARCH ADVENTURE"}
-        </span>
+        {!uploadFirst ? (
+          <span className="eyebrow green-text">
+            YOUR NEXT RESEARCH ADVENTURE
+          </span>
+        ) : null}
         {uploadFirst ? (
           <h1 id="welcome-title">Upload your research paper</h1>
         ) : (
@@ -368,34 +368,28 @@ export function Welcome({
               <ArrowRight size={23} />
             </span>
           </button>
-          {!uploadFirst ? (
-            <div className="reasoning-preview-entry">
-              <div>
-                <strong>
-                  A correct choice can still hide a misconception.
-                </strong>
-                <p>Choose → Explain → Check evidence → Revise</p>
-                <span>Authored example · no AI calls</span>
-              </div>
-              <a href="#/research/reasoning" className="reasoning-preview-link">
-                Try the reasoning preview
-                <ArrowRight size={18} aria-hidden="true" />
-              </a>
+          <div className="reasoning-preview-entry">
+            <div>
+              <strong>A correct choice can still hide a misconception.</strong>
+              <p>Choose → Explain → Check evidence → Revise</p>
+              <span>Authored example · no AI calls</span>
             </div>
-          ) : null}
-          {!uploadFirst ? (
-            <div className="welcome-details">
-              <span>
-                <Clock3 size={16} /> About 10 minutes
-              </span>
-              <span>
-                <Check size={16} /> Evidence after your attempt
-              </span>
-              <span>
-                <Sparkles size={16} /> Two new scenarios
-              </span>
-            </div>
-          ) : null}
+            <a href="#/research/reasoning" className="reasoning-preview-link">
+              Try the reasoning preview
+              <ArrowRight size={18} aria-hidden="true" />
+            </a>
+          </div>
+          <div className="welcome-details">
+            <span>
+              <Clock3 size={16} /> About 10 minutes
+            </span>
+            <span>
+              <Check size={16} /> Evidence after your attempt
+            </span>
+            <span>
+              <Sparkles size={16} /> Two new scenarios
+            </span>
+          </div>
         </section>
       ) : null}
     </main>

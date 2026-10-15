@@ -2263,9 +2263,6 @@ html[data-reduced-motion="true"]
   width: 30px;
   height: 30px;
 }
-.upload-home .upload-card > .eyebrow {
-  display: none;
-}
 .upload-home .upload-card h1 {
   font-size: clamp(28px, 3vw, 36px);
   letter-spacing: -0.04em;

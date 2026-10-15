@@ -6,7 +6,7 @@ Without AI credentials, real PDF checking leads to an explicit, separately label
 
 The published and fictional short-note cases remain at their existing case URLs. Their guided **Start → Read → Choose → Try → Recap** flow remains available without API calls. They no longer replace the document-input home. Free-form writing in authored/local previews is never presented as AI assessed.
 
-## What makes the interaction useful
+## Optional authored-case exploration
 
 1. **An initial commitment survives the reveal.** The learner makes a provisional claim; a starting note and confidence are optional. Once evidence is opened, that initial call is kept for comparison rather than silently rewritten.
 2. **Evidence is something the learner works with.** One note is shown at a time, with a short summary and expandable source detail. Previous/next actions and a compact note list support navigation. Saving evidence is optional; saved-note checks still distinguish support from limitations and counterexamples.
@@ -22,7 +22,9 @@ The directly inspected PhET simulation and Polygons explorable show how a small 
 
 ## A concise hackathon demonstration
 
-Open the reference study and choose a starting answer. Read five short notes with Next note. Choose a conclusion and check it; inspect Why only if useful. Try the changed setting, then download the recap. The qualitative study uses the same flow. The earlier guided lesson at commit `9ab53f1` is the navigation reference: one central task, familiar answer cards and a persistent next action.
+Start on the centered home screen. Upload a PDF, inspect the extracted text, then enter the explicitly labeled sample lesson while live AI is unavailable. Answer a challenge, inspect its evidence and feedback, and show the saved practice points and resume action. The visible DOI field offers the supported reference study as another entry.
+
+For a separate reasoning demonstration, open an authored case: choose a starting claim, inspect short evidence notes, check a conclusion, try a changed setting and export the recap. Keep this optional path distinct from processing the uploaded paper.
 
 This targets the official judging dimensions of coherent design, demonstrated usefulness and idea quality. The technical criterion still requires a working application using NVIDIA models through eligible Nebius infrastructure. An authored frontend does not establish that runtime integration. See the [official criteria and requirements](https://nebiusglobalaihackathon.devpost.com/) and the separate setup and live acceptance guides. No award outcome is implied.
 
