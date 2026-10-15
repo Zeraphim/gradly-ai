@@ -4,6 +4,11 @@ Follow the [root instructions](../../AGENTS.md) and read
 [DESIGN.md](../../docs/DESIGN.md), [REQUIREMENTS.md](../../docs/REQUIREMENTS.md),
 and the relevant checks in [TESTING.md](../../docs/TESTING.md).
 
+- For new or changed interactive frontend behavior anywhere on the site, load
+  [gradly-motion](../../.agents/skills/gradly-motion/SKILL.md). Match equivalent
+  interactions to the shared motion convention, including surrounding layout,
+  interruption, immediate input, focus and live reduced-motion behavior. Reuse
+  shared primitives; keep the implementation scoped to the requested screen.
 - `src/App.tsx` owns hash-route selection. Preserve upload-first entry, retired-link
   recovery, curated compatibility, and the separately labeled reasoning preview.
 - Reuse the supplied Gradly artwork, self-hosted Plus Jakarta Sans, blue palette,

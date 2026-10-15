@@ -41,6 +41,10 @@ Compatibility symlinks share `AGENTS.md` and `.agents/skills/` with other agent
 clients. See `docs/README.md` for the maintained link map; edit canonical sources
 rather than introducing client-specific copies.
 
+For interactive frontend changes across any route, load
+[gradly-motion](../gradly-motion/SKILL.md). It applies the site-wide convention and
+identifies the current research-scoped implementation boundaries.
+
 ## Commands from the repository root
 
 | Need                                       | Command                                           |

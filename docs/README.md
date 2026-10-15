@@ -5,6 +5,15 @@ requirements, runtime documentation, design evidence, and references. Use
 [../README.md](../README.md) for setup and [../AGENTS.md](../AGENTS.md) for agent routing.
 Unlinked code paths in these documents are relative to the repository root.
 
+## Interaction consistency
+
+[The site-wide motion convention](DESIGN.md#site-wide-motion-convention) defines
+consistent interaction behavior across screens. The project-local
+[gradly-motion skill](../.agents/skills/gradly-motion/SKILL.md) routes contributors
+to shared primitives, accessibility handling and relevant verification. The current
+Motion implementation is research-scoped; these instructions do not claim all
+existing pages have already adopted it.
+
 ## Research scene development
 
 [SCENE_AUTHORING.md](SCENE_AUTHORING.md) explains the reusable scene contract,

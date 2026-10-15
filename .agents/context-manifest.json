@@ -51,7 +51,7 @@
     {
       "path": "apps/web",
       "agents": "apps/web/AGENTS.md",
-      "skills": []
+      "skills": ["gradly-motion"]
     },
     {
       "path": "apps/api",
@@ -97,6 +97,10 @@
         {
           "type": "depends-on",
           "target": "api-instructions"
+        },
+        {
+          "type": "depends-on",
+          "target": "gradly-motion"
         }
       ],
       "implementationRefs": [
@@ -125,7 +129,12 @@
       "authorityDomains": ["operating-procedure"],
       "owners": [],
       "appliesTo": ["apps/web/**"],
-      "relationships": [],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "gradly-motion"
+        }
+      ],
       "implementationRefs": [],
       "review": {
         "commit": null,
@@ -183,6 +192,10 @@
         {
           "type": "depends-on",
           "target": "testing"
+        },
+        {
+          "type": "depends-on",
+          "target": "gradly-motion"
         }
       ],
       "implementationRefs": [],
@@ -732,6 +745,49 @@
         "tests/research/scene-motion.test.ts",
         "tests/research/flow-connectors.test.ts",
         "tests/research/scenes-workspace.test.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "gradly-motion",
+      "kind": "skill",
+      "title": "Site-wide micro-interaction and motion consistency",
+      "path": ".agents/skills/gradly-motion/SKILL.md",
+      "status": "Active",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/**",
+        "docs/DESIGN.md",
+        ".agents/skills/gradly-motion/**"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "design"
+        },
+        {
+          "type": "related",
+          "target": "scene-authoring"
+        },
+        {
+          "type": "related",
+          "target": "fresh-adventure-motion"
+        },
+        {
+          "type": "depends-on",
+          "target": "testing"
+        }
+      ],
+      "implementationRefs": [
+        "apps/web/src/research/scenes/scene-motion.tsx",
+        "apps/web/src/research/scenes/scenes.css",
+        "apps/web/src/styles.css",
+        "tests/research/scene-motion.test.ts"
       ],
       "review": {
         "commit": null,

@@ -11,6 +11,7 @@ with [docs/CONTEXT.md](docs/CONTEXT.md) for documentation and instruction routin
 | Setup, commands, module boundaries, configuration      | [project-context](.agents/skills/project-context/SKILL.md)                     |
 | Documentation, structure, decisions, design evidence   | [documentation-maintenance](.agents/skills/documentation-maintenance/SKILL.md) |
 | Vercel builds, assets, function packaging, deployments | [vercel-delivery](.agents/skills/vercel-delivery/SKILL.md)                     |
+| Interaction and animation consistency across the site  | [gradly-motion](.agents/skills/gradly-motion/SKILL.md)                         |
 | Learner interface changes                              | [apps/web/AGENTS.md](apps/web/AGENTS.md)                                       |
 | Server, extraction, generation, storage changes        | [apps/api/AGENTS.md](apps/api/AGENTS.md)                                       |
 
