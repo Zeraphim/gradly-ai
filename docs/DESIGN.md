@@ -67,11 +67,51 @@ Keep challenge content centered and reserve space for the persistent action area
 
 Research learning-path pages reset the original hero's inherited width/padding within `.research-lab`. The path choice is more compact, mobile navigation stays on one row below the brand, and document review uses a single page selector with previous/next actions. Text stays left-aligned at a readable size. Desktop pairs the original PDF with the review/confirmation area; mobile prioritizes the review before the PDF. Secondary privacy/format details are expandable. The ready action appears above the audit stack.
 
-## Motion and icon system
+## Site-wide motion convention
+
+Apply one interaction language across upload, processing, learning, history, review
+and settings as those surfaces are changed. Motion should acknowledge input,
+explain a state change or maintain spatial continuity. Equivalent interactions use
+shared behavior; static or disabled elements should not suggest extra interactivity.
+This is the ongoing contributor convention, not evidence that every existing screen
+has already been migrated or visually verified.
+
+| Interaction                | Consistent behavior                                                                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hover and press            | Restrained tactile feedback on enabled controls; hover only on fine hover-capable pointers; keyboard focus stays immediately visible         |
+| Expand and collapse        | Coordinate the boundary, detail/provenance and neighboring content; protect text/icons from scaling distortion and final lines from clipping |
+| Selection and validation   | Native state updates immediately; a subtle indicator may transition without delaying input or implying an unsaved success                    |
+| Insert, remove and replace | Brief interruptible presence and layout changes with stable identity; no replay for restored content; remove revoked content immediately     |
+| Navigation and disclosure  | Preserve orientation, focus and drafts; make exiting controls inert and return focus safely when their content closes                        |
+
+The shared `sceneTiming` in
+`apps/web/src/research/scenes/scene-motion.tsx` is the current timing reference for
+copy, gestures, non-bouncing layout springs, challenge arrivals, charts and connection
+emphasis. Reuse these choices through shared primitives rather than accumulating
+per-screen timing variants. Prefer Motion for coordinated layout, presence and
+gestures. Simple existing style transitions can remain when they follow this
+convention. Avoid decorative loops, long staggers, artificial input delays and
+animation-driven progression.
+
+The operating-system and saved application preferences both apply live. Enabling
+reduced motion must settle active movement without remounting controls, moving focus
+or losing state. Information stays usable without animation. Give transforms one
+owner so global press rules, arrival effects and Motion do not multiply each other.
+
+The current Motion implementation and its style selectors are research-scoped.
+Adopting it on another screen requires checking feature-provider ownership, styling
+scope and projection-reset assumptions. Share the smallest appropriate primitive
+within that task; this convention does not call for a site migration on every edit.
+See [gradly-motion](../.agents/skills/gradly-motion/SKILL.md) for the working procedure
+and [scene mechanics](SCENE_AUTHORING.md#motion-and-accessibility) for evidence-specific
+reveal and connector rules. No motion may retain newly forbidden findings, access-
+restricted content or a result that the server has withdrawn.
+
+## Existing motion and icon implementation
 
 Research controls use the same Lucide SVG family as the original application, including actions, agent roles, selection marks and page navigation. Icons remain decorative beside descriptive text; icon-only controls retain accessible labels.
 
-Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops or additional animation dependency are introduced.
+Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops are introduced. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
 
 OS reduced-motion preferences and the saved interface setting disable entrances, spinners and hover/press movement. Text labels and progress values remain available when motion is disabled.
 
