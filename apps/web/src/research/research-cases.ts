@@ -36,6 +36,8 @@ export const practiceCases: ResearchCase[] = [
         id: "garden-design",
         label: "Experiences, including less active voices",
         kind: "design",
+        summary:
+          "Ten local people were interviewed, including regular volunteers and people who rarely took part.",
         text: "Ten local people were interviewed, including regular volunteers and people who rarely joined in. The question concerns experiences of belonging, not a population rating of the garden.",
         sourceLabel: "Fictional case · Method and question",
       },
@@ -43,6 +45,8 @@ export const practiceCases: ResearchCase[] = [
         id: "garden-invitation",
         label: "Recognition can matter",
         kind: "finding",
+        summary:
+          "One person felt included when others asked for advice about seedlings. Being recognised as a contributor mattered.",
         text: "Interview A describes feeling part of the garden after other volunteers asked for advice about seedlings. The account connects belonging with being recognised as someone who could contribute.",
         sourceLabel: "Fictional case · Interview A summary",
       },
@@ -50,6 +54,8 @@ export const practiceCases: ResearchCase[] = [
         id: "garden-quiet",
         label: "Participation need not mean more events",
         kind: "finding",
+        summary:
+          "Another person enjoyed gardening quietly and did not want more group events. Participation can mean different things.",
         text: "Interview B enjoys watering plants quietly after work and does not want more organised social events. This challenges a recommendation that more group activities would improve everyone’s experience.",
         sourceLabel: "Fictional case · Interview B summary",
       },
@@ -57,6 +63,8 @@ export const practiceCases: ResearchCase[] = [
         id: "garden-access",
         label: "Wanting to join is not the same as being able to",
         kind: "finding",
+        summary:
+          "A third person wanted to join, but the route and tasks were hard to access. Low participation did not mean low interest.",
         text: "Interview C wants to participate but describes a narrow route and tasks that are difficult to access. Low participation in this account is not evidence of low interest.",
         sourceLabel: "Fictional case · Interview C summary",
       },
@@ -64,6 +72,8 @@ export const practiceCases: ResearchCase[] = [
         id: "garden-boundary",
         label: "An interpretation is not a vote",
         kind: "limitation",
+        summary:
+          "Three selected accounts are not the whole dataset. They cannot tell us how everyone feels.",
         text: "Three selected accounts cannot establish a final theme or the prevalence of an experience. A defensible interpretation needs a coherent connection to the question and material, including accounts that complicate it.",
         sourceLabel: "Fictional case · Analytic limits",
       },
@@ -71,24 +81,32 @@ export const practiceCases: ResearchCase[] = [
     claims: [
       {
         id: "garden-cautious",
-        text: "Because these are personal accounts, no meaningful interpretation is possible.",
+        text: "Personal accounts cannot tell us anything useful.",
         feedback:
-          "Personal accounts are relevant to a question about experience. Interpretive work can be rigorous when it explains its connections and limits; it does not require a single mechanical answer.",
+          "These accounts help us understand experience. A useful interpretation explains their connections and differences.",
       },
       {
         id: "garden-supported",
-        text: "These accounts suggest that belonging involves recognition and workable forms of participation, while the garden means different things to different people.",
+        text: "These accounts link belonging with recognition and access; experiences differ.",
         feedback:
-          "This is a defensible provisional reading of the supplied accounts. It includes difference, avoids a universal claim and leaves room to review the whole dataset or develop another coherent interpretation.",
+          "This is one defensible provisional reading. It connects the accounts without claiming everyone has the same experience.",
       },
       {
         id: "garden-overreach",
-        text: "The garden makes everyone feel connected, so more group events will benefit every resident.",
+        text: "More garden events will make every resident feel included.",
         feedback:
-          "Wanting to participate can coexist with inaccessible conditions, and one person values quiet participation. The supplied accounts do not support a universal experience or a tested solution.",
+          "One person values quiet gardening; another faces access barriers. More events are not a tested solution for everyone.",
       },
     ],
     supportedClaimId: "garden-supported",
+    overview: {
+      approach:
+        "Interviews with ten local people, including regular volunteers and less active participants.",
+      finding:
+        "Recognition and access shaped belonging. One person preferred quiet gardening to group events.",
+      limit:
+        "Selected accounts allow a provisional interpretation, not a final theme or a claim about all residents.",
+    },
     usefulEvidenceIds: ["garden-invitation", "garden-access"],
     competingEvidenceId: "garden-quiet",
     coachingQuestion:
@@ -106,19 +124,19 @@ export const practiceCases: ResearchCase[] = [
       options: [
         {
           id: "garden-transfer-force-fit",
-          text: "Discard it because it conflicts with the idea that group events create belonging.",
+          text: "Discard it because it conflicts with the other accounts.",
           feedback:
             "A contrary account is evidence to examine, not an inconvenience to remove so that a preferred interpretation survives.",
         },
         {
           id: "garden-transfer-revisit",
-          text: "Revisit how invitation and preferred forms of participation create belonging; retain the difference and review the wider dataset.",
+          text: "Keep the difference and revisit the interpretation using the wider dataset.",
           feedback:
             "The new account can refine the interpretation. It distinguishes feeling included from attending organised events without claiming that one extract settles the whole analysis.",
         },
         {
           id: "garden-transfer-vote",
-          text: "Count mentions and call whichever activity is most frequent the true theme.",
+          text: "Treat the most frequently mentioned activity as the true theme.",
           feedback:
             "Frequency alone does not establish a theme’s meaning or importance in this reflexive thematic exercise. The interpretation needs to address the question and explain the material.",
         },

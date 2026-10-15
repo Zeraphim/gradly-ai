@@ -22,18 +22,20 @@ import type { ResearchCase } from "./case-types.js";
 import "./styles.css";
 import "./paper-lab.css";
 
-export const paperCases: readonly ResearchCase[] = [
-  referenceCase,
-  ...practiceCases,
-];
+const paperCases: readonly ResearchCase[] = [referenceCase, ...practiceCases];
 const stages: { id: CasePhase; label: string }[] = [
-  { id: "question", label: "Wonder" },
-  { id: "evidence", label: "Explore" },
-  { id: "claim", label: "Connect" },
-  { id: "transfer", label: "Try it" },
-  { id: "complete", label: "Keep it" },
+  { id: "question", label: "Start" },
+  { id: "evidence", label: "Read" },
+  { id: "claim", label: "Choose" },
+  { id: "transfer", label: "Try" },
+  { id: "complete", label: "Recap" },
 ];
 const confidenceLabels = ["Tentative", "Somewhat sure", "Very sure"];
+const evidenceKinds = {
+  design: "Approach",
+  finding: "Finding",
+  limitation: "Limit",
+};
 let memoryNotebook: CaseNotebook | null = null;
 let writesFailed = false;
 function restoreNotebook() {
@@ -55,8 +57,15 @@ export function PaperLab() {
   const [showGuide, setShowGuide] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const guide = useRef<HTMLElement>(null);
+  const helpButton = useRef<HTMLButtonElement>(null);
+  const transferFeedback = useRef<HTMLDivElement>(null);
   const draft = study ? (notebook.cases[study.id] ?? freshCase()) : null;
   const phase = draft?.phase;
+  useEffect(() => {
+    if (phase === "transfer" && draft?.transferChecked) {
+      transferFeedback.current?.focus();
+    }
+  }, [phase, draft?.transferChecked]);
   useEffect(() => {
     memoryNotebook = notebook;
     try {
@@ -87,13 +96,22 @@ export function PaperLab() {
   }, [showGuide]);
   function update(next: Partial<CaseDraft>) {
     if (!study) return;
-    setNotebook((previous) => ({
-      version: 1,
-      cases: {
-        ...previous.cases,
-        [study.id]: { ...(previous.cases[study.id] ?? freshCase()), ...next },
-      },
-    }));
+    setNotebook((previous) => {
+      const current = previous.cases[study.id] ?? freshCase();
+      return {
+        version: 1,
+        cases: {
+          ...previous.cases,
+          [study.id]: {
+            ...current,
+            ...next,
+            ...(next.claim !== undefined && next.claim !== current.claim
+              ? { claimChecked: false }
+              : {}),
+          },
+        },
+      };
+    });
   }
   function reset() {
     if (!study) return;
@@ -102,8 +120,24 @@ export function PaperLab() {
       cases: { ...previous.cases, [study.id]: freshCase() },
     }));
   }
-  const progress =
-    study && draft ? stages.findIndex((item) => item.id === draft.phase) : 0;
+  function closeGuide() {
+    setShowGuide(false);
+    helpButton.current?.focus();
+  }
+  const progress = draft
+    ? stages.findIndex((item) => item.id === draft.phase)
+    : 0;
+  function canVisit(index: number) {
+    if (!study || !draft) return false;
+    if (index === 0) return true;
+    if (index === 1) return Boolean(draft.initialClaim);
+    if (index === 2)
+      return Boolean(draft.initialClaim) && boardReady(study, draft);
+    if (index === 3) return boardReady(study, draft) && draft.claimChecked;
+    return (
+      boardReady(study, draft) && draft.claimChecked && draft.transferChecked
+    );
+  }
   return (
     <div className="research-lab paper-lab">
       <a
@@ -121,16 +155,15 @@ export function PaperLab() {
           <Link className="brand" href="/lab" aria-label="Gradly home">
             <BrandLogo />
           </Link>
-          <span className="paper-header-note">
-            A little curiosity goes a long way.
-          </span>
+          <span className="paper-header-note">One step at a time.</span>
           <button
             className="paper-help"
+            ref={helpButton}
             onClick={() => setShowGuide(!showGuide)}
             aria-expanded={showGuide}
           >
             <Icon name="book" size={18} />
-            <span>How to play</span>
+            <span>Help</span>
           </button>
         </div>
       </header>
@@ -142,74 +175,77 @@ export function PaperLab() {
         {showGuide ? (
           <section
             className="paper-guide"
-            aria-label="How to play"
+            aria-label="Help"
             ref={guide}
             tabIndex={-1}
           >
             <div>
-              <h2>Follow the evidence. Change your mind.</h2>
+              <h2>Read. Choose. Try it.</h2>
               <p>
-                Make a first call, open the study’s evidence cards, pin what
-                matters, then build a careful claim. Try the idea in a fresh
-                situation and keep a one-page recap.
+                Read one note at a time, choose a conclusion, then try a new
+                situation. Use the numbered steps to go back.
               </p>
-              <p>
-                Evidence and feedback are authored for this prototype. Guide
-                checks cover selected claims and cards. Your own writing is
-                saved here and is not AI assessed.
-              </p>
+              <details>
+                <summary>About this preview</summary>
+                <p>
+                  Content and feedback are authored, with no AI calls. Your
+                  writing is saved in this tab and is not AI assessed. The
+                  garden study is fictional; the texting study uses a published
+                  paper.
+                </p>
+              </details>
+              <label className="paper-motion">
+                <input
+                  type="checkbox"
+                  checked={reduced}
+                  onChange={(event) => {
+                    setReduced(event.target.checked);
+                    writeReducedMotion(event.target.checked);
+                  }}
+                />{" "}
+                Reduce motion
+              </label>
             </div>
-            <label className="paper-motion">
-              <input
-                type="checkbox"
-                checked={reduced}
-                onChange={(event) => {
-                  setReduced(event.target.checked);
-                  writeReducedMotion(event.target.checked);
-                }}
-              />{" "}
-              Reduce motion
-            </label>
+            <button
+              className="paper-back"
+              onClick={closeGuide}
+              aria-label="Close help"
+            >
+              <Icon name="close" size={20} />
+            </button>
           </section>
         ) : null}
         {!study ? (
           <>
             {caseId ? (
               <div role="status" className="paper-inline-notice">
-                That case file could not be found. Choose one below.
+                Study not found. Choose one below.
               </div>
             ) : null}
             <section className="paper-hero">
               <div className="paper-hero-copy">
                 <span className="paper-eyebrow">
-                  Less passive reading. More discovery.
+                  Research, made approachable
                 </span>
                 <h1 ref={heading} tabIndex={-1}>
-                  Make the paper
+                  Understand a paper.
                   <br />
-                  <span>make sense.</span>
+                  <span>One step at a time.</span>
                 </h1>
                 <p>
-                  Step inside a study. Uncover its evidence, connect the ideas,
-                  and decide what the findings really let you say.
+                  Read a little. Make a choice. See what the evidence supports.
                 </p>
                 <Link href="/lab/texting-lecture" className="btn primary">
                   <ActionLabel>
                     {notebook.cases[referenceCase.id]
-                      ? "Return to the case file"
-                      : "Open the case file"}
+                      ? "Continue my study"
+                      : "Start exploring"}
                   </ActionLabel>
                 </Link>
-                <span className="paper-hero-meta">
-                  One paper. A complete investigation. Ready to explore.
-                </span>
               </div>
-              <div
-                className="paper-hero-scene"
-                aria-label="A paper becomes an evidence trail"
-              >
+              <div className="paper-hero-scene" aria-hidden="true">
                 <div className="paper-scene-sheet">
-                  <span className="paper-file-tab">CASE FILE 01</span>
+                  <span className="paper-file-tab">YOUR FIRST STUDY</span>
                   <Icon name="phone" size={30} />
                   <strong>
                     One lecture.
@@ -222,12 +258,8 @@ export function PaperLab() {
                     <span />
                   </div>
                   <span className="paper-scene-stamp">
-                    Question → Evidence → Understanding
+                    Read → Choose → Understand
                   </span>
-                </div>
-                <div className="paper-scene-note">
-                  <Icon name="search" size={18} />
-                  <span>What can we actually claim?</span>
                 </div>
                 <Mascot pose="thinking" size="large" />
               </div>
@@ -237,13 +269,7 @@ export function PaperLab() {
               aria-labelledby="paper-library-title"
             >
               <div className="paper-section-heading">
-                <div>
-                  <span className="paper-eyebrow">Choose your paper trail</span>
-                  <h2 id="paper-library-title">
-                    Two studies. One way to explore.
-                  </h2>
-                </div>
-                <p>Research is more than a statistical test.</p>
+                <h2 id="paper-library-title">Choose a study</h2>
               </div>
               <div className="paper-case-grid">
                 {paperCases.map((item, index) => {
@@ -255,178 +281,129 @@ export function PaperLab() {
                       key={item.id}
                     >
                       <div className="paper-case-card-top">
-                        <span className="paper-case-number">0{index + 1}</span>
+                        <span className="paper-eyebrow">
+                          {item.provenance === "reference-paper"
+                            ? "Published paper"
+                            : "Fictional practice study"}
+                        </span>
                         <Icon
                           name={index === 0 ? "phone" : "coach"}
-                          size={28}
+                          size={24}
                         />
                       </div>
-                      <span className="paper-eyebrow">{item.topic}</span>
                       <h3>{item.title}</h3>
-                      <p>{item.hook}</p>
                       <div className="paper-case-card-bottom">
                         <span>
-                          {item.provenance === "reference-paper"
-                            ? "Published paper · curated exploration"
-                            : "Fictional study · learning example"}
+                          {index === 0
+                            ? "Texting & learning"
+                            : "Belonging & participation"}
                         </span>
                         <strong>
                           {saved?.phase === "complete"
                             ? "Revisit"
                             : saved
                               ? "Continue"
-                              : "Explore"}
+                              : "Start"}
                           <Icon name="arrow" size={17} />
                         </strong>
                       </div>
-                      {saved ? (
-                        <span className="paper-case-saved">
-                          {saved.phase === "complete"
-                            ? "Case explored"
-                            : `${stages.find((stage) => stage.id === saved.phase)?.label} · draft saved`}
-                        </span>
-                      ) : null}
                     </Link>
                   );
                 })}
               </div>
             </section>
-            <div className="paper-promise">
-              <Icon name="shield" size={20} />
-              <p>
-                Authored prototype · no AI calls. Your notes stay in this
-                browser tab. This experience helps you examine a paper’s core
-                ideas; it does not certify understanding or replace checking the
-                source.
-              </p>
-            </div>
+            <p className="paper-preview-note">
+              <Icon name="shield" size={16} /> Preview · authored content, no AI
+              calls.
+            </p>
           </>
         ) : draft ? (
           <>
             <div className="paper-case-topline">
               <Link href="/lab">
-                <Icon name="back" size={17} /> All case files
+                <Icon name="back" size={17} /> All studies
               </Link>
               <span>
                 {study.provenance === "reference-paper"
-                  ? "Published paper · curated evidence"
-                  : "Fictional study · authored evidence"}
+                  ? "Published paper · guided preview"
+                  : "Fictional practice study"}
               </span>
             </div>
-            <ol className="paper-trail" aria-label="Paper exploration stages">
-              {stages.map((stage, index) => (
-                <li
-                  className={index < progress ? "done" : ""}
-                  aria-current={stage.id === draft.phase ? "step" : undefined}
-                  key={stage.id}
-                >
-                  <span>
-                    {index < progress ? (
-                      <Icon name="check" size={15} />
-                    ) : (
-                      index + 1
-                    )}
-                  </span>
-                  {stage.label}
-                </li>
-              ))}
-            </ol>
+            <nav aria-label="Study steps">
+              <ol className="paper-trail">
+                {stages.map((stage, index) => (
+                  <li
+                    className={
+                      canVisit(index) && index !== progress ? "available" : ""
+                    }
+                    aria-current={stage.id === draft.phase ? "step" : undefined}
+                    key={stage.id}
+                  >
+                    <button
+                      disabled={!canVisit(index)}
+                      aria-label={`Step ${index + 1}: ${stage.label}`}
+                      onClick={() => update({ phase: stage.id })}
+                    >
+                      <span>
+                        {index < progress ? (
+                          <Icon name="check" size={14} />
+                        ) : (
+                          index + 1
+                        )}
+                      </span>
+                      <span>{stage.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </nav>
             <div className="paper-stage-heading">
               <div>
-                <span className="paper-eyebrow">
-                  {study.topic} · {progress + 1} of 5
-                </span>
+                <span className="paper-eyebrow">Step {progress + 1} of 5</span>
                 <h1 ref={heading} tabIndex={-1}>
                   {draft.phase === "question"
                     ? study.title
                     : draft.phase === "evidence"
-                      ? "Build your evidence board."
+                      ? "Read the study."
                       : draft.phase === "claim"
-                        ? "Give the finding the right reach."
+                        ? "What can we conclude?"
                         : draft.phase === "transfer"
-                          ? "New setting. Same careful thinking."
-                          : "The paper, connected."}
+                          ? "Try a new situation."
+                          : "Your paper recap."}
                 </h1>
-                <p>
-                  {draft.phase === "question"
-                    ? study.hook
-                    : draft.phase === "evidence"
-                      ? "Open the cards. Pin the evidence you would use, including something that limits the claim."
-                      : draft.phase === "claim"
-                        ? "Move the claim dial. Connect it to the evidence you pinned, then explain the connection in your own words."
-                        : draft.phase === "transfer"
-                          ? "Take the idea beyond this paper. Notice what changes before carrying a conclusion across."
-                          : "Keep the question, approach, findings and boundaries together. This is your starting point for explaining the study to someone else."}
-                </p>
+                {draft.phase === "question" ? (
+                  <p>Start with your best guess. You can change it later.</p>
+                ) : draft.phase === "claim" ? (
+                  <p>Choose the answer that fits what you just read.</p>
+                ) : null}
               </div>
-              <span className="paper-prototype-label">
-                Authored exploration
-                <br />
-                No AI calls
-              </span>
             </div>
             {draft.phase === "question" ? (
-              <div className="paper-question-layout">
-                <section className="paper-panel paper-brief">
-                  <span className="paper-eyebrow">
-                    The question at the heart of the paper
-                  </span>
-                  <h2>{study.question}</h2>
-                  <p>{study.context}</p>
-                  <div className="paper-mentor">
-                    <Mascot pose="guiding" size="small" />
-                    <p>
-                      Make a provisional call. You can change your mind when you
-                      see the evidence.
-                    </p>
-                  </div>
-                  <details>
-                    <summary>About this case file</summary>
-                    <p>{study.sourceNote}</p>
-                    <p>
-                      {study.provenance === "fictional-study"
-                        ? "The study, participants and findings are invented for learning. They are not evidence about a real community."
-                        : "The cards paraphrase selected study details. Later you can open the original source and inspect the wider argument."}
-                    </p>
-                  </details>
-                </section>
-                <section className="paper-panel">
-                  <fieldset
-                    className="paper-choice-list"
-                    disabled={draft.opened.length > 0}
-                  >
-                    <legend>
-                      What would be a defensible kind of conclusion?
-                    </legend>
-                    {study.claims.map((option) => (
-                      <label
-                        className={
-                          draft.initialClaim === option.id ? "selected" : ""
-                        }
-                        key={option.id}
-                      >
-                        <input
-                          type="radio"
-                          name="initial-claim"
-                          value={option.id}
-                          checked={draft.initialClaim === option.id}
-                          onChange={() =>
-                            update({
-                              initialClaim: option.id,
-                              claim: option.id,
-                            })
-                          }
-                        />
-                        <span>{option.text}</span>
-                      </label>
-                    ))}
-                  </fieldset>
+              <section className="paper-panel paper-focus-card">
+                <h2 className="paper-study-question">{study.question}</h2>
+                <Choices
+                  study={study}
+                  value={draft.initialClaim}
+                  label="Your starting answer"
+                  name="initial-claim"
+                  disabled={draft.opened.length > 0}
+                  onChange={(id) => update({ initialClaim: id, claim: id })}
+                />
+                {draft.opened.length > 0 ? (
+                  <p className="paper-small">
+                    Your starting answer is kept. Change your conclusion in step
+                    3.
+                  </p>
+                ) : null}
+                <details className="paper-optional">
+                  <summary>
+                    Add a starting note <span>(optional)</span>
+                  </summary>
                   <label
                     className="paper-field-label"
                     htmlFor="initial-explanation"
                   >
-                    What makes that seem plausible?{" "}
-                    <span className="paper-small">(optional)</span>
+                    Why do you think so?
                   </label>
                   <textarea
                     id="initial-explanation"
@@ -437,29 +414,32 @@ export function PaperLab() {
                     onChange={(event) =>
                       update({ initialExplanation: event.target.value })
                     }
-                    aria-describedby="initial-writing-note"
-                    placeholder="Capture your first thought before opening the evidence."
                   />
-                  <p id="initial-writing-note" className="paper-small">
-                    This is your starting thought, not an assessed answer.
-                  </p>
                   <Confidence
                     value={draft.initialConfidence}
                     onChange={(value) => update({ initialConfidence: value })}
-                    label="How sure are you before opening the evidence?"
+                    label="Your starting confidence"
                     disabled={draft.opened.length > 0}
                   />
-                  {draft.opened.length > 0 ? (
-                    <p className="paper-small">
-                      Your first call is kept as it was before opening evidence.
-                      Revise your current interpretation in Connect.
+                  <p className="paper-small">
+                    Personal notes only. Writing is not AI assessed.
+                  </p>
+                </details>
+                <details className="paper-optional">
+                  <summary>Study background & source</summary>
+                  <p>{study.context}</p>
+                  <p>{study.sourceNote}</p>
+                  {study.provenance === "fictional-study" ? (
+                    <p>
+                      All people, accounts and findings in this practice study
+                      are fictional.
                     </p>
                   ) : null}
-                </section>
-              </div>
+                </details>
+              </section>
             ) : null}
             {draft.phase === "evidence" ? (
-              <EvidenceBoard
+              <EvidenceReader
                 key={study.id}
                 study={study}
                 draft={draft}
@@ -467,159 +447,115 @@ export function PaperLab() {
               />
             ) : null}
             {draft.phase === "claim" ? (
-              <div className="paper-connect-layout">
-                <section className="paper-panel paper-claim-builder">
-                  <span className="paper-eyebrow">
-                    Your working interpretation
-                  </span>
-                  <label className="paper-field-label" htmlFor="claim-dial">
-                    How far should the claim go?
-                  </label>
-                  <input
-                    id="claim-dial"
-                    className="paper-claim-dial"
-                    type="range"
-                    min={0}
-                    max={2}
-                    step={1}
-                    value={Math.max(
-                      0,
-                      study.claims.findIndex(
-                        (option) => option.id === draft.claim,
-                      ),
-                    )}
-                    aria-valuetext={
-                      study.claims.find((option) => option.id === draft.claim)
-                        ?.text ?? "Choose a claim"
-                    }
-                    onChange={(event) =>
-                      update({
-                        claim: study.claims[Number(event.target.value)]!.id,
-                      })
-                    }
-                  />
-                  <div className="paper-dial-labels" aria-hidden="true">
-                    <span>Hold back</span>
-                    <span>Bounded</span>
-                    <span>Reach further</span>
-                  </div>
-                  <fieldset className="paper-choice-list paper-claim-options">
-                    <legend className="sr-only">Your revised claim</legend>
-                    {study.claims.map((option) => (
-                      <label
-                        className={draft.claim === option.id ? "selected" : ""}
-                        key={option.id}
-                      >
-                        <input
-                          type="radio"
-                          name="revised-claim"
-                          checked={draft.claim === option.id}
-                          onChange={() => update({ claim: option.id })}
-                        />
-                        <span>{option.text}</span>
-                      </label>
-                    ))}
-                  </fieldset>
+              <section className="paper-panel paper-focus-card">
+                <Choices
+                  study={study}
+                  value={draft.claim}
+                  label="Your conclusion"
+                  name="revised-claim"
+                  onChange={(id) => update({ claim: id })}
+                />
+                {draft.claimChecked ? (
                   <ClaimReview study={study} draft={draft} />
-                  <details>
-                    <summary>Revisit my first thought</summary>
-                    <p>
-                      {
-                        study.claims.find(
-                          (option) => option.id === draft.initialClaim,
-                        )?.text
-                      }
-                    </p>
-                    <blockquote>
-                      {draft.initialExplanation ||
-                        "No initial explanation added."}
-                    </blockquote>
-                    <p className="paper-small">
-                      Kept from before the evidence. Your writing has not been
-                      assessed.
-                    </p>
-                  </details>
+                ) : null}
+                <details className="paper-optional">
+                  <summary>Review study notes</summary>
+                  <ul className="paper-note-checklist">
+                    {study.evidence.map((item) => (
+                      <li key={item.id}>
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={draft.pinned.includes(item.id)}
+                            onChange={() =>
+                              update({
+                                pinned: draft.pinned.includes(item.id)
+                                  ? draft.pinned.filter((id) => id !== item.id)
+                                  : [...draft.pinned, item.id],
+                                opened: draft.opened.includes(item.id)
+                                  ? draft.opened
+                                  : [...draft.opened, item.id],
+                              })
+                            }
+                          />
+                          <span>
+                            <strong>{item.label}</strong>
+                            <span>{item.summary}</span>
+                          </span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="paper-small">
+                    Checked notes are included in your download. Saving notes is
+                    optional.
+                  </p>
+                </details>
+                <details className="paper-optional">
+                  <summary>
+                    Add my explanation <span>(optional)</span>
+                  </summary>
                   <label
                     htmlFor="paper-explanation"
                     className="paper-field-label"
                   >
-                    Connect the claim to the evidence
+                    My explanation
                   </label>
                   <textarea
                     id="paper-explanation"
-                    rows={4}
+                    rows={3}
                     maxLength={3000}
                     value={draft.explanation}
                     onChange={(event) =>
                       update({ explanation: event.target.value })
                     }
-                    placeholder="What supports the claim? What keeps it bounded?"
                     aria-describedby="paper-writing-note"
+                    placeholder="Which evidence changed or supported your answer?"
                   />
                   <p id="paper-writing-note" className="paper-small">
-                    Your writing is not assessed in this prototype. The guide
-                    checks the selected claim and evidence cards.
+                    Your writing is not AI assessed.
                   </p>
+                  <Confidence
+                    value={draft.confidence}
+                    onChange={(value) => update({ confidence: value })}
+                    label="Your confidence now"
+                  />
                   <details>
-                    <summary>See one authored explanation</summary>
+                    <summary>See an example explanation</summary>
                     <p>{study.revision.explanation}</p>
                     <button
-                      className="btn outline compact"
+                      className="paper-back"
                       onClick={() =>
                         update({ explanation: study.revision.explanation })
                       }
                     >
-                      Use this example explanation
+                      Use this example
                     </button>
                   </details>
-                  <Confidence
-                    value={draft.confidence}
-                    onChange={(value) => update({ confidence: value })}
-                    label="How sure are you after examining the evidence?"
-                  />
-                </section>
-                <section
-                  className="paper-panel paper-pinned-summary"
-                  aria-label="Your pinned evidence"
-                >
-                  <span className="paper-eyebrow">
-                    Keep the evidence beside the claim
-                  </span>
-                  <h2>Why these cards?</h2>
-                  {study.evidence
-                    .filter((item) => draft.pinned.includes(item.id))
-                    .map((item) => (
-                      <article key={item.id}>
-                        <span className={`paper-evidence-type ${item.kind}`}>
-                          {item.kind}
-                        </span>
-                        <h3>{item.label}</h3>
-                        <p>{item.text}</p>
-                        <span className="paper-source">{item.sourceLabel}</span>
-                      </article>
-                    ))}
-                  <button
-                    className="btn outline compact"
-                    onClick={() => update({ phase: "evidence" })}
-                  >
-                    <ActionLabel icon="back">
-                      Change pinned evidence
-                    </ActionLabel>
-                  </button>
-                </section>
-              </div>
+                </details>
+                <details className="paper-optional">
+                  <summary>My starting answer</summary>
+                  <p>
+                    {
+                      study.claims.find(
+                        (option) => option.id === draft.initialClaim,
+                      )?.text
+                    }
+                  </p>
+                  {draft.initialExplanation ? (
+                    <blockquote>{draft.initialExplanation}</blockquote>
+                  ) : null}
+                </details>
+              </section>
             ) : null}
             {draft.phase === "transfer" ? (
-              <section className="paper-panel paper-transfer">
-                <div className="paper-mentor">
-                  <Mascot pose="thinking" size="small" />
-                  <p>
-                    The takeaway has to travel. A new setting can change which
-                    claims the evidence supports.
-                  </p>
-                </div>
+              <section className="paper-panel paper-focus-card paper-transfer">
+                <span className="paper-eyebrow">Fictional example</span>
                 <p className="paper-transfer-context">
-                  {study.transfer.context}
+                  {study.transfer.context.replace(
+                    /^Fictional transfer case: /,
+                    "",
+                  )}
                 </p>
                 <fieldset className="paper-choice-list">
                   <legend>{study.transfer.prompt}</legend>
@@ -649,10 +585,12 @@ export function PaperLab() {
                   <div
                     className={`paper-guide-feedback ${draft.transferChoice === study.transfer.supportedOptionId ? "supported" : "reconsider"}`}
                     role="status"
+                    tabIndex={-1}
+                    ref={transferFeedback}
                   >
                     <strong>
                       {draft.transferChoice === study.transfer.supportedOptionId
-                        ? "The distinction carries over."
+                        ? "That connection holds."
                         : "Look at what changed."}
                     </strong>
                     <p>
@@ -662,15 +600,11 @@ export function PaperLab() {
                         )?.feedback
                       }
                     </p>
+                    <span className="paper-small">
+                      Authored feedback · no AI assessment
+                    </span>
                   </div>
                 ) : null}
-                <button
-                  className="btn outline"
-                  disabled={!draft.transferChoice}
-                  onClick={() => update({ transferChecked: true })}
-                >
-                  <ActionLabel icon="verify">Check this connection</ActionLabel>
-                </button>
               </section>
             ) : null}
             {draft.phase === "complete" ? (
@@ -680,19 +614,21 @@ export function PaperLab() {
                 draft={draft}
                 update={update}
                 reset={reset}
+                storageFailed={storageFailed}
               />
             ) : null}
-            <div className="paper-save-note" role="status">
-              {storageFailed
-                ? "Tab storage is unavailable. Keep this page open to retain your notes."
-                : "Saved in this tab · no account or AI request"}
-            </div>
-            {draft.phase !== "complete" ? (
+            {storageFailed ? (
+              <p className="paper-inline-notice" role="status">
+                Tab storage is unavailable. Keep this page open to retain your
+                notes.
+              </p>
+            ) : null}
+            {draft.phase !== "complete" && draft.phase !== "evidence" ? (
               <footer className="paper-action-dock">
                 <div>
-                  {draft.phase === "question" ? (
+                  {progress === 0 ? (
                     <Link className="paper-back" href="/lab">
-                      <Icon name="back" size={17} /> Case files
+                      <Icon name="back" size={17} /> Studies
                     </Link>
                   ) : (
                     <button
@@ -704,38 +640,43 @@ export function PaperLab() {
                       <Icon name="back" size={17} /> Back
                     </button>
                   )}
-                  <p>
-                    {draft.phase === "question"
-                      ? "A first call is a starting point."
-                      : draft.phase === "evidence"
-                        ? boardReady(study, draft)
-                          ? "Your board covers design, findings and limits."
-                          : "Open a design, finding and limitation card. Pin at least two."
-                        : draft.phase === "claim"
-                          ? "A careful claim keeps its evidence and limits together."
-                          : "Check the connection before your recap."}
-                  </p>
+                  <span className="paper-dock-hint" role="status">
+                    {draft.phase === "question" && !draft.initialClaim
+                      ? "Choose an answer to begin"
+                      : draft.phase === "transfer" && !draft.transferChoice
+                        ? "Choose an answer"
+                        : ""}
+                  </span>
                   <button
                     className="btn primary"
                     disabled={
                       draft.phase === "question"
                         ? !draft.initialClaim
-                        : draft.phase === "evidence"
-                          ? !boardReady(study, draft)
-                          : draft.phase === "claim"
-                            ? !draft.claim
-                            : !draft.transferChecked
+                        : draft.phase === "claim"
+                          ? !draft.claim
+                          : !draft.transferChoice
                     }
-                    onClick={() => update({ phase: stages[progress + 1]!.id })}
+                    onClick={() => {
+                      if (draft.phase === "claim" && !draft.claimChecked)
+                        update({ claimChecked: true });
+                      else if (
+                        draft.phase === "transfer" &&
+                        !draft.transferChecked
+                      )
+                        update({ transferChecked: true });
+                      else update({ phase: stages[progress + 1]!.id });
+                    }}
                   >
                     <ActionLabel>
                       {draft.phase === "question"
-                        ? "Open the evidence board"
-                        : draft.phase === "evidence"
-                          ? "Build my interpretation"
-                          : draft.phase === "claim"
-                            ? "Try it in a new setting"
-                            : "See my paper recap"}
+                        ? "Start exploring"
+                        : draft.phase === "claim" && !draft.claimChecked
+                          ? "Check answer"
+                          : draft.phase === "transfer" && !draft.transferChecked
+                            ? "Check answer"
+                            : draft.phase === "transfer"
+                              ? "See recap"
+                              : "Continue"}
                     </ActionLabel>
                   </button>
                 </div>
@@ -744,17 +685,59 @@ export function PaperLab() {
           </>
         ) : null}
       </main>
-      <footer className="paper-footer">
-        <Link href="/lab">Gradly</Link>
-        <span>Curiosity, with evidence.</span>
-        <button onClick={() => setShowGuide(!showGuide)}>
-          About this prototype
-        </button>
-      </footer>
+      {!study ? (
+        <footer className="paper-footer">
+          <Link href="/lab">Gradly</Link>
+          <button
+            onClick={() => {
+              setShowGuide(true);
+              window.scrollTo({ top: 0, behavior: "instant" });
+            }}
+          >
+            About this preview
+          </button>
+        </footer>
+      ) : null}
     </div>
   );
 }
 
+function Choices({
+  study,
+  value,
+  label,
+  name,
+  disabled = false,
+  onChange,
+}: {
+  study: ResearchCase;
+  value: string;
+  label: string;
+  name: string;
+  disabled?: boolean;
+  onChange: (id: string) => void;
+}) {
+  return (
+    <fieldset className="paper-choice-list" disabled={disabled}>
+      <legend>{label}</legend>
+      {study.claims.map((option) => (
+        <label
+          className={value === option.id ? "selected" : ""}
+          key={option.id}
+        >
+          <input
+            type="radio"
+            name={name}
+            value={option.id}
+            checked={value === option.id}
+            onChange={() => onChange(option.id)}
+          />
+          <span>{option.text}</span>
+        </label>
+      ))}
+    </fieldset>
+  );
+}
 function Confidence({
   value,
   onChange,
@@ -782,12 +765,11 @@ function Confidence({
           </label>
         ))}
       </div>
-      <p>Self-report only. Confidence is not a score.</p>
     </fieldset>
   );
 }
 
-function EvidenceBoard({
+function EvidenceReader({
   study,
   draft,
   update,
@@ -796,233 +778,158 @@ function EvidenceBoard({
   draft: CaseDraft;
   update: (next: Partial<CaseDraft>) => void;
 }) {
-  const [active, setActive] = useState<string | null>(null);
-  const [filter, setFilter] = useState("all");
-  const selected = study.evidence.find((item) => item.id === active);
+  // Resume at the first unread note; going back never discards notes or choices.
+  const [index, setIndex] = useState(() =>
+    Math.max(
+      0,
+      study.evidence.findIndex((item) => !draft.opened.includes(item.id)),
+    ),
+  );
+  const selected = study.evidence[index]!;
   const cardHeading = useRef<HTMLHeadingElement>(null);
-  const opener = useRef<HTMLButtonElement | null>(null);
+  // Mark the automatically displayed first note once, after it is rendered.
+  const initialNote = useRef(selected.id);
   useEffect(() => {
-    if (active) cardHeading.current?.focus();
-  }, [active]);
-  function open(id: string, event: React.MouseEvent<HTMLButtonElement>) {
-    opener.current = event.currentTarget;
-    setActive(id);
-    if (!draft.opened.includes(id)) update({ opened: [...draft.opened, id] });
+    if (!draft.opened.includes(initialNote.current))
+      update({ opened: [...draft.opened, initialNote.current] });
+    // Subsequent notes are recorded by the navigation event below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    cardHeading.current?.focus();
+  }, [index]);
+  function read(nextIndex: number) {
+    const note = study.evidence[nextIndex]!;
+    setIndex(nextIndex);
+    if (!draft.opened.includes(note.id))
+      update({ opened: [...draft.opened, note.id] });
   }
-  function pin(id: string) {
-    update({
-      pinned: draft.pinned.includes(id)
-        ? draft.pinned.filter((item) => item !== id)
-        : [...draft.pinned, id],
-    });
+  function next() {
+    if (index < study.evidence.length - 1) read(index + 1);
+    else {
+      const unread = study.evidence.findIndex(
+        (item) => !draft.opened.includes(item.id),
+      );
+      if (unread !== -1) read(unread);
+      else update({ phase: "claim" });
+    }
   }
+  const allRead = study.evidence.every((item) =>
+    draft.opened.includes(item.id),
+  );
   return (
     <>
-      <div className="paper-board-map" aria-label="The paper’s evidence trail">
-        <div>
-          <Icon name="search" size={21} />
-          <strong>Question</strong>
-          <span>{study.question}</span>
-        </div>
-        {["design", "finding", "limitation"].map((kind) => (
-          <div
-            key={kind}
-            className={
-              study.evidence.some(
-                (item) => item.kind === kind && draft.opened.includes(item.id),
-              )
-                ? "explored"
-                : ""
-            }
-          >
-            <Icon
-              name={
-                kind === "design"
-                  ? "research"
-                  : kind === "finding"
-                    ? "document"
-                    : "shield"
-              }
-              size={21}
-            />
-            <strong>
-              {kind === "design"
-                ? "Approach"
-                : kind === "finding"
-                  ? "Findings"
-                  : "Boundaries"}
-            </strong>
+      <div className="paper-reading-layout">
+        <nav className="paper-note-nav" aria-label="Study notes">
+          <ol>
+            {study.evidence.map((item, itemIndex) => (
+              <li key={item.id}>
+                <button
+                  aria-current={index === itemIndex ? "step" : undefined}
+                  aria-label={`Read note ${itemIndex + 1}: ${item.label}`}
+                  onClick={() => read(itemIndex)}
+                >
+                  <span className="paper-note-number">
+                    {draft.opened.includes(item.id) && index !== itemIndex ? (
+                      <Icon name="check" size={15} />
+                    ) : (
+                      itemIndex + 1
+                    )}
+                  </span>
+                  <span className="paper-note-nav-title">{item.label}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <article
+          className="paper-panel paper-reading-card"
+          aria-label="Current study note"
+        >
+          <div className="paper-note-top">
+            <span className="paper-eyebrow">
+              {evidenceKinds[selected.kind]}
+            </span>
             <span>
-              {
-                study.evidence.filter(
-                  (item) =>
-                    item.kind === kind && draft.opened.includes(item.id),
-                ).length
-              }{" "}
-              of {study.evidence.filter((item) => item.kind === kind).length}{" "}
-              cards opened
+              Note {index + 1} of {study.evidence.length}
             </span>
           </div>
-        ))}
-      </div>
-      <section className="paper-pinboard" aria-label="Pinned evidence">
-        <div>
-          <Icon name="verify" size={20} />
-          <strong>Your evidence trail</strong>
-          <span>{draft.pinned.length} pinned</span>
-        </div>
-        {draft.pinned.length ? (
-          <ul>
-            {study.evidence
-              .filter((item) => draft.pinned.includes(item.id))
-              .map((item) => (
-                <li key={item.id}>
-                  <span>{item.label}</span>
-                  <button
-                    aria-label={`Unpin ${item.label}`}
-                    onClick={() => pin(item.id)}
-                  >
-                    <Icon name="close" size={16} />
-                  </button>
-                </li>
-              ))}
-          </ul>
-        ) : (
-          <p>
-            Open a card, then pin what you would use to explain the paper.
-            Include a boundary, not just a result.
-          </p>
-        )}
-      </section>
-      <div className="paper-board-toolbar">
-        <h2>
-          On the table{" "}
-          <span>
-            {draft.opened.length}/{study.evidence.length} opened
-          </span>
-        </h2>
-        <label>
-          Show{" "}
-          <select
-            aria-label="Show evidence"
-            value={filter}
-            onChange={(event) => {
-              setFilter(event.target.value);
-              setActive(null);
-            }}
-          >
-            <option value="all">All evidence</option>
-            <option value="design">Approach</option>
-            <option value="finding">Findings</option>
-            <option value="limitation">Boundaries</option>
-          </select>
-        </label>
-      </div>
-      <div className="paper-evidence-layout">
-        <div className="paper-evidence-grid">
-          {study.evidence
-            .filter((item) => filter === "all" || item.kind === filter)
-            .map((item, index) => {
-              const opened = draft.opened.includes(item.id);
-              const pinned = draft.pinned.includes(item.id);
-              return (
-                <article
-                  className={`paper-evidence-card evidence-${item.kind} ${active === item.id ? "active" : ""} ${opened ? "opened" : ""}`}
-                  key={item.id}
-                >
-                  <span className="paper-evidence-index">
-                    E{study.evidence.indexOf(item) + 1}
-                  </span>
-                  <span className="paper-evidence-type">
-                    {item.kind === "design"
-                      ? "Approach"
-                      : item.kind === "finding"
-                        ? "Finding"
-                        : "Boundary"}
-                  </span>
-                  <h3>{item.label}</h3>
-                  <p className="paper-card-preview">
-                    {opened ? item.text : "Open this source note."}
-                  </p>
-                  <div>
-                    <button
-                      className="paper-card-open"
-                      onClick={(event) => open(item.id, event)}
-                      aria-expanded={active === item.id}
-                    >
-                      <Icon name={opened ? "book" : "search"} size={17} />
-                      {opened ? "Inspect card" : "Open card"}
-                      <span className="sr-only">: {item.label}</span>
-                    </button>
-                    {opened ? (
-                      <button
-                        className="paper-pin"
-                        aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
-                        aria-pressed={pinned}
-                        onClick={() => pin(item.id)}
-                      >
-                        <Icon name={pinned ? "check" : "verify"} size={18} />
-                        {pinned ? "Pinned" : "Pin"}
-                      </button>
-                    ) : (
-                      <span className="paper-card-seal">Not opened</span>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-        </div>
-        {selected ? (
-          <aside className="paper-card-reader" aria-label="Open evidence card">
-            <div className="paper-reader-top">
-              <span className="paper-eyebrow">
-                Evidence E{study.evidence.indexOf(selected) + 1}
-              </span>
-              <button
-                aria-label="Close evidence card"
-                onClick={() => {
-                  setActive(null);
-                  opener.current?.focus();
-                }}
-              >
-                <Icon name="close" size={20} />
-              </button>
-            </div>
-            <h2 ref={cardHeading} tabIndex={-1}>
-              {selected.label}
-            </h2>
-            <p>{selected.text}</p>
-            <span className="paper-source">{selected.sourceLabel}</span>
-            <button
-              className="btn outline compact"
-              onClick={() => pin(selected.id)}
-              aria-pressed={draft.pinned.includes(selected.id)}
+          <h2 ref={cardHeading} tabIndex={-1}>
+            {selected.label}
+          </h2>
+          <p className="paper-note-summary">{selected.summary}</p>
+          {selected.id === "difference" ? (
+            <div
+              className="paper-score-comparison"
+              role="img"
+              aria-label="Average quiz scores: 83 percent without texting; 73.41 percent with texting."
             >
-              <ActionLabel icon="verify">
-                {draft.pinned.includes(selected.id)
-                  ? "Remove from my evidence"
-                  : "Pin to my evidence"}
-              </ActionLabel>
+              <div>
+                <span>No texting</span>
+                <div>
+                  <i style={{ width: "83%" }} />
+                </div>
+                <strong>83.00%</strong>
+              </div>
+              <div>
+                <span>Texting</span>
+                <div>
+                  <i style={{ width: "73.41%" }} />
+                </div>
+                <strong>73.41%</strong>
+              </div>
+            </div>
+          ) : null}
+          <span className="paper-source">{selected.sourceLabel}</span>
+          <div className="paper-note-extras">
+            <details key={selected.id}>
+              <summary>More detail</summary>
+              <p>{selected.text}</p>
+            </details>
+            <button
+              className="paper-save-button"
+              aria-pressed={draft.pinned.includes(selected.id)}
+              onClick={() =>
+                update({
+                  pinned: draft.pinned.includes(selected.id)
+                    ? draft.pinned.filter((id) => id !== selected.id)
+                    : [...draft.pinned, selected.id],
+                })
+              }
+            >
+              <Icon
+                name={draft.pinned.includes(selected.id) ? "check" : "document"}
+                size={17}
+              />
+              {draft.pinned.includes(selected.id) ? "Saved note" : "Save note"}
             </button>
-            <p className="paper-small">
-              {selected.kind === "limitation"
-                ? "A limitation helps decide how far a conclusion can travel."
-                : selected.kind === "design"
-                  ? "The approach shapes what the findings can mean."
-                  : "A result is useful when you keep its measurement and context attached."}
-            </p>
-          </aside>
-        ) : (
-          <aside className="paper-reader-empty">
-            <Mascot pose="reading" size="small" />
-            <h2>Follow your curiosity.</h2>
-            <p>
-              Open any card to inspect the evidence. Pin the pieces that help
-              you explain the study.
-            </p>
-          </aside>
-        )}
+          </div>
+        </article>
       </div>
+      <footer className="paper-action-dock">
+        <div>
+          <button
+            className="paper-back"
+            onClick={() =>
+              index > 0 ? read(index - 1) : update({ phase: "question" })
+            }
+          >
+            <Icon name="back" size={17} /> Back
+          </button>
+          <span className="paper-dock-hint">
+            {index + 1} of {study.evidence.length} notes
+          </span>
+          <button className="btn primary" onClick={next}>
+            <ActionLabel>
+              {index === study.evidence.length - 1 && allRead
+                ? "Choose a conclusion"
+                : index === study.evidence.length - 1
+                  ? "Read remaining notes"
+                  : "Next note"}
+            </ActionLabel>
+          </button>
+        </div>
+      </footer>
     </>
   );
 }
@@ -1035,33 +942,54 @@ function ClaimReview({
   draft: CaseDraft;
 }) {
   const review = evidenceReview(study, draft);
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    heading.current?.focus();
+  }, []);
   return (
     <div
-      className={`paper-guide-feedback ${review.ready ? "supported" : "reconsider"}`}
+      className={`paper-guide-feedback ${review.supported ? "supported" : "reconsider"}`}
       role="status"
     >
-      <span className="paper-eyebrow">
-        Authored guide · selected claim and cards
-      </span>
-      <h3>{review.label}</h3>
+      <h2 ref={heading} tabIndex={-1}>
+        {review.supported ? "That fits the evidence." : "Look more closely."}
+      </h2>
       <p>
         {study.claims.find((option) => option.id === draft.claim)?.feedback}
       </p>
-      <ul>
-        <li>
-          {review.relevant.length
-            ? "You pinned evidence that supports the interpretation."
-            : "Pin evidence that directly supports the interpretation."}
-        </li>
-        <li>
-          {review.boundary
-            ? "You kept the counterexample or boundary in view."
-            : `Consider “${study.evidence.find((item) => item.id === study.competingEvidenceId)?.label}”. That card complicates the interpretation.`}
-        </li>
-      </ul>
-      <p>
-        <strong>Think about this:</strong> {study.coachingQuestion}
-      </p>
+      <details>
+        <summary>Why?</summary>
+        <p>{study.coachingQuestion}</p>
+        <ul>
+          {study.evidence
+            .filter(
+              (item) =>
+                item.id === study.usefulEvidenceIds[0] ||
+                item.id === study.competingEvidenceId,
+            )
+            .map((item) => (
+              <li key={item.id}>
+                <strong>{item.label}</strong>
+                <p>{item.summary}</p>
+                <span className="paper-source">{item.sourceLabel}</span>
+              </li>
+            ))}
+        </ul>
+      </details>
+      {draft.pinned.length > 0 ? (
+        <details>
+          <summary>Check my saved notes</summary>
+          <strong>{review.label}</strong>
+          <p>
+            {review.ready
+              ? "Your notes include support and a boundary."
+              : review.relevant.length === 0
+                ? "Save a note that directly supports the conclusion, as well as its limits."
+                : "Include the note that complicates the conclusion."}
+          </p>
+        </details>
+      ) : null}
+      <span className="paper-small">Authored feedback · no AI assessment</span>
     </div>
   );
 }
@@ -1071,15 +999,22 @@ function PaperRecap({
   draft,
   update,
   reset,
+  storageFailed,
 }: {
   study: ResearchCase;
   draft: CaseDraft;
   update: (next: Partial<CaseDraft>) => void;
   reset: () => void;
+  storageFailed: boolean;
 }) {
   const [exported, setExported] = useState(false);
   const [exportError, setExportError] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
+  const confirmation = useRef<HTMLDivElement>(null);
+  const restartButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (confirmReset) confirmation.current?.focus();
+  }, [confirmReset]);
   function download() {
     try {
       const url = URL.createObjectURL(
@@ -1098,236 +1033,171 @@ function PaperRecap({
       setExportError(true);
     }
   }
-  const review = evidenceReview(study, draft);
   return (
-    <>
-      <section className="paper-recap-banner">
+    <section
+      className="paper-panel paper-focus-card paper-recap"
+      aria-label="Paper recap"
+    >
+      <div className="paper-recap-intro">
         <Mascot pose="approving" size="small" />
         <div>
-          <h2>You followed a paper from question to claim.</h2>
-          <p>{study.takeaway}</p>
-          <span>Exploration complete · no mastery score awarded</span>
-        </div>
-      </section>
-      <div className="paper-recap-grid">
-        <section
-          className="paper-panel paper-paper-map"
-          aria-label="Paper recap"
-        >
-          <span className="paper-eyebrow">The paper in one connected view</span>
-          <h2>{study.paper.title}</h2>
-          <p className="paper-source">{study.paper.authors}</p>
-          {[
-            { label: "Question", text: study.question, icon: "search" },
-            { label: "Approach", text: study.design, icon: "research" },
-            { label: "Findings", text: study.findings, icon: "document" },
-            {
-              label: "What it does not settle",
-              text: study.limitations.join(" "),
-              icon: "shield",
-            },
-          ].map((part) => (
-            <article key={part.label}>
-              <span className="paper-map-icon">
-                <Icon
-                  name={
-                    part.icon as "search" | "research" | "document" | "shield"
-                  }
-                  size={21}
-                />
-              </span>
-              <div>
-                <h3>{part.label}</h3>
-                <p>{part.text}</p>
-              </div>
-            </article>
-          ))}
-          {study.paper.url ? (
-            <a
-              className="paper-original-source"
-              href={study.paper.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Inspect the original paper <Icon name="arrow" size={17} />
-              <span className="sr-only">(opens in a new tab)</span>
-            </a>
-          ) : (
-            <p className="paper-small">
-              Fictional study for learning. No original publication exists.
-            </p>
-          )}
-        </section>
-        <div className="paper-recap-personal">
-          <section
-            className="paper-panel"
-            aria-label="Your interpretation journey"
-          >
-            <span className="paper-eyebrow">Your thinking trail</span>
-            <h2>
-              {draft.initialClaim === draft.claim
-                ? "You kept your claim. What strengthened it?"
-                : "Your claim changed. What changed it?"}
-            </h2>
-            <div className="paper-before-after">
-              <div>
-                <strong>Before opening the evidence</strong>
-                <p>
-                  {
-                    study.claims.find(
-                      (option) => option.id === draft.initialClaim,
-                    )?.text
-                  }
-                </p>
-                <span>{confidenceLabels[draft.initialConfidence - 1]}</span>
-                {draft.initialExplanation ? (
-                  <blockquote>{draft.initialExplanation}</blockquote>
-                ) : null}
-              </div>
-              <div>
-                <strong>After exploring</strong>
-                <p>
-                  {
-                    study.claims.find((option) => option.id === draft.claim)
-                      ?.text
-                  }
-                </p>
-                <span>{confidenceLabels[draft.confidence - 1]}</span>
-              </div>
-            </div>
-            <p
-              className={`paper-recap-guide ${review.ready ? "supported" : "reconsider"}`}
-            >
-              <strong>Guide check: {review.label}</strong>
-            </p>
-            {!review.ready ? (
-              <button
-                className="btn outline compact"
-                onClick={() => update({ phase: "claim" })}
-              >
-                Revisit my interpretation
-              </button>
-            ) : null}
-            <details>
-              <summary>My explanation and pinned evidence</summary>
-              <p>{draft.explanation || "No written explanation added."}</p>
-              <p className="paper-small">Writing not AI assessed.</p>
-              <ul>
-                {study.evidence
-                  .filter((item) => draft.pinned.includes(item.id))
-                  .map((item) => (
-                    <li key={item.id}>
-                      {item.label} · {item.sourceLabel}
-                    </li>
-                  ))}
-              </ul>
-            </details>
-          </section>
-          <section className="paper-panel" aria-label="Transfer reflection">
-            <span className="paper-eyebrow">The idea in a new setting</span>
-            <h2>
-              {draft.transferChoice === study.transfer.supportedOptionId
-                ? "You carried the distinction across."
-                : "Keep this distinction in view."}
-            </h2>
-            <p>
-              {
-                study.transfer.options.find(
-                  (option) => option.id === draft.transferChoice,
-                )?.feedback
-              }
-            </p>
-            <button
-              className="paper-back"
-              onClick={() => update({ phase: "transfer" })}
-            >
-              Revisit the new setting
-            </button>
-          </section>
-          <section className="paper-panel">
-            <label className="paper-field-label" htmlFor="paper-reflection">
-              Explain the paper to your future self
-            </label>
-            <p id="reflection-help">
-              What did it ask, what did it find, and what should someone be
-              careful not to conclude?
-            </p>
-            <textarea
-              id="paper-reflection"
-              rows={5}
-              maxLength={1500}
-              value={draft.reflection}
-              onChange={(event) => update({ reflection: event.target.value })}
-              aria-describedby="reflection-help"
-            />
-            <div className="paper-recap-actions">
-              <button className="btn primary" onClick={download}>
-                <ActionLabel icon="document">Keep my paper notes</ActionLabel>
-              </button>
-              <button
-                className="paper-back"
-                onClick={() => update({ phase: "claim" })}
-              >
-                Edit my interpretation
-              </button>
-            </div>
-            <p className="paper-small" role="status">
-              {exported
-                ? "Your notes file was prepared. It includes the paper recap and your current writing."
-                : "Notes are saved in this tab. Export a copy to keep them after closing it."}
-            </p>
-            {exportError ? (
-              <div className="paper-inline-notice" role="alert">
-                <p>
-                  The notes file could not be prepared. Your writing is still
-                  saved here. You can select and copy the text below.
-                </p>
-                <label className="paper-field-label" htmlFor="paper-notes-copy">
-                  Your paper notes
-                </label>
-                <textarea
-                  id="paper-notes-copy"
-                  readOnly
-                  rows={8}
-                  value={caseNotes(study, draft)}
-                />
-              </div>
-            ) : null}
-          </section>
+          <span className="paper-eyebrow">Exploration complete</span>
+          <h2>The key ideas, together.</h2>
         </div>
       </div>
+      <dl className="paper-recap-facts">
+        {[
+          ["Question", study.question],
+          ["Approach", study.overview.approach],
+          ["Finding", study.overview.finding],
+          ["Limit", study.overview.limit],
+        ].map(([label, text]) => (
+          <div key={label}>
+            <dt>{label}</dt>
+            <dd>{text}</dd>
+          </div>
+        ))}
+      </dl>
+      <button className="btn primary" onClick={download}>
+        <ActionLabel icon="document">Download my notes</ActionLabel>
+      </button>
+      <p className="paper-small" role="status">
+        {exported
+          ? "Your notes file was prepared."
+          : storageFailed
+            ? "Export your notes to keep a copy."
+            : "Saved in this tab. Download to keep a copy."}
+      </p>
+      {exportError ? (
+        <div className="paper-inline-notice" role="alert">
+          <p>The notes file could not be prepared. You can copy it below.</p>
+          <label className="paper-field-label" htmlFor="paper-notes-copy">
+            Your paper notes
+          </label>
+          <textarea
+            id="paper-notes-copy"
+            readOnly
+            rows={8}
+            value={caseNotes(study, draft)}
+          />
+        </div>
+      ) : null}
+      <details className="paper-optional">
+        <summary>My answers & notes</summary>
+        <section aria-label="My answers and notes">
+          <h3>Starting answer</h3>
+          <p>
+            {
+              study.claims.find((option) => option.id === draft.initialClaim)
+                ?.text
+            }
+          </p>
+          <p className="paper-small">
+            {confidenceLabels[draft.initialConfidence - 1]}
+          </p>
+          {draft.initialExplanation ? (
+            <blockquote>{draft.initialExplanation}</blockquote>
+          ) : null}
+          <h3>My conclusion</h3>
+          <p>
+            {study.claims.find((option) => option.id === draft.claim)?.text}
+          </p>
+          <p className="paper-small">
+            {confidenceLabels[draft.confidence - 1]}
+          </p>
+          <p>{draft.explanation || "No explanation added."}</p>
+          <p className="paper-small">
+            Personal writing and confidence are not assessed.
+          </p>
+          {draft.pinned.length > 0 ? (
+            <ul>
+              {study.evidence
+                .filter((item) => draft.pinned.includes(item.id))
+                .map((item) => (
+                  <li key={item.id}>
+                    {item.label} · {item.sourceLabel}
+                  </li>
+                ))}
+            </ul>
+          ) : null}
+          <h3>New situation</h3>
+          <p>
+            {
+              study.transfer.options.find(
+                (option) => option.id === draft.transferChoice,
+              )?.feedback
+            }
+          </p>
+          <label className="paper-field-label" htmlFor="paper-reflection">
+            A note for my future self
+          </label>
+          <textarea
+            id="paper-reflection"
+            rows={3}
+            maxLength={1500}
+            value={draft.reflection}
+            onChange={(event) => update({ reflection: event.target.value })}
+          />
+        </section>
+      </details>
+      <details className="paper-optional">
+        <summary>Full study recap & source</summary>
+        <h3>{study.paper.title}</h3>
+        <p className="paper-source">{study.paper.authors}</p>
+        <p>{study.design}</p>
+        <p>{study.findings}</p>
+        <ul>
+          {study.limitations.map((limit) => (
+            <li key={limit}>{limit}</li>
+          ))}
+        </ul>
+        {study.paper.url ? (
+          <a
+            className="paper-original-source"
+            href={study.paper.url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open the original paper <Icon name="arrow" size={17} />
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
+        ) : (
+          <p>Fictional study for learning. No original publication exists.</p>
+        )}
+      </details>
       <div className="paper-recap-end">
-        <Link className="btn outline" href="/lab">
-          <ActionLabel>Choose another paper trail</ActionLabel>
+        <Link className="paper-back" href="/lab">
+          <Icon name="back" size={17} /> All studies
         </Link>
         {confirmReset ? (
           <div
             className="paper-replay-confirm"
             role="group"
-            aria-label="Restart this case"
+            aria-label="Restart this study"
+            tabIndex={-1}
+            ref={confirmation}
           >
-            <span>
-              Start a new trail? This replaces this case’s saved notes in this
-              tab.
-            </span>
+            <span>Replace this study’s saved notes?</span>
+            <button onClick={reset}>Start fresh</button>
             <button
               onClick={() => {
-                reset();
                 setConfirmReset(false);
+                requestAnimationFrame(() => restartButton.current?.focus());
               }}
             >
-              Start fresh
-            </button>
-            <button onClick={() => setConfirmReset(false)}>
-              Keep my trail
+              Keep my notes
             </button>
           </div>
         ) : (
-          <button className="paper-back" onClick={() => setConfirmReset(true)}>
-            Explore this paper again
+          <button
+            className="paper-back"
+            ref={restartButton}
+            onClick={() => setConfirmReset(true)}
+          >
+            Start again
           </button>
         )}
       </div>
-    </>
+    </section>
   );
 }

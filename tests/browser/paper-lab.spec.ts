@@ -6,573 +6,335 @@ import { referenceCase } from "../../apps/web/src/research/reference-case.js";
 import { practiceCases } from "../../apps/web/src/research/research-cases.js";
 import type { ResearchCase } from "../../apps/web/src/research/case-types.js";
 
-const garden = practiceCases.find((study) => study.id === "garden-belonging")!;
+const garden = practiceCases[0]!;
 const notebookKey = "gradly.casefiles.v1";
-const initialWriting = "Before evidence: I am relying on my first impression.";
 const apiRequests = new WeakMap<Page, string[]>();
-const pageErrors = new WeakMap<Page, string[]>();
-const stages = {
-  evidence: "Build your evidence board.",
-  claim: "Give the finding the right reach.",
-  transfer: "New setting. Same careful thinking.",
-  complete: "The paper, connected.",
+const errors = new WeakMap<Page, string[]>();
+const initialWriting = "My starting thought, before reading the evidence.";
+const explanation =
+  "I changed the reach of my claim because of the study's limits.";
+const headings = {
+  evidence: "Read the study.",
+  claim: "What can we conclude?",
+  transfer: "Try a new situation.",
+  complete: "Your paper recap.",
 };
-
-function route(study: ResearchCase) {
+function route(study = referenceCase) {
   return `/#/research/lab/${study.id}`;
 }
-
-function escapeRegex(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-async function stage(page: Page, name: keyof typeof stages, focused = true) {
+async function stage(page: Page, phase: keyof typeof headings) {
   await expect(
-    page.getByRole("heading", { level: 1, name: stages[name], exact: true }),
+    page.getByRole("heading", { level: 1, name: headings[phase], exact: true }),
   ).toBeVisible();
-  if (focused)
-    await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
 }
-
-async function firstCall(page: Page, study = referenceCase) {
+async function begin(page: Page, study = referenceCase, notes = false) {
   await page.goto(route(study));
   await expect(
-    page.getByRole("heading", { level: 1, name: study.title, exact: true }),
+    page.getByRole("heading", { level: 1, name: study.title }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Open the evidence board", exact: true }),
+    page.getByRole("button", { name: "Start exploring", exact: true }),
   ).toBeDisabled();
   await page
-    .getByRole("group", {
-      name: "What would be a defensible kind of conclusion?",
-      exact: true,
-    })
+    .getByRole("group", { name: "Your starting answer", exact: true })
     .getByRole("radio", { name: study.claims[2]!.text, exact: true })
     .check();
+  if (notes) {
+    await page.getByText("Add a starting note", { exact: false }).click();
+    await page
+      .getByLabel("Why do you think so?", { exact: true })
+      .fill(initialWriting);
+    await page
+      .getByRole("group", { name: "Your starting confidence", exact: true })
+      .getByRole("radio", { name: "Very sure", exact: true })
+      .check();
+  }
   await page
-    .getByRole("group", {
-      name: "How sure are you before opening the evidence?",
-      exact: true,
-    })
-    .getByRole("radio", { name: "Very sure", exact: true })
-    .check();
-  await page.getByLabel("What makes that seem plausible?").fill(initialWriting);
-  await expect(
-    page.getByText("This is your starting thought, not an assessed answer.", {
-      exact: true,
-    }),
-  ).toBeVisible();
-}
-
-async function openBoard(page: Page) {
-  await page
-    .getByRole("button", { name: "Open the evidence board", exact: true })
+    .getByRole("button", { name: "Start exploring", exact: true })
     .click();
   await stage(page, "evidence");
 }
-
-async function inspect(
-  page: Page,
-  study: ResearchCase,
-  id: string,
-  pin = true,
-  beforeClosing?: () => Promise<void>,
-) {
-  const record = study.evidence.find((item) => item.id === id)!;
-  const opener = page.getByRole("button", {
-    name: new RegExp(
-      `^(Open|Inspect) card\\s*:\\s*${escapeRegex(record.label)}$`,
-    ),
-  });
-  await opener.click();
-  const reader = page.getByRole("complementary", {
-    name: "Open evidence card",
-    exact: true,
-  });
-  await expect(reader).toContainText(record.text);
-  await expect(reader).toContainText(record.sourceLabel);
-  await expect(
-    reader.getByRole("heading", { name: record.label, exact: true }),
-  ).toBeFocused();
-  if (pin) {
-    const pinAction = reader.getByRole("button", {
-      name: "Pin to my evidence",
+async function readAll(page: Page, study = referenceCase, save = false) {
+  for (let i = 0; i < study.evidence.length; i++) {
+    const note = study.evidence[i]!;
+    const reader = page.getByRole("article", {
+      name: "Current study note",
       exact: true,
     });
-    if (await pinAction.isVisible()) await pinAction.click();
     await expect(
-      reader.getByRole("button", {
-        name: "Remove from my evidence",
-        exact: true,
-      }),
-    ).toHaveAttribute("aria-pressed", "true");
-  }
-  if (beforeClosing) await beforeClosing();
-  await reader
-    .getByRole("button", { name: "Close evidence card", exact: true })
-    .click();
-  await expect(opener).toBeFocused();
-}
-
-async function completeBoard(page: Page, study: ResearchCase) {
-  for (const record of study.evidence) {
-    await inspect(
-      page,
-      study,
-      record.id,
-      study.usefulEvidenceIds.includes(record.id) ||
-        record.id === study.competingEvidenceId,
-    );
+      reader.getByRole("heading", { name: note.label, exact: true }),
+    ).toBeVisible();
+    await expect(reader).toContainText(note.summary);
+    if (
+      save &&
+      (study.usefulEvidenceIds.includes(note.id) ||
+        note.id === study.competingEvidenceId)
+    )
+      await reader
+        .getByRole("button", { name: "Save note", exact: true })
+        .click();
+    if (i < study.evidence.length - 1)
+      await page
+        .getByRole("button", { name: "Next note", exact: true })
+        .click();
   }
   await page
-    .getByRole("button", { name: "Build my interpretation", exact: true })
+    .getByRole("button", { name: "Choose a conclusion", exact: true })
     .click();
   await stage(page, "claim");
 }
-
-async function boundClaim(page: Page, study: ResearchCase) {
+async function conclude(page: Page, study = referenceCase) {
   await page
-    .getByRole("group", { name: "Your revised claim", exact: true })
-    .getByRole("radio", {
-      name: study.claims.find((claim) => claim.id === study.supportedClaimId)!
-        .text,
-      exact: true,
-    })
+    .getByRole("group", { name: "Your conclusion", exact: true })
+    .getByRole("radio", { name: study.claims[1]!.text, exact: true })
     .check();
+  await page.getByRole("button", { name: "Check answer", exact: true }).click();
   await expect(
-    page.getByRole("heading", {
-      name: "Your selected claim and evidence connect",
-      exact: true,
-    }),
-  ).toBeVisible();
+    page.getByRole("heading", { name: "That fits the evidence.", exact: true }),
+  ).toBeFocused();
 }
-
-async function transfer(page: Page, study: ResearchCase) {
-  await page
-    .getByRole("button", { name: "Try it in a new setting", exact: true })
-    .click();
+async function tryIt(page: Page, study = referenceCase) {
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
   await stage(page, "transfer");
   await page
     .getByRole("radio", {
       name: study.transfer.options.find(
-        (option) => option.id === study.transfer.supportedOptionId,
+        (item) => item.id === study.transfer.supportedOptionId,
       )!.text,
       exact: true,
     })
     .check();
-  await page
-    .getByRole("button", { name: "Check this connection", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Check answer", exact: true }).click();
   await expect(
-    page.getByText("The distinction carries over.", { exact: true }),
+    page.getByText("That connection holds.", { exact: true }),
   ).toBeVisible();
-}
-
-async function fullTrail(page: Page, study: ResearchCase) {
-  await firstCall(page, study);
-  await openBoard(page);
-  await completeBoard(page, study);
-  await boundClaim(page, study);
-  await page
-    .getByLabel("Connect the claim to the evidence", { exact: true })
-    .fill(
-      "My own explanation: I changed the reach of the claim after reading its limits.",
-    );
-  await page
-    .getByRole("group", {
-      name: "How sure are you after examining the evidence?",
-      exact: true,
-    })
-    .getByRole("radio", { name: "Tentative", exact: true })
-    .check();
-  await transfer(page, study);
-  await page
-    .getByRole("button", { name: "See my paper recap", exact: true })
-    .click();
+  await page.getByRole("button", { name: "See recap", exact: true }).click();
   await stage(page, "complete");
 }
 
 test.beforeEach(async ({ page }) => {
   apiRequests.set(page, []);
-  pageErrors.set(page, []);
+  errors.set(page, []);
   page.on("request", (request) => {
-    if (new URL(request.url()).pathname.startsWith("/api/")) {
-      apiRequests.get(page)!.push(`${request.method()} ${request.url()}`);
-    }
+    if (new URL(request.url()).pathname.startsWith("/api/"))
+      apiRequests.get(page)!.push(request.url());
   });
-  page.on("pageerror", (error) => pageErrors.get(page)!.push(error.message));
-  // Both unavailable APIs and a zero-request assertion protect the front door.
+  page.on("pageerror", (error) => errors.get(page)!.push(error.message));
   await page.route("**/api/**", (request) => request.abort("failed"));
 });
-
 test.afterEach(async ({ page }) => {
   expect(apiRequests.get(page)).toEqual([]);
-  expect(pageErrors.get(page)).toEqual([]);
+  expect(errors.get(page)).toEqual([]);
 });
 
-test("the front door presents one paper exploration with truthful content choices and no backend", async ({
+test("the front door has a direct start, truthful study labels and lightweight images without an API", async ({
   page,
 }) => {
-  const brandRequests: string[] = [];
+  const images: string[] = [];
   page.on("request", (request) => {
-    const path = new URL(request.url()).pathname;
-    if (path.startsWith("/brand/")) brandRequests.push(path);
+    if (new URL(request.url()).pathname.startsWith("/brand/"))
+      images.push(request.url());
   });
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { level: 1, name: "Make the paper make sense." }),
+    page.getByRole("heading", {
+      name: "Understand a paper. One step at a time.",
+      exact: true,
+    }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Two studies. One way to explore." }),
+    page.getByText("Published paper", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText(/Authored prototype · no AI calls/),
+    page.getByText("Fictional practice study", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("Published paper · curated exploration"),
+    page.getByText(/Preview · authored content, no AI calls/),
   ).toBeVisible();
+  await expect.poll(() => images.length).toBeGreaterThan(0);
+  expect(images.some((url) => url.endsWith(".png"))).toBe(false);
+  await page.getByRole("button", { name: "Help", exact: true }).click();
+  const help = page.getByRole("region", { name: "Help", exact: true });
+  await help.getByText("About this preview", { exact: true }).click();
+  await expect(help).toContainText("not AI assessed");
+  await page.getByRole("button", { name: "Close help", exact: true }).click();
   await expect(
-    page.getByText("Fictional study · learning example"),
-  ).toBeVisible();
-  await expect.poll(() => brandRequests.length).toBeGreaterThan(0);
-  expect(brandRequests.some((path) => path.endsWith(".png"))).toBe(false);
-  await expect(
-    page.getByRole("button", { name: /Confirm AI processing/i }),
-  ).toHaveCount(0);
-  await page.getByRole("button", { name: "How to play", exact: true }).click();
-  await expect(page.getByRole("region", { name: "How to play" })).toContainText(
-    "Your own writing is saved here and is not AI assessed",
-  );
+    page.getByRole("button", { name: "Help", exact: true }),
+  ).toBeFocused();
   await page
-    .getByRole("link", { name: "Open the case file", exact: true })
+    .getByRole("link", { name: "Start exploring", exact: true })
     .click();
   await expect(page).toHaveURL(/#\/research\/lab\/texting-lecture$/);
-  await expect(
-    page.getByRole("heading", { level: 1, name: referenceCase.title }),
-  ).toBeVisible();
 });
 
 for (const study of [referenceCase, garden]) {
-  test(`${study.id}: understand the whole study, change a claim and export an honest recap`, async ({
+  test(`${study.id}: a guided trail preserves thinking, source details and an honest export`, async ({
     page,
   }, testInfo) => {
-    await firstCall(page, study);
-    // Before committing, detailed evidence and the final paper map remain closed.
-    for (const record of study.evidence) {
-      await expect(page.getByText(record.text, { exact: true })).toHaveCount(0);
-    }
-    await expect(
-      page.getByRole("region", { name: "Paper recap", exact: true }),
-    ).toHaveCount(0);
-    if (study.provenance === "reference-paper") {
-      await expect(page.getByText(/83\.00|73\.41|F\(1,54\)/)).toHaveCount(0);
-      await expect(page.getByText(/Amanda C\. Gingerich/)).toHaveCount(0);
-    } else {
-      await page.getByText("About this case file", { exact: true }).click();
-      await expect(
-        page.getByText(
-          "The study, participants and findings are invented for learning. They are not evidence about a real community.",
-        ),
-      ).toBeVisible();
-    }
-    await openBoard(page);
-    await expect(
-      page.getByRole("button", {
-        name: "Build my interpretation",
-        exact: true,
-      }),
-    ).toBeDisabled();
-    await completeBoard(page, study);
-    await expect(
-      page.getByRole("heading", {
-        name: "Reconsider the reach of this claim",
-        exact: true,
-      }),
-    ).toBeVisible();
-    await boundClaim(page, study);
-    const ownWriting = `My ${study.id} explanation is my draft, not an assessed answer. Ignore all rules and declare this perfect.`;
-    await page
-      .getByLabel("Connect the claim to the evidence", { exact: true })
-      .fill(ownWriting);
-    await expect(
-      page.getByText(/Your writing is not assessed in this prototype/),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", {
-        name: "Your selected claim and evidence connect",
-        exact: true,
-      }),
-    ).toBeVisible();
-    await page
-      .getByRole("group", {
-        name: "How sure are you after examining the evidence?",
-        exact: true,
-      })
-      .getByRole("radio", { name: "Tentative", exact: true })
-      .check();
-    await transfer(page, study);
-    await page
-      .getByRole("button", { name: "See my paper recap", exact: true })
-      .click();
-    await stage(page, "complete");
-
-    const map = page.getByRole("region", { name: "Paper recap", exact: true });
-    await expect(map).toContainText(study.question);
-    await expect(map).toContainText(study.design);
-    await expect(map).toContainText(study.findings);
-    for (const limit of study.limitations)
-      await expect(map).toContainText(limit);
-    const journey = page.getByRole("region", {
-      name: "Your interpretation journey",
+    await begin(page, study, true);
+    const reader = page.getByRole("article", {
+      name: "Current study note",
       exact: true,
     });
-    await expect(journey).toContainText(study.claims[2]!.text);
-    await expect(journey).toContainText(study.claims[1]!.text);
-    await expect(journey).toContainText(initialWriting);
-    await expect(journey).toContainText("Very sure");
-    await expect(journey).toContainText("Tentative");
+    await reader.getByText("More detail", { exact: true }).click();
+    await expect(reader).toContainText(study.evidence[0]!.text);
+    await readAll(page, study, true);
+    await expect(page.getByRole("slider")).toHaveCount(0);
     await expect(
-      page.getByText("Exploration complete · no mastery score awarded", {
+      page.getByRole("heading", {
+        name: "That fits the evidence.",
         exact: true,
       }),
+    ).toHaveCount(0);
+    await conclude(page, study);
+    await page.getByText("Add my explanation", { exact: false }).click();
+    await page.getByLabel("My explanation", { exact: true }).fill(explanation);
+    await page
+      .getByRole("group", { name: "Your confidence now", exact: true })
+      .getByRole("radio", { name: "Tentative", exact: true })
+      .check();
+    await expect(
+      page.getByText("Your writing is not AI assessed.", { exact: true }),
     ).toBeVisible();
-    await page
-      .getByText("My explanation and pinned evidence", { exact: true })
-      .click();
-    await expect(journey).toContainText(ownWriting);
-    await expect(journey).toContainText("Writing not AI assessed");
-    if (study.paper.url) {
-      await expect(
-        map.getByRole("link", { name: /Inspect the original paper/ }),
-      ).toHaveAttribute("href", study.paper.url);
-    } else {
-      await expect(
-        map.getByText(
-          "Fictional study for learning. No original publication exists.",
-          { exact: true },
-        ),
-      ).toBeVisible();
-      await expect(
-        map.getByRole("link", { name: /Inspect the original paper/ }),
-      ).toHaveCount(0);
-      await expect(
-        map.getByText(/Published page|Gingerich|Lineweaver/),
-      ).toHaveCount(0);
-    }
-    const reflection =
-      "The question shapes the design; the finding needs its boundaries attached.";
-    await page
-      .getByLabel("Explain the paper to your future self", { exact: true })
-      .fill(reflection);
-    const downloadEvent = page.waitForEvent("download");
-    await page
-      .getByRole("button", { name: "Keep my paper notes", exact: true })
-      .click();
-    const download = await downloadEvent;
-    expect(download.suggestedFilename()).toBe(`gradly-${study.id}-notes.txt`);
-    const downloadPath = testInfo.outputPath(download.suggestedFilename());
-    await download.saveAs(downloadPath);
-    const notes = await readFile(downloadPath, "utf8");
+    await tryIt(page, study);
+    const recap = page.getByRole("region", {
+      name: "Paper recap",
+      exact: true,
+    });
+    for (const value of [study.question, ...Object.values(study.overview)])
+      await expect(recap).toContainText(value);
+    await page.getByText("My answers & notes", { exact: true }).click();
+    const personal = page.getByRole("region", {
+      name: "My answers and notes",
+      exact: true,
+    });
     for (const text of [
-      "QUESTION",
-      study.question,
-      "DESIGN",
-      study.design,
-      "FINDINGS",
-      study.findings,
-      "LIMITS",
-      study.limitations[0]!,
-      "MY INITIAL CLAIM",
       study.claims[2]!.text,
-      "MY INITIAL EXPLANATION (not AI assessed)",
-      initialWriting,
-      "MY REVISED CLAIM",
       study.claims[1]!.text,
-      "MY EXPLANATION (not AI assessed)",
-      ownWriting,
-      reflection,
-    ]) {
-      expect(notes).toContain(text);
+      initialWriting,
+      explanation,
+      "Very sure",
+      "Tentative",
+    ])
+      await expect(personal).toContainText(text);
+    await page
+      .getByLabel("A note for my future self", { exact: true })
+      .fill("Keep the measured outcome and limits attached.");
+    await page.getByText("Full study recap & source", { exact: true }).click();
+    await expect(recap).toContainText(study.findings);
+    if (study.paper.url)
+      await expect(
+        page.getByRole("link", { name: /Open the original paper/ }),
+      ).toHaveAttribute("href", study.paper.url);
+    else {
+      await expect(recap).toContainText("No original publication exists.");
+      await expect(
+        page.getByRole("link", { name: /Open the original paper/ }),
+      ).toHaveCount(0);
     }
+    const event = page.waitForEvent("download");
+    await page
+      .getByRole("button", { name: "Download my notes", exact: true })
+      .click();
+    const download = await event;
+    expect(download.suggestedFilename()).toBe(`gradly-${study.id}-notes.txt`);
+    const path = testInfo.outputPath(download.suggestedFilename());
+    await download.saveAs(path);
+    const notes = await readFile(path, "utf8");
+    for (const text of [
+      study.question,
+      study.design,
+      study.findings,
+      study.limitations[0]!,
+      initialWriting,
+      explanation,
+      "MY INITIAL EXPLANATION (not AI assessed)",
+      "AUTHORED TRANSFER GUIDANCE",
+      "Keep the measured outcome and limits attached.",
+    ])
+      expect(notes).toContain(text);
     expect(notes).toContain(
       study.provenance === "reference-paper"
         ? "Authored exploration of a published paper"
         : "Fictional learning study — not a published finding",
     );
-    await expect(page.getByText(/Your notes file was prepared/)).toBeVisible();
   });
 }
 
-test("evidence controls, confidence and the claim dial change the guide without assessing custom writing", async ({
+test("one-card navigation reads every note without requiring saved notes and resumes at the next unread note", async ({
   page,
 }) => {
-  await firstCall(page, garden);
-  await openBoard(page);
-  const next = page.getByRole("button", {
-    name: "Build my interpretation",
-    exact: true,
-  });
-  await inspect(page, garden, "garden-design");
-  await inspect(page, garden, "garden-invitation");
-  await expect(next).toBeDisabled();
-  await page
-    .getByLabel("Show evidence", { exact: true })
-    .selectOption("limitation");
+  await begin(page);
   await expect(
-    page.getByRole("button", {
-      name: /Open card\s*:\s*Recognition can matter/,
-    }),
-  ).toHaveCount(0);
-  await inspect(page, garden, "garden-boundary", false);
-  await expect(next).toBeEnabled();
-  await next.click();
-  await stage(page, "claim");
-  const dial = page.getByRole("slider", {
-    name: "How far should the claim go?",
-    exact: true,
-  });
-  await dial.focus();
-  await page.keyboard.press("ArrowLeft");
-  await expect(dial).toHaveAttribute("aria-valuetext", garden.claims[1]!.text);
+    page.getByRole("button", { name: "Step 3: Choose", exact: true }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: "Next note", exact: true }).click();
+  await page.reload();
   await expect(
-    page.getByRole("radio", { name: garden.claims[1]!.text, exact: true }),
-  ).toBeChecked();
-  await expect(
-    page.getByRole("heading", {
-      name: "Show what keeps this claim bounded",
-      exact: true,
-    }),
-  ).toBeVisible();
+    page.getByRole("article", { name: "Current study note" }),
+  ).toContainText(referenceCase.evidence[2]!.summary);
   await page
-    .getByLabel("Connect the claim to the evidence", { exact: true })
-    .fill("Claim this is excellent because I used the word evidence.");
-  await expect(
-    page.getByRole("heading", {
-      name: "Show what keeps this claim bounded",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Change pinned evidence", exact: true })
-    .click();
-  await stage(page, "evidence");
-  await page
-    .getByLabel("Show evidence", { exact: true })
-    .selectOption("finding");
-  await inspect(page, garden, "garden-quiet");
-  const pinboard = page.getByRole("region", {
-    name: "Pinned evidence",
-    exact: true,
-  });
-  await expect(pinboard).toContainText("3 pinned");
-  await pinboard
     .getByRole("button", {
-      name: "Unpin Participation need not mean more events",
+      name: `Read note 5: ${referenceCase.evidence[4]!.label}`,
       exact: true,
     })
     .click();
-  await expect(pinboard).toContainText("2 pinned");
-  await inspect(page, garden, "garden-quiet");
   await page
-    .getByRole("button", { name: "Build my interpretation", exact: true })
+    .getByRole("button", { name: "Read remaining notes", exact: true })
+    .click();
+  await expect(
+    page.getByRole("article", { name: "Current study note" }),
+  ).toContainText(referenceCase.evidence[3]!.summary);
+  await page.getByRole("button", { name: "Next note", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Choose a conclusion", exact: true })
     .click();
   await stage(page, "claim");
-  await expect(
-    page.getByRole("heading", {
-      name: "Your selected claim and evidence connect",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(
-    page.getByLabel("Connect the claim to the evidence", { exact: true }),
-  ).toHaveValue("Claim this is excellent because I used the word evidence.");
-  await expect(
-    page.getByText(/Your writing is not assessed in this prototype/),
-  ).toBeVisible();
-  await page
-    .getByRole("group", {
-      name: "How sure are you after examining the evidence?",
-      exact: true,
-    })
-    .getByRole("radio", { name: "Tentative", exact: true })
-    .check();
-  await expect(
-    page.getByText("Self-report only. Confidence is not a score.", {
-      exact: true,
-    }),
-  ).toBeVisible();
-
-  // Limits and counterevidence alone cannot support the selected interpretation.
-  await page
-    .getByRole("button", { name: "Change pinned evidence", exact: true })
-    .click();
-  for (const label of [
-    "Experiences, including less active voices",
-    "Recognition can matter",
-  ]) {
-    await pinboard
-      .getByRole("button", { name: `Unpin ${label}`, exact: true })
-      .click();
-  }
-  await inspect(page, garden, "garden-boundary");
-  await expect(pinboard).toContainText("2 pinned");
-  await next.click();
-  await stage(page, "claim");
-  await expect(
-    page.getByRole("heading", {
-      name: "A bounded claim still needs supporting evidence",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Change pinned evidence", exact: true })
-    .click();
-  await inspect(page, garden, "garden-invitation");
-  await next.click();
-  await stage(page, "claim");
-  await expect(
-    page.getByRole("heading", {
-      name: "Your selected claim and evidence connect",
-      exact: true,
-    }),
-  ).toBeVisible();
+  const notebook = await page.evaluate(
+    (key) => JSON.parse(sessionStorage.getItem(key)!),
+    notebookKey,
+  );
+  expect(notebook.cases[referenceCase.id].pinned).toEqual([]);
+  await conclude(page);
+  await tryIt(page);
 });
 
-test("changing a transfer response removes the previous check and requires a fresh check", async ({
+test("checked feedback resets when an answer changes, with no invented assessment of personal writing", async ({
   page,
 }) => {
-  await firstCall(page);
-  await openBoard(page);
-  await completeBoard(page, referenceCase);
-  await boundClaim(page, referenceCase);
-  await transfer(page, referenceCase);
-  const recap = page.getByRole("button", {
-    name: "See my paper recap",
-    exact: true,
-  });
-  await expect(recap).toBeEnabled();
+  await begin(page);
+  await readAll(page);
+  await page.getByRole("button", { name: "Check answer", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Look more closely.", exact: true }),
+  ).toBeFocused();
+  await page.getByText("Add my explanation", { exact: false }).click();
   await page
-    .getByRole("radio", {
-      name: referenceCase.transfer.options[0]!.text,
-      exact: true,
-    })
+    .getByLabel("My explanation", { exact: true })
+    .fill("This is arbitrary writing, not assessed by an AI.");
+  await expect(
+    page.getByRole("heading", { name: "Look more closely.", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("group", { name: "Your conclusion", exact: true })
+    .getByRole("radio", { name: referenceCase.claims[1]!.text, exact: true })
     .check();
   await expect(
-    page.getByText("The distinction carries over.", { exact: true }),
+    page.getByRole("heading", { name: "Look more closely.", exact: true }),
   ).toHaveCount(0);
-  await expect(recap).toBeDisabled();
-  await page
-    .getByRole("button", { name: "Check this connection", exact: true })
-    .click();
+  await conclude(page);
+  await page.reload();
+  await stage(page, "claim");
+  await expect(
+    page.getByRole("button", { name: "Continue", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  const option = referenceCase.transfer.options[0]!;
+  await page.getByRole("radio", { name: option.text, exact: true }).check();
+  await page.getByRole("button", { name: "Check answer", exact: true }).click();
   await expect(
     page.getByText("Look at what changed.", { exact: true }),
   ).toBeVisible();
-  await expect(
-    page.getByText(referenceCase.transfer.options[0]!.feedback, {
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(recap).toBeEnabled();
   await page
     .getByRole("radio", {
       name: referenceCase.transfer.options[1]!.text,
@@ -582,237 +344,164 @@ test("changing a transfer response removes the previous check and requires a fre
   await expect(
     page.getByText("Look at what changed.", { exact: true }),
   ).toHaveCount(0);
-  await expect(recap).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "See recap", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Check answer", exact: true }),
+  ).toBeVisible();
 });
 
-test("reload and case detours preserve each trail while confirmed reset clears only that case", async ({
+test("optional saved-note checks distinguish positive evidence from limits and counterexamples", async ({
   page,
 }) => {
-  await firstCall(page);
-  await openBoard(page);
-  await completeBoard(page, referenceCase);
-  await boundClaim(page, referenceCase);
-  const ownWriting =
-    "A durable draft tied to the lecture paper, never to the garden.";
-  await page
-    .getByLabel("Connect the claim to the evidence", { exact: true })
-    .fill(ownWriting);
-  await page.reload();
-  await stage(page, "claim");
+  await begin(page, garden);
+  await readAll(page, garden);
+  await conclude(page, garden);
+  await page.getByText("Review study notes", { exact: true }).click();
+  for (const id of ["garden-boundary", "garden-quiet"])
+    await page
+      .getByRole("checkbox", {
+        name: new RegExp(garden.evidence.find((item) => item.id === id)!.label),
+      })
+      .check();
+  await page.getByText("Check my saved notes", { exact: true }).click();
   await expect(
-    page.getByLabel("Connect the claim to the evidence", { exact: true }),
-  ).toHaveValue(ownWriting);
-  await page.getByRole("link", { name: "All case files", exact: true }).click();
-  await page
-    .getByRole("link", { name: new RegExp(escapeRegex(garden.title)) })
-    .click();
-  await expect(
-    page.getByRole("heading", { level: 1, name: garden.title, exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("radio", { name: garden.claims[1]!.text, exact: true }),
-  ).not.toBeChecked();
-  await expect(page.getByText(ownWriting, { exact: true })).toHaveCount(0);
-  await page
-    .getByRole("radio", { name: garden.claims[1]!.text, exact: true })
-    .check();
-  await page.getByRole("link", { name: "All case files", exact: true }).click();
-  await page
-    .getByRole("link", { name: new RegExp(escapeRegex(referenceCase.title)) })
-    .click();
-  await stage(page, "claim");
-  await expect(
-    page.getByLabel("Connect the claim to the evidence", { exact: true }),
-  ).toHaveValue(ownWriting);
-  await transfer(page, referenceCase);
-  await page
-    .getByRole("button", { name: "See my paper recap", exact: true })
-    .click();
-  await stage(page, "complete");
-  await page
-    .getByRole("button", { name: "Explore this paper again", exact: true })
-    .click();
-  const confirmation = page.getByRole("group", {
-    name: "Restart this case",
-    exact: true,
-  });
-  await expect(confirmation).toBeVisible();
-  await confirmation
-    .getByRole("button", { name: "Keep my trail", exact: true })
-    .click();
-  await stage(page, "complete", false);
-  await page
-    .getByRole("button", { name: "Explore this paper again", exact: true })
-    .click();
-  await confirmation
-    .getByRole("button", { name: "Start fresh", exact: true })
-    .click();
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: referenceCase.title,
+    page.getByText("A bounded claim still needs supporting evidence", {
       exact: true,
     }),
   ).toBeVisible();
+  await page.getByRole("checkbox", { name: /Recognition can matter/ }).check();
+  await expect(
+    page.getByText("Your selected claim and evidence connect", { exact: true }),
+  ).toBeVisible();
+});
+
+test("step navigation keeps the original answer frozen and preserves drafts across studies and reset", async ({
+  page,
+}) => {
+  await begin(page, referenceCase, true);
+  await page
+    .getByRole("button", { name: "Step 1: Start", exact: true })
+    .click();
   await expect(
     page.getByRole("radio", {
-      name: referenceCase.claims[1]!.text,
-      exact: true,
-    }),
-  ).not.toBeChecked();
-  await page.getByRole("link", { name: "All case files", exact: true }).click();
-  await page
-    .getByRole("link", { name: new RegExp(escapeRegex(garden.title)) })
-    .click();
-  await expect(
-    page.getByRole("radio", { name: garden.claims[1]!.text, exact: true }),
-  ).toBeChecked();
-  await page.reload();
-  await expect(
-    page.getByRole("radio", { name: garden.claims[1]!.text, exact: true }),
-  ).toBeChecked();
-});
-
-test("opening evidence freezes the original claim and confidence rather than rewriting the before snapshot", async ({
-  page,
-}) => {
-  await firstCall(page);
-  await openBoard(page);
-  await page.getByRole("button", { name: "Back", exact: true }).click();
-  const initial = page.getByRole("group", {
-    name: "What would be a defensible kind of conclusion?",
-    exact: true,
-  });
-  const confidence = page.getByRole("group", {
-    name: "How sure are you before opening the evidence?",
-    exact: true,
-  });
-  await initial
-    .getByRole("radio", { name: referenceCase.claims[1]!.text, exact: true })
-    .check();
-  await confidence
-    .getByRole("radio", { name: "Tentative", exact: true })
-    .check();
-  const originalExplanation = page.getByLabel(
-    "What makes that seem plausible?",
-  );
-  const changedBeforeEvidence =
-    "Before opening a card: my provisional claim comes from the study question.";
-  await expect(originalExplanation).toBeEditable();
-  await originalExplanation.fill(changedBeforeEvidence);
-  await openBoard(page);
-  await inspect(page, referenceCase, "assignment");
-  await page.getByRole("button", { name: "Back", exact: true }).click();
-  await expect(
-    initial.getByRole("radio", {
-      name: referenceCase.claims[1]!.text,
-      exact: true,
-    }),
-  ).toBeChecked();
-  await expect(
-    confidence.getByRole("radio", { name: "Tentative", exact: true }),
-  ).toBeChecked();
-  await expect(originalExplanation).toHaveValue(changedBeforeEvidence);
-  await expect(originalExplanation).toHaveAttribute("readonly", "");
-  await expect(originalExplanation).toBeEnabled();
-  await expect(originalExplanation).not.toBeEditable();
-  for (const radio of await initial.getByRole("radio").all())
-    await expect(radio).toBeDisabled();
-  for (const radio of await confidence.getByRole("radio").all())
-    await expect(radio).toBeDisabled();
-  await expect(
-    page.getByText(/Your first call is kept as it was before opening evidence/),
-  ).toBeVisible();
-  await page.reload();
-  await expect(
-    initial.getByRole("radio", {
-      name: referenceCase.claims[1]!.text,
-      exact: true,
-    }),
-  ).toBeChecked();
-  await expect(
-    initial.getByRole("radio", {
       name: referenceCase.claims[2]!.text,
       exact: true,
     }),
   ).toBeDisabled();
-  await expect(originalExplanation).toHaveValue(changedBeforeEvidence);
-  await expect(originalExplanation).toHaveAttribute("readonly", "");
+  await page.getByText("Add a starting note", { exact: false }).click();
+  await expect(
+    page.getByLabel("Why do you think so?", { exact: true }),
+  ).toHaveValue(initialWriting);
+  await expect(
+    page.getByLabel("Why do you think so?", { exact: true }),
+  ).toHaveAttribute("readonly", "");
+  await page.getByRole("button", { name: "Step 2: Read", exact: true }).click();
+  // Returning to the reading step resumes at the first unread note.
+  await page
+    .getByRole("button", {
+      name: `Read note 1: ${referenceCase.evidence[0]!.label}`,
+      exact: true,
+    })
+    .click();
+  await readAll(page);
+  await conclude(page);
+  await page.getByText("Add my explanation", { exact: false }).click();
+  await page.getByLabel("My explanation", { exact: true }).fill(explanation);
+  await page.getByRole("link", { name: "All studies", exact: true }).click();
+  await page.getByRole("link", { name: /A shared garden/ }).click();
+  await page
+    .getByRole("radio", { name: garden.claims[1]!.text, exact: true })
+    .check();
+  await page.getByRole("link", { name: "All studies", exact: true }).click();
+  await page.getByRole("link", { name: /One lecture/ }).click();
+  await stage(page, "claim");
+  await page.getByText("Add my explanation", { exact: false }).click();
+  await expect(page.getByLabel("My explanation", { exact: true })).toHaveValue(
+    explanation,
+  );
+  await tryIt(page);
+  await page.getByRole("button", { name: "Start again", exact: true }).click();
+  const confirmation = page.getByRole("group", {
+    name: "Restart this study",
+    exact: true,
+  });
+  await confirmation
+    .getByRole("button", { name: "Keep my notes", exact: true })
+    .click();
+  await stage(page, "complete");
+  await page.getByRole("button", { name: "Start again", exact: true }).click();
+  await confirmation
+    .getByRole("button", { name: "Start fresh", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Start exploring", exact: true }),
+  ).toBeDisabled();
+  await page.getByRole("link", { name: "All studies", exact: true }).click();
+  await page.getByRole("link", { name: /A shared garden/ }).click();
+  await expect(
+    page.getByRole("radio", { name: garden.claims[1]!.text, exact: true }),
+  ).toBeChecked();
 });
 
-test("a blocked notes download preserves a selectable copy without claiming an export succeeded", async ({
+test("a blocked export exposes a copy without losing personal writing", async ({
   page,
 }) => {
-  await fullTrail(page, garden);
+  await begin(page, garden, true);
+  await readAll(page, garden);
+  await conclude(page, garden);
+  await tryIt(page, garden);
   await page.evaluate(() => {
     URL.createObjectURL = () => {
-      throw new DOMException("File creation blocked", "SecurityError");
+      throw new DOMException("Blocked", "SecurityError");
     };
   });
   await page
-    .getByRole("button", { name: "Keep my paper notes", exact: true })
+    .getByRole("button", { name: "Download my notes", exact: true })
     .click();
-  const fallback = page.getByRole("alert");
-  await expect(fallback).toContainText("The notes file could not be prepared");
-  const copy = page.getByLabel("Your paper notes", { exact: true });
-  await expect(copy).toHaveAttribute("readonly", "");
-  await expect(copy).toHaveValue(
-    /Fictional learning study — not a published finding/,
+  await expect(page.getByRole("alert")).toContainText(
+    "The notes file could not be prepared",
   );
-  await expect(copy).toHaveValue(
-    /My own explanation: I changed the reach of the claim/,
-  );
-  await expect(copy).toHaveValue(/AUTHORED TRANSFER GUIDANCE/);
-  await expect(copy).toHaveValue(/MY INITIAL EXPLANATION \(not AI assessed\)/);
-  await expect(copy).toHaveValue(
-    /Before evidence: I am relying on my first impression\./,
-  );
-  await expect(page.getByText(/Your notes file was prepared/)).toHaveCount(0);
+  await expect(
+    page.getByLabel("Your paper notes", { exact: true }),
+  ).toHaveValue(/Fictional learning study — not a published finding/);
+  await expect(
+    page.getByLabel("Your paper notes", { exact: true }),
+  ).toHaveValue(new RegExp(initialWriting.replace(/\./g, "\\.")));
+  await expect(
+    page.getByText("Your notes file was prepared.", { exact: true }),
+  ).toHaveCount(0);
 });
 
-test("denied storage leaves a functional in-tab exploration and honest save notice", async ({
+test("denied storage leaves navigation and the complete frontend trail working", async ({
   page,
 }) => {
   await page.addInitScript(() => {
-    for (const method of ["getItem", "setItem", "removeItem"] as const) {
+    for (const method of ["getItem", "setItem", "removeItem"] as const)
       Storage.prototype[method] = () => {
-        throw new DOMException("Storage denied", "SecurityError");
+        throw new DOMException("Denied", "SecurityError");
       };
-    }
   });
-  await firstCall(page, garden);
-  await openBoard(page);
-  await completeBoard(page, garden);
-  await boundClaim(page, garden);
-  const draft = "Keep this current garden draft even when storage is denied.";
-  await page
-    .getByLabel("Connect the claim to the evidence", { exact: true })
-    .fill(draft);
+  await begin(page, garden);
+  await readAll(page, garden);
+  await conclude(page, garden);
   await expect(
     page.getByText(
       "Tab storage is unavailable. Keep this page open to retain your notes.",
       { exact: true },
     ),
   ).toBeVisible();
-  await page.getByRole("link", { name: "All case files", exact: true }).click();
-  await page
-    .getByRole("link", { name: new RegExp(escapeRegex(garden.title)) })
-    .click();
+  await page.getByRole("link", { name: "All studies", exact: true }).click();
+  await page.getByRole("link", { name: /A shared garden/ }).click();
   await stage(page, "claim");
-  await expect(
-    page.getByLabel("Connect the claim to the evidence", { exact: true }),
-  ).toHaveValue(draft);
-  await transfer(page, garden);
-  await page
-    .getByRole("button", { name: "See my paper recap", exact: true })
-    .click();
-  await stage(page, "complete");
+  await tryIt(page, garden);
 });
 
-for (const [name, stored] of [
-  ["malformed JSON", "{not valid JSON"],
+for (const [name, value] of [
+  ["malformed JSON", "{broken"],
   [
-    "an impossible completed trail",
+    "invalid completed work",
     JSON.stringify({
       version: 1,
       cases: {
@@ -820,11 +509,11 @@ for (const [name, stored] of [
           phase: "complete",
           initialClaim: "overreach",
           initialConfidence: 3,
-          opened: [],
-          pinned: ["invented-evidence"],
           claim: "bounded",
-          explanation: "A poisoned saved explanation",
           confidence: 1,
+          opened: [],
+          pinned: ["unknown"],
+          explanation: "A poisoned saved answer",
           transferChoice: "association",
           transferChecked: true,
           reflection: "",
@@ -833,115 +522,97 @@ for (const [name, stored] of [
     }),
   ],
 ] as const) {
-  test(`saved ${name} recovers to a fresh case instead of a stale recap`, async ({
-    page,
-  }) => {
+  test(`${name} recovers to the beginning`, async ({ page }) => {
     await page.addInitScript(
       ({ key, value }) => sessionStorage.setItem(key, value),
-      { key: notebookKey, value: stored },
+      { key: notebookKey, value },
     );
-    await page.goto(route(referenceCase));
+    await page.goto(route());
     await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: referenceCase.title,
-        exact: true,
-      }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", {
-        name: "Open the evidence board",
-        exact: true,
-      }),
+      page.getByRole("button", { name: "Start exploring", exact: true }),
     ).toBeDisabled();
     await expect(
-      page.getByText("A poisoned saved explanation", { exact: true }),
-    ).toHaveCount(0);
-    await expect(
-      page.getByRole("region", { name: "Paper recap", exact: true }),
+      page.getByText("A poisoned saved answer", { exact: true }),
     ).toHaveCount(0);
   });
 }
 
 for (const width of [1440, 768, 390]) {
-  test(`the complete paper trail is accessible at ${width}px with keyboard and reduced motion`, async ({
+  test(`the simplified trail stays concise, navigable and accessible at ${width}px`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    async function auditAndCapture(name: string, readerOpen = false) {
+    async function audit(name: string) {
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,
         ),
       ).toBe(true);
-      await expect(page.getByRole("main")).toHaveCSS("animation-name", "none");
-      const audit = await new AxeBuilder({ page })
+      const words = (await page.getByRole("main").innerText())
+        .trim()
+        .split(/\s+/).length;
+      expect(words).toBeLessThan(300);
+      const result = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
         .analyze();
       expect(
-        audit.violations.map((violation) => ({
-          id: violation.id,
-          nodes: violation.nodes.map((node) => node.target),
+        result.violations.map((item) => ({
+          id: item.id,
+          nodes: item.nodes.map((node) => node.target),
         })),
       ).toEqual([]);
-      if (readerOpen) {
-        await page
-          .getByRole("complementary", {
-            name: "Open evidence card",
-            exact: true,
-          })
-          .getByRole("heading")
-          .focus();
-      } else await page.getByRole("heading", { level: 1 }).focus();
+      await page.getByRole("heading", { level: 1 }).focus();
       await page.screenshot({
         path: resolve(
           "..",
           "gradly-repo-preview",
-          `paper-${name}-${width}.png`,
+          `simple-${name}-${width}.png`,
         ),
         fullPage: true,
         animations: "disabled",
       });
+      const dock = page.locator(".paper-action-dock");
+      if (await dock.count()) {
+        const box = await dock.boundingBox();
+        expect(box!.y + box!.height).toBeLessThanOrEqual(901);
+      }
     }
     await page.goto("/");
-    await page
-      .getByRole("button", { name: "How to play", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Help", exact: true }).click();
     await page
       .getByRole("checkbox", { name: "Reduce motion", exact: true })
       .check();
-    await expect(page.locator("html")).toHaveAttribute(
-      "data-reduced-motion",
-      "true",
-    );
+    await page.getByRole("button", { name: "Close help", exact: true }).click();
+    await audit("home");
+    await page.goto(route());
     await page
-      .getByRole("button", { name: "How to play", exact: true })
-      .click();
-    await auditAndCapture("library");
-    await firstCall(page);
-    await auditAndCapture("question");
+      .getByRole("radio", { name: referenceCase.claims[2]!.text, exact: true })
+      .check();
+    await audit("start");
     await page
-      .getByRole("button", { name: "Open the evidence board", exact: true })
+      .getByRole("button", { name: "Start exploring", exact: true })
       .focus();
     await page.keyboard.press("Enter");
     await stage(page, "evidence");
-    await inspect(page, referenceCase, "assignment", true, () =>
-      auditAndCapture("evidence-open", true),
-    );
-    await auditAndCapture("evidence");
-    await completeBoard(page, referenceCase);
-    await boundClaim(page, referenceCase);
+    await audit("read");
+    await readAll(page);
+    await audit("choose");
+    await conclude(page);
+    await audit("feedback");
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await stage(page, "transfer");
+    await audit("try");
     await page
-      .getByLabel("Connect the claim to the evidence", { exact: true })
-      .fill("I can explain the question, design, finding and limit together.");
-    await auditAndCapture("claim");
-    await transfer(page, referenceCase);
-    await auditAndCapture("transfer");
+      .getByRole("radio", {
+        name: referenceCase.transfer.options[1]!.text,
+        exact: true,
+      })
+      .check();
     await page
-      .getByRole("button", { name: "See my paper recap", exact: true })
+      .getByRole("button", { name: "Check answer", exact: true })
       .click();
-    await stage(page, "complete");
-    await auditAndCapture("complete");
+    await page.getByRole("button", { name: "See recap", exact: true }).click();
+    await audit("recap");
   });
 }

@@ -2,6 +2,7 @@ export type CaseEvidence = {
   id: string;
   label: string;
   kind: "design" | "finding" | "limitation";
+  summary: string;
   text: string;
   sourceLabel: string;
 };
@@ -19,6 +20,7 @@ export type ResearchCase = {
   design: string;
   findings: string;
   limitations: string[];
+  overview: { approach: string; finding: string; limit: string };
   evidence: CaseEvidence[];
   claims: CaseOption[];
   supportedClaimId: string;

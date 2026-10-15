@@ -26,6 +26,7 @@ function prepared(study: ResearchCase): CaseDraft {
     opened: study.evidence.map((item) => item.id),
     pinned: [study.usefulEvidenceIds[0]!, study.competingEvidenceId],
     claim: study.supportedClaimId,
+    claimChecked: true,
     explanation: "I changed the reach of my claim after inspecting its limits.",
     confidence: 2,
     transferChoice: study.transfer.supportedOptionId,
@@ -74,6 +75,16 @@ describe("case notebook persistence", () => {
         referenceCase.id
       ],
     ).toEqual({ ...draft, initialExplanation: "" });
+  });
+
+  it("keeps older completed trails and writing when the new check flag is absent", () => {
+    const draft = prepared(qualitative);
+    const { claimChecked: _claimChecked, ...legacy } = draft;
+    expect(
+      readNotebook(serialized(qualitative, legacy), studies).cases[
+        qualitative.id
+      ],
+    ).toEqual(draft);
   });
 
   it.each([
@@ -138,6 +149,7 @@ describe("case notebook persistence", () => {
     { reflection: "x".repeat(1501) },
     { transferChoice: "unknown-transfer" },
     { transferChecked: "true" },
+    { claimChecked: "true" },
   ])(
     "rejects invalid fields without attaching an assessment: %o",
     (changes) => {
@@ -202,15 +214,20 @@ describe("case notebook persistence", () => {
       ),
     ).toEqual(emptyNotebook());
   });
+
+  it("does not restore an unchecked conclusion as a completed trail", () => {
+    const draft = { ...prepared(qualitative), claimChecked: false };
+    expect(readNotebook(serialized(qualitative, draft), studies)).toEqual(
+      emptyNotebook(),
+    );
+  });
 });
 
 describe.each(studies)("evidence and claims: $title", (study) => {
   it("asks the learner to inspect design, findings and limits before leaving the board", () => {
     const draft = prepared(study);
     expect(boardReady(study, draft)).toBe(true);
-    expect(boardReady(study, { ...draft, pinned: [draft.pinned[0]!] })).toBe(
-      false,
-    );
+    expect(boardReady(study, { ...draft, pinned: [] })).toBe(true);
     for (const kind of ["design", "finding", "limitation"]) {
       const opened = study.evidence
         .filter((item) => item.kind !== kind)

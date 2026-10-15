@@ -1,6 +1,6 @@
 # One paper, one connected experience
 
-The public prototype now has one mode: **Wonder → Explore → Connect → Try it → Keep it**. Its purpose is to help someone explain a paper’s question, approach, findings and boundaries after interacting with its evidence. Choosing a different study changes the content, not the interface or the learning mechanism.
+The public prototype now has one mode: **Start → Read → Choose → Try → Recap**. Its purpose is to help someone explain a paper’s question, approach, findings and boundaries after interacting with its evidence. Choosing a different study changes the content, not the interface or the learning mechanism.
 
 The original quantitative paper is a curated source-backed case. The qualitative garden case is explicitly fictional. It shows that the same mechanism can handle interpretations, different participant accounts and analytic limits without forcing statistical tests onto every paper. Neither case is represented as a new live AI analysis. Custom writing remains unassessed.
 
@@ -8,9 +8,9 @@ The older six-quest, research-upload and reasoning-showcase routes remain availa
 
 ## What makes the interaction useful
 
-1. **An initial commitment survives the reveal.** The learner makes a provisional claim and reports confidence. Once evidence is opened, that initial call is kept for comparison rather than silently rewritten.
-2. **Evidence is something the learner works with.** Cards reveal design, findings and limits. Pinning records the source pieces attached to the current interpretation. A finding alone is insufficient: the guide asks for a relevant counterexample or boundary.
-3. **Claim strength changes visibly.** A three-position dial and equivalent radio controls let the learner compare excessive caution, a bounded interpretation and overreach. Authored guidance responds to selected claims and cards, while the explanation remains the learner’s own writing.
+1. **An initial commitment survives the reveal.** The learner makes a provisional claim; a starting note and confidence are optional. Once evidence is opened, that initial call is kept for comparison rather than silently rewritten.
+2. **Evidence is something the learner works with.** One note is shown at a time, with a short summary and expandable source detail. Previous/next actions and a compact note list support navigation. Saving evidence is optional; saved-note checks still distinguish support from limitations and counterexamples.
+3. **A conclusion gets an explicit check.** Short radio choices compare excessive caution, a bounded interpretation and overreach. Check answer reveals concise authored feedback; changing the choice removes that check. Explanation writing and detailed evidence review remain optional.
 4. **The distinction must travel.** A fictional transfer setting changes a critical feature. The guide explains the structured choice; a completed trail is not a mastery certificate.
 5. **Understanding has a portable artifact.** The recap connects question, approach, findings and limits, preserves the initial and revised claims, and exports evidence, reflection and transfer guidance as local notes.
 
@@ -18,11 +18,11 @@ This is the proposed differentiation: an inspectable path from a claim to eviden
 
 ## Why these interface references mattered
 
-The directly inspected PhET simulation and Polygons explorable show how a small set of purposeful controls can make a relationship visible. The inference for Gradly is an evidence board and claim dial, not a separate game layer. Details, verification limits and original links are in [INTERACTION_REFERENCES.md](INTERACTION_REFERENCES.md). The learning rationale and methodological boundaries are in [RESEARCH_LEARNING_DESIGN.md](RESEARCH_LEARNING_DESIGN.md).
+The directly inspected PhET simulation and Polygons explorable show how a small set of purposeful controls can make a relationship visible. The current adaptation is progressive evidence and visible answer feedback in a guided lesson. User feedback led to removing the free-form board and duplicate dial controls from the main path. Details, verification limits and original links are in [INTERACTION_REFERENCES.md](INTERACTION_REFERENCES.md). The learning rationale and methodological boundaries are in [RESEARCH_LEARNING_DESIGN.md](RESEARCH_LEARNING_DESIGN.md).
 
 ## A concise hackathon demonstration
 
-Open the reference paper. Begin with the overreaching claim. Open the assignment, group-result and scope cards; pin the evidence and boundary. Move the claim dial and explain why the claim changed. Try the new setting, then export a recap that shows the same paper understood as a connected argument. Open the qualitative case briefly to demonstrate breadth through the same interaction.
+Open the reference study and choose a starting answer. Read five short notes with Next note. Choose a conclusion and check it; inspect Why only if useful. Try the changed setting, then download the recap. The qualitative study uses the same flow. The earlier guided lesson at commit `9ab53f1` is the navigation reference: one central task, familiar answer cards and a persistent next action.
 
 This targets the official judging dimensions of coherent design, demonstrated usefulness and idea quality. The technical criterion still requires a working application using NVIDIA models through eligible Nebius infrastructure. An authored frontend does not establish that runtime integration. See the [official criteria and requirements](https://nebiusglobalaihackathon.devpost.com/) and the separate setup and live acceptance guides. No award outcome is implied.
 

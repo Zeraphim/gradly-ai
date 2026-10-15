@@ -1,5 +1,7 @@
 # Playable whole-paper understanding
 
+Current implementation note: user feedback favors the earlier guided lesson. The main path now shows one note at a time, short answer choices and one primary next action. Pinning is optional, and the board/dial proposals below document the exploration that informed the design rather than controls still required in the default flow.
+
 Reference inspection: 15 October 2026. This document records design observations and recommendations, not evidence that Gradly improves learning or will win a hackathon. The case lab implementation and its tests remain the authority for what actually works.
 
 ## Product direction

@@ -31,6 +31,8 @@ export const referenceCase: ResearchCase = {
       id: "assignment",
       label: "Who experienced what?",
       kind: "design",
+      summary:
+        "56 students were randomly assigned to text or not text during a lecture. Each student tried one condition.",
       text: "56 undergraduates were randomly assigned to texting or no texting. Each student experienced one condition. Random assignment supports a causal comparison under these study conditions; it is not random sampling of all students.",
       sourceLabel: "Published page 47 · Methods summary",
     },
@@ -38,6 +40,8 @@ export const referenceCase: ResearchCase = {
       id: "outcome",
       label: "What did learning mean here?",
       kind: "design",
+      summary:
+        "Learning meant a score on a nine-question lecture quiz. GPA and long-term learning were not measured.",
       text: "The outcome was the percentage correct on a nine-item comprehension quiz after a lecture and distractor task. The researchers did not measure overall GPA or long-term retention with this outcome.",
       sourceLabel: "Published page 47 · Procedure and outcome summary",
     },
@@ -45,6 +49,8 @@ export const referenceCase: ResearchCase = {
       id: "difference",
       label: "What did the groups score?",
       kind: "finding",
+      summary:
+        "The no-texting group averaged 83.00%; the texting group averaged 73.41%. That is a 9.59 percentage-point gap.",
       text: "Average quiz scores were 83.00% without texting and 73.41% with texting. The observed difference is 9.59 percentage points, not a 9.59% relative change.",
       sourceLabel: "Published page 47 · Results summary",
     },
@@ -52,6 +58,8 @@ export const referenceCase: ResearchCase = {
       id: "comparison",
       label: "What did the analysis show?",
       kind: "finding",
+      summary:
+        "The analysis found a difference between group averages. It does not tell us that every texting student scored lower.",
       text: "The reported one-way ANOVA was F(1,54) = 4.33, p < .05. This comparison concerns group averages under the study design. A p-value does not measure the size or practical importance of an effect.",
       sourceLabel: "Published page 47 · Analysis summary",
     },
@@ -59,6 +67,8 @@ export const referenceCase: ResearchCase = {
       id: "scope",
       label: "Where does the claim stop?",
       kind: "limitation",
+      summary:
+        "This was one university, prescribed texting and a short quiz. Broader claims need more evidence.",
       text: "Participants came from one university, texting was prescribed, and the outcome was a short comprehension quiz. These boundaries matter before extending the finding to everyday phone use, all students or long-term achievement.",
       sourceLabel: "Curated study limitations · published discussion",
     },
@@ -66,24 +76,32 @@ export const referenceCase: ResearchCase = {
   claims: [
     {
       id: "too-cautious",
-      text: "This experiment cannot tell us anything about texting and comprehension.",
+      text: "This study tells us nothing useful about texting.",
       feedback:
-        "That discards useful evidence. The randomized comparison and quiz outcome support a bounded interpretation, even though generalization needs care.",
+        "Random assignment and the quiz results do tell us something useful. The limits narrow the conclusion rather than erase it.",
     },
     {
       id: "bounded",
-      text: "Texting reduced average comprehension under these study conditions; broader effects need more evidence.",
+      text: "Texting lowered average quiz scores here. Broader effects need more evidence.",
       feedback:
-        "This connects the randomized comparison, measured outcome and observed group difference while keeping the claim within the study’s reach.",
+        "The randomized comparison supports an effect on average quiz scores here. It does not settle effects in other settings.",
     },
     {
       id: "overreach",
-      text: "Texting makes every student fail and lowers their overall GPA.",
+      text: "Texting makes every student fail and lowers their GPA.",
       feedback:
-        "This extends beyond the measured outcome and an average comparison. The study did not establish that every student fails or that GPA changes.",
+        "The study measured average quiz scores, not everyone’s outcome or GPA. This claim reaches too far.",
     },
   ],
   supportedClaimId: "bounded",
+  overview: {
+    approach:
+      "56 students were randomly assigned to text or not text during a lecture, then took a nine-question quiz.",
+    finding:
+      "Average scores were 83.00% without texting and 73.41% with texting: a 9.59 percentage-point gap.",
+    limit:
+      "One university and one short quiz. This does not establish effects on every student, GPA or long-term learning.",
+  },
   usefulEvidenceIds: ["assignment", "outcome", "difference"],
   competingEvidenceId: "scope",
   coachingQuestion:
@@ -101,13 +119,13 @@ export const referenceCase: ResearchCase = {
     options: [
       {
         id: "cause",
-        text: "Yes. Higher marks prove laptops caused better learning.",
+        text: "Yes. Laptops caused the higher marks.",
         feedback:
           "An observed difference alone does not establish the cause. Class selection and prior attainment could explain the pattern.",
       },
       {
         id: "association",
-        text: "No. The groups differ, but selection and prior attainment leave the causal effect unresolved.",
+        text: "No. Class choice and prior attainment could explain the difference.",
         feedback:
           "The outcome pattern is useful evidence of an association. Unlike the original experiment, this comparison lacks random assignment and does not resolve selection differences.",
       },

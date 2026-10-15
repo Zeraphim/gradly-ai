@@ -5,8 +5,8 @@ The latest direction is one refined frontend paper-investigation mode, broader t
 ## Current prototype acceptance
 
 - One public flow connects a paper's question, approach, findings, interpretation and limitations. A content choice does not create another interaction mode.
-- The curated published case and clearly fictional qualitative case both complete through the same evidence board, claim controls, transfer and recap.
-- Opening and pinning evidence change an inspectable trail. Selected claims and cards receive authored guide feedback; arbitrary writing never receives fabricated assessment.
+- The curated published case and clearly fictional qualitative case both complete through the same short-note reader, answer check, transfer and recap.
+- One note is shown at a time with direct Back/Next controls. Saving notes and personal writing are optional. Answer changes invalidate authored feedback; arbitrary writing never receives fabricated assessment.
 - The initial call survives the findings reveal, confidence remains self-reported, and completion never implies mastery.
 - Notes, revisions and per-case recovery work in tab storage with safe denial/corruption handling. Local export preserves source and fictional provenance and has a copyable fallback.
 - Every phase works with API requests blocked; the default experience makes zero API requests. `npm run dev:prototype` serves the frontend alone.

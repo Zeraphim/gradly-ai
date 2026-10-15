@@ -11,6 +11,7 @@ export type CaseDraft = {
   opened: string[];
   pinned: string[];
   claim: string;
+  claimChecked: boolean;
   explanation: string;
   confidence: number;
   transferChoice: string;
@@ -27,6 +28,7 @@ export const freshCase = (): CaseDraft => ({
   opened: [],
   pinned: [],
   claim: "",
+  claimChecked: false,
   explanation: "",
   confidence: 2,
   transferChoice: "",
@@ -65,6 +67,9 @@ export function readNotebook(
       const initialExplanation = Object.hasOwn(draft, "initialExplanation")
         ? draft.initialExplanation
         : "";
+      const claimChecked = Object.hasOwn(draft, "claimChecked")
+        ? draft.claimChecked
+        : ["transfer", "complete"].includes(draft.phase);
       const confidence = (v: unknown) =>
         Number.isInteger(v) && Number(v) >= 1 && Number(v) <= 3;
       if (
@@ -72,6 +77,7 @@ export function readNotebook(
         !choice(draft.initialClaim) ||
         !text(initialExplanation, 1500) ||
         !choice(draft.claim) ||
+        typeof claimChecked !== "boolean" ||
         !confidence(draft.initialConfidence) ||
         !confidence(draft.confidence) ||
         !evidence(draft.opened) ||
@@ -96,6 +102,8 @@ export function readNotebook(
         continue;
       if (["transfer", "complete"].includes(draft.phase) && !draft.claim)
         continue;
+      if (["transfer", "complete"].includes(draft.phase) && !claimChecked)
+        continue;
       if (
         draft.phase === "complete" &&
         (!draft.transferChecked || !draft.transferChoice)
@@ -109,6 +117,7 @@ export function readNotebook(
         opened: [...draft.opened],
         pinned: [...draft.pinned],
         claim: draft.claim,
+        claimChecked,
         explanation: draft.explanation,
         confidence: draft.confidence,
         transferChoice: draft.transferChoice,
@@ -126,12 +135,10 @@ export function boardReady(
   study: ResearchCase,
   draft: Pick<CaseDraft, "opened" | "pinned">,
 ) {
-  return (
-    ["design", "finding", "limitation"].every((kind) =>
-      study.evidence.some(
-        (item) => item.kind === kind && draft.opened.includes(item.id),
-      ),
-    ) && draft.pinned.length >= 2
+  return ["design", "finding", "limitation"].every((kind) =>
+    study.evidence.some(
+      (item) => item.kind === kind && draft.opened.includes(item.id),
+    ),
   );
 }
 

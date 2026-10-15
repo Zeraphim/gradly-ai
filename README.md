@@ -1,10 +1,10 @@
 # Gradly
 
-Gradly turns a paper into an interactive evidence trail. The current prototype has one public experience: **Wonder → Explore → Connect → Try it → Keep it**. Start with a question, uncover and pin source evidence, calibrate a claim, try the distinction in a new setting, and export a connected paper recap.
+Gradly helps learners understand a paper one small step at a time. The public prototype uses one guided flow: **Start → Read → Choose → Try → Recap**. Read one short note at a time, check a conclusion, try a new situation and download the key ideas.
 
-Open `/` or `/#/research/lab`. Two content cases use the same interface: a curated exploration of Gingerich & Lineweaver’s texting experiment, and a clearly fictional qualitative garden study. Research judgment extends beyond statistical test selection.
+Open `/` or `/#/research/lab`. The published texting experiment and clearly fictional qualitative garden study share the same interface. Back and numbered steps make navigation direct. Extra source detail, personal writing and confidence are optional disclosures; saving notes is never required to continue.
 
-The frontend makes no API request. Guide feedback checks selected claims and evidence cards; custom writing is not assessed. Confidence is a self-report, and completion is not a mastery score. Original claims stay fixed after evidence is opened. Notes remain in tab storage with a memory fallback and can be exported locally.
+The frontend makes zero API requests. Feedback is authored, not live AI. Custom writing is not assessed, confidence is self-reported, and completion is not a mastery score. Original answers stay fixed after evidence opens. Existing per-study tab drafts are preserved, including work saved before this simplification.
 
 See [PRODUCT_DIRECTION.md](PRODUCT_DIRECTION.md) for the single-mode scope and demonstration, [INTERACTION_REFERENCES.md](INTERACTION_REFERENCES.md) for the inspected educational interfaces, and [RESEARCH_LEARNING_DESIGN.md](RESEARCH_LEARNING_DESIGN.md) for the source-linked rationale and learning limits. These are design hypotheses, not evidence of an established learning benefit.
 
@@ -80,7 +80,7 @@ npm run test:live
 
 Verified October 14, 2026: type checking, production builds, and 15 automated checks passed. The simulated learner flow covers initial answer hiding, a failed request and retry, wrong-answer revision, saved-progress resumption, six completed quests, independent transfer answers, and dialog cancellation. All eight live cases produced the expected outcomes. Seven model-request durations ranged from 0.595 to 1.900 seconds in that run. This small check does not establish statistical teaching quality or a learning benefit.
 
-The current source passes 165 unit/service checks and 47 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
+The current source passes 168 unit/service checks and 47 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
 
 ## Scope and data
 
