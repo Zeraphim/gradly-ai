@@ -458,6 +458,14 @@ test("deployed hero composition, responsive scaling, color contrast and PDF hand
     page.getByRole("heading", { name: "Upload your Research Paper" }),
   ).toBeVisible();
   await expect(page.getByText("hero-study.pdf", { exact: true })).toBeVisible();
+  const preview = page.getByTitle("Selected research PDF preview");
+  await expect(preview).toHaveAttribute("src", /^blob:/);
+  expect(
+    await preview.evaluate(async (frame) => {
+      const response = await fetch((frame as HTMLIFrameElement).src);
+      return (await response.text()).slice(0, 5);
+    }),
+  ).toBe("%PDF-");
   await page.getByRole("button", { name: "Check this document" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),

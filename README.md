@@ -15,6 +15,8 @@ A research-reading MVP based on the supplied study-adventure designs, with the G
 
 This branch integrates an optional eight-challenge investigation, PDF extraction/OCR, durable research history and reviewed lesson generation into the existing Vite/Express application. The deployed hero composition and six-quest curated flow remain intact. See [RESEARCH_INTEGRATION.md](RESEARCH_INTEGRATION.md) for configuration, verification and limits. The extension is locally available and requires explicit opt-in plus remote storage on Vercel.
 
+Design references, module boundaries, acceptance criteria and verification coverage are documented in [DESIGN.md](DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [TESTING.md](TESTING.md).
+
 ## Run
 
 Requires Node.js **22.18 or newer within version 22** and npm.

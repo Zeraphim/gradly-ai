@@ -124,9 +124,7 @@ function GradlyWorkspace({
   const [history, setHistory] = useState<History[]>([]);
   const [documents, setDocuments] = useState<Doc[]>([]);
   const [file, setFile] = useState<File | null>(initialFile ?? null);
-  const [preview, setPreview] = useState(() =>
-    initialFile ? URL.createObjectURL(initialFile) : "",
-  );
+  const [preview, setPreview] = useState("");
   const [sourcePages, setSourcePages] = useState<
     import("../../../api/src/research/contracts.js").PageText[] | null
   >(null);
@@ -202,12 +200,15 @@ function GradlyWorkspace({
     } catch {}
     heading.current?.focus();
   }, [session]);
-  useEffect(
-    () => () => {
-      if (preview) URL.revokeObjectURL(preview);
-    },
-    [preview],
-  );
+  useEffect(() => {
+    if (!file) {
+      setPreview("");
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
   useEffect(() => {
     if (!confirm) return;
     const dialog = document.querySelector<HTMLElement>("[role=dialog]");
@@ -355,7 +356,6 @@ function GradlyWorkspace({
       return;
     }
     setFile(f);
-    setPreview(URL.createObjectURL(f));
   };
   const upload = () => {
     if (!file || busy) return;
@@ -606,7 +606,6 @@ function GradlyWorkspace({
                       disabled={busy}
                       onClick={() => {
                         setFile(null);
-                        setPreview("");
                         setUploaded(null);
                         if (input.current) input.current.value = "";
                       }}
@@ -614,7 +613,10 @@ function GradlyWorkspace({
                       Remove
                     </button>
                   </div>
-                  <iframe title="Selected research PDF preview" src={preview} />
+                  <iframe
+                    title="Selected research PDF preview"
+                    src={preview || undefined}
+                  />
                   {uploaded ? (
                     <div className="notice">
                       <h2>Document checked</h2>
