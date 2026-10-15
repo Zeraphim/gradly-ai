@@ -16,6 +16,7 @@
     "packages/*/src",
     "tests",
     "scripts/*.ts",
-    "server.ts"
+    "server.ts",
+    "apps/web/src/vite-env.d.ts"
   ]
 }

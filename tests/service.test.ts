@@ -231,3 +231,54 @@ test("hosted adapter leaves static files to Vercel and separates client limits b
     );
   }
 });
+
+test("configured model overrides remain bound to the verified response model", async () => {
+  const previous = process.env.NEBIUS_MODEL_ID;
+  process.env.NEBIUS_MODEL_ID = "nvidia/test-configured-model";
+  try {
+    const service = createFeedbackService(async (payload) => {
+      assert.equal(payload.model, "nvidia/test-configured-model");
+      return {
+        ...completion("sound_reasoning"),
+        model: "nvidia/test-configured-model",
+      };
+    });
+    assert.equal(
+      (await service(request("config-model"))).feedback.outcome,
+      "correct",
+    );
+  } finally {
+    if (previous === undefined) delete process.env.NEBIUS_MODEL_ID;
+    else process.env.NEBIUS_MODEL_ID = previous;
+  }
+});
+test("unconfigured hosted research does not break curated routes", async () => {
+  const oldVercel = process.env.VERCEL;
+  const oldEnabled = process.env.RESEARCH_ENABLED;
+  process.env.VERCEL = "1";
+  delete process.env.RESEARCH_ENABLED;
+  const server = createApp({ preview: true }).listen(0, "127.0.0.1");
+  await new Promise<void>((r) => server.once("listening", r));
+  const address = server.address();
+  assert.ok(address && typeof address !== "string");
+  const base = `http://127.0.0.1:${address.port}`;
+  try {
+    assert.equal((await fetch(base + "/api/lesson")).status, 200);
+    assert.equal(
+      (await (await fetch(base + "/api/research/config")).json()).storage,
+      false,
+    );
+    const blocked = await fetch(base + "/api/research/learning", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "start" }),
+    });
+    assert.equal(blocked.status, 503);
+  } finally {
+    await new Promise<void>((r) => server.close(() => r()));
+    if (oldVercel === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = oldVercel;
+    if (oldEnabled === undefined) delete process.env.RESEARCH_ENABLED;
+    else process.env.RESEARCH_ENABLED = oldEnabled;
+  }
+});

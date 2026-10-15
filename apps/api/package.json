@@ -5,13 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=../../.env src/index.ts",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "dev:test": "tsx --env-file-if-exists=../../.env src/index.ts"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "@paperquest/contracts": "*",
+    "@tesseract.js-data/eng": "^1.0.0",
     "express": "5.3.0",
-    "helmet": "8.3.0",
     "express-rate-limit": "8.7.1",
-    "@paperquest/contracts": "*"
+    "helmet": "8.3.0",
+    "pdf-parse": "^2.4.5",
+    "tesseract.js": "^7.0.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/express": "5.0.6"
