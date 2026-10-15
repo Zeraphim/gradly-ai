@@ -43,6 +43,27 @@ Google Antigravity is a separate tool with support for the same
 these canonical files. If an older client does not discover them, check its version
 and official discovery documentation before creating a second copy of the rules.
 
+## Compatibility links
+
+Other clients share the canonical instructions and skills through relative symlinks:
+
+| Client              | Link                              | Target              |
+| ------------------- | --------------------------------- | ------------------- |
+| Claude Code         | `CLAUDE.md`                       | `AGENTS.md`         |
+| Claude Code         | `.claude/skills`                  | `../.agents/skills` |
+| Cursor              | `.cursor`                         | `.agents`           |
+| Cursor legacy rules | `.cursorrules`                    | `AGENTS.md`         |
+| Windsurf            | `.windsurfrules`                  | `AGENTS.md`         |
+| Cline               | `.clinerules`                     | `AGENTS.md`         |
+| GitHub Copilot      | `.github/copilot-instructions.md` | `../AGENTS.md`      |
+| Kiro skills         | `.kiro/skills`                    | `../.agents/skills` |
+| Kiro steering       | `.kiro/steering/AGENTS.md`        | `../../AGENTS.md`   |
+
+Edit `AGENTS.md` and `.agents/skills/` as the canonical sources. Keep these links
+relative so the same checkout works on another developer's machine. Never replace
+an existing client configuration with a link without reviewing its real content.
+Codex and Antigravity use the canonical files directly.
+
 ## Context maintenance
 
 ```sh

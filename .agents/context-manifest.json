@@ -99,7 +99,17 @@
           "target": "api-instructions"
         }
       ],
-      "implementationRefs": [],
+      "implementationRefs": [
+        "CLAUDE.md",
+        ".claude/skills",
+        ".cursor",
+        ".cursorrules",
+        ".windsurfrules",
+        ".clinerules",
+        ".github/copilot-instructions.md",
+        ".kiro/skills",
+        ".kiro/steering/AGENTS.md"
+      ],
       "review": {
         "commit": null,
         "at": null,

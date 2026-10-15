@@ -32,6 +32,10 @@ anywhere; it does not depend on a parent context repository or personal skill pa
   `tests/browser/`: Playwright. `docs/`: maintained project documentation and
   historical research/review evidence indexed by `docs/CONTEXT.md`.
 
+Compatibility symlinks share `AGENTS.md` and `.agents/skills/` with other agent
+clients. See `docs/README.md` for the maintained link map; edit canonical sources
+rather than introducing client-specific copies.
+
 ## Commands from the repository root
 
 | Need                                       | Command                                           |
