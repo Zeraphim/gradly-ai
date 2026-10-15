@@ -8,6 +8,7 @@ import {
   type Audit,
 } from "./contracts.js";
 import { type ModelProvider } from "./provider.js";
+import { sceneAuthoringInstructions } from "./scene-authoring.js";
 const roles: [string, string][] = [
   [
     "Research Evidence Analyst",
@@ -91,7 +92,7 @@ export async function runStage(
     } else if (j.stage === 1) {
       j.lesson = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–14 challenges depending on evidence, adapting to this paper’s research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. Restrict evidence to the supplied exact excerpts. paper.url must be an actual DOI/source appearing in the supplied document; otherwise set paper.url=null and explicitly mark unavailable metadata. Do not invent references, participants, quotes, results, or a single best answer where the source permits alternatives.`,
+        `${audit.task} Use 3–14 challenges depending on evidence, adapting to this paper’s research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. Restrict evidence to the supplied exact excerpts. paper.url must be an actual DOI/source appearing in the supplied document; otherwise set paper.url=null and explicitly mark unavailable metadata. Do not invent references, participants, quotes, results, or a single best answer where the source permits alternatives. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
           pages: j.pages,
@@ -101,6 +102,7 @@ export async function runStage(
         },
         lessonSchema,
       );
+      j.lesson = lessonSchema.parse(j.lesson);
       j.lesson.id = j.id;
       j.lesson.source = "generated";
       if (j.pages.some((p) => p.method === "ocr"))
@@ -111,7 +113,7 @@ export async function runStage(
     } else if (j.stage === 2 || j.stage === 3) {
       const assessment = await provider.generate(
         audit.role,
-        `${audit.task} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Return approved=false when uncertain.`,
+        `${audit.task} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Review all scene text, values, edges, response labels and reveal gates too. Reject unsupported visual relationships, findings or answer leakage in setup metadata, invented numerical data, misleading provenance, or diagrams that imply unavailable observations. Return approved=false when uncertain.`,
         { lesson: j.lesson, pages: j.pages },
         z.object({
           approved: z.boolean(),

@@ -5,6 +5,12 @@ export type InvestigationDraft = {
   reasoning: string;
   reflection: string;
   editingReasoning: boolean;
+  scene?: {
+    inspectedId: string | null;
+    prediction: string | null;
+    pinnedIds?: string[];
+    revealed?: boolean;
+  };
 };
 const drafts = new Map<string, InvestigationDraft>();
 let motionOverride: boolean | undefined;
@@ -24,7 +30,24 @@ function validDraft(value: unknown): value is InvestigationDraft {
     d.reasoning.length <= 3000 &&
     typeof d.reflection === "string" &&
     d.reflection.length <= 3000 &&
-    typeof d.editingReasoning === "boolean"
+    typeof d.editingReasoning === "boolean" &&
+    (d.scene === undefined ||
+      (d.scene !== null &&
+        typeof d.scene === "object" &&
+        (d.scene.inspectedId === null ||
+          (typeof d.scene.inspectedId === "string" &&
+            d.scene.inspectedId.length <= 80)) &&
+        (d.scene.prediction === null ||
+          (typeof d.scene.prediction === "string" &&
+            d.scene.prediction.length <= 600)) &&
+        (d.scene.revealed === undefined ||
+          typeof d.scene.revealed === "boolean") &&
+        (d.scene.pinnedIds === undefined ||
+          (Array.isArray(d.scene.pinnedIds) &&
+            d.scene.pinnedIds.length <= 12 &&
+            d.scene.pinnedIds.every(
+              (id) => typeof id === "string" && id.length <= 80,
+            )))))
   );
 }
 export function readDraft(id: string, version: number, challengeId: string) {

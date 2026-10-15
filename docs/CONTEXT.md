@@ -40,11 +40,14 @@
 | `contributor-readme` | runbook | Active | Setup and contributor entrypoint | `README.md` |  |
 | `documentation-guide` | runbook | Active | Documentation provenance and shared agent setup | `docs/README.md` |  |
 | `research-integration` | runbook | Documented | Research configuration, boundaries, and historical integration checks | `docs/RESEARCH_INTEGRATION.md` |  |
+| `scene-authoring` | runbook | Documented | Reusable research scene contract and integration | `docs/SCENE_AUTHORING.md` |  |
 | `testing` | runbook | Documented | Validation commands and retained historical test reports | `docs/TESTING.md` |  |
 | `documentation-maintenance` | skill | Active | Documentation and context lifecycle | `.agents/skills/documentation-maintenance/SKILL.md` |  |
 | `project-context` | skill | Active | Stack, layout, commands, and configuration | `.agents/skills/project-context/SKILL.md` |  |
 | `vercel-delivery` | skill | Active | Vercel packaging and delivery checks | `.agents/skills/vercel-delivery/SKILL.md` |  |
 | `design` | ui | Proposed | Interface conventions and retained historical design sections | `docs/DESIGN.md` |  |
+| `fresh-adventure-motion` | ui | Proposed | Fresh Adventure shared motion and interaction coverage | `docs/ui/FRESH_ADVENTURE_MOTION.md` |  |
+| `fresh-adventure-ui` | ui | Proposed | Fresh Adventure visual scenes and verification limits | `docs/ui/FRESH_ADVENTURE.md` |  |
 | `ui-polish-review` | validation | Historical report | Historical source and browser polish review | `docs/UI_POLISH_REVIEW.md` |  |
 
 ## Context Commands

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { sceneSchema, sceneProblems, sceneItems } from "@paperquest/contracts";
 export const refSchema = z.object({
   id: z.string().min(1),
   page: z.number().int().positive(),
@@ -11,6 +12,7 @@ export const challengeSchema = z.object({
   type: z.enum(["single", "multiple"]),
   prompt: z.string().min(10),
   evidence: z.array(z.string()),
+  scene: sceneSchema.nullable().optional(),
   options: z
     .array(z.object({ id: z.string(), text: z.string().min(1) }))
     .min(2)
@@ -167,6 +169,46 @@ export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
     }
     if (c.refs.some((r) => !refs.has(r)))
       problems.push(`${c.id}: unknown evidence reference.`);
+    if (c.scene) {
+      const parsed = sceneSchema.safeParse(c.scene);
+      if (!parsed.success)
+        problems.push(`${c.id}: malformed scene; retry lesson generation.`);
+      else {
+        problems.push(
+          ...sceneProblems(
+            parsed.data,
+            c.options.map((o) => o.id),
+            c.refs,
+          ).map((issue) => `${c.id}: ${issue}.`),
+        );
+        if (parsed.data.kind === "comparison") {
+          for (const value of parsed.data.values) {
+            if (value.provenance.kind !== "reported") {
+              problems.push(
+                `${c.id}: comparison values must be reported source measurements.`,
+              );
+              continue;
+            }
+            const excerpts = lesson.evidence
+              .filter((ref) => value.provenance.refs.includes(ref.id))
+              .map((ref) => ref.excerpt)
+              .join(" ");
+            const numbers = (excerpts.match(/-?\d+(?:\.\d+)?/g) ?? []).map(
+              Number,
+            );
+            if (!numbers.includes(value.value))
+              problems.push(
+                `${c.id}: comparison value is not in its referenced evidence.`,
+              );
+          }
+        }
+        const setup = sceneItems(parsed.data).filter(
+          (item) => item.at === "setup",
+        );
+        if (!setup.length)
+          problems.push(`${c.id}: scene needs visible setup content.`);
+      }
+    }
     if (c.reveal === "bonus" && lesson.challenges.includes(c))
       problems.push(`${c.id}: bonus in required sequence.`);
   }

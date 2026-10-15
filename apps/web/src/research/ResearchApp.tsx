@@ -1,4 +1,19 @@
 import "./styles.css";
+import { sceneSchema } from "@paperquest/contracts";
+import {
+  InvestigationScene,
+  emptySceneDraft,
+  type SceneDraft,
+} from "./scenes/InvestigationScene.js";
+import {
+  SceneMotion,
+  SceneTransition,
+  SceneFeedback,
+  SceneAction,
+  SceneFollowing,
+} from "./scenes/scene-motion.js";
+import { SceneDisclosure } from "./scenes/SceneDisclosure.js";
+import { SceneJourney, SceneReview } from "./scenes/SceneJourney.js";
 import {
   ResearchLink as Link,
   useResearchPath,
@@ -26,6 +41,7 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useMemo,
   useState,
 } from "react";
 import type {
@@ -145,6 +161,7 @@ function GradlyWorkspace({
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+  const [sceneDraft, setSceneDraft] = useState<SceneDraft>(emptySceneDraft);
   const [reasoning, setReasoning] = useState("");
   const [editingReasoning, setEditingReasoning] = useState(false);
   const [feedback, setFeedback] = useState<{
@@ -183,7 +200,7 @@ function GradlyWorkspace({
   useEffect(() => {
     document.documentElement.dataset.reducedMotion = String(reduced);
   }, [reduced]);
-  const applySession = useCallback((s: Session) => {
+  const applySession = useCallback((s: Session, exploration?: SceneDraft) => {
     const draft = readDraft(s.id, s.version, s.challenge?.id ?? s.phase);
     setSession(s);
     setSelected(
@@ -195,6 +212,7 @@ function GradlyWorkspace({
           ? []
           : (s.challenge?.previousSelection ?? []),
     );
+    setSceneDraft(draft?.scene ?? exploration ?? emptySceneDraft);
     setReasoning(draft?.reasoning ?? s.challenge?.reasoning ?? "");
     setFeedback(null);
     setEditingReasoning(
@@ -270,8 +288,9 @@ function GradlyWorkspace({
       reasoning,
       reflection,
       editingReasoning,
+      scene: sceneDraft,
     });
-  }, [session, selected, reasoning, reflection, editingReasoning]);
+  }, [session, selected, reasoning, reflection, editingReasoning, sceneDraft]);
   useEffect(() => {
     const previousTitle = document.title;
     const titles: Record<string, string> = {
@@ -309,7 +328,10 @@ function GradlyWorkspace({
       });
       if (!mounted.current) return;
       if (session) clearDraft(session.id);
-      applySession(s);
+      applySession(
+        s,
+        s.challenge?.id === session?.challenge?.id ? sceneDraft : undefined,
+      );
       if (
         action === "start" ||
         action === "restart" ||
@@ -427,6 +449,10 @@ function GradlyWorkspace({
     }
   };
   const c = session?.challenge;
+  const scene = useMemo(() => {
+    const parsed = sceneSchema.safeParse(c?.scene);
+    return parsed.success ? parsed.data : null;
+  }, [c?.scene]);
   const demo = job?.mode === "demo" || session?.source === "demo";
   const shownFeedback = feedback ?? c?.aiFeedback;
   const bottom =
@@ -515,7 +541,7 @@ function GradlyWorkspace({
       </header>
       <main
         id="main"
-        className={`main ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
+        className={`main ${route === "adventure" ? "scene-motion-page" : ""} ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
       >
         <ErrorMessage message={error || configError} />
         {configError || (error && route !== "history") ? (
@@ -618,767 +644,801 @@ function GradlyWorkspace({
           />
         ) : null}
         {route === "adventure" && session ? (
-          <>
-            {session.phase === "briefing" ? (
-              <>
-                <Speech>
-                  You make the research decisions. I’ll help you examine the
-                  evidence, then we’ll reveal the original paper.
-                </Speech>
-                <span className="tag">
-                  {session.source === "demo"
-                    ? "Sample investigation · authored guidance"
-                    : session.source !== "generated"
-                      ? "Pre-reviewed reference investigation"
-                      : "AI-generated • verification passed"}
-                </span>
-                <h1 ref={heading} tabIndex={-1}>
-                  {session.title}
-                </h1>
-                <div className="card">
-                  <h2>Your investigation briefing</h2>
-                  <p>{session.briefing}</p>
-                  {session.source !== "generated" ? (
-                    <p>
-                      56 undergraduate students were randomly assigned to text
-                      or not text during a lecture. Each participant experienced
-                      one condition. After approximately 30 minutes of lecture
-                      and a 10-minute distractor activity, they took a nine-item
-                      comprehension quiz scored as percentage correct.
-                    </p>
-                  ) : null}
-                  <p>
-                    You can revise once after a missed answer. Completion and
-                    first-attempt accuracy are tracked separately. Written
-                    reasoning is optional.
-                  </p>
-                </div>
-                <button
-                  disabled={busy}
-                  className="btn primary"
-                  onClick={() => act("begin")}
-                >
-                  <ActionLabel>Begin investigation</ActionLabel>
-                </button>
-              </>
-            ) : null}
-            {c && !reviewMode ? (
-              <>
-                <div className="lesson-top">
-                  <Link
-                    href="/history"
-                    className="exit"
-                    aria-label="Save and exit investigation"
-                  >
-                    <Icon name="close" size={22} />
-                  </Link>
-                  <Progress
-                    value={
-                      session.phase === "bonus" ? session.total : session.index
-                    }
-                    max={session.total}
-                    label={
-                      session.phase === "bonus"
-                        ? "Bonus challenge"
-                        : `Challenge ${session.index + 1} of ${session.total}`
-                    }
-                  />
-                  <span className="mode-pill">
-                    {demo
-                      ? "Sample"
+          <SceneMotion reduced={reduced}>
+            <SceneTransition
+              identity={`${session.id}:${reviewMode ? "review" : `${session.phase}:${c?.id ?? ""}`}`}
+            >
+              {session.phase === "briefing" ? (
+                <>
+                  <Speech>
+                    You make the research decisions. I’ll help you examine the
+                    evidence, then we’ll reveal the original paper.
+                  </Speech>
+                  <span className="tag">
+                    {session.source === "demo"
+                      ? "Sample investigation · authored guidance"
                       : session.source !== "generated"
-                        ? "Reference"
-                        : "AI-reviewed"}
+                        ? "Pre-reviewed reference investigation"
+                        : "AI-generated • verification passed"}
                   </span>
-                </div>
-                <Speech>
-                  {c.reveal === "results"
-                    ? session.source === "generated"
-                      ? "Inspect the findings. What do they support—and what do they leave uncertain?"
-                      : "Look at the group scores. What do they tell us—and what do they leave uncertain?"
-                    : c.reveal === "significance"
-                      ? "Go beyond the number. Match your interpretation to the design and evidence."
-                      : c.reveal === "interpretation"
-                        ? "Connect the interpretation to the evidence. Which claims fit, and where should you stop?"
-                        : "Let’s investigate. Defend a research decision before we reveal the findings."}
-                </Speech>
-                <div className="stage">
-                  <span>{c.stage}</span>
-                  <span>
-                    {c.type === "multiple"
-                      ? "Select all that apply"
-                      : "Choose one response"}
-                  </span>
-                </div>
-                <h1
-                  ref={heading}
-                  tabIndex={-1}
-                  key={`${c.id}-heading`}
-                  className="challenge-heading"
-                >
-                  {c.title}
-                </h1>
-                {c.evidence.length ? (
-                  <section
-                    className="study-card"
-                    aria-label="Available research evidence"
-                  >
-                    <h2>Research evidence</h2>
-                    {c.reveal === "results" &&
-                    session.source !== "generated" ? (
-                      <div className="stats-grid">
-                        <div>
-                          <span className="tag">Condition A</span>
-                          <h3>Texting group</h3>
-                          <div className="score-row">
-                            <span>Mean score</span>
-                            <strong>73.41%</strong>
-                          </div>
-                          <div className="chart-track">
-                            <div style={{ width: "73.41%" }} />
-                          </div>
-                          <p>SD = 16.95%</p>
-                        </div>
-                        <div>
-                          <span className="tag">Condition B</span>
-                          <h3>No-texting group</h3>
-                          <div className="score-row">
-                            <span>Mean score</span>
-                            <strong>83.00%</strong>
-                          </div>
-                          <div className="chart-track">
-                            <div style={{ width: "83%" }} />
-                          </div>
-                          <p>SD = 17.26%</p>
-                        </div>
-                      </div>
-                    ) : (
-                      c.evidence.map((e, i) => <p key={i}>{e}</p>)
-                    )}
-                    {c.feedback &&
-                    c.reveal === "results" &&
-                    session.source !== "generated" ? (
-                      <p className="difference">
-                        Difference: 9.59 percentage points
-                      </p>
-                    ) : null}
-                    <p className="quiet">
-                      Use only the evidence available at this stage.
-                    </p>
-                  </section>
-                ) : null}
-                <p className="question">{c.prompt}</p>
-                <fieldset
-                  key={`${c.id}-choices`}
-                  disabled={busy || !!c.feedback}
-                  className="choices"
-                >
-                  <legend className="sr-only">{c.prompt}</legend>
-                  {c.options.map((o) => (
-                    <label
-                      key={o.id}
-                      className={`choice ${selected.includes(o.id) ? "selected" : ""}`}
-                    >
-                      <input
-                        type={c.type === "multiple" ? "checkbox" : "radio"}
-                        name="answer"
-                        value={o.id}
-                        checked={selected.includes(o.id)}
-                        onChange={() => {
-                          setSelected(
-                            c.type === "single"
-                              ? [o.id]
-                              : selected.includes(o.id)
-                                ? selected.filter((s) => s !== o.id)
-                                : [...selected, o.id],
-                          );
-                        }}
-                      />
-                      <span className="keycap">{o.id}</span>
-                      <span>{o.text}</span>
-                      <span aria-hidden="true" className="selection-mark">
-                        {selected.includes(o.id) ? (
-                          <Icon name="check" size={19} />
-                        ) : null}
-                      </span>
-                    </label>
-                  ))}
-                </fieldset>
-                {!c.feedback ? (
-                  <p className="quiet draft-note">
-                    Your draft stays in this tab. Submitted decisions are saved
-                    to your guest profile.
-                  </p>
-                ) : null}
-                <div className="support-grid">
-                  <details className="support">
-                    <summary className="icon-summary">
-                      Study Details
-                      <Icon
-                        name="chevron"
-                        size={17}
-                        className="disclosure-chevron"
-                      />
-                    </summary>
+                  <h1 ref={heading} tabIndex={-1}>
+                    {session.title}
+                  </h1>
+                  <div className="card">
+                    <h2>Your investigation briefing</h2>
+                    <p>{session.briefing}</p>
                     {session.source !== "generated" ? (
                       <p>
-                        Random assignment; separate participant groups;
-                        numerical percentage-correct outcome. The quiz followed
-                        a lecture and a distractor activity. Statistical
-                        assumptions need examination; random assignment does not
-                        guarantee normality or independence in every testing
-                        arrangement.
+                        56 undergraduate students were randomly assigned to text
+                        or not text during a lecture. Each participant
+                        experienced one condition. After approximately 30
+                        minutes of lecture and a 10-minute distractor activity,
+                        they took a nine-item comprehension quiz scored as
+                        percentage correct.
                       </p>
-                    ) : (
-                      <p>
-                        {c.evidence.join(" ") ||
-                          "Use the research evidence supplied with this challenge. Missing evidence should not be inferred."}
-                      </p>
-                    )}
-                  </details>
-                  <details className="support">
-                    <summary className="icon-summary">
-                      Hint
-                      <Icon
-                        name="chevron"
-                        size={17}
-                        className="disclosure-chevron"
-                      />
-                    </summary>
-                    <p>{c.hint}</p>
-                  </details>
-                </div>
-                {c.writtenReasoning ? (
-                  <div className="reasoning">
-                    <label htmlFor="reasoning">
-                      Defend your decision{" "}
-                      <span className="quiet">(optional)</span>
-                    </label>
-                    <textarea
-                      id="reasoning"
-                      value={reasoning}
-                      maxLength={3000}
-                      disabled={busy || (!!c.feedback && !editingReasoning)}
-                      onChange={(e) => setReasoning(e.target.value)}
-                      placeholder="How does the study design support your choice?"
-                    />
-                    {c.feedback ? (
-                      <div className="actions">
-                        {editingReasoning ? (
-                          <>
-                            <button
-                              className="btn secondary"
-                              disabled={busy}
-                              onClick={() =>
-                                act("revise-reasoning", { reasoning })
-                              }
-                            >
-                              Save revised explanation
-                            </button>
-                            <button
-                              className="btn outline"
-                              disabled={busy}
-                              onClick={() => {
-                                setReasoning(c.reasoning);
-                                setEditingReasoning(false);
-                              }}
-                            >
-                              Cancel revision
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            className="btn outline compact"
-                            onClick={() => setEditingReasoning(true)}
-                          >
-                            Revise explanation
-                          </button>
-                        )}
-                      </div>
                     ) : null}
-                    <p className="quiet">
-                      Your selection uses the answer guide. Written reasoning
-                      receives AI evaluation only when you request live
-                      feedback.
+                    <p>
+                      You can revise once after a missed answer. Completion and
+                      first-attempt accuracy are tracked separately. Written
+                      reasoning is optional.
                     </p>
                   </div>
-                ) : null}
-                {c.feedback ? (
-                  <>
-                    <section
-                      ref={feedbackRegion}
-                      tabIndex={-1}
-                      className={`feedback ${c.feedback.correct ? "correct" : "incorrect"}`}
-                      aria-live="polite"
+                  <button
+                    disabled={busy}
+                    className="btn primary"
+                    onClick={() => act("begin")}
+                  >
+                    <ActionLabel>Begin investigation</ActionLabel>
+                  </button>
+                </>
+              ) : null}
+              {c && !reviewMode ? (
+                <>
+                  <div className="lesson-top">
+                    <Link
+                      href="/history"
+                      className="exit"
+                      aria-label="Save and exit investigation"
                     >
-                      <h2>
-                        {c.feedback.correct
-                          ? "Your choice matches"
-                          : c.attempts === 1
-                            ? "Let’s reconsider."
-                            : "Here’s the reference explanation."}
-                      </h2>
-                      <p>{c.feedback.message}</p>
-                      {c.feedback.explanation && !c.feedback.correct ? (
-                        <p>{c.feedback.explanation}</p>
-                      ) : null}
-                    </section>
-                    <details className="agent-panel">
-                      <summary>See the answer guide and evidence</summary>
-                      <p className="quiet">
-                        {session.source !== "generated"
-                          ? "Reference guidance • no model was called for answer checking."
-                          : "Guidance from the verified lesson • no new inference for answer checking."}
-                      </p>
-                      {[
-                        [
-                          "Research Evidence Analyst",
-                          "Relevant Research Evidence",
-                          c.evidence.join(" ") ||
-                            (session.source === "generated"
-                              ? "Use this challenge’s page references. Do not fill gaps in the source with assumptions."
-                              : "Independent participants, one condition per person, and a numerical quiz outcome."),
-                        ],
-                        [
-                          session.source === "generated"
-                            ? "Research Methods Reviewer"
-                            : "Statistical Reviewer",
-                          session.source === "generated"
-                            ? "Methods and Interpretation"
-                            : "Statistical Assessment",
-                          c.feedback.explanation ||
-                            (session.source === "generated"
-                              ? "Check how the research approach and available evidence support the decision, and where competing explanations remain."
-                              : "Check whether your selected method matches the outcome and the relationship between observations."),
-                        ],
-                        [
-                          "Learning Coach",
-                          "Identified Misconception",
-                          c.feedback.correct
-                            ? "Your selected response matches the accepted answer guide."
-                            : c.feedback.message,
-                        ],
-                        [
-                          "Verification Layer",
-                          "Evidence Verification",
-                          "The answer was checked against the lesson’s accepted responses. Written reasoning has not changed that score.",
-                        ],
-                        [
-                          "Learning Coach",
-                          "Learning Guidance",
-                          session.source !== "generated" && c.id === "q3"
-                            ? "Does each student have a score in both conditions, or only one? What would make two observations paired?"
-                            : c.hint,
-                        ],
-                      ].map(([role, title, text]) => (
-                        <details className="audit-detail" key={title}>
-                          <summary>{title}</summary>
-                          <p>
-                            <strong>{role}</strong> •{" "}
-                            {session.source !== "generated"
-                              ? "Reference role"
-                              : "Verified lesson role"}
-                          </p>
-                          <p>Input: {c.title}</p>
-                          <p>{text}</p>
-                          <p>
-                            Source references:{" "}
-                            {c.references
-                              .map(
-                                (r) =>
-                                  `${r.id}, ${session.source !== "generated" ? "published page" : "PDF page"} ${r.page}`,
-                              )
-                              .join("; ")}
-                          </p>
-                          <p>Status: available reference guidance</p>
-                        </details>
-                      ))}
-                    </details>
-                    {c.writtenReasoning && reasoning ? (
-                      <section
-                        className="reasoning-review"
-                        aria-label="Reasoning review"
-                      >
-                        <h2>Check the explanation, too.</h2>
-                        <p>
-                          {editingReasoning
-                            ? "Save your revised explanation before requesting another review."
-                            : !demo &&
-                                shownFeedback &&
-                                !(
-                                  "error" in shownFeedback &&
-                                  shownFeedback.error
-                                )
-                              ? "The live review below considers your written explanation separately from your choice."
-                              : "Your written explanation has not been assessed. The answer-guide result checks your choice only."}
+                      <Icon name="close" size={22} />
+                    </Link>
+                    <Progress
+                      value={
+                        session.phase === "bonus"
+                          ? session.total
+                          : session.index
+                      }
+                      max={session.total}
+                      label={
+                        session.phase === "bonus"
+                          ? "Bonus challenge"
+                          : `Challenge ${session.index + 1} of ${session.total}`
+                      }
+                    />
+                    <span className="mode-pill">
+                      {demo
+                        ? "Sample"
+                        : session.source !== "generated"
+                          ? "Reference"
+                          : "AI-reviewed"}
+                    </span>
+                  </div>
+                  <Speech>
+                    {c.reveal === "results"
+                      ? session.source === "generated"
+                        ? "Inspect the findings. What do they support—and what do they leave uncertain?"
+                        : "Look at the group scores. What do they tell us—and what do they leave uncertain?"
+                      : c.reveal === "significance"
+                        ? "Go beyond the number. Match your interpretation to the design and evidence."
+                        : c.reveal === "interpretation"
+                          ? "Connect the interpretation to the evidence. Which claims fit, and where should you stop?"
+                          : "Let’s investigate. Defend a research decision before we reveal the findings."}
+                  </Speech>
+                  <div className="stage">
+                    <span>{c.stage}</span>
+                    <span>
+                      {c.type === "multiple"
+                        ? "Select all that apply"
+                        : "Choose one response"}
+                    </span>
+                  </div>
+                  <h1
+                    ref={heading}
+                    tabIndex={-1}
+                    key={`${c.id}-heading`}
+                    className="challenge-heading"
+                  >
+                    {c.title}
+                  </h1>
+                  {!scene && c.evidence.length ? (
+                    <section
+                      className="study-card"
+                      aria-label="Available research evidence"
+                    >
+                      <h2>Research evidence</h2>
+                      {c.reveal === "results" &&
+                      session.source !== "generated" ? (
+                        <div className="stats-grid">
+                          <div>
+                            <span className="tag">Condition A</span>
+                            <h3>Texting group</h3>
+                            <div className="score-row">
+                              <span>Mean score</span>
+                              <strong>73.41%</strong>
+                            </div>
+                            <div className="chart-track">
+                              <div style={{ width: "73.41%" }} />
+                            </div>
+                            <p>SD = 16.95%</p>
+                          </div>
+                          <div>
+                            <span className="tag">Condition B</span>
+                            <h3>No-texting group</h3>
+                            <div className="score-row">
+                              <span>Mean score</span>
+                              <strong>83.00%</strong>
+                            </div>
+                            <div className="chart-track">
+                              <div style={{ width: "83%" }} />
+                            </div>
+                            <p>SD = 17.26%</p>
+                          </div>
+                        </div>
+                      ) : (
+                        c.evidence.map((e, i) => <p key={i}>{e}</p>)
+                      )}
+                      {c.feedback &&
+                      c.reveal === "results" &&
+                      session.source !== "generated" ? (
+                        <p className="difference">
+                          Difference: 9.59 percentage points
                         </p>
-                        <button
-                          className="btn secondary"
-                          disabled={
-                            busy ||
-                            editingReasoning ||
-                            (!demo && !config?.liveAI)
-                          }
-                          onClick={async () => {
-                            if (demo) {
-                              setFeedback({
-                                category: "Reference guidance",
-                                guidance:
-                                  c.feedback?.explanation ??
-                                  c.feedback?.message,
-                                followup:
-                                  "Compare this guidance with your explanation. Your writing is saved; no AI assessment was performed.",
-                              });
-                              return;
-                            }
-                            setBusy(true);
-                            try {
-                              const response = await api<{
-                                session: Session;
-                              }>("/api/research/feedback", {
-                                id: session.id,
-                              });
-                              if (!mounted.current) return;
-                              clearDraft(session.id);
-                              applySession(response.session);
-                            } catch (e) {
-                              if (!mounted.current) return;
-                              setFeedback({
-                                error: `${(e as Error).message} Your reasoning is saved. Use the reference explanation; no live assessment was completed.`,
-                              });
-                            } finally {
-                              if (mounted.current) setBusy(false);
-                            }
-                          }}
+                      ) : null}
+                      <p className="quiet">
+                        Use only the evidence available at this stage.
+                      </p>
+                    </section>
+                  ) : null}
+                  <p className="question">{c.prompt}</p>
+                  {scene ? (
+                    <InvestigationScene
+                      key={`${session.id}:${c.id}:${session.retrying}`}
+                      scene={scene}
+                      options={c.options}
+                      multiple={c.type === "multiple"}
+                      selected={selected}
+                      firstSelection={c.firstSelection ?? []}
+                      disabled={busy || !!c.feedback}
+                      answered={!!c.feedback}
+                      reduced={reduced}
+                      draft={sceneDraft}
+                      onDraft={setSceneDraft}
+                      onSelect={setSelected}
+                    />
+                  ) : (
+                    <fieldset
+                      key={`${c.id}-choices`}
+                      disabled={busy || !!c.feedback}
+                      className="choices"
+                    >
+                      <legend className="sr-only">{c.prompt}</legend>
+                      {c.options.map((o) => (
+                        <label
+                          key={o.id}
+                          className={`choice ${selected.includes(o.id) ? "selected" : ""}`}
                         >
-                          {demo
-                            ? "Explore sample guidance"
-                            : "Ask AI to review my reasoning"}
-                        </button>
-                        {!config?.liveAI && !demo ? (
+                          <input
+                            type={c.type === "multiple" ? "checkbox" : "radio"}
+                            name="answer"
+                            value={o.id}
+                            checked={selected.includes(o.id)}
+                            onChange={() => {
+                              setSelected(
+                                c.type === "single"
+                                  ? [o.id]
+                                  : selected.includes(o.id)
+                                    ? selected.filter((s) => s !== o.id)
+                                    : [...selected, o.id],
+                              );
+                            }}
+                          />
+                          <span className="keycap">{o.id}</span>
+                          <span>{o.text}</span>
+                          <span aria-hidden="true" className="selection-mark">
+                            {selected.includes(o.id) ? (
+                              <Icon name="check" size={19} />
+                            ) : null}
+                          </span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  )}
+                  <SceneFollowing>
+                    {!c.feedback ? (
+                      <p className="quiet draft-note">
+                        Your draft stays in this tab. Submitted decisions are
+                        saved to your guest profile.
+                      </p>
+                    ) : null}
+                    <div className="support-grid">
+                      <SceneDisclosure
+                        reduced={reduced}
+                        className="support"
+                        title="Study Details"
+                      >
+                        {session.source !== "generated" ? (
                           <p>
-                            Live AI is not configured. Your written reasoning is
-                            saved but has not been evaluated.
+                            Random assignment; separate participant groups;
+                            numerical percentage-correct outcome. The quiz
+                            followed a lecture and a distractor activity.
+                            Statistical assumptions need examination; random
+                            assignment does not guarantee normality or
+                            independence in every testing arrangement.
                           </p>
-                        ) : null}
-                        {shownFeedback && !editingReasoning ? (
-                          <div className="notice" role="status">
-                            {"error" in shownFeedback && shownFeedback.error ? (
-                              <ErrorMessage
-                                message={
-                                  ("error" in shownFeedback
-                                    ? shownFeedback.error
-                                    : "") ?? ""
-                                }
-                              />
-                            ) : (
+                        ) : (
+                          <p>
+                            {c.evidence.join(" ") ||
+                              "Use the research evidence supplied with this challenge. Missing evidence should not be inferred."}
+                          </p>
+                        )}
+                      </SceneDisclosure>
+                      <SceneDisclosure
+                        reduced={reduced}
+                        className="support"
+                        title="Hint"
+                      >
+                        <p>{c.hint}</p>
+                      </SceneDisclosure>
+                    </div>
+                    {c.writtenReasoning ? (
+                      <div className="reasoning">
+                        <label htmlFor="reasoning">
+                          Defend your decision{" "}
+                          <span className="quiet">(optional)</span>
+                        </label>
+                        <textarea
+                          id="reasoning"
+                          value={reasoning}
+                          maxLength={3000}
+                          disabled={busy || (!!c.feedback && !editingReasoning)}
+                          onChange={(e) => setReasoning(e.target.value)}
+                          placeholder="How does the study design support your choice?"
+                        />
+                        {c.feedback ? (
+                          <div className="actions">
+                            {editingReasoning ? (
                               <>
-                                <strong>
-                                  {shownFeedback.category} •{" "}
-                                  {demo
-                                    ? "Sample preview"
-                                    : "Live AI assessment"}
-                                </strong>
-                                <p>{shownFeedback.guidance}</p>
-                                <p>{shownFeedback.followup}</p>
-                                <p className="quiet">
-                                  This feedback does not override your
-                                  answer-guide score.
-                                </p>
+                                <button
+                                  className="btn secondary"
+                                  disabled={busy}
+                                  onClick={() =>
+                                    act("revise-reasoning", { reasoning })
+                                  }
+                                >
+                                  Save revised explanation
+                                </button>
+                                <button
+                                  className="btn outline"
+                                  disabled={busy}
+                                  onClick={() => {
+                                    setReasoning(c.reasoning);
+                                    setEditingReasoning(false);
+                                  }}
+                                >
+                                  Cancel revision
+                                </button>
                               </>
+                            ) : (
+                              <button
+                                className="btn outline compact"
+                                onClick={() => setEditingReasoning(true)}
+                              >
+                                Revise explanation
+                              </button>
                             )}
                           </div>
                         ) : null}
-                        <p className="quiet reasoning-preview-note">
-                          See how a correct choice can hide a misconception in
-                          an authored example, separate from your writing.
+                        <p className="quiet">
+                          Your selection uses the answer guide. Written
+                          reasoning receives AI evaluation only when you request
+                          live feedback.
                         </p>
-                        <Link className="text-link" href="/reasoning">
-                          See a reasoning-and-revision example
-                        </Link>
-                      </section>
+                      </div>
                     ) : null}
-                  </>
-                ) : null}
-              </>
-            ) : null}
-            {session.phase === "bonus-choice" ? (
-              <div className="center">
-                <Mascot />
-                <h1 ref={heading} tabIndex={-1}>
-                  One more question?
-                </h1>
-                <p>
-                  {session.source === "generated"
-                    ? session.bonusAvailable
-                      ? "You’ve completed the required challenges. Consider one more question about the evidence before revealing the source."
-                      : "You’ve completed the required challenges. Connect your decisions to the paper and the limits of its evidence."
-                    : "You’ve completed the required challenges. Explore whether statistical significance can repair a design problem."}
-                </p>
-                <div className="card bonus">
-                  <h2>
-                    {session.source === "generated"
-                      ? session.bonusAvailable
-                        ? "One more angle on the evidence"
-                        : "Ready to meet the source?"
-                      : "Can Significance Fix the Design?"}
-                  </h2>
+                    {c.feedback ? (
+                      <>
+                        <SceneFeedback
+                          ref={feedbackRegion}
+                          tabIndex={-1}
+                          className={`feedback ${c.feedback.correct ? "correct" : "incorrect"}`}
+                          aria-live="polite"
+                        >
+                          <h2>
+                            {c.feedback.correct
+                              ? "Your choice matches"
+                              : c.attempts === 1
+                                ? "Let’s reconsider."
+                                : "Here’s the reference explanation."}
+                          </h2>
+                          <p>{c.feedback.message}</p>
+                          {c.feedback.explanation && !c.feedback.correct ? (
+                            <p>{c.feedback.explanation}</p>
+                          ) : null}
+                        </SceneFeedback>
+                        <details className="agent-panel">
+                          <summary>See the answer guide and evidence</summary>
+                          <p className="quiet">
+                            {session.source !== "generated"
+                              ? "Reference guidance • no model was called for answer checking."
+                              : "Guidance from the verified lesson • no new inference for answer checking."}
+                          </p>
+                          {[
+                            [
+                              "Research Evidence Analyst",
+                              "Relevant Research Evidence",
+                              c.evidence.join(" ") ||
+                                (session.source === "generated"
+                                  ? "Use this challenge’s page references. Do not fill gaps in the source with assumptions."
+                                  : "Independent participants, one condition per person, and a numerical quiz outcome."),
+                            ],
+                            [
+                              session.source === "generated"
+                                ? "Research Methods Reviewer"
+                                : "Statistical Reviewer",
+                              session.source === "generated"
+                                ? "Methods and Interpretation"
+                                : "Statistical Assessment",
+                              c.feedback.explanation ||
+                                (session.source === "generated"
+                                  ? "Check how the research approach and available evidence support the decision, and where competing explanations remain."
+                                  : "Check whether your selected method matches the outcome and the relationship between observations."),
+                            ],
+                            [
+                              "Learning Coach",
+                              "Identified Misconception",
+                              c.feedback.correct
+                                ? "Your selected response matches the accepted answer guide."
+                                : c.feedback.message,
+                            ],
+                            [
+                              "Verification Layer",
+                              "Evidence Verification",
+                              "The answer was checked against the lesson’s accepted responses. Written reasoning has not changed that score.",
+                            ],
+                            [
+                              "Learning Coach",
+                              "Learning Guidance",
+                              session.source !== "generated" && c.id === "q3"
+                                ? "Does each student have a score in both conditions, or only one? What would make two observations paired?"
+                                : c.hint,
+                            ],
+                          ].map(([role, title, text]) => (
+                            <details className="audit-detail" key={title}>
+                              <summary>{title}</summary>
+                              <p>
+                                <strong>{role}</strong> •{" "}
+                                {session.source !== "generated"
+                                  ? "Reference role"
+                                  : "Verified lesson role"}
+                              </p>
+                              <p>Input: {c.title}</p>
+                              <p>{text}</p>
+                              <p>
+                                Source references:{" "}
+                                {c.references
+                                  .map(
+                                    (r) =>
+                                      `${r.id}, ${session.source !== "generated" ? "published page" : "PDF page"} ${r.page}`,
+                                  )
+                                  .join("; ")}
+                              </p>
+                              <p>Status: available reference guidance</p>
+                            </details>
+                          ))}
+                        </details>
+                        {c.writtenReasoning && reasoning ? (
+                          <section
+                            className="reasoning-review"
+                            aria-label="Reasoning review"
+                          >
+                            <h2>Check the explanation, too.</h2>
+                            <p>
+                              {editingReasoning
+                                ? "Save your revised explanation before requesting another review."
+                                : !demo &&
+                                    shownFeedback &&
+                                    !(
+                                      "error" in shownFeedback &&
+                                      shownFeedback.error
+                                    )
+                                  ? "The live review below considers your written explanation separately from your choice."
+                                  : "Your written explanation has not been assessed. The answer-guide result checks your choice only."}
+                            </p>
+                            <button
+                              className="btn secondary"
+                              disabled={
+                                busy ||
+                                editingReasoning ||
+                                (!demo && !config?.liveAI)
+                              }
+                              onClick={async () => {
+                                if (demo) {
+                                  setFeedback({
+                                    category: "Reference guidance",
+                                    guidance:
+                                      c.feedback?.explanation ??
+                                      c.feedback?.message,
+                                    followup:
+                                      "Compare this guidance with your explanation. Your writing is saved; no AI assessment was performed.",
+                                  });
+                                  return;
+                                }
+                                setBusy(true);
+                                try {
+                                  const response = await api<{
+                                    session: Session;
+                                  }>("/api/research/feedback", {
+                                    id: session.id,
+                                  });
+                                  if (!mounted.current) return;
+                                  clearDraft(session.id);
+                                  applySession(response.session);
+                                } catch (e) {
+                                  if (!mounted.current) return;
+                                  setFeedback({
+                                    error: `${(e as Error).message} Your reasoning is saved. Use the reference explanation; no live assessment was completed.`,
+                                  });
+                                } finally {
+                                  if (mounted.current) setBusy(false);
+                                }
+                              }}
+                            >
+                              {demo
+                                ? "Explore sample guidance"
+                                : "Ask AI to review my reasoning"}
+                            </button>
+                            {!config?.liveAI && !demo ? (
+                              <p>
+                                Live AI is not configured. Your written
+                                reasoning is saved but has not been evaluated.
+                              </p>
+                            ) : null}
+                            {shownFeedback && !editingReasoning ? (
+                              <div className="notice" role="status">
+                                {"error" in shownFeedback &&
+                                shownFeedback.error ? (
+                                  <ErrorMessage
+                                    message={
+                                      ("error" in shownFeedback
+                                        ? shownFeedback.error
+                                        : "") ?? ""
+                                    }
+                                  />
+                                ) : (
+                                  <>
+                                    <strong>
+                                      {shownFeedback.category} •{" "}
+                                      {demo
+                                        ? "Sample preview"
+                                        : "Live AI assessment"}
+                                    </strong>
+                                    <p>{shownFeedback.guidance}</p>
+                                    <p>{shownFeedback.followup}</p>
+                                    <p className="quiet">
+                                      This feedback does not override your
+                                      answer-guide score.
+                                    </p>
+                                  </>
+                                )}
+                              </div>
+                            ) : null}
+                            <p className="quiet reasoning-preview-note">
+                              See how a correct choice can hide a misconception
+                              in an authored example, separate from your
+                              writing.
+                            </p>
+                            <Link className="text-link" href="/reasoning">
+                              See a reasoning-and-revision example
+                            </Link>
+                          </section>
+                        ) : null}
+                      </>
+                    ) : null}
+                  </SceneFollowing>
+                </>
+              ) : null}
+              {session.phase === "bonus-choice" ? (
+                <div className="center">
+                  <Mascot />
+                  <h1 ref={heading} tabIndex={-1}>
+                    One more question?
+                  </h1>
                   <p>
                     {session.source === "generated"
-                      ? "Keep each conclusion within what the paper can support."
-                      : "Compare nonrandom selection with random assignment."}
+                      ? session.bonusAvailable
+                        ? "You’ve completed the required challenges. Consider one more question about the evidence before revealing the source."
+                        : "You’ve completed the required challenges. Connect your decisions to the paper and the limits of its evidence."
+                      : "You’ve completed the required challenges. Explore whether statistical significance can repair a design problem."}
                   </p>
-                  <div className="actions">
-                    {session.bonusAvailable ? (
+                  <div className="card bonus">
+                    <h2>
+                      {session.source === "generated"
+                        ? session.bonusAvailable
+                          ? "One more angle on the evidence"
+                          : "Ready to meet the source?"
+                        : "Can Significance Fix the Design?"}
+                    </h2>
+                    <p>
+                      {session.source === "generated"
+                        ? "Keep each conclusion within what the paper can support."
+                        : "Compare nonrandom selection with random assignment."}
+                    </p>
+                    <div className="actions">
+                      {session.bonusAvailable ? (
+                        <button
+                          className="btn primary"
+                          disabled={busy}
+                          onClick={() => act("bonus")}
+                        >
+                          <ActionLabel icon="sparkle">
+                            Try the bonus
+                          </ActionLabel>
+                        </button>
+                      ) : null}
+                      <button
+                        className="btn outline"
+                        disabled={busy}
+                        onClick={() => act("skip")}
+                      >
+                        Skip to paper reveal
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+              {["reveal", "complete"].includes(session.phase) && !reviewMode ? (
+                <>
+                  <div className="reveal-head">
+                    <Mascot />
+                    <span className="tag">
+                      {session.phase === "complete"
+                        ? "Adventure complete"
+                        : "Original investigation"}
+                    </span>
+                    <h1 ref={heading} tabIndex={-1}>
+                      {session.phase === "complete"
+                        ? "Investigation complete!"
+                        : "Research Paper Unlocked!"}
+                    </h1>
+                    <p>
+                      You made the decisions. Now connect your reasoning with
+                      the original research.
+                    </p>
+                    <p className="research-points-total">
+                      {session.points ?? 0} practice points earned · 10 per
+                      solved challenge
+                    </p>
+                  </div>
+                  <SceneJourney
+                    records={session.review ?? []}
+                    reduced={reduced}
+                  />
+                  <div className="metrics">
+                    <div className="card">
+                      <span className="symbol amber">
+                        <Icon name="star" />
+                      </span>
+                      <div>
+                        <span>First-attempt accuracy</span>
+                        <strong>
+                          {session.summary.firstCorrect}/{session.summary.total}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="card">
+                      <span className="symbol blue">
+                        <Icon name="check" />
+                      </span>
+                      <div>
+                        <span>Required challenges</span>
+                        <strong>
+                          {session.summary.completed}/{session.summary.total}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="card">
+                      <span className="symbol green">
+                        <Icon name="retry" />
+                      </span>
+                      <div>
+                        <span>Challenges revised</span>
+                        <strong>{session.summary.retries}</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <article className="paper-card">
+                    <span className="tag blue-text">
+                      Original research • source revealed
+                    </span>
+                    <h2>{session.paper?.title}</h2>
+                    <p>{session.paper?.authors}</p>
+                    <p>{session.paper?.journal}</p>
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={session.paper?.url ?? undefined}
+                    >
+                      {session.paper?.url
+                        ? "Read the paper’s source ↗"
+                        : "Source link not available in document"}
+                    </a>
+                    {session.source !== "generated" ? (
+                      <div className="finding">
+                        <h3>Experiment 2: published finding</h3>
+                        <p>
+                          Texting M=73.41%, SD=16.95%; no texting M=83.00%,
+                          SD=17.26%. The authors reported F(1,54)=4.33,
+                          p&lt;.05.
+                        </p>
+                        <p>The mean difference is 9.59 percentage points.</p>
+                        <p>
+                          A two-group equal-variance ANOVA and pooled
+                          independent t-test yield F=t². A different variance
+                          approach may produce a different result.
+                        </p>
+                      </div>
+                    ) : null}
+                    <h3>Keep the conclusion in scope</h3>
+                    <ul>
+                      {session.paper?.limitations.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                    <p>
+                      Completing this adventure records practice; it does not
+                      {session.source === "generated"
+                        ? " establish research mastery."
+                        : " establish statistical mastery."}
+                    </p>
+                  </article>
+                  {session.phase === "reveal" ? (
+                    <div className="card">
+                      <label htmlFor="reflection">
+                        What will you check first in your next paper?{" "}
+                        <span className="quiet">(optional)</span>
+                      </label>
+                      <textarea
+                        id="reflection"
+                        value={reflection}
+                        maxLength={3000}
+                        onChange={(e) => setReflection(e.target.value)}
+                      />
                       <button
                         className="btn primary"
                         disabled={busy}
-                        onClick={() => act("bonus")}
+                        onClick={() => act("finish", { reflection })}
                       >
-                        <ActionLabel icon="sparkle">Try the bonus</ActionLabel>
+                        <ActionLabel icon="check">Finish adventure</ActionLabel>
                       </button>
-                    ) : null}
-                    <button
-                      className="btn outline"
-                      disabled={busy}
-                      onClick={() => act("skip")}
-                    >
-                      Skip to paper reveal
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-            {["reveal", "complete"].includes(session.phase) && !reviewMode ? (
-              <>
-                <div className="reveal-head">
-                  <Mascot />
-                  <span className="tag">
-                    {session.phase === "complete"
-                      ? "Adventure complete"
-                      : "Original investigation"}
-                  </span>
-                  <h1 ref={heading} tabIndex={-1}>
-                    {session.phase === "complete"
-                      ? "Investigation complete!"
-                      : "Research Paper Unlocked!"}
-                  </h1>
-                  <p>
-                    You made the decisions. Now connect your reasoning with the
-                    original research.
-                  </p>
-                  <p className="research-points-total">
-                    {session.points ?? 0} practice points earned · 10 per solved
-                    challenge
-                  </p>
-                </div>
-                <div className="metrics">
-                  <div className="card">
-                    <span className="symbol amber">
-                      <Icon name="star" />
-                    </span>
-                    <div>
-                      <span>First-attempt accuracy</span>
-                      <strong>
-                        {session.summary.firstCorrect}/{session.summary.total}
-                      </strong>
                     </div>
-                  </div>
-                  <div className="card">
-                    <span className="symbol blue">
-                      <Icon name="check" />
-                    </span>
-                    <div>
-                      <span>Required challenges</span>
-                      <strong>
-                        {session.summary.completed}/{session.summary.total}
-                      </strong>
-                    </div>
-                  </div>
-                  <div className="card">
-                    <span className="symbol green">
-                      <Icon name="retry" />
-                    </span>
-                    <div>
-                      <span>Challenges revised</span>
-                      <strong>{session.summary.retries}</strong>
-                    </div>
-                  </div>
-                </div>
-                <article className="paper-card">
-                  <span className="tag blue-text">
-                    Original research • source revealed
-                  </span>
-                  <h2>{session.paper?.title}</h2>
-                  <p>{session.paper?.authors}</p>
-                  <p>{session.paper?.journal}</p>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={session.paper?.url ?? undefined}
-                  >
-                    {session.paper?.url
-                      ? "Read the paper’s source ↗"
-                      : "Source link not available in document"}
-                  </a>
-                  {session.source !== "generated" ? (
-                    <div className="finding">
-                      <h3>Experiment 2: published finding</h3>
-                      <p>
-                        Texting M=73.41%, SD=16.95%; no texting M=83.00%,
-                        SD=17.26%. The authors reported F(1,54)=4.33, p&lt;.05.
-                      </p>
-                      <p>The mean difference is 9.59 percentage points.</p>
-                      <p>
-                        A two-group equal-variance ANOVA and pooled independent
-                        t-test yield F=t². A different variance approach may
-                        produce a different result.
-                      </p>
-                    </div>
-                  ) : null}
-                  <h3>Keep the conclusion in scope</h3>
-                  <ul>
-                    {session.paper?.limitations.map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-                  <p>
-                    Completing this adventure records practice; it does not
-                    {session.source === "generated"
-                      ? " establish research mastery."
-                      : " establish statistical mastery."}
-                  </p>
-                </article>
-                {session.phase === "reveal" ? (
-                  <div className="card">
-                    <label htmlFor="reflection">
-                      What will you check first in your next paper?{" "}
-                      <span className="quiet">(optional)</span>
-                    </label>
-                    <textarea
-                      id="reflection"
-                      value={reflection}
-                      maxLength={3000}
-                      onChange={(e) => setReflection(e.target.value)}
-                    />
-                    <button
-                      className="btn primary"
-                      disabled={busy}
-                      onClick={() => act("finish", { reflection })}
-                    >
-                      <ActionLabel icon="check">Finish adventure</ActionLabel>
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <div className="card">
-                      <h2>Concepts to revisit</h2>
-                      {session.summary.missed.length ? (
-                        <ul>
-                          {session.summary.missed.map((m) => (
-                            <li key={m}>{m}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p>
-                          Your first responses matched the answer guide on every
-                          required challenge.
-                        </p>
-                      )}
-                      {session.reflection ? (
-                        <blockquote>{session.reflection}</blockquote>
-                      ) : null}
-                      <div className="actions">
-                        <button
-                          className="btn primary"
-                          onClick={() => setShowReview(true)}
-                        >
-                          Review Decisions
-                        </button>
+                  ) : (
+                    <>
+                      <div className="card">
+                        <h2>Concepts to revisit</h2>
                         {session.summary.missed.length ? (
-                          <button
-                            className="btn secondary"
-                            disabled={busy}
-                            onClick={() => act("review-missed")}
-                          >
-                            Retry Missed Concepts
-                          </button>
-                        ) : null}
-                        <button
-                          className="btn outline"
-                          onClick={() => setConfirm("restart")}
-                        >
-                          Restart Adventure
-                        </button>
-                        <Link className="btn outline" href="/">
-                          Return Home
-                        </Link>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </>
-            ) : null}
-            {reviewMode ? (
-              <>
-                <h1 ref={heading} tabIndex={-1}>
-                  Your research decisions
-                </h1>
-                {session.review?.map((item) => (
-                  <details className="card" key={item.id}>
-                    <summary>
-                      {item.title} •{" "}
-                      {item.attempts[0]?.correct
-                        ? "Correct first attempt"
-                        : "Concept to revisit"}
-                    </summary>
-                    {item.attempts.map((a, i) => (
-                      <div key={a.at}>
-                        <h3>Attempt {i + 1}</h3>
-                        <p>
-                          {a.selected
-                            .map(
-                              (id) =>
-                                item.options.find((o) => o.id === id)?.text,
-                            )
-                            .join(" ")}
-                        </p>
-                        {a.reasoning ? (
-                          <blockquote>{a.reasoning}</blockquote>
-                        ) : null}
-                        {a.reasoningRevisions?.length ? (
-                          <details>
-                            <summary>Previous explanations</summary>
-                            {a.reasoningRevisions.map((r, i) => (
-                              <blockquote key={i}>
-                                {r.text || "No written explanation submitted."}
-                              </blockquote>
+                          <ul>
+                            {session.summary.missed.map((m) => (
+                              <li key={m}>{m}</li>
                             ))}
-                          </details>
+                          </ul>
+                        ) : (
+                          <p>
+                            Your first responses matched the answer guide on
+                            every required challenge.
+                          </p>
+                        )}
+                        {session.reflection ? (
+                          <blockquote>{session.reflection}</blockquote>
                         ) : null}
-                        <p>
-                          {a.correct
-                            ? "Matched answer guide"
-                            : "Did not match answer guide"}
-                        </p>
+                        <div className="actions">
+                          <button
+                            className="btn primary"
+                            onClick={() => setShowReview(true)}
+                          >
+                            Review Decisions
+                          </button>
+                          {session.summary.missed.length ? (
+                            <button
+                              className="btn secondary"
+                              disabled={busy}
+                              onClick={() => act("review-missed")}
+                            >
+                              Retry Missed Concepts
+                            </button>
+                          ) : null}
+                          <button
+                            className="btn outline"
+                            onClick={() => setConfirm("restart")}
+                          >
+                            Restart Adventure
+                          </button>
+                          <Link className="btn outline" href="/">
+                            Return Home
+                          </Link>
+                        </div>
                       </div>
-                    ))}
-                    <p>
-                      <strong>Accepted responses:</strong>{" "}
-                      {item.accepted.join(", ")}
-                    </p>
-                    <p>{item.explanation}</p>
-                  </details>
-                ))}
-                <button
-                  className="btn outline"
-                  onClick={() => setShowReview(false)}
-                >
-                  Back to summary
-                </button>
-              </>
-            ) : null}
-          </>
+                    </>
+                  )}
+                </>
+              ) : null}
+              {reviewMode ? (
+                <>
+                  <h1 ref={heading} tabIndex={-1}>
+                    Your research decisions
+                  </h1>
+                  {session.review?.map((item) => (
+                    <SceneDisclosure
+                      reduced={reduced}
+                      key={item.id}
+                      title={
+                        <>
+                          {item.title} •{" "}
+                          {item.attempts[0]?.correct
+                            ? "Correct first attempt"
+                            : "Concept to revisit"}
+                        </>
+                      }
+                    >
+                      <SceneReview record={item} reduced={reduced} />
+                      {item.attempts.map((a, i) => (
+                        <div key={a.at}>
+                          <h3>Attempt {i + 1}</h3>
+                          <p>
+                            {a.selected
+                              .map(
+                                (id) =>
+                                  item.options.find((o) => o.id === id)?.text,
+                              )
+                              .join(" ")}
+                          </p>
+                          {a.reasoning ? (
+                            <blockquote>{a.reasoning}</blockquote>
+                          ) : null}
+                          {a.reasoningRevisions?.length ? (
+                            <details>
+                              <summary>Previous explanations</summary>
+                              {a.reasoningRevisions.map((r, i) => (
+                                <blockquote key={i}>
+                                  {r.text ||
+                                    "No written explanation submitted."}
+                                </blockquote>
+                              ))}
+                            </details>
+                          ) : null}
+                          <p>
+                            {a.correct
+                              ? "Matched answer guide"
+                              : "Did not match answer guide"}
+                          </p>
+                        </div>
+                      ))}
+                      <p>
+                        <strong>Accepted responses:</strong>{" "}
+                        {item.accepted.join(", ")}
+                      </p>
+                      <p>{item.explanation}</p>
+                    </SceneDisclosure>
+                  ))}
+                  <button
+                    className="btn outline"
+                    onClick={() => setShowReview(false)}
+                  >
+                    Back to summary
+                  </button>
+                </>
+              ) : null}
+            </SceneTransition>
+          </SceneMotion>
         ) : null}
         {route === "adventure" && id && !session && !error ? (
           <p role="status">Loading your saved adventure…</p>
@@ -1478,7 +1538,8 @@ function GradlyWorkspace({
                   : "Choose a response, then check your choice."}
               </p>
             </div>
-            <button
+            <SceneAction
+              reduced={reduced}
               className="btn primary"
               aria-busy={busy}
               disabled={
@@ -1508,7 +1569,7 @@ function GradlyWorkspace({
                       : "Continue"
                     : "Check Answer"}
               </ActionLabel>
-            </button>
+            </SceneAction>
           </div>
         </footer>
       ) : (

@@ -40,3 +40,35 @@ After configuring the intended environment with [RESEARCH_INTEGRATION.md](RESEAR
 4. Verify explanation feedback, provider-failure recovery, history, deletion and retention cleanup.
 
 The existing automatic Vercel preview was blocked by project access restrictions. A successful hosted deployment, new live generation quality and learning benefit are not established by local test results. Earlier dated feedback evidence in README refers to the original curated service.
+
+## Fresh Adventure scene checks
+
+- `tests/research/scenes.test.ts`: scene validation, source/option mappings, gated
+  payloads, legacy/future fallback, invalid generation, numerical checks, and both
+  unrelated authored fixtures through the mocked generation/learning pipeline.
+- `tests/research/scenes-service.test.ts`: real temporary local learning server,
+  signed guest ownership, stale-version rejection, submission, retry and resume.
+- `tests/research/scenes-ui.test.ts`: component rendering for all nine featured
+  scenes and both fixtures, keyboard/multiple selection, evidence pins, branching,
+  prediction/reveal and disabled submitted controls.
+- `tests/research/scenes-workspace.test.ts`: actual research workspace integration
+  with mocked transport, failed-save draft retention, retry, saved-version resume,
+  and late-response protection, plus challenge/bonus transitions and heading focus.
+
+- `tests/research/scene-motion.test.ts`: real Motion in a simulated document,
+  rapid card reversal, fine/coarse-pointer gestures, disabled controls, native
+  selection, assembly reversal, reveal focus, forbidden-result withdrawal,
+  disclosure focus/exits, challenge replacement and live reduced-motion changes.
+  Includes all scene families and the unrelated quantitative/qualitative fixtures.
+- `tests/research/flow-connectors.test.ts`: simulated transformed node geometry,
+  ancestor scaling, same-paint Motion-value/path updates, bounded frame coalescing,
+  reduced-motion samples and observer/frame cleanup. This verifies geometry logic,
+  not actual browser transform scheduling.
+
+Run `npm run check` for type checks, all service/research checks and production
+builds. Local service checks need permission to bind a temporary loopback port.
+Component/workspace checks use a simulated document environment, not a browser.
+Do not treat previous Chromium reports as verification of these new scene layouts.
+Browser layout, animation smoothness, mobile touch and assistive-technology review
+remain unverified unless separately performed and reported. No live model or
+production deployment is required or established by the authored fixtures.

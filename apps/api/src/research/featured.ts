@@ -1,4 +1,5 @@
 import { type Challenge, type Lesson } from "./contracts.js";
+import { featuredScenes } from "./featured-scenes.js";
 const options = (texts: string[]) =>
   texts.map((text, i) => ({ id: String.fromCharCode(65 + i), text }));
 function c(
@@ -34,7 +35,13 @@ function c(
     misconceptions,
     reveal,
     evidence,
-    refs: [id === 9 ? "exp1" : id >= 6 ? "results" : "method"],
+    scene: featuredScenes[`q${id}`],
+    refs:
+      id === 9
+        ? ["exp1", "method"]
+        : id === 8
+          ? ["method", "results"]
+          : [id >= 6 ? "results" : "method"],
     writtenReasoning: [3, 4, 8].includes(id),
   };
 }
