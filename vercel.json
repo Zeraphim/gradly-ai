@@ -1,12 +1,28 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "express",
-  "buildCommand": "npm run build:vercel",
-  "installCommand": "npm ci",
-  "functions": {
-    "server.ts": {
-      "maxDuration": 240,
-      "includeFiles": "node_modules/{tesseract.js,tesseract.js-core,@tesseract.js-data/eng,@napi-rs/canvas,@napi-rs/canvas-*}/**/*"
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "public"
+      }
+    },
+    {
+      "src": "server.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "node_modules/{tesseract.js,tesseract.js-core,@tesseract.js-data/eng,@napi-rs/canvas,@napi-rs/canvas-*}/**/*"
+      }
     }
-  }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.ts"
+    }
+  ]
 }

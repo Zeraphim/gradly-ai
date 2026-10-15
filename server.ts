@@ -3,6 +3,8 @@ import { resolve } from "node:path";
 import { createApp } from "./apps/api/src/app.js";
 import { nebiusProvider } from "./apps/api/src/feedback.js";
 
+export const config = { maxDuration: 240 };
+
 const app = express();
 const key = process.env.NEBIUS_API_KEY;
 const preview = process.env.PREVIEW_MODE === "true";

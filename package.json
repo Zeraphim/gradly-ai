@@ -24,7 +24,8 @@
     "predev": "npm run build --workspace @paperquest/contracts",
     "pretest": "npm run build --workspace @paperquest/contracts",
     "test:research": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "vercel-build": "npm run build:vercel"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
