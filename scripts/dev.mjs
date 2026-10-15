@@ -1,6 +1,17 @@
 import { spawn } from "node:child_process";
 const processes = ["@paperquest/api", "@paperquest/web"].map((workspace) =>
-  spawn("npm", ["run", "dev", "--workspace", workspace], { stdio: "inherit" }),
+  spawn(
+    "npm",
+    [
+      "run",
+      workspace === "@paperquest/api" && process.argv.includes("--test")
+        ? "dev:test"
+        : "dev",
+      "--workspace",
+      workspace,
+    ],
+    { stdio: "inherit" },
+  ),
 );
 let stopping = false;
 function stop(code = 0) {

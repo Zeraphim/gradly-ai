@@ -17,6 +17,10 @@ export async function POST(request: Request) {
       s.lessonId === featured.id
         ? featured
         : (await read<Job>(who, "job", s.lessonId)).lesson!;
+    if (l.source === "demo")
+      throw Error(
+        "Sample previews use authored guidance. No live AI assessment is performed.",
+      );
     const c = currentChallenge(s, l);
     if (!c || !["challenge", "bonus"].includes(s.phase) || !c.writtenReasoning)
       throw Error("No supported active reasoning challenge.");

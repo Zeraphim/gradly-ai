@@ -19,6 +19,7 @@ export async function GET(request: Request) {
         id: j.id,
         name: j.name,
         status: j.status,
+        mode: j.mode ?? "live",
         pages: j.pages.length,
       })),
     );

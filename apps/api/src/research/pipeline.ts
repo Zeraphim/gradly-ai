@@ -167,6 +167,7 @@ export async function runStage(
 export function publicJob(j: Job) {
   return {
     id: j.id,
+    mode: j.mode ?? "live",
     consented: j.consented,
     name: j.name,
     stage: j.stage,

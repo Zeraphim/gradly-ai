@@ -30,6 +30,10 @@ Jobs persist role, task, status, evidence references, concise summary and error.
 
 Exact excerpt/page matching, valid answer guides, known reference identifiers and reviewer approvals gate generated lessons. Model reviews assess semantic support; deterministic checks alone cannot prove that every inference is correct. Missing evidence or rejected review blocks play. Statistical results and paper metadata remain hidden in research session responses until permitted by the learning engine. The preserved curated entry independently exposes its original study metadata.
 
+## Explicit local sample mode
+
+`research/demo.ts` advances saved sample stages without an AI provider. It uses the separate reference study, preserves uploaded pages, and marks its lessons `source=demo`. Both `DEMO_MODE=true` and `PREVIEW_MODE=true` are required, and hosted/production execution is rejected. Document mode is immutable after consent; sample records cannot become live lessons. Live failures never switch into this path. See the setup guide for the flag transition and fresh-upload requirement.
+
 ## Storage and security
 
 Local SQLite and remote libSQL share `store.ts`. Records have guest owner, kind, version and 30-day expiry. Compare-and-swap updates reject stale submissions. Deleting a document atomically removes its linked learner sessions. Protected maintenance removes expired records and stale request counters.

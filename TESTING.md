@@ -10,17 +10,17 @@ npm run build:vercel
 npm audit --audit-level=moderate
 ```
 
-`check` runs TypeScript, the original Node tests, Vitest research tests and production builds. Playwright starts both existing development services and waits for API health. It uses local SQLite, preview mode and an empty model key, so browser verification does not incur inference requests. Chromium is required; install it with `npx playwright install chromium` if unavailable.
+`check` runs TypeScript, the original Node tests, Vitest research tests and production builds. Playwright starts both existing development services and waits for API health. It uses local SQLite, preview mode and an empty model key, so browser verification does not incur inference requests. The API uses a non-watching test entry point so development file watchers cannot interrupt a request during the suite. Chromium is required; install it with `npx playwright install chromium` if unavailable.
 
 ## Automated coverage
 
-| Suite                                          | Coverage                                                                                                                                                                                                                      |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/*.test.ts` — 18 tests                   | Original six-quest interface, guarded service, transitions, duplicate attempts, model override and hosted research isolation                                                                                                  |
-| `tests/research/` — 25 tests                   | Eight-challenge engine, disclosures/revisions, PDF and real OCR, bounded worker behavior, provider schemas/errors, sequential generation/review, ownership-aware retention                                                    |
-| `tests/browser/research.spec.ts` — 9 scenarios | Full reference adventure, retries, bonus/reveal/review/history, owner/version boundaries, consent, upload/extraction/OCR, interruption/deletion, support routes, responsive/keyboard/axe checks and original hero/PDF handoff |
+| Suite                                           | Coverage                                                                                                                                                                                                                      |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/*.test.ts` — 18 tests                    | Original six-quest interface, guarded service, transitions, duplicate attempts, model override and hosted research isolation                                                                                                  |
+| `tests/research/` — 28 tests                    | Eight-challenge engine, disclosures/revisions, PDF and real OCR, bounded worker behavior, provider schemas/errors, sequential generation/review, ownership-aware retention                                                    |
+| `tests/browser/research.spec.ts` — 11 scenarios | Full reference adventure, retries, bonus/reveal/review/history, owner/version boundaries, consent, upload/extraction/OCR, interruption/deletion, support routes, responsive/keyboard/axe checks and original hero/PDF handoff |
 
-Provider and orchestration tests explicitly mock model outputs. PDF and OCR tests process real synthetic PDF files, including an image-only fixture. These categories must not be described as live model verification.
+Provider and orchestration tests explicitly mock model outputs. PDF and OCR tests process real synthetic PDF files, including an image-only fixture. These categories must not be described as live model verification. Demo tests additionally exercise explicit local gating, production/Vercel rejection, immutable document modes, sample identity, no-provider-call guarantees, saved processing and disabled-demo rejection. Browser coverage includes a real nine-page PDF, page navigation, sample processing through completion/history, sample reasoning guidance and viewport/axe checks on the checked-document state.
 
 The hero handoff assertion reads the PDF blob used by the preview, so an iframe pointing at a revoked object URL cannot satisfy the test. It complements file-name visibility and extraction checks.
 

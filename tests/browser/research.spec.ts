@@ -1,6 +1,6 @@
 import { AxeBuilder } from "@axe-core/playwright";
 import { test, expect, type Page } from "@playwright/test";
-import { pdfBytes } from "../research/pdf-fixture.js";
+import { pdfBytes, multiPagePdfBytes } from "../research/pdf-fixture.js";
 async function begin(page: Page) {
   await page.goto("/#/research/learn");
   await page.getByRole("button", { name: "Start investigation" }).click();
@@ -182,15 +182,15 @@ test("PDF preview, real extraction, no-key recovery and document deletion", asyn
     page.getByText("1 page with extracted text", { exact: false }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Confirm AI processing" }),
-  ).toBeDisabled();
+    page.getByRole("button", { name: "Start sample preview" }),
+  ).toBeEnabled();
   await page.goto("/#/research/history");
   await expect(
     page.getByRole("heading", { name: "research.pdf" }),
   ).toBeVisible();
   await page.getByRole("link", { name: "View processing" }).click();
   await expect(
-    page.getByRole("heading", { name: "Live inference needs configuration" }),
+    page.getByRole("heading", { name: "Preview the adventure flow" }),
   ).toBeVisible();
   const documentId = page.url().split("/").pop();
   const unconfirmed = await page.request.post("/api/research/jobs", {
@@ -470,4 +470,138 @@ test("deployed hero composition, responsive scaling, color contrast and PDF hand
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
+});
+
+test("no-key sample flow is explicit, resumable and separate from uploaded evidence", async ({
+  page,
+}) => {
+  await page.goto("/#/research/upload");
+  await page.getByLabel("Choose PDF file").setInputFiles({
+    name: "not-the-sample.pdf",
+    mimeType: "application/pdf",
+    buffer: multiPagePdfBytes(9),
+  });
+  await page.getByRole("button", { name: "Check this document" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Document checked" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Preview uses a separate sample study.", { exact: false }),
+  ).toBeVisible();
+  await page.getByLabel("Extracted PDF page").selectOption("8");
+  await expect(
+    page.getByRole("region", { name: "Text from PDF page 9" }),
+  ).toContainText("Project planning page 9");
+  await page.getByRole("button", { name: "Previous extracted page" }).click();
+  await expect(page.getByLabel("Extracted PDF page")).toHaveValue("7");
+  await page.getByRole("button", { name: "Start sample preview" }).click();
+  await expect(page.getByLabel("Sample preview mode")).toBeVisible();
+  const processingUrl = page.url();
+  await expect(
+    page.getByRole("heading", { name: "Your adventure is ready!" }),
+  ).toBeVisible();
+  await expect(page.locator(".status")).toHaveText(Array(5).fill("Completed"));
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Your adventure is ready!" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Begin investigation" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your investigation briefing" }),
+  ).toBeVisible();
+  await expect(page.getByLabel("Sample preview mode")).toContainText(
+    "not an analysis of your upload",
+  );
+  await page.getByRole("button", { name: "Begin investigation" }).click();
+  for (const [index, answer] of keys.entries()) {
+    if (index === 2)
+      await page
+        .getByLabel("Defend your decision")
+        .fill("Independent groups suggest comparing means.");
+    await choose(page, answer);
+    if (index === 2) {
+      await page
+        .getByText("See How Gradly’s AI Agents Helped", { exact: true })
+        .click();
+      await page
+        .getByRole("button", { name: "Explore sample guidance" })
+        .click();
+      await expect(
+        page.getByText(
+          "Your writing is saved; no AI assessment was performed.",
+          { exact: false },
+        ),
+      ).toBeVisible();
+    }
+    await page.getByRole("button", { name: "Continue", exact: false }).click();
+  }
+  await page.getByRole("button", { name: "Skip to paper reveal" }).click();
+  await page.getByRole("button", { name: "Finish adventure" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Investigation complete!" }),
+  ).toBeVisible();
+  await expect(page.locator(".metrics")).toContainText("8/8");
+  await page.goto("/#/research/history");
+  await expect(
+    page.getByText("Sample preview · Completed", { exact: true }),
+  ).toBeVisible();
+  await page.goto(processingUrl);
+  await expect(page.getByLabel("Sample preview mode")).toBeVisible();
+});
+
+test("learning paths and nine-page document review fit desktop, tablet and mobile", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const width of [1440, 768, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/#/research/learn");
+    await expect(
+      page.getByRole("heading", { name: "Think like a researcher." }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await page.screenshot({
+      path: `test-results/learn-${width}.png`,
+      fullPage: true,
+    });
+  }
+  await page.goto("/#/research/upload");
+  await page.getByLabel("Choose PDF file").setInputFiles({
+    name: "nine-page-plan.pdf",
+    mimeType: "application/pdf",
+    buffer: multiPagePdfBytes(9),
+  });
+  await page.getByRole("button", { name: "Check this document" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Document checked" }),
+  ).toBeVisible();
+  for (const width of [1440, 768, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(
+      page.getByRole("button", { name: "Start sample preview" }),
+    ).toBeEnabled();
+    await expect(page.getByLabel("Extracted PDF page")).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    const audit = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze();
+    expect(
+      audit.violations.map((v) => ({
+        id: v.id,
+        nodes: v.nodes.map((n) => n.target),
+      })),
+    ).toEqual([]);
+    await page.screenshot({
+      path: `test-results/document-review-${width}.png`,
+      fullPage: true,
+    });
+  }
 });

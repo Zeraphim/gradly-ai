@@ -34,6 +34,20 @@ npm run dev
 
 The extension works with local SQLite and reference guidance without a model credential. Select a PDF in the original hero or open Research Lab. The paper is not sent to Nebius until you confirm after extraction/review. Original PDF bytes are not stored on the server.
 
+## Local sample flow without credentials
+
+For an interactive preview, set `PREVIEW_MODE=true` and `DEMO_MODE=true` in the local `.env`, then run `npm run dev`. The example environment includes these values. After checking a PDF, **Start sample preview** advances through five persisted preparation steps and opens the separate authored reference investigation. Page extraction remains real. The preview does not analyze the upload or invent findings from it; its evidence and challenges come from the reference study. Sample guidance can be explored without claiming an assessment of the learner's writing.
+
+Guardrails:
+
+- Both flags must be explicitly true. Demo is refused when `VERCEL` is set or `NODE_ENV=production`, even if the flags are accidentally copied there.
+- Mode is saved on each document and cannot change after confirmation. Sample lessons have `source=demo`; processing, learning and history label them accordingly.
+- Demo code never invokes the model provider. It is not a fallback for failed/missing live inference.
+- To switch to real generation, set `DEMO_MODE=false`, `PREVIEW_MODE=false` and the server's Nebius key, restart, and upload/check the PDF again. The live route still requires consent, exact evidence checks and reviewer approval. Existing sample records are never promoted to live lessons.
+- Disabling demo also blocks opening its sample lessons. Delete sample documents through history when no longer needed; linked sessions are removed with them.
+
+Document review uses a bounded, selectable page reader instead of a long nested list. The PDF and extracted text appear side by side on desktop and stack on narrow screens. Learning-path layouts override the original hero's spacing inside the research scope.
+
 ## Vercel configuration
 
 The existing curated production demo needs only its existing `NEBIUS_API_KEY` and `PREVIEW_MODE` settings. To enable the extension, set:
@@ -76,7 +90,7 @@ npm run test:e2e
 npm run build:vercel
 ```
 
-Locally verified on Node 22: 18 original/integration tests, 25 research tests and all 9 browser scenarios passed. `npm run check`, `npm run build:vercel`, and `npm audit --audit-level=moderate` passed with zero reported vulnerabilities. The compiled Express server also passed real searchable/scanned PDF extraction and deletion smoke checks.
+Locally verified on Node 22: 18 original/integration tests, 28 research tests and all 11 browser scenarios passed. `npm run check`, `npm run build:vercel`, and `npm audit --audit-level=moderate` passed with zero reported vulnerabilities. The compiled Express server also passed real searchable/scanned PDF extraction and deletion smoke checks.
 
 The check command includes the repository’s original tests, the ported research tests, type checking and production builds. Browser tests cover the full reference adventure, retries/bonus, persisted revisions, ownership/conflicts, consent, real PDF/OCR upload and recovery, deletion, responsive layouts and accessibility. The research routes share a persistent limit of 120 logical AI requests per hour, in addition to per-guest limits. Provider retries can make additional inference calls, so this is not an exact billing cap. Model tests are explicitly mocked; they do not establish live generation quality.
 

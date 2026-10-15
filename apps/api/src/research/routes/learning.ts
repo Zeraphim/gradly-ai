@@ -1,3 +1,4 @@
+import { demoAvailable } from "../demo.js";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { owner, sameOrigin, safeError } from "../auth.js";
@@ -16,6 +17,10 @@ async function lesson(who: string, id: string) {
   const job = await read<Job>(who, "job", id);
   if (job.status !== "ready" || !job.lesson)
     throw Error("This lesson has not passed verification.");
+  if (job.lesson.source === "demo" && !demoAvailable())
+    throw Error(
+      "Sample previews are disabled. Upload the paper again for live processing.",
+    );
   return job.lesson;
 }
 export async function GET(request: Request) {
@@ -33,6 +38,7 @@ export async function GET(request: Request) {
         phase: s.phase,
         index: s.index,
         created: s.created,
+        source: s.source ?? "featured",
       })),
     );
   } catch (e) {

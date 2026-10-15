@@ -35,6 +35,10 @@ Use rounded cards, visible borders, approximately 4px tactile depth, large selec
 
 Keep challenge content centered and reserve space for the persistent action area. At small widths, the original header places navigation on its own row. Headings scale with the viewport. Research CSS remains inside `.research-lab`, and the module loads only when opened. OS reduced-motion preferences and the learner setting disable nonessential movement.
 
+## Viewport refinements
+
+Research learning-path pages reset the original hero's inherited width/padding within `.research-lab`. The path choice is more compact, mobile navigation stays on one row below the brand, and document review uses a single page selector with previous/next actions. Text stays left-aligned at a readable size. Desktop pairs the original PDF with the review/confirmation area; mobile prioritizes the review before the PDF. Secondary privacy/format details are expandable. The ready action appears above the audit stack.
+
 ## Visual verification
 
 Hero and research workspace screenshots were inspected at 1440, 768 and 390 CSS pixels. Browser assertions check overflow, PDF/link order and automated accessibility rules. This establishes responsive behavior for those cases; it is not a claim of pixel-identical Stitch reproduction or complete WCAG conformance. See `TESTING.md` for the checks and remaining limits.

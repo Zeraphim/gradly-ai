@@ -3,6 +3,7 @@ export function newSession(lesson: Lesson, id: string): LearningSession {
   return {
     id,
     lessonId: lesson.id,
+    source: lesson.source,
     title: lesson.title,
     index: 0,
     phase: "briefing",

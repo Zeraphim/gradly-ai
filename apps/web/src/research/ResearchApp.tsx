@@ -21,6 +21,7 @@ type Session = ReturnType<typeof publicSession>;
 type Job = ReturnType<typeof publicJob>;
 type Config = {
   liveAI: boolean;
+  demoAvailable: boolean;
   maxUploadBytes: number;
   storage: boolean;
   model: string;
@@ -31,8 +32,15 @@ type History = {
   phase: string;
   index: number;
   created: string;
+  source?: "featured" | "generated" | "demo";
 };
-type Doc = { id: string; name: string; status: string; pages: number };
+type Doc = {
+  id: string;
+  name: string;
+  status: string;
+  pages: number;
+  mode?: string;
+};
 async function api<T>(
   path: string,
   body?: unknown,
@@ -83,6 +91,9 @@ export function ResearchApp({
   initialFile?: File | null;
 }) {
   const path = useResearchPath();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [path]);
   return (
     <div className="research-lab">
       <GradlyWorkspace
@@ -290,7 +301,12 @@ function GradlyWorkspace({
                 }
               : j,
           );
-        const j = await api<Job>("/api/research/jobs", { id, retry, consent });
+        const j = await api<Job>("/api/research/jobs", {
+          id,
+          retry,
+          consent,
+          ...(consent ? { mode: config?.liveAI ? "live" : "demo" } : {}),
+        });
         setJob(j);
       } catch (e) {
         setError((e as Error).message);
@@ -302,7 +318,7 @@ function GradlyWorkspace({
         setBusy(false);
       }
     },
-    [id],
+    [id, config?.liveAI],
   );
   useEffect(() => {
     if (
@@ -310,11 +326,14 @@ function GradlyWorkspace({
       !job ||
       !job.consented ||
       error ||
-      !config?.liveAI
+      (!config?.liveAI && job.mode !== "demo")
     )
       return;
     if (job.status === "pending") {
-      const timer = setTimeout(() => void step(), 10);
+      const timer = setTimeout(
+        () => void step(),
+        job.mode === "demo" ? 650 : 10,
+      );
       return () => clearTimeout(timer);
     } else if (job.status === "processing") {
       const timer = setTimeout(() => {
@@ -408,6 +427,7 @@ function GradlyWorkspace({
     }
   };
   const c = session?.challenge;
+  const demo = job?.mode === "demo" || session?.source === "demo";
   const shownFeedback = feedback ?? c?.aiFeedback;
   const bottom =
     (route === "adventure" && session?.phase === "challenge") ||
@@ -435,7 +455,8 @@ function GradlyWorkspace({
           </Link>
           <nav aria-label="Research navigation">
             <button className="btn compact outline" onClick={onExit}>
-              Curated adventure
+              <span className="desktop-label">Gradly home</span>
+              <span className="mobile-label">Home</span>
             </button>
             <Link
               aria-current={
@@ -461,9 +482,18 @@ function GradlyWorkspace({
       </header>
       <main
         id="main"
-        className={`main ${bottom ? "learning" : ""} ${route === "upload" ? "upload-page" : ""}`}
+        className={`main ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
       >
         <ErrorMessage message={error} />
+        {demo ? (
+          <aside className="demo-banner" aria-label="Sample preview mode">
+            <strong>Sample preview</strong>
+            <span>
+              Reference study data · no AI calls · not an analysis of your
+              upload
+            </span>
+          </aside>
+        ) : null}
         {config && !config.storage ? (
           <div className="notice">
             <h1>Research extension needs configuration</h1>
@@ -479,35 +509,34 @@ function GradlyWorkspace({
         ) : null}
         {config?.storage && ["home", "learn", "featured"].includes(route) ? (
           <>
-            <Speech>
-              Let’s turn research into an adventure. Make decisions, question
-              the evidence, and discover what the study really tells us.
-            </Speech>
+            <div className="path-intro">
+              <Mascot small />
+              <p>Small decisions. Deeper understanding.</p>
+              <span className="tag">Your research companion</span>
+            </div>
             <section className="welcome">
               <span className="tag">Your research-learning companion</span>
               <h1 ref={heading} tabIndex={-1}>
                 Think like a researcher.
               </h1>
               <p>
-                Go beyond choosing a test. Learn to connect questions, design,
-                assumptions, and conclusions.
+                Start with a guided investigation, or explore the journey with
+                your own PDF.
               </p>
               <div className="path-grid">
                 <article className="path-card featured-card">
                   <div className="symbol blue">
                     <Icon name="phone" />
                   </div>
-                  <span className="tag">
-                    Featured investigation • Reference guidance
-                  </span>
+                  <span className="tag">Start here · guided investigation</span>
                   <h2>
                     Can You Text
                     <br />
                     and Still Learn?
                   </h2>
                   <p>
-                    A lecture. Two conditions. One question worth investigating.
-                    Make your recommendations before the results are revealed.
+                    Explore a classroom experiment. Make your research
+                    decisions, then discover what the evidence says.
                   </p>
                   <div className="pills">
                     <span>8 challenges</span>
@@ -532,13 +561,19 @@ function GradlyWorkspace({
                     <br />A new perspective.
                   </h2>
                   <p>
-                    Upload an empirical research PDF. Gradly’s agents extract
-                    evidence, draft challenges, and review the lesson before you
-                    begin.
+                    {config.liveAI
+                      ? "Bring an empirical research PDF. Review its evidence, then let Gradly build and check your investigation."
+                      : "Check your PDF and walk through processing, learning and review with a clearly labeled sample study."}
                   </p>
                   <div className="pills">
                     <span>Page-linked evidence</span>
-                    <span>Live AI required</span>
+                    <span>
+                      {config.liveAI
+                        ? "Live AI ready"
+                        : config.demoAvailable
+                          ? "Sample preview available"
+                          : "Live AI needed"}
+                    </span>
                   </div>
                   <Link className="btn outline" href="/upload">
                     Upload a research paper ↑
@@ -554,12 +589,12 @@ function GradlyWorkspace({
         {route === "upload" ? (
           <>
             <Speech>
-              Drop a research paper here. We’ll check the document first, then
-              ask for your confirmation before sending its extracted text to
-              Nebius.
+              {config?.liveAI
+                ? "Check your paper first. You choose when its text is sent for AI processing."
+                : "Check your PDF, then explore a sample adventure. Nothing is sent to an AI service."}
             </Speech>
             <section
-              className={`dropzone ${drag ? "dragging" : ""}`}
+              className={`dropzone ${file ? "has-file" : ""} ${uploaded ? "is-checked" : ""} ${drag ? "dragging" : ""}`}
               onDragOver={(e) => {
                 e.preventDefault();
                 setDrag(true);
@@ -575,7 +610,7 @@ function GradlyWorkspace({
                 <Icon name="document" />
               </div>
               <h1 ref={heading} tabIndex={-1}>
-                Upload your Research Paper
+                {uploaded ? "Review your paper" : "Upload your Research Paper"}
               </h1>
               <p>
                 Research PDF • up to{" "}
@@ -604,6 +639,13 @@ function GradlyWorkspace({
                     <button
                       className="btn compact outline"
                       disabled={busy}
+                      onClick={() => input.current?.click()}
+                    >
+                      Replace
+                    </button>
+                    <button
+                      className="btn compact outline"
+                      disabled={busy}
                       onClick={() => {
                         setFile(null);
                         setUploaded(null);
@@ -618,59 +660,75 @@ function GradlyWorkspace({
                     src={preview || undefined}
                   />
                   {uploaded ? (
-                    <div className="notice">
-                      <h2>Document checked</h2>
-                      <p>
-                        {uploaded.pageCount}{" "}
-                        {uploaded.pageCount === 1 ? "page" : "pages"} with
-                        extracted text. Inspect this excerpt before continuing.
-                      </p>
-                      <blockquote>{uploaded.excerpt}</blockquote>
-                      <details className="support">
-                        <summary>Inspect all extracted pages</summary>
-                        <ExtractedPages pages={uploaded.pages} />
-                      </details>
+                    <div className="notice document-review">
+                      <div className="review-heading">
+                        <span className="review-check" aria-hidden="true">
+                          ✓
+                        </span>
+                        <div>
+                          <h2>Document checked</h2>
+                          <p>
+                            {uploaded.pageCount}{" "}
+                            {uploaded.pageCount === 1 ? "page" : "pages"} with
+                            extracted text. Review before continuing.
+                          </p>
+                        </div>
+                      </div>
+                      <ExtractedPages pages={uploaded.pages} />
                       {uploaded.extraction?.some((p) => p.method === "ocr") ? (
                         <p className="ocr-warning">
-                          Some pages were read with English OCR. Check the text
-                          and statistical numbers against the PDF before
-                          confirming. OCR confidence is an estimate, not a
-                          correctness guarantee.
+                          Some pages were read with English OCR. Check text and
+                          numbers against the original. Confidence is an
+                          estimate, not a guarantee.
                         </p>
                       ) : null}
-                      <p>
-                        Continuing sends extracted document text to Nebius Token
-                        Factory for AI processing. The original PDF remains in
-                        this browser; the server stores extracted text for 30
-                        days or until you delete it. AI output can contain
-                        errors.
-                      </p>
-                      <button
-                        disabled={busy || !config?.liveAI}
-                        className="btn primary"
-                        onClick={async () => {
-                          setBusy(true);
-                          try {
-                            await api("/api/research/jobs", {
-                              id: uploaded.id,
-                              consent: true,
-                            });
-                            router.push(`/processing/${uploaded.id}`);
-                          } catch (e) {
-                            setError((e as Error).message);
-                          } finally {
-                            setBusy(false);
-                          }
-                        }}
-                      >
-                        Confirm AI processing →
-                      </button>
-                      {!config?.liveAI ? (
+                      <div className="processing-choice">
+                        <span className="tag">
+                          {config?.liveAI
+                            ? "Ready for your confirmation"
+                            : "Explore the complete flow"}
+                        </span>
                         <p>
-                          Live AI is not configured. The PDF check is complete;
-                          the featured investigation remains available.
+                          {config?.liveAI
+                            ? "Continuing sends extracted text to Nebius. AI can make mistakes."
+                            : config?.demoAvailable
+                              ? "Preview uses a separate sample study. Your PDF is checked, but its content won’t be analyzed or used to invent findings."
+                              : "Live AI is not configured. You can still start the guided reference investigation."}
                         </p>
-                      ) : null}
+                        <button
+                          disabled={
+                            busy || (!config?.liveAI && !config?.demoAvailable)
+                          }
+                          className="btn primary"
+                          onClick={async () => {
+                            setBusy(true);
+                            try {
+                              await api("/api/research/jobs", {
+                                id: uploaded.id,
+                                consent: true,
+                                mode: config?.liveAI ? "live" : "demo",
+                              });
+                              router.push(`/processing/${uploaded.id}`);
+                            } catch (e) {
+                              setError((e as Error).message);
+                            } finally {
+                              setBusy(false);
+                            }
+                          }}
+                        >
+                          {busy
+                            ? "Opening…"
+                            : config?.liveAI
+                              ? "Confirm AI processing →"
+                              : config?.demoAvailable
+                                ? "Start sample preview →"
+                                : "Confirm AI processing →"}
+                        </button>
+                        <small>
+                          Original PDF stays in this browser. Extracted text is
+                          stored for 30 days or until deleted.
+                        </small>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -715,8 +773,10 @@ function GradlyWorkspace({
                 </p>
               )}
             </section>
-            <div className="notice">
-              <strong>Your paper, your choice.</strong>
+            <details className="upload-privacy">
+              <summary>
+                Your paper, your choice · privacy & supported files
+              </summary>
               <p>
                 Use documents you have permission to process. English scans use
                 bounded OCR for up to six image pages. Unreadable or longer
@@ -724,50 +784,79 @@ function GradlyWorkspace({
                 corrupt PDFs receive a recoverable error.
               </p>
               <Link href="/privacy">Privacy & AI processing →</Link>
-            </div>
-            <section className="alternative">
-              <h2>Try a reference investigation</h2>
-              <button
-                disabled={busy}
-                className="path-card"
-                onClick={() => act("start")}
-              >
-                <strong>Can You Text and Still Learn?</strong>
-                <p>
-                  Research design, independent groups, and statistical
-                  interpretation.
-                </p>
-                <span className="text-link">
-                  Begin the featured adventure →
-                </span>
-              </button>
-            </section>
+            </details>
+            {!uploaded ? (
+              <section className="alternative">
+                <h2>Try a reference investigation</h2>
+                <button
+                  disabled={busy}
+                  className="path-card"
+                  onClick={() => act("start")}
+                >
+                  <strong>Can You Text and Still Learn?</strong>
+                  <p>
+                    Research design, independent groups, and statistical
+                    interpretation.
+                  </p>
+                  <span className="text-link">
+                    Begin the featured adventure →
+                  </span>
+                </button>
+              </section>
+            ) : null}
           </>
         ) : null}
         {route === "processing" ? (
           <>
             <Speech>
-              Our research crew builds from the paper’s evidence. Each stage
-              must succeed before the adventure can be played.
+              {demo
+                ? "Explore how an adventure comes together. These steps use the reference sample, not AI analysis of your PDF."
+                : "Our research crew builds from the paper’s evidence. Each stage must succeed before you begin."}
             </Speech>
             <h1 ref={heading} tabIndex={-1}>
-              AI Agents Crafting Adventure
+              {demo
+                ? "Your sample adventure is taking shape"
+                : "AI Agents Crafting Adventure"}
             </h1>
             {job ? (
               <>
                 <div className="card">
-                  <span className="tag">Uploaded document</span>
+                  <span className="tag">
+                    {demo ? "Your upload · sample flow" : "Uploaded document"}
+                  </span>
                   <h2>{job.name}</h2>
                   <p>
                     {job.pageCount} {job.pageCount === 1 ? "page" : "pages"}{" "}
-                    extracted • {config?.model}
+                    extracted •{" "}
+                    {demo ? "Sample flow · no AI calls" : config?.model}
                   </p>
                   <Progress
                     value={job.stage}
                     max={5}
-                    label="Verified processing stages"
+                    label={
+                      demo
+                        ? "Sample preparation steps"
+                        : "Verified processing stages"
+                    }
                   />
                 </div>
+                {job.status === "ready" ? (
+                  <div className="center">
+                    <h2>Your adventure is ready!</h2>
+                    <p>
+                      {demo
+                        ? "All sample steps are complete. Explore eight guided challenges, feedback, the paper reveal and your learning summary."
+                        : "All five stages passed. Generated content is AI-reviewed, rather than instructor-reviewed."}
+                    </p>
+                    <button
+                      className="btn primary"
+                      disabled={busy}
+                      onClick={() => act("start", { lessonId: job.id })}
+                    >
+                      Begin investigation →
+                    </button>
+                  </div>
+                ) : null}
                 <div className="agent-stack">
                   {job.audits.map((a, i) => (
                     <details
@@ -802,24 +891,32 @@ function GradlyWorkspace({
                     </details>
                   ))}
                 </div>
-                {!job.consented && config?.liveAI ? (
+                {!job.consented && (config?.liveAI || config?.demoAvailable) ? (
                   <div className="notice">
-                    <h2>Confirm external AI processing</h2>
+                    <h2>
+                      {config?.liveAI
+                        ? "Confirm external AI processing"
+                        : "Preview the adventure flow"}
+                    </h2>
                     <p>
-                      Continuing sends this document’s extracted text to Nebius
-                      Token Factory. Review the extracted text below first. AI
-                      output can contain errors.
+                      {config?.liveAI
+                        ? "Continuing sends extracted text to Nebius Token Factory. Review it first; AI can make mistakes."
+                        : "Use a separate sample investigation to explore every step. No AI is called and no findings are generated from your upload."}
                     </p>
                     <button
                       className="btn primary"
                       disabled={busy}
                       onClick={() => step(false, true)}
                     >
-                      Confirm AI processing →
+                      {config?.liveAI
+                        ? "Confirm AI processing →"
+                        : config?.demoAvailable
+                          ? "Start sample preview →"
+                          : "Confirm AI processing →"}
                     </button>
                   </div>
                 ) : null}
-                {!config?.liveAI ? (
+                {!config?.liveAI && !demo && !config?.demoAvailable ? (
                   <div className="notice">
                     <h2>Live inference needs configuration</h2>
                     <p>
@@ -835,28 +932,12 @@ function GradlyWorkspace({
                     </button>
                   </div>
                 ) : null}
-                {job.status === "ready" ? (
-                  <div className="center">
-                    <h2>Your adventure is ready!</h2>
-                    <p>
-                      All five stages passed. Generated content is AI-reviewed,
-                      rather than instructor-reviewed.
-                    </p>
-                    <button
-                      className="btn primary"
-                      disabled={busy}
-                      onClick={() => act("start", { lessonId: job.id })}
-                    >
-                      Begin investigation →
-                    </button>
-                  </div>
-                ) : null}
                 {["failed", "review"].includes(job.status) || error ? (
                   <div className="notice">
                     <ErrorMessage message={job.error ?? ""} />
                     <button
                       className="btn secondary"
-                      disabled={busy || !config?.liveAI}
+                      disabled={busy || (!config?.liveAI && !demo)}
                       onClick={() => step(true)}
                     >
                       {job.status === "review"
@@ -867,11 +948,16 @@ function GradlyWorkspace({
                 ) : null}
                 {job.evidence.length ? (
                   <details className="card">
-                    <summary>Inspect extracted evidence</summary>
+                    <summary>
+                      {demo
+                        ? "Inspect sample study evidence"
+                        : "Inspect extracted evidence"}
+                    </summary>
                     {job.evidence.map((r) => (
                       <div key={r.id}>
                         <h3>
-                          {r.id} • PDF page {r.page}
+                          {r.id} • {demo ? "Sample source page" : "PDF page"}{" "}
+                          {r.page}
                         </h3>
                         <blockquote>{r.excerpt}</blockquote>
                       </div>
@@ -932,9 +1018,11 @@ function GradlyWorkspace({
                   evidence, then we’ll reveal the original paper.
                 </Speech>
                 <span className="tag">
-                  {session.source === "featured"
-                    ? "Pre-reviewed reference investigation"
-                    : "AI-generated • verification passed"}
+                  {session.source === "demo"
+                    ? "Sample investigation · authored guidance"
+                    : session.source !== "generated"
+                      ? "Pre-reviewed reference investigation"
+                      : "AI-generated • verification passed"}
                 </span>
                 <h1 ref={heading} tabIndex={-1}>
                   {session.title}
@@ -942,7 +1030,7 @@ function GradlyWorkspace({
                 <div className="card">
                   <h2>Your investigation briefing</h2>
                   <p>{session.briefing}</p>
-                  {session.source === "featured" ? (
+                  {session.source !== "generated" ? (
                     <p>
                       56 undergraduate students were randomly assigned to text
                       or not text during a lecture. Each participant experienced
@@ -988,9 +1076,11 @@ function GradlyWorkspace({
                     }
                   />
                   <span className="mode-pill">
-                    {session.source === "featured"
-                      ? "Reference"
-                      : "AI-reviewed"}
+                    {demo
+                      ? "Sample"
+                      : session.source !== "generated"
+                        ? "Reference"
+                        : "AI-reviewed"}
                   </span>
                 </div>
                 <Speech>
@@ -1017,7 +1107,8 @@ function GradlyWorkspace({
                     aria-label="Available research evidence"
                   >
                     <h2>Research evidence</h2>
-                    {c.reveal === "results" && session.source === "featured" ? (
+                    {c.reveal === "results" &&
+                    session.source !== "generated" ? (
                       <div className="stats-grid">
                         <div>
                           <span className="tag">Condition A</span>
@@ -1049,7 +1140,7 @@ function GradlyWorkspace({
                     )}
                     {c.feedback &&
                     c.reveal === "results" &&
-                    session.source === "featured" ? (
+                    session.source !== "generated" ? (
                       <p className="difference">
                         Difference: 9.59 percentage points
                       </p>
@@ -1093,7 +1184,7 @@ function GradlyWorkspace({
                 <div className="support-grid">
                   <details className="support">
                     <summary>Study Details</summary>
-                    {session.source === "featured" ? (
+                    {session.source !== "generated" ? (
                       <p>
                         Random assignment; separate participant groups;
                         numerical percentage-correct outcome. The quiz followed
@@ -1190,7 +1281,7 @@ function GradlyWorkspace({
                     <details className="agent-panel">
                       <summary>See How Gradly’s AI Agents Helped</summary>
                       <p className="quiet">
-                        {session.source === "featured"
+                        {session.source !== "generated"
                           ? "Reference guidance • no model was called for answer checking."
                           : "Guidance from the verified lesson • no new inference for answer checking."}
                       </p>
@@ -1231,7 +1322,7 @@ function GradlyWorkspace({
                           <summary>{title}</summary>
                           <p>
                             <strong>{role}</strong> •{" "}
-                            {session.source === "featured"
+                            {session.source !== "generated"
                               ? "Reference role"
                               : "Verified lesson role"}
                           </p>
@@ -1242,7 +1333,7 @@ function GradlyWorkspace({
                             {c.references
                               .map(
                                 (r) =>
-                                  `${r.id}, ${session.source === "featured" ? "published page" : "PDF page"} ${r.page}`,
+                                  `${r.id}, ${session.source !== "generated" ? "published page" : "PDF page"} ${r.page}`,
                               )
                               .join("; ")}
                           </p>
@@ -1254,9 +1345,22 @@ function GradlyWorkspace({
                           <button
                             className="btn secondary"
                             disabled={
-                              busy || editingReasoning || !config?.liveAI
+                              busy ||
+                              editingReasoning ||
+                              (!demo && !config?.liveAI)
                             }
                             onClick={async () => {
+                              if (demo) {
+                                setFeedback({
+                                  category: "Reference guidance",
+                                  guidance:
+                                    c.feedback?.explanation ??
+                                    c.feedback?.message,
+                                  followup:
+                                    "Compare this guidance with your explanation. Your writing is saved; no AI assessment was performed.",
+                                });
+                                return;
+                              }
                               setBusy(true);
                               try {
                                 const response = await api<{
@@ -1274,9 +1378,11 @@ function GradlyWorkspace({
                               }
                             }}
                           >
-                            Ask AI to review my reasoning
+                            {demo
+                              ? "Explore sample guidance"
+                              : "Ask AI to review my reasoning"}
                           </button>
-                          {!config?.liveAI ? (
+                          {!config?.liveAI && !demo ? (
                             <p>
                               Live AI is not configured. Your written reasoning
                               is saved but has not been evaluated.
@@ -1296,8 +1402,10 @@ function GradlyWorkspace({
                               ) : (
                                 <>
                                   <strong>
-                                    {shownFeedback.category} • Live AI
-                                    assessment
+                                    {shownFeedback.category} •{" "}
+                                    {demo
+                                      ? "Sample preview"
+                                      : "Live AI assessment"}
                                   </strong>
                                   <p>{shownFeedback.guidance}</p>
                                   <p>{shownFeedback.followup}</p>
@@ -1418,7 +1526,7 @@ function GradlyWorkspace({
                       ? "Read the paper’s source ↗"
                       : "Source link not available in document"}
                   </a>
-                  {session.source === "featured" ? (
+                  {session.source !== "generated" ? (
                     <div className="finding">
                       <h3>Experiment 2: published finding</h3>
                       <p>
@@ -1601,6 +1709,7 @@ function GradlyWorkspace({
                 <article className="history-card card" key={h.id}>
                   <div>
                     <span className="tag">
+                      {h.source === "demo" ? "Sample preview · " : ""}
                       {h.phase === "complete" ? "Completed" : "In progress"}
                     </span>
                     <h2>{h.title}</h2>

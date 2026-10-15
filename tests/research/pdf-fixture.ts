@@ -1,3 +1,35 @@
+export function multiPagePdfBytes(count = 9) {
+  const objects = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    `<< /Type /Pages /Kids [${Array.from({ length: count }, (_, i) => `${3 + i * 2} 0 R`).join(" ")}] /Count ${count} >>`,
+  ];
+  const font = 3 + count * 2;
+  for (let i = 0; i < count; i++) {
+    const text = `Project planning page ${i + 1}. This document is a private project plan, not an empirical classroom experiment. It includes tasks, schedules, assumptions and questions for later review. No statistical findings should be inferred from it.`;
+    const lines = text.match(/.{1,70}(?:\s|$)/g) ?? [];
+    const stream = `BT /F1 12 Tf 16 TL 50 750 Td ${lines.map((line) => `(${line}) Tj T*`).join(" ")} ET`;
+    objects.push(
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 ${font} 0 R >> >> /Contents ${4 + i * 2} 0 R >>`,
+      `<< /Length ${Buffer.byteLength(stream)} >>\nstream\n${stream}\nendstream`,
+    );
+  }
+  objects.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  let pdf = "%PDF-1.4\n";
+  const offsets = [0];
+  for (const [i, object] of objects.entries()) {
+    offsets.push(Buffer.byteLength(pdf));
+    pdf += `${i + 1} 0 obj\n${object}\nendobj\n`;
+  }
+  const xref = Buffer.byteLength(pdf);
+  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n${offsets
+    .slice(1)
+    .map((n) => String(n).padStart(10, "0") + " 00000 n ")
+    .join(
+      "\n",
+    )}\ntrailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
+  return Buffer.from(pdf);
+}
+
 export function pdfBytes(
   text = "An empirical research paper. Fifty-six participants were randomly assigned to one of two independent groups. Each group attended a lecture and completed a numerical comprehension quiz. The design supports a comparison of independent group means. Researchers must examine variance and distribution assumptions.",
 ) {

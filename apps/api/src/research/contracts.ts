@@ -28,7 +28,7 @@ export const lessonSchema = z.object({
   id: z.string(),
   title: z.string(),
   briefing: z.string(),
-  source: z.enum(["featured", "generated"]),
+  source: z.enum(["featured", "generated", "demo"]),
   paper: z.object({
     title: z.string(),
     authors: z.string(),
@@ -55,6 +55,7 @@ export type Attempt = {
   feedback: string;
 };
 export type LearningSession = {
+  source?: Lesson["source"];
   id: string;
   lessonId: string;
   title: string;
@@ -100,6 +101,7 @@ export type Audit = {
   error?: string;
 };
 export type Job = {
+  mode?: "demo" | "live";
   consented: boolean;
   id: string;
   name: string;

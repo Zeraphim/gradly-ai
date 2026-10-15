@@ -32,6 +32,10 @@ The current repository and blue Gradly branding take priority over the separate 
 - Support keyboard use, accessible labels, visible focus, reduced motion and responsive desktop/tablet/mobile layouts.
 - Pass type checks, unit/service tests, browser scenarios, production/Vercel source builds and dependency checks. See `TESTING.md` for exact coverage.
 
+## Local flow-preview acceptance
+
+With explicit local preview flags, a checked upload must offer a working sample-flow action. Its saved steps, lesson, guidance and history must disclose sample content, never claim findings from the uploaded paper, and make no inference request. It must be rejected on Vercel/in production and cannot silently replace the live path. `demo.test.ts` and the sample-flow browser scenario cover these boundaries.
+
 ## Release conditions
 
 Local implementation/testing does not establish hosted persistence, new live generation quality or Vercel OCR execution. The user requested setup instructions because credentials are not configured. Test those paths after setting the documented variables. The PR's automatic Vercel preview is reported blocked, and the current CLI account cannot access that project's details. A release must resolve that external restriction before relying on preview evidence.

@@ -27,7 +27,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Open **http://localhost:5173**. The example configuration explicitly enables **local preview**. It checks choices against sample answers and does **not** assess explanations. The interface labels preview feedback and sample points throughout.
+Open **http://localhost:5173**. The example configuration explicitly enables **local preview**. It checks choices against sample answers and does **not** assess explanations. The interface labels preview feedback and sample points throughout. `DEMO_MODE=true` also enables the explicitly labeled local sample flow after PDF extraction, so processing through learning/history can be explored without a key. It uses separate reference content and is refused in production/Vercel. See the integration guide for switching to live data.
 
 For live reasoning assessment, set these values in the ignored root `.env`:
 
