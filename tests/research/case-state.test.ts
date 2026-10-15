@@ -297,6 +297,31 @@ describe.each(studies)("evidence and claims: $title", (study) => {
   });
 });
 
+it("requires positive account evidence alongside the qualitative counterexample and limits", () => {
+  const draft = {
+    claim: qualitative.supportedClaimId,
+    pinned: ["garden-boundary", "garden-quiet"],
+  };
+  expect(evidenceReview(qualitative, draft)).toMatchObject({
+    supported: true,
+    relevant: [],
+    boundary: true,
+    ready: false,
+  });
+  for (const support of ["garden-invitation", "garden-access"]) {
+    expect(
+      evidenceReview(qualitative, {
+        ...draft,
+        pinned: [...draft.pinned, support],
+      }),
+    ).toMatchObject({
+      relevant: [support],
+      boundary: true,
+      ready: true,
+    });
+  }
+});
+
 it("a new draft and notebook do not share mutable state", () => {
   const first = freshCase();
   first.pinned.push("example");

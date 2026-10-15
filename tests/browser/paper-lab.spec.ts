@@ -501,6 +501,41 @@ test("evidence controls, confidence and the claim dial change the guide without 
       exact: true,
     }),
   ).toBeVisible();
+
+  // Limits and counterevidence alone cannot support the selected interpretation.
+  await page
+    .getByRole("button", { name: "Change pinned evidence", exact: true })
+    .click();
+  for (const label of [
+    "Experiences, including less active voices",
+    "Recognition can matter",
+  ]) {
+    await pinboard
+      .getByRole("button", { name: `Unpin ${label}`, exact: true })
+      .click();
+  }
+  await inspect(page, garden, "garden-boundary");
+  await expect(pinboard).toContainText("2 pinned");
+  await next.click();
+  await stage(page, "claim");
+  await expect(
+    page.getByRole("heading", {
+      name: "A bounded claim still needs supporting evidence",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Change pinned evidence", exact: true })
+    .click();
+  await inspect(page, garden, "garden-invitation");
+  await next.click();
+  await stage(page, "claim");
+  await expect(
+    page.getByRole("heading", {
+      name: "Your selected claim and evidence connect",
+      exact: true,
+    }),
+  ).toBeVisible();
 });
 
 test("changing a transfer response removes the previous check and requires a fresh check", async ({

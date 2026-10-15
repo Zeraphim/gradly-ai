@@ -89,11 +89,7 @@ export const practiceCases: ResearchCase[] = [
       },
     ],
     supportedClaimId: "garden-supported",
-    usefulEvidenceIds: [
-      "garden-invitation",
-      "garden-access",
-      "garden-boundary",
-    ],
+    usefulEvidenceIds: ["garden-invitation", "garden-access"],
     competingEvidenceId: "garden-quiet",
     coachingQuestion:
       "What meaning connects these accounts, and which account stops your interpretation from becoming a claim about everyone?",
