@@ -59,7 +59,9 @@ test("featured adventure, ordered challenges, bonus, reveal, review and saved hi
           "Different students contribute to each group; both tests compare means.",
         );
     await choose(page, keys[i]!);
-    await expect(page.locator(".feedback")).toContainText("Well reasoned");
+    await expect(page.locator(".feedback")).toContainText(
+      "Your choice matches",
+    );
     if (i === 5)
       await expect(page.locator(".difference")).toContainText("9.59");
     await page.getByRole("button", { name: "Continue", exact: false }).click();
@@ -108,7 +110,7 @@ test("two misses, retry, agent panel, resume, bonus skip and restart confirmatio
   await begin(page);
   await choose(page, ["B"]);
   await expect(page.locator(".feedback")).toContainText("reconsider");
-  await page.getByText("See How Gradly’s AI Agents Helped").click();
+  await page.getByText("See the answer guide and evidence").click();
   await page.getByText("Identified Misconception", { exact: true }).click();
   await expect(
     page.getByText("no model was called", { exact: false }),
@@ -387,7 +389,18 @@ test("scanned PDF OCR warning and no-key reasoning fallback are honest", async (
   await expect(page.getByLabel("Defend your decision")).toHaveValue(
     "Independent students contributed one outcome each.",
   );
-  await expect(page.locator(".feedback")).toContainText("Well reasoned");
+  await expect(page.locator(".feedback")).toContainText("Your choice matches");
+  const reasoningReview = page.getByRole("region", {
+    name: "Reasoning review",
+  });
+  await expect(reasoningReview).toBeVisible();
+  await expect(reasoningReview).toContainText("has not been assessed");
+  await expect(
+    reasoningReview.getByRole("link", {
+      name: "See a reasoning-and-revision example",
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".agent-panel")).not.toHaveAttribute("open", "");
   await page.getByRole("button", { name: "Revise explanation" }).click();
   await page
     .getByLabel("Defend your decision")
@@ -400,7 +413,7 @@ test("scanned PDF OCR warning and no-key reasoning fallback are honest", async (
   await expect(page.getByLabel("Defend your decision")).toHaveValue(
     "The groups contain separate participants, so the observations are not paired.",
   );
-  await expect(page.locator(".feedback")).toContainText("Well reasoned");
+  await expect(page.locator(".feedback")).toContainText("Your choice matches");
 });
 
 test("deployed hero composition, responsive scaling, color contrast and PDF handoff", async ({
@@ -525,7 +538,7 @@ test("no-key sample flow is explicit, resumable and separate from uploaded evide
     await choose(page, answer);
     if (index === 2) {
       await page
-        .getByText("See How Gradly’s AI Agents Helped", { exact: true })
+        .getByText("See the answer guide and evidence", { exact: true })
         .click();
       await page
         .getByRole("button", { name: "Explore sample guidance" })
@@ -639,7 +652,9 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
       .evaluate((el) => getComputedStyle(el).animationName),
   ).toBe("gradly-arrive");
   const other = page.locator(".path-card").nth(1);
-  const initial = await other.boundingBox();
+  // Hover may scroll a taller page. Compare document coordinates for layout stability.
+  const initialY =
+    (await other.boundingBox())!.y + (await page.evaluate(() => scrollY));
   const height = await start.evaluate((el) => (el as HTMLElement).offsetHeight);
   await start.hover();
   await expect
@@ -656,7 +671,9 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
   expect(await start.evaluate((el) => (el as HTMLElement).offsetHeight)).toBe(
     height,
   );
-  expect((await other.boundingBox())!.y).toBe(initial!.y);
+  expect(
+    (await other.boundingBox())!.y + (await page.evaluate(() => scrollY)),
+  ).toBe(initialY);
   await page.mouse.move(4, 4);
   await page.mouse.up();
   let release!: () => void;

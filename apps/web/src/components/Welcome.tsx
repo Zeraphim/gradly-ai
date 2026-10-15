@@ -266,6 +266,17 @@ export function Welcome({
             <ArrowRight size={23} />
           </span>
         </button>
+        <div className="reasoning-preview-entry">
+          <div>
+            <strong>A correct choice can still hide a misconception.</strong>
+            <p>Choose → Explain → Check evidence → Revise</p>
+            <span>Authored example · no AI calls</span>
+          </div>
+          <a href="#/research/reasoning" className="reasoning-preview-link">
+            Try the reasoning preview
+            <ArrowRight size={18} aria-hidden="true" />
+          </a>
+        </div>
         <div className="welcome-details">
           <span>
             <Clock3 size={16} /> About 10 minutes

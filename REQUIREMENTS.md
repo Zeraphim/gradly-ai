@@ -4,6 +4,8 @@ The current repository and blue Gradly branding take priority over the separate 
 
 ## Functional acceptance
 
+The added browser-only reasoning showcase demonstrates separate choice and explanation judgments, a specific misconception, published-page evidence, a targeted question, revision comparison and a gated paper reveal. It remains usable with all API routes unavailable, labels its authored feedback, and refuses to assess custom writing. Its checks and future live requirements are in [REASONING_PREVIEW.md](REASONING_PREVIEW.md).
+
 | Required journey                                               | Implementation                                                                      | Evidence and limits                                                                     |
 | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Existing hero, PDF control, link below it, curated lesson      | `App.tsx`, `Welcome.tsx`, original components and APIs                              | Original interface/service/state tests; responsive hero browser test                    |

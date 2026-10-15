@@ -863,6 +863,29 @@
 .research-lab .reasoning {
   margin: 24px 0;
 }
+.research-lab .reasoning-review {
+  margin: 24px 0;
+  padding: 22px;
+  background: #f0f8fd;
+  border: 1px solid #c8dfed;
+  border-radius: 18px;
+}
+.research-lab .reasoning-review h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+.research-lab .reasoning-review > .btn {
+  margin-top: 4px;
+}
+.research-lab .reasoning-review .reasoning-preview-note {
+  margin: 18px 0 6px;
+}
+.research-lab .reasoning-review > .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+}
 .research-lab .reasoning > label,
 .research-lab label[for="reflection"] {
   font-size: 15px;

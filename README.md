@@ -7,7 +7,7 @@
 
 # Gradly
 
-[Live production demo](https://nebius-hackathon-submission.vercel.app)
+[Existing curated production demo](https://nebius-hackathon-submission.vercel.app)
 
 A research-reading MVP based on the supplied study-adventure designs, with the Gradly logo and mascot. Choose a curated study, justify a decision, get feedback, reveal the evidence, revise, and try two fictional transfer scenarios.
 
@@ -16,6 +16,12 @@ A research-reading MVP based on the supplied study-adventure designs, with the G
 This branch integrates an optional eight-challenge investigation, PDF extraction/OCR, durable research history and reviewed lesson generation into the existing Vite/Express application. The deployed hero composition and six-quest curated flow remain intact. See [RESEARCH_INTEGRATION.md](RESEARCH_INTEGRATION.md) for configuration, verification and limits. The extension is locally available and requires explicit opt-in plus remote storage on Vercel.
 
 Design references, module boundaries, acceptance criteria and verification coverage are documented in [DESIGN.md](DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [TESTING.md](TESTING.md).
+
+## Browser-only reasoning showcase
+
+Open `/#/research/reasoning`, or choose **Try the reasoning preview** from the home screen or research learning path. The complete choose → explain → inspect evidence → revise → reflect loop works without API credentials, database access, or a working backend. A suitable method with flawed reasoning receives separate judgments; an authored revision shows the conceptual improvement before the paper's findings are revealed. Alternative-method and missing-evidence examples are also available.
+
+This is explicitly authored feedback. Custom writing is not assessed, inputs remain in tab storage with an in-memory fallback, and no investigation score or progress changes. This browser showcase is available independently of the server's local upload-sample flags, including in a hosted frontend build. It makes no live assessment request. See [REASONING_PREVIEW.md](REASONING_PREVIEW.md) for the future live contract, current backend gaps and release guardrails. The new showcase has been verified locally; it has not been publicly deployed.
 
 ## Run
 
@@ -71,7 +77,7 @@ npm run test:live
 
 Verified October 14, 2026: type checking, production builds, and 15 automated checks passed. The simulated learner flow covers initial answer hiding, a failed request and retry, wrong-answer revision, saved-progress resumption, six completed quests, independent transfer answers, and dialog cancellation. All eight live cases produced the expected outcomes. Seven model-request durations ranged from 0.595 to 1.900 seconds in that run. This small check does not establish statistical teaching quality or a learning benefit.
 
-The current integration additionally passes 73 unit/service checks and 21 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
+The current integration additionally passes 123 unit/service checks and 32 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
 
 ## Scope and data
 

@@ -31,6 +31,19 @@ export function PathPicker({
           Start with a guided investigation, or explore the journey with your
           own PDF.
         </p>
+        <aside
+          className="reasoning-preview-invitation"
+          aria-label="Research reasoning preview"
+        >
+          <div>
+            <strong>A correct choice can still hide a misconception.</strong>
+            <p>Choose → Explain → Check evidence → Revise</p>
+            <span className="quiet">Authored example · no AI calls</span>
+          </div>
+          <Link className="btn outline compact" href="/reasoning">
+            <ActionLabel>Try the reasoning preview</ActionLabel>
+          </Link>
+        </aside>
         <div className="path-grid">
           <article className="path-card featured-card">
             <div className="symbol blue">

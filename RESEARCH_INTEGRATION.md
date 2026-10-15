@@ -26,6 +26,8 @@ When the extension is enabled, the existing hero’s PDF control hands a selecte
 
 ## Local use
 
+For the research-reasoning mechanism alone, open `/#/research/reasoning`. This frontend showcase needs neither this API nor storage configuration. It uses labeled authored explanations and feedback, keeps custom writing unassessed, and demonstrates revision without changing investigation progress. It is separate from the local post-upload sample mode below. See `REASONING_PREVIEW.md` for the expected live behavior and remaining integration requirements.
+
 ```sh
 npm ci
 cp .env.example .env

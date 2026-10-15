@@ -16,7 +16,9 @@ Gradly keeps the existing React/Vite + Express TypeScript workspaces, shared con
 | `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                       |
 | `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance             |
 
-The research workspace composes `PathPicker`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `useResearchConfig` loads availability once per mounted research app and exposes explicit retry; internal navigation reuses its result. Shared display types live in `research/types.ts`. Confirmation dialogs reuse the original native `Dialog` component.
+The research workspace composes `PathPicker`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `useResearchConfig` loads availability once per mounted API-backed workspace and exposes explicit retry; its internal navigation reuses the result. Shared display types live in `research/types.ts`. Confirmation dialogs reuse the original native `Dialog` component.
+
+`ReasoningPreview` handles `#/research/reasoning` outside that configuration dependency. `reasoning-preview.ts` is a pure authored-fixture adapter: only an exact method and normalized authored explanation receive a prepared review. Custom text stays unassessed. `reasoning-preview-state.ts` validates draft inputs; verdicts are recomputed rather than trusted from storage. The showcase has no provider, session mutation or scoring calls. It preserves before/after attempts in separate tab storage, with a memory fallback for denied or failed writes. See `REASONING_PREVIEW.md` for the proposed live-review contract; stable attempt/revision binding and full evidence prompting are future backend work.
 
 ## Research data flow
 

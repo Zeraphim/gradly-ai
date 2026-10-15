@@ -33,6 +33,7 @@ import { PathPicker } from "./PathPicker.js";
 import { UploadPage } from "./UploadPage.js";
 import { ProcessingPage } from "./ProcessingPage.js";
 import { useResearchConfig } from "./useResearchConfig.js";
+import { ReasoningPreview } from "./ReasoningPreview.js";
 export function ResearchApp({
   onExit,
   initialFile,
@@ -42,7 +43,6 @@ export function ResearchApp({
 }) {
   const path = useResearchPath();
   const previousPath = useRef(path);
-  const configuration = useResearchConfig();
   const [returnPath, setReturnPath] = useState<string | null>(null);
   const [uploadDraft, setUploadDraft] = useState<UploadDraft>(() => ({
     file: initialFile ?? null,
@@ -63,18 +63,36 @@ export function ResearchApp({
   }, [path]);
   return (
     <div className="research-lab">
-      <GradlyWorkspace
-        key={path}
-        path={path}
-        onExit={onExit}
-        uploadDraft={uploadDraft}
-        setUploadDraft={setUploadDraft}
-        returnPath={returnPath}
-        config={configuration.config}
-        configError={configuration.error}
-        onRetryConfig={configuration.retry}
-      />
+      {/^\/reasoning\/?$/.test(path) ? (
+        <ReasoningPreview onExit={onExit} returnHref={returnPath ?? "/learn"} />
+      ) : (
+        <ResearchWorkspaceHost
+          path={path}
+          onExit={onExit}
+          uploadDraft={uploadDraft}
+          setUploadDraft={setUploadDraft}
+          returnPath={returnPath}
+        />
+      )}
     </div>
+  );
+}
+function ResearchWorkspaceHost(props: {
+  path: string;
+  onExit: () => void;
+  uploadDraft: UploadDraft;
+  setUploadDraft: React.Dispatch<React.SetStateAction<UploadDraft>>;
+  returnPath: string | null;
+}) {
+  const configuration = useResearchConfig();
+  return (
+    <GradlyWorkspace
+      key={props.path}
+      {...props}
+      config={configuration.config}
+      configError={configuration.error}
+      onRetryConfig={configuration.retry}
+    />
   );
 }
 function GradlyWorkspace({
@@ -498,6 +516,25 @@ function GradlyWorkspace({
             </button>
           </div>
         ) : null}
+        {!config?.storage && ["home", "learn", "featured"].includes(route) ? (
+          <aside
+            className="reasoning-preview-invitation"
+            aria-label="Research reasoning preview"
+          >
+            <div>
+              <strong>
+                Explore the reasoning loop while the workspace is unavailable.
+              </strong>
+              <p>
+                Choose, explain, inspect evidence and revise. Authored example ·
+                no AI calls.
+              </p>
+            </div>
+            <Link className="btn primary compact" href="/reasoning">
+              Try the reasoning preview
+            </Link>
+          </aside>
+        ) : null}
         {config?.storage && ["home", "learn", "featured"].includes(route) ? (
           <PathPicker
             config={config}
@@ -833,7 +870,7 @@ function GradlyWorkspace({
                     >
                       <h2>
                         {c.feedback.correct
-                          ? "Well reasoned!"
+                          ? "Your choice matches"
                           : c.attempts === 1
                             ? "Let’s reconsider."
                             : "Here’s the reference explanation."}
@@ -844,7 +881,7 @@ function GradlyWorkspace({
                       ) : null}
                     </section>
                     <details className="agent-panel">
-                      <summary>See How Gradly’s AI Agents Helped</summary>
+                      <summary>See the answer guide and evidence</summary>
                       <p className="quiet">
                         {session.source !== "generated"
                           ? "Reference guidance • no model was called for answer checking."
@@ -905,89 +942,111 @@ function GradlyWorkspace({
                           <p>Status: available reference guidance</p>
                         </details>
                       ))}
-                      {c.writtenReasoning && reasoning ? (
-                        <>
-                          <button
-                            className="btn secondary"
-                            disabled={
-                              busy ||
-                              editingReasoning ||
-                              (!demo && !config?.liveAI)
-                            }
-                            onClick={async () => {
-                              if (demo) {
-                                setFeedback({
-                                  category: "Reference guidance",
-                                  guidance:
-                                    c.feedback?.explanation ??
-                                    c.feedback?.message,
-                                  followup:
-                                    "Compare this guidance with your explanation. Your writing is saved; no AI assessment was performed.",
-                                });
-                                return;
-                              }
-                              setBusy(true);
-                              try {
-                                const response = await api<{
-                                  session: Session;
-                                }>("/api/research/feedback", {
-                                  id: session.id,
-                                });
-                                if (!mounted.current) return;
-                                clearDraft(session.id);
-                                applySession(response.session);
-                              } catch (e) {
-                                if (!mounted.current) return;
-                                setFeedback({
-                                  error: `${(e as Error).message} Your reasoning is saved. Use the reference explanation; no live assessment was completed.`,
-                                });
-                              } finally {
-                                if (mounted.current) setBusy(false);
-                              }
-                            }}
-                          >
-                            {demo
-                              ? "Explore sample guidance"
-                              : "Ask AI to review my reasoning"}
-                          </button>
-                          {!config?.liveAI && !demo ? (
-                            <p>
-                              Live AI is not configured. Your written reasoning
-                              is saved but has not been evaluated.
-                            </p>
-                          ) : null}
-                          {shownFeedback ? (
-                            <div className="notice">
-                              {"error" in shownFeedback &&
-                              shownFeedback.error ? (
-                                <ErrorMessage
-                                  message={
-                                    ("error" in shownFeedback
-                                      ? shownFeedback.error
-                                      : "") ?? ""
-                                  }
-                                />
-                              ) : (
-                                <>
-                                  <strong>
-                                    {shownFeedback.category} •{" "}
-                                    {demo
-                                      ? "Sample preview"
-                                      : "Live AI assessment"}
-                                  </strong>
-                                  <p>{shownFeedback.guidance}</p>
-                                  <p>{shownFeedback.followup}</p>
-                                  <p className="quiet">
-                                    This feedback does not override your
-                                    answer-guide score.
-                                  </p>
-                                </>
-                              )}
-                            </div>
-                          ) : null}
-                        </>
-                      ) : null}
                     </details>
+                    {c.writtenReasoning && reasoning ? (
+                      <section
+                        className="reasoning-review"
+                        aria-label="Reasoning review"
+                      >
+                        <h2>Check the explanation, too.</h2>
+                        <p>
+                          {editingReasoning
+                            ? "Save your revised explanation before requesting another review."
+                            : !demo &&
+                                shownFeedback &&
+                                !(
+                                  "error" in shownFeedback &&
+                                  shownFeedback.error
+                                )
+                              ? "The live review below considers your written explanation separately from your choice."
+                              : "Your written explanation has not been assessed. The answer-guide result checks your choice only."}
+                        </p>
+                        <button
+                          className="btn secondary"
+                          disabled={
+                            busy ||
+                            editingReasoning ||
+                            (!demo && !config?.liveAI)
+                          }
+                          onClick={async () => {
+                            if (demo) {
+                              setFeedback({
+                                category: "Reference guidance",
+                                guidance:
+                                  c.feedback?.explanation ??
+                                  c.feedback?.message,
+                                followup:
+                                  "Compare this guidance with your explanation. Your writing is saved; no AI assessment was performed.",
+                              });
+                              return;
+                            }
+                            setBusy(true);
+                            try {
+                              const response = await api<{
+                                session: Session;
+                              }>("/api/research/feedback", {
+                                id: session.id,
+                              });
+                              if (!mounted.current) return;
+                              clearDraft(session.id);
+                              applySession(response.session);
+                            } catch (e) {
+                              if (!mounted.current) return;
+                              setFeedback({
+                                error: `${(e as Error).message} Your reasoning is saved. Use the reference explanation; no live assessment was completed.`,
+                              });
+                            } finally {
+                              if (mounted.current) setBusy(false);
+                            }
+                          }}
+                        >
+                          {demo
+                            ? "Explore sample guidance"
+                            : "Ask AI to review my reasoning"}
+                        </button>
+                        {!config?.liveAI && !demo ? (
+                          <p>
+                            Live AI is not configured. Your written reasoning is
+                            saved but has not been evaluated.
+                          </p>
+                        ) : null}
+                        {shownFeedback && !editingReasoning ? (
+                          <div className="notice" role="status">
+                            {"error" in shownFeedback && shownFeedback.error ? (
+                              <ErrorMessage
+                                message={
+                                  ("error" in shownFeedback
+                                    ? shownFeedback.error
+                                    : "") ?? ""
+                                }
+                              />
+                            ) : (
+                              <>
+                                <strong>
+                                  {shownFeedback.category} •{" "}
+                                  {demo
+                                    ? "Sample preview"
+                                    : "Live AI assessment"}
+                                </strong>
+                                <p>{shownFeedback.guidance}</p>
+                                <p>{shownFeedback.followup}</p>
+                                <p className="quiet">
+                                  This feedback does not override your
+                                  answer-guide score.
+                                </p>
+                              </>
+                            )}
+                          </div>
+                        ) : null}
+                        <p className="quiet reasoning-preview-note">
+                          See how a correct choice can hide a misconception in
+                          an authored example, separate from your writing.
+                        </p>
+                        <Link className="text-link" href="/reasoning">
+                          See a reasoning-and-revision example
+                        </Link>
+                      </section>
+                    ) : null}
                   </>
                 ) : null}
               </>
@@ -1335,7 +1394,7 @@ function GradlyWorkspace({
                   ? "Saving…"
                   : c.feedback
                     ? c.feedback.correct
-                      ? "Well reasoned!"
+                      ? "Choice matches"
                       : c.feedback.retryAvailable
                         ? "Ready to reconsider?"
                         : "Explanation revealed"
@@ -1346,7 +1405,7 @@ function GradlyWorkspace({
               <p>
                 {c.feedback
                   ? "Your response is saved."
-                  : "Choose a response, then check your reasoning."}
+                  : "Choose a response, then check your choice."}
               </p>
             </div>
             <button
