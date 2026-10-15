@@ -5,7 +5,8 @@
   "installCommand": "npm ci",
   "functions": {
     "server.ts": {
-      "maxDuration": 60
+      "maxDuration": 240,
+      "includeFiles": "node_modules/{tesseract.js,tesseract.js-core,@tesseract.js-data/eng}/**/*"
     }
   }
 }

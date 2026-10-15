@@ -11,3 +11,7 @@ coverage/
 /public/
 .vercel
 .env*
+
+.data/
+test-results/
+playwright-report/

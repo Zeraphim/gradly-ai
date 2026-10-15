@@ -1,27 +1,42 @@
-| Abbreviation | Full name                         | Plain-language description                              |
-| ------------ | --------------------------------- | ------------------------------------------------------- |
-| API          | Application programming interface | Same-origin routes for lessons and feedback.            |
-| MVP          | Minimum viable product            | One curated study and a complete learner flow.          |
-| PDF          | Portable Document Format          | The optional paper file checked locally in the browser. |
-| npm          | No established expansion          | The package manager used for the workspaces.            |
-
 # Gradly
 
-[Live production demo](https://nebius-hackathon-submission.vercel.app)
+Gradly starts with your paper. The home page keeps **PDF upload and a paper URL/DOI field visible together**, with a compact sample/resume action and your practice-point balance. The main flow is **add paper → review extracted text → learn through challenges → review the evidence**. Both `/` and the previously shared `/#/research/lab` open this upload-first home.
 
-A research-reading MVP based on the supplied study-adventure designs, with the Gradly logo and mascot. Choose a curated study, justify a decision, get feedback, reveal the evidence, revise, and try two fictional transfer scenarios.
+PDF validation, text extraction, review, saved processing and learning history work through the local application service. With no AI credential, an explicit sample-preview action continues into a separately labeled lesson. It never claims to analyze the uploaded document. Link entry currently opens only the curated texting paper’s DOI; other paper links receive an honest limitation and can be supplied as PDFs instead.
+
+Research adventures award **10 practice points per solved challenge**, once per challenge in that adventure, including successful retries and an optional bonus. Refreshing, duplicate submissions and explanation edits cannot duplicate that reward. Points derive from saved answer records; they do not grade free-form writing or certify learning. The home balance includes these saved research-adventure points and the existing curated-session points.
+
+The separate paper-case prototype has been removed to keep one primary workflow. Its old links return to the upload home. See [PRODUCT_DIRECTION.md](PRODUCT_DIRECTION.md) for scope and [RESEARCH_LEARNING_DESIGN.md](RESEARCH_LEARNING_DESIGN.md) for the learning rationale and limits.
+
+## Learning workspaces
+
+The six-quest curated adventure remains at `/#/classic`, the eight-challenge/upload workspace at `/#/research/learn`, and the authored explanation showcase at `/#/research/reasoning`. Existing saved links keep working when their API is available. The root sample action uses the familiar curated journey. The [earlier curated production demo](https://nebius-hackathon-submission.vercel.app) predates this research integration.
+
+The research API retains PDF extraction/OCR, guest history and reviewed generation. Its prompts now adapt to a paper’s research approach without requiring statistical tests for qualitative or conceptual material. This orchestration is tested with synthetic fixtures; new live generation remains unverified. See [RESEARCH_INTEGRATION.md](RESEARCH_INTEGRATION.md) for configuration and [REASONING_PREVIEW.md](REASONING_PREVIEW.md) for future live-review guardrails.
+
+Design, module boundaries, acceptance and verification are in [DESIGN.md](DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [TESTING.md](TESTING.md).
 
 ## Run
 
 Requires Node.js **22.18 or newer within version 22** and npm.
 
+For the complete local upload and learning preview:
+
 ```sh
 npm ci
+npm run dev:preview
+```
+
+Open **http://127.0.0.1:5173**. The command starts both the frontend and local PDF/learning service, uses local SQLite, and explicitly disables external AI calls. No environment file or AI credential is needed. It preserves the existing local preview database.
+
+For your own environment configuration:
+
+```sh
 cp .env.example .env
 npm run dev
 ```
 
-Open **http://localhost:5173**. The example configuration explicitly enables **local preview**. It checks choices against sample answers and does **not** assess explanations. The interface labels preview feedback and sample points throughout.
+`DEMO_MODE=true` enables the separate sample lesson after real PDF extraction. This sample path is refused on Vercel/in production and never silently replaces failed live inference. `npm run dev:prototype` runs only the frontend, including the authored reasoning preview; it does not provide the upload service.
 
 For live reasoning assessment, set these values in the ignored root `.env`:
 
@@ -43,9 +58,9 @@ scripts                 Development orchestration and opt-in live verification
 tests                   Service, state and simulated learner interaction checks
 ```
 
-The browser requests the public lesson from `GET /api/lesson` and submits only its version, question identifier, attempt identifier, choice, and explanation to `POST /api/feedback`. `GET /api/health` reports server health and feedback configuration. Initial lesson payloads omit answer criteria and authored solutions. The server supplies trusted evidence and criteria to the model, validates its single-field assessment, and selects authored teaching text. Model-generated teaching copy or citations never pass directly to learners.
+In the compatibility curated workspace, the browser requests the public lesson from `GET /api/lesson` and submits only its version, question identifier, attempt identifier, choice, and explanation to `POST /api/feedback`. `GET /api/health` reports server health and feedback configuration. Initial lesson payloads omit answer criteria and authored solutions. The server supplies trusted evidence and criteria to the model, validates its single-field assessment, and selects authored teaching text. Model-generated teaching copy or citations never pass directly to learners.
 
-The six quests cover separate groups, method assumptions, percentage points, missing evidence, and two original transfer scenarios. Five correct quests award 10 points each, once. The missing-evidence checkpoint reveals an evidence boundary after an attempt and awards no points. Revisions stay in the same quest. New scenarios have separate answers.
+The original six quests cover separate groups, method assumptions, percentage points, missing evidence, and two original transfer scenarios. Five correct quests award 10 points each, once. The missing-evidence checkpoint reveals an evidence boundary after an attempt and awards no points. Revisions stay in the same quest. New scenarios have separate answers.
 
 ## Production and verification
 
@@ -65,15 +80,15 @@ npm run test:live
 
 Verified October 14, 2026: type checking, production builds, and 15 automated checks passed. The simulated learner flow covers initial answer hiding, a failed request and retry, wrong-answer revision, saved-progress resumption, six completed quests, independent transfer answers, and dialog cancellation. All eight live cases produced the expected outcomes. Seven model-request durations ranged from 0.595 to 1.900 seconds in that run. This small check does not establish statistical teaching quality or a learning benefit.
 
-Visual layout, actual browser keyboard behavior, and operating-system reduced-motion behavior still need manual verification. Open the app on desktop and a narrow phone viewport, finish a quest with the keyboard, then enable reduced motion and verify that transitions and celebration motion stop.
+See [TESTING.md](TESTING.md) for the retained test suites and hosted/live acceptance requirements. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
 
 ## Scope and data
 
 The teaching content is a draft awaiting expert review. Research facts are attributed to [Gingerich & Lineweaver (2014)](https://doi.org/10.1177/0098628313514177), with [author metadata](https://butler.elsevierpure.com/en/publications/omg-texting-in-class-u-fail-empirical-evidence-that-text-messagin-2/). Evidence is curated and paraphrased, not extracted automatically. Fictional transfer examples are labeled. The original copyrighted paper is not redistributed. Publisher access may be required.
 
-Start with the sample card or the paper’s digital object identifier `10.1177/0098628313514177`. Optional PDF selection checks the exact supplied version’s fingerprint locally. Files never leave the browser. Other papers and other file versions are rejected with a route back to the supported sample. General document extraction, automatic lesson generation, accounts, leaderboards, shops, and arbitrary paper ingestion are outside this MVP.
+The original curated path accepts the sample card or the paper’s digital object identifier `10.1177/0098628313514177`, and checks the supplied PDF version’s fingerprint in the browser. The research extension accepts general PDFs, parses them on the application server, and retains extracted text for up to 30 days; original PDF bytes are not retained there. Reviewed lesson generation uses external AI only after confirmation, while local sample preview uses a separate labeled study. Accounts, leaderboards and shops remain outside the application.
 
-Answers and progress use versioned browser-local storage. Uploaded files are not stored. Downloadable notes include your explanations. Live mode sends explanations to Nebius for assessment. The application keeps a bounded, in-memory request cache for 15 minutes and does not persist learner answers on the server. Local progress is for a pilot, not tamper-resistant assessment.
+In the original six-quest path, answers and progress use versioned browser-local storage. Uploaded files are not stored. Downloadable notes include your explanations. Live mode sends explanations to Nebius for assessment. The application keeps a bounded, in-memory request cache for 15 minutes and does not persist learner answers on the server. Local progress is for a pilot, not tamper-resistant assessment.
 
 Repeated identical attempts share a request and cached result within one server process. Edited text must use a new attempt identifier. Failures preserve the answer, award no progress, and remain retryable where appropriate. Limits are 2,000 explanation characters, two concurrent model calls, 20 feedback submissions per client per 15 minutes, and 120 model calls per process per hour. Cache, concurrency, and budget limits reset on restart and are not shared across replicas. Vercel can run multiple function instances. These in-memory limits and duplicate-request protection apply separately to each instance, not across the whole deployment.
 
@@ -83,7 +98,7 @@ Application code is licensed under MIT. Third-party fonts, packages, and the ref
 
 ## Deploy to Vercel
 
-Deploy this repository root as one Express project. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The shared contracts package is compiled to JavaScript before bundling so the hosted function imports a runtime file instead of TypeScript source. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function has a 60-second execution limit, longer than the bounded model request.
+Deploy this repository root as one Express project. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The shared contracts package is compiled to JavaScript before bundling so the hosted function imports a runtime file instead of TypeScript source. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function now has a 240-second execution limit for bounded document/OCR work; the original model request retains its 45-second timeout.
 
 Configure `NEBIUS_API_KEY` as a sensitive production environment variable and `PREVIEW_MODE=false` for live reasoning feedback. Credentials stay on the server. Preview deployments can explicitly use `PREVIEW_MODE=true` without a model credential. The adapter trusts Vercel's immediate proxy so per-client request limits use the forwarded client address.
 
