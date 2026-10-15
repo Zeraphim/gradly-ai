@@ -61,24 +61,52 @@ function validLesson(raw: unknown): raw is Lesson {
     ["preview", "nebius", "unconfigured"].includes(l.mode)
   );
 }
-export function LegacyApp() {
+function isResearchRoute() {
+  return (
+    window.location.hash.startsWith("#/research") &&
+    !/^#\/research\/lab\/?$/.test(window.location.hash)
+  );
+}
+export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   const [screen, setScreen] = useState<
     "welcome" | "prepare" | "lesson" | "research"
-  >(window.location.hash.startsWith("#/research") ? "research" : "welcome");
+  >(isResearchRoute() ? "research" : "welcome");
   const [researchAvailable, setResearchAvailable] = useState(false);
+  const [liveResearchAI, setLiveResearchAI] = useState(false);
+  const [researchPoints, setResearchPoints] = useState(0);
+  useEffect(() => {
+    if (!uploadFirst || screen !== "welcome") return;
+    const controller = new AbortController();
+    fetch("/api/research/learning", { signal: controller.signal })
+      .then((response) => (response.ok ? response.json() : []))
+      .then((records: unknown) => {
+        if (!Array.isArray(records)) return;
+        setResearchPoints(
+          records.reduce(
+            (total, record) =>
+              total +
+              (Number.isInteger(record?.points) && record.points >= 0
+                ? record.points
+                : 0),
+            0,
+          ),
+        );
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [uploadFirst, screen]);
   const [researchFile, setResearchFile] = useState<File | null>(null);
   useEffect(() => {
     fetch("/api/research/config")
       .then((r) => r.json())
-      .then((data) => setResearchAvailable(data.storage === true))
+      .then((data) => {
+        setResearchAvailable(data.storage === true);
+        setLiveResearchAI(data.liveAI === true);
+      })
       .catch(() => {});
     const changed = () =>
       setScreen((s) =>
-        window.location.hash.startsWith("#/research")
-          ? "research"
-          : s === "research"
-            ? "welcome"
-            : s,
+        isResearchRoute() ? "research" : s === "research" ? "welcome" : s,
       );
     window.addEventListener("hashchange", changed);
     return () => window.removeEventListener("hashchange", changed);
@@ -244,6 +272,7 @@ export function LegacyApp() {
     }
   }
   const complete = !!lesson && session.current >= lesson.questions.length;
+  const simpleHome = uploadFirst && screen === "welcome";
   const reviewId = dialog?.startsWith("review:") ? dialog.slice(7) : null;
   const reviewQuestion = lesson?.questions.find((q) => q.id === reviewId);
   const reviewState = reviewId ? session.questions[reviewId] : null;
@@ -259,7 +288,7 @@ export function LegacyApp() {
         <ResearchApp
           initialFile={researchFile}
           onExit={() => {
-            window.location.hash = "/classic";
+            window.location.hash = uploadFirst ? "" : "/classic";
             changeScreen("welcome");
           }}
         />
@@ -289,23 +318,39 @@ export function LegacyApp() {
             <BrandLogo />
           </button>
           <nav aria-label="Main navigation">
-            <button
-              className={screen !== "welcome" ? "active" : ""}
-              onClick={() =>
-                pending ? setDialog("pause") : changeScreen("welcome")
-              }
-            >
-              Adventure
-            </button>
-            <button onClick={() => setDialog("progress")}>My progress</button>
-            {researchAvailable ? (
-              <button onClick={() => openResearch()}>Research Lab</button>
-            ) : null}
+            {simpleHome ? (
+              <button
+                onClick={() => {
+                  window.location.hash = "/research/history";
+                }}
+              >
+                My documents
+              </button>
+            ) : (
+              <>
+                <button
+                  className={screen !== "welcome" ? "active" : ""}
+                  onClick={() =>
+                    pending ? setDialog("pause") : changeScreen("welcome")
+                  }
+                >
+                  Adventure
+                </button>
+                <button onClick={() => setDialog("progress")}>
+                  My progress
+                </button>
+                {researchAvailable ? (
+                  <button onClick={() => openResearch()}>Research Lab</button>
+                ) : null}
+              </>
+            )}
           </nav>
           <div className="header-badges">
             <span className="points-pill">
               <Sparkles size={17} />
-              <strong>{points(session)}</strong>
+              <strong>
+                {points(session) + (simpleHome ? researchPoints : 0)}
+              </strong>
               <span className="points-label">
                 {lesson?.mode === "preview" ? "sample points" : "points"}
               </span>
@@ -320,7 +365,7 @@ export function LegacyApp() {
           </div>
         </div>
       </header>
-      {lesson?.mode === "preview" ? (
+      {lesson?.mode === "preview" && !simpleHome ? (
         <div className="mode-banner">
           Local preview · choices are checked, explanations are not assessed.
         </div>
@@ -339,9 +384,13 @@ export function LegacyApp() {
       ) : null}
       {screen === "welcome" ? (
         <Welcome
+          uploadFirst={uploadFirst}
+          samplePreview={uploadFirst && !liveResearchAI}
           onStart={prepare}
           onResearchFile={
-            researchAvailable ? (file) => openResearch(file) : undefined
+            uploadFirst || researchAvailable
+              ? (file) => openResearch(file)
+              : undefined
           }
           session={session}
           complete={complete}

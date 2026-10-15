@@ -6,6 +6,7 @@ import {
   submit,
   publicSession,
   reviseReasoning,
+  learningPoints,
 } from "../../apps/api/src/research/engine.js";
 import {
   lessonSchema,
@@ -24,6 +25,30 @@ function finish(s: LearningSession) {
   return s;
 }
 describe("featured learning engine", () => {
+  it("awards practice points once per solved challenge, including retries and an optional bonus", () => {
+    let s = begun();
+    expect(learningPoints(s)).toBe(0);
+    s = submit(s, featured, ["B"], "A first attempt.");
+    expect(learningPoints(s)).toBe(0);
+    s = transition(s, featured, "retry");
+    s = submit(s, featured, ["A"], "Revised using the evidence.");
+    expect(learningPoints(s)).toBe(10);
+    expect(() => submit(s, featured, ["A"], "Repeat")).toThrow();
+    expect(publicSession(s, featured).points).toBe(10);
+    expect(publicSession(s, featured).points).toBe(10);
+    s = transition(s, featured, "next");
+    s = finish(s);
+    expect(learningPoints(s)).toBe(80);
+    s = transition(s, featured, "bonus");
+    s = submit(
+      s,
+      featured,
+      featured.bonus!.accepted,
+      "Transfer to the new setting.",
+    );
+    expect(learningPoints(s)).toBe(90);
+    expect(learningPoints(newSession(featured, "new"))).toBe(0);
+  });
   it("validates the full contract and mandated answer keys", () => {
     expect(lessonSchema.safeParse(featured).success).toBe(true);
     expect(featured.challenges.map((c) => c.accepted.join(""))).toEqual([

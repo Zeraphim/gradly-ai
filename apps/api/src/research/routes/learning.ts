@@ -10,6 +10,7 @@ import {
   transition,
   publicSession,
   reviseReasoning,
+  learningPoints,
 } from "../engine.js";
 import { type Job, type LearningSession } from "../contracts.js";
 async function lesson(who: string, id: string) {
@@ -39,6 +40,7 @@ export async function GET(request: Request) {
         index: s.index,
         created: s.created,
         source: s.source ?? "featured",
+        points: learningPoints(s),
       })),
     );
   } catch (e) {

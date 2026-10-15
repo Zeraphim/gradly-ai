@@ -321,7 +321,7 @@ export function PaperLab() {
           <>
             <div className="paper-case-topline">
               <Link href="/lab">
-                <Icon name="back" size={17} /> All studies
+                <Icon name="back" size={17} /> Home
               </Link>
               <span>
                 {study.provenance === "reference-paper"
@@ -1167,7 +1167,7 @@ function PaperRecap({
       </details>
       <div className="paper-recap-end">
         <Link className="paper-back" href="/lab">
-          <Icon name="back" size={17} /> All studies
+          <Icon name="back" size={17} /> Home
         </Link>
         {confirmReset ? (
           <div

@@ -1,16 +1,18 @@
 # Gradly
 
-Gradly helps learners understand a paper one small step at a time. The public prototype uses one guided flow: **Start → Read → Choose → Try → Recap**. Read one short note at a time, check a conclusion, try a new situation and download the key ideas.
+Gradly starts with your paper. The home page keeps **PDF upload and a paper URL/DOI field visible together**, with a compact sample/resume action and your practice-point balance. The main flow is **add paper → review extracted text → learn through challenges → review the evidence**. Both `/` and the previously shared `/#/research/lab` open this upload-first home.
 
-Open `/` or `/#/research/lab`. The published texting experiment and clearly fictional qualitative garden study share the same interface. Back and numbered steps make navigation direct. Extra source detail, personal writing and confidence are optional disclosures; saving notes is never required to continue.
+PDF validation, text extraction, review, saved processing and learning history work through the local application service. With no AI credential, an explicit sample-preview action continues into a separately labeled lesson. It never claims to analyze the uploaded document. Link entry currently opens only the curated texting paper’s DOI; other paper links receive an honest limitation and can be supplied as PDFs instead.
 
-The frontend makes zero API requests. Feedback is authored, not live AI. Custom writing is not assessed, confidence is self-reported, and completion is not a mastery score. Original answers stay fixed after evidence opens. Existing per-study tab drafts are preserved, including work saved before this simplification.
+Research adventures award **10 practice points per solved challenge**, once per challenge in that adventure, including successful retries and an optional bonus. Refreshing, duplicate submissions and explanation edits cannot duplicate that reward. Points derive from saved answer records; they do not grade free-form writing or certify learning. The home balance includes these saved research-adventure points and the existing curated-session points.
+
+The short-note paper examples remain available at their saved case URLs (`/#/research/lab/texting-lecture` and `/#/research/lab/garden-belonging`). They use authored content and no API requests. The main page no longer opens a study catalog in place of document input.
 
 See [PRODUCT_DIRECTION.md](PRODUCT_DIRECTION.md) for the single-mode scope and demonstration, [INTERACTION_REFERENCES.md](INTERACTION_REFERENCES.md) for the inspected educational interfaces, and [RESEARCH_LEARNING_DESIGN.md](RESEARCH_LEARNING_DESIGN.md) for the source-linked rationale and learning limits. These are design hypotheses, not evidence of an established learning benefit.
 
-## Compatibility workspaces
+## Learning workspaces
 
-The earlier six-quest curated adventure remains at `/#/classic`, the eight-challenge/upload workspace at `/#/research/learn`, and the authored explanation showcase at `/#/research/reasoning`. Existing saved links keep working when their API is available. They are not promoted as separate modes in the current front door. The [earlier curated production demo](https://nebius-hackathon-submission.vercel.app) predates this paper-exploration prototype.
+The six-quest curated adventure remains at `/#/classic`, the eight-challenge/upload workspace at `/#/research/learn`, and the authored explanation showcase at `/#/research/reasoning`. Existing saved links keep working when their API is available. The root sample action uses the familiar curated journey. The [earlier curated production demo](https://nebius-hackathon-submission.vercel.app) predates this paper-exploration prototype.
 
 The research API retains PDF extraction/OCR, guest history and reviewed generation. Its prompts now adapt to a paper’s research approach without requiring statistical tests for qualitative or conceptual material. This orchestration is tested with synthetic fixtures; new live generation remains unverified. See [RESEARCH_INTEGRATION.md](RESEARCH_INTEGRATION.md) for configuration and [REASONING_PREVIEW.md](REASONING_PREVIEW.md) for future live-review guardrails.
 
@@ -20,23 +22,23 @@ Design, module boundaries, acceptance and verification are in [DESIGN.md](DESIGN
 
 Requires Node.js **22.18 or newer within version 22** and npm.
 
-For the refined frontend prototype:
+For the complete local upload and learning preview:
 
 ```sh
 npm ci
-npm run dev:prototype
+npm run dev:preview
 ```
 
-Open **http://127.0.0.1:5173**. No environment file, database or AI credential is needed for the paper experience.
+Open **http://127.0.0.1:5173**. The command starts both the frontend and local PDF/learning service, uses local SQLite, and explicitly disables external AI calls. No environment file or AI credential is needed. It preserves the existing local preview database.
 
-To run the compatibility API and upload workspaces too:
+For your own environment configuration:
 
 ```sh
 cp .env.example .env
 npm run dev
 ```
 
-The example configuration enables local preview. `DEMO_MODE=true` also enables a separate sample study after real PDF extraction; that sample path is refused in production/Vercel. It never invents findings from an upload or silently replaces failed live inference.
+`DEMO_MODE=true` enables the separate sample lesson after real PDF extraction. This sample path is refused on Vercel/in production and never silently replaces failed live inference. `npm run dev:prototype` runs only the frontend and remains useful for the authored case URLs; it does not provide the upload service.
 
 For live reasoning assessment, set these values in the ignored root `.env`:
 
@@ -80,7 +82,7 @@ npm run test:live
 
 Verified October 14, 2026: type checking, production builds, and 15 automated checks passed. The simulated learner flow covers initial answer hiding, a failed request and retry, wrong-answer revision, saved-progress resumption, six completed quests, independent transfer answers, and dialog cancellation. All eight live cases produced the expected outcomes. Seven model-request durations ranged from 0.595 to 1.900 seconds in that run. This small check does not establish statistical teaching quality or a learning benefit.
 
-The current source passes 168 unit/service checks and 47 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
+The current source passes 169 unit/service checks and 50 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
 
 ## Scope and data
 

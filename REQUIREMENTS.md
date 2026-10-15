@@ -1,15 +1,17 @@
 # Requirements and acceptance evidence
 
-The latest direction is one refined frontend paper-investigation mode, broader than statistics and playable without backend integration. Preserve Gradly's blue identity and source boundaries. Earlier curated/upload journeys remain compatible at their saved routes; they are not extra modes in the public entry. Source changes continue in the existing PR to `main`. Live infrastructure setup and public deployment remain separate.
+The public entry must start with adding a paper, preserving both PDF upload and visible URL/DOI entry. It restores the earlier learning journey and point system, with a refined desktop hero, concise copy and responsive layout. Local PDF checking and explicitly labeled sample lessons work without an external AI credential. General URL import and live paper-specific generation remain separate integrations.
 
 ## Current prototype acceptance
 
-- One public flow connects a paper's question, approach, findings, interpretation and limitations. A content choice does not create another interaction mode.
+- The home exposes PDF, URL/DOI, sample/resume and practice points; inputs remain visible on a 1366×768 desktop viewport.
+- Research points award ten once per solved challenge per adventure and persist across refresh; explanation edits and duplicate requests do not create rewards.
+- The authored case flow connects a paper's question, approach, findings, interpretation and limitations. A content choice does not create another interaction mode.
 - The curated published case and clearly fictional qualitative case both complete through the same short-note reader, answer check, transfer and recap.
 - One note is shown at a time with direct Back/Next controls. Saving notes and personal writing are optional. Answer changes invalidate authored feedback; arbitrary writing never receives fabricated assessment.
 - The initial call survives the findings reveal, confidence remains self-reported, and completion never implies mastery.
 - Notes, revisions and per-case recovery work in tab storage with safe denial/corruption handling. Local export preserves source and fictional provenance and has a copyable fallback.
-- Every phase works with API requests blocked; the default experience makes zero API requests. `npm run dev:prototype` serves the frontend alone.
+- Authored case URLs work with API requests blocked. The upload-first home uses the local PDF/learning service; `npm run dev:preview` starts it without external AI calls.
 - Responsive, keyboard, reduced-motion and accessibility checks cover the full five-stage flow, with inspected render evidence. Existing compatibility regressions remain covered.
 
 `PRODUCT_DIRECTION.md` records the product reasoning and future evaluation needs. `TESTING.md` records actual verification and limits.

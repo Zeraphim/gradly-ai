@@ -1,4 +1,12 @@
 import { type Lesson, type LearningSession } from "./contracts.js";
+/** Practice credit, once per solved challenge in this adventure. */
+export function learningPoints(session: LearningSession): number {
+  return (
+    Object.values(session.answers).filter((attempts) =>
+      attempts.some((attempt) => attempt.correct),
+    ).length * 10
+  );
+}
 export function newSession(lesson: Lesson, id: string): LearningSession {
   return {
     id,
@@ -164,6 +172,7 @@ export function publicSession(s: LearningSession, l: Lesson) {
     index: s.index,
     phase: s.phase,
     version: s.version,
+    points: learningPoints(s),
     briefing: l.briefing,
     challenge,
     retrying: s.retrying,

@@ -2206,3 +2206,488 @@ html[data-reduced-motion="true"]
   transform: none;
   scale: 1;
 }
+
+/* Upload-first home: one hero, two visible ways to add a paper. */
+.welcome.upload-home {
+  width: min(1120px, calc(100% - 64px));
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 72px;
+  align-items: center;
+  margin: 0 auto;
+  padding: 56px 0;
+  min-height: calc(100svh - 130px);
+}
+.upload-home .upload-hero {
+  text-align: left;
+}
+.upload-home .upload-hero > .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.upload-home .upload-hero h1 {
+  font-size: clamp(44px, 4.5vw, 60px);
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+  margin: 16px 0 20px;
+}
+.upload-home .upload-hero h1 span {
+  color: #006b93;
+}
+.upload-home .upload-hero-lede {
+  max-width: 370px;
+  color: #4e5b6e;
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 0;
+}
+.upload-home .upload-hero-guide {
+  margin: 22px 0 16px;
+}
+.upload-home .upload-hero-guide .mascot {
+  width: 120px;
+  height: 120px;
+}
+.upload-home .upload-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+}
+.upload-home .upload-hero-actions button {
+  min-height: 44px;
+  font-size: 13px;
+  padding-left: 0;
+}
+.upload-home .upload-card {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 32px;
+  border: 1px solid #cddfe9;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 5px 0 #e0eaf0;
+}
+.upload-home .upload-card.dragging {
+  border-color: #006b93;
+  background: #eef8fd;
+}
+.upload-home .paper-illustration,
+.upload-home .upload-card > .eyebrow,
+.upload-home .upload-card > .lede {
+  display: none;
+}
+.upload-home .upload-card h2 {
+  text-align: left;
+  font-size: 25px;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+  margin: 0 0 28px;
+}
+.upload-home .upload-button {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 0;
+}
+.upload-home .micro {
+  font-size: 12px;
+  margin: 12px 0 0;
+}
+.upload-home .home-paper-link {
+  margin-top: 0;
+}
+.upload-home .home-paper-link .divider {
+  margin: 24px 0 20px;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.upload-home .paper-link-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 750;
+  text-align: left;
+  color: #004566;
+  margin-bottom: 9px;
+}
+.upload-home .link-form {
+  background: #fff;
+  border: 1px solid #bdcdd8;
+}
+.upload-home .link-form input {
+  min-width: 0;
+  font-size: 14px;
+}
+.upload-home .scope-note {
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+}
+.upload-home .home-preview-details {
+  margin: 22px 0 0;
+  border-top: 1px solid #e0e7ec;
+  padding-top: 10px;
+  text-align: left;
+}
+.upload-home .home-preview-details summary {
+  min-height: 44px;
+  padding: 10px 0;
+  font-size: 12px;
+  color: #536574;
+  cursor: pointer;
+}
+.upload-home .home-preview-details p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #536574;
+  margin-bottom: 0;
+}
+@media (max-width: 900px) {
+  .welcome.upload-home {
+    width: min(600px, calc(100% - 40px));
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 32px 0;
+    min-height: 0;
+  }
+  .upload-home .upload-hero h1 {
+    font-size: 42px;
+    margin-bottom: 14px;
+  }
+  .upload-home .upload-hero-lede {
+    max-width: 100%;
+    font-size: 16px;
+  }
+  .upload-home .upload-hero-guide {
+    display: none;
+  }
+  .upload-home .upload-hero-actions {
+    margin-top: 12px;
+  }
+  .upload-home .upload-card {
+    padding: 26px;
+  }
+}
+@media (max-width: 480px) {
+  .welcome.upload-home {
+    width: calc(100% - 32px);
+    padding-top: 24px;
+  }
+  .upload-home .upload-hero h1 {
+    font-size: 36px;
+  }
+  .upload-home .upload-card {
+    padding: 22px 20px;
+    border-radius: 18px;
+  }
+  .upload-home .upload-card h2 {
+    font-size: 23px;
+    margin-bottom: 24px;
+  }
+  .upload-home .link-form input {
+    font-size: 16px;
+  }
+}
+
+/* Give the entry a crafted workspace composition without adding copy. */
+.welcome.upload-home {
+  position: relative;
+  width: min(1240px, calc(100% - 64px));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 72px;
+  min-height: 0;
+  margin: 32px auto 40px;
+  padding: 48px;
+  border: 1px solid #dce8ee;
+  border-radius: 32px;
+  background: linear-gradient(115deg, #edf7fc 0%, #f5f9fb 48%, #fbfcfd 75%);
+  overflow: hidden;
+}
+.upload-home .upload-hero {
+  position: relative;
+  z-index: 1;
+}
+.upload-home .upload-hero > .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+}
+.upload-home .upload-hero > .eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #0981aa;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #d8eef8;
+}
+.upload-home .upload-hero h1 {
+  font-size: clamp(44px, 4.4vw, 60px);
+  margin-top: 20px;
+}
+.upload-home .upload-hero h1 > span {
+  position: relative;
+}
+.upload-home .upload-hero h1 > span::after {
+  content: "";
+  position: absolute;
+  height: 5px;
+  border-radius: 50%;
+  background: #f3b544;
+  bottom: -8px;
+  left: 2px;
+  width: 52%;
+  transform: rotate(-2deg);
+}
+.upload-home .upload-hero-lede {
+  margin-top: 26px;
+  font-size: 16px;
+  max-width: 350px;
+}
+.upload-home .upload-hero-guide {
+  position: relative;
+  height: 194px;
+  margin: 14px 0 18px;
+  max-width: 420px;
+}
+.upload-home .upload-hero-guide::before {
+  content: "";
+  position: absolute;
+  inset: 12px 0 -8px;
+  background-image: radial-gradient(#a7c7d9 1px, transparent 1px);
+  background-size: 17px 17px;
+  opacity: 0.35;
+  mask-image: radial-gradient(ellipse, #000 25%, transparent 70%);
+}
+.upload-home .upload-hero-guide .mascot {
+  position: absolute;
+  bottom: 0;
+  left: 24px;
+  width: 140px;
+  height: 140px;
+  z-index: 3;
+  filter: drop-shadow(0 8px 7px #254d6715);
+}
+.upload-home .hero-paper-stack {
+  position: absolute;
+  left: 202px;
+  top: 8px;
+  width: 126px;
+  height: 153px;
+  transform: rotate(9deg);
+}
+.upload-home .hero-paper-stack::before,
+.upload-home .hero-paper-stack::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid #bed4e0;
+  border-radius: 10px;
+  background: #fff;
+  transform: translate(-10px, 7px) rotate(-9deg);
+}
+.upload-home .hero-paper-stack::before {
+  transform: translate(-18px, 12px) rotate(-17deg);
+  background: #edf7fd;
+}
+.upload-home .hero-paper-sheet {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: 15px;
+  border: 1px solid #b0ccdc;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 6px 16px #0c4e6c12;
+  color: #006b93;
+}
+.upload-home .hero-paper-sheet > span {
+  display: block;
+  height: 4px;
+  margin-top: 8px;
+  border-radius: 3px;
+  background: #dce9f1;
+}
+.upload-home .hero-paper-sheet > .hero-paper-title {
+  height: 6px;
+  width: 75%;
+  margin: 12px 0;
+  background: #80b7d0;
+}
+.upload-home .hero-paper-sheet > .hero-paper-short {
+  width: 65%;
+}
+.upload-home .hero-paper-result {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 13px;
+  padding: 6px;
+  background: #eef8f3;
+  border-radius: 5px;
+  color: #377558;
+}
+.upload-home .hero-paper-result i {
+  width: 22px;
+  height: 3px;
+  background: #bdd7c9;
+  border-radius: 2px;
+}
+.upload-home .hero-note-token {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border-radius: 11px;
+  background: #fff;
+  border: 1px solid #c5dce9;
+  color: #006b93;
+  box-shadow: 0 4px 0 #d9e8f1;
+  z-index: 4;
+}
+.upload-home .token-question {
+  top: 20px;
+  left: 130px;
+  transform: rotate(-9deg);
+}
+.upload-home .token-insight {
+  right: 35px;
+  bottom: 28px;
+  color: #a16412;
+  background: #fff8e9;
+  border-color: #e9d5a9;
+  transform: rotate(8deg);
+}
+.upload-home .hero-evidence-path {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #76a9c1;
+  z-index: 2;
+}
+.upload-home .upload-hero-actions {
+  gap: 10px;
+}
+.upload-home .upload-hero-actions button {
+  padding: 10px 12px;
+  border: 1px solid #ccdee9;
+  border-radius: 10px;
+  background: #ffffffc9;
+  color: #004566;
+  font-size: 12px;
+  gap: 7px;
+}
+.upload-home .upload-card {
+  position: relative;
+  z-index: 1;
+  padding: 30px;
+  border-color: #d8e4eb;
+  border-radius: 22px;
+  box-shadow:
+    0 14px 35px #234e6410,
+    0 4px 0 #dce8ef;
+}
+.upload-home .upload-card h2 {
+  margin-bottom: 22px;
+  font-size: 25px;
+}
+.upload-home .home-upload-well {
+  border: 1.5px dashed #9ec4d8;
+  border-radius: 14px;
+  padding: 20px 18px 16px;
+  background: #f3f9fd;
+}
+.upload-home .upload-button {
+  font-size: 14px;
+  min-height: 50px;
+}
+.upload-home .home-upload-well .micro {
+  font-size: 11px;
+  margin-top: 14px;
+}
+.upload-home .paper-link-label {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.upload-home .link-form {
+  border-radius: 12px;
+  padding: 6px 6px 6px 12px;
+  box-shadow: 0 2px 3px #1b4d6505;
+}
+.upload-home .scope-note {
+  font-size: 10px;
+  margin-top: 9px;
+}
+.upload-home .home-preview-details {
+  margin-top: 18px;
+  padding-top: 8px;
+}
+.upload-home .home-preview-details summary {
+  font-size: 11px;
+}
+@media (min-width: 901px) and (max-width: 1100px) {
+  .welcome.upload-home {
+    gap: 34px;
+    padding: 34px;
+  }
+  .upload-home .hero-paper-stack {
+    left: 170px;
+  }
+  .upload-home .token-insight {
+    right: 0;
+  }
+}
+@media (max-width: 900px) {
+  .welcome.upload-home {
+    width: min(620px, calc(100% - 40px));
+    grid-template-columns: 1fr;
+    padding: 30px;
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .upload-home .upload-hero h1 {
+    font-size: 42px;
+  }
+  .upload-home .upload-hero-lede {
+    max-width: 100%;
+  }
+  .upload-home .upload-hero-guide {
+    display: none;
+  }
+  .upload-home .upload-hero-actions {
+    margin-top: 18px;
+  }
+  .upload-home .upload-card {
+    padding: 26px;
+  }
+}
+@media (max-width: 480px) {
+  .welcome.upload-home {
+    width: calc(100% - 24px);
+    border-radius: 22px;
+    margin: 16px auto 28px;
+    padding: 22px 16px;
+    gap: 22px;
+  }
+  .upload-home .upload-hero h1 {
+    font-size: 37px;
+  }
+  .upload-home .upload-hero-lede {
+    font-size: 15px;
+  }
+  .upload-home .upload-card {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+  .upload-home .home-upload-well {
+    padding: 16px 12px;
+  }
+  .upload-home .link-form input {
+    font-size: 16px;
+  }
+}

@@ -18,6 +18,7 @@ export type AdventureRecord = {
   index: number;
   created: string;
   source?: "featured" | "generated" | "demo";
+  points?: number;
 };
 export type DocumentRecord = {
   id: string;

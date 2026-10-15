@@ -4,7 +4,9 @@ Gradly keeps the existing React/Vite + Express TypeScript workspaces, shared con
 
 ## Current public experience
 
-`App.tsx` is a small hash router. The root and `#/research/lab` lazy-load `PaperLab`, a browser-only paper investigation with one shared flow for a published reference case and a fictional qualitative case. It makes no API request. Earlier routes lazy-load `LegacyApp`, preserving saved links while keeping its services and UI out of the default experience.
+`App.tsx` is a small hash router. Root and `#/research/lab` render the upload-first `LegacyApp` entry, which retains the real PDF/processing/learning service. Explicit `#/research/lab/{caseId}` URLs lazy-load `PaperLab`, preserving authored paper examples without replacing upload. Research workspace routes keep their original extraction, ownership, consent and saved-state boundaries.
+
+`npm run dev:preview` starts frontend and local API with preview/sample flags and local SQLite, while forcing an empty provider credential. Research points derive from each saved challenge’s successful attempts, once per challenge ID per adventure; session and history responses expose only that computed total. The home sums saved adventure points and existing curated-session points. No new reward ledger or database migration is required.
 
 `case-types.ts` defines a paper through its question, design, findings, limitations, source-labelled evidence, short summaries, claim options and transfer setting. `reference-case.ts` and `research-cases.ts` supply explicit reference/fictional provenance. `case-state.ts` validates per-case tab drafts, recomputes selected-card/claim guidance, rejects impossible saved phases and produces local text notes. It stores inputs rather than verdicts. The first claim and confidence become read-only once evidence is opened. The guide does not assess free text or award mastery.
 

@@ -1,6 +1,8 @@
 # Gradly design
 
-The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public prototype uses the earlier guided-lesson flow as its navigation reference. The main path has one central task, familiar answer cards and a persistent primary action. The original hero and PDF/link controls remain in the compatibility workspace. The user's blue-palette instruction supersedes the Stitch export's original green primary color.
+The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public home restores the upload-first entry. The desktop hero pairs a short purpose statement and supplied mascot/paper illustration with one input card. PDF upload and paper URL/DOI entry are visible together, including on a 1366×768 viewport. Repeated instructions, workflow lists, large sample cards and full-width resume notices are replaced with compact actions; preview limits remain available in a disclosure. The original blue palette and tactile controls are retained.
+
+The header shows My documents, practice points and help. Research adventures display their server-derived points and retain the original challenge sequence. Ten points are awarded once per solved challenge per adventure, with no claim of mastery. Root and the previously shared lab index now lead to upload. The detailed paper-example flow described below remains available at its saved case URLs.
 
 ## Paper exploration
 

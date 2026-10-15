@@ -444,9 +444,17 @@ function GradlyWorkspace({
       </a>
       <header className="header">
         <div className="nav">
-          <Link className="brand" href="/">
+          <a
+            className="brand"
+            href="#"
+            aria-label="Gradly home"
+            onClick={(event) => {
+              event.preventDefault();
+              onExit();
+            }}
+          >
             <BrandLogo />
-          </Link>
+          </a>
           <nav aria-label="Research navigation">
             <button className="btn compact outline" onClick={onExit}>
               <span className="desktop-label">Gradly home</span>
@@ -472,6 +480,15 @@ function GradlyWorkspace({
           <Link className="guest-pill" href="/settings">
             Guest settings
           </Link>
+          {session ? (
+            <span
+              className="research-points"
+              aria-label={`${session.points ?? 0} practice points`}
+            >
+              <Icon name="star" size={17} />
+              <strong>{session.points ?? 0}</strong> points
+            </span>
+          ) : null}
         </div>
       </header>
       <main
@@ -1127,6 +1144,10 @@ function GradlyWorkspace({
                   <p>
                     You made the decisions. Now connect your reasoning with the
                     original research.
+                  </p>
+                  <p className="research-points-total">
+                    {session.points ?? 0} practice points earned · 10 per solved
+                    challenge
                   </p>
                 </div>
                 <div className="metrics">

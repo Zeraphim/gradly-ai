@@ -26,12 +26,16 @@ export function Welcome({
   onResume,
   onResearchFile,
   complete = false,
+  uploadFirst = false,
+  samplePreview = false,
 }: {
   onStart: (label: string) => void;
   session: Session;
   onResume: () => void;
   onResearchFile?: (file: File) => void;
   complete?: boolean;
+  uploadFirst?: boolean;
+  samplePreview?: boolean;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const checkVersion = useRef(0);
@@ -124,18 +128,92 @@ export function Welcome({
     void chooseFile(event.dataTransfer.files[0]);
   }
   return (
-    <main id="main" className="welcome page-enter">
-      <div className="welcome-intro">
-        <Mascot pose="approving" />
-        <div className="speech">
-          <span className="eyebrow">MEET YOUR RESEARCH GUIDE</span>
-          <p>
-            Big paper? Small steps.
+    <main
+      id="main"
+      tabIndex={-1}
+      className={`welcome page-enter ${uploadFirst ? "upload-home" : ""}`}
+    >
+      {uploadFirst ? (
+        <section className="upload-hero" aria-labelledby="upload-hero-title">
+          <span className="eyebrow blue-text">YOUR RESEARCH COMPANION</span>
+          <h1 id="upload-hero-title">
+            Big paper?
             <br />
-            Let’s turn reading into <strong>reasoning.</strong>
+            <span>Small steps.</span>
+          </h1>
+          <p className="upload-hero-lede">
+            Understand your paper through questions, evidence and feedback.
           </p>
+          <div className="upload-hero-guide" aria-hidden="true">
+            <div className="hero-paper-stack">
+              <div className="hero-paper-sheet">
+                <FileText size={23} />
+                <span className="hero-paper-title" />
+                <span />
+                <span />
+                <span className="hero-paper-short" />
+                <div className="hero-paper-result">
+                  <Check size={17} />
+                  <i />
+                  <i />
+                </div>
+              </div>
+            </div>
+            <div className="hero-note-token token-question">
+              <BookOpen size={18} />
+            </div>
+            <div className="hero-note-token token-insight">
+              <Sparkles size={19} />
+            </div>
+            <svg
+              className="hero-evidence-path"
+              viewBox="0 0 420 200"
+              fill="none"
+            >
+              <path
+                d="M42 125C110 186 162 174 191 134C222 87 278 71 358 93"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeDasharray="4 6"
+              />
+              <path
+                d="m348 85 12 9-14 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <Mascot pose="guiding" />
+          </div>
+          <div className="upload-hero-actions">
+            <button
+              className="text-button"
+              onClick={() => onStart("Gingerich & Lineweaver · 2014")}
+            >
+              <BookOpen size={17} /> Try a sample paper <ArrowRight size={17} />
+            </button>
+            {session.started ? (
+              <button className="text-button" onClick={onResume}>
+                {complete ? "Review adventure" : "Resume adventure"}
+                <ArrowRight size={17} />
+              </button>
+            ) : null}
+          </div>
+        </section>
+      ) : (
+        <div className="welcome-intro">
+          <Mascot pose="approving" />
+          <div className="speech">
+            <span className="eyebrow">MEET YOUR RESEARCH GUIDE</span>
+            <p>
+              Big paper? Small steps.
+              <br />
+              Let’s turn reading into <strong>reasoning.</strong>
+            </p>
+          </div>
         </div>
-      </div>
+      )}
       <section
         className={`upload-card ${dragging ? "dragging" : ""}`}
         onDragOver={(e) => {
@@ -149,81 +227,129 @@ export function Welcome({
         <div className="paper-illustration" aria-hidden="true">
           <FileText size={58} strokeWidth={1.8} />
           <span className="floating-tag">
-            <Sparkles size={13} /> SIX QUESTS
+            <Sparkles size={13} /> {uploadFirst ? "YOUR PAPER" : "SIX QUESTS"}
           </span>
           <span className="paper-star">✦</span>
         </div>
-        <span className="eyebrow green-text">YOUR NEXT RESEARCH ADVENTURE</span>
-        <h1 id="welcome-title">
-          A little curiosity.
-          <br />A lot of discovery.
-        </h1>
+        <span className="eyebrow green-text">
+          {uploadFirst
+            ? "START WITH YOUR PAPER"
+            : "YOUR NEXT RESEARCH ADVENTURE"}
+        </span>
+        {uploadFirst ? (
+          <h2 id="welcome-title">Add your paper</h2>
+        ) : (
+          <h1 id="welcome-title">
+            A little curiosity.
+            <br />A lot of discovery.
+          </h1>
+        )}
         <p className="lede">
-          Make a choice. Explain your thinking.
-          <br />
-          Then see what the research actually says.
+          {uploadFirst ? (
+            "Choose a PDF or paste a paper link below."
+          ) : (
+            <>
+              Make a choice. Explain your thinking.
+              <br />
+              Then see what the research actually says.
+            </>
+          )}
         </p>
-        <input
-          ref={fileInput}
-          type="file"
-          accept=".pdf,application/pdf"
-          hidden
-          onChange={(e) => void chooseFile(e.target.files?.[0])}
-        />
-        <button
-          className="button primary upload-button"
-          onClick={() => fileInput.current?.click()}
-          disabled={checking}
-        >
-          <Upload size={20} />
-          {checking
-            ? "Checking your paper…"
-            : onResearchFile
-              ? "Choose a research PDF"
-              : "Choose the study PDF"}
-        </button>
-        <p className="micro">
-          Or drop it here.{" "}
-          {onResearchFile
-            ? "Review your PDF before server extraction and external AI processing."
-            : "Your file stays on your device."}
-        </p>
-        <div className="divider">
-          <span />
-          or use its paper link
-          <span />
-        </div>
-        <form className="link-form" onSubmit={submitLink}>
-          <Link size={20} aria-hidden="true" />
-          <label className="sr-only" htmlFor="paper-link">
-            Paper link or digital object identifier
-          </label>
+        <div className="home-upload-well">
           <input
-            id="paper-link"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            placeholder="Paste the curated paper’s link…"
+            ref={fileInput}
+            type="file"
+            accept=".pdf,application/pdf"
+            hidden
+            onChange={(e) => void chooseFile(e.target.files?.[0])}
           />
           <button
-            className="icon-button blue"
-            type="submit"
-            aria-label="Open paper adventure"
+            className="button primary upload-button"
+            onClick={() => fileInput.current?.click()}
+            disabled={checking}
           >
-            <ArrowRight size={22} />
+            <Upload size={20} />
+            {checking
+              ? "Checking your paper…"
+              : uploadFirst
+                ? "Upload PDF"
+                : onResearchFile
+                  ? "Choose a research PDF"
+                  : "Choose the study PDF"}
           </button>
-        </form>
-        <p className="scope-note">
-          {onResearchFile
-            ? "Use a PDF for a new investigation, or the curated paper’s DOI below for the six-quest adventure."
-            : "A focused pilot with one curated paper. General paper extraction is not enabled on this host."}
-        </p>
+          <p className="micro">
+            {uploadFirst ? (
+              "PDF up to 4 MB · or drag and drop"
+            ) : (
+              <>
+                Or drop it here.{" "}
+                {onResearchFile
+                  ? "Review your PDF before server extraction and external AI processing."
+                  : "Your file stays on your device."}
+              </>
+            )}
+          </p>
+        </div>
+        <div className="home-paper-link">
+          <div className="divider">
+            <span />
+            {uploadFirst ? "or" : "or use its paper link"}
+            <span />
+          </div>
+          <label
+            className={uploadFirst ? "paper-link-label" : "sr-only"}
+            htmlFor="paper-link"
+          >
+            {uploadFirst
+              ? "Paper URL or DOI"
+              : "Paper link or digital object identifier"}
+          </label>
+          <form className="link-form" onSubmit={submitLink}>
+            <Link size={20} aria-hidden="true" />
+            <input
+              id="paper-link"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              placeholder={
+                uploadFirst
+                  ? "Paste a paper URL or DOI…"
+                  : "Paste the curated paper’s link…"
+              }
+            />
+            <button
+              className="icon-button blue"
+              type="submit"
+              aria-label="Open paper adventure"
+            >
+              <ArrowRight size={22} />
+            </button>
+          </form>
+          <p className="scope-note">
+            {uploadFirst
+              ? "Link preview: sample paper only."
+              : onResearchFile
+                ? "Use a PDF for a new investigation, or the curated paper’s DOI below for the six-quest adventure."
+                : "A focused pilot with one curated paper. General paper extraction is not enabled on this host."}
+          </p>
+        </div>
+        {samplePreview ? (
+          <details className="home-preview-details">
+            <summary>Preview details</summary>
+            <p>
+              PDF checking and text review work locally. Lessons use a separate
+              sample, not an AI analysis of your upload. The link preview
+              supports DOI 10.1177/0098628313514177; upload a PDF for other
+              papers.
+            </p>
+          </details>
+        ) : null}
         {error ? (
           <p className="error-message" role="alert">
             {error}
           </p>
         ) : null}
       </section>
-      {session.started ? (
+      {session.started && !uploadFirst ? (
         <div className="resume-card">
           <div>
             <strong>
@@ -242,53 +368,61 @@ export function Welcome({
           </button>
         </div>
       ) : null}
-      <section className="sample-section" aria-labelledby="sample-title">
-        <div className="section-label">
-          <span className="line" />
-          <h2 id="sample-title">No paper handy? Start here.</h2>
-          <span className="line" />
-        </div>
-        <button
-          className="sample-card"
-          onClick={() => onStart("Gingerich & Lineweaver · 2014")}
-        >
-          <span className="sample-icon">
-            <BookOpen size={28} />
-          </span>
-          <span className="sample-copy">
-            <span className="eyebrow blue-text">
-              COGNITIVE PSYCHOLOGY · 2014
-            </span>
-            <strong>Can you text and still learn?</strong>
-            <span>Gingerich & Lineweaver · A classroom experiment</span>
-          </span>
-          <span className="sample-arrow">
-            <ArrowRight size={23} />
-          </span>
-        </button>
-        <div className="reasoning-preview-entry">
-          <div>
-            <strong>A correct choice can still hide a misconception.</strong>
-            <p>Choose → Explain → Check evidence → Revise</p>
-            <span>Authored example · no AI calls</span>
+      {!uploadFirst ? (
+        <section className="sample-section" aria-labelledby="sample-title">
+          <div className="section-label">
+            <span className="line" />
+            <h2 id="sample-title">No paper handy? Start here.</h2>
+            <span className="line" />
           </div>
-          <a href="#/research/reasoning" className="reasoning-preview-link">
-            Try the reasoning preview
-            <ArrowRight size={18} aria-hidden="true" />
-          </a>
-        </div>
-        <div className="welcome-details">
-          <span>
-            <Clock3 size={16} /> About 10 minutes
-          </span>
-          <span>
-            <Check size={16} /> Evidence after your attempt
-          </span>
-          <span>
-            <Sparkles size={16} /> Two new scenarios
-          </span>
-        </div>
-      </section>
+          <button
+            className="sample-card"
+            onClick={() => onStart("Gingerich & Lineweaver · 2014")}
+          >
+            <span className="sample-icon">
+              <BookOpen size={28} />
+            </span>
+            <span className="sample-copy">
+              <span className="eyebrow blue-text">
+                COGNITIVE PSYCHOLOGY · 2014
+              </span>
+              <strong>Can you text and still learn?</strong>
+              <span>Gingerich & Lineweaver · A classroom experiment</span>
+            </span>
+            <span className="sample-arrow">
+              <ArrowRight size={23} />
+            </span>
+          </button>
+          {!uploadFirst ? (
+            <div className="reasoning-preview-entry">
+              <div>
+                <strong>
+                  A correct choice can still hide a misconception.
+                </strong>
+                <p>Choose → Explain → Check evidence → Revise</p>
+                <span>Authored example · no AI calls</span>
+              </div>
+              <a href="#/research/reasoning" className="reasoning-preview-link">
+                Try the reasoning preview
+                <ArrowRight size={18} aria-hidden="true" />
+              </a>
+            </div>
+          ) : null}
+          {!uploadFirst ? (
+            <div className="welcome-details">
+              <span>
+                <Clock3 size={16} /> About 10 minutes
+              </span>
+              <span>
+                <Check size={16} /> Evidence after your attempt
+              </span>
+              <span>
+                <Sparkles size={16} /> Two new scenarios
+              </span>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
     </main>
   );
 }

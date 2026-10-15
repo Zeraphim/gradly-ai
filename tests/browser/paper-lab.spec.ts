@@ -127,7 +127,7 @@ test.afterEach(async ({ page }) => {
   expect(errors.get(page)).toEqual([]);
 });
 
-test("the front door has a direct start, truthful study labels and lightweight images without an API", async ({
+test("authored examples keep lightweight artwork, provenance and a path to the upload home", async ({
   page,
 }) => {
   const images: string[] = [];
@@ -135,22 +135,13 @@ test("the front door has a direct start, truthful study labels and lightweight i
     if (new URL(request.url()).pathname.startsWith("/brand/"))
       images.push(request.url());
   });
-  await page.goto("/");
+  await page.goto(route());
   await expect(
-    page.getByRole("heading", {
-      name: "Understand a paper. One step at a time.",
-      exact: true,
-    }),
+    page.getByRole("heading", { level: 1, name: referenceCase.title }),
   ).toBeVisible();
   await expect(
-    page.getByText("Published paper", { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("Fictional practice study", { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByText(/Preview · authored content, no AI calls/),
-  ).toBeVisible();
+    page.getByRole("link", { name: "Gradly home", exact: true }),
+  ).toHaveAttribute("href", "#/research/lab");
   await expect.poll(() => images.length).toBeGreaterThan(0);
   expect(images.some((url) => url.endsWith(".png"))).toBe(false);
   await page.getByRole("button", { name: "Help", exact: true }).click();
@@ -161,10 +152,6 @@ test("the front door has a direct start, truthful study labels and lightweight i
   await expect(
     page.getByRole("button", { name: "Help", exact: true }),
   ).toBeFocused();
-  await page
-    .getByRole("link", { name: "Start exploring", exact: true })
-    .click();
-  await expect(page).toHaveURL(/#\/research\/lab\/texting-lecture$/);
 });
 
 for (const study of [referenceCase, garden]) {
@@ -409,13 +396,11 @@ test("step navigation keeps the original answer frozen and preserves drafts acro
   await conclude(page);
   await page.getByText("Add my explanation", { exact: false }).click();
   await page.getByLabel("My explanation", { exact: true }).fill(explanation);
-  await page.getByRole("link", { name: "All studies", exact: true }).click();
-  await page.getByRole("link", { name: /A shared garden/ }).click();
+  await page.goto(route(garden));
   await page
     .getByRole("radio", { name: garden.claims[1]!.text, exact: true })
     .check();
-  await page.getByRole("link", { name: "All studies", exact: true }).click();
-  await page.getByRole("link", { name: /One lecture/ }).click();
+  await page.goto(route(referenceCase));
   await stage(page, "claim");
   await page.getByText("Add my explanation", { exact: false }).click();
   await expect(page.getByLabel("My explanation", { exact: true })).toHaveValue(
@@ -438,8 +423,7 @@ test("step navigation keeps the original answer frozen and preserves drafts acro
   await expect(
     page.getByRole("button", { name: "Start exploring", exact: true }),
   ).toBeDisabled();
-  await page.getByRole("link", { name: "All studies", exact: true }).click();
-  await page.getByRole("link", { name: /A shared garden/ }).click();
+  await page.goto(route(garden));
   await expect(
     page.getByRole("radio", { name: garden.claims[1]!.text, exact: true }),
   ).toBeChecked();
@@ -492,8 +476,7 @@ test("denied storage leaves navigation and the complete frontend trail working",
       { exact: true },
     ),
   ).toBeVisible();
-  await page.getByRole("link", { name: "All studies", exact: true }).click();
-  await page.getByRole("link", { name: /A shared garden/ }).click();
+  await page.goto(route(garden));
   await stage(page, "claim");
   await tryIt(page, garden);
 });
@@ -578,13 +561,13 @@ for (const width of [1440, 768, 390]) {
         expect(box!.y + box!.height).toBeLessThanOrEqual(901);
       }
     }
-    await page.goto("/");
+    await page.goto(route());
     await page.getByRole("button", { name: "Help", exact: true }).click();
     await page
       .getByRole("checkbox", { name: "Reduce motion", exact: true })
       .check();
     await page.getByRole("button", { name: "Close help", exact: true }).click();
-    await audit("home");
+    await audit("help");
     await page.goto(route());
     await page
       .getByRole("radio", { name: referenceCase.claims[2]!.text, exact: true })

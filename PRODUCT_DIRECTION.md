@@ -1,10 +1,10 @@
 # One paper, one connected experience
 
-The public prototype now has one mode: **Start → Read → Choose → Try → Recap**. Its purpose is to help someone explain a paper’s question, approach, findings and boundaries after interacting with its evidence. Choosing a different study changes the content, not the interface or the learning mechanism.
+The public entry returns to the original **upload-first learning flow**: add a paper, review its extracted text, continue into challenges and inspect the evidence. PDF upload and URL/DOI entry stay visible on the desktop hero. Sample and resume actions stay compact, and practice points remain visible. The root and previously shared `/#/research/lab` both lead here.
 
-The original quantitative paper is a curated source-backed case. The qualitative garden case is explicitly fictional. It shows that the same mechanism can handle interpretations, different participant accounts and analytic limits without forcing statistical tests onto every paper. Neither case is represented as a new live AI analysis. Custom writing remains unassessed.
+Without AI credentials, real PDF checking leads to an explicit, separately labeled sample lesson. It does not create findings from the upload. The link preview currently supports the curated DOI, not arbitrary URL import. Research adventures award ten practice points once per solved challenge in each adventure; this is engagement credit, not a validated learning score.
 
-The older six-quest, research-upload and reasoning-showcase routes remain available for existing saved links and engineering compatibility. They are not promoted as additional modes in the public front door. The old home is at `/#/classic`; the current paper experience opens at `/` or `/#/research/lab`.
+The published and fictional short-note cases remain at their existing case URLs. Their guided **Start → Read → Choose → Try → Recap** flow remains available without API calls. They no longer replace the document-input home. Free-form writing in authored/local previews is never presented as AI assessed.
 
 ## What makes the interaction useful
 
