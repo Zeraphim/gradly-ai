@@ -17,7 +17,7 @@ test("upload home keeps PDF, DOI and points visible in clean desktop and mobile 
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Big paper? Small steps.",
+        name: "Upload your research paper",
         exact: true,
       }),
     ).toBeVisible();

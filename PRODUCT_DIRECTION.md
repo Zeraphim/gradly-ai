@@ -1,6 +1,6 @@
 # One paper, one connected experience
 
-The public entry returns to the original **upload-first learning flow**: add a paper, review its extracted text, continue into challenges and inspect the evidence. PDF upload and URL/DOI entry stay visible on the desktop hero. Sample and resume actions stay compact, and practice points remain visible. The root and previously shared `/#/research/lab` both lead here.
+The public entry returns to the original **upload-first learning flow**: add a paper, review its extracted text, continue into challenges and inspect the evidence. PDF upload and URL/DOI entry stay visible together in the original centered upload-screen layout, refined with concise copy and restrained surfaces. Sample and resume actions stay compact, and practice points remain visible. The root and previously shared `/#/research/lab` both lead here.
 
 Without AI credentials, real PDF checking leads to an explicit, separately labeled sample lesson. It does not create findings from the upload. The link preview currently supports the curated DOI, not arbitrary URL import. Research adventures award ten practice points once per solved challenge in each adventure; this is engagement credit, not a validated learning score.
 

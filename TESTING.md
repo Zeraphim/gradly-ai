@@ -47,6 +47,8 @@ Browser screenshots were inspected at 1440, 768 and 390 CSS pixels for the simpl
 
 Axe scans cover the new library and every paper stage/open reader, plus the compatibility hero, research entry/upload/support screens and a challenge. Keyboard actions and focus restoration are covered in the exercised paths. This is automated coverage for those states, not complete WCAG certification. Safari/Firefox, assistive-technology sessions and every possible uploaded-document layout remain outside the verified browser matrix.
 
+The centered-layout follow-up reran all three upload-home scenarios plus the preserved original hero scenario, the 21 Node/interface checks, TypeScript and Vercel packaging. This verifies the changed composition, PDF/DOI behavior, point persistence and classic upload entry without repeating unrelated backend suites. The preceding full run passed all 50 browser and 169 unit/service checks.
+
 ## Hosted/live acceptance still required
 
 Follow `RESEARCH_INTEGRATION.md`, then verify on the intended Vercel environment:

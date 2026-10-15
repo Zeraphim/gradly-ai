@@ -134,71 +134,17 @@ export function Welcome({
       className={`welcome page-enter ${uploadFirst ? "upload-home" : ""}`}
     >
       {uploadFirst ? (
-        <section className="upload-hero" aria-labelledby="upload-hero-title">
-          <span className="eyebrow blue-text">YOUR RESEARCH COMPANION</span>
-          <h1 id="upload-hero-title">
-            Big paper?
-            <br />
-            <span>Small steps.</span>
-          </h1>
-          <p className="upload-hero-lede">
-            Understand your paper through questions, evidence and feedback.
-          </p>
-          <div className="upload-hero-guide" aria-hidden="true">
-            <div className="hero-paper-stack">
-              <div className="hero-paper-sheet">
-                <FileText size={23} />
-                <span className="hero-paper-title" />
-                <span />
-                <span />
-                <span className="hero-paper-short" />
-                <div className="hero-paper-result">
-                  <Check size={17} />
-                  <i />
-                  <i />
-                </div>
-              </div>
-            </div>
-            <div className="hero-note-token token-question">
-              <BookOpen size={18} />
-            </div>
-            <div className="hero-note-token token-insight">
-              <Sparkles size={19} />
-            </div>
-            <svg
-              className="hero-evidence-path"
-              viewBox="0 0 420 200"
-              fill="none"
-            >
-              <path
-                d="M42 125C110 186 162 174 191 134C222 87 278 71 358 93"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeDasharray="4 6"
-              />
-              <path
-                d="m348 85 12 9-14 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <Mascot pose="guiding" />
-          </div>
-          <div className="upload-hero-actions">
-            <button
-              className="text-button"
-              onClick={() => onStart("Gingerich & Lineweaver · 2014")}
-            >
-              <BookOpen size={17} /> Try a sample paper <ArrowRight size={17} />
-            </button>
-            {session.started ? (
-              <button className="text-button" onClick={onResume}>
-                {complete ? "Review adventure" : "Resume adventure"}
-                <ArrowRight size={17} />
-              </button>
-            ) : null}
+        <section
+          className="welcome-intro home-guide"
+          aria-label="Your research guide"
+        >
+          <Mascot pose="guiding" />
+          <div className="speech">
+            <p>
+              Big paper? Small steps.
+              <br />
+              <strong>Let’s make sense of it.</strong>
+            </p>
           </div>
         </section>
       ) : (
@@ -226,10 +172,14 @@ export function Welcome({
       >
         <div className="paper-illustration" aria-hidden="true">
           <FileText size={58} strokeWidth={1.8} />
-          <span className="floating-tag">
-            <Sparkles size={13} /> {uploadFirst ? "YOUR PAPER" : "SIX QUESTS"}
-          </span>
-          <span className="paper-star">✦</span>
+          {!uploadFirst ? (
+            <>
+              <span className="floating-tag">
+                <Sparkles size={13} /> SIX QUESTS
+              </span>
+              <span className="paper-star">✦</span>
+            </>
+          ) : null}
         </div>
         <span className="eyebrow green-text">
           {uploadFirst
@@ -237,7 +187,7 @@ export function Welcome({
             : "YOUR NEXT RESEARCH ADVENTURE"}
         </span>
         {uploadFirst ? (
-          <h2 id="welcome-title">Add your paper</h2>
+          <h1 id="welcome-title">Upload your research paper</h1>
         ) : (
           <h1 id="welcome-title">
             A little curiosity.
@@ -246,7 +196,7 @@ export function Welcome({
         )}
         <p className="lede">
           {uploadFirst ? (
-            "Choose a PDF or paste a paper link below."
+            "Explore its ideas through questions, evidence and feedback."
           ) : (
             <>
               Make a choice. Explain your thinking.
@@ -349,6 +299,31 @@ export function Welcome({
           </p>
         ) : null}
       </section>
+      {uploadFirst ? (
+        <div
+          className={`home-secondary-actions ${session.started ? "has-resume" : ""}`}
+        >
+          <button
+            className="home-sample-action"
+            onClick={() => onStart("Gingerich & Lineweaver · 2014")}
+          >
+            <span className="home-sample-icon">
+              <BookOpen size={21} />
+            </span>
+            <span>
+              <small>No paper handy?</small>
+              <strong>Try a sample paper</strong>
+            </span>
+            <ArrowRight size={19} />
+          </button>
+          {session.started ? (
+            <button className="home-resume-action" onClick={onResume}>
+              {complete ? "Review adventure" : "Resume adventure"}
+              <ArrowRight size={18} />
+            </button>
+          ) : null}
+        </div>
+      ) : null}
       {session.started && !uploadFirst ? (
         <div className="resume-card">
           <div>

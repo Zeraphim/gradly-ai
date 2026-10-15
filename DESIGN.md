@@ -1,6 +1,8 @@
 # Gradly design
 
-The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public home restores the upload-first entry. The desktop hero pairs a short purpose statement and supplied mascot/paper illustration with one input card. PDF upload and paper URL/DOI entry are visible together, including on a 1366×768 viewport. Repeated instructions, workflow lists, large sample cards and full-width resume notices are replaced with compact actions; preview limits remain available in a disclosure. The original blue palette and tactile controls are retained.
+The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public home uses the original centered Gradly upload composition, refined in the blue design system. A compact mascot/speech introduction leads into one dashed document area, a direct upload heading, the PDF action and the visible URL/DOI field. Sample and resume actions sit in a compact row below. There is no outer hero frame, split-column layout, nested upload panel or decorative evidence diagram. Preview limits remain expandable.
+
+Typography, whitespace and a single tactile upload action establish the hierarchy. At 1366×768 and 1440×900, both document inputs remain above the fold. The centered layout stacks naturally on tablet and mobile while keeping points and document navigation in the header.
 
 The header shows My documents, practice points and help. Research adventures display their server-derived points and retain the original challenge sequence. Ten points are awarded once per solved challenge per adventure, with no claim of mastery. Root and the previously shared lab index now lead to upload. The detailed paper-example flow described below remains available at its saved case URLs.
 
