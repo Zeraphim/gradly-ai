@@ -1,4 +1,5 @@
 import express from "express";
+import { researchRouter } from "./research/router.js";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { existsSync } from "node:fs";
@@ -25,11 +26,15 @@ export function createApp(
   app.use(
     helmet({
       contentSecurityPolicy: {
-        directives: { "upgrade-insecure-requests": null },
+        directives: {
+          "upgrade-insecure-requests": null,
+          "frame-src": ["'self'", "blob:"],
+        },
       },
     }),
   );
   app.use(express.json({ limit: "12kb", strict: true }));
+  app.use("/api/research", researchRouter());
   const mode = options.preview
     ? "preview"
     : options.provider

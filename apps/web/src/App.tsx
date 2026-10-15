@@ -1,4 +1,7 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
+const ResearchApp = lazy(() =>
+  import("./research/ResearchApp.js").then((m) => ({ default: m.ResearchApp })),
+);
 import { BrandLogo } from "./components/BrandLogo.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BookOpen, Check, CircleHelp, Flag, Sparkles, X } from "lucide-react";
@@ -59,9 +62,32 @@ function validLesson(raw: unknown): raw is Lesson {
   );
 }
 export function App() {
-  const [screen, setScreen] = useState<"welcome" | "prepare" | "lesson">(
-    "welcome",
-  );
+  const [screen, setScreen] = useState<
+    "welcome" | "prepare" | "lesson" | "research"
+  >(window.location.hash.startsWith("#/research") ? "research" : "welcome");
+  const [researchAvailable, setResearchAvailable] = useState(false);
+  const [researchFile, setResearchFile] = useState<File | null>(null);
+  useEffect(() => {
+    fetch("/api/research/config")
+      .then((r) => r.json())
+      .then((data) => setResearchAvailable(data.storage === true))
+      .catch(() => {});
+    const changed = () =>
+      setScreen((s) =>
+        window.location.hash.startsWith("#/research")
+          ? "research"
+          : s === "research"
+            ? "welcome"
+            : s,
+      );
+    window.addEventListener("hashchange", changed);
+    return () => window.removeEventListener("hashchange", changed);
+  }, []);
+  function openResearch(file?: File) {
+    setResearchFile(file ?? null);
+    window.location.hash = file ? "/research/upload" : "/research/learn";
+    setScreen("research");
+  }
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [session, setSession] = useState(newSession);
   const [label, setLabel] = useState("");
@@ -221,6 +247,24 @@ export function App() {
   const reviewId = dialog?.startsWith("review:") ? dialog.slice(7) : null;
   const reviewQuestion = lesson?.questions.find((q) => q.id === reviewId);
   const reviewState = reviewId ? session.questions[reviewId] : null;
+  if (screen === "research")
+    return (
+      <Suspense
+        fallback={
+          <main id="main">
+            <p>Opening the research workspace…</p>
+          </main>
+        }
+      >
+        <ResearchApp
+          initialFile={researchFile}
+          onExit={() => {
+            window.location.hash = "";
+            changeScreen("welcome");
+          }}
+        />
+      </Suspense>
+    );
   return (
     <>
       <a href="#main" className="skip-link">
@@ -247,6 +291,9 @@ export function App() {
               Adventure
             </button>
             <button onClick={() => setDialog("progress")}>My progress</button>
+            {researchAvailable ? (
+              <button onClick={() => openResearch()}>Research Lab</button>
+            ) : null}
           </nav>
           <div className="header-badges">
             <span className="points-pill">
@@ -286,6 +333,9 @@ export function App() {
       {screen === "welcome" ? (
         <Welcome
           onStart={prepare}
+          onResearchFile={
+            researchAvailable ? (file) => openResearch(file) : undefined
+          }
           session={session}
           onResume={() => {
             if (lesson) changeScreen("lesson");

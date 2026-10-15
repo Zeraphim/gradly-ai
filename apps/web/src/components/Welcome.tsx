@@ -18,10 +18,12 @@ export function Welcome({
   onStart,
   session,
   onResume,
+  onResearchFile,
 }: {
   onStart: (label: string) => void;
   session: Session;
   onResume: () => void;
+  onResearchFile?: (file: File) => void;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [link, setLink] = useState("");
@@ -33,13 +35,31 @@ export function Welcome({
     setError("");
     if (
       !file.name.toLowerCase().endsWith(".pdf") ||
-      file.size > 20 * 1024 * 1024
+      file.size > (onResearchFile ? 4000000 : 20 * 1024 * 1024)
     ) {
-      setError("Choose a research paper in PDF format, under 20 megabytes.");
+      setError(
+        onResearchFile
+          ? "Choose a PDF under 4 megabytes."
+          : "Choose a research paper in PDF format, under 20 megabytes.",
+      );
       return;
     }
     setChecking(true);
     try {
+      if (onResearchFile) {
+        if (
+          !file.size ||
+          new TextDecoder().decode(await file.slice(0, 5).arrayBuffer()) !==
+            "%PDF-"
+        ) {
+          setError(
+            "This file is empty or does not contain a valid PDF header.",
+          );
+          return;
+        }
+        onResearchFile(file);
+        return;
+      }
       const digest = await crypto.subtle.digest(
         "SHA-256",
         await file.arrayBuffer(),
@@ -136,10 +156,17 @@ export function Welcome({
           disabled={checking}
         >
           <Upload size={20} />
-          {checking ? "Checking your paper…" : "Choose the study PDF"}
+          {checking
+            ? "Checking your paper…"
+            : onResearchFile
+              ? "Choose a research PDF"
+              : "Choose the study PDF"}
         </button>
         <p className="micro">
-          Or drop it here. Your file stays on your device.
+          Or drop it here.{" "}
+          {onResearchFile
+            ? "Review your PDF before server extraction and external AI processing."
+            : "Your file stays on your device."}
         </p>
         <div className="divider">
           <span />
@@ -166,8 +193,9 @@ export function Welcome({
           </button>
         </form>
         <p className="scope-note">
-          A focused pilot with one curated paper. General paper extraction is
-          not available yet.
+          {onResearchFile
+            ? "Use a PDF for a new investigation, or the curated paper’s DOI below for the six-quest adventure."
+            : "A focused pilot with one curated paper. General paper extraction is not enabled on this host."}
         </p>
         {error ? (
           <p className="error-message" role="alert">

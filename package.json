@@ -16,13 +16,17 @@
     "start": "node --env-file-if-exists=.env apps/api/dist/apps/api/src/index.js",
     "typecheck": "tsc --noEmit && npm run typecheck --workspace @paperquest/web",
     "test": "node --import tsx --test tests/*.test.ts",
-    "check": "npm run typecheck && npm test && npm run build",
+    "check": "npm run typecheck && npm test && npm run test:research && npm run build",
     "test:live": "node --env-file-if-exists=.env --import tsx scripts/verify-live.ts",
     "build:vercel": "npm run build --workspace @paperquest/contracts && npm run build --workspace @paperquest/web && node scripts/prepare-vercel.mjs",
     "predev": "npm run build --workspace @paperquest/contracts",
-    "pretest": "npm run build --workspace @paperquest/contracts"
+    "pretest": "npm run build --workspace @paperquest/contracts",
+    "test:research": "vitest run",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.64.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
     "@types/jsdom": "^30.0.0",
@@ -30,7 +34,8 @@
     "jsdom": "^30.1.2",
     "prettier": "3.9.10",
     "tsx": "4.23.15",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "vitest": "^5.0.4"
   },
   "dependencies": {
     "express": "5.3.0"

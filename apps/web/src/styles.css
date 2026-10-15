@@ -12,10 +12,10 @@
   color: #1b1c1c;
   background: #fbf9f8;
   font-synthesis: none;
-  --green: #58cc02;
-  --green-dark: #2b6c00;
-  --green-ink: #173e00;
-  --green-soft: #e9f8dc;
+  --green: #1cb0f6;
+  --green-dark: #006b93;
+  --green-ink: #003d59;
+  --green-soft: #e5f5ff;
   --blue: #006b93;
   --blue-dark: #004566;
   --orange: #ff8414;
@@ -274,7 +274,7 @@ svg {
 }
 .button.primary {
   background: var(--blue);
-  color: white;
+  color: #fff;
   box-shadow: 0 4px 0 var(--blue-dark);
 }
 .button.primary:hover:not(:disabled) {
@@ -291,7 +291,7 @@ svg {
   box-shadow: 0 3px 0 #c2c9bb;
 }
 .button.neutral:hover {
-  background: #f5f7f1;
+  background: #f0f8fd;
   transform: translateY(-1px);
 }
 .button.neutral:active {
@@ -300,7 +300,7 @@ svg {
 }
 .button:disabled {
   background: #e4e8df;
-  color: #52604b;
+  color: #4e5b6e;
   box-shadow: 0 3px 0 #c9d0c2;
 }
 .text-button {
@@ -447,7 +447,8 @@ svg {
   transform: rotate(20deg);
 }
 .upload-card h1 {
-  font-size: clamp(32px, 4vw, 45px);
+  font-size: clamp(32px, 3.7vw, 45px);
+  text-wrap: balance;
   margin: 12px 0 15px;
 }
 .lede {
@@ -506,7 +507,7 @@ svg {
   outline: none;
 }
 .link-form input::placeholder {
-  color: #52604b;
+  color: #4e5b6e;
 }
 .scope-note {
   max-width: 510px;
@@ -536,7 +537,7 @@ svg {
   gap: 16px;
   padding: 20px;
   margin-top: 24px;
-  border: 1px solid #90bb71;
+  border: 1px solid #79b5ca;
   border-radius: 18px;
   background: var(--green-soft);
 }
@@ -636,7 +637,7 @@ svg {
   color: var(--green-dark);
 }
 .app-footer {
-  border-top: 1px solid #e1e4dc;
+  border-top: 1px solid #dfe5ec;
   background: #f5f4f1;
   padding: 22px 38px;
   display: flex;
@@ -702,7 +703,7 @@ svg {
 }
 .progress-track {
   height: 13px;
-  background: #e5e8e0;
+  background: #e5edf3;
   border-radius: 20px;
   padding: 3px;
   overflow: hidden;
@@ -723,7 +724,7 @@ svg {
   left: 4px;
   right: 4px;
   height: 2px;
-  background: #92eb50;
+  background: #1cb0f6;
   border-radius: 10px;
 }
 .preparation-list {
@@ -859,7 +860,7 @@ svg {
   color: var(--muted);
 }
 .quest-path .done button:hover {
-  background: #f0f5eb;
+  background: #eaf6ff;
 }
 .path-number {
   display: grid;
@@ -1044,7 +1045,7 @@ svg {
   transform-origin: left;
 }
 .green-score .score-track {
-  background: #cce1be;
+  background: #c8dfed;
 }
 .green-score .score-track span {
   background: var(--green-dark);
@@ -1073,7 +1074,7 @@ svg {
   gap: 14px;
   background: white;
   border: 1px solid var(--control-line);
-  box-shadow: 0 3px 0 #c7cebf;
+  box-shadow: 0 3px 0 #bfd0dc;
   border-radius: 13px;
   margin-bottom: 12px;
   padding: 15px 16px;
@@ -1082,7 +1083,7 @@ svg {
   transition: transform 120ms ease-out;
 }
 .choice:hover {
-  background: #f5f7f1;
+  background: #f0f8fd;
   transform: translateY(-1px);
 }
 .choice:active {
@@ -1165,11 +1166,11 @@ svg {
   color: #1b1c1c;
 }
 .explanation textarea::placeholder {
-  color: #52604b;
+  color: #4e5b6e;
 }
 .explanation textarea:disabled {
-  background: #f1f4ed;
-  color: #36442e;
+  background: #edf4f8;
+  color: #3f4f5c;
 }
 .explanation > p {
   margin-top: 5px;
@@ -1179,7 +1180,7 @@ svg {
   bottom: 0;
   z-index: 2;
   background: #fbf9f8;
-  border-top: 1px solid #d8dfd0;
+  border-top: 1px solid #dce6ed;
   display: flex;
   align-items: center;
   gap: 18px;
@@ -1188,7 +1189,7 @@ svg {
   margin-top: 25px;
 }
 .action-dock.success {
-  border-color: #a0c184;
+  border-color: #88c5df;
 }
 .action-status {
   display: flex;
@@ -1223,7 +1224,7 @@ svg {
   display: block;
   width: 23px;
   height: 23px;
-  border: 3px solid #d8dfd0;
+  border: 3px solid #dce6ed;
   border-top-color: var(--green-dark);
   border-radius: 50%;
   animation: spin 850ms linear infinite;
@@ -1231,7 +1232,7 @@ svg {
 }
 .feedback-panel {
   background: var(--green-soft);
-  border: 1px solid #91b475;
+  border: 1px solid #79b5ca;
   border-radius: 17px;
   padding: 22px;
   margin-top: 22px;
@@ -1272,7 +1273,7 @@ svg {
 }
 .evidence {
   background: white;
-  border: 1px solid #859a75;
+  border: 1px solid #83909c;
   border-radius: 12px;
   margin-top: 19px;
   overflow: hidden;
@@ -1302,7 +1303,7 @@ svg {
   font-size: 19px;
 }
 .evidence blockquote {
-  border-left: 2px solid #a4bb94;
+  border-left: 2px solid #abc9d8;
   padding: 0 15px;
   margin: 6px 16px 16px;
 }
@@ -1400,7 +1401,7 @@ blockquote cite {
 .paper-citation {
   margin: 22px 0 12px;
   padding: 22px;
-  background: #f3f5ef;
+  background: #eff6fa;
   border-radius: 13px;
 }
 .paper-citation p {
@@ -1470,7 +1471,7 @@ blockquote cite {
   text-align: center;
 }
 .modal {
-  border: 2px solid #becbb1;
+  border: 2px solid #bfd0dc;
   border-radius: 22px;
   background: white;
   padding: 27px;
@@ -1511,7 +1512,7 @@ blockquote cite {
   padding: 17px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #f3f5ef;
+  background: #eff6fa;
   margin: 20px 0;
 }
 .review-answer p {
@@ -1525,7 +1526,7 @@ blockquote cite {
 .modal blockquote {
   margin: 20px 0 0;
   padding: 0 0 0 15px;
-  border-left: 3px solid #a0bc89;
+  border-left: 3px solid #88c5df;
 }
 .page-enter {
   animation: page-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -1717,18 +1718,25 @@ blockquote cite {
     width: 120px;
     height: 44px;
   }
-  .app-header nav button:first-child {
-    display: none;
+  .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 12px;
+    padding-top: 8px;
   }
   .app-header nav {
-    gap: 0;
-    margin-left: auto;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    justify-content: center;
+    gap: 20px;
   }
   .app-header nav button {
-    font-size: 10px;
-    padding-inline: 0;
+    font-size: 12px;
+    padding: 10px 4px;
   }
   .header-badges {
+    grid-row: 1;
+    grid-column: 2;
     margin-left: 0;
   }
   .points-pill {
@@ -1779,7 +1787,7 @@ blockquote cite {
     border-width: 2px;
   }
   .upload-card h1 {
-    font-size: 31px;
+    font-size: clamp(27px, 7.8vw, 31px);
   }
   .upload-card > .eyebrow {
     font-size: 9px;
