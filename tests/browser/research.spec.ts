@@ -416,13 +416,13 @@ test("scanned PDF OCR warning and no-key reasoning fallback are honest", async (
   await expect(page.locator(".feedback")).toContainText("Your choice matches");
 });
 
-test("deployed hero composition, responsive scaling, color contrast and PDF handoff", async ({
+test("legacy hero composition, responsive scaling, color contrast and PDF handoff", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   for (const width of [1440, 768, 390]) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.goto("/");
+    await page.goto("/#/classic");
     await expect(
       page.getByRole("heading", {
         name: "A little curiosity. A lot of discovery.",

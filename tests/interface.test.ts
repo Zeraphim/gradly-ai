@@ -47,7 +47,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
   const { render, screen, waitFor, fireEvent, cleanup, act } =
     await import("@testing-library/react");
   const { userEvent } = await import("@testing-library/user-event");
-  const { App } = await import("../apps/web/src/App.js");
+  const { LegacyApp } = await import("../apps/web/src/LegacyApp.js");
   const server = createApp({ preview: true }).listen(0, "127.0.0.1");
   await new Promise<void>((resolve) => server.once("listening", resolve));
   const address = server.address();
@@ -76,7 +76,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
   };
   const user = userEvent.setup({ document: dom.window.document });
   try {
-    render(createElement(App));
+    render(createElement(LegacyApp));
     assert.ok(screen.getByRole("button", { name: "Gradly home" }));
     assert.ok(document.querySelector('[data-pose="approving"]'));
     await user.click(
@@ -151,7 +151,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
     assert.ok(document.querySelector('[data-pose="approving"]'));
     await user.click(screen.getByRole("button", { name: /^Continue$/ }));
     cleanup();
-    render(createElement(App));
+    render(createElement(LegacyApp));
     await waitFor(() =>
       assert.ok(screen.getByRole("button", { name: /Resume/ })),
     );

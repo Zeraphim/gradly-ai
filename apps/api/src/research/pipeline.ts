@@ -11,15 +11,15 @@ import { type ModelProvider } from "./provider.js";
 const roles: [string, string][] = [
   [
     "Research Evidence Analyst",
-    "Locate exact page-linked evidence for design, variables, participants, tests, results, and limitations.",
+    "Locate exact page-linked evidence for the research question, approach, source of observations or arguments, findings or claims, and limitations. Identify study-specific details such as sampling, researcher interpretation, variables, or analyses only when applicable.",
   ],
   [
     "Lesson Architect",
     "Create a sequential investigation from verified evidence.",
   ],
   [
-    "Statistical Reviewer",
-    "Check methodological suitability, alternative answers, assumptions, and source support.",
+    "Research Methods Reviewer",
+    "Check whether decisions and interpretations fit this paper’s research approach, source support, alternatives, and limits. Assess statistical assumptions only when the paper uses statistical analysis.",
   ],
   [
     "Learning Coach",
@@ -61,7 +61,7 @@ export async function runStage(
     if (j.stage === 0) {
       j.evidence = await provider.generate(
         audit.role,
-        `${audit.task} Return exact excerpts, not paraphrases. Use the physical PDF page numbers provided. If key evidence is absent, list it in missing. Pages marked method=ocr are uncertain transcriptions; do not imply their numbers were verified against original pixels.`,
+        `${audit.task} Adapt to qualitative, quantitative, mixed-methods, review, or conceptual research as supported by the document. Return exact excerpts, not paraphrases. Use the physical PDF page numbers provided. List in missing only evidence essential to a grounded investigation of this paper; a statistical test, numerical result, or experimental design is not required for every research approach. Do not infer study type or claims from absent evidence. If the document cannot support at least three evidence-grounded research decisions, mark that essential evidence as missing. Pages marked method=ocr are uncertain transcriptions; do not imply wording or numbers were verified against original pixels.`,
         { pages: j.pages },
         z.object({
           findings: z.string(),
@@ -84,14 +84,14 @@ export async function runStage(
         );
       if (j.evidence.missing.length)
         throw Error(
-          `Insufficient research evidence: ${j.evidence.missing.join("; ").slice(0, 200)}. Try a complete empirical paper.`,
+          `Insufficient research evidence: ${j.evidence.missing.join("; ").slice(0, 200)}. Try a complete research paper with enough source evidence.`,
         );
       audit.summary = j.evidence.findings;
       audit.refs = j.evidence.refs.map((r) => r.id);
     } else if (j.stage === 1) {
       j.lesson = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–14 challenges depending on evidence. Include single/multiple responses, optional reasoning, hints, misconceptions, alternatives, source refs and staged results reveals. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. Restrict evidence to the supplied exact excerpts. paper.url must be an actual DOI/source appearing in the supplied document; otherwise set paper.url=null and explicitly mark unavailable metadata. Do not invent references.`,
+        `${audit.task} Use 3–14 challenges depending on evidence, adapting to this paper’s research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. Restrict evidence to the supplied exact excerpts. paper.url must be an actual DOI/source appearing in the supplied document; otherwise set paper.url=null and explicitly mark unavailable metadata. Do not invent references, participants, quotes, results, or a single best answer where the source permits alternatives.`,
         {
           evidence: j.evidence,
           pages: j.pages,
@@ -105,13 +105,13 @@ export async function runStage(
       j.lesson.source = "generated";
       if (j.pages.some((p) => p.method === "ocr"))
         j.lesson.briefing +=
-          " Some source pages were read with OCR. Verify numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
+          " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
       audit.summary = `Drafted ${j.lesson.challenges.length} challenges.`;
       audit.refs = j.evidence!.refs.map((r) => r.id);
     } else if (j.stage === 2 || j.stage === 3) {
       const assessment = await provider.generate(
         audit.role,
-        `${audit.task} Reject claims or interpretations not supported by document evidence. Reject paper identity revealed before final reveal and results leaked in design-stage prompts/hints. Review every accepted response and alternative. Return approved=false when uncertain.`,
+        `${audit.task} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Return approved=false when uncertain.`,
         { lesson: j.lesson, pages: j.pages },
         z.object({
           approved: z.boolean(),
@@ -132,7 +132,8 @@ export async function runStage(
       if (j.stage === 2) j.review = assessment;
     } else {
       const problems = verifyLesson(j.lesson!, j.pages);
-      if (!j.review?.approved) problems.push("Statistical review is missing.");
+      if (!j.review?.approved)
+        problems.push("Research methods review is missing.");
 
       if (problems.length) {
         j.status = "review";

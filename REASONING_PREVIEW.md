@@ -2,7 +2,7 @@
 
 The showcase must make Gradly’s learning mechanism visible before live feedback is connected. A learner chooses an analysis, explains why it fits, inspects relevant evidence, revises the explanation, and sees what changed. Matching an answer guide and supporting a decision with evidence are separate outcomes.
 
-The browser showcase implements this preview at `/#/research/reasoning`. This document separates its verified authored behavior from the proposed future live contract. Checked items have local verification; the live acceptance items remain open.
+The earlier browser showcase implements this preview at `/#/research/reasoning`, reachable from the compatibility home (`/#/classic`) and research path. The current public front door uses the single paper-centered experience in `PRODUCT_DIRECTION.md`; this narrower explanation showcase remains available for existing links. This document separates its verified authored behavior from the proposed future live contract. Checked items have local verification; the live acceptance items remain open.
 
 ## Current implementation boundaries
 

@@ -1,39 +1,42 @@
-| Abbreviation | Full name                         | Plain-language description                              |
-| ------------ | --------------------------------- | ------------------------------------------------------- |
-| API          | Application programming interface | Same-origin routes for lessons and feedback.            |
-| MVP          | Minimum viable product            | One curated study and a complete learner flow.          |
-| PDF          | Portable Document Format          | The optional paper file checked locally in the browser. |
-| npm          | No established expansion          | The package manager used for the workspaces.            |
-
 # Gradly
 
-[Existing curated production demo](https://nebius-hackathon-submission.vercel.app)
+Gradly turns a paper into an interactive evidence trail. The current prototype has one public experience: **Wonder → Explore → Connect → Try it → Keep it**. Start with a question, uncover and pin source evidence, calibrate a claim, try the distinction in a new setting, and export a connected paper recap.
 
-A research-reading MVP based on the supplied study-adventure designs, with the Gradly logo and mascot. Choose a curated study, justify a decision, get feedback, reveal the evidence, revise, and try two fictional transfer scenarios.
+Open `/` or `/#/research/lab`. Two content cases use the same interface: a curated exploration of Gingerich & Lineweaver’s texting experiment, and a clearly fictional qualitative garden study. Research judgment extends beyond statistical test selection.
 
-## Research extension
+The frontend makes no API request. Guide feedback checks selected claims and evidence cards; custom writing is not assessed. Confidence is a self-report, and completion is not a mastery score. Original claims stay fixed after evidence is opened. Notes remain in tab storage with a memory fallback and can be exported locally.
 
-This branch integrates an optional eight-challenge investigation, PDF extraction/OCR, durable research history and reviewed lesson generation into the existing Vite/Express application. The deployed hero composition and six-quest curated flow remain intact. See [RESEARCH_INTEGRATION.md](RESEARCH_INTEGRATION.md) for configuration, verification and limits. The extension is locally available and requires explicit opt-in plus remote storage on Vercel.
+See [PRODUCT_DIRECTION.md](PRODUCT_DIRECTION.md) for the single-mode scope and demonstration, [INTERACTION_REFERENCES.md](INTERACTION_REFERENCES.md) for the inspected educational interfaces, and [RESEARCH_LEARNING_DESIGN.md](RESEARCH_LEARNING_DESIGN.md) for the source-linked rationale and learning limits. These are design hypotheses, not evidence of an established learning benefit.
 
-Design references, module boundaries, acceptance criteria and verification coverage are documented in [DESIGN.md](DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [TESTING.md](TESTING.md).
+## Compatibility workspaces
 
-## Browser-only reasoning showcase
+The earlier six-quest curated adventure remains at `/#/classic`, the eight-challenge/upload workspace at `/#/research/learn`, and the authored explanation showcase at `/#/research/reasoning`. Existing saved links keep working when their API is available. They are not promoted as separate modes in the current front door. The [earlier curated production demo](https://nebius-hackathon-submission.vercel.app) predates this paper-exploration prototype.
 
-Open `/#/research/reasoning`, or choose **Try the reasoning preview** from the home screen or research learning path. The complete choose → explain → inspect evidence → revise → reflect loop works without API credentials, database access, or a working backend. A suitable method with flawed reasoning receives separate judgments; an authored revision shows the conceptual improvement before the paper's findings are revealed. Alternative-method and missing-evidence examples are also available.
+The research API retains PDF extraction/OCR, guest history and reviewed generation. Its prompts now adapt to a paper’s research approach without requiring statistical tests for qualitative or conceptual material. This orchestration is tested with synthetic fixtures; new live generation remains unverified. See [RESEARCH_INTEGRATION.md](RESEARCH_INTEGRATION.md) for configuration and [REASONING_PREVIEW.md](REASONING_PREVIEW.md) for future live-review guardrails.
 
-This is explicitly authored feedback. Custom writing is not assessed, inputs remain in tab storage with an in-memory fallback, and no investigation score or progress changes. This browser showcase is available independently of the server's local upload-sample flags, including in a hosted frontend build. It makes no live assessment request. See [REASONING_PREVIEW.md](REASONING_PREVIEW.md) for the future live contract, current backend gaps and release guardrails. The new showcase has been verified locally; it has not been publicly deployed.
+Design, module boundaries, acceptance and verification are in [DESIGN.md](DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [TESTING.md](TESTING.md).
 
 ## Run
 
 Requires Node.js **22.18 or newer within version 22** and npm.
 
+For the refined frontend prototype:
+
 ```sh
 npm ci
+npm run dev:prototype
+```
+
+Open **http://127.0.0.1:5173**. No environment file, database or AI credential is needed for the paper experience.
+
+To run the compatibility API and upload workspaces too:
+
+```sh
 cp .env.example .env
 npm run dev
 ```
 
-Open **http://localhost:5173**. The example configuration explicitly enables **local preview**. It checks choices against sample answers and does **not** assess explanations. The interface labels preview feedback and sample points throughout. `DEMO_MODE=true` also enables the explicitly labeled local sample flow after PDF extraction, so processing through learning/history can be explored without a key. It uses separate reference content and is refused in production/Vercel. See the integration guide for switching to live data.
+The example configuration enables local preview. `DEMO_MODE=true` also enables a separate sample study after real PDF extraction; that sample path is refused in production/Vercel. It never invents findings from an upload or silently replaces failed live inference.
 
 For live reasoning assessment, set these values in the ignored root `.env`:
 
@@ -55,7 +58,7 @@ scripts                 Development orchestration and opt-in live verification
 tests                   Service, state and simulated learner interaction checks
 ```
 
-The browser requests the public lesson from `GET /api/lesson` and submits only its version, question identifier, attempt identifier, choice, and explanation to `POST /api/feedback`. `GET /api/health` reports server health and feedback configuration. Initial lesson payloads omit answer criteria and authored solutions. The server supplies trusted evidence and criteria to the model, validates its single-field assessment, and selects authored teaching text. Model-generated teaching copy or citations never pass directly to learners.
+In the compatibility curated workspace, the browser requests the public lesson from `GET /api/lesson` and submits only its version, question identifier, attempt identifier, choice, and explanation to `POST /api/feedback`. `GET /api/health` reports server health and feedback configuration. Initial lesson payloads omit answer criteria and authored solutions. The server supplies trusted evidence and criteria to the model, validates its single-field assessment, and selects authored teaching text. Model-generated teaching copy or citations never pass directly to learners.
 
 The original six quests cover separate groups, method assumptions, percentage points, missing evidence, and two original transfer scenarios. Five correct quests award 10 points each, once. The missing-evidence checkpoint reveals an evidence boundary after an attempt and awards no points. Revisions stay in the same quest. New scenarios have separate answers.
 
@@ -77,7 +80,7 @@ npm run test:live
 
 Verified October 14, 2026: type checking, production builds, and 15 automated checks passed. The simulated learner flow covers initial answer hiding, a failed request and retry, wrong-answer revision, saved-progress resumption, six completed quests, independent transfer answers, and dialog cancellation. All eight live cases produced the expected outcomes. Seven model-request durations ranged from 0.595 to 1.900 seconds in that run. This small check does not establish statistical teaching quality or a learning benefit.
 
-The current integration additionally passes 123 unit/service checks and 32 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
+The current source passes 164 unit/service checks and 47 Chromium browser scenarios, including desktop/tablet/mobile layouts, keyboard use, automated accessibility checks, both reduced-motion controls, full reference/sample completion, and draft recovery. See [TESTING.md](TESTING.md) for coverage and remaining browser/live limits. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
 
 ## Scope and data
 

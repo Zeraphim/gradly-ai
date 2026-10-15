@@ -53,10 +53,10 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/**", (request) => request.abort("failed"));
 });
 
-test("the original home and research learning page expose the preview with every API unavailable", async ({
+test("the legacy home and research learning page expose the preview with every API unavailable", async ({
   page,
 }) => {
-  for (const entry of ["/", "/#/research/learn"]) {
+  for (const entry of ["/#/classic", "/#/research/learn"]) {
     await page.goto(entry);
     const invitation = page.getByRole("link", {
       name: "Try the reasoning preview",

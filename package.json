@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
+    "dev:prototype": "npm run dev --workspace @paperquest/web",
     "build": "npm run build --workspace @paperquest/contracts && npm run build --workspace @paperquest/web && npm run build --workspace @paperquest/api",
     "start": "node --env-file-if-exists=.env apps/api/dist/apps/api/src/index.js",
     "typecheck": "tsc --noEmit && npm run typecheck --workspace @paperquest/web",

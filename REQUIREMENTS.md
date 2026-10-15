@@ -1,8 +1,20 @@
 # Requirements and acceptance evidence
 
-The current repository and blue Gradly branding take priority over the separate prototype. Preserve the existing hero and six-quest curated experience, integrate the useful research capabilities, and submit the changes as a PR to `main`. Live infrastructure setup and public deployment are separate from the requested source preparation.
+The latest direction is one refined frontend paper-investigation mode, broader than statistics and playable without backend integration. Preserve Gradly's blue identity and source boundaries. Earlier curated/upload journeys remain compatible at their saved routes; they are not extra modes in the public entry. Source changes continue in the existing PR to `main`. Live infrastructure setup and public deployment remain separate.
 
-## Functional acceptance
+## Current prototype acceptance
+
+- One public flow connects a paper's question, approach, findings, interpretation and limitations. A content choice does not create another interaction mode.
+- The curated published case and clearly fictional qualitative case both complete through the same evidence board, claim controls, transfer and recap.
+- Opening and pinning evidence change an inspectable trail. Selected claims and cards receive authored guide feedback; arbitrary writing never receives fabricated assessment.
+- The initial call survives the findings reveal, confidence remains self-reported, and completion never implies mastery.
+- Notes, revisions and per-case recovery work in tab storage with safe denial/corruption handling. Local export preserves source and fictional provenance and has a copyable fallback.
+- Every phase works with API requests blocked; the default experience makes zero API requests. `npm run dev:prototype` serves the frontend alone.
+- Responsive, keyboard, reduced-motion and accessibility checks cover the full five-stage flow, with inspected render evidence. Existing compatibility regressions remain covered.
+
+`PRODUCT_DIRECTION.md` records the product reasoning and future evaluation needs. `TESTING.md` records actual verification and limits.
+
+## Compatibility functional acceptance
 
 The added browser-only reasoning showcase demonstrates separate choice and explanation judgments, a specific misconception, published-page evidence, a targeted question, revision comparison and a gated paper reveal. It remains usable with all API routes unavailable, labels its authored feedback, and refuses to assess custom writing. Its checks and future live requirements are in [REASONING_PREVIEW.md](REASONING_PREVIEW.md).
 

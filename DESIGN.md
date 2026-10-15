@@ -1,6 +1,12 @@
 # Gradly design
 
-The deployed repository is the primary reference, as requested in the follow-up brief. Preserve its Gradly logo, blue book mascot, hero headline, paper illustration, Choose PDF control and paper-link field below the control. The user's later blue-palette instruction supersedes the Stitch export's original green primary color.
+The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The latest direction converges the public prototype on one polished paper-exploration mode. Its front door now leads to a spatial paper case file and evidence board, rather than foregrounding upload, quiz and preview modes. The original hero and PDF/link controls remain in the compatibility workspace. The user's blue-palette instruction supersedes the Stitch export's original green primary color.
+
+## Paper exploration
+
+The current interface turns one study into a visible trail: question, approach, findings and boundaries. A paper-stack illustration anchors the library; evidence cards, source labels and a pinned trail carry the interaction. The learner controls a claim dial, retains the original claim for comparison, tries a changed setting and keeps a connected recap. Published and fictional content have distinct provenance labels within the same layout.
+
+At narrow widths, the active evidence reader moves before the card grid and returns focus to the opener on close. Persistent stage actions reserve bottom space. Native radio/select/range controls provide keyboard equivalents, all meaningful controls have at least 44px hit targets, and claim/card changes remain immediate. Core mobile reading text is 14px and controls retain readable labels. OS and saved reduced-motion preferences disable nonessential movement; no WebGL or new visual dependency is needed for these relationships. Inspected references and the reasoning behind these choices are in `INTERACTION_REFERENCES.md`.
 
 ## Reference inventory
 
@@ -54,3 +60,7 @@ Hero and research workspace screenshots were inspected at 1440, 768 and 390 CSS 
 ## Skill-guided refinement
 
 The final pass applies the supplied [jmo-skills better-ui guidance](https://github.com/23jmo/jmo-skills/tree/6082bf2c472857d6cfda48995ab985b69345aac6/skills/better-ui) and clear technical English guidance. It retains Gradly’s structural borders, blue palette, density, mascot and extrusion. Inline SVG icons use absolute stroke widths, with a stronger stroke beside action labels. Hover styles require a fine, hover-capable pointer. Frequent answer changes have no entrance animation, while occasional view and progress feedback remains brief. Native confirmation dialogs contain scrolling and return focus. See `UI_POLISH_REVIEW.md` for inspected scope and remaining verification limits.
+
+## Brand asset delivery
+
+The original PNG artwork remains unchanged. `scripts/optimize-brand.mjs` generates lossless WebP crops for the logo and individual mascot poses with optional local `cwebp`; builds use the committed derivatives and need no image tooling. All ten decoded crops were compared pixel for pixel with their original source regions. The library's brand-image payload fell from 5,755,210 to 718,904 bytes (87.5% smaller), without resampling the artwork. The browser check confirms the front door no longer requests the large PNG sheets.

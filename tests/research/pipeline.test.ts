@@ -2,6 +2,16 @@ import { it, expect } from "vitest";
 import { newJob, runStage } from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
 import { type ModelProvider } from "../../apps/api/src/research/provider.js";
+import {
+  lessonSchema,
+  type Lesson,
+} from "../../apps/api/src/research/contracts.js";
+import {
+  newSession,
+  publicSession,
+  submit,
+  transition,
+} from "../../apps/api/src/research/engine.js";
 const page =
   "A complete empirical study of independent groups with a numerical outcome and random assignment. Reported group results and statistical test are described here.";
 const refs = [{ id: "source1", page: 1, excerpt: page }];
@@ -78,7 +88,7 @@ it("clears obsolete stage and job errors after a successful retry", async () => 
   expect(recovered.error).toBeUndefined();
   expect(recovered.audits[0]?.error).toBeUndefined();
 });
-it("prevents a flagged statistical review from becoming playable", async () => {
+it("prevents a flagged methods review from becoming playable", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);
   const p = provider([
     { findings: "Evidence", refs, missing: [] },
@@ -93,4 +103,213 @@ it("prevents a flagged statistical review from becoming playable", async () => {
   expect(j.status).toBe("review");
   expect(j.stage).toBe(2);
   expect(j.audits[2]!.status).toBe("Needs Review");
+});
+
+// Synthetic contract fixture. These accounts do not describe a published study.
+const qualitativeDesign =
+  "Researchers used purposive sampling to recruit commuters for open-ended interviews about navigating an unfamiliar station. Transcripts were coded and compared to develop themes, with researcher memos documenting interpretive decisions.";
+const qualitativeFinding =
+  "Interview accounts linked asking staff for help with uncertainty about platform signs. The authors present this as a theme in these accounts, not a population estimate or evidence that sign changes cause better navigation.";
+const qualitativeRefs = [
+  { id: "approach", page: 1, excerpt: qualitativeDesign },
+  { id: "accounts", page: 2, excerpt: qualitativeFinding },
+];
+const qualitativeLesson: Lesson = {
+  id: "qualitative-fixture",
+  title: "A station, a question, and the limits of an account",
+  briefing:
+    "Researchers explored how commuters describe navigating an unfamiliar station. Decide what the approach can support before inspecting the accounts.",
+  source: "generated",
+  paper: {
+    title: "Synthetic interview study for contract testing",
+    authors: "Synthetic fixture",
+    journal: "Not a publication",
+    url: null,
+    limitations: [
+      "Purposive interview accounts do not estimate population prevalence.",
+    ],
+  },
+  evidence: qualitativeRefs,
+  challenges: [
+    {
+      id: "approach-choice",
+      stage: "Research design",
+      title: "Choose a fitting inquiry",
+      type: "single",
+      prompt: "Which approach fits the aim of exploring commuters’ accounts?",
+      evidence: [qualitativeDesign],
+      options: [
+        { id: "A", text: "Open-ended interviews with thematic interpretation" },
+        { id: "B", text: "A statistical test of mean quiz scores" },
+      ],
+      accepted: ["A"],
+      alternatives: [],
+      hint: "Consider the type of evidence the question seeks.",
+      misconceptions: {
+        B: "There is no numerical quiz outcome in this study.",
+      },
+      explanation:
+        "Open-ended interviews can explore how participants describe experiences; a numerical comparison addresses a different question.",
+      refs: ["approach"],
+      writtenReasoning: true,
+      reveal: "design",
+    },
+    {
+      id: "theme-boundary",
+      stage: "Evidence interpretation",
+      title: "Interpret the theme",
+      type: "single",
+      prompt: "What does the reported theme support about these accounts?",
+      evidence: [qualitativeFinding],
+      options: [
+        {
+          id: "A",
+          text: "Some accounts connect help-seeking and sign uncertainty.",
+        },
+        {
+          id: "B",
+          text: "Most commuters everywhere cannot read platform signs.",
+        },
+      ],
+      accepted: ["A"],
+      alternatives: [],
+      hint: "Distinguish a theme in accounts from a population estimate.",
+      misconceptions: {
+        B: "The study does not provide a population estimate.",
+      },
+      explanation:
+        "The theme describes a pattern in the interview accounts. Purposive interviews alone cannot establish how common that experience is in a population.",
+      refs: ["accounts"],
+      writtenReasoning: true,
+      reveal: "results",
+    },
+    {
+      id: "causal-boundary",
+      stage: "Claim limits",
+      title: "Know when to ask for more evidence",
+      type: "single",
+      prompt:
+        "Do these interviews show that changing signs will improve navigation?",
+      evidence: [qualitativeFinding],
+      options: [
+        { id: "A", text: "No; an intervention claim needs further evidence." },
+        {
+          id: "B",
+          text: "Yes; a reported theme establishes the causal effect.",
+        },
+      ],
+      accepted: ["A"],
+      alternatives: [],
+      hint: "Which intervention and comparison were observed?",
+      misconceptions: {
+        B: "A theme alone does not identify an intervention effect.",
+      },
+      explanation:
+        "The accounts can motivate a design hypothesis. They do not test a signage intervention, so its effect remains uncertain.",
+      refs: ["accounts"],
+      writtenReasoning: true,
+      reveal: "interpretation",
+    },
+  ],
+  bonus: null,
+};
+
+it("supports a nonnumeric qualitative investigation through verification and the learning loop", async () => {
+  const pages = qualitativeRefs.map(({ page, excerpt }) => ({
+    page,
+    text: excerpt,
+  }));
+  const outputs: unknown[] = [
+    {
+      findings: "An interview approach and bounded theme are available.",
+      refs: qualitativeRefs,
+      missing: [],
+    },
+    qualitativeLesson,
+    {
+      approved: true,
+      issues: [],
+      summary: "Interpretations stay within the accounts.",
+    },
+    {
+      approved: true,
+      issues: [],
+      summary: "Feedback distinguishes a theme from a causal claim.",
+    },
+  ];
+  const requests: { role: string; task: string }[] = [];
+  const mocked: ModelProvider = {
+    async generate(role, task, _input, schema) {
+      requests.push({ role, task });
+      return schema.parse(outputs.shift());
+    },
+  };
+  let job = newJob("qualitative-job", "interview-study.pdf", pages);
+  for (let stage = 0; stage < 5; stage++) job = await runStage(job, mocked);
+  expect(job.status).toBe("ready");
+  expect(job.lesson?.challenges.at(-1)?.reveal).toBe("interpretation");
+  expect(job.lesson?.paper.url).toBeNull();
+  expect(job.lesson?.evidence).toEqual(qualitativeRefs);
+  expect(requests[0]?.task).toContain(
+    "statistical test, numerical result, or experimental design is not required",
+  );
+  expect(requests[1]?.task).toContain(
+    "do not turn qualitative themes into prevalence estimates",
+  );
+  expect(requests[2]?.role).toBe("Research Methods Reviewer");
+
+  const lesson = job.lesson!;
+  let session = transition(
+    newSession(lesson, "qualitative-session"),
+    lesson,
+    "begin",
+  );
+  expect(publicSession(session, lesson).paper).toBeNull();
+  for (const challenge of lesson.challenges) {
+    expect(publicSession(session, lesson).challenge?.id).toBe(challenge.id);
+    session = submit(
+      session,
+      lesson,
+      ["A"],
+      "The scope of the evidence limits the claim.",
+    );
+    session = transition(session, lesson, "next");
+  }
+  session = transition(session, lesson, "skip");
+  expect(publicSession(session, lesson).paper?.title).toBe(
+    qualitativeLesson.paper.title,
+  );
+  expect(publicSession(session, lesson).summary.firstCorrect).toBe(3);
+});
+
+it("keeps the legacy statistical-significance path schema-compatible", () => {
+  expect(lessonSchema.safeParse(featured).success).toBe(true);
+  expect(
+    featured.challenges.some(
+      (challenge) => challenge.reveal === "significance",
+    ),
+  ).toBe(true);
+});
+
+it("blocks an evidence-poor document without falling back to authored research", async () => {
+  const document =
+    "A project note lists a station redesign idea but contains no research methods, evidence or supported findings.";
+  const job = newJob("not-research", "project-note.pdf", [
+    { page: 1, text: document },
+  ]);
+  const result = await runStage(
+    job,
+    provider([
+      {
+        findings: "A project proposal only.",
+        refs: [{ id: "note", page: 1, excerpt: document }],
+        missing: ["Research evidence for grounded decisions"],
+      },
+    ]),
+  );
+  expect(result.status).toBe("failed");
+  expect(result.stage).toBe(0);
+  expect(result.lesson).toBeUndefined();
+  expect(result.error).toContain("Insufficient research evidence");
+  expect(result.audits[0]?.status).toBe("Failed");
 });

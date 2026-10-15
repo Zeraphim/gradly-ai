@@ -258,7 +258,7 @@ function GradlyWorkspace({
       featured: "Featured investigation",
       upload: "Upload your paper",
       history: "Your adventures",
-      glossary: "Statistics glossary",
+      glossary: "Research glossary",
       help: "How Gradly works",
       settings: "Learning settings",
       privacy: "Privacy & AI processing",
@@ -654,10 +654,14 @@ function GradlyWorkspace({
                 </div>
                 <Speech>
                   {c.reveal === "results"
-                    ? "Look at the group scores. What do they tell us—and what do they leave uncertain?"
+                    ? session.source === "generated"
+                      ? "Inspect the findings. What do they support—and what do they leave uncertain?"
+                      : "Look at the group scores. What do they tell us—and what do they leave uncertain?"
                     : c.reveal === "significance"
                       ? "Go beyond the number. Match your interpretation to the design and evidence."
-                      : "Let’s investigate. Defend a research decision before we reveal the findings."}
+                      : c.reveal === "interpretation"
+                        ? "Connect the interpretation to the evidence. Which claims fit, and where should you stop?"
+                        : "Let’s investigate. Defend a research decision before we reveal the findings."}
                 </Speech>
                 <div className="stage">
                   <span>{c.stage}</span>
@@ -892,13 +896,21 @@ function GradlyWorkspace({
                           "Research Evidence Analyst",
                           "Relevant Research Evidence",
                           c.evidence.join(" ") ||
-                            "Independent participants, one condition per person, and a numerical quiz outcome.",
+                            (session.source === "generated"
+                              ? "Use this challenge’s page references. Do not fill gaps in the source with assumptions."
+                              : "Independent participants, one condition per person, and a numerical quiz outcome."),
                         ],
                         [
-                          "Statistical Reviewer",
-                          "Statistical Assessment",
+                          session.source === "generated"
+                            ? "Research Methods Reviewer"
+                            : "Statistical Reviewer",
+                          session.source === "generated"
+                            ? "Methods and Interpretation"
+                            : "Statistical Assessment",
                           c.feedback.explanation ||
-                            "Check whether your selected method matches the outcome and the relationship between observations.",
+                            (session.source === "generated"
+                              ? "Check how the research approach and available evidence support the decision, and where competing explanations remain."
+                              : "Check whether your selected method matches the outcome and the relationship between observations."),
                         ],
                         [
                           "Learning Coach",
@@ -915,7 +927,7 @@ function GradlyWorkspace({
                         [
                           "Learning Coach",
                           "Learning Guidance",
-                          c.id === "q3"
+                          session.source !== "generated" && c.id === "q3"
                             ? "Does each student have a score in both conditions, or only one? What would make two observations paired?"
                             : c.hint,
                         ],
@@ -1058,12 +1070,25 @@ function GradlyWorkspace({
                   One more question?
                 </h1>
                 <p>
-                  You’ve completed the required challenges. Explore whether
-                  statistical significance can repair a design problem.
+                  {session.source === "generated"
+                    ? session.bonusAvailable
+                      ? "You’ve completed the required challenges. Consider one more question about the evidence before revealing the source."
+                      : "You’ve completed the required challenges. Connect your decisions to the paper and the limits of its evidence."
+                    : "You’ve completed the required challenges. Explore whether statistical significance can repair a design problem."}
                 </p>
                 <div className="card bonus">
-                  <h2>Can Significance Fix the Design?</h2>
-                  <p>Compare nonrandom selection with random assignment.</p>
+                  <h2>
+                    {session.source === "generated"
+                      ? session.bonusAvailable
+                        ? "One more angle on the evidence"
+                        : "Ready to meet the source?"
+                      : "Can Significance Fix the Design?"}
+                  </h2>
+                  <p>
+                    {session.source === "generated"
+                      ? "Keep each conclusion within what the paper can support."
+                      : "Compare nonrandom selection with random assignment."}
+                  </p>
                   <div className="actions">
                     {session.bonusAvailable ? (
                       <button
@@ -1176,7 +1201,9 @@ function GradlyWorkspace({
                   </ul>
                   <p>
                     Completing this adventure records practice; it does not
-                    establish statistical mastery.
+                    {session.source === "generated"
+                      ? " establish research mastery."
+                      : " establish statistical mastery."}
                   </p>
                 </article>
                 {session.phase === "reveal" ? (

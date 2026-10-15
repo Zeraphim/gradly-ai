@@ -247,7 +247,7 @@ test("a completed start request cannot pull a learner back from the glossary", a
     await expect(page.getByRole("button", { name: "Opening…" })).toBeDisabled();
     await page.getByRole("link", { name: "Glossary", exact: true }).click();
     await expect(
-      page.getByRole("heading", { name: "Statistics Glossary" }),
+      page.getByRole("heading", { name: "Research glossary" }),
     ).toBeVisible();
     const finished = page.waitForResponse(
       (response) =>
@@ -265,7 +265,7 @@ test("a completed start request cannot pull a learner back from the glossary", a
     );
     await expect(page).toHaveURL(/#\/research\/glossary$/);
     await expect(
-      page.getByRole("heading", { name: "Statistics Glossary" }),
+      page.getByRole("heading", { name: "Research glossary" }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Your investigation briefing" }),
@@ -458,7 +458,7 @@ test("AI availability stays honest during recovery and settings are reused acros
     ).toBeVisible();
     await page.getByRole("link", { name: "Glossary", exact: true }).click();
     await expect(
-      page.getByRole("heading", { name: "Statistics Glossary" }),
+      page.getByRole("heading", { name: "Research glossary" }),
     ).toBeVisible();
     await page.getByRole("link", { name: "Guest settings" }).click();
     await expect(page.getByText("sample-test", { exact: true })).toBeVisible();
@@ -466,4 +466,47 @@ test("AI availability stays honest during recovery and settings are reused acros
   } finally {
     gate.resolve();
   }
+});
+
+test("research support explains qualitative and causal limits without backend access", async ({
+  page,
+}) => {
+  await page.route("**/api/**", (route) => route.abort());
+  await page.goto("/#/research/glossary");
+  await expect(
+    page.getByRole("heading", { name: "Research glossary" }),
+  ).toBeVisible();
+  await page.getByText("Qualitative theme", { exact: true }).click();
+  await expect(
+    page.getByText(/A theme does not by itself estimate how common/),
+  ).toBeVisible();
+  await page.getByText("Causal claim", { exact: true }).click();
+  await expect(
+    page.getByText(/an association alone does not establish it/),
+  ).toBeVisible();
+  await page.getByText("Transfer", { exact: true }).click();
+  await expect(
+    page.getByText(/Completing one example does not establish mastery/),
+  ).toBeVisible();
+
+  await page.getByRole("link", { name: "How it works", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Decide, explain, then reconsider" }),
+  ).toBeVisible();
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("link", { name: "Explore the Research Lab" }),
+  ).toHaveAttribute("href", "#/research/lab");
+  await expect(
+    page.getByText(/Your written explanation is not assessed/),
+  ).toBeVisible();
+
+  await page.goto("/#/research/privacy");
+  await expect(
+    page.getByRole("heading", { name: "Research Lab previews" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/not sent to the server or an AI service/),
+  ).toBeVisible();
 });

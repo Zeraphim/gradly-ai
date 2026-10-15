@@ -22,7 +22,15 @@ export const challengeSchema = z.object({
   explanation: z.string().min(10),
   refs: z.array(z.string()).min(1),
   writtenReasoning: z.boolean(),
-  reveal: z.enum(["design", "results", "significance", "bonus"]),
+  // "significance" is retained for the featured quantitative investigation.
+  // "interpretation" also covers themes, arguments, and causal boundaries.
+  reveal: z.enum([
+    "design",
+    "results",
+    "significance",
+    "interpretation",
+    "bonus",
+  ]),
 });
 export const lessonSchema = z.object({
   id: z.string(),
