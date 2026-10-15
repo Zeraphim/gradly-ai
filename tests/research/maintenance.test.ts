@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import {
   db,
   insert,
+  list,
   purgeExpired,
   read,
 } from "../../apps/api/src/research/store.js";
@@ -52,4 +53,39 @@ it("purges expired papers and linked sessions while preserving active records ac
     removedRecords: 0,
     removedRateCounters: 0,
   });
+});
+it("history listing removes sessions whose earlier-uploaded document expired", async () => {
+  const now = Date.now();
+  await insert("staggered-owner", "job", "older-paper", { name: "older" });
+  await insert("staggered-owner", "session", "newer-linked-session", {
+    lessonId: "older-paper",
+  });
+  await insert("staggered-owner", "session", "active-reference-session", {
+    lessonId: "featured-reference",
+  });
+  await insert("unrelated-owner", "session", "unrelated-session", {
+    lessonId: "older-paper",
+  });
+  const d = await db();
+  await d.execute({
+    sql: "UPDATE records SET expires=? WHERE id=? AND kind='job'",
+    args: [now - 1, "older-paper"],
+  });
+  await d.execute({
+    sql: "UPDATE records SET expires=? WHERE id=? AND kind='session'",
+    args: [now + 2 * 86400000, "newer-linked-session"],
+  });
+
+  expect(await list("staggered-owner", "session")).toEqual([
+    expect.objectContaining({ lessonId: "featured-reference" }),
+  ]);
+  await expect(
+    read("staggered-owner", "session", "newer-linked-session"),
+  ).rejects.toThrow("not found");
+  await expect(read("staggered-owner", "job", "older-paper")).rejects.toThrow(
+    "not found",
+  );
+  await expect(
+    read("unrelated-owner", "session", "unrelated-session"),
+  ).resolves.toMatchObject({ lessonId: "older-paper" });
 });

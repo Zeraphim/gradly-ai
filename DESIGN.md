@@ -43,10 +43,14 @@ Research learning-path pages reset the original hero's inherited width/padding w
 
 Research controls use the same Lucide SVG family as the original application, including actions, agent roles, selection marks and page navigation. Icons remain decorative beside descriptive text; icon-only controls retain accessible labels.
 
-Use short transform-based arrivals for route/question changes, a small stagger for response choices, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons depress through transforms without changing their border size/margins or moving neighboring controls. Hover cues apply to fine pointers. No background decorative loops or additional animation dependency are introduced.
+Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops or additional animation dependency are introduced.
 
 OS reduced-motion preferences and the saved interface setting disable entrances, spinners and hover/press movement. Text labels and progress values remain available when motion is disabled.
 
 ## Visual verification
 
 Hero and research workspace screenshots were inspected at 1440, 768 and 390 CSS pixels. Browser assertions check overflow, PDF/link order and automated accessibility rules. This establishes responsive behavior for those cases; it is not a claim of pixel-identical Stitch reproduction or complete WCAG conformance. See `TESTING.md` for the checks and remaining limits.
+
+## Skill-guided refinement
+
+The final pass applies the supplied [jmo-skills better-ui guidance](https://github.com/23jmo/jmo-skills/tree/6082bf2c472857d6cfda48995ab985b69345aac6/skills/better-ui) and clear technical English guidance. It retains Gradly’s structural borders, blue palette, density, mascot and extrusion. Inline SVG icons use absolute stroke widths, with a stronger stroke beside action labels. Hover styles require a fine, hover-capable pointer. Frequent answer changes have no entrance animation, while occasional view and progress feedback remains brief. Native confirmation dialogs contain scrolling and return focus. See `UI_POLISH_REVIEW.md` for inspected scope and remaining verification limits.

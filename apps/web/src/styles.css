@@ -26,6 +26,7 @@
   --line: #dfe5ec;
   --control-line: #83909c;
   --surface: #fff;
+  --motion-ease: cubic-bezier(0.23, 1, 0.32, 1);
 }
 * {
   box-sizing: border-box;
@@ -33,6 +34,9 @@
 body {
   margin: 0;
   min-width: 320px;
+}
+body:has(dialog[open]) {
+  overflow: hidden;
 }
 button,
 input,
@@ -172,7 +176,11 @@ svg {
   font-weight: 800;
   color: var(--muted);
 }
-.app-header nav button:hover,
+@media (hover: hover) and (pointer: fine) {
+  .app-header nav button:hover {
+    color: var(--blue);
+  }
+}
 .app-header nav button.active {
   color: var(--blue);
 }
@@ -204,9 +212,21 @@ svg {
   border: 0;
   border-radius: 12px;
   background: #efefeb;
+  transition: scale 150ms ease-out;
 }
-.icon-button:hover {
-  background: #e6e9e1;
+.icon-button:active:not(:disabled) {
+  scale: 0.96;
+}
+.button svg {
+  stroke-width: 2.5;
+}
+.button svg * {
+  vector-effect: non-scaling-stroke;
+}
+@media (hover: hover) and (pointer: fine) {
+  .icon-button:hover {
+    background: #e6e9e1;
+  }
 }
 .help-button {
   background: transparent;
@@ -217,8 +237,10 @@ svg {
   background: var(--blue);
   box-shadow: 0 3px 0 #004666;
 }
-.blue.icon-button:hover {
-  background: #004c6e;
+@media (hover: hover) and (pointer: fine) {
+  .blue.icon-button:hover {
+    background: #004c6e;
+  }
 }
 .mode-banner {
   background: #fff3d2;
@@ -269,7 +291,10 @@ svg {
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.005em;
-  transition: transform 120ms ease-out;
+  transition:
+    transform 150ms ease-out,
+    scale 150ms ease-out,
+    background-color 150ms ease;
   white-space: nowrap;
 }
 .button.primary {
@@ -277,12 +302,15 @@ svg {
   color: #fff;
   box-shadow: 0 4px 0 var(--blue-dark);
 }
-.button.primary:hover:not(:disabled) {
-  background: #005c80;
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .button.primary:hover:not(:disabled) {
+    background: #005c80;
+    transform: translateY(-1px);
+  }
 }
 .button.primary:active:not(:disabled) {
   transform: translateY(4px);
+  scale: 0.96;
   box-shadow: 0 0 0 var(--blue-dark);
 }
 .button.neutral {
@@ -290,12 +318,15 @@ svg {
   border: 1px solid var(--control-line);
   box-shadow: 0 3px 0 #c2c9bb;
 }
-.button.neutral:hover {
-  background: #f0f8fd;
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .button.neutral:hover:not(:disabled) {
+    background: #f0f8fd;
+    transform: translateY(-1px);
+  }
 }
-.button.neutral:active {
+.button.neutral:active:not(:disabled) {
   transform: translateY(3px);
+  scale: 0.96;
   box-shadow: none;
 }
 .button:disabled {
@@ -317,10 +348,12 @@ svg {
   font-size: 12px;
   text-decoration: none;
 }
-.text-button:hover {
-  color: var(--blue);
-  text-decoration: underline;
-  text-underline-offset: 4px;
+@media (hover: hover) and (pointer: fine) {
+  .text-button:hover {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
 }
 .text-button.blue-text {
   color: var(--blue);
@@ -580,14 +613,19 @@ svg {
   align-items: center;
   gap: 20px;
   text-align: left;
-  transition: transform 150ms ease-out;
+  transition:
+    transform 150ms ease-out,
+    scale 150ms ease-out;
 }
-.sample-card:hover {
-  border-color: var(--green-dark);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .sample-card:hover:not(:disabled) {
+    border-color: var(--green-dark);
+    transform: translateY(-2px);
+  }
 }
-.sample-card:active {
+.sample-card:active:not(:disabled) {
   transform: translateY(4px);
+  scale: 0.96;
   box-shadow: none;
 }
 .sample-icon {
@@ -859,8 +897,10 @@ svg {
 .quest-path .locked button {
   color: var(--muted);
 }
-.quest-path .done button:hover {
-  background: #eaf6ff;
+@media (hover: hover) and (pointer: fine) {
+  .quest-path .done button:hover {
+    background: #eaf6ff;
+  }
 }
 .path-number {
   display: grid;
@@ -1082,12 +1122,12 @@ svg {
   cursor: pointer;
   transition: transform 120ms ease-out;
 }
-.choice:hover {
-  background: #f0f8fd;
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .choice:hover {
+    background: #f0f8fd;
+  }
 }
 .choice:active {
-  transform: translateY(3px);
   box-shadow: none;
 }
 .choice.selected {
@@ -1137,7 +1177,11 @@ svg {
 .choices:disabled .choice {
   cursor: default;
 }
-.choices:disabled .choice:hover,
+@media (hover: hover) and (pointer: fine) {
+  .choices:disabled .choice:hover {
+    transform: none;
+  }
+}
 .choices:disabled .choice:active {
   transform: none;
 }
@@ -1438,8 +1482,10 @@ blockquote cite {
   text-align: left;
   gap: 15px;
 }
-.recap-item:hover {
-  background: var(--green-soft);
+@media (hover: hover) and (pointer: fine) {
+  .recap-item:hover {
+    background: var(--green-soft);
+  }
 }
 .recap-item .path-number {
   background: var(--green-soft);
@@ -1479,6 +1525,7 @@ blockquote cite {
   color: #1b1c1c;
   max-height: 85dvh;
   overflow-y: auto;
+  overscroll-behavior: contain;
   animation: modal-in 180ms ease-out;
 }
 .modal::backdrop {
@@ -2090,4 +2137,29 @@ blockquote cite {
   .confetti {
     display: none;
   }
+  .button,
+  .icon-button,
+  .sample-card,
+  .choice {
+    transform: none !important;
+    scale: 1 !important;
+  }
+}
+html[data-reduced-motion="true"] *,
+html[data-reduced-motion="true"] *::before,
+html[data-reduced-motion="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+html[data-reduced-motion="true"]
+  :is(.button, .icon-button, .sample-card, .choice) {
+  transform: none !important;
+  scale: 1 !important;
+}
+.button:focus-visible:active,
+.icon-button:focus-visible:active,
+.sample-card:focus-visible:active {
+  transform: none;
+  scale: 1;
 }

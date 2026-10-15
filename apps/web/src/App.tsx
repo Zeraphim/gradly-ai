@@ -337,6 +337,7 @@ export function App() {
             researchAvailable ? (file) => openResearch(file) : undefined
           }
           session={session}
+          complete={complete}
           onResume={() => {
             if (lesson) changeScreen("lesson");
             else {
@@ -475,7 +476,9 @@ export function App() {
                   changeScreen("lesson");
                 }}
               >
-                Return to adventure
+                {complete
+                  ? "Review completed adventure"
+                  : "Return to adventure"}
               </button>
             </>
           ) : (

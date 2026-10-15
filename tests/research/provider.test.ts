@@ -97,19 +97,17 @@ it("rejects truncated or unexpected-model responses before accepting valid JSON"
   ]) {
     vi.stubGlobal(
       "fetch",
-      vi
-        .fn()
-        .mockResolvedValue(
-          Response.json({
-            model,
-            choices: [
-              {
-                finish_reason: finishReason,
-                message: { content: '{"answer":"valid"}' },
-              },
-            ],
-          }),
-        ),
+      vi.fn().mockResolvedValue(
+        Response.json({
+          model,
+          choices: [
+            {
+              finish_reason: finishReason,
+              message: { content: '{"answer":"valid"}' },
+            },
+          ],
+        }),
+      ),
     );
     await expect(
       new NebiusProvider().generate("Test", "test", {}, schema),

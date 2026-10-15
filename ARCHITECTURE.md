@@ -16,6 +16,8 @@ Gradly keeps the existing React/Vite + Express TypeScript workspaces, shared con
 | `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                       |
 | `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance             |
 
+The research workspace composes `PathPicker`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `useResearchConfig` loads availability once per mounted research app and exposes explicit retry; internal navigation reuses its result. Shared display types live in `research/types.ts`. Confirmation dialogs reuse the original native `Dialog` component.
+
 ## Research data flow
 
 PDF selection → local blob preview → explicit server extraction → per-page transcription review → confirmation for external processing → evidence analyst → lesson architect → statistical reviewer → coach reviewer → deterministic verification → learning session → optional explanation feedback → reveal → completion/history.
@@ -37,6 +39,8 @@ Exact excerpt/page matching, valid answer guides, known reference identifiers an
 ## Storage and security
 
 Local SQLite and remote libSQL share `store.ts`. Records have guest owner, kind, version and 30-day expiry. Compare-and-swap updates reject stale submissions. Deleting a document atomically removes its linked learner sessions. Protected maintenance removes expired records and stale request counters.
+
+`research/client-state.ts` keeps unsubmitted choices, explanations, revisions and reflections in tab-scoped session storage, with an in-memory fallback when storage is denied. Drafts require matching session version and challenge; submitted decisions remain authoritative on the server. Selected PDFs and checked-document results stay in browser memory across research navigation. Route loads are abortable, upload callbacks are detached on departure, and late mutations cannot redirect a learner away from their chosen screen. `research/request.ts` presents recoverable connection/response errors without exposing raw diagnostics.
 
 HMAC-signed HttpOnly SameSite=Strict cookies identify guests; Vercel cookies are Secure. Guest ownership is not an account or cross-device sync system. On Vercel, research requires explicit enablement, a remote database URL/token and a signing secret. Source and client assets contain no credentials.
 

@@ -15,6 +15,7 @@ export function Dialog({
     const dialog = ref.current!;
     const prior = document.activeElement as HTMLElement | null;
     dialog.showModal();
+    dialog.querySelector<HTMLElement>("[data-initial-focus]")?.focus();
     return () => {
       dialog.close();
       prior?.focus();

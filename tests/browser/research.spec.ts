@@ -285,6 +285,10 @@ test("desktop, tablet, mobile layouts and keyboard access", async ({
   await page.reload();
   await expect(page.getByLabel("Reduce interface motion")).toBeChecked();
   await page.goto("/#/research/learn");
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Think like a researcher." }),
+  ).toBeVisible();
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Skip to content" }),
@@ -636,9 +640,7 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
   ).toBe("gradly-arrive");
   const other = page.locator(".path-card").nth(1);
   const initial = await other.boundingBox();
-  const height = await start.evaluate(
-    (el) => el.getBoundingClientRect().height,
-  );
+  const height = await start.evaluate((el) => (el as HTMLElement).offsetHeight);
   await start.hover();
   await expect
     .poll(() =>
@@ -648,7 +650,10 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
     )
     .not.toBe("none");
   await page.mouse.down();
-  expect(await start.evaluate((el) => el.getBoundingClientRect().height)).toBe(
+  await expect
+    .poll(() => start.evaluate((el) => getComputedStyle(el).scale))
+    .toBe("0.96");
+  expect(await start.evaluate((el) => (el as HTMLElement).offsetHeight)).toBe(
     height,
   );
   expect((await other.boundingBox())!.y).toBe(initial!.y);

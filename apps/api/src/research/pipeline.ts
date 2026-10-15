@@ -149,6 +149,7 @@ export async function runStage(
       j.status = "ready";
     }
     audit.status = "Completed";
+    delete audit.error;
     j.stage++;
     j.status = j.stage === 5 ? "ready" : "pending";
     j.leaseUntil = 0;

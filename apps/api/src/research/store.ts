@@ -14,9 +14,14 @@ export async function db() {
     client = createClient({ url, authToken: process.env.DATABASE_AUTH_TOKEN });
   }
   if (!ready)
-    ready = client.executeMultiple(
-      `CREATE TABLE IF NOT EXISTS records (id TEXT NOT NULL,owner TEXT NOT NULL,kind TEXT NOT NULL,data TEXT NOT NULL,version INTEGER NOT NULL DEFAULT 0,updated INTEGER NOT NULL,expires INTEGER NOT NULL, PRIMARY KEY(id,kind)); CREATE INDEX IF NOT EXISTS records_owner ON records(owner,kind); CREATE TABLE IF NOT EXISTS limits (id TEXT PRIMARY KEY,count INTEGER NOT NULL,reset INTEGER NOT NULL);`,
-    );
+    ready = client
+      .executeMultiple(
+        `CREATE TABLE IF NOT EXISTS records (id TEXT NOT NULL,owner TEXT NOT NULL,kind TEXT NOT NULL,data TEXT NOT NULL,version INTEGER NOT NULL DEFAULT 0,updated INTEGER NOT NULL,expires INTEGER NOT NULL, PRIMARY KEY(id,kind)); CREATE INDEX IF NOT EXISTS records_owner ON records(owner,kind); CREATE TABLE IF NOT EXISTS limits (id TEXT PRIMARY KEY,count INTEGER NOT NULL,reset INTEGER NOT NULL);`,
+      )
+      .catch((error: unknown) => {
+        ready = undefined;
+        throw error;
+      });
   await ready;
   return client;
 }
@@ -75,11 +80,8 @@ export async function list<T>(
   owner: string,
   kind: string,
 ): Promise<(T & { version: number })[]> {
+  await purgeExpired();
   const d = await db();
-  await d.execute({
-    sql: "DELETE FROM records WHERE expires<?",
-    args: [Date.now()],
-  });
   const r = await d.execute({
     sql: "SELECT data,version FROM records WHERE owner=? AND kind=? ORDER BY updated DESC LIMIT 100",
     args: [owner, kind],

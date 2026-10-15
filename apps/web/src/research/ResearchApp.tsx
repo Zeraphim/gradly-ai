@@ -5,84 +5,34 @@ import {
   useResearchRouter,
 } from "./navigation.js";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { Dialog } from "../components/Dialog.js";
+import { SupportPages } from "./SupportPages.js";
+import { HistoryPage } from "./HistoryPage.js";
 import { ActionLabel, Icon } from "./icon.js";
+import { api } from "./request.js";
 import {
-  Mascot,
-  Speech,
-  Progress,
-  ErrorMessage,
-  ExtractedPages,
-} from "./learning-ui.js";
+  clearDraft,
+  readDraft,
+  readLastAdventure,
+  readReducedMotion,
+  writeReducedMotion,
+  writeDraft,
+} from "./client-state.js";
+import { Mascot, Speech, Progress, ErrorMessage } from "./learning-ui.js";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { publicSession } from "../../../api/src/research/engine.js";
-import type { publicJob } from "../../../api/src/research/pipeline.js";
-type Session = ReturnType<typeof publicSession>;
-type Job = ReturnType<typeof publicJob>;
-type Config = {
-  liveAI: boolean;
-  demoAvailable: boolean;
-  maxUploadBytes: number;
-  storage: boolean;
-  model: string;
-};
-type History = {
-  id: string;
-  title: string;
-  phase: string;
-  index: number;
-  created: string;
-  source?: "featured" | "generated" | "demo";
-};
-type Doc = {
-  id: string;
-  name: string;
-  status: string;
-  pages: number;
-  mode?: string;
-};
-async function api<T>(
-  path: string,
-  body?: unknown,
-  method = "POST",
-): Promise<T> {
-  const response = await fetch(
-    path,
-    body === undefined
-      ? { cache: "no-store" }
-      : {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        },
-  );
-  const data = await response.json();
-  if (!response.ok)
-    throw Error(data.error || "The request failed. Please try again.");
-  return data;
-}
-const glossary: Record<string, string> = {
-  "Between-participants design":
-    "Different participants contribute observations in each condition.",
-  "Random assignment":
-    "A chance process assigns participants to conditions. It supports causal comparisons by reducing systematic initial differences.",
-  "Random sampling":
-    "A chance process selects people from a population. It concerns representativeness and differs from random assignment.",
-  "Independent-samples t-test":
-    "Compares two independent group means. The pooled version assumes equal population variances; Welch’s version relaxes that assumption.",
-  "One-way ANOVA":
-    "Tests group mean differences for one factor. With two groups, the usual equal-variance ANOVA and pooled t-test are equivalent: F = t².",
-  "Paired-samples t-test":
-    "Tests the mean difference in linked observations, such as repeated measurements of the same people.",
-  "Percentage points":
-    "The arithmetic difference between two percentages. A relative percentage change instead divides by a baseline.",
-  "p-value":
-    "Under a specified null model and test assumptions, the probability of a result at least as extreme as the one observed.",
-  "Standard deviation":
-    "Describes the spread of observations around a mean, in the outcome’s units.",
-  Generalizability:
-    "Whether findings apply to people, contexts, and outcomes beyond those studied.",
-};
+import type {
+  ResearchSession as Session,
+  ProcessingJob as Job,
+  ResearchConfig as Config,
+  AdventureRecord as History,
+  DocumentRecord as Doc,
+  UploadDraft,
+} from "./types.js";
+import { PathPicker } from "./PathPicker.js";
+import { UploadPage } from "./UploadPage.js";
+import { ProcessingPage } from "./ProcessingPage.js";
+import { useResearchConfig } from "./useResearchConfig.js";
 export function ResearchApp({
   onExit,
   initialFile,
@@ -91,8 +41,25 @@ export function ResearchApp({
   initialFile?: File | null;
 }) {
   const path = useResearchPath();
+  const previousPath = useRef(path);
+  const configuration = useResearchConfig();
+  const [returnPath, setReturnPath] = useState<string | null>(null);
+  const [uploadDraft, setUploadDraft] = useState<UploadDraft>(() => ({
+    file: initialFile ?? null,
+    uploaded: null,
+  }));
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
+    if (previousPath.current !== path) {
+      previousPath.current = path;
+      const title = document.querySelector<HTMLElement>(
+        ".research-lab main h1",
+      );
+      title?.setAttribute("tabindex", "-1");
+      title?.focus();
+    }
+    if (/^\/(?:upload|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(path))
+      setReturnPath(path);
   }, [path]);
   return (
     <div className="research-lab">
@@ -100,7 +67,12 @@ export function ResearchApp({
         key={path}
         path={path}
         onExit={onExit}
-        initialFile={initialFile}
+        uploadDraft={uploadDraft}
+        setUploadDraft={setUploadDraft}
+        returnPath={returnPath}
+        config={configuration.config}
+        configError={configuration.error}
+        onRetryConfig={configuration.retry}
       />
     </div>
   );
@@ -108,17 +80,26 @@ export function ResearchApp({
 function GradlyWorkspace({
   path,
   onExit,
-  initialFile,
+  uploadDraft,
+  setUploadDraft,
+  returnPath,
+  config,
+  configError,
+  onRetryConfig,
 }: {
   path: string;
   onExit: () => void;
-  initialFile?: File | null;
+  uploadDraft: UploadDraft;
+  setUploadDraft: React.Dispatch<React.SetStateAction<UploadDraft>>;
+  returnPath: string | null;
+  config: Config | null;
+  configError: string;
+  onRetryConfig: () => void;
 }) {
   const router = useResearchRouter();
   const parts = path.split("/").filter(Boolean);
   const route = parts[0] || "home";
   const id = parts[1];
-  const [config, setConfig] = useState<Config | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [job, setJob] = useState<Job | null>(null);
   const [error, setError] = useState("");
@@ -134,126 +115,146 @@ function GradlyWorkspace({
   } | null>(null);
   const [history, setHistory] = useState<History[]>([]);
   const [documents, setDocuments] = useState<Doc[]>([]);
-  const [file, setFile] = useState<File | null>(initialFile ?? null);
-  const [preview, setPreview] = useState("");
+  const [historyStatus, setHistoryStatus] = useState<
+    "loading" | "error" | "ready"
+  >("loading");
+  const [loadVersion, setLoadVersion] = useState(0);
   const [sourcePages, setSourcePages] = useState<
     import("../../../api/src/research/contracts.js").PageText[] | null
   >(null);
-  const [drag, setDrag] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploaded, setUploaded] = useState<{
-    id: string;
-    pageCount: number;
-    excerpt: string;
-    pages: import("../../../api/src/research/contracts.js").PageText[];
-    extraction: { page: number; method: string; confidence?: number }[];
-  } | null>(null);
   const [showReview, setShowReview] = useState(false);
   const [reflection, setReflection] = useState("");
   const [confirm, setConfirm] = useState<"restart" | string | null>(null);
-  const [reduced, setReduced] = useState(false);
-  const input = useRef<HTMLInputElement>(null);
-  const xhr = useRef<XMLHttpRequest | null>(null);
+  const [dialogError, setDialogError] = useState("");
+  const [reduced, setReduced] = useState(readReducedMotion);
   const heading = useRef<HTMLHeadingElement>(null);
+  const feedbackRegion = useRef<HTMLElement>(null);
+  const mounted = useRef(false);
+  const previousFocus = useRef<{ stage: string; attempts: number } | null>(
+    null,
+  );
   const actionLock = useRef(false);
   useEffect(() => {
-    api<Config>("/api/research/config")
-      .then((c) => {
-        setConfig(c);
-        try {
-          setReduced(localStorage.getItem("gradly-reduced-motion") === "true");
-        } catch {}
-      })
-      .catch(() =>
-        setError(
-          "Application configuration could not be loaded. Refresh to retry.",
-        ),
-      );
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
   }, []);
   useEffect(() => {
     document.documentElement.dataset.reducedMotion = String(reduced);
   }, [reduced]);
   const applySession = useCallback((s: Session) => {
+    const draft = readDraft(s.id, s.version, s.challenge?.id ?? s.phase);
     setSession(s);
-    setSelected(s.retrying ? [] : (s.challenge?.previousSelection ?? []));
-    setReasoning(s.challenge?.reasoning ?? "");
+    setSelected(
+      !s.challenge?.feedback && draft
+        ? draft.selected.filter((id) =>
+            s.challenge?.options.some((o) => o.id === id),
+          )
+        : s.retrying
+          ? []
+          : (s.challenge?.previousSelection ?? []),
+    );
+    setReasoning(draft?.reasoning ?? s.challenge?.reasoning ?? "");
     setFeedback(null);
-    setEditingReasoning(false);
-    setReflection(s.reflection);
+    setEditingReasoning(
+      !!s.challenge?.feedback && (draft?.editingReasoning ?? false),
+    );
+    setReflection(draft?.reflection ?? s.reflection);
   }, []);
   useEffect(() => {
+    const controller = new AbortController();
+    const get = <T,>(url: string) =>
+      api<T>(url, undefined, "GET", controller.signal);
+    const failed = (e: Error) => {
+      if (!controller.signal.aborted) setError(e.message);
+    };
     if (route === "adventure" && id) {
-      api<Session>(`/api/research/learning?id=${encodeURIComponent(id)}`)
-        .then(applySession)
-        .catch((e) => setError(e.message));
+      get<Session>(`/api/research/learning?id=${encodeURIComponent(id)}`)
+        .then((s) => {
+          if (!controller.signal.aborted) applySession(s);
+        })
+        .catch(failed);
     }
     if (route === "processing" && id) {
-      api<Job>(`/api/research/jobs?id=${encodeURIComponent(id)}`)
-        .then(setJob)
-        .catch((e) => setError(e.message));
+      get<Job>(`/api/research/jobs?id=${encodeURIComponent(id)}`)
+        .then((j) => {
+          if (!controller.signal.aborted) setJob(j);
+        })
+        .catch(failed);
     }
     if (route === "history") {
+      setHistoryStatus("loading");
       Promise.all([
-        api<History[]>("/api/research/learning"),
-        api<Doc[]>("/api/research/documents"),
+        get<History[]>("/api/research/learning"),
+        get<Doc[]>("/api/research/documents"),
       ])
         .then(([h, d]) => {
+          if (controller.signal.aborted) return;
           setHistory(h);
           setDocuments(d);
+          setHistoryStatus("ready");
         })
-        .catch((e) => setError(e.message));
+        .catch((e) => {
+          if (!controller.signal.aborted) {
+            setHistoryStatus("error");
+            failed(e);
+          }
+        });
     }
-  }, [route, id, applySession]);
+    return () => controller.abort();
+  }, [route, id, applySession, loadVersion]);
   useEffect(() => {
     if (!session) return;
     try {
       localStorage.setItem("gradly-last-adventure", session.id);
     } catch {}
-    heading.current?.focus();
+    const stage = `${session.id}:${session.phase}:${session.challenge?.id ?? ""}`;
+    if (previousFocus.current?.stage !== stage) heading.current?.focus();
+    else if (
+      (previousFocus.current?.attempts ?? 0) <
+      (session.challenge?.attempts ?? 0)
+    )
+      feedbackRegion.current?.focus();
+    previousFocus.current = {
+      stage,
+      attempts: session.challenge?.attempts ?? 0,
+    };
   }, [session]);
   useEffect(() => {
-    if (!file) {
-      setPreview("");
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    return () => URL.revokeObjectURL(url);
-  }, [file]);
+    if (!session) return;
+    writeDraft(session.id, {
+      version: session.version,
+      challengeId: session.challenge?.id ?? session.phase,
+      selected,
+      reasoning,
+      reflection,
+      editingReasoning,
+    });
+  }, [session, selected, reasoning, reflection, editingReasoning]);
   useEffect(() => {
-    if (!confirm) return;
-    const dialog = document.querySelector<HTMLElement>("[role=dialog]");
-    const previous = document.activeElement as HTMLElement;
-    const focusables = () =>
-      Array.from(
-        dialog?.querySelectorAll<HTMLElement>(
-          "button:not(:disabled),a[href],input,textarea",
-        ) ?? [],
-      );
-    focusables()[0]?.focus();
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setConfirm(null);
-        return;
-      }
-      if (e.key !== "Tab") return;
-      const nodes = focusables();
-      const first = nodes[0],
-        last = nodes.at(-1);
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last?.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first?.focus();
-      }
+    const previousTitle = document.title;
+    const titles: Record<string, string> = {
+      learn: "Choose your learning path",
+      home: "Choose your learning path",
+      featured: "Featured investigation",
+      upload: "Upload your paper",
+      history: "Your adventures",
+      glossary: "Statistics glossary",
+      help: "How Gradly works",
+      settings: "Learning settings",
+      privacy: "Privacy & AI processing",
+      processing: "Prepare your investigation",
+      adventure: "Your investigation",
     };
-    document.addEventListener("keydown", handler);
+    document.title = `${titles[route] ?? "Find your investigation"} · Gradly`;
     return () => {
-      document.removeEventListener("keydown", handler);
-      previous?.focus();
+      document.title = previousTitle;
     };
-  }, [confirm]);
+  }, [route, !!config]);
+  useEffect(() => {
+    if (session) heading.current?.focus();
+  }, [showReview]);
   const act = async (action: string, extra: Record<string, unknown> = {}) => {
     if (actionLock.current) return;
     actionLock.current = true;
@@ -266,6 +267,8 @@ function GradlyWorkspace({
         version: session?.version,
         ...extra,
       });
+      if (!mounted.current) return;
+      if (session) clearDraft(session.id);
       applySession(s);
       if (
         action === "start" ||
@@ -274,10 +277,10 @@ function GradlyWorkspace({
       )
         router.push(`/adventure/${s.id}`);
     } catch (e) {
-      setError((e as Error).message);
+      if (mounted.current) setError((e as Error).message);
     } finally {
       actionLock.current = false;
-      setBusy(false);
+      if (mounted.current) setBusy(false);
     }
   };
   const step = useCallback(
@@ -307,15 +310,18 @@ function GradlyWorkspace({
           consent,
           ...(consent ? { mode: config?.liveAI ? "live" : "demo" } : {}),
         });
-        setJob(j);
+        if (mounted.current) setJob(j);
       } catch (e) {
+        if (!mounted.current) return;
         setError((e as Error).message);
         api<Job>(`/api/research/jobs?id=${id}`)
-          .then(setJob)
+          .then((j) => {
+            if (mounted.current) setJob(j);
+          })
           .catch(() => {});
       } finally {
         actionLock.current = false;
-        setBusy(false);
+        if (mounted.current) setBusy(false);
       }
     },
     [id, config?.liveAI],
@@ -339,91 +345,45 @@ function GradlyWorkspace({
       const timer = setTimeout(() => {
         api<Job>(`/api/research/jobs?id=${id}`)
           .then((j) => {
+            if (!mounted.current) return;
             setJob(j);
             if (j.leaseUntil < Date.now()) void step();
           })
-          .catch((e) => setError(e.message));
+          .catch((e) => {
+            if (mounted.current) setError(e.message);
+          });
       }, 2000);
       return () => clearTimeout(timer);
     }
   }, [route, job, error, config, step, id]);
-  const pickFile = async (f: File | undefined) => {
-    if (busy) return;
-    setError("");
-    setUploaded(null);
-    setUploadProgress(0);
-    if (!f) return;
-    if (
-      !f.name.toLowerCase().endsWith(".pdf") ||
-      (f.type && f.type !== "application/pdf")
-    ) {
-      setError("Choose a PDF document.");
-      return;
-    }
-    if (!f.size) {
-      setError("This PDF is empty. Choose another file.");
-      return;
-    }
-    if (f.size > (config?.maxUploadBytes ?? 4000000)) {
-      setError("This PDF exceeds the 4 MB limit. Choose a smaller file.");
-      return;
-    }
-    if (
-      new TextDecoder().decode(await f.slice(0, 5).arrayBuffer()) !== "%PDF-"
-    ) {
-      setError("This file’s contents are not a PDF.");
-      return;
-    }
-    setFile(f);
-  };
-  const upload = () => {
-    if (!file || busy) return;
-    setBusy(true);
-    setError("");
-    const req = new XMLHttpRequest();
-    xhr.current = req;
-    req.open("POST", "/api/research/documents");
-    req.upload.onprogress = (e) => {
-      if (e.lengthComputable)
-        setUploadProgress(Math.round((e.loaded / e.total) * 100));
-    };
-    req.onload = () => {
-      setBusy(false);
-      try {
-        const data = JSON.parse(req.responseText);
-        if (req.status >= 400) throw Error(data.error);
-        setUploaded(data);
-      } catch (e) {
-        setError((e as Error).message || "Upload failed. Try again.");
-      }
-    };
-    req.onerror = () => {
-      setBusy(false);
-      setError(
-        "The upload was interrupted. Your selected file is still here; retry when connected.",
-      );
-    };
-    req.onabort = () => {
-      setBusy(false);
-      setUploadProgress(0);
-      setError("Upload cancelled. Choose or retry your PDF.");
-    };
-    const form = new FormData();
-    form.append("file", file);
-    req.send(form);
-  };
   const removeDocument = async (docId: string) => {
     setBusy(true);
+    setError("");
+    setDialogError("");
+    let deleted = false;
     try {
       await api("/api/research/documents", { id: docId }, "DELETE");
+      setUploadDraft((draft) =>
+        draft.uploaded?.id === docId ? { file: null, uploaded: null } : draft,
+      );
+      if (!mounted.current) return;
+      deleted = true;
       setDocuments((d) => d.filter((item) => item.id !== docId));
       setConfirm(null);
       const h = await api<History[]>("/api/research/learning");
+      if (!mounted.current) return;
+      history
+        .filter((old) => !h.some((next) => next.id === old.id))
+        .forEach((old) => clearDraft(old.id));
       setHistory(h);
     } catch (e) {
-      setError((e as Error).message);
+      if (mounted.current) {
+        setError((e as Error).message);
+        if (deleted) setHistoryStatus("error");
+        else setDialogError((e as Error).message);
+      }
     } finally {
-      setBusy(false);
+      if (mounted.current) setBusy(false);
     }
   };
   const c = session?.challenge;
@@ -433,6 +393,22 @@ function GradlyWorkspace({
     (route === "adventure" && session?.phase === "challenge") ||
     (route === "adventure" && session?.phase === "bonus");
   const reviewMode = showReview && !!session?.review;
+  const lastAdventure = readLastAdventure();
+  const resumeHref =
+    returnPath ?? (lastAdventure ? `/adventure/${lastAdventure}` : "/learn");
+  const resumeLabel =
+    resumeHref === "/upload"
+      ? "Return to your paper"
+      : resumeHref.startsWith("/processing/")
+        ? "Return to processing"
+        : resumeHref.startsWith("/adventure/")
+          ? "Return to investigation"
+          : "Continue learning";
+  const reloadSavedState = () => {
+    setError("");
+    onRetryConfig();
+    setLoadVersion((v) => v + 1);
+  };
   return (
     <>
       <a
@@ -482,9 +458,25 @@ function GradlyWorkspace({
       </header>
       <main
         id="main"
-        className={`main ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
+        className={`main ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
       >
-        <ErrorMessage message={error} />
+        <ErrorMessage message={error || configError} />
+        {configError || (error && route !== "history") ? (
+          <div className="recovery-actions actions">
+            <button
+              className="btn outline compact"
+              disabled={busy}
+              onClick={reloadSavedState}
+            >
+              Reload saved state
+            </button>
+            {route === "adventure" || route === "processing" ? (
+              <Link className="btn outline compact" href="/history">
+                Your adventures
+              </Link>
+            ) : null}
+          </div>
+        ) : null}
         {demo ? (
           <aside className="demo-banner" aria-label="Sample preview mode">
             <strong>Sample preview</strong>
@@ -496,11 +488,10 @@ function GradlyWorkspace({
         ) : null}
         {config && !config.storage ? (
           <div className="notice">
-            <h1>Research extension needs configuration</h1>
+            <h1>This learning path is unavailable</h1>
             <p>
-              The existing curated adventure remains available. Enable the
-              extension with remote libSQL storage and SESSION_SECRET on Vercel;
-              see the repository setup guide.
+              The research workspace is not available right now. Continue with
+              Gradly’s guided adventure while it is being prepared.
             </p>
             <button className="btn primary" onClick={onExit}>
               Return to curated adventure
@@ -508,549 +499,47 @@ function GradlyWorkspace({
           </div>
         ) : null}
         {config?.storage && ["home", "learn", "featured"].includes(route) ? (
-          <>
-            <div className="path-intro">
-              <Mascot small />
-              <p>Small decisions. Deeper understanding.</p>
-              <span className="tag">Your research companion</span>
-            </div>
-            <section className="welcome">
-              <span className="tag">Your research-learning companion</span>
-              <h1 ref={heading} tabIndex={-1}>
-                Think like a researcher.
-              </h1>
-              <p>
-                Start with a guided investigation, or explore the journey with
-                your own PDF.
-              </p>
-              <div className="path-grid">
-                <article className="path-card featured-card">
-                  <div className="symbol blue">
-                    <Icon name="phone" />
-                  </div>
-                  <span className="tag">Start here · guided investigation</span>
-                  <h2>
-                    Can You Text
-                    <br />
-                    and Still Learn?
-                  </h2>
-                  <p>
-                    Explore a classroom experiment. Make your research
-                    decisions, then discover what the evidence says.
-                  </p>
-                  <div className="pills">
-                    <span>8 challenges</span>
-                    <span>Optional bonus</span>
-                    <span>No API key needed</span>
-                  </div>
-                  <button
-                    disabled={busy}
-                    className="btn primary"
-                    aria-busy={busy}
-                    onClick={() => act("start")}
-                  >
-                    <ActionLabel busy={busy}>
-                      {busy ? "Opening…" : "Start investigation"}
-                    </ActionLabel>
-                  </button>
-                </article>
-                <article className="path-card">
-                  <div className="symbol green">
-                    <Icon name="document" />
-                  </div>
-                  <span className="tag">Bring your own paper</span>
-                  <h2>
-                    Your paper.
-                    <br />A new perspective.
-                  </h2>
-                  <p>
-                    {config.liveAI
-                      ? "Bring an empirical research PDF. Review its evidence, then let Gradly build and check your investigation."
-                      : "Check your PDF and walk through processing, learning and review with a clearly labeled sample study."}
-                  </p>
-                  <div className="pills">
-                    <span>Page-linked evidence</span>
-                    <span>
-                      {config.liveAI
-                        ? "Live AI ready"
-                        : config.demoAvailable
-                          ? "Sample preview available"
-                          : "Live AI needed"}
-                    </span>
-                  </div>
-                  <Link className="btn outline" href="/upload">
-                    <ActionLabel icon="upload">
-                      Upload a research paper
-                    </ActionLabel>
-                  </Link>
-                </article>
-              </div>
-              <p className="quiet">
-                Decisions first. Findings next. Understanding throughout.
-              </p>
-            </section>
-          </>
+          <PathPicker
+            config={config}
+            busy={busy}
+            heading={heading}
+            onStart={() => void act("start")}
+          />
         ) : null}
         {route === "upload" ? (
-          <>
-            <Speech>
-              {config?.liveAI
-                ? "Check your paper first. You choose when its text is sent for AI processing."
-                : "Check your PDF, then explore a sample adventure. Nothing is sent to an AI service."}
-            </Speech>
-            <section
-              className={`dropzone ${file ? "has-file" : ""} ${uploaded ? "is-checked" : ""} ${drag ? "dragging" : ""}`}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setDrag(true);
-              }}
-              onDragLeave={() => setDrag(false)}
-              onDrop={(e) => {
-                e.preventDefault();
-                setDrag(false);
-                void pickFile(e.dataTransfer.files[0]);
-              }}
-            >
-              <div className="document-icon">
-                <Icon name="document" />
-              </div>
-              <h1 ref={heading} tabIndex={-1}>
-                {uploaded ? "Review your paper" : "Upload your Research Paper"}
-              </h1>
-              <p>
-                Research PDF • up to{" "}
-                {(config?.maxUploadBytes ?? 4000000) / 1000000} MB • up to 80
-                pages
-              </p>
-              <input
-                ref={input}
-                aria-label="Choose PDF file"
-                type="file"
-                accept="application/pdf,.pdf"
-                onChange={(e) => void pickFile(e.target.files?.[0])}
-              />
-              <button
-                className="btn primary"
-                disabled={busy}
-                onClick={() => input.current?.click()}
-              >
-                <ActionLabel icon="upload">
-                  {file ? "Replace PDF" : "Choose PDF File"}
-                </ActionLabel>
-              </button>
-              {file ? (
-                <div className="file-preview">
-                  <div className="file-info">
-                    <strong>{file.name}</strong>
-                    <span>{(file.size / 1000000).toFixed(2)} MB</span>
-                    <button
-                      className="btn compact outline"
-                      disabled={busy}
-                      onClick={() => input.current?.click()}
-                    >
-                      Replace
-                    </button>
-                    <button
-                      className="btn compact outline"
-                      disabled={busy}
-                      onClick={() => {
-                        setFile(null);
-                        setUploaded(null);
-                        if (input.current) input.current.value = "";
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                  <iframe
-                    title="Selected research PDF preview"
-                    src={preview || undefined}
-                  />
-                  {uploaded ? (
-                    <div className="notice document-review">
-                      <div className="review-heading">
-                        <span className="review-check" aria-hidden="true">
-                          <Icon name="check" size={19} />
-                        </span>
-                        <div>
-                          <h2>Document checked</h2>
-                          <p>
-                            {uploaded.pageCount}{" "}
-                            {uploaded.pageCount === 1 ? "page" : "pages"} with
-                            extracted text. Review before continuing.
-                          </p>
-                        </div>
-                      </div>
-                      <ExtractedPages pages={uploaded.pages} />
-                      {uploaded.extraction?.some((p) => p.method === "ocr") ? (
-                        <p className="ocr-warning">
-                          Some pages were read with English OCR. Check text and
-                          numbers against the original. Confidence is an
-                          estimate, not a guarantee.
-                        </p>
-                      ) : null}
-                      <div className="processing-choice">
-                        <span className="tag">
-                          {config?.liveAI
-                            ? "Ready for your confirmation"
-                            : "Explore the complete flow"}
-                        </span>
-                        <p>
-                          {config?.liveAI
-                            ? "Continuing sends extracted text to Nebius. AI can make mistakes."
-                            : config?.demoAvailable
-                              ? "Preview uses a separate sample study. Your PDF is checked, but its content won’t be analyzed or used to invent findings."
-                              : "Live AI is not configured. You can still start the guided reference investigation."}
-                        </p>
-                        <button
-                          disabled={
-                            busy || (!config?.liveAI && !config?.demoAvailable)
-                          }
-                          className="btn primary"
-                          onClick={async () => {
-                            setBusy(true);
-                            try {
-                              await api("/api/research/jobs", {
-                                id: uploaded.id,
-                                consent: true,
-                                mode: config?.liveAI ? "live" : "demo",
-                              });
-                              router.push(`/processing/${uploaded.id}`);
-                            } catch (e) {
-                              setError((e as Error).message);
-                            } finally {
-                              setBusy(false);
-                            }
-                          }}
-                        >
-                          <ActionLabel busy={busy}>
-                            {busy
-                              ? "Opening…"
-                              : config?.liveAI
-                                ? "Confirm AI processing"
-                                : config?.demoAvailable
-                                  ? "Start sample preview"
-                                  : "Confirm AI processing"}
-                          </ActionLabel>
-                        </button>
-                        <small>
-                          Original PDF stays in this browser. Extracted text is
-                          stored for 30 days or until deleted.
-                        </small>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <p>
-                        Validate and extract text before any external AI
-                        processing.
-                      </p>
-                      <button
-                        disabled={busy}
-                        className="btn secondary"
-                        onClick={upload}
-                      >
-                        <ActionLabel busy={busy} icon="verify">
-                          {busy
-                            ? "Uploading & validating…"
-                            : "Check this document"}
-                        </ActionLabel>
-                      </button>
-                      {busy ? (
-                        <>
-                          <progress
-                            aria-label="Upload progress"
-                            value={uploadProgress}
-                            max={100}
-                          />
-                          <p>
-                            {uploadProgress}% transferred. Server validation
-                            follows.
-                          </p>
-                          <button
-                            className="btn outline compact"
-                            onClick={() => xhr.current?.abort()}
-                          >
-                            Cancel upload
-                          </button>
-                        </>
-                      ) : null}
-                    </>
-                  )}
-                </div>
-              ) : (
-                <p className="quiet">
-                  Drag and drop a PDF, or choose a file above.
-                </p>
-              )}
-            </section>
-            <details className="upload-privacy">
-              <summary>
-                Your paper, your choice · privacy & supported files
-              </summary>
-              <p>
-                Use documents you have permission to process. English scans use
-                bounded OCR for up to six image pages. Unreadable or longer
-                scans need a clearer searchable copy. Password-protected and
-                corrupt PDFs receive a recoverable error.
-              </p>
-              <Link className="inline-action" href="/privacy">
-                <ActionLabel icon="shield">Privacy & AI processing</ActionLabel>
-              </Link>
-            </details>
-            {!uploaded ? (
-              <section className="alternative">
-                <h2>Try a reference investigation</h2>
-                <button
-                  disabled={busy}
-                  className="path-card"
-                  onClick={() => act("start")}
-                >
-                  <strong>Can You Text and Still Learn?</strong>
-                  <p>
-                    Research design, independent groups, and statistical
-                    interpretation.
-                  </p>
-                  <span className="text-link">
-                    <ActionLabel>Begin the featured adventure</ActionLabel>
-                  </span>
-                </button>
-              </section>
-            ) : null}
-          </>
+          <UploadPage
+            config={config}
+            draft={uploadDraft}
+            onDraftChange={setUploadDraft}
+            busy={busy}
+            heading={heading}
+            onStart={() => void act("start")}
+          />
         ) : null}
-        {route === "processing" ? (
-          <>
-            <Speech>
-              {demo
-                ? "Explore how an adventure comes together. These steps use the reference sample, not AI analysis of your PDF."
-                : "Our research crew builds from the paper’s evidence. Each stage must succeed before you begin."}
-            </Speech>
-            <h1 ref={heading} tabIndex={-1}>
-              {demo
-                ? "Your sample adventure is taking shape"
-                : "AI Agents Crafting Adventure"}
-            </h1>
-            {job ? (
-              <>
-                <div className="card">
-                  <span className="tag">
-                    {demo ? "Your upload · sample flow" : "Uploaded document"}
-                  </span>
-                  <h2>{job.name}</h2>
-                  <p>
-                    {job.pageCount} {job.pageCount === 1 ? "page" : "pages"}{" "}
-                    extracted •{" "}
-                    {demo ? "Sample flow · no AI calls" : config?.model}
-                  </p>
-                  <Progress
-                    value={job.stage}
-                    max={5}
-                    label={
-                      demo
-                        ? "Sample preparation steps"
-                        : "Verified processing stages"
-                    }
-                  />
-                </div>
-                {job.status === "ready" ? (
-                  <div className="center">
-                    <h2>Your adventure is ready!</h2>
-                    <p>
-                      {demo
-                        ? "All sample steps are complete. Explore eight guided challenges, feedback, the paper reveal and your learning summary."
-                        : "All five stages passed. Generated content is AI-reviewed, rather than instructor-reviewed."}
-                    </p>
-                    <button
-                      className="btn primary"
-                      disabled={busy}
-                      onClick={() => act("start", { lessonId: job.id })}
-                    >
-                      <ActionLabel>Begin investigation</ActionLabel>
-                    </button>
-                  </div>
-                ) : null}
-                <div className="agent-stack">
-                  {job.audits.map((a, i) => (
-                    <details
-                      className={`agent-card ${a.status === "Processing" ? "active" : ""}`}
-                      key={a.role}
-                      open={
-                        a.status === "Failed" || a.status === "Needs Review"
-                      }
-                    >
-                      <summary>
-                        <span className={`symbol ${i % 2 ? "blue" : "green"}`}>
-                          <Icon
-                            name={
-                              (
-                                [
-                                  "search",
-                                  "layout",
-                                  "chart",
-                                  "coach",
-                                  "shield",
-                                ] as const
-                              )[i]!
-                            }
-                          />
-                        </span>
-                        <div>
-                          <strong>{a.role}</strong>
-                          <p>{a.task}</p>
-                        </div>
-                        <span
-                          className={`status ${a.status.toLowerCase().replace(" ", "-")}`}
-                        >
-                          {a.status === "Completed" ? (
-                            <Icon name="check" size={13} />
-                          ) : ["Processing", "Retrying"].includes(a.status) ? (
-                            <Icon
-                              name="loading"
-                              size={13}
-                              className="is-spinning"
-                            />
-                          ) : null}
-                          {a.status}
-                        </span>
-                        <Icon
-                          name="chevron"
-                          size={18}
-                          className="disclosure-chevron"
-                        />
-                      </summary>
-                      <div className="agent-details">
-                        <p>{a.summary}</p>
-                        <p>Model / role: {a.model}</p>
-                        {a.refs.length ? (
-                          <p>Evidence references: {a.refs.join(", ")}</p>
-                        ) : null}
-                        {a.error ? <ErrorMessage message={a.error} /> : null}
-                      </div>
-                    </details>
-                  ))}
-                </div>
-                {!job.consented && (config?.liveAI || config?.demoAvailable) ? (
-                  <div className="notice">
-                    <h2>
-                      {config?.liveAI
-                        ? "Confirm external AI processing"
-                        : "Preview the adventure flow"}
-                    </h2>
-                    <p>
-                      {config?.liveAI
-                        ? "Continuing sends extracted text to Nebius Token Factory. Review it first; AI can make mistakes."
-                        : "Use a separate sample investigation to explore every step. No AI is called and no findings are generated from your upload."}
-                    </p>
-                    <button
-                      className="btn primary"
-                      disabled={busy}
-                      onClick={() => step(false, true)}
-                    >
-                      <ActionLabel busy={busy}>
-                        {busy
-                          ? "Opening…"
-                          : config?.liveAI
-                            ? "Confirm AI processing"
-                            : config?.demoAvailable
-                              ? "Start sample preview"
-                              : "Confirm AI processing"}
-                      </ActionLabel>
-                    </button>
-                  </div>
-                ) : null}
-                {!config?.liveAI && !demo && !config?.demoAvailable ? (
-                  <div className="notice">
-                    <h2>Live inference needs configuration</h2>
-                    <p>
-                      The document has been extracted. No AI model has been
-                      called. Configure the server’s Nebius API key to generate
-                      an adventure.
-                    </p>
-                    <button
-                      className="btn primary"
-                      onClick={() => act("start")}
-                    >
-                      <ActionLabel>Start reference investigation</ActionLabel>
-                    </button>
-                  </div>
-                ) : null}
-                {["failed", "review"].includes(job.status) || error ? (
-                  <div className="notice">
-                    <ErrorMessage message={job.error ?? ""} />
-                    <button
-                      className="btn secondary"
-                      disabled={busy || (!config?.liveAI && !demo)}
-                      onClick={() => step(true)}
-                    >
-                      {job.status === "review"
-                        ? "Regenerate & review again"
-                        : "Retry failed stage"}
-                    </button>
-                  </div>
-                ) : null}
-                {job.evidence.length ? (
-                  <details className="card">
-                    <summary>
-                      {demo
-                        ? "Inspect sample study evidence"
-                        : "Inspect extracted evidence"}
-                    </summary>
-                    {job.evidence.map((r) => (
-                      <div key={r.id}>
-                        <h3>
-                          {r.id} • {demo ? "Sample source page" : "PDF page"}{" "}
-                          {r.page}
-                        </h3>
-                        <blockquote>{r.excerpt}</blockquote>
-                      </div>
-                    ))}
-                  </details>
-                ) : null}
-                <details className="card">
-                  <summary>View extracted text</summary>
-                  {job.extraction.some((p) => p.method === "ocr") ? (
-                    <p>
-                      English OCR was used. Check transcription and statistics
-                      against the original document. Pages:{" "}
-                      {job.extraction
-                        .filter((p) => p.method === "ocr")
-                        .map(
-                          (p) =>
-                            `${p.page} (confidence estimate ${p.confidence}%)`,
-                        )
-                        .join(", ")}
-                    </p>
-                  ) : null}
-                  <blockquote>{job.excerpt}</blockquote>
-                  {sourcePages ? (
-                    <ExtractedPages pages={sourcePages} />
-                  ) : (
-                    <button
-                      className="btn outline compact"
-                      onClick={async () => {
-                        try {
-                          const result = await api<{
-                            pages: import("../../../api/src/research/contracts.js").PageText[];
-                          }>(`/api/research/documents?id=${job.id}`);
-                          setSourcePages(result.pages);
-                        } catch (e) {
-                          setError((e as Error).message);
-                        }
-                      }}
-                    >
-                      Inspect all extracted pages
-                    </button>
-                  )}
-                </details>
-                <Link className="btn outline" href="/upload">
-                  Return to upload
-                </Link>
-              </>
-            ) : !error ? (
-              <p role="status">Loading saved processing state…</p>
-            ) : null}
-          </>
+        {route === "processing" && id ? (
+          <ProcessingPage
+            job={job}
+            config={config}
+            busy={busy}
+            error={error}
+            heading={heading}
+            sourcePages={sourcePages}
+            onStart={(lessonId) =>
+              void act("start", lessonId ? { lessonId } : {})
+            }
+            onStep={(retry, consent) => void step(retry, consent)}
+            onLoadPages={async () => {
+              if (!job) return;
+              try {
+                const result = await api<{
+                  pages: import("../../../api/src/research/contracts.js").PageText[];
+                }>(`/api/research/documents?id=${job.id}`);
+                if (mounted.current) setSourcePages(result.pages);
+              } catch (e) {
+                if (mounted.current) setError((e as Error).message);
+              }
+            }}
+          />
         ) : null}
         {route === "adventure" && session ? (
           <>
@@ -1205,10 +694,9 @@ function GradlyWorkspace({
                   className="choices"
                 >
                   <legend className="sr-only">{c.prompt}</legend>
-                  {c.options.map((o, index) => (
+                  {c.options.map((o) => (
                     <label
                       key={o.id}
-                      style={{ animationDelay: `${index * 35}ms` }}
                       className={`choice ${selected.includes(o.id) ? "selected" : ""}`}
                     >
                       <input
@@ -1236,6 +724,12 @@ function GradlyWorkspace({
                     </label>
                   ))}
                 </fieldset>
+                {!c.feedback ? (
+                  <p className="quiet draft-note">
+                    Your draft stays in this tab. Submitted decisions are saved
+                    to your guest profile.
+                  </p>
+                ) : null}
                 <div className="support-grid">
                   <details className="support">
                     <summary className="icon-summary">
@@ -1332,6 +826,8 @@ function GradlyWorkspace({
                 {c.feedback ? (
                   <>
                     <section
+                      ref={feedbackRegion}
+                      tabIndex={-1}
                       className={`feedback ${c.feedback.correct ? "correct" : "incorrect"}`}
                       aria-live="polite"
                     >
@@ -1437,13 +933,16 @@ function GradlyWorkspace({
                                 }>("/api/research/feedback", {
                                   id: session.id,
                                 });
+                                if (!mounted.current) return;
+                                clearDraft(session.id);
                                 applySession(response.session);
                               } catch (e) {
+                                if (!mounted.current) return;
                                 setFeedback({
                                   error: `${(e as Error).message} Your reasoning is saved. Use the reference explanation; no live assessment was completed.`,
                                 });
                               } finally {
-                                setBusy(false);
+                                if (mounted.current) setBusy(false);
                               }
                             }}
                           >
@@ -1752,257 +1251,57 @@ function GradlyWorkspace({
             ) : null}
           </>
         ) : null}
-        {route === "adventure" && !session && !error ? (
+        {route === "adventure" && id && !session && !error ? (
           <p role="status">Loading your saved adventure…</p>
         ) : null}
         {route === "history" ? (
-          <>
-            <h1 ref={heading} tabIndex={-1}>
-              Previous Adventures
-            </h1>
-            <p>Your progress belongs to this browser’s guest profile.</p>
-            {!history.length ? (
-              <div className="card">
-                <Mascot small />
-                <h2>Your next investigation starts here.</h2>
-                <p>
-                  Adventures appear here after you begin. Every submitted
-                  decision is saved.
-                </p>
-                <Link className="btn primary" href="/learn">
-                  <ActionLabel>Choose a learning path</ActionLabel>
-                </Link>
-              </div>
-            ) : (
-              history.map((h) => (
-                <article className="history-card card" key={h.id}>
-                  <div>
-                    <span className="tag">
-                      {h.source === "demo" ? "Sample preview · " : ""}
-                      {h.phase === "complete" ? "Completed" : "In progress"}
-                    </span>
-                    <h2>{h.title}</h2>
-                    <p>Started {new Date(h.created).toLocaleDateString()}</p>
-                  </div>
-                  <Link className="btn outline" href={`/adventure/${h.id}`}>
-                    <ActionLabel>
-                      {h.phase === "complete"
-                        ? "Review adventure"
-                        : "Resume investigation"}
-                    </ActionLabel>
-                  </Link>
-                </article>
-              ))
-            )}
-            <h2>Your uploaded documents</h2>
-            {documents.length ? (
-              documents.map((d) => (
-                <article className="history-card card" key={d.id}>
-                  <div>
-                    <h3>{d.name}</h3>
-                    <p>
-                      {d.pages} extracted pages • {d.status}
-                    </p>
-                  </div>
-                  <div className="actions">
-                    <Link
-                      className="btn outline compact"
-                      href={`/processing/${d.id}`}
-                    >
-                      View processing
-                    </Link>
-                    <button
-                      className="btn danger compact"
-                      onClick={() => setConfirm(d.id)}
-                    >
-                      Delete document
-                    </button>
-                  </div>
-                </article>
-              ))
-            ) : (
-              <p>No uploaded document records.</p>
-            )}
-          </>
+          <HistoryPage
+            heading={heading}
+            history={history}
+            documents={documents}
+            status={historyStatus}
+            busy={busy}
+            onRetry={reloadSavedState}
+            onDelete={(id) => {
+              if (busy) return;
+              setDialogError("");
+              setConfirm(id);
+            }}
+          />
         ) : null}
-        {route === "glossary" ? (
-          <>
+        <SupportPages
+          route={route}
+          heading={heading}
+          config={config}
+          configError={configError}
+          reduced={reduced}
+          onReducedChange={(next) => {
+            setReduced(next);
+            writeReducedMotion(next);
+          }}
+          resumeHref={resumeHref}
+          resumeLabel={resumeLabel}
+          hasReturnPath={!!returnPath}
+        />
+        {["adventure", "processing"].includes(route) && !id ? (
+          <div className="card center">
+            <Mascot small />
             <h1 ref={heading} tabIndex={-1}>
-              Statistics Glossary
+              Find your investigation
             </h1>
-            <p>A few ideas to keep beside your investigation.</p>
-            {Object.entries(glossary).map(([term, definition]) => (
-              <details className="card glossary" key={term}>
-                <summary className="icon-summary">
-                  {term}
-                  <Icon
-                    name="chevron"
-                    size={17}
-                    className="disclosure-chevron"
-                  />
-                </summary>
-                <p>{definition}</p>
-              </details>
-            ))}
-            <Link className="btn primary" href="/learn">
-              <ActionLabel>Continue learning</ActionLabel>
-            </Link>
-          </>
-        ) : null}
-        {route === "help" ? (
-          <>
-            <Speech>
-              Research judgment grows through practice. You can change your
-              mind—and explain why.
-            </Speech>
-            <h1 ref={heading} tabIndex={-1}>
-              How Gradly works
-            </h1>
-            <ol className="how-list">
-              <li>
-                <h2>Choose an investigation</h2>
-                <p>
-                  Start the reference lesson, or upload a searchable empirical
-                  research PDF.
-                </p>
-              </li>
-              <li>
-                <h2>Inspect the evidence</h2>
-                <p>
-                  Uploads are checked locally by the application server before
-                  you confirm external AI processing. Agents extract evidence,
-                  draft a lesson, and review it. Unsupported lessons stay
-                  blocked.
-                </p>
-              </li>
-              <li>
-                <h2>Make and defend decisions</h2>
-                <p>
-                  Choose methods and interpretations. Use hints and study
-                  details. Try a revision after your first miss.
-                </p>
-              </li>
-              <li>
-                <h2>Connect decisions to findings</h2>
-                <p>
-                  See the original paper at the end, review your responses, and
-                  practice concepts you missed.
-                </p>
-              </li>
-            </ol>
-            <details className="card">
-              <summary>How Agents Collaborate</summary>
-              <p>
-                Gradly uses a sequential evidence-analysis, lesson-design,
-                statistical-review, learning-coach, and verification pipeline.
-                This is an architecture explanation, not a Mixture of Agents
-                demonstration or a live execution trace.
-              </p>
-              <div className="flow">
-                Evidence → Lesson → Statistical review → Coach review →
-                Verification
-              </div>
-              <p>
-                Agent cards report observable tasks and output summaries. Hidden
-                chain-of-thought is neither stored nor displayed.
-              </p>
-            </details>
-            <Link className="btn primary" href="/learn">
-              <ActionLabel>Choose a learning path</ActionLabel>
-            </Link>
-          </>
-        ) : null}
-        {route === "settings" ? (
-          <>
-            <h1 ref={heading} tabIndex={-1}>
-              Your learning settings
-            </h1>
-            <div className="card">
-              <h2>Guest profile</h2>
-              <p>
-                No account is required. A signed browser cookie identifies your
-                saved adventures. Clearing cookies can remove your access to
-                saved progress.
-              </p>
-              <label className="toggle">
-                <input
-                  type="checkbox"
-                  checked={reduced}
-                  onChange={(e) => {
-                    setReduced(e.target.checked);
-                    localStorage.setItem(
-                      "gradly-reduced-motion",
-                      String(e.target.checked),
-                    );
-                  }}
-                />{" "}
-                Reduce interface motion
-              </label>
-              <p>System reduced-motion preferences are also respected.</p>
-            </div>
-            <div className="card">
-              <h2>AI availability</h2>
-              <p>
-                {config?.liveAI
-                  ? "Live Nebius inference is configured. Generated lessons must pass review."
-                  : "Live Nebius inference is not configured. The reference lesson and deterministic answer checking are available."}
-              </p>
-              <p>{config?.model}</p>
-              <Link href="/privacy">
-                <ActionLabel icon="shield">
-                  Read processing and retention information
-                </ActionLabel>
+            <p>
+              This link is missing an investigation. Resume one from your
+              adventures or choose a new learning path.
+            </p>
+            <div className="actions">
+              <Link className="btn primary" href="/history">
+                Your adventures
+              </Link>
+              <Link className="btn outline" href="/learn">
+                Choose a learning path
               </Link>
             </div>
-          </>
-        ) : null}
-        {route === "privacy" ? (
-          <>
-            <h1 ref={heading} tabIndex={-1}>
-              Privacy & AI processing
-            </h1>
-            <div className="card">
-              <h2>What is stored</h2>
-              <p>
-                Uploaded PDFs are parsed on the application server. Extracted
-                page text, processing summaries, generated lessons, answers,
-                written reasoning, and progress are retained for up to 30 days.
-                Original PDF bytes are not retained by the server.
-              </p>
-              <h2>When an external model is used</h2>
-              <p>
-                Only after you confirm processing, extracted text is sent to
-                Nebius Token Factory. Requesting AI feedback sends the current
-                challenge’s permitted evidence and your submitted reasoning.
-                Avoid sensitive or identifiable participant information.
-              </p>
-              <h2>Your controls</h2>
-              <p>
-                Delete an uploaded document from Adventures to remove its
-                extracted text, processing record, generated lesson, and linked
-                learner sessions. Records expire after 30 days. Expired records
-                are purged when history is queried; a scheduled purge should be
-                enabled for unattended deployments.
-              </p>
-              <h2>Limits of AI review</h2>
-              <p>
-                AI review and exact-source checks reduce errors; they cannot
-                certify correctness. The featured investigation uses reference
-                answer guidance. Failed AI feedback never changes that answer
-                key.
-              </p>
-              <a
-                href="https://nebius.com/privacy-policy"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Nebius privacy information ↗
-              </a>
-            </div>
-            <Link className="btn outline" href="/history">
-              Manage uploaded documents
-            </Link>
-          </>
+          </div>
         ) : null}
         {![
           "home",
@@ -2094,46 +1393,50 @@ function GradlyWorkspace({
         </footer>
       )}
       {confirm ? (
-        <div className="modal-backdrop">
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="confirm-title"
-            className="modal"
-          >
-            <h2 id="confirm-title">
-              {confirm === "restart"
-                ? "Start a new attempt?"
-                : "Delete this document?"}
-            </h2>
-            <p>
-              {confirm === "restart"
-                ? "Your current adventure stays in history. A fresh attempt starts at the briefing."
-                : "This removes extracted text, processing results, the generated lesson, and all linked adventures. This cannot be undone."}
-            </p>
-            <div className="actions">
-              <button
-                autoFocus
-                className="btn outline"
-                onClick={() => setConfirm(null)}
-              >
-                Cancel
-              </button>
-              <button
-                disabled={busy}
-                className={`btn ${confirm === "restart" ? "primary" : "danger"}`}
-                onClick={() => {
-                  if (confirm === "restart") {
-                    setConfirm(null);
-                    void act("restart", { confirmed: true });
-                  } else void removeDocument(confirm);
-                }}
-              >
-                {confirm === "restart" ? "Restart" : "Delete document"}
-              </button>
-            </div>
+        <Dialog
+          title={
+            confirm === "restart"
+              ? "Start a new attempt?"
+              : "Delete this document?"
+          }
+          onClose={() => setConfirm(null)}
+        >
+          <ErrorMessage message={dialogError} />
+          <p>
+            {confirm === "restart"
+              ? "Your current adventure stays in history. A fresh attempt starts at the briefing."
+              : "This removes extracted text, processing results, the generated lesson, and all linked adventures. This cannot be undone."}
+          </p>
+          <div className="actions">
+            <button
+              autoFocus
+              data-initial-focus
+              className="btn outline"
+              onClick={() => setConfirm(null)}
+            >
+              {busy ? "Close" : "Cancel"}
+            </button>
+            <button
+              disabled={busy}
+              aria-busy={busy}
+              className={`btn ${confirm === "restart" ? "primary" : "danger"}`}
+              onClick={() => {
+                if (confirm === "restart") {
+                  setConfirm(null);
+                  void act("restart", { confirmed: true });
+                } else void removeDocument(confirm);
+              }}
+            >
+              <ActionLabel busy={busy}>
+                {busy
+                  ? "Deleting…"
+                  : confirm === "restart"
+                    ? "Restart"
+                    : "Delete document"}
+              </ActionLabel>
+            </button>
           </div>
-        </div>
+        </Dialog>
       ) : null}
     </>
   );

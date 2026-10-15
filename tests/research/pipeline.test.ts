@@ -55,6 +55,29 @@ it("rejects invented exact excerpts and incomplete evidence", async () => {
   );
   expect(missing.error).toContain("Insufficient");
 });
+it("clears obsolete stage and job errors after a successful retry", async () => {
+  const j = newJob("retry-job", "paper.pdf", [{ page: 1, text: page }]);
+  const failed = await runStage(j, {
+    async generate() {
+      throw Error("Temporary provider outage");
+    },
+  });
+  expect(failed.status).toBe("failed");
+  expect(failed.stage).toBe(0);
+  expect(failed.error).toBe("Temporary provider outage");
+  expect(failed.audits[0]?.error).toBe("Temporary provider outage");
+
+  const recovered = await runStage(
+    failed,
+    provider([{ findings: "Evidence recovered", refs, missing: [] }]),
+  );
+  expect(recovered.status).toBe("pending");
+  expect(recovered.stage).toBe(1);
+  expect(recovered.audits[0]?.status).toBe("Completed");
+  expect(recovered.audits[0]?.summary).toBe("Evidence recovered");
+  expect(recovered.error).toBeUndefined();
+  expect(recovered.audits[0]?.error).toBeUndefined();
+});
 it("prevents a flagged statistical review from becoming playable", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);
   const p = provider([

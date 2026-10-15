@@ -1,5 +1,11 @@
 import React from "react";
-import { useRef, useState, type DragEvent, type FormEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type DragEvent,
+  type FormEvent,
+} from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -19,17 +25,26 @@ export function Welcome({
   session,
   onResume,
   onResearchFile,
+  complete = false,
 }: {
   onStart: (label: string) => void;
   session: Session;
   onResume: () => void;
   onResearchFile?: (file: File) => void;
+  complete?: boolean;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const checkVersion = useRef(0);
   const [link, setLink] = useState("");
   const [error, setError] = useState("");
   const [dragging, setDragging] = useState(false);
   const [checking, setChecking] = useState(false);
+  useEffect(
+    () => () => {
+      checkVersion.current += 1;
+    },
+    [],
+  );
   async function chooseFile(file?: File) {
     if (!file || checking) return;
     setError("");
@@ -44,14 +59,16 @@ export function Welcome({
       );
       return;
     }
+    const version = ++checkVersion.current;
+    const isCurrent = () => checkVersion.current === version;
     setChecking(true);
     try {
       if (onResearchFile) {
-        if (
-          !file.size ||
-          new TextDecoder().decode(await file.slice(0, 5).arrayBuffer()) !==
-            "%PDF-"
-        ) {
+        const header = new TextDecoder().decode(
+          await file.slice(0, 5).arrayBuffer(),
+        );
+        if (!isCurrent()) return;
+        if (!file.size || header !== "%PDF-") {
           setError(
             "This file is empty or does not contain a valid PDF header.",
           );
@@ -60,10 +77,10 @@ export function Welcome({
         onResearchFile(file);
         return;
       }
-      const digest = await crypto.subtle.digest(
-        "SHA-256",
-        await file.arrayBuffer(),
-      );
+      const bytes = await file.arrayBuffer();
+      if (!isCurrent()) return;
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      if (!isCurrent()) return;
       const hex = [...new Uint8Array(digest)]
         .map((x) => x.toString(16).padStart(2, "0"))
         .join("");
@@ -75,12 +92,15 @@ export function Welcome({
       }
       onStart(file.name);
     } catch {
-      setError(
-        "This file could not be checked. Choose the curated sample below.",
-      );
+      if (isCurrent())
+        setError(
+          "This file could not be checked. Choose the curated sample below.",
+        );
     } finally {
-      setChecking(false);
-      if (fileInput.current) fileInput.current.value = "";
+      if (isCurrent()) {
+        setChecking(false);
+        if (fileInput.current) fileInput.current.value = "";
+      }
     }
   }
   function submitLink(event: FormEvent) {
@@ -206,11 +226,19 @@ export function Welcome({
       {session.started ? (
         <div className="resume-card">
           <div>
-            <strong>You have an adventure in progress.</strong>
-            <p>Your answers are saved on this device.</p>
+            <strong>
+              {complete
+                ? "You completed this adventure."
+                : "You have an adventure in progress."}
+            </strong>
+            <p>
+              {complete
+                ? "Revisit your answers and the evidence whenever you like."
+                : "Your answers are saved on this device."}
+            </p>
           </div>
           <button className="button neutral" onClick={onResume}>
-            Resume <ArrowRight size={18} />
+            {complete ? "Review adventure" : "Resume"} <ArrowRight size={18} />
           </button>
         </div>
       ) : null}

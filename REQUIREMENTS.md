@@ -4,23 +4,24 @@ The current repository and blue Gradly branding take priority over the separate 
 
 ## Functional acceptance
 
-| Required journey                                               | Implementation                                         | Evidence and limits                                                                     |
-| -------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| Existing hero, PDF control, link below it, curated lesson      | `App.tsx`, `Welcome.tsx`, original components and APIs | Original interface/service/state tests; responsive hero browser test                    |
-| Learning path, reference entry and eight ordered challenges    | Research workspace, `featured.ts`, `engine.ts`         | Full browser adventure and answer-key unit checks                                       |
-| Single/multiple choices, hints, retry, second-miss explanation | Research engine and challenge workspace                | Engine tests and retry/multiple-selection browser paths                                 |
-| Results timing, bonus complete/skip, final paper reveal        | Public session filtering and legal transitions         | Unit/browser checks for withheld answers and staged reveal                              |
-| Written reasoning, independent revision and approved fallback  | Learning/feedback routes and revision UI               | Revision tests and no-key fallback browser path; new live feedback unverified           |
-| Agent evidence/guidance and collaboration explanation          | Expandable research panels and help                    | Browser disclosure checks; sequential architecture is labeled accurately                |
-| Completion, review, missed concepts and restart confirmation   | Research engine/history UI                             | Full completion and recovery browser scenarios                                          |
-| Valid/invalid/oversized/corrupt PDF, preview and confirmation  | PDF service, upload UI and bounded router              | Real PDF unit/browser tests, preview-byte assertion and compiled server smoke checks    |
-| Interrupted upload, replacement, cancellation and retry        | Upload state and XMLHttpRequest                        | Browser interruption/retry path and saved file checks                                   |
-| Searchable and image-only extraction with page provenance      | PDFParse and bounded English Tesseract                 | Actual raster-only OCR fixtures, limits/timeouts and compiled server smoke check        |
-| Insufficient evidence and generation failure/recovery          | Persisted jobs and pipeline                            | Mock-provider tests for missing/fabricated sources, failed review and successful stages |
-| Generated lessons of evidence-dependent length                 | Schemas, role prompts and verifier                     | Three-challenge mocked pipeline; 3–14 supported; no successful live generation claimed  |
-| Explicit external-processing consent and protected storage     | Job consent gate, guest cookies and storage            | Browser consent, ownership, version conflict and deletion checks                        |
-| Refresh/resume, previous adventures and deletion               | Durable research records and history UI                | Browser resume/history/delete paths; remote database unverified                         |
-| Glossary, help, settings and privacy                           | Connected research routes                              | Browser navigation and axe scans                                                        |
+| Required journey                                               | Implementation                                                                      | Evidence and limits                                                                     |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Existing hero, PDF control, link below it, curated lesson      | `App.tsx`, `Welcome.tsx`, original components and APIs                              | Original interface/service/state tests; responsive hero browser test                    |
+| Learning path, reference entry and eight ordered challenges    | Research workspace, `featured.ts`, `engine.ts`                                      | Full browser adventure and answer-key unit checks                                       |
+| Single/multiple choices, hints, retry, second-miss explanation | Research engine and challenge workspace                                             | Engine tests and retry/multiple-selection browser paths                                 |
+| Results timing, bonus complete/skip, final paper reveal        | Public session filtering and legal transitions                                      | Unit/browser checks for withheld answers and staged reveal                              |
+| Written reasoning, independent revision and approved fallback  | Learning/feedback routes and revision UI                                            | Revision tests and no-key fallback browser path; new live feedback unverified           |
+| Agent evidence/guidance and collaboration explanation          | Expandable research panels and help                                                 | Browser disclosure checks; sequential architecture is labeled accurately                |
+| Completion, review, missed concepts and restart confirmation   | Research engine/history UI                                                          | Full completion and recovery browser scenarios                                          |
+| Valid/invalid/oversized/corrupt PDF, preview and confirmation  | PDF service, upload UI and bounded router                                           | Real PDF unit/browser tests, preview-byte assertion and compiled server smoke checks    |
+| Interrupted upload, replacement, cancellation and retry        | Upload state and XMLHttpRequest                                                     | Browser interruption/retry path and saved file checks                                   |
+| Searchable and image-only extraction with page provenance      | PDFParse and bounded English Tesseract                                              | Actual raster-only OCR fixtures, limits/timeouts and compiled server smoke check        |
+| Insufficient evidence and generation failure/recovery          | Persisted jobs and pipeline                                                         | Mock-provider tests for missing/fabricated sources, failed review and successful stages |
+| Generated lessons of evidence-dependent length                 | Schemas, role prompts and verifier                                                  | Three-challenge mocked pipeline; 3–14 supported; no successful live generation claimed  |
+| Explicit external-processing consent and protected storage     | Job consent gate, guest cookies and storage                                         | Browser consent, ownership, version conflict and deletion checks                        |
+| Refresh/resume, previous adventures and deletion               | Durable research records and history UI                                             | Browser resume/history/delete paths; remote database unverified                         |
+| Unsubmitted drafts, context return and request recovery        | Version-bound tab drafts, retained upload, safe navigation and explicit load states | Final-polish browser scenarios and client-state/request unit tests                      |
+| Glossary, help, settings and privacy                           | Connected research routes                                                           | Browser navigation and axe scans                                                        |
 
 ## Nonfunctional acceptance
 

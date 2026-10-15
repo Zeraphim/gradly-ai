@@ -48,16 +48,19 @@ export function Icon({
   name,
   size = 24,
   className,
+  strong = false,
 }: {
   name: IconName;
   size?: number;
   className?: string;
+  strong?: boolean;
 }) {
   const Component = icons[name];
   return (
     <Component
       size={size}
-      strokeWidth={1.9}
+      strokeWidth={strong ? 2.5 : 2}
+      absoluteStrokeWidth
       className={className}
       aria-hidden="true"
       focusable="false"
@@ -78,6 +81,7 @@ export function ActionLabel({
     <>
       <span className="action-label">{children}</span>
       <Icon
+        strong
         name={busy ? "loading" : icon}
         size={19}
         className={busy ? "action-icon is-spinning" : "action-icon"}
