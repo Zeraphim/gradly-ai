@@ -28,6 +28,15 @@ point in time. They are not fresh verification of today's checkout or environmen
 Report contradictions between documented intent, retained historical proposals, and
 current code before changing behavior. Do not create a competing work-status tracker.
 
+## Research references
+
+- [research/PAPER_SELECTION.md](research/PAPER_SELECTION.md) is a curated shortlist of
+  source studies that could seed Gradly paper cases, with a per-study fit against the
+  selection criteria. It is a research input; it commits no one to implementing any of
+  it, and its access and licensing notes describe what could be verified when written.
+- [research/papers/](research/papers/README.md) stores only source PDFs whose licence
+  permits redistribution, with attribution and retrieval notes.
+
 ## Shared agent setup
 
 Open this application repository as the workspace, regardless of where it was

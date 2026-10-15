@@ -502,6 +502,30 @@
       }
     },
     {
+      "id": "paper-selection",
+      "kind": "other",
+      "title": "Vetted candidate paper studies for Gradly",
+      "path": "docs/research/PAPER_SELECTION.md",
+      "status": "Reference",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "docs/research/**"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "research-learning-design"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
       "id": "testing",
       "kind": "runbook",
       "title": "Validation commands and retained historical test reports",
