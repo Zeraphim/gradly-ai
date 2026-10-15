@@ -49,4 +49,4 @@ Follow `RESEARCH_INTEGRATION.md`, then verify on the intended Vercel environment
 4. Exercise explanation feedback with real supported, alternative, incorrect and uncertain reasoning; confirm failures preserve the saved response.
 5. Reload history, delete test documents and verify authenticated retention cleanup. Recheck the original curated adventure.
 
-The current automatic Vercel preview reports **blocked**. GitHub exposes that status but not a cause; the authenticated local CLI account cannot access the project's scope. No successful preview or production deployment is claimed. Existing dated production-feedback evidence in README refers to the earlier curated service, not the new research integration.
+The current automatic Vercel preview reports **blocked**. The latest check links to a Vercel team invitation for the commit author; the authenticated local CLI account cannot access the project's scope. No successful preview or production deployment is claimed. Existing dated production-feedback evidence in README refers to the earlier curated service, not the new research integration.
