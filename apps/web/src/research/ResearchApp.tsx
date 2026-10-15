@@ -5,6 +5,7 @@ import {
   useResearchRouter,
 } from "./navigation.js";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { AppLoading } from "../components/AppLoading.js";
 import { Dialog } from "../components/Dialog.js";
 import { SupportPages } from "./SupportPages.js";
 import { HistoryPage } from "./HistoryPage.js";
@@ -75,13 +76,7 @@ export function ResearchApp({
   return (
     <div className="research-lab">
       {/^\/reasoning\/?$/.test(path) ? (
-        <Suspense
-          fallback={
-            <main aria-busy="true">
-              <p>Opening reasoning preview…</p>
-            </main>
-          }
-        >
+        <Suspense fallback={<AppLoading label="Opening reasoning preview…" />}>
           <ReasoningPreview
             onExit={onExit}
             returnHref={returnPath ?? "/learn"}

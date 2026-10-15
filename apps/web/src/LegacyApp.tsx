@@ -3,6 +3,7 @@ const ResearchApp = lazy(() =>
   import("./research/ResearchApp.js").then((m) => ({ default: m.ResearchApp })),
 );
 import { BrandLogo } from "./components/BrandLogo.js";
+import { AppLoading } from "./components/AppLoading.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BookOpen, Check, CircleHelp, Flag, Sparkles, X } from "lucide-react";
 import {
@@ -279,11 +280,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   if (screen === "research")
     return (
       <Suspense
-        fallback={
-          <main id="main">
-            <p>Opening the research workspace…</p>
-          </main>
-        }
+        fallback={<AppLoading label="Opening the research workspace…" />}
       >
         <ResearchApp
           initialFile={researchFile}
