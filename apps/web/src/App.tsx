@@ -1,29 +1,23 @@
-import { lazy, Suspense, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
+import { LegacyApp } from "./LegacyApp.js";
 
-const LegacyApp = lazy(() =>
-  import("./LegacyApp.js").then((module) => ({ default: module.LegacyApp })),
-);
 function subscribe(changed: () => void) {
   window.addEventListener("hashchange", changed);
   return () => window.removeEventListener("hashchange", changed);
 }
 
-/** One upload-first entry, with the original curated journey preserved. */
+/**
+ * One upload-first entry, with the original curated journey preserved.
+ *
+ * LegacyApp is imported eagerly rather than code-split: it is the first
+ * meaningful paint for the common routes, so loading it up front avoids an
+ * intermediate "Opening Gradly…" screen flashing on every refresh.
+ */
 export function App() {
   const hash = useSyncExternalStore(
     subscribe,
     () => window.location.hash,
     () => "",
   );
-  return (
-    <Suspense
-      fallback={
-        <main className="app-opening" aria-busy="true">
-          <p>Opening Gradly…</p>
-        </main>
-      }
-    >
-      <LegacyApp uploadFirst={!hash.startsWith("#/classic")} />
-    </Suspense>
-  );
+  return <LegacyApp uploadFirst={!hash.startsWith("#/classic")} />;
 }

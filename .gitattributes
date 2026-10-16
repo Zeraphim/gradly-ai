@@ -1,0 +1,3 @@
+# PDFs are binary source artifacts. Without this, Git treats some of them as text and
+# `git diff --check` reports whitespace inside embedded metadata, not in tracked prose.
+*.pdf -diff

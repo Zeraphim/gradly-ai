@@ -122,6 +122,41 @@ svg {
 .skip-link:focus {
   transform: translateY(0);
 }
+/* Branded full-viewport screen for code-split loads. Centered so it reads the
+   same on phones and wide screens instead of a bare top-left paragraph. */
+.app-opening {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 24px;
+  background: #fbf9f8;
+  text-align: center;
+}
+.app-opening-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.app-opening-mark {
+  display: block;
+  width: 58px;
+  height: 58px;
+}
+.app-opening-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #dce6ed;
+  border-top-color: var(--green-dark);
+  border-radius: 50%;
+  animation: spin 850ms linear infinite;
+}
+.app-opening p {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
 .app-header {
   background: #fff;
   border-bottom: 1px solid #e7e8e2;
@@ -2208,6 +2243,23 @@ html[data-reduced-motion="true"]
 }
 
 /* Centered Gradly upload entry, refined from the original screen. */
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.app-shell > main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+.app-shell > header,
+.app-shell > footer {
+  flex-shrink: 0;
+}
+.app-shell > .lesson-layout {
+  align-content: start;
+}
 .welcome.upload-home {
   width: min(760px, calc(100% - 48px));
   max-width: none;
@@ -2319,6 +2371,20 @@ html[data-reduced-motion="true"]
   min-width: 0;
   font-size: 14px;
 }
+.upload-home .link-form > button {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+}
+.upload-home-shell .help-button {
+  display: grid;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+}
+.upload-home-shell .brand {
+  justify-self: start;
+}
 .upload-home .scope-note {
   text-align: left;
   font-size: 11px;
@@ -2333,7 +2399,7 @@ html[data-reduced-motion="true"]
   border-top: 1px solid #e3ebf0;
 }
 .upload-home .home-preview-details summary {
-  min-height: 40px;
+  min-height: 44px;
   display: list-item;
   padding: 10px 0;
   font-size: 11px;

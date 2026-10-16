@@ -4,6 +4,12 @@ The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta
 
 Typography, whitespace and a single tactile upload action establish the hierarchy. At 1366×768 and 1440×900, both document inputs remain above the fold. The centered layout stacks naturally on tablet and mobile while keeping points and document navigation in the header.
 
+The upload home, curated adventure, and research workspace share a flexible shell
+with a dynamic viewport minimum height. Main content grows to keep the footer at
+the bottom of taller screens; short screens and expanded content scroll naturally
+without a fixed height or header-height subtraction. Home help and link-submit
+controls retain 44px targets on narrow screens, including 320px widths.
+
 The header shows My documents, practice points and help. Research adventures display their server-derived points and retain the original challenge sequence. Ten points are awarded once per solved challenge per adventure, with no claim of mastery. Root and the previously shared lab index now lead to upload. The detailed paper-example flow described below remains available at its saved case URLs.
 
 ## Fresh Adventure visual scenes

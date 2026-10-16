@@ -22,7 +22,11 @@ nominated in this application repository. Do not invent owners or approval event
 2. Update canonical docs where durable facts or intent changed. Correct links when
    moving files; put substantive project Markdown in `docs/`, keeping the root
    README and scoped `AGENTS.md` files at their discovery locations. Keep skill
-   entrypoints and references under `.agents/skills/`.
+   entrypoints and references under `.agents/skills/`. When recording a source file
+   or citation, verify the artifact's own text and metadata against the claim before
+   describing it — a download link is not proof of the file's version or licence.
+   Stored PDFs under `docs/research/papers/` are checked against their entries by
+   `tests/research/stored-papers.test.ts`.
 3. Update registry paths, relationships, status, and implementation references.
    Register new canonical documents instead of duplicating their prose.
 4. Run `npm run context:index`, then `npm run context:check`. The check is read-only.

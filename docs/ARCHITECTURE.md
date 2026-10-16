@@ -21,18 +21,18 @@ See [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for a complete integration example.
 
 ## Modules
 
-| Module                                              | Responsibility                                                                    |
-| --------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `apps/web/src/App.tsx`                              | Upload-first entry and lazy compatibility routing                                 |
-| `apps/web/src/LegacyApp.tsx`, `components/`         | Preserved original hero, curated flow and API-backed research entry               |
-| `packages/contracts`, `packages/lesson-state`       | Original lesson API contracts and curated progress                                |
-| `apps/api/src/feedback.ts`                          | Guarded curated reasoning assessment with authored teaching text                  |
-| `apps/web/src/research/`                            | Lazy-loaded research views, hash navigation and scoped design                     |
-| `apps/api/src/research/pdf.ts`, `ocr.ts`            | PDF validation, physical page extraction and bounded English OCR                  |
-| `research/provider.ts`, `pipeline.ts`               | Nebius adapter and persisted sequential role workflow                             |
-| `research/contracts.ts`, `engine.ts`, `featured.ts` | Lesson schemas, source checks, learning transitions and eight-challenge reference |
-| `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                       |
-| `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance             |
+| Module                                              | Responsibility                                                                           |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `apps/web/src/App.tsx`                              | Upload-first entry and hash compatibility routing (entry app eager, research views lazy) |
+| `apps/web/src/LegacyApp.tsx`, `components/`         | Preserved original hero, curated flow and API-backed research entry                      |
+| `packages/contracts`, `packages/lesson-state`       | Original lesson API contracts and curated progress                                       |
+| `apps/api/src/feedback.ts`                          | Guarded curated reasoning assessment with authored teaching text                         |
+| `apps/web/src/research/`                            | Lazy-loaded research views, hash navigation and scoped design                            |
+| `apps/api/src/research/pdf.ts`, `ocr.ts`            | PDF validation, physical page extraction and bounded English OCR                         |
+| `research/provider.ts`, `pipeline.ts`               | Nebius adapter and persisted sequential role workflow                                    |
+| `research/contracts.ts`, `engine.ts`, `featured.ts` | Lesson schemas, source checks, learning transitions and eight-challenge reference        |
+| `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                              |
+| `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance                    |
 
 The research workspace composes `PathPicker`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `useResearchConfig` loads availability once per mounted API-backed workspace and exposes explicit retry; its internal navigation reuses the result. Shared display types live in `research/types.ts`. Confirmation dialogs reuse the original native `Dialog` component.
 

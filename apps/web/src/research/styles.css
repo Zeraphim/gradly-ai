@@ -158,7 +158,7 @@
 }
 .research-lab .main {
   max-width: 1000px;
-  min-height: calc(100vh - 178px);
+  min-height: 0;
   margin: auto;
   padding: 42px 24px 70px;
 }
@@ -178,6 +178,7 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 .research-lab .mascot img {
   width: 106px;
@@ -207,6 +208,11 @@
   position: absolute;
   left: -13px;
   top: calc(50% - 12px);
+  width: 0;
+  height: 0;
+  background: none;
+  transform: none;
+  border: 0;
   border-right: 13px solid #dce9f0;
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
