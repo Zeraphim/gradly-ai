@@ -26,9 +26,18 @@ The retired standalone paper-case implementation and its dedicated tests are rem
 
 Format changed files with Prettier and run `git diff --check`. Browser traces are retained on failure. Automated accessibility checks cover exercised states; Safari/Firefox, assistive-technology sessions and arbitrary uploaded-document layouts remain outside this matrix.
 
-## Consolidated verification
+## Historical consolidated verification
 
-The replacement branch passes TypeScript, 127 unit/service checks, all 36 retained Chromium scenarios, production builds and Vercel packaging. Formatting and diff checks pass. This includes retired-link recovery, real PDF review through a labeled sample lesson, saved points, responsive accessibility and the API-free reasoning/revision loop.
+Pull request 2 reported passing TypeScript, 127 unit/service checks, all 36 retained Chromium scenarios, production builds, Vercel packaging, formatting and diff checks. These are the replacement branch's historical reports, not current hosted verification. This includes retired-link recovery, real PDF review through a labeled sample lesson, saved points, responsive accessibility and the API-free reasoning/revision loop.
+
+## Merge and integration checks
+
+Use [MERGE_GUARDRAILS.md](MERGE_GUARDRAILS.md) to select checks for the actual
+candidate and resulting integration revision. Its evidence catalog covers the
+post-request-2 declaration, canvas-runtime and static-asset fixes, and the separate
+preview access restriction. `npm run check` does not run the actual Vercel function
+builder, browser suite or hosted checks. Documentation-only guardrail edits do not
+require rerunning unrelated application tests.
 
 ## Hosted/live acceptance
 

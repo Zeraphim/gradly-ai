@@ -45,6 +45,10 @@ For interactive frontend changes across any route, load
 [gradly-motion](../gradly-motion/SKILL.md). It applies the site-wide convention and
 identifies the current research-scoped implementation boundaries.
 
+For pull-request readiness and after authorized integration, load
+[merge-verification](../merge-verification/SKILL.md). Its check matrix distinguishes
+source tests, clean packaging, frontend rendering and actual hosted results.
+
 ## Commands from the repository root
 
 | Need                                       | Command                                           |

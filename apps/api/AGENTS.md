@@ -19,8 +19,10 @@ Follow the [root instructions](../../AGENTS.md). Read
 - Sample mode requires explicit local flags, is refused on Vercel/in production,
   and never substitutes for a failed live call. Hosted research storage requires
   remote libSQL and signing configuration; local SQLite is for local work.
-- Preserve extraction/OCR bounds and transcription provenance. For dependency or
-  function-packaging changes, also load vercel-delivery.
+- Preserve extraction/OCR bounds and transcription provenance. For dependency/lockfile,
+  transitive startup-import or function-packaging changes, also load vercel-delivery.
+  Preserve entrypoint declaration discovery and host-native/worker assets; a local
+  import or root type check does not verify the hosted package.
 - Run commands from the repository root. Use relevant service/research tests and
   type checks. Provider fixtures do not establish live model quality or hosted
   database/OCR success. Live checks need the appropriate environment and task scope.

@@ -5,6 +5,15 @@ requirements, runtime documentation, design evidence, and references. Use
 [../README.md](../README.md) for setup and [../AGENTS.md](../AGENTS.md) for agent routing.
 Unlinked code paths in these documents are relative to the repository root.
 
+## Merge readiness
+
+[MERGE_GUARDRAILS.md](MERGE_GUARDRAILS.md) records the upload-first integration's
+delivery failures, supporting changes and the diff-based verification matrix.
+[merge-verification](../.agents/skills/merge-verification/SKILL.md) routes pre-merge
+and post-integration work; [vercel-delivery](../.agents/skills/vercel-delivery/SKILL.md)
+owns packaging and hosted checks. These are agent procedures, not automated branch
+protection or authorization to merge or deploy.
+
 ## Interaction consistency
 
 [The site-wide motion convention](DESIGN.md#site-wide-motion-convention) defines

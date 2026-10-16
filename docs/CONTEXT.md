@@ -17,7 +17,7 @@
 
 | Scope | Instructions | Skills |
 |---|---|---|
-| `.` | `AGENTS.md` | project-context, documentation-maintenance, vercel-delivery |
+| `.` | `AGENTS.md` | project-context, documentation-maintenance, vercel-delivery, merge-verification |
 | `apps/api` | `apps/api/AGENTS.md` |  |
 | `apps/web` | `apps/web/AGENTS.md` | gradly-motion |
 
@@ -39,11 +39,13 @@
 | `architecture` | runbook | Descriptive | Current module and data-flow descriptions | `docs/ARCHITECTURE.md` |  |
 | `contributor-readme` | runbook | Active | Setup and contributor entrypoint | `README.md` |  |
 | `documentation-guide` | runbook | Active | Documentation provenance and shared agent setup | `docs/README.md` |  |
+| `merge-guardrails` | runbook | Documented | Integration failure evidence and merge verification matrix | `docs/MERGE_GUARDRAILS.md` |  |
 | `research-integration` | runbook | Documented | Research configuration, boundaries, and historical integration checks | `docs/RESEARCH_INTEGRATION.md` |  |
 | `scene-authoring` | runbook | Documented | Reusable research scene contract and integration | `docs/SCENE_AUTHORING.md` |  |
 | `testing` | runbook | Documented | Validation commands and retained historical test reports | `docs/TESTING.md` |  |
 | `documentation-maintenance` | skill | Active | Documentation and context lifecycle | `.agents/skills/documentation-maintenance/SKILL.md` |  |
 | `gradly-motion` | skill | Active | Site-wide micro-interaction and motion consistency | `.agents/skills/gradly-motion/SKILL.md` |  |
+| `merge-verification` | skill | Active | Pull-request readiness and post-integration verification | `.agents/skills/merge-verification/SKILL.md` |  |
 | `project-context` | skill | Active | Stack, layout, commands, and configuration | `.agents/skills/project-context/SKILL.md` |  |
 | `vercel-delivery` | skill | Active | Vercel packaging and delivery checks | `.agents/skills/vercel-delivery/SKILL.md` |  |
 | `design` | ui | Proposed | Interface conventions and retained historical design sections | `docs/DESIGN.md` |  |
