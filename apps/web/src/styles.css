@@ -2243,6 +2243,19 @@ html[data-reduced-motion="true"]
 }
 
 /* Centered Gradly upload entry, refined from the original screen. */
+.upload-home-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.upload-home-shell > .welcome.upload-home {
+  flex: 1 0 auto;
+}
+.upload-home-shell > .app-header,
+.upload-home-shell > .app-footer {
+  flex-shrink: 0;
+}
 .welcome.upload-home {
   width: min(760px, calc(100% - 48px));
   max-width: none;

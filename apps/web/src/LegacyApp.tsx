@@ -292,7 +292,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
       </Suspense>
     );
   return (
-    <>
+    <div className={simpleHome ? "upload-home-shell" : undefined}>
       <a
         href="#main"
         className="skip-link"
@@ -603,7 +603,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
           ) : null}
         </Dialog>
       ) : null}
-    </>
+    </div>
   );
 }
 function ArrowFooter() {

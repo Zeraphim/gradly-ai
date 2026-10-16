@@ -1,11 +1,10 @@
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { resolve } from "node:path";
 import { pdfBytes } from "../research/pdf-fixture.js";
 
 test("upload home keeps PDF, DOI and points visible in clean desktop and mobile layouts", async ({
   page,
-}) => {
+}, testInfo) => {
   for (const [width, height] of [
     [1440, 900],
     [1366, 768],
@@ -21,6 +20,7 @@ test("upload home keeps PDF, DOI and points visible in clean desktop and mobile 
         exact: true,
       }),
     ).toBeVisible();
+    await expect(page.getByRole("main")).toHaveCSS("opacity", "1");
     const upload = page.getByRole("button", {
       name: "Upload PDF",
       exact: true,
@@ -56,11 +56,45 @@ test("upload home keeps PDF, DOI and points visible in clean desktop and mobile 
       })),
     ).toEqual([]);
     await page.screenshot({
-      path: resolve("..", "gradly-repo-preview", `upload-home-${width}.png`),
+      path: testInfo.outputPath(`upload-home-${width}.png`),
       fullPage: true,
       animations: "disabled",
     });
   }
+});
+
+test("upload home fills the viewport and lets short screens scroll", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  for (const [width, height] of [
+    [1440, 1200],
+    [1366, 768],
+    [390, 900],
+    [1366, 480],
+  ]) {
+    await page.setViewportSize({ width: width!, height: height! });
+    const shell = await page.locator(".upload-home-shell").boundingBox();
+    const footer = await page.locator(".app-footer").boundingBox();
+    expect(shell!.height).toBeGreaterThanOrEqual(height!);
+    expect(footer!.y + footer!.height).toBeCloseTo(shell!.y + shell!.height, 0);
+    if (height === 1200)
+      expect(footer!.y + footer!.height).toBeCloseTo(height, 0);
+    if (height === 480) expect(shell!.height).toBeGreaterThan(height);
+    await page
+      .getByRole("textbox", { name: "Paper URL or DOI", exact: true })
+      .scrollIntoViewIfNeeded();
+    await expect(
+      page.getByRole("textbox", { name: "Paper URL or DOI", exact: true }),
+    ).toBeInViewport();
+  }
+  await page.setViewportSize({ width: 1440, height: 1200 });
+  await page.screenshot({
+    path: testInfo.outputPath("home-tall-viewport.png"),
+    fullPage: true,
+  });
+  await page.goto("/#/classic");
+  await expect(page.locator(".upload-home-shell")).toHaveCount(0);
 });
 
 test("the home upload reaches real PDF review, a labeled sample lesson and durable practice points", async ({
