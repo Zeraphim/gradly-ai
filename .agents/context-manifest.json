@@ -45,7 +45,8 @@
       "skills": [
         "project-context",
         "documentation-maintenance",
-        "vercel-delivery"
+        "vercel-delivery",
+        "merge-verification"
       ]
     },
     {
@@ -101,6 +102,10 @@
         {
           "type": "depends-on",
           "target": "gradly-motion"
+        },
+        {
+          "type": "depends-on",
+          "target": "merge-verification"
         }
       ],
       "implementationRefs": [
@@ -196,6 +201,10 @@
         {
           "type": "depends-on",
           "target": "gradly-motion"
+        },
+        {
+          "type": "depends-on",
+          "target": "merge-verification"
         }
       ],
       "implementationRefs": [],
@@ -254,7 +263,10 @@
         "package-lock.json",
         "scripts/prepare-vercel.mjs",
         "apps/api/src/research/ocr*",
-        "apps/api/src/research/pdf.ts"
+        "apps/api/src/research/pdf.ts",
+        "apps/api/package.json",
+        "apps/api/src/**",
+        "packages/contracts/**"
       ],
       "relationships": [
         {
@@ -264,6 +276,10 @@
         {
           "type": "depends-on",
           "target": "testing"
+        },
+        {
+          "type": "related",
+          "target": "merge-guardrails"
         }
       ],
       "implementationRefs": [],
@@ -788,6 +804,95 @@
         "apps/web/src/research/scenes/scenes.css",
         "apps/web/src/styles.css",
         "tests/research/scene-motion.test.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "merge-verification",
+      "kind": "skill",
+      "title": "Pull-request readiness and post-integration verification",
+      "path": ".agents/skills/merge-verification/SKILL.md",
+      "status": "Active",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/**",
+        "packages/**",
+        "tests/**",
+        "scripts/**",
+        "package.json",
+        "package-lock.json",
+        "server.ts",
+        "vercel.json",
+        ".agents/skills/merge-verification/**"
+      ],
+      "relationships": [
+        {
+          "type": "depends-on",
+          "target": "merge-guardrails"
+        },
+        {
+          "type": "depends-on",
+          "target": "vercel-delivery"
+        },
+        {
+          "type": "related",
+          "target": "gradly-motion"
+        }
+      ],
+      "implementationRefs": [
+        "package.json",
+        "vercel.json",
+        "server.ts",
+        "scripts/prepare-vercel.mjs",
+        "tests/service.test.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "merge-guardrails",
+      "kind": "runbook",
+      "title": "Integration failure evidence and merge verification matrix",
+      "path": "docs/MERGE_GUARDRAILS.md",
+      "status": "Documented",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/**",
+        "packages/**",
+        "tests/**",
+        "scripts/**",
+        "package.json",
+        "package-lock.json",
+        "server.ts",
+        "vercel.json",
+        ".agents/skills/merge-verification/**",
+        ".agents/skills/vercel-delivery/**"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "testing"
+        },
+        {
+          "type": "related",
+          "target": "research-integration"
+        }
+      ],
+      "implementationRefs": [
+        "apps/api/src/research/ocr.ts",
+        "apps/api/src/research/ocr-data.d.ts",
+        "vercel.json",
+        "server.ts",
+        "scripts/prepare-vercel.mjs"
       ],
       "review": {
         "commit": null,

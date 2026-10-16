@@ -12,6 +12,7 @@ with [docs/CONTEXT.md](docs/CONTEXT.md) for documentation and instruction routin
 | Documentation, structure, decisions, design evidence   | [documentation-maintenance](.agents/skills/documentation-maintenance/SKILL.md) |
 | Vercel builds, assets, function packaging, deployments | [vercel-delivery](.agents/skills/vercel-delivery/SKILL.md)                     |
 | Interaction and animation consistency across the site  | [gradly-motion](.agents/skills/gradly-motion/SKILL.md)                         |
+| Pull-request readiness and post-merge verification     | [merge-verification](.agents/skills/merge-verification/SKILL.md)               |
 | Learner interface changes                              | [apps/web/AGENTS.md](apps/web/AGENTS.md)                                       |
 | Server, extraction, generation, storage changes        | [apps/api/AGENTS.md](apps/api/AGENTS.md)                                       |
 
@@ -36,6 +37,10 @@ checkout. Open this repository root as the workspace in Codex or Antigravity.
 - Choose checks for the changed behavior using [docs/TESTING.md](docs/TESTING.md).
   Before closing work, load documentation-maintenance and review affected context.
   Fix broken documentation links when moving files.
+- Before recommending or performing a merge, load merge-verification and select
+  checks from the actual diff. After an authorized merge, pull or rebase, verify
+  the resulting revision. Local builds and green comment checks do not establish
+  hosted delivery; report missing or failing applicable checks before proceeding.
 - Conventional commit subjects match recent history. Never add a co-author line.
   Commit, push, release, deploy, and send messages only within the user's authorized
   scope. Report local, committed, pushed, preview-tested, and production-verified
