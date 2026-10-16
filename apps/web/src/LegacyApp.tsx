@@ -292,7 +292,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
       </Suspense>
     );
   return (
-    <div className={simpleHome ? "upload-home-shell" : undefined}>
+    <div className={`app-shell${simpleHome ? " upload-home-shell" : ""}`}>
       <a
         href="#main"
         className="skip-link"

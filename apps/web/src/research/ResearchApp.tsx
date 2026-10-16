@@ -74,7 +74,7 @@ export function ResearchApp({
       setReturnPath(path);
   }, [path]);
   return (
-    <div className="research-lab">
+    <div className="research-lab app-shell">
       {/^\/reasoning\/?$/.test(path) ? (
         <Suspense fallback={<AppLoading label="Opening reasoning preview…" />}>
           <ReasoningPreview
