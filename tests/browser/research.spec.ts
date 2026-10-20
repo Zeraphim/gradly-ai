@@ -14,7 +14,7 @@ async function choose(page: Page, ids: string[]) {
   await expect(page.locator(".feedback")).toHaveCount(0);
   // Comparison scenes make their evidence available before assessment. Predictions
   // are optional exploration; they must not be mistaken for assessed responses.
-  const reveal = page.getByRole("button", { name: "Reveal group results" });
+  const reveal = page.getByRole("button", { name: "Reveal reported results" });
   if (await reveal.count()) await reveal.click();
   const responses = page.locator(".scene-responses");
   for (const id of ids) {

@@ -34,7 +34,7 @@ See [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for a complete integration example.
 | `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                              |
 | `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance                    |
 
-The research workspace composes `PathPicker`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `useResearchConfig` loads availability once per mounted API-backed workspace and exposes explicit retry; its internal navigation reuses the result. Shared display types live in `research/types.ts`. Confirmation dialogs reuse the original native `Dialog` component.
+The research workspace composes `PathPicker`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `LegacyApp` owns the shared public configuration read and passes its loading/error/retry state to `ResearchApp`; direct research entry defers the inactive classic lesson. A standalone `ResearchApp` uses its own `useResearchConfig` fallback, disabled when the parent supplies configuration. Navigation reuses the result without a second configuration request. Shared display types live in `research/types.ts`. Confirmation dialogs reuse the original native `Dialog` component.
 
 `ReasoningPreview` handles `#/research/reasoning` outside that configuration dependency. `reasoning-preview.ts` is a pure authored-fixture adapter: only an exact method and normalized authored explanation receive a prepared review. Custom text stays unassessed. `reasoning-preview-state.ts` validates draft inputs; verdicts are recomputed rather than trusted from storage. The showcase has no provider, session mutation or scoring calls. It preserves before/after attempts in separate tab storage, with a memory fallback for denied or failed writes. See `REASONING_PREVIEW.md` for the proposed live-review contract; stable attempt/revision binding and full evidence prompting are future backend work.
 
@@ -101,3 +101,13 @@ no API. Live jobs open the player's generated briefing through `start` with
 text. `HistoryPage.tsx` fetches persisted errors for failed jobs through the
 existing job endpoint. No API or scene contract changed. See the
 [intake integration proposal](ui/INTAKE_PROCESSING.md) for unresolved fields.
+
+
+## Authored multi-paper scene pilot
+
+`PaperActivityPilot.tsx` and `activity-pilot.ts` provide the lazy `/activities`
+research preview with three source-backed datasets, reusing `InvestigationScene`
+and the shared scene projection. Review and per-paper drafts stay in session
+storage, separately from server assessment. It makes no assessment or inference
+calls. The comparison contract adds optional bounded decimal places; existing
+scenes retain their two-decimal default. See DESIGN.md and SCENE_AUTHORING.md.

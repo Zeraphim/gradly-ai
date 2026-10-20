@@ -36,7 +36,24 @@ The added browser-only reasoning showcase demonstrates separate choice and expla
 | Unsubmitted drafts, context return and request recovery        | Version-bound tab drafts, retained upload, safe navigation and explicit load states | Final-polish browser scenarios and client-state/request unit tests                      |
 | Glossary, help, settings and privacy                           | Connected research routes                                                           | Browser navigation and axe scans                                                        |
 
+## Authored results exploration
+
+The authored sample must offer an ungraded prediction before deliberately revealing
+reported quiz means. Prediction and reveal survive refresh within the current tab;
+restarting clears them. Prediction controls must not submit or grade an answer.
+Comparison may show the reported heights and prompt a calculation, while the worked
+difference remains behind answer feedback. Preserve the following SD inspection,
+interpretation, retry and completion path, source values and reduced-motion behavior.
+Do not imply this sample interaction automatically supports arbitrary research papers.
+
 ## Nonfunctional acceptance
+
+For the authored quest's desktop question layout, the full answer choices must
+be visible above the pinned action bar without scrolling at the supported
+viewport sizes in `tests/browser/quest-motion.spec.ts`. An illustration or an
+always-expanded duplicate data table must not displace those controls. Keep long
+answer text readable and complete; preserve natural scrolling on narrow screens,
+enlarged text and deliberately expanded source material.
 
 - Keep the existing TypeScript/Vite/Express architecture, self-hosted font and supplied blue logo/mascot.
 - Keep model secrets server-side and make endpoint/model configurable. Missing credentials produce explicit unavailable/fallback states, not synthetic AI results.
@@ -86,3 +103,16 @@ The context must stay readable at every supported width: the stage and its capti
 share one card, the chapter rail wraps on narrow screens, the schematic switches to
 a vertical composition, and the caption carries the meaning when the stage is hidden
 from assistive technology.
+
+## Three-paper authored activity pilot
+
+The activity pilot must demonstrate existing scene families using three distinct
+research designs and linked source evidence. Preserve the experiment's proportions
+and their precision, label observational relationships without causal overreach,
+and keep interview themes contextual. Prepared feedback and custom unassessed
+writing must be distinguishable. Each paper retains its own tab draft and reset.
+Practice must work without assessment or inference requests and must not affect
+server progress or points. Desktop choices and Check controls remain visible at
+the supported pilot viewport sizes; narrow screens retain natural scrolling.
+This pilot is evidence of authored rendering reuse, not automatic generation from
+arbitrary papers, proven learning benefit or production delivery.

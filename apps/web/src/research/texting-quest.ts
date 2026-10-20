@@ -13,7 +13,6 @@ export type QuestVisual =
   | "scope"
   | "lecture"
   | "attention"
-  | "assignment"
   | "study"
   | "groups"
   | "results"
@@ -247,7 +246,7 @@ export const textingQuest: QuestScreen[] = [
         C: "The comparison could contain selection bias. Students who choose to text might differ in motivation or prior knowledge. Random assignment helps address that problem.",
       },
     },
-    afterVisual: "assignment",
+    // Keep the selected design on its working surface after feedback.
     continueLabel: "Next: Measure learning",
   },
   {

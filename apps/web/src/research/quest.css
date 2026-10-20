@@ -130,6 +130,74 @@
   font-size: 14px;
   font-weight: 700;
 }
+/* The question, visual and answers share the desktop working area. A tall
+   illustration must never push the answer controls below the action dock. */
+@media (min-width: 1000px) {
+  .research-lab .quest:has(.quest-choice.has-visual) {
+    max-width: 1120px;
+    padding-top: 24px;
+  }
+  .research-lab .quest:has(.quest-choice.has-visual) .quest-top {
+    margin-bottom: 20px;
+  }
+  .research-lab .quest:has(.quest-choice.has-visual) .quest-screen {
+    min-height: 0;
+  }
+  .research-lab .quest-choice.has-visual {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-areas:
+      "label label"
+      "ask ask"
+      "visual options"
+      "hint options";
+    align-items: start;
+    gap: 0 24px;
+  }
+  .research-lab .quest-choice.has-visual > .quest-label {
+    grid-area: label;
+    justify-self: start;
+  }
+  .research-lab .quest-choice.has-visual > .quest-ask {
+    grid-area: ask;
+  }
+  .research-lab .quest-choice.has-visual > .quest-figure {
+    grid-area: visual;
+    min-width: 0;
+  }
+  .research-lab .quest-choice.has-visual > .quest-options {
+    grid-area: options;
+    min-width: 0;
+  }
+  .research-lab .quest-choice.has-visual > .quest-hint {
+    grid-area: hint;
+  }
+  .research-lab .quest-choice.has-visual .quest-evidence {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+@media (min-width: 1000px) and (max-height: 760px) {
+  .research-lab .quest-choice.has-visual .quest-heading {
+    font-size: 26px;
+  }
+  .research-lab .quest-choice.has-visual .quest-option {
+    padding: 12px 14px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .research-lab .quest-choice.has-visual .quest-figure {
+    padding: 18px;
+  }
+}
+@media (min-width: 1000px) and (max-height: 700px) {
+  .research-lab .quest:has(.quest-choice.has-visual) {
+    padding-top: 16px;
+  }
+  .research-lab .quest:has(.quest-choice.has-visual) .quest-top {
+    margin-bottom: 14px;
+  }
+}
 .research-lab .quest-option {
   position: relative;
   display: grid;
@@ -346,43 +414,6 @@
   transform-origin: right center;
 }
 
-.research-lab .quest-pools {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-  min-height: 110px;
-}
-.research-lab .quest-pool {
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  padding: 14px 18px;
-  border-radius: 18px;
-  background: #fff;
-}
-.research-lab .quest-pool span {
-  color: var(--j-ink);
-  font-size: 14px;
-  font-weight: 800;
-}
-.research-lab .quest-pool div {
-  display: grid;
-  grid-template-columns: repeat(6, 18px);
-  gap: 8px;
-}
-.research-lab .quest-pools.is-split .quest-pool div {
-  grid-template-columns: repeat(3, 18px);
-}
-.research-lab .quest-pool i {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--j-accent);
-}
-.research-lab .quest-pool i.is-text {
-  background: #f0a35b;
-}
-
 .research-lab .quest-flow {
   display: flex;
   flex-wrap: wrap;
@@ -504,13 +535,12 @@
 /* The value sits above the bar's left side; error bars sit at its right. */
 .research-lab .quest-col b {
   position: absolute;
-  top: -24px;
   left: 0;
   color: var(--j-ink);
   font-size: 15px;
   white-space: nowrap;
 }
-.research-lab .quest-col .error {
+.research-lab .quest-col .quest-sd {
   position: absolute;
   background: transparent;
   left: 78%;
@@ -521,7 +551,7 @@
   border-right: 0;
   transform-origin: center;
 }
-.research-lab .quest-col .error::before {
+.research-lab .quest-col .quest-sd::before {
   content: "";
   position: absolute;
   top: 0;
@@ -539,6 +569,24 @@
 }
 .research-lab .quest-variation {
   justify-self: center;
+}
+.research-lab .quest-chart-data {
+  min-width: 0;
+  border-top: 1px solid var(--j-line);
+}
+.research-lab .quest-chart-data > summary {
+  display: list-item;
+  min-height: 44px;
+  padding: 12px 4px;
+  color: var(--j-accent-deep);
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+@media (min-width: 1000px) {
+  .research-lab .quest-chart-plot {
+    height: clamp(180px, 28vh, 240px);
+  }
 }
 .research-lab .quest-table {
   width: 100%;
@@ -826,12 +874,6 @@
   .research-lab .quest-complete-actions .j-btn {
     flex: 1 1 100%;
   }
-  .research-lab .quest-pools {
-    gap: 10px;
-  }
-  .research-lab .quest-pool {
-    padding: 12px;
-  }
   .research-lab .journey-actions .quest-feedback p {
     max-height: 30vh;
     overflow-y: auto;
@@ -873,7 +915,7 @@
 }
 
 /* Interactive visuals */
-.research-lab .qv-swap {
+.research-lab .qv-content {
   width: 100%;
 }
 .research-lab .qv-prompt {
@@ -969,44 +1011,6 @@
   color: var(--j-accent-deep);
   font-size: 14px;
   font-weight: 800;
-}
-.research-lab .qv-flow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.research-lab .qv-flow li {
-  margin: 0;
-  padding: 10px 14px;
-  border-radius: 14px;
-  background: #fff;
-  color: var(--j-ink);
-  font-size: 14px;
-  font-weight: 800;
-  box-shadow: 0 2px 0 #d9e2e8;
-}
-.research-lab .qv-flow li + li::before {
-  content: "→";
-  margin-right: 8px;
-  color: var(--j-accent);
-}
-.research-lab .qv-split {
-  display: inline-flex;
-  gap: 6px;
-}
-.research-lab .qv-split b {
-  padding: 2px 8px;
-  border-radius: 8px;
-  background: var(--j-accent-soft);
-  color: var(--j-accent-deep);
-}
-.research-lab .qv-split b.is-text {
-  background: #fff1e2;
-  color: #8a4b12;
 }
 .research-lab .qv-form {
   display: grid;
@@ -1235,11 +1239,52 @@
     flex-direction: row;
     align-items: center;
   }
-  .research-lab .quest-bar .journey-actions-inner:has(> .quest-help) .journey-actions-buttons {
+  .research-lab
+    .quest-bar
+    .journey-actions-inner:has(> .quest-help)
+    .journey-actions-buttons {
     flex: 1;
   }
   .research-lab .quest-help {
     flex: 0 0 auto;
     padding: 0 14px;
   }
+}
+
+/* Results exploration keeps the same plot and answer column through reveal. */
+.research-lab .quest-prediction-note {
+  margin: 0 0 10px;
+  color: var(--j-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.research-lab .quest-unrevealed {
+  align-self: center;
+  color: var(--j-muted);
+  font-size: 36px;
+  font-weight: 800;
+}
+.research-lab .quest-comparison {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.research-lab .quest-comparison > button {
+  justify-self: start;
+}
+.research-lab .quest-comparison p {
+  margin: 0;
+}
+.research-lab .quest-bars {
+  position: relative;
+}
+.research-lab .quest-mean-gap {
+  position: absolute;
+  left: 50%;
+  bottom: 73.41%;
+  height: 9.59%;
+  width: 14px;
+  border: 2px solid var(--j-ink);
+  border-left: 0;
 }

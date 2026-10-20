@@ -29,6 +29,7 @@ import { Complete } from "./components/Complete.js";
 import { Dialog } from "./components/Dialog.js";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome.js";
 import { linkNotePdf } from "./research/link-note.js";
+import { useResearchConfig } from "./research/useResearchConfig.js";
 const STORAGE = "paperquest.session.v1";
 function savedSession(ids: string[], mode: Lesson["mode"]): Session {
   try {
@@ -74,7 +75,8 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   const [screen, setScreen] = useState<
     "welcome" | "prepare" | "lesson" | "research"
   >(isResearchRoute() ? "research" : "welcome");
-  const [researchAvailable, setResearchAvailable] = useState(false);
+  const configuration = useResearchConfig();
+  const researchAvailable = configuration.config?.storage === true;
   const [researchPoints, setResearchPoints] = useState(0);
   useEffect(() => {
     if (!uploadFirst || screen !== "welcome") return;
@@ -99,12 +101,6 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   }, [uploadFirst, screen]);
   const [researchFile, setResearchFile] = useState<File | null>(null);
   useEffect(() => {
-    fetch("/api/research/config")
-      .then((r) => r.json())
-      .then((data) => {
-        setResearchAvailable(data.storage === true);
-      })
-      .catch(() => {});
     const changed = () =>
       setScreen((s) =>
         isResearchRoute() ? "research" : s === "research" ? "welcome" : s,
@@ -160,10 +156,12 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
         );
     }
   }, []);
+  const classicVisible = screen !== "research";
   useEffect(() => {
-    void loadLesson();
+    if (!classicVisible) return;
+    if (!initialized.current) void loadLesson();
     return () => loadController.current?.abort();
-  }, [loadLesson]);
+  }, [loadLesson, classicVisible]);
   useEffect(() => {
     if (!initialized.current) return;
     try {
@@ -284,6 +282,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
       >
         <ResearchApp
           initialFile={researchFile}
+          configuration={configuration}
           onExit={() => {
             window.location.hash = uploadFirst ? "" : "/classic";
             changeScreen("welcome");

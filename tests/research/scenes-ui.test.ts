@@ -115,7 +115,7 @@ it("keeps an optional prediction visible and reveals permitted comparison values
     "",
   );
   await user.click(
-    screen.getByRole("button", { name: /Reveal group results/ }),
+    screen.getByRole("button", { name: /Reveal reported results/ }),
   );
   expect(screen.getByRole("figure").textContent).toContain("73.41");
   expect(screen.getByText("Your prediction: Similar group means")).toBeTruthy();

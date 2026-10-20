@@ -13,20 +13,138 @@ npm run build:vercel
 
 ## Retained coverage
 
-| Suite                                     | Coverage                                                                                                                                           |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/*.test.ts`                         | Curated learner journey, feedback guards, unique rewards, resumption and stale PDF callbacks                                                       |
-| `tests/research/`                         | Learning engine, points, PDF/OCR, provider validation, processing, sample-mode gates, ownership, retention, drafts and authored reasoning fixtures |
-| `tests/research/stored-papers.test.ts`    | Stored `papers/` PDFs carry the DOI and title, and have an entry, matching `papers/README.md`                                                      |
-| `tests/browser/upload-home.spec.ts`       | PDF/DOI entry, retired-link recovery, responsive/axe checks, upload → review → sample lesson → persisted points                                    |
-| `tests/browser/viewport-layout.spec.ts`   | Shared viewport shell across home, preparation, curated lessons, research and reasoning preview; narrow-screen controls and expanded/error content |
-| `tests/browser/research.spec.ts`          | Full research journey, uploads/OCR, consent, ownership, history, deletion, responsive views and classic compatibility                              |
-| `tests/browser/final-polish.spec.ts`      | Draft recovery, failed requests, late navigation, dialogs, configuration reuse and accurate support copy                                           |
-| `tests/browser/reasoning-preview.spec.ts` | API-free reasoning/revision flow, custom-text abstention, storage failure, keyboard, responsive and axe checks                                     |
+| Suite                                     | Coverage                                                                                                                                                                                                 |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/*.test.ts`                         | Curated learner journey, feedback guards, unique rewards, resumption and stale PDF callbacks                                                                                                             |
+| `tests/research/`                         | Learning engine, points, PDF/OCR, provider validation, processing, sample-mode gates, ownership, retention, drafts and authored reasoning fixtures                                                       |
+| `tests/research/stored-papers.test.ts`    | Stored `papers/` PDFs carry the DOI and title, and have an entry, matching `papers/README.md`                                                                                                            |
+| `tests/browser/upload-home.spec.ts`       | PDF/DOI entry, retired-link recovery, responsive/axe checks, upload → review → sample lesson → persisted points                                                                                          |
+| `tests/browser/viewport-layout.spec.ts`   | Shared viewport shell across home, preparation, curated lessons, research and reasoning preview; narrow-screen controls and expanded/error content                                                       |
+| `tests/browser/research.spec.ts`          | Full research journey, uploads/OCR, consent, ownership, history, deletion, responsive views and classic compatibility                                                                                    |
+| `tests/browser/final-polish.spec.ts`      | Draft recovery, failed requests, late navigation, dialogs, configuration reuse and accurate support copy                                                                                                 |
+| `tests/browser/reasoning-preview.spec.ts` | API-free reasoning/revision flow, custom-text abstention, storage failure, keyboard, responsive and axe checks                                                                                           |
+| `tests/browser/quest-motion.spec.ts`      | Shared bootstrap configuration, classic deferral, quest heading focus, direct slider response, persistent design/reveal state, rapid reversal, reduced motion, touch, resumption and stable chart labels |
 
 The retired standalone paper-case implementation and its dedicated tests are removed together. The retained reasoning preview still blocks API requests during its browser tests. Provider tests use synthetic outputs; these are not live model verification. PDF and OCR tests process synthetic PDFs. Sample-mode tests verify no inference calls and rejection on Vercel/in production.
 
 Format changed files with Prettier and run `git diff --check`. Browser traces are retained on failure. Automated accessibility checks cover exercised states; Safari/Firefox, assistive-technology sessions and arbitrary uploaded-document layouts remain outside this matrix.
+
+## Quest motion and study-design activity · 21 October 2026
+
+Local implementation on `marc`, authorized for implementation and local preview;
+visual acceptance, commit and push remain pending. The unrelated untracked Paper
+Brief files were preserved.
+
+- `npm run check` passed: 21 Node/interface checks, 209 research checks in 22
+  files, TypeScript checks and production builds. After the final vertical-chart
+  adjustment, root/web type checks and the frontend production build passed again.
+- All 55 unique Chromium scenarios across the eight browser suites passed in
+  two batches (38 and 22, with five overlapping quest cases). The five focused
+  quest regressions also passed on the final presentation changes.
+- The new regressions exercise one completed configuration read and no classic
+  lesson read on direct research entry, retained classic loading, heading focus,
+  immediate slider updates, retained diagram/group identities, rapid A/B/C changes,
+  server-free sample interaction, post-answer source disclosure, restored answers,
+  live reduced motion, emulated mobile touch and stable chart-label height over
+  20 frames. The chart is entered through the preceding decision, then its marks
+  are checked at their full size after enabling reduced motion.
+- The design activity was checked for overflow and axe violations at 320, 390,
+  768 and 1366 CSS pixels. None were observed in these exercised states. Desktop
+  (1440×1000) and mobile (390×844) screenshots were inspected. The browser test
+  retains screenshots in its ignored Playwright output directory.
+- Formatting, `git diff --check` and the context audit passed. The context audit
+  reports 48 review/authority warnings; no review baselines were advanced.
+
+These checks establish local behavior for the authored sample and retained
+application journeys. They do not establish new live model output, automatic
+study-design selection for arbitrary papers, hosted delivery, learning benefit,
+Safari/Firefox behavior, assistive-technology usability or physical-phone frame
+rates. The new template's current integration is the sample quest.
+
+## Desktop choice visibility follow-up · 21 October 2026
+
+The reported results-screen defect was caused by a vertical chart/table/choices
+stack. All authored visual questions now share the desktop visual/answer grid,
+and chart data tables use a native disclosure. The narrower-screen flow retains
+normal page scrolling and full-size reading controls.
+
+- Root/web type checks, the frontend production build, formatting and
+  `git diff --check` passed.
+- The seven quest browser cases passed against the existing local preview using
+  an isolated browser context, without restarting the user's server or modifying
+  their browser session. The final two layout cases passed again after adding
+  the tightest desktop breakpoint.
+- The layout guard derives all 11 choice steps from the authored script and
+  checks seven sizes: 1366×768, 1440×900, 1920×1080, 1280×720, 1024×768,
+  1280×640 and 1000×640. It verifies zero page scrolling, no horizontal overflow,
+  complete label rectangles above the action bar, at least 44px target height
+  and pointer coverage, before and after Help opens. It also checks expanded
+  variation controls. That covers 77 question/viewport combinations.
+- The separate result-table case checks that opening the accessible table
+  preserves the choices' vertical position and keeps them above the dock.
+  Its screenshot was inspected, and axe found no violations in that state.
+
+The geometry sweep uses reduced motion to measure settled layout. It does not
+establish every possible window, zoom level or arbitrary generated-paper layout.
+Native Safari/WebKit was not exercised in this pass; the installed Playwright
+package's matching WebKit runtime was unavailable. No browser was installed.
+
+## Results prediction and comparison · 21 October 2026
+
+Local implementation on `marc`, uncommitted. Root/web type checks, frontend
+production build, formatting and `git diff --check` passed. Six focused Chromium
+cases passed against the existing preview: full authored quest with keyboard,
+retry and resume; chart label stability; the 77-combination desktop layout sweep;
+optional table layout; prediction/reveal persistence and feedback gating; and
+prediction/comparison accessibility at 320, 390 and 768px widths.
+
+The viewport sweep now measures both prediction choices and revealed assessment
+choices, with Compare means and Help open. The results case checks that prediction
+creates no answer record, shortcuts cannot submit hidden interpretations, numerical
+marks/table remain absent before explicit reveal, reveal restores heading focus,
+the worked calculation waits for feedback, and the next SD question still works.
+Axe found no violations in the exercised prediction/comparison states. Screenshots
+of the settled comparison and score-spread states were inspected locally. A final
+focused rerun passed after isolating the SD marker class from error-message styles;
+it measures both marker endpoints against mean ± SD and rejects inherited padding,
+bottom margin and border rounding.
+
+This is Chromium and the authored sample, with no inference requests or new
+packages. Safari, real screen-reader use, physical-phone performance, arbitrary
+paper generation, learning gains and hosted delivery are unverified.
+
+## Three-paper activity pilot · 21 October 2026
+
+Local, uncommitted work on `marc`. The authored `/activities` preview uses the
+same renderer and scene projection as the learning workspace.
+
+- Root/web type checks and the complete contracts/web/API build passed. Formatting,
+  `git diff --check` and the context audit passed; the audit retains 51 review/authority
+  warnings and no review baselines were advanced.
+- All 21 Node tests and 215 research tests passed. Server-binding cases were
+  rerun with the necessary local-server permission after sandbox `EPERM` failures.
+- All 15 Chromium cases in `activity-pilot.spec.ts` and `research.spec.ts` passed
+  using separate ports and a temporary test database. The first temporary-server
+  run lacked its alternate frontend origin; configuring that test origin resolved
+  the request rejection without changing application security behavior.
+- The three pilot cases passed again against the existing preview after final
+  copy/provenance and screenshot adjustments. No user browser state was modified.
+- Desktop geometry covers all three papers at 1366×768, 1000×640 and 1440×900:
+  three complete choices and their Check control remain in view, with 44px minimum
+  targets and no horizontal overflow. Narrower layouts scroll naturally.
+- Axe scans found no violations across the three activities at widths 320, 390,
+  768 and 1366. Checks include prediction/reveal, original three-decimal means,
+  feedback-gated difference, card inspection, pins, revision, independent notes,
+  refresh, per-paper reset, focus and reduced motion. Pilot interactions issue no
+  assessment POST requests and remain usable with API requests blocked.
+- Full experiment/interview screenshots were inspected. The inherited container
+  class collision was fixed by distinguishing `scene-kind-*` from inner diagram
+  classes; the existing learning journey passed after that change.
+
+These checks establish renderer reuse for three prepared source-backed cases.
+Independent academic review, observed learning benefit, arbitrary-paper generation,
+Safari/Firefox, real assistive-technology use, physical-phone frame rates and hosted
+delivery remain unverified. The original local preview stays running.
 
 ## Historical consolidated verification
 

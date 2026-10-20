@@ -37,6 +37,8 @@ type Props = {
   onSelect: (ids: string[]) => void;
   /** Result of the checked attempt, used only to colour the chosen responses. */
   verdict?: "correct" | "incorrect";
+  /** Optional local review controls; assessment remains owned by the caller. */
+  responseFooter?: React.ReactNode;
 };
 
 /** A data-only scene renderer. Assessment and progression remain outside this component. */
@@ -75,7 +77,7 @@ function SceneContent(props: Props) {
         data-scene-layout
         layout={motion.layout}
         style={{ borderRadius: 24 }}
-        className={`investigation-scene scene-${scene.kind}`}
+        className={`investigation-scene scene-kind-${scene.kind}`}
         aria-label={scene.title}
       >
         <m.header
@@ -334,6 +336,7 @@ function SceneResponses({
   disabled,
   onSelect,
   verdict,
+  responseFooter,
 }: Props) {
   const motion = useSceneMotion();
   const shown = scene.responses.filter((response) =>
@@ -447,6 +450,7 @@ function SceneResponses({
           );
         })}
       </div>
+      {responseFooter}
     </m.fieldset>
   );
 }

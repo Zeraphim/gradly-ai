@@ -62,18 +62,28 @@ import type {
 import { PathPicker } from "./PathPicker.js";
 import { UploadPage } from "./UploadPage.js";
 import { ProcessingPage } from "./ProcessingPage.js";
-import { useResearchConfig } from "./useResearchConfig.js";
+import {
+  useResearchConfig,
+  type ResearchConfiguration,
+} from "./useResearchConfig.js";
 const ReasoningPreview = lazy(() =>
   import("./ReasoningPreview.js").then((module) => ({
     default: module.ReasoningPreview,
   })),
 );
+const PaperActivityPilot = lazy(() =>
+  import("./PaperActivityPilot.js").then((module) => ({
+    default: module.PaperActivityPilot,
+  })),
+);
 export function ResearchApp({
   onExit,
   initialFile,
+  configuration,
 }: {
   onExit: () => void;
   initialFile?: File | null;
+  configuration?: ResearchConfiguration;
 }) {
   const path = useResearchPath();
   const previousPath = useRef(path);
@@ -106,8 +116,13 @@ export function ResearchApp({
             returnHref={returnPath ?? "/learn"}
           />
         </Suspense>
+      ) : /^\/activities\/?$/.test(path) ? (
+        <Suspense fallback={<AppLoading label="Opening paper activities…" />}>
+          <PaperActivityPilot onExit={onExit} />
+        </Suspense>
       ) : (
         <ResearchWorkspaceHost
+          configuration={configuration}
           path={path}
           onExit={onExit}
           uploadDraft={uploadDraft}
@@ -118,14 +133,19 @@ export function ResearchApp({
     </div>
   );
 }
-function ResearchWorkspaceHost(props: {
+function ResearchWorkspaceHost({
+  configuration: provided,
+  ...props
+}: {
+  configuration?: ResearchConfiguration;
   path: string;
   onExit: () => void;
   uploadDraft: UploadDraft;
   setUploadDraft: React.Dispatch<React.SetStateAction<UploadDraft>>;
   returnPath: string | null;
 }) {
-  const configuration = useResearchConfig();
+  const fallback = useResearchConfig(!provided);
+  const configuration = provided ?? fallback;
   return (
     <GradlyWorkspace
       key={props.path}

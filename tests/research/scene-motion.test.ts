@@ -214,7 +214,9 @@ it("makes an outgoing assembly inert and can reverse removal before the exit fin
 it("moves focus from an inert reveal cover to the chart and retains the prediction", async () => {
   render(h(Surface, { challenge: featured.challenges[5]! }));
   fireEvent.click(screen.getByRole("radio", { name: "Similar group means" }));
-  fireEvent.click(screen.getByRole("button", { name: /Reveal group results/ }));
+  fireEvent.click(
+    screen.getByRole("button", { name: /Reveal reported results/ }),
+  );
   expect(document.activeElement).toBe(screen.getByRole("figure"));
   expect(screen.getByText("Your prediction: Similar group means")).toBeTruthy();
   const cover = document.querySelector(".scene-results-cover");
@@ -289,7 +291,9 @@ it("responds live to device preferences without remounting the expanded card or 
 
 it("settles an active quantitative reveal at its actual value when the app preference changes", async () => {
   const view = render(h(Surface, { challenge: featured.challenges[5]! }));
-  fireEvent.click(screen.getByRole("button", { name: /Reveal group results/ }));
+  fireEvent.click(
+    screen.getByRole("button", { name: /Reveal reported results/ }),
+  );
   view.rerender(
     h(Surface, { challenge: featured.challenges[5]!, reduced: true }),
   );

@@ -115,6 +115,54 @@ restricted content or a result that the server has withdrawn.
 
 ## Existing motion and icon implementation
 
+### Authored quest repair and study-design activity · 21 October 2026
+
+The authored texting quest replaces outgoing task content immediately and focuses
+the incoming heading after it mounts. Its brief entrance uses the shared copy
+timing. Answer controls stay available immediately and use the shared gesture
+timing without an entrance stagger. Question and measurement previews update
+within a retained surface; the attention slider tracks the learner's input directly.
+Chart labels sit outside the animated bar fill so their text keeps its normal size.
+Routine motion reuses the existing 120 ms gesture, 160 ms copy, 220 ms connection
+and 300 ms chart timings. Active vertical chart marks settle to their full size
+when reduced motion is enabled, without replaying when it is disabled again.
+
+The design choice now uses `scenes/StudyDesignVisual.tsx`. One schematic stays
+mounted as the learner compares observing groups, random assignment and
+self-selection. Its route changes through the selected grouping rule while group
+labels and the outcome update immediately. The same diagram remains after an
+answer check; the source procedure summary appears only with resolved feedback.
+Desktop pairs the diagram with the answer choices, while smaller screens stack
+them. The diagram is illustrative, has no participant counts or early findings,
+and has a live textual equivalent. The older timed assignment illustration and
+replaced plan-list styles were removed.
+
+The renderer accepts structured plan text, but its current integration is the
+authored sample. It does not add a new generated scene family or establish support
+for arbitrary papers. Implementation was authorized in the current task; visual
+acceptance remains pending Marc's review of the local preview.
+
+### Choices remain visible beside visuals · 21 October 2026
+
+All visual questions in the authored quest share one desktop layout: the heading
+and source note above, visual on the left, and answer controls on the right.
+The layout starts at 1000 CSS pixels, with shorter-window spacing and a bounded
+chart height. It removes the old single-column arrangement that pushed choices
+below the pinned action bar. No answer text is clipped, scaled down to fit, or
+placed in an inner scrolling panel. Smaller screens retain a readable stacked
+flow and normal page scrolling.
+
+The chart's duplicate table is available through the native "View values as a
+table" disclosure. Opening it keeps the desktop choices in place. The SD caution
+appears when variation is actually shown. The diagram-specific desktop rules now
+use the same question layout rather than maintaining a second layout in its CSS.
+
+The browser regression derives its cases from every authored choice in
+`textingQuest`, so newly added questions enter the layout check automatically.
+It checks full label rectangles, minimum target height and pointer coverage above
+the action bar, without page scrolling, both before and after Help is opened.
+Window sizes and verification limits are recorded in [TESTING.md](TESTING.md).
+
 Research controls use the same Lucide SVG family as the original application, including actions, agent roles, selection marks and page navigation. Icons remain decorative beside descriptive text; icon-only controls retain accessible labels.
 
 Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops are introduced. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
@@ -319,3 +367,63 @@ built-in viewer to fit the page width (`#view=FitH`) and tops out at 440px, whic
 keeps both columns close to the same height. The reference-study row is a single
 line: icon, title, description, action — its label no longer wraps into a column
 of words at narrow widths.
+
+
+## Authored results exploration · 21 October 2026
+
+The sample quiz-results decision begins with an ungraded prediction (Text lower,
+About the same, No text lower). The score plot, numerical table and assessed
+interpretations stay absent until the learner selects a prediction and explicitly
+reveals the reported means. The chart keeps its axes and group positions; its
+fills enter using the shared chart timing. Reduced motion settles them immediately.
+Revealing returns focus to the question heading, and native radios support keyboard
+selection without the assessment shortcuts capturing prediction input.
+
+The prediction remains visible beside the answer choices after reveal and is saved
+with the quest in tab session storage. It awards no points and never marks an
+assessment correct. Refresh retains both prediction and reveal; older saved resolved
+results reopen as resolved. Restart clears this exploration with the quest.
+
+Compare means adds a bracket between the two reported heights and a calculation
+prompt. The worked 9.59 percentage-point difference appears only after the existing
+answer feedback. The next decision reveals ±1 SD on request and distinguishes score
+spread from confidence intervals or min/max. No individual observations are invented.
+Resolved variation decisions restore their visible SD bars on refresh. The SD marks
+use a dedicated `quest-sd` class, avoiding the shared error-message padding, margin
+and rounded border that previously distorted their geometry.
+
+Desktop retains the shared plot/answer grid through prediction, reveal and comparison.
+Narrow screens retain natural scrolling. This implementation is the authored texting
+sample; arbitrary-paper generation and its evidence-release contract are unchanged.
+
+## Three-paper activity pilot · 21 October 2026
+
+`#/research/activities` is a local, authored practice area, linked from learning
+paths. It loads the existing `InvestigationScene` renderer with three source-backed
+cases: a randomized experiment (Bobek & Tversky, Experiment 2), longitudinal
+observations (Watts et al.) and purposive interviews (Lukashe et al.). It reuses
+comparison, flow and evidence-connection scenes. This pilot does not generate
+content from uploads or award server points.
+
+The experiment uses an optional prediction and explicit reveal; its worked mean
+difference waits for interpretation feedback. The observational diagram labels
+measurement timing and analysis inputs, without presenting a causal mechanism.
+The interview activity uses paraphrased accounts and contextual themes, with no
+invented quotations or population rates. Each activity links to its paper and
+section locator. Response headings are neutral and the supported interpretation
+occupies a different position in each case.
+
+Desktop puts response sentences and their Check control beside the evidence.
+Narrow screens scroll naturally; expanded source material and optional personal
+explanations follow the activity. Switching papers retains separate tab drafts,
+notes, inspected cards and pins. Reset affects only the active paper. Custom writing
+is explicitly unassessed; storage failures show a warning. The shared live motion
+preferences, native controls, heading focus and feedback focus remain in use.
+
+The pilot exposed two reusable-component issues: the outer `scene-flow` class
+collided with the inner diagram's layout, and a fixed two-decimal chart rounded
+reported proportions. Container variants now use `scene-kind-*`. Comparison data
+may specify `decimals` from zero to six; existing scenes default to two. Generic
+reveal copy now refers to reported values instead of assuming every chart shows
+group means. These changes do not establish arbitrary-paper or live generation
+quality. The next evaluation is independent content review and observed learner use.

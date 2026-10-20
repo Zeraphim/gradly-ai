@@ -293,3 +293,26 @@ redistribution. Paywalled versions of record are linked, never copied. See
   grant redistribution, so they are linked only. Study 1 (Deslauriers, CC BY-NC-ND) is
   still unretrieved — PNAS, PMC, Europe PMC, and Semantic Scholar all blocked automated
   download.
+
+## Three-design activity pilot · 21 October 2026
+
+This later pilot deliberately extends beyond the original quantitative candidate
+shortlist's C6 exclusion. It evaluates the existing renderer across three kinds of
+evidence. These are authored examples, not generated lessons or a learning study.
+
+| Case | Source and checked location | Evidence used in the pilot |
+| --- | --- | --- |
+| Experiment | [Bobek & Tversky (2016)](https://doi.org/10.1186/s41235-016-0031-6), Experiment 2 Procedure/Results, Figure 5 | Random assignment; delayed-test proportions 0.822 and 0.631. The subtraction is authored arithmetic. |
+| Observational | [Watts, Duncan & Quan (2018)](https://doi.org/10.1177/0956797618761661), Method, Analytic approach, Results, Table 4 | Early waiting, later achievement and adjustment for background/cognition. The diagram represents timing and analysis, not causal identification. |
+| Interviews | [Lukashe, Chigbu & Umejesi (2024)](https://doi.org/10.3389/feduc.2024.1449363), Sections 2.1–2.3, career-readiness findings and Section 4 | Purposive interviews with 27 students; contextual accounts of digital adaptability and networking/practical-experience concerns. |
+
+Rechecked publisher full text for the experiment and interviews. PMC's access check
+prevented full-text access for Watts; the same DOI/title/authors were verified in
+[the article PDF](https://gwern.net/doc/psychology/willpower/2018-watts.pdf).
+No additional PDF was stored or redistributed. Source cards are paraphrases.
+
+Precision clarification for the earlier Watts summary: Table 4 distinguishes
+Grade 1 standardized estimates (0.279, 0.102, 0.047) from age-15 estimates
+(0.236, 0.081, 0.050). Do not label the earlier approximate 0.28 → 0.05 summary
+as an age-15 comparison. The pilot avoids conflating those outcomes and does not
+present these coefficients as intervention effects.

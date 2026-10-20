@@ -28,7 +28,12 @@ import {
   Brain,
   BookX,
 } from "lucide-react";
-import { AnimatePresence, m, useSceneMotion } from "./scenes/scene-motion.js";
+import { m, useSceneMotion } from "./scenes/scene-motion.js";
+import {
+  StudyDesignVisual,
+  type StudyDesignPlan,
+} from "./scenes/StudyDesignVisual.js";
+import { questSource } from "./texting-quest.js";
 import type { QuestIcon } from "./texting-quest.js";
 
 const icons: Record<QuestIcon, typeof Users> = {
@@ -69,23 +74,9 @@ export function OptionIcon({ icon }: { icon?: QuestIcon }) {
   );
 }
 
-/** Swaps a small block when the learner's selection changes. */
-function Swap({ id, children }: { id: string; children: ReactNode }) {
-  const motion = useSceneMotion();
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      <m.div
-        key={id}
-        className="qv-swap"
-        initial={motion.still ? false : { opacity: 0, y: 8, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -6 }}
-        transition={motion.still ? { duration: 0 } : { duration: 0.22 }}
-      >
-        {children}
-      </m.div>
-    </AnimatePresence>
-  );
+/** Selection changes its text immediately; the working surface stays mounted. */
+function VisualContent({ children }: { children: ReactNode }) {
+  return <div className="qv-content">{children}</div>;
 }
 
 function Prompt({ children }: { children: ReactNode }) {
@@ -105,18 +96,18 @@ export function FrameVisual({ selected }: { selected?: string }) {
       <div className="qv-frame-row">
         <div className={`qv-slot ${pair ? "is-filled" : ""}`}>
           <small>What varies</small>
-          <Swap id={pair?.[0] ?? "empty-a"}>
+          <VisualContent>
             <strong>{pair?.[0] ?? "?"}</strong>
-          </Swap>
+          </VisualContent>
         </div>
         <span className="qv-arrow" aria-hidden="true">
           →
         </span>
         <div className={`qv-slot ${pair ? "is-filled" : ""}`}>
           <small>What gets measured</small>
-          <Swap id={pair?.[1] ?? "empty-b"}>
+          <VisualContent>
             <strong>{pair?.[1] ?? "?"}</strong>
-          </Swap>
+          </VisualContent>
         </div>
       </div>
       <figcaption>
@@ -173,11 +164,7 @@ export function SampleVisual({ selected }: { selected?: string }) {
                 opacity: keep(belief) ? 1 : 0.18,
                 scale: keep(belief) ? 1 : 0.86,
               }}
-              transition={
-                motion.still
-                  ? { duration: 0 }
-                  : { duration: 0.25, delay: i * 0.012 }
-              }
+              transition={motion.still ? { duration: 0 } : motion.copy}
             >
               <Face size={20} strokeWidth={2.2} />
             </m.span>
@@ -204,94 +191,60 @@ export function SampleVisual({ selected }: { selected?: string }) {
   );
 }
 
-function Flow({
-  steps,
-}: {
-  steps: { label: string; split?: [string, string] }[];
-}) {
-  const motion = useSceneMotion();
-  return (
-    <ol className="qv-flow">
-      {steps.map((step, i) => (
-        <m.li
-          key={step.label}
-          initial={motion.still ? false : { opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={
-            motion.still ? { duration: 0 } : { delay: i * 0.1, duration: 0.25 }
-          }
-        >
-          {step.split ? (
-            <span className="qv-split">
-              <b className="is-text">{step.split[0]}</b>
-              <b>{step.split[1]}</b>
-            </span>
-          ) : (
-            step.label
-          )}
-        </m.li>
-      ))}
-    </ol>
-  );
-}
+const studyPlans: Record<string, StudyDesignPlan> = {
+  A: {
+    id: "A",
+    title: "Existing habits",
+    grouping: "observe",
+    groups: ["Usually texts", "Usually does not text"],
+    outcome: "Latest course grades",
+    description:
+      "Ask about existing texting habits, then compare course grades. Neither the groups nor their lecture experiences are assigned.",
+  },
+  B: {
+    id: "B",
+    title: "Random assignment",
+    grouping: "assign",
+    groups: ["Assigned to text", "Assigned not to text"],
+    outcome: "Same lecture · same quiz",
+    description:
+      "Chance assigns students to the two groups. Both groups watch the same lecture and take the same quiz.",
+  },
+  C: {
+    id: "C",
+    title: "Self-selection",
+    grouping: "choose",
+    groups: ["Chooses to text", "Chooses not to text"],
+    outcome: "Same lecture · same quiz",
+    description:
+      "Students decide which group to join. Both groups watch the same lecture and take the same quiz.",
+  },
+};
 
-/** 05 · Three study plans: existing habits, random assignment, self-selection. */
-export function PlansVisual({ selected }: { selected?: string }) {
-  const plans: Record<
-    string,
-    {
-      name: string;
-      icon: ReactNode;
-      steps: { label: string; split?: [string, string] }[];
-    }
-  > = {
-    A: {
-      name: "Existing habits",
-      icon: <ClipboardList size={18} />,
-      steps: [
-        { label: "Students" },
-        { label: "“Do you usually text?”" },
-        { label: "Latest course grades" },
-      ],
-    },
-    B: {
-      name: "Random assignment",
-      icon: <Dices size={18} />,
-      steps: [
-        { label: "Shared pool" },
-        { label: "Chance decides" },
-        { label: "groups", split: ["Text", "No text"] },
-        { label: "Same lecture" },
-        { label: "Same quiz" },
-      ],
-    },
-    C: {
-      name: "Self-selection",
-      icon: <Hand size={18} />,
-      steps: [
-        { label: "Students" },
-        { label: "Each picks a group" },
-        { label: "groups", split: ["Text", "No text"] },
-        { label: "Same quiz" },
-      ],
-    },
-  };
-  const plan = selected ? plans[selected] : undefined;
+/** 05 · The same diagram responds to each proposed study design. */
+export function PlansVisual({
+  selected,
+  resolved = false,
+}: {
+  selected?: string;
+  resolved?: boolean;
+}) {
   return (
-    <figure className="quest-figure qv-plans">
-      <Swap id={selected ?? "none"}>
-        {plan ? (
-          <>
-            <span className="qv-plan-name">
-              {plan.icon} Plan {selected}: {plan.name}
-            </span>
-            <Flow steps={plan.steps} />
-          </>
-        ) : (
-          <Prompt>Pick an approach to preview its study plan.</Prompt>
-        )}
-      </Swap>
-    </figure>
+    <StudyDesignVisual
+      participantsLabel="Students"
+      plan={selected ? studyPlans[selected] : undefined}
+      source={
+        resolved
+          ? {
+              summary:
+                "In Experiment 2, the researchers randomly assigned undergraduates to text or not text during a recorded lecture, then gave them a nine-item quiz.",
+              citation:
+                "Gingerich & Lineweaver (2014), Experiment 2 · procedure summary",
+              href: `https://doi.org/${questSource.doi}`,
+            }
+          : undefined
+      }
+    />
   );
 }
 
@@ -299,7 +252,7 @@ export function PlansVisual({ selected }: { selected?: string }) {
 export function InstrumentsVisual({ selected }: { selected?: string }) {
   return (
     <figure className="quest-figure qv-instrument">
-      <Swap id={selected ?? "none"}>
+      <VisualContent>
         {selected === "A" ? (
           <div className="qv-form">
             <small>Self-report</small>
@@ -341,7 +294,7 @@ export function InstrumentsVisual({ selected }: { selected?: string }) {
         ) : (
           <Prompt>Pick a measure to see what participants would answer.</Prompt>
         )}
-      </Swap>
+      </VisualContent>
     </figure>
   );
 }

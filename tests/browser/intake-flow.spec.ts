@@ -233,6 +233,16 @@ test("the texting quest plays by keyboard, retries once, resumes and completes",
       await finish.click();
       break;
     }
+    const revealMeans = page.getByRole("button", {
+      name: "Reveal reported means",
+    });
+    if (await revealMeans.isVisible()) {
+      await page
+        .getByRole("radio", { name: "Text lower", exact: true })
+        .check();
+      await revealMeans.click();
+      continue;
+    }
     if (await check.isVisible()) {
       await page.keyboard.press("A");
       await page.keyboard.press("Enter");

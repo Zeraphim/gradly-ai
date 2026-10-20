@@ -57,6 +57,8 @@ export const sceneSchema = z.discriminatedUnion("kind", [
     kind: z.literal("comparison"),
     measure: text,
     unit: text,
+    // Preserve reported precision without changing existing two-decimal scenes.
+    decimals: z.number().int().min(0).max(6).optional(),
     min: z.number().finite(),
     max: z.number().finite(),
     values: z

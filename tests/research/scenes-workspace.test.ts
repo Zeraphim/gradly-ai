@@ -81,7 +81,7 @@ it("preserves prediction and answer drafts after failure, through retry, and acr
   await screen.findByRole("heading", { name: "See the group difference" });
   await user.click(screen.getByRole("radio", { name: "Similar group means" }));
   await user.click(
-    screen.getByRole("button", { name: /Reveal group results/ }),
+    screen.getByRole("button", { name: /Reveal reported results/ }),
   );
   await user.click(
     screen
@@ -145,7 +145,7 @@ it("does not let a late visual answer response replace a newer adventure", async
   render(createElement(ResearchApp, { onExit() {} }));
   await screen.findByRole("heading", { name: "See the group difference" });
   await user.click(
-    screen.getByRole("button", { name: /Reveal group results/ }),
+    screen.getByRole("button", { name: /Reveal reported results/ }),
   );
   await user.click(
     screen

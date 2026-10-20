@@ -28,6 +28,15 @@ implementation and pending backend/player integration decisions.
 
 ## Research scene development
 
+[The 21 October animation and dynamic-paper review](INTERACTION_REFERENCES.md#21-october-2026-animation-and-dynamic-paper-review)
+records the current source audit, Brilliant research, targeted cleanup opportunities,
+proposed learning activities, effort estimates and verification limits. Larger
+automatic-generation changes remain recommendations. The bounded
+[three-paper activity pilot](DESIGN.md#three-paper-activity-pilot--21-october-2026)
+now reuses the existing renderer with prepared experiment, observational and
+interview evidence; its [source checks](research/PAPER_SELECTION.md#three-design-activity-pilot--21-october-2026)
+record the distinction from live generation.
+
 [SCENE_AUTHORING.md](SCENE_AUTHORING.md) explains the reusable scene contract,
 generation instructions, public-response gates and backend setup.
 [Fresh Adventure evidence](ui/FRESH_ADVENTURE.md) maps all nine visual challenges

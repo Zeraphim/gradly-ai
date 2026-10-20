@@ -1,4 +1,11 @@
-import { useEffect, useState, type RefObject } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  type CSSProperties,
+  type RefObject,
+} from "react";
+import { animate, useMotionValue } from "motion/react";
 import { ActionLabel, Icon } from "./icon.js";
 import { Mascot } from "./learning-ui.js";
 import { ResearchLink as Link } from "./navigation.js";
@@ -30,14 +37,21 @@ import "./quest.css";
 type Choice = Extract<QuestScreen, { kind: "choice" }>;
 type Phase = "answering" | "retry" | "correct" | "explained";
 type Record_ = { firstCorrect: boolean; revised: boolean };
+type Prediction = "Text lower" | "About the same" | "No text lower";
+type Exploration = { prediction?: Prediction; revealed?: boolean };
 
 const STORAGE = "gradly-texting-quest";
+const EMPTY_EXPLORATION: Exploration = {};
 
 function restore(id: string) {
   try {
     const saved = JSON.parse(sessionStorage.getItem(`${STORAGE}:${id}`) ?? "");
     if (typeof saved?.index === "number" && saved.records)
-      return saved as { index: number; records: Record<string, Record_> };
+      return saved as {
+        index: number;
+        records: Record<string, Record_>;
+        exploration?: Exploration;
+      };
   } catch {
     /* A fresh start is always safe. */
   }
@@ -69,7 +83,8 @@ function Quest({
   heading: RefObject<HTMLHeadingElement | null>;
 }) {
   const motion = useSceneMotion();
-  const [{ index, records }, setProgress] = useState(() => restore(sessionKey));
+  const [{ index, records, exploration = EMPTY_EXPLORATION }, setProgress] =
+    useState(() => restore(sessionKey));
   // A refresh reopens a resolved decision as resolved, not as a blank retry.
   const [resumed] = useState(() => {
     const saved = textingQuest[index];
@@ -88,19 +103,42 @@ function Quest({
   const [phase, setPhase] = useState<Phase>(resumed.phase);
   const [message, setMessage] = useState(resumed.message);
   const [hint, setHint] = useState(false);
-  const [variation, setVariation] = useState(false);
+  const [variation, setVariation] = useState(
+    () =>
+      textingQuest[index]?.kind === "choice" &&
+      textingQuest[index]?.id === "variation" &&
+      (resumed.phase === "correct" || resumed.phase === "explained"),
+  );
   const screen = textingQuest[index]!;
+  const predicting =
+    screen.id === "results" &&
+    !exploration.revealed &&
+    phase !== "correct" &&
+    phase !== "explained";
+  const revealResults = () => {
+    if (!exploration.prediction) return;
+    setProgress((p) => ({
+      ...p,
+      exploration: { ...p.exploration, revealed: true },
+    }));
+    heading.current?.focus({ preventScroll: true });
+  };
   const total = textingQuest.length - 1;
   useEffect(() => {
     try {
       sessionStorage.setItem(
         `${STORAGE}:${sessionKey}`,
-        JSON.stringify({ index, records }),
+        JSON.stringify({ index, records, exploration }),
       );
     } catch {
       /* Progress still works for this visit. */
     }
-  }, [index, records, sessionKey]);
+  }, [index, records, exploration, sessionKey]);
+  // The previous screen is removed immediately. Focus the new heading after
+  // its DOM has committed, independently of the presentation's entrance.
+  useEffect(() => {
+    heading.current?.focus({ preventScroll: true });
+  }, [screen.id, heading]);
   const goTo = (next: number) => {
     setProgress((p) => ({ ...p, index: next }));
     setSelected([]);
@@ -109,13 +147,12 @@ function Quest({
     setHint(false);
     setVariation(false);
     window.scrollTo({ top: 0, behavior: "instant" });
-    requestAnimationFrame(() => heading.current?.focus());
   };
   const advance = () => goTo(Math.min(index + 1, textingQuest.length - 1));
   const record = (id: string, value: Record_) =>
     setProgress((p) => ({ ...p, records: { ...p.records, [id]: value } }));
   const check = () => {
-    if (screen.kind !== "choice" || !selected.length) return;
+    if (screen.kind !== "choice" || predicting || !selected.length) return;
     const result = feedbackFor(screen, selected);
     setMessage(result.message);
     if (result.correct) {
@@ -151,6 +188,14 @@ function Quest({
         return;
       const target = event.target as HTMLElement | null;
       if (target?.closest("input[type=range], textarea, select")) return;
+      if (predicting) {
+        if (target?.closest("button, a, summary")) return;
+        if (event.key === "Enter") {
+          event.preventDefault();
+          revealResults();
+        }
+        return;
+      }
       if (event.key === "Enter") {
         // A focused button or link already handles Enter natively.
         if (target?.closest("button, a, summary")) return;
@@ -215,42 +260,48 @@ function Quest({
         </div>
         <span className="quest-stage">{screen.stage}</span>
       </div>
-      <AnimatePresence mode="wait" initial={false}>
-        <m.section
-          key={screen.id}
-          className="quest-screen"
-          initial={motion.still ? false : { opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={motion.still ? { opacity: 0 } : { opacity: 0, x: -16 }}
-          transition={motion.still ? { duration: 0 } : motion.swap}
-        >
-          {screen.kind === "story" ? (
-            <Story screen={screen} heading={heading} />
-          ) : null}
-          {screen.kind === "choice" ? (
-            <ChoiceScreen
-              screen={screen}
-              heading={heading}
-              selected={selected}
-              phase={phase}
-              hint={hint}
-              variation={variation}
-              onVariation={() => setVariation(true)}
-              onToggle={toggle}
-            />
-          ) : null}
-          {screen.kind === "complete" ? (
-            <Complete
-              records={records}
-              heading={heading}
-              onRestart={() => {
-                setProgress({ index: 0, records: {} });
-                goTo(0);
-              }}
-            />
-          ) : null}
-        </m.section>
-      </AnimatePresence>
+      <m.section
+        key={screen.id}
+        className="quest-screen"
+        data-scene-settle
+        initial={motion.enter}
+        animate={{ opacity: 1, y: 0 }}
+        transition={motion.copy}
+      >
+        {screen.kind === "story" ? (
+          <Story screen={screen} heading={heading} />
+        ) : null}
+        {screen.kind === "choice" ? (
+          <ChoiceScreen
+            screen={screen}
+            heading={heading}
+            predicting={predicting}
+            prediction={exploration.prediction}
+            onPrediction={(prediction) =>
+              setProgress((p) => ({
+                ...p,
+                exploration: { ...p.exploration, prediction },
+              }))
+            }
+            selected={selected}
+            phase={phase}
+            hint={hint}
+            variation={variation}
+            onVariation={() => setVariation(true)}
+            onToggle={toggle}
+          />
+        ) : null}
+        {screen.kind === "complete" ? (
+          <Complete
+            records={records}
+            heading={heading}
+            onRestart={() => {
+              setProgress({ index: 0, records: {} });
+              goTo(0);
+            }}
+          />
+        ) : null}
+      </m.section>
 
       {screen.kind !== "complete" ? (
         <div
@@ -321,7 +372,15 @@ function Quest({
                   </button>
                 </>
               ) : null}
-              {screen.kind === "choice" && phase === "answering" ? (
+              {screen.kind === "choice" && predicting ? (
+                <button
+                  className="j-btn"
+                  disabled={!exploration.prediction}
+                  onClick={revealResults}
+                >
+                  <ActionLabel>Reveal reported means</ActionLabel>
+                </button>
+              ) : screen.kind === "choice" && phase === "answering" ? (
                 <button
                   className="j-btn"
                   disabled={!selected.length}
@@ -418,8 +477,14 @@ function ChoiceScreen({
   variation,
   onVariation,
   onToggle,
+  predicting,
+  prediction,
+  onPrediction,
 }: {
   screen: Choice;
+  predicting: boolean;
+  prediction?: Prediction;
+  onPrediction: (prediction: Prediction) => void;
   heading: RefObject<HTMLHeadingElement | null>;
   selected: string[];
   phase: Phase;
@@ -432,22 +497,30 @@ function ChoiceScreen({
   const done = phase === "correct" || phase === "explained";
   const multiple = screen.correct.length > 1;
   return (
-    <div className="quest-choice">
+    <div className={`quest-choice${screen.visual ? " has-visual" : ""}`}>
       {screen.label ? <p className="quest-label">{screen.label}</p> : null}
       <div className="quest-ask">
         <Mascot small pose={done ? "celebrating" : "thinking"} />
         <div>
           <Title heading={heading}>{screen.heading}</Title>
-          {screen.evidence ? (
+          {screen.evidence && screen.id !== "results" ? (
             <p className="quest-evidence">{screen.evidence}</p>
           ) : null}
         </div>
       </div>
-      {screen.visual ? (
+      {screen.id === "results" ? (
+        <ResultsChart
+          variation={false}
+          hidden={predicting}
+          resolved={done}
+          compareEnabled
+        />
+      ) : screen.visual ? (
         <Visual
           // A follow-up visual takes the same place, so nothing moves below
           // the fold after checking.
           kind={done && screen.afterVisual ? screen.afterVisual : screen.visual}
+          resolved={done}
           selected={selected}
           variation={variation}
           onVariation={onVariation}
@@ -462,47 +535,78 @@ function ChoiceScreen({
             exit={{ opacity: 0 }}
             transition={motion.still ? { duration: 0 } : { duration: 0.2 }}
           >
-            <strong>A clue from the study</strong> {screen.hint}
+            <strong>A clue from the study</strong>{" "}
+            {predicting
+              ? "Think about dividing attention during a lecture. You can explore the reported scores after making any prediction."
+              : screen.hint}
           </m.p>
         ) : null}
       </AnimatePresence>
-      <fieldset className="quest-options" disabled={done}>
-        <legend>
-          {screen.instruction}
-          {multiple ? <span> Select all that apply.</span> : null}
-        </legend>
-        {screen.options.map((option, i) => {
-          const active = selected.includes(option.id);
-          const right = done && screen.correct.includes(option.id);
-          const wrong = phase === "retry" && active;
-          return (
+      {predicting ? (
+        <fieldset className="quest-options quest-prediction">
+          <legend>Before seeing the scores, what do you expect?</legend>
+          <p className="quest-prediction-note">
+            Your prediction is ungraded. The paper may surprise you.
+          </p>
+          {(
+            ["Text lower", "About the same", "No text lower"] as Prediction[]
+          ).map((value) => (
             <m.label
-              key={option.id}
-              className={`quest-option ${active ? "is-selected" : ""} ${right ? "is-right" : ""} ${wrong ? "is-wrong" : ""}`}
-              initial={motion.still ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileTap={motion.still || done ? undefined : { scale: 0.98 }}
-              transition={
-                motion.still
-                  ? { duration: 0 }
-                  : { delay: 0.05 + i * 0.05, duration: 0.25 }
-              }
+              key={value}
+              className={`quest-option ${prediction === value ? "is-selected" : ""}`}
+              data-scene-motion-control
+              initial={false}
+              {...motion.gestures(false)}
             >
               <input
-                type={multiple ? "checkbox" : "radio"}
-                name={`quest-${screen.id}`}
-                value={option.id}
-                checked={active}
-                onChange={() => onToggle(option.id)}
+                type="radio"
+                name="quest-prediction"
+                checked={prediction === value}
+                onChange={() => onPrediction(value)}
               />
-              <span className="quest-key" aria-hidden="true">
-                {right ? <Icon name="check" size={15} strong /> : option.id}
-              </span>
-              <span className="quest-option-text">{option.text}</span>
+              <span className="quest-option-text">{value}</span>
             </m.label>
-          );
-        })}
-      </fieldset>
+          ))}
+        </fieldset>
+      ) : (
+        <fieldset className="quest-options" disabled={done}>
+          <legend>
+            {screen.instruction}
+            {multiple ? <span> Select all that apply.</span> : null}
+          </legend>
+          {screen.id === "results" && prediction ? (
+            <p className="quest-prediction-note" role="status">
+              You predicted: {prediction}. Now compare the reported means.
+            </p>
+          ) : null}
+          {screen.options.map((option) => {
+            const active = selected.includes(option.id);
+            const right = done && screen.correct.includes(option.id);
+            const wrong = phase === "retry" && active;
+            return (
+              <m.label
+                key={option.id}
+                className={`quest-option ${active ? "is-selected" : ""} ${right ? "is-right" : ""} ${wrong ? "is-wrong" : ""}`}
+                data-scene-motion-control
+                initial={false}
+                {...motion.gestures(done)}
+              >
+                <input
+                  type={multiple ? "checkbox" : "radio"}
+                  name={`quest-${screen.id}`}
+                  value={option.id}
+                  checked={active}
+                  onChange={() => onToggle(option.id)}
+                />
+                <span className="quest-key" aria-hidden="true">
+                  {right ? <Icon name="check" size={15} strong /> : option.id}
+                </span>
+                <span className="quest-option-text">{option.text}</span>
+              </m.label>
+            );
+          })}
+        </fieldset>
+      )}
     </div>
   );
 }
@@ -677,16 +781,19 @@ function Visual({
   selected = [],
   variation = false,
   onVariation,
+  resolved = false,
 }: {
   kind: QuestVisual;
   selected?: string[];
   variation?: boolean;
   onVariation?: () => void;
+  resolved?: boolean;
 }) {
   const latest = selected[selected.length - 1];
   if (kind === "frame") return <FrameVisual selected={latest} />;
   if (kind === "sample") return <SampleVisual selected={latest} />;
-  if (kind === "plans") return <PlansVisual selected={latest} />;
+  if (kind === "plans")
+    return <PlansVisual selected={latest} resolved={resolved} />;
   if (kind === "instruments") return <InstrumentsVisual selected={latest} />;
   if (kind === "inspect") return <InspectVisual />;
   if (kind === "distribution") return <DistributionVisual />;
@@ -695,7 +802,6 @@ function Visual({
     return <GroupsVisual selected={selected.includes("B") ? "B" : latest} />;
   if (kind === "lecture") return <LectureScene />;
   if (kind === "attention") return <AttentionScene />;
-  if (kind === "assignment") return <Assignment />;
   if (kind === "study") return <StudyFlow />;
   if (kind === "results" || kind === "variation")
     return (
@@ -789,7 +895,6 @@ function LectureScene() {
 }
 
 function AttentionScene() {
-  const motion = useSceneMotion();
   const [messages, setMessages] = useState(3);
   const phone = Math.min(70, messages * 7);
   return (
@@ -807,74 +912,16 @@ function AttentionScene() {
         />
       </label>
       <div className="quest-attention-bar" aria-hidden="true">
-        <m.span
+        <span
           className="lecture"
-          initial={false}
-          animate={{ scaleX: (100 - phone) / 100 }}
-          transition={motion.still ? { duration: 0 } : { duration: 0.2 }}
+          style={{ transform: `scaleX(${(100 - phone) / 100})` }}
         />
-        <m.span
+        <span
           className="phone"
-          initial={false}
-          animate={{ scaleX: phone / 100 }}
-          transition={motion.still ? { duration: 0 } : { duration: 0.2 }}
+          style={{ transform: `scaleX(${phone / 100})` }}
         />
       </div>
       <figcaption>Illustration of divided attention, not a finding.</figcaption>
-    </figure>
-  );
-}
-
-function Assignment() {
-  const motion = useSceneMotion();
-  const [split, setSplit] = useState(motion.still);
-  useEffect(() => {
-    if (motion.still) return;
-    const timer = setTimeout(() => setSplit(true), 450);
-    return () => clearTimeout(timer);
-  }, [motion.still]);
-  const dots = Array.from({ length: 12 }, (_, i) => i);
-  // A fixed shuffle so the illustration is stable between renders.
-  const group = (i: number) => [0, 3, 4, 7, 9, 10].includes(i);
-  return (
-    <figure className="quest-figure quest-assignment" aria-hidden="true">
-      <div className={`quest-pools ${split ? "is-split" : ""}`}>
-        {split ? (
-          <>
-            {[true, false].map((texting) => (
-              <div key={String(texting)} className="quest-pool">
-                <span>{texting ? "Text" : "No text"}</span>
-                <div>
-                  {dots
-                    .filter((i) => group(i) === texting)
-                    .map((i) => (
-                      <m.i
-                        key={i}
-                        layoutId={`dot-${i}`}
-                        className={texting ? "is-text" : ""}
-                        transition={{
-                          type: "spring",
-                          duration: 0.5,
-                          bounce: 0.2,
-                        }}
-                      />
-                    ))}
-                </div>
-              </div>
-            ))}
-          </>
-        ) : (
-          <div className="quest-pool">
-            <span>Shared pool</span>
-            <div>
-              {dots.map((i) => (
-                <m.i key={i} layoutId={`dot-${i}`} />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-      <figcaption>Illustration of random assignment</figcaption>
     </figure>
   );
 }
@@ -916,11 +963,17 @@ function StudyFlow() {
 function ResultsChart({
   variation,
   onVariation,
+  hidden = false,
+  compareEnabled = false,
+  resolved = false,
 }: {
+  resolved?: boolean;
+  hidden?: boolean;
+  compareEnabled?: boolean;
   variation: boolean;
   onVariation?: () => void;
 }) {
-  const motion = useSceneMotion();
+  const [comparing, setComparing] = useState(false);
   const bars = [
     { label: "Text", mean: 73.41, sd: 16.95 },
     { label: "No text", mean: 83.0, sd: 17.26 },
@@ -935,74 +988,137 @@ function ResultsChart({
           ))}
         </div>
         <div className="quest-bars">
+          {comparing && !hidden ? <span className="quest-mean-gap" /> : null}
           {bars.map((bar, i) => (
             <div key={bar.label} className="quest-col">
-              <m.span
-                className={`fill ${i === 0 ? "is-text" : ""}`}
-                style={{ height: `${bar.mean}%` }}
-                initial={motion.still ? false : { scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                transition={
-                  motion.still
-                    ? { duration: 0 }
-                    : { delay: 0.15 + i * 0.12, duration: 0.6, ease: "easeOut" }
-                }
-              >
-                <b>{bar.mean.toFixed(2)}%</b>
-              </m.span>
-              {variation ? (
-                <m.span
-                  className="error"
-                  style={{
-                    bottom: `${bar.mean - bar.sd}%`,
-                    height: `${bar.sd * 2}%`,
-                  }}
-                  initial={motion.still ? false : { opacity: 0, scaleY: 0.3 }}
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  transition={
-                    motion.still ? { duration: 0 } : { duration: 0.35 }
-                  }
-                />
-              ) : null}
+              {!hidden ? (
+                <>
+                  <ChartMark
+                    className={`fill ${i === 0 ? "is-text" : ""}`}
+                    style={{ height: `${bar.mean}%` }}
+                  />
+                  <b style={{ bottom: `calc(${bar.mean}% + 8px)` }}>
+                    {bar.mean.toFixed(2)}%
+                  </b>
+                  {variation ? (
+                    <ChartMark
+                      className="quest-sd"
+                      style={{
+                        bottom: `${bar.mean - bar.sd}%`,
+                        height: `${bar.sd * 2}%`,
+                      }}
+                    />
+                  ) : null}
+                </>
+              ) : (
+                <span className="quest-unrevealed">?</span>
+              )}
               <em>{bar.label}</em>
             </div>
           ))}
         </div>
       </div>
-      {onVariation ? (
-        <button
-          className="j-btn is-quiet quest-variation"
-          disabled={variation}
-          onClick={onVariation}
-        >
-          {variation ? "Showing ±1 standard deviation" : "Show variation"}
-        </button>
+      {!hidden ? (
+        <p className="sr-only" role="status">
+          Reported means: Text 73.41%; No text 83.00%.
+        </p>
       ) : null}
-      <table className="quest-table">
-        <caption>Table equivalent</caption>
-        <thead>
-          <tr>
-            <th>Condition</th>
-            <th>Mean</th>
-            {variation ? <th>±1 SD</th> : null}
-          </tr>
-        </thead>
-        <tbody>
-          {bars.map((bar) => (
-            <tr key={bar.label}>
-              <td>{bar.label}</td>
-              <td>{bar.mean.toFixed(2)}%</td>
-              {variation ? <td>{bar.sd} points</td> : null}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <figcaption>
-        Reported summary values. Overlapping SD bars are not a significance
-        test.
-      </figcaption>
+      {hidden ? (
+        <figcaption>
+          Make a prediction, then reveal the paper’s reported means. No scores
+          are shown yet.
+        </figcaption>
+      ) : (
+        <>
+          {compareEnabled ? (
+            <div className="quest-comparison">
+              <button
+                className="j-btn is-quiet"
+                aria-expanded={comparing}
+                onClick={() => setComparing((value) => !value)}
+              >
+                {comparing ? "Hide comparison" : "Compare means"}
+              </button>
+              {comparing ? (
+                <p role="status">
+                  {resolved ? (
+                    <>
+                      <strong>83.00 − 73.41 = 9.59 percentage points.</strong> A
+                      difference between group averages; individual scores can
+                      differ.
+                    </>
+                  ) : (
+                    <>
+                      The bracket marks the gap between the means. Subtract the
+                      lower mean from the higher one, then choose an
+                      interpretation.
+                    </>
+                  )}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+          {onVariation ? (
+            <button
+              className="j-btn is-quiet quest-variation"
+              disabled={variation}
+              onClick={onVariation}
+            >
+              {variation ? "Showing ±1 standard deviation" : "Show variation"}
+            </button>
+          ) : null}
+          <details className="quest-chart-data">
+            <summary>View values as a table</summary>
+            <table className="quest-table">
+              <caption>Reported quiz scores</caption>
+              <thead>
+                <tr>
+                  <th>Condition</th>
+                  <th>Mean</th>
+                  {variation ? <th>±1 SD</th> : null}
+                </tr>
+              </thead>
+              <tbody>
+                {bars.map((bar) => (
+                  <tr key={bar.label}>
+                    <td>{bar.label}</td>
+                    <td>{bar.mean.toFixed(2)}%</td>
+                    {variation ? <td>{bar.sd} points</td> : null}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </details>
+          <figcaption>
+            {variation
+              ? "Reported summary values. Overlapping SD bars are not a significance test."
+              : "Reported group means. Individual scores are not shown."}
+          </figcaption>
+        </>
+      )}
     </figure>
   );
+}
+
+/** Vertical marks own their motion so a live preference settles scaleY in place. */
+function ChartMark({
+  className,
+  style,
+}: {
+  className: string;
+  style: CSSProperties;
+}) {
+  const motion = useSceneMotion();
+  const scale = useMotionValue(motion.canEnter() ? 0 : 1);
+  useLayoutEffect(() => {
+    if (motion.still) {
+      scale.set(1);
+      return;
+    }
+    const playback = animate(scale, 1, motion.chart);
+    return () => playback.stop();
+  }, [motion.still, scale]);
+  return <m.span className={className} style={{ ...style, scaleY: scale }} />;
 }
 
 function Reveal() {

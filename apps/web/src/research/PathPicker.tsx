@@ -104,6 +104,11 @@ export function PathPicker({
             </Link>
           </article>
         </div>
+        <p>
+          <Link className="text-link" href="/activities">
+            Explore three paper activities · authored practice
+          </Link>
+        </p>
         <p className="quiet">
           Decisions first. Findings next. Understanding throughout.
         </p>
