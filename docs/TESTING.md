@@ -368,6 +368,11 @@ library's Start quest now opens it (see [intake notes](ui/INTAKE_PROCESSING.md))
 - Full browser suite: 50 of 50 passed in one complete run. An earlier run had
   failures caused by the dev API restarting while `npm run check` rebuilt shared
   contracts at the same time; do not run both together against one dev server.
+- After merging `main` (50 stored studies) into `marc`: `npm run check` passed
+  (209 Vitest tests); the browser suite passed 49 of 50. "no-key sample flow is
+  explicit, resumable and separate from uploaded evidence" failed once on a
+  lingering `.feedback` element in the shared player, then passed 3 of 3 alone.
+  Treat it as intermittent, not resolved.
 - New: a keyboard-only quest run (Enter on story screens, letter and number keys,
   one retry, refresh resume, completion), with no horizontal scroll and axe
   passing at 375, 768 and 1366 px.
