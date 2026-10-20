@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import {
   SceneMotion,
   AnimatePresence,
@@ -35,6 +35,8 @@ type Props = {
   draft: SceneDraft;
   onDraft: (draft: SceneDraft) => void;
   onSelect: (ids: string[]) => void;
+  /** Result of the checked attempt, used only to colour the chosen responses. */
+  verdict?: "correct" | "incorrect";
 };
 
 /** A data-only scene renderer. Assessment and progression remain outside this component. */
@@ -210,29 +212,12 @@ function SceneContent(props: Props) {
               disabled={props.disabled}
             />
           ) : null}
-          <m.div
-            data-scene-layout
-            layout={motion.position}
-            className="scene-connection-mark"
-            aria-hidden="true"
-          >
-            <m.svg viewBox="0 0 240 24" width="240" height="24" initial={false}>
-              <m.path
-                d="M20 1 V7 Q20 12 28 12 H212 Q220 12 220 20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                data-scene-path={props.selected.length ? 1 : 0.12}
-                data-scene-opacity={props.selected.length ? 1 : 0.35}
-                animate={{
-                  pathLength: props.selected.length ? 1 : 0.12,
-                  opacity: props.selected.length ? 1 : 0.35,
-                }}
-                transition={motion.connection}
-              />
-            </m.svg>
-            <Link2 size={18} />
-          </m.div>
+          <LinkStrip
+            labels={sceneItemsFor(scene)
+              .filter((item) => targets.has(item.id))
+              .map((item) => item.label)}
+            chosen={props.selected.length > 0}
+          />
           {scene.kind !== "comparison" ||
           !scene.prediction ||
           draft.revealed ||
@@ -297,6 +282,50 @@ function SceneContent(props: Props) {
   );
 }
 
+function sceneItemsFor(scene: Scene): SceneItem[] {
+  if (scene.kind === "flow") return scene.nodes;
+  if (scene.kind === "connections") return scene.anchors;
+  if (scene.kind === "designs") return scene.panels.flatMap((p) => p.steps);
+  return [];
+}
+
+/**
+ * Cause and effect made visible: choosing a response names and lights up the
+ * study parts it connects to. Purely presentational; no answer is implied.
+ */
+function LinkStrip({ labels, chosen }: { labels: string[]; chosen: boolean }) {
+  const motion = useSceneMotion();
+  return (
+    <m.div
+      data-scene-layout
+      layout={motion.position}
+      className={`scene-link-strip ${chosen ? "is-linked" : ""}`}
+      aria-hidden="true"
+    >
+      <span className="scene-link-line" />
+      <AnimatePresence initial={false} mode="popLayout">
+        <m.span
+          key={chosen ? labels.join("|") || "linked" : "empty"}
+          className="scene-link-pill"
+          data-scene-settle
+          initial={motion.still ? false : { opacity: 0, scale: 0.9, y: 4 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: motion.still ? 1 : 0.95 }}
+          transition={motion.copy}
+        >
+          <Link2 size={15} />
+          {chosen
+            ? labels.length
+              ? `Links to ${labels.join(" + ")}`
+              : "Response chosen"
+            : "Choose a response to see what it connects to"}
+        </m.span>
+      </AnimatePresence>
+      <span className="scene-link-line" />
+    </m.div>
+  );
+}
+
 function SceneResponses({
   scene,
   options,
@@ -304,8 +333,46 @@ function SceneResponses({
   selected,
   disabled,
   onSelect,
+  verdict,
 }: Props) {
   const motion = useSceneMotion();
+  const shown = scene.responses.filter((response) =>
+    options.some((option) => option.id === response.optionId),
+  );
+  const toggle = (id: string) =>
+    onSelect(
+      multiple
+        ? selected.includes(id)
+          ? selected.filter((s) => s !== id)
+          : [...selected, id]
+        : [id],
+    );
+  // Keyboard shortcuts: A/B/C… or 1/2/3… choose a response, as in lesson apps.
+  useEffect(() => {
+    if (disabled) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (
+        target?.closest(
+          "input:not([type=radio]):not([type=checkbox]), textarea, select, [contenteditable=true]",
+        )
+      )
+        return;
+      const key = event.key.toUpperCase();
+      const index = /^[1-9]$/.test(key)
+        ? Number(key) - 1
+        : /^[A-Z]$/.test(key)
+          ? key.charCodeAt(0) - 65
+          : -1;
+      const response = shown[index];
+      if (!response) return;
+      event.preventDefault();
+      toggle(response.optionId);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
   return (
     <m.fieldset
       data-scene-layout
@@ -327,18 +394,19 @@ function SceneResponses({
         </span>
       </legend>
       <div className="scene-response-grid">
-        {scene.responses.map((response) => {
+        {shown.map((response, index) => {
           const option = options.find(
             (option) => option.id === response.optionId,
           );
           if (!option) return null;
           const active = selected.includes(option.id);
+          const result = active && verdict ? `is-${verdict}` : "";
           return (
             <m.label
               data-scene-motion-control
               {...motion.gestures(disabled)}
               style={{ borderRadius: 14 }}
-              className={`scene-response ${active ? "selected" : ""}`}
+              className={`scene-response ${active ? "selected" : ""} ${result}`}
               key={option.id}
             >
               <input
@@ -346,16 +414,15 @@ function SceneResponses({
                 name="scene-response"
                 value={option.id}
                 checked={active}
-                onChange={() =>
-                  onSelect(
-                    multiple
-                      ? active
-                        ? selected.filter((id) => id !== option.id)
-                        : [...selected, option.id]
-                      : [option.id],
-                  )
-                }
+                onChange={() => toggle(option.id)}
               />
+              <span className="scene-response-key" aria-hidden="true">
+                {active && verdict === "correct" ? (
+                  <Check size={15} strokeWidth={3} />
+                ) : (
+                  String.fromCharCode(65 + index)
+                )}
+              </span>
               <span className="scene-response-heading">
                 <span>{response.label}</span>
                 <span className="scene-response-indicator" aria-hidden="true">

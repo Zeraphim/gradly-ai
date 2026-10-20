@@ -8,8 +8,8 @@ type FrameClock = {
   now: () => number;
 };
 const browserClock = (): FrameClock => ({
-  request: requestAnimationFrame,
-  cancel: cancelAnimationFrame,
+  request: (callback) => window.requestAnimationFrame(callback),
+  cancel: (id) => window.cancelAnimationFrame(id),
   now: () => performance.now(),
 });
 

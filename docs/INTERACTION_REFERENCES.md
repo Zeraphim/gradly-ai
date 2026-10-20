@@ -85,3 +85,68 @@ These are source inspection findings. Historical rendered artifacts were used to
 The reference inspection proves that those public designs expose the described controls and structures. It does not validate Gradly's implementation. Verify each new case end to end with the backend unavailable; check source-before-verdict ordering, reset/back/refresh behavior, transfer feedback, provenance and custom-writing limits. Render at 1440, 768 and 390 CSS pixels, test keyboard focus and reduced motion, and run automated accessibility checks. Whole-paper understanding and engagement still require learner observation; passing interface checks cannot establish those outcomes.
 
 Requested skill material inspected: the local `jmo-skills` checkout at commit `6082bf2c472857d6cfda48995ab985b69345aac6`, particularly [`better-ui`](https://github.com/23jmo/jmo-skills/tree/6082bf2c472857d6cfda48995ab985b69345aac6/skills/better-ui). The checkout refers to separate layout/accessibility/typography skills that are not present in it. Their absent instructions were not treated as available verification.
+
+## 19 October 2026: public runtime study for the paper workspace
+
+This pass used the already installed REA skill and cached `rea-agents` 6.7.0 CLI.
+No second skill, MCP server or analysis engine was installed. Chromium needed the
+host's normal process access because the sandbox prevented macOS browser startup.
+Reference screenshots and full Evidence records were retained in the task's local
+`/private/tmp/gradly-reference-study/` folder, rather than copying third-party assets
+into the application. These are public-page observations, not an audit of either
+product's authenticated lessons or internal implementation.
+
+| Reference                             | Declared scenario and observed state                                                                                                                                                                                                                     | REA Evidence                                                          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [Brilliant](https://brilliant.org/)   | Open homepage; choose learner; dismiss notice; Continue; select Math; Continue. A focused question and two large choices precede a radio-group question. Continue is disabled until a subject is selected. Back and segmented progress remain available. | `ev_f98df82f431752179c235cbbfa6deddd971c98637c2f5fd004ef94929e7d16d2` |
+| [Duolingo](https://www.duolingo.com/) | Open homepage; Get started; inspect language choices; select Spanish. Cards have large labeled targets and a visible lower edge. The recorded Spanish destination was still an intermediate state; a complete lesson was not observed.                   | `ev_ec934e39e28695f06179d745d5b157cc343180d21f65adf2fd4294c9d098b0e2` |
+
+Additional initial-page records: Brilliant
+`ev_33bd77b09391aee933a72a4c3e82f2185a2f7fb00330b95f698aae97b068b529`;
+Duolingo course choices
+`ev_421be745a7cea320707ee24d3834a48f3e8cba9afe13b7872caf044da09cab36`.
+The providers confirmed termination of their owned browser processes. One initial
+Duolingo click was ambiguous because two Get started links existed; the successful
+capture selected the observed unique top-entry attribute.
+
+**Gradly adaptations (design choices):** retain a stable working canvas while a
+short explanation changes; make selection immediate; keep one primary next action;
+use the supplied mascot as a guide; preserve tactile control feedback and clear
+pending/disabled states. The paper context tells the study as four short chapters on
+one stage — question, setup, measure, edge — where the same objects stay on the
+canvas and rearrange, with the published citation beside it and the deeper
+paraphrase behind one disclosure per chapter. It does not manufacture participant
+data, findings, AI output or mastery. Exact reference easing, animation performance
+and authenticated lesson behavior were not established by these captures. Gradly
+uses its own shared Motion timings and original blue artwork, with no copied
+reference code or assets.
+
+## 20 October 2026: measured motion values from the public pages
+
+A second, narrower pass measured the public landing pages directly in headless
+Chromium and read the computed styles of every element, without logging in and
+without copying assets or code. The REA MCP server was registered for OpenCode in
+this pass (`rea-agents` 6.7.0, skill v42); its tools need a new session, so these
+values come from the same browser the REA browser route uses.
+
+| Reference         | Observed motion vocabulary                                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [Brilliant](https://brilliant.org/) | 1,235 elements. Transition durations 0.2s (40 elements), 0.3s (33), 0.25s, 0.4s, 0.15s, 1.5s. Easings `ease` (63) and `ease-out` (22). Transitioned properties: opacity, background-color, color, transform, visibility, border-color, box-shadow. Radii 9999px (pills), 50%, 20px, 17px. Shadows `0 0 15px rgba(0,0,0,0.1)` (20 elements). |
+| [Duolingo](https://www.duolingo.com/) | 4,288 elements. Only four elements carry a CSS transition (0.2s–0.5s, `ease`, `ease-in-out`, `cubic-bezier(0.22,…)` on transform/border-color/filter). The public page is nearly motion-free: the app's motion is script-driven and was not observable here. |
+
+Two lessons were taken from these values, and they are Gradly design decisions,
+not reproductions: a short, consistent vocabulary (0.2s–0.3s, one ease-out
+curve, transform and opacity) produces the smoothness people read as "premium";
+and a reference that animates its *app* rather than its *marketing page* cannot
+be imitated from the marketing page alone. Gradly therefore keeps its own Motion
+timings, its own artwork and its own reduced-motion contract.
+
+The paper story applies the first lesson directly: chapter changes are one
+0.24-second eased swap over `transform` and `opacity` on a measured canvas, with no
+per-chapter timing of their own and no animated progression. The second lesson is
+why the story was designed as an interactive canvas rather than copied from any
+observed page: neither public page exposed an authenticated lesson to measure.
+
+The limits are explicit: these are public pages, not the authenticated lessons of
+either product; no easing curve, spring, asset or code was copied; and nothing
+here establishes the perceived quality of either product's learning flow.

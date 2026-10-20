@@ -1,8 +1,39 @@
-import type { RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import { ResearchLink as Link } from "./navigation.js";
 import { Mascot } from "./learning-ui.js";
 import { ActionLabel, Icon } from "./icon.js";
-import type { AdventureRecord, DocumentRecord } from "./types.js";
+import type {
+  AdventureRecord,
+  DocumentRecord,
+  ProcessingJob,
+} from "./types.js";
+import { api } from "./request.js";
+
+/** Read the persisted error without guessing a failure category from its wording. */
+function SavedFailureReason({ id }: { id: string }) {
+  const [reason, setReason] = useState("Loading the saved failure reason…");
+  useEffect(() => {
+    const controller = new AbortController();
+    api<ProcessingJob>(
+      `/api/research/jobs?id=${encodeURIComponent(id)}`,
+      undefined,
+      "GET",
+      controller.signal,
+    )
+      .then((job) => {
+        if (!controller.signal.aborted)
+          setReason(job.error || "Open processing to inspect this saved job.");
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setReason(
+            "The reason couldn’t be loaded. Open processing to try again.",
+          );
+      });
+    return () => controller.abort();
+  }, [id]);
+  return <p className="history-failure-reason">{reason}</p>;
+}
 
 type HistoryPageProps = {
   heading: RefObject<HTMLHeadingElement | null>;
@@ -28,7 +59,7 @@ export function HistoryPage({
       <header className="workspace-heading">
         <span className="tag">Your learning journey</span>
         <h1 ref={heading} tabIndex={-1}>
-          Previous Adventures
+          Previous quests
         </h1>
         <p>Your progress belongs to this browser’s guest profile.</p>
       </header>
@@ -36,16 +67,16 @@ export function HistoryPage({
       {status === "loading" ? (
         <div className="card history-state" role="status">
           <Icon name="loading" size={22} className="is-spinning" />
-          <p>Loading your adventures…</p>
+          <p>Loading your quests…</p>
         </div>
       ) : status === "error" ? (
         <div className="card history-state">
           <span className="symbol blue">
             <Icon name="retry" />
           </span>
-          <h2>Your adventures couldn’t be loaded.</h2>
+          <h2>Your quests couldn’t be loaded.</h2>
           <p>
-            We couldn’t refresh your saved adventures. Try again when you’re
+            We couldn’t refresh your saved quests. Try again when you’re
             connected.
           </p>
           <button className="btn primary" onClick={onRetry}>
@@ -68,7 +99,7 @@ export function HistoryPage({
                 <div className="section-heading">
                   <div>
                     <span className="tag">Answers and progress</span>
-                    <h2 id="saved-investigations-title">Your investigations</h2>
+                    <h2 id="saved-investigations-title">Your quests</h2>
                   </div>
                   <span className="quiet">{history.length} saved</span>
                 </div>
@@ -104,8 +135,8 @@ export function HistoryPage({
                       >
                         <ActionLabel>
                           {adventure.phase === "complete"
-                            ? "Review adventure"
-                            : "Resume investigation"}
+                            ? "Review quest"
+                            : "Resume quest"}
                         </ActionLabel>
                       </Link>
                     </article>
@@ -116,11 +147,11 @@ export function HistoryPage({
               <div className="card history-state">
                 <Mascot small />
                 <h2 id="saved-investigations-title">
-                  Your next investigation starts here.
+                  Your next quest starts here.
                 </h2>
                 <p>
-                  Adventures appear here after you begin. Every submitted
-                  decision is saved.
+                  Quests appear here after you begin. Every submitted decision
+                  is saved.
                 </p>
                 <Link className="btn primary" href="/learn">
                   <ActionLabel>Choose a learning path</ActionLabel>
@@ -143,7 +174,7 @@ export function HistoryPage({
               ) : null}
             </div>
             <p className="quiet">
-              Review processing or delete a document and its linked adventures.
+              Review processing or delete a document and its linked quests.
             </p>
             {documents.length ? (
               <div className="history-list">
@@ -160,6 +191,9 @@ export function HistoryPage({
                         {document.pages === 1 ? "page" : "pages"} ·{" "}
                         {document.status}
                       </p>
+                      {["failed", "review"].includes(document.status) ? (
+                        <SavedFailureReason id={document.id} />
+                      ) : null}
                     </div>
                     <div className="actions">
                       <Link

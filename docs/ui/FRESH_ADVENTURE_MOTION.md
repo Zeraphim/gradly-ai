@@ -88,7 +88,8 @@ learning benefit or hosted deployment is asserted.
 ## Manual walkthrough
 
 Run `npm run dev`, open `http://127.0.0.1:5173/#/research/learn`, choose **Start
-investigation**, then **Begin investigation**. In the first challenge, rapidly
+quest** on the featured card, then **Start quest** again after the paper context.
+In the first decision, rapidly
 expand/collapse and switch evidence cards, pin/unpin including the last item, and
 select responses. Inspect text, borders, sibling movement and focus. Continue
 through the flow diagrams, prediction/reveal, feedback/retry, bonus, recap and

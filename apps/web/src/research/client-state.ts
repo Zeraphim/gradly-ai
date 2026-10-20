@@ -102,3 +102,20 @@ export function writeReducedMotion(reduced: boolean) {
     localStorage.setItem("gradly-reduced-motion", String(reduced));
   } catch {}
 }
+/**
+ * Live subscription to the saved motion preference. The setting is written by
+ * another screen, so the change arrives through a storage event; the document
+ * attribute carries the same state for the interface that toggles it.
+ */
+export function subscribeReducedMotion(changed: () => void) {
+  window.addEventListener("storage", changed);
+  const observer = new MutationObserver(changed);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-reduced-motion"],
+  });
+  return () => {
+    window.removeEventListener("storage", changed);
+    observer.disconnect();
+  };
+}

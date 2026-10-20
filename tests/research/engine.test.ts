@@ -25,6 +25,12 @@ function finish(s: LearningSession) {
   return s;
 }
 describe("featured learning engine", () => {
+  it("keeps the quoted decision count in step with the featured quest", () => {
+    /* The path picker and the completion recap both promise these numbers. */
+    expect(featured.challenges).toHaveLength(8);
+    expect(featured.bonus).toBeTruthy();
+  });
+
   it("awards practice points once per solved challenge, including retries and an optional bonus", () => {
     let s = begun();
     expect(learningPoints(s)).toBe(0);

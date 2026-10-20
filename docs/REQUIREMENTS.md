@@ -62,3 +62,27 @@ validated contract. Preserve legacy lessons, server-side reveal gates, ownership
 versioning, retries, drafts, reasoning revisions and once-per-solved-challenge
 points. Exploration does not establish correctness or learning benefit.
 See [scene authoring](SCENE_AUTHORING.md) and [local design evidence](ui/FRESH_ADVENTURE.md).
+
+## Paper context before the investigation
+
+The upload and sample entries must introduce the study before assessment begins.
+Reference context narrates the question, assignment, measurement and limitations in
+four chapters without revealing numerical findings early. Learners move through the
+chapters by pointer, keyboard, the story's own Back/Next controls or a horizontal
+swipe; exploration is not an assessment and awards no points. In the upload sample journey
+and from the library, the texting quest follows: short story screens, then one
+decision per screen with a hint-led retry and an explanation. Numerical results
+and the authors' conclusion stay hidden until the quest reaches them. The reference study's
+published identity (title, authors, journal issue, DOI) is shown as authored
+citation text, never as an AI analysis of an arbitrary PDF. Generated paper
+briefings and extraction/consent remain tied to their own document. In sample
+mode any pasted link is accepted as a labelled "link note" (not fetched) and
+continues to the sample journey; nothing claims the linked paper was analysed.
+
+A journey shows the story once. In the upload sample flow the quest follows
+preparation directly; where the player's briefing is shown, it recaps the same
+points briefly instead of repeating the story.
+The context must stay readable at every supported width: the stage and its caption
+share one card, the chapter rail wraps on narrow screens, the schematic switches to
+a vertical composition, and the caption carries the meaning when the stage is hidden
+from assistive technology.

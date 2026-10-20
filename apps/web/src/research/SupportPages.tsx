@@ -115,8 +115,7 @@ export function SupportPages({
             <h2>Connect decisions to findings</h2>
             <p>
               Review the paper’s findings and limits, then apply the idea in a
-              new setting. Practice points record solved challenges, not
-              mastery.
+              new setting. Practice points record solved decisions, not mastery.
             </p>
           </li>
         </ol>
@@ -193,8 +192,8 @@ export function SupportPages({
               : config.liveAI
                 ? "Live Nebius AI processing is configured. Generated lessons must pass all review steps before you can begin."
                 : config?.demoAvailable
-                  ? "Live Nebius AI processing is not configured. You can use the reference investigation and sample preview, with saved progress and answer checking. Sample previews make no AI calls and do not analyze your upload."
-                  : "Live Nebius AI processing is not configured. You can use the reference investigation and answer checking."}
+                  ? "Live Nebius AI processing is not configured. You can use the reference quest and sample preview, with saved progress and answer checking. Sample previews make no AI calls and do not analyze your upload."
+                  : "Live Nebius AI processing is not configured. You can use the reference quest and answer checking."}
           </p>
           <p>{config?.model}</p>
           <p>
@@ -258,10 +257,10 @@ export function SupportPages({
           </p>
           <h2>Your controls</h2>
           <p>
-            Delete an uploaded document from Adventures to remove its extracted
+            Delete an uploaded document from Quests to remove its extracted
             text, processing record, generated lesson, and linked learner
             sessions. Records expire after 30 days. Gradly removes expired
-            records when you open Adventures.
+            records when you open Quests.
           </p>
           <h2>Limits of AI review</h2>
           <p>

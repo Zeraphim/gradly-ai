@@ -1,0 +1,194 @@
+/* Shared site chrome: identical on the home page and every research screen. */
+.gr-header {
+  position: relative;
+  z-index: 5;
+  background: #fff;
+  border-bottom: 1px solid #e7e8e2;
+}
+.gr-header .gr-header-inner {
+  max-width: 1280px;
+  min-height: 76px;
+  margin: 0 auto;
+  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+.gr-header .gr-brand {
+  display: flex;
+  flex: 0 0 auto;
+  border-radius: 12px;
+}
+.gr-header .gr-brand .brand-logo {
+  width: 140px;
+  height: 47px;
+}
+.gr-header .gr-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+.gr-header .gr-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: #4e5b6e;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.gr-header .gr-nav a[aria-current="page"] {
+  color: #004566;
+  background: #e8f3f8;
+}
+.gr-header .gr-label-short {
+  display: none;
+}
+.gr-header .gr-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.gr-header .gr-points {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 6px;
+  padding: 7px 13px;
+  border: 1px solid #e9dcba;
+  border-radius: 999px;
+  background: #fff7e3;
+  color: #7a5200;
+  font-size: 13px;
+  font-weight: 700;
+}
+.gr-header .gr-points strong {
+  font-size: 15px;
+}
+.gr-header .gr-icon-link {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  color: #006b93;
+  transition: background-color 160ms ease;
+}
+.gr-header a:focus-visible,
+.gr-footer a:focus-visible {
+  outline: 3px solid #006590;
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .gr-header .gr-nav a:hover {
+    color: #004566;
+    background: #f1f6f8;
+    text-decoration: none;
+  }
+  .gr-header .gr-icon-link:hover {
+    background: #f1f6f8;
+  }
+  .gr-footer a:hover {
+    text-decoration: underline;
+  }
+}
+
+.gr-footer {
+  border-top: 1px solid #e7e8e2;
+  background: #f7f6f3;
+}
+.gr-footer .gr-footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: #4e5b6e;
+  font-size: 13px;
+}
+.gr-footer .gr-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.gr-footer .gr-footer-brand .brand-logo {
+  width: 96px;
+  height: 32px;
+  mix-blend-mode: multiply;
+}
+.gr-footer nav {
+  display: flex;
+  gap: 20px;
+}
+.gr-footer a {
+  color: #004566;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .gr-header .gr-header-inner {
+    gap: 16px;
+    padding: 10px 20px;
+  }
+  .gr-header .gr-nav a {
+    padding: 0 10px;
+  }
+  .gr-header .gr-label-long {
+    display: none;
+  }
+  .gr-header .gr-label-short {
+    display: inline;
+  }
+}
+@media (max-width: 640px) {
+  .gr-header .gr-header-inner {
+    flex-wrap: wrap;
+    row-gap: 4px;
+    padding: 8px 16px 6px;
+  }
+  .gr-header .gr-brand .brand-logo {
+    width: 112px;
+    height: 38px;
+  }
+  .gr-header .gr-nav {
+    order: 3;
+    flex: 1 0 100%;
+    justify-content: space-between;
+    gap: 2px;
+  }
+  .gr-header .gr-nav a {
+    flex: 1;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 6px;
+    font-size: 14px;
+  }
+  .gr-header .gr-points {
+    margin-right: 2px;
+    padding: 6px 10px;
+  }
+  .gr-footer .gr-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gr-header .gr-nav a,
+  .gr-header .gr-icon-link {
+    transition: none;
+  }
+}

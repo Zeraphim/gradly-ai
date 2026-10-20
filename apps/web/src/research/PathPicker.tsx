@@ -49,7 +49,7 @@ export function PathPicker({
             <div className="symbol blue">
               <Icon name="phone" />
             </div>
-            <span className="tag">Start here · guided investigation</span>
+            <span className="tag">Start here · guided quest</span>
             <h2>
               Can You Text
               <br />
@@ -60,7 +60,7 @@ export function PathPicker({
               discover what the evidence says.
             </p>
             <div className="pills">
-              <span>8 challenges</span>
+              <span>8 decisions</span>
               <span>Optional bonus</span>
               <span>No API key needed</span>
             </div>
@@ -71,7 +71,7 @@ export function PathPicker({
               onClick={onStart}
             >
               <ActionLabel busy={busy}>
-                {busy ? "Opening…" : "Start investigation"}
+                {busy ? "Opening…" : "Start quest"}
               </ActionLabel>
             </button>
           </article>
@@ -86,7 +86,7 @@ export function PathPicker({
             </h2>
             <p>
               {config.liveAI
-                ? "Bring an empirical research PDF. Review its evidence, then let Gradly build and check your investigation."
+                ? "Bring an empirical research PDF. Review its evidence, then let Gradly build and check your quest."
                 : "Check your PDF and walk through processing, learning and review with a clearly labeled sample study."}
             </p>
             <div className="pills">

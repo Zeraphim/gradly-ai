@@ -1,4 +1,4 @@
-import {
+import React, {
   createContext,
   forwardRef,
   useContext,
@@ -31,7 +31,14 @@ export const sceneTiming = {
   challenge: { duration: 0.22, ease: "easeOut" },
   chart: { duration: 0.3, ease: "easeOut" },
   connection: { duration: 0.22, ease: "easeOut" },
+  // Entrance and copy-swap timing shared by the paper workspace surfaces.
+  // One curve, one scale: measured against the reference interfaces, where
+  // motion is short, transform-only and always settles in the same direction.
+  enter: { duration: 0.34, ease: [0.22, 1, 0.36, 1] },
+  swap: { duration: 0.24, ease: [0.22, 1, 0.36, 1] },
 } satisfies Record<string, MotionProps["transition"]>;
+/** Seconds between neighbouring items in a staggered entrance. */
+export const sceneStagger = 0.045;
 const rest = { opacity: 1, y: 0, scale: 1 };
 const motionContext = createContext<{
   still: boolean;
@@ -161,15 +168,26 @@ export function useSceneMotion() {
     copy: context.still
       ? { duration: 0, layout: { duration: 0 } }
       : { ...sceneTiming.copy, layout: sceneTiming.layout },
-    enter: context.canEnter() ? { opacity: 0, y: 4 } : (false as const),
-    exit: { opacity: 0, y: context.still ? 0 : -3 },
+    enter: context.canEnter() ? { opacity: 0, y: 10 } : (false as const),
+    /**
+     * Page-level entrance. A surface may introduce itself whenever it is
+     * shown, unlike investigation content, which must not replay an entrance
+     * for restored work.
+     */
+    page: context.still ? (false as const) : ({ opacity: 0, y: 10 } as const),
+    exit: { opacity: 0, y: context.still ? 0 : -4 },
     chart: context.still ? { duration: 0 } : sceneTiming.chart,
     connection: context.still ? { duration: 0 } : sceneTiming.connection,
+    /** Staggered entrance delay for the nth item of a group. */
+    stagger: (index: number) =>
+      context.still ? 0 : index * sceneStagger,
+    /** Copy swap used when one panel replaces another. */
+    swap: context.still ? { duration: 0 } : sceneTiming.swap,
     gestures: (disabled = false): MotionProps => ({
       animate: { y: 0, scale: 1 },
       whileHover: context.hover && !disabled ? { y: -2 } : undefined,
       whileTap:
-        !context.still && !disabled ? { y: 0, scale: 0.985 } : undefined,
+        !context.still && !disabled ? { y: 0, scale: 0.97 } : undefined,
       transition: {
         ...(context.still ? { duration: 0 } : sceneTiming.gesture),
         layout: context.still ? { duration: 0 } : sceneTiming.layout,

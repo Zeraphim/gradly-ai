@@ -88,6 +88,26 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+it("uses the browser receiver for native frame scheduling and cleanup", () => {
+  const { host } = fixture();
+  const request = vi
+    .spyOn(window, "requestAnimationFrame")
+    .mockImplementation(function (this: Window) {
+      expect(this).toBe(window);
+      return 42;
+    });
+  const cancel = vi
+    .spyOn(window, "cancelAnimationFrame")
+    .mockImplementation(function (this: Window, id: number) {
+      expect(this).toBe(window);
+      expect(id).toBe(42);
+    });
+  const sync = syncFlowConnectors(host, [], false);
+  expect(request).toHaveBeenCalledOnce();
+  sync.dispose();
+  expect(cancel).toHaveBeenCalledOnce();
+});
+
 it("follows transformed node boundaries mid-animation, coalesces tracking and stops after its bounded window", () => {
   const { host, path, move } = fixture();
   const clock = frameClock();

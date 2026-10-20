@@ -52,6 +52,7 @@
 | `design` | ui | Proposed | Interface conventions and retained historical design sections | `docs/DESIGN.md` |  |
 | `fresh-adventure-motion` | ui | Proposed | Fresh Adventure shared motion and interaction coverage | `docs/ui/FRESH_ADVENTURE_MOTION.md` |  |
 | `fresh-adventure-ui` | ui | Proposed | Fresh Adventure visual scenes and verification limits | `docs/ui/FRESH_ADVENTURE.md` |  |
+| `intake-processing-ui` | ui | Proposed | Intake, review, preparation and player handoff (issue 12) | `docs/ui/INTAKE_PROCESSING.md` |  |
 | `ui-polish-review` | validation | Historical report | Historical source and browser polish review | `docs/UI_POLISH_REVIEW.md` |  |
 
 ## Context Commands

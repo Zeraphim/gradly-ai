@@ -18,7 +18,9 @@ for (const name of [
   "window",
   "document",
   "navigator",
+  "Element",
   "HTMLElement",
+  "SVGElement",
   "HTMLInputElement",
   "HTMLTextAreaElement",
   "HTMLDialogElement",
@@ -32,6 +34,16 @@ for (const name of [
   });
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 dom.window.scrollTo = () => {};
+Object.defineProperty(dom.window, "matchMedia", {
+  value: (media: string) => ({
+    media,
+    matches: false,
+    addEventListener() {},
+    removeEventListener() {},
+    addListener() {},
+    removeListener() {},
+  }),
+});
 Object.defineProperty(dom.window.HTMLDialogElement.prototype, "showModal", {
   value() {
     this.open = true;
@@ -193,13 +205,13 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
       await waitFor(() =>
         assert.ok(
           screen.getByRole("button", {
-            name: i === choices.length - 1 ? /Finish adventure/ : /^Continue$/,
+            name: i === choices.length - 1 ? /Finish quest/ : /^Continue$/,
           }),
         ),
       );
       await user.click(
         screen.getByRole("button", {
-          name: i === choices.length - 1 ? /Finish adventure/ : /^Continue$/,
+          name: i === choices.length - 1 ? /Finish quest/ : /^Continue$/,
         }),
       );
     }
@@ -214,7 +226,7 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
     assert.equal(saved.current, 6);
     assert.equal(saved.questions["study-design"].attempts.length, 2);
     await user.click(screen.getByRole("button", { name: /My progress/ }));
-    assert.ok(screen.getByRole("dialog", { name: /Your adventure progress/ }));
+    assert.ok(screen.getByRole("dialog", { name: /Your quest progress/ }));
     fireEvent(
       screen.getByRole("dialog"),
       new dom.window.Event("cancel", { bubbles: false, cancelable: true }),
@@ -224,14 +236,14 @@ test("learner completes six quests, revises a wrong answer, and resumes saved pr
       "completed adventures offer review from the preserved hero",
       async () => {
         await user.click(screen.getByRole("button", { name: "Gradly home" }));
-        assert.ok(screen.getByText("You completed this adventure."));
+        assert.ok(screen.getByText("You completed this quest."));
         assert.equal(
-          screen.queryByText("You have an adventure in progress."),
+          screen.queryByText("You have a quest in progress."),
           null,
         );
         assert.equal(screen.queryByRole("button", { name: /Resume/ }), null);
         await user.click(
-          screen.getByRole("button", { name: "Review adventure" }),
+          screen.getByRole("button", { name: "Review quest" }),
         );
         assert.ok(
           screen.getByRole("heading", { name: "Curiosity, meet evidence." }),

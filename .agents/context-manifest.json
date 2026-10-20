@@ -538,9 +538,7 @@
       "status": "Reference",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": [
-        "docs/research/**"
-      ],
+      "appliesTo": ["docs/research/**"],
       "relationships": [
         {
           "type": "related",
@@ -893,6 +891,57 @@
         "vercel.json",
         "server.ts",
         "scripts/prepare-vercel.mjs"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "intake-processing-ui",
+      "kind": "ui",
+      "title": "Intake, review, preparation and player handoff (issue 12)",
+      "path": "docs/ui/INTAKE_PROCESSING.md",
+      "status": "Proposed",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/UploadPage.tsx",
+        "apps/web/src/research/ProcessingPage.tsx",
+        "apps/web/src/research/PreparationTrack.tsx",
+        "apps/web/src/research/FailureRecovery.tsx",
+        "apps/web/src/research/useDocumentUpload.ts",
+        "apps/web/src/components/SiteChrome.tsx",
+        "apps/web/src/research/FocusBar.tsx",
+        "apps/web/src/research/PaperBrief.tsx"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "design"
+        },
+        {
+          "type": "related",
+          "target": "fresh-adventure-motion"
+        }
+      ],
+      "implementationRefs": [
+        "apps/web/src/components/SiteChrome.tsx",
+        "apps/web/src/research/UploadPage.tsx",
+        "apps/web/src/research/ProcessingPage.tsx",
+        "apps/web/src/research/PreparationTrack.tsx",
+        "apps/web/src/research/FailureRecovery.tsx",
+        "tests/browser/intake-flow.spec.ts",
+        "tests/browser/preparation.spec.ts",
+        "apps/web/src/research/FocusBar.tsx",
+        "apps/web/src/research/TextingQuest.tsx",
+        "apps/web/src/research/texting-quest.ts",
+        "apps/web/src/research/quest-visuals.tsx",
+        "apps/web/src/research/quest.css",
+        "apps/web/src/research/journey.css",
+        "apps/web/src/research/play.css",
+        "apps/web/src/research/link-note.ts"
       ],
       "review": {
         "commit": null,

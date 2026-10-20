@@ -19,7 +19,11 @@ import {
   useResearchPath,
   useResearchRouter,
 } from "./navigation.js";
-import { BrandLogo } from "../components/BrandLogo.js";
+import { SiteFooter, SiteHeader } from "../components/SiteChrome.js";
+import { FocusBar, libraryJourneySteps, type JourneyStep } from "./FocusBar.js";
+import { TextingQuest } from "./TextingQuest.js";
+import "./journey.css";
+import "./play.css";
 import { AppLoading } from "../components/AppLoading.js";
 import { Dialog } from "../components/Dialog.js";
 import { SupportPages } from "./SupportPages.js";
@@ -31,10 +35,12 @@ import {
   readDraft,
   readLastAdventure,
   readReducedMotion,
+  subscribeReducedMotion,
   writeReducedMotion,
   writeDraft,
 } from "./client-state.js";
 import { Mascot, Speech, Progress, ErrorMessage } from "./learning-ui.js";
+import { paperContext } from "./paper-context.js";
 
 import {
   lazy,
@@ -75,6 +81,8 @@ export function ResearchApp({
   const [uploadDraft, setUploadDraft] = useState<UploadDraft>(() => ({
     file: initialFile ?? null,
     uploaded: null,
+    autoCheck: !!initialFile,
+    autoContinue: !!initialFile,
   }));
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -195,6 +203,11 @@ function GradlyWorkspace({
   useEffect(() => {
     document.documentElement.dataset.reducedMotion = String(reduced);
   }, [reduced]);
+  // Follow a preference saved elsewhere (another tab or the settings page).
+  useEffect(
+    () => subscribeReducedMotion(() => setReduced(readReducedMotion())),
+    [],
+  );
   const applySession = useCallback((s: Session, exploration?: SceneDraft) => {
     const draft = readDraft(s.id, s.version, s.challenge?.id ?? s.phase);
     setSession(s);
@@ -291,17 +304,18 @@ function GradlyWorkspace({
     const titles: Record<string, string> = {
       learn: "Choose your learning path",
       home: "Choose your learning path",
-      featured: "Featured investigation",
+      featured: "Featured quest",
       upload: "Upload your paper",
-      history: "Your adventures",
+      history: "Your quests",
       glossary: "Research glossary",
       help: "How Gradly works",
       settings: "Learning settings",
       privacy: "Privacy & AI processing",
-      processing: "Prepare your investigation",
-      adventure: "Your investigation",
+      processing: "Read the paper",
+      adventure: "Your quest",
+      meet: "Texting study quest",
     };
-    document.title = `${titles[route] ?? "Find your investigation"} · Gradly`;
+    document.title = `${titles[route] ?? "Find your quest"} · Gradly`;
     return () => {
       document.title = previousTitle;
     };
@@ -333,6 +347,38 @@ function GradlyWorkspace({
         action === "review-missed"
       )
         router.push(`/adventure/${s.id}`);
+    } catch (e) {
+      if (mounted.current) setError((e as Error).message);
+    } finally {
+      actionLock.current = false;
+      if (mounted.current) setBusy(false);
+    }
+  };
+  // When preparation already introduced the study, the handoff enters the
+  // first challenge directly instead of a second briefing and Start button.
+  const startFirstChallenge = async (lessonId?: string, begin = false) => {
+    if (actionLock.current) return;
+    actionLock.current = true;
+    setBusy(true);
+    setError("");
+    try {
+      const started = await api<Session>("/api/research/learning", {
+        action: "start",
+        ...(lessonId ? { lessonId } : {}),
+      });
+      let target = started;
+      if (begin && started.phase === "briefing") {
+        try {
+          target = await api<Session>("/api/research/learning", {
+            action: "begin",
+            id: started.id,
+            version: started.version,
+          });
+        } catch {
+          // The briefing still offers Start, so the learner is never stranded.
+        }
+      }
+      if (mounted.current) router.push(`/adventure/${target.id}`);
     } catch (e) {
       if (mounted.current) setError((e as Error).message);
     } finally {
@@ -395,7 +441,9 @@ function GradlyWorkspace({
     if (job.status === "pending") {
       const timer = setTimeout(
         () => void step(),
-        job.mode === "demo" ? 650 : 10,
+        // The authored sample holds each stage long enough to read; the
+        // stage still only advances when the saved job does.
+        job.mode === "demo" ? 1200 : 10,
       );
       return () => clearTimeout(timer);
     } else if (job.status === "processing") {
@@ -454,6 +502,23 @@ function GradlyWorkspace({
     (route === "adventure" && session?.phase === "challenge") ||
     (route === "adventure" && session?.phase === "bonus");
   const reviewMode = showReview && !!session?.review;
+  // The paper journey (review → prepare → meet → play) runs in focus mode:
+  // a slim bar with the stepper replaces the site header and footer.
+  const focusStep: JourneyStep | null =
+    route === "upload" && uploadDraft.file
+      ? 0
+      : route === "processing"
+        ? job && !job.consented
+          ? 0
+          : 1
+        : route === "meet" || route === "adventure"
+          ? 2
+          : null;
+  // A prepared study chosen from the library skips upload and preparation.
+  const libraryJourney =
+    (route === "meet" && id === "featured") ||
+    (route === "adventure" && session?.source === "featured");
+  const focus = focusStep !== null;
   const lastAdventure = readLastAdventure();
   const resumeHref =
     returnPath ?? (lastAdventure ? `/adventure/${lastAdventure}` : "/learn");
@@ -463,7 +528,7 @@ function GradlyWorkspace({
       : resumeHref.startsWith("/processing/")
         ? "Return to processing"
         : resumeHref.startsWith("/adventure/")
-          ? "Return to investigation"
+          ? "Return to quest"
           : "Continue learning";
   const reloadSavedState = () => {
     setError("");
@@ -485,61 +550,58 @@ function GradlyWorkspace({
       >
         Skip to content
       </a>
-      <header className="header">
-        <div className="nav">
-          <a
-            className="brand"
-            href="#"
-            aria-label="Gradly home"
-            onClick={(event) => {
-              event.preventDefault();
-              onExit();
-            }}
-          >
-            <BrandLogo />
-          </a>
-          <nav aria-label="Research navigation">
-            <button className="btn compact outline" onClick={onExit}>
-              <span className="desktop-label">Gradly home</span>
-              <span className="mobile-label">Home</span>
-            </button>
-            <Link
-              aria-current={
-                route === "home" || route === "learn" ? "page" : undefined
-              }
-              href="/learn"
-            >
-              Learn
-            </Link>
-            <Link
-              aria-current={route === "history" ? "page" : undefined}
-              href="/history"
-            >
-              Adventures
-            </Link>
-            <Link href="/glossary">Glossary</Link>
-            <Link href="/help">How it works</Link>
-          </nav>
-          <Link className="guest-pill" href="/settings">
-            Guest settings
-          </Link>
+      {focus ? (
+        <FocusBar
+          step={libraryJourney ? 1 : focusStep}
+          steps={libraryJourney ? libraryJourneySteps : undefined}
+          sample={demo || route === "meet"}
+          onExit={
+            route === "adventure" ? () => router.push("/history") : onExit
+          }
+          onHome={onExit}
+          exitLabel={
+            route === "adventure" ? "Save and exit quest" : "Exit to home"
+          }
+        >
           {session ? (
             <span
-              className="research-points"
+              className="focus-points"
               aria-label={`${session.points ?? 0} practice points`}
             >
-              <Icon name="star" size={17} />
-              <strong>{session.points ?? 0}</strong> points
+              <Icon name="star" size={15} />
+              <strong>{session.points ?? 0}</strong>
             </span>
           ) : null}
-        </div>
-      </header>
+        </FocusBar>
+      ) : (
+        <SiteHeader
+          current={
+            ["home", "learn", "featured"].includes(route)
+              ? "studies"
+              : route === "history"
+                ? "quests"
+                : route === "glossary"
+                  ? "glossary"
+                  : route === "upload" || route === "processing"
+                    ? "upload"
+                    : null
+          }
+          points={session ? (session.points ?? 0) : null}
+          onHome={onExit}
+        />
+      )}
       <main
         id="main"
-        className={`main ${route === "adventure" ? "scene-motion-page" : ""} ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
+        className={`main ${focus && route !== "adventure" ? "journey-main" : ""} ${route === "adventure" ? "scene-motion-page" : ""} ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
       >
-        <ErrorMessage message={error || configError} />
-        {configError || (error && route !== "history") ? (
+        {/* Preparation shows its own recovery surface once the job is loaded. */}
+        <ErrorMessage
+          message={
+            route === "processing" && job ? configError : error || configError
+          }
+        />
+        {configError ||
+        (error && route !== "history" && !(route === "processing" && job)) ? (
           <div className="recovery-actions actions">
             <button
               className="btn outline compact"
@@ -550,18 +612,15 @@ function GradlyWorkspace({
             </button>
             {route === "adventure" || route === "processing" ? (
               <Link className="btn outline compact" href="/history">
-                Your adventures
+                Your quests
               </Link>
             ) : null}
           </div>
         ) : null}
-        {demo ? (
+        {demo && !focus ? (
           <aside className="demo-banner" aria-label="Sample preview mode">
             <strong>Sample preview</strong>
-            <span>
-              Reference study data · no AI calls · not an analysis of your
-              upload
-            </span>
+            <span>Reference study · authored · no AI calls</span>
           </aside>
         ) : null}
         {config && !config.storage ? (
@@ -569,7 +628,7 @@ function GradlyWorkspace({
             <h1>This learning path is unavailable</h1>
             <p>
               The research workspace is not available right now. Continue with
-              Gradly’s guided adventure while it is being prepared.
+              Gradly’s guided quest while it is being prepared.
             </p>
             <button className="btn primary" onClick={onExit}>
               Return to curated adventure
@@ -600,29 +659,39 @@ function GradlyWorkspace({
             config={config}
             busy={busy}
             heading={heading}
-            onStart={() => void act("start")}
+            onStart={() => router.push("/meet/featured")}
           />
         ) : null}
         {route === "upload" ? (
           <UploadPage
+            reduced={reduced}
             config={config}
             draft={uploadDraft}
             onDraftChange={setUploadDraft}
             busy={busy}
             heading={heading}
-            onStart={() => void act("start")}
+            onStart={() => router.push("/meet/featured")}
+          />
+        ) : null}
+        {route === "meet" && id ? (
+          <TextingQuest
+            key={id}
+            sessionKey={id}
+            reduced={reduced}
+            heading={heading}
           />
         ) : null}
         {route === "processing" && id ? (
           <ProcessingPage
+            reduced={reduced}
             job={job}
             config={config}
             busy={busy}
             error={error}
             heading={heading}
             sourcePages={sourcePages}
-            onStart={(lessonId) =>
-              void act("start", lessonId ? { lessonId } : {})
+            onStart={(lessonId, begin) =>
+              void startFirstChallenge(lessonId, begin)
             }
             onStep={(retry, consent) => void step(retry, consent)}
             onLoadPages={async () => {
@@ -651,9 +720,9 @@ function GradlyWorkspace({
                   </Speech>
                   <span className="tag">
                     {session.source === "demo"
-                      ? "Sample investigation · authored guidance"
+                      ? "Sample quest · authored guidance"
                       : session.source !== "generated"
-                        ? "Pre-reviewed reference investigation"
+                        ? "Pre-reviewed reference quest"
                         : "AI-generated • verification passed"}
                   </span>
                   <h1 ref={heading} tabIndex={-1}>
@@ -661,64 +730,106 @@ function GradlyWorkspace({
                   </h1>
                   <div className="card">
                     <h2>Your investigation briefing</h2>
-                    <p>{session.briefing}</p>
-                    {session.source !== "generated" ? (
-                      <p>
-                        56 undergraduate students were randomly assigned to text
-                        or not text during a lecture. Each participant
-                        experienced one condition. After approximately 30
-                        minutes of lecture and a 10-minute distractor activity,
-                        they took a nine-item comprehension quiz scored as
-                        percentage correct.
-                      </p>
-                    ) : null}
                     <p>
-                      You can revise once after a missed answer. Completion and
-                      first-attempt accuracy are tracked separately. Written
-                      reasoning is optional.
+                      {session.source === "generated"
+                        ? session.briefing
+                        : "Make eight research decisions about this study. You’ll choose an analysis before comparing it with the published findings."}
                     </p>
+                    <details className="briefing-session-details">
+                      <summary>
+                        Attempts, reasoning and the optional bonus
+                      </summary>
+                      <p>
+                        You can revise once after a missed answer. Completion
+                        and first-attempt accuracy are tracked separately.
+                        Written reasoning is optional. Any available bonus
+                        follows the main decisions.
+                      </p>
+                    </details>
                   </div>
+                  {session.source !== "generated" ? (
+                    <div className="card briefing-recap">
+                      <h2>Before you decide</h2>
+                      <ul>
+                        {paperContext.slice(0, 3).map((point) => (
+                          <li key={point.id}>
+                            <span className="tag">{point.label}</span>
+                            <p>{point.title}</p>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="quiet">
+                        Results stay closed until the investigation reaches
+                        them.
+                      </p>
+                      {session.source === "demo" ? (
+                        <Link
+                          className="text-link"
+                          href={`/processing/${session.id}`}
+                        >
+                          Review the study map
+                        </Link>
+                      ) : null}
+                    </div>
+                  ) : null}
                   <button
                     disabled={busy}
                     className="btn primary"
+                    aria-busy={busy}
                     onClick={() => act("begin")}
                   >
-                    <ActionLabel>Begin investigation</ActionLabel>
+                    <ActionLabel busy={busy}>Start quest</ActionLabel>
                   </button>
                 </>
               ) : null}
               {c && !reviewMode ? (
                 <>
-                  <div className="lesson-top">
-                    <Link
-                      href="/history"
-                      className="exit"
-                      aria-label="Save and exit investigation"
-                    >
-                      <Icon name="close" size={22} />
-                    </Link>
-                    <Progress
-                      value={
+                  <div className="play-top">
+                    <div
+                      className="play-progress"
+                      role="progressbar"
+                      aria-label={
+                        session.phase === "bonus"
+                          ? "Bonus decision"
+                          : `Decision ${session.index + 1} of ${session.total}`
+                      }
+                      aria-valuemin={0}
+                      aria-valuemax={session.total}
+                      aria-valuenow={
                         session.phase === "bonus"
                           ? session.total
                           : session.index
                       }
-                      max={session.total}
-                      label={
-                        session.phase === "bonus"
-                          ? "Bonus challenge"
-                          : `Challenge ${session.index + 1} of ${session.total}`
-                      }
-                    />
-                    <span className="mode-pill">
-                      {demo
-                        ? "Sample"
-                        : session.source !== "generated"
-                          ? "Reference"
-                          : "AI-reviewed"}
+                    >
+                      {Array.from({ length: session.total }, (_, i) => (
+                        <span
+                          key={i}
+                          className={
+                            session.phase === "bonus" || i < session.index
+                              ? "is-done"
+                              : i === session.index
+                                ? "is-current"
+                                : ""
+                          }
+                        />
+                      ))}
+                    </div>
+                    <span className="play-progress-label" aria-hidden="true">
+                      {session.phase === "bonus"
+                        ? "Bonus decision"
+                        : `Decision ${session.index + 1} of ${session.total}`}
                     </span>
                   </div>
-                  <Speech>
+                  <Speech
+                    // A reaction for the key moment only: the checked answer.
+                    pose={
+                      c.feedback
+                        ? c.feedback.correct
+                          ? "celebrating"
+                          : "thinking"
+                        : "guiding"
+                    }
+                  >
                     {c.reveal === "results"
                       ? session.source === "generated"
                         ? "Inspect the findings. What do they support—and what do they leave uncertain?"
@@ -729,14 +840,12 @@ function GradlyWorkspace({
                           ? "Connect the interpretation to the evidence. Which claims fit, and where should you stop?"
                           : "Let’s investigate. Defend a research decision before we reveal the findings."}
                   </Speech>
-                  <div className="stage">
-                    <span>{c.stage}</span>
-                    <span>
-                      {c.type === "multiple"
-                        ? "Select all that apply"
-                        : "Choose one response"}
-                    </span>
-                  </div>
+                  <span className="play-kicker">
+                    {c.stage} ·{" "}
+                    {c.type === "multiple"
+                      ? "Select all that apply"
+                      : "Choose one response"}
+                  </span>
                   <h1
                     ref={heading}
                     tabIndex={-1}
@@ -809,6 +918,13 @@ function GradlyWorkspace({
                       draft={sceneDraft}
                       onDraft={setSceneDraft}
                       onSelect={setSelected}
+                      verdict={
+                        c.feedback
+                          ? c.feedback.correct
+                            ? "correct"
+                            : "incorrect"
+                          : undefined
+                      }
                     />
                   ) : (
                     <fieldset
@@ -849,12 +965,6 @@ function GradlyWorkspace({
                     </fieldset>
                   )}
                   <SceneFollowing>
-                    {!c.feedback ? (
-                      <p className="quiet draft-note">
-                        Your draft stays in this tab. Submitted decisions are
-                        saved to your guest profile.
-                      </p>
-                    ) : null}
                     <div className="support-grid">
                       <SceneDisclosure
                         reduced={reduced}
@@ -873,7 +983,7 @@ function GradlyWorkspace({
                         ) : (
                           <p>
                             {c.evidence.join(" ") ||
-                              "Use the research evidence supplied with this challenge. Missing evidence should not be inferred."}
+                              "Use the research evidence supplied with this decision. Missing evidence should not be inferred."}
                           </p>
                         )}
                       </SceneDisclosure>
@@ -973,7 +1083,7 @@ function GradlyWorkspace({
                               "Relevant Research Evidence",
                               c.evidence.join(" ") ||
                                 (session.source === "generated"
-                                  ? "Use this challenge’s page references. Do not fill gaps in the source with assumptions."
+                                  ? "Use this decision’s page references. Do not fill gaps in the source with assumptions."
                                   : "Independent participants, one condition per person, and a numerical quiz outcome."),
                             ],
                             [
@@ -1143,17 +1253,17 @@ function GradlyWorkspace({
                 </>
               ) : null}
               {session.phase === "bonus-choice" ? (
-                <div className="center">
-                  <Mascot />
+                <div className="center bonus-offer">
+                  <Mascot pose="thinking" />
                   <h1 ref={heading} tabIndex={-1}>
                     One more question?
                   </h1>
                   <p>
                     {session.source === "generated"
                       ? session.bonusAvailable
-                        ? "You’ve completed the required challenges. Consider one more question about the evidence before revealing the source."
-                        : "You’ve completed the required challenges. Connect your decisions to the paper and the limits of its evidence."
-                      : "You’ve completed the required challenges. Explore whether statistical significance can repair a design problem."}
+                        ? "You’ve completed the required decisions. Consider one more question about the evidence before revealing the source."
+                        : "You’ve completed the required decisions. Connect them to the paper and the limits of its evidence."
+                      : "You’ve completed the required decisions. Explore whether statistical significance can repair a design problem."}
                   </p>
                   <div className="card bonus">
                     <h2>
@@ -1194,15 +1304,19 @@ function GradlyWorkspace({
               {["reveal", "complete"].includes(session.phase) && !reviewMode ? (
                 <>
                   <div className="reveal-head">
-                    <Mascot />
+                    <Mascot
+                      pose={
+                        session.phase === "complete" ? "celebrating" : "reading"
+                      }
+                    />
                     <span className="tag">
                       {session.phase === "complete"
-                        ? "Adventure complete"
-                        : "Original investigation"}
+                        ? "Quest complete"
+                        : "Original quest"}
                     </span>
                     <h1 ref={heading} tabIndex={-1}>
                       {session.phase === "complete"
-                        ? "Investigation complete!"
+                        ? "Quest complete!"
                         : "Research Paper Unlocked!"}
                     </h1>
                     <p>
@@ -1235,7 +1349,7 @@ function GradlyWorkspace({
                         <Icon name="check" />
                       </span>
                       <div>
-                        <span>Required challenges</span>
+                        <span>Required decisions</span>
                         <strong>
                           {session.summary.completed}/{session.summary.total}
                         </strong>
@@ -1246,7 +1360,7 @@ function GradlyWorkspace({
                         <Icon name="retry" />
                       </span>
                       <div>
-                        <span>Challenges revised</span>
+                        <span>Decisions revised</span>
                         <strong>{session.summary.retries}</strong>
                       </div>
                     </div>
@@ -1313,7 +1427,7 @@ function GradlyWorkspace({
                         disabled={busy}
                         onClick={() => act("finish", { reflection })}
                       >
-                        <ActionLabel icon="check">Finish adventure</ActionLabel>
+                        <ActionLabel icon="check">Finish quest</ActionLabel>
                       </button>
                     </div>
                   ) : (
@@ -1355,7 +1469,7 @@ function GradlyWorkspace({
                             className="btn outline"
                             onClick={() => setConfirm("restart")}
                           >
-                            Restart Adventure
+                            Restart quest
                           </button>
                           <Link className="btn outline" href="/">
                             Return Home
@@ -1479,7 +1593,7 @@ function GradlyWorkspace({
             </p>
             <div className="actions">
               <Link className="btn primary" href="/history">
-                Your adventures
+                Your quests
               </Link>
               <Link className="btn outline" href="/learn">
                 Choose a learning path
@@ -1499,6 +1613,7 @@ function GradlyWorkspace({
           "help",
           "settings",
           "privacy",
+          "meet",
         ].includes(route) ? (
           <div className="center">
             <h1>Let’s get you back on track.</h1>
@@ -1529,7 +1644,7 @@ function GradlyWorkspace({
               </strong>
               <p>
                 {c.feedback
-                  ? "Your response is saved."
+                  ? c.feedback.message
                   : "Choose a response, then check your choice."}
               </p>
             </div>
@@ -1567,15 +1682,8 @@ function GradlyWorkspace({
             </SceneAction>
           </div>
         </footer>
-      ) : (
-        <footer className="site-footer">
-          <Link className="brand" href="/">
-            Gradly
-          </Link>
-          <span>Learn to question. Grow with evidence.</span>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/help">Help</Link>
-        </footer>
+      ) : focus ? null : (
+        <SiteFooter />
       )}
       {confirm ? (
         <Dialog
@@ -1589,8 +1697,8 @@ function GradlyWorkspace({
           <ErrorMessage message={dialogError} />
           <p>
             {confirm === "restart"
-              ? "Your current adventure stays in history. A fresh attempt starts at the briefing."
-              : "This removes extracted text, processing results, the generated lesson, and all linked adventures. This cannot be undone."}
+              ? "Your current quest stays in history. A fresh attempt starts at the briefing."
+              : "This removes extracted text, processing results, the generated lesson, and all linked quests. This cannot be undone."}
           </p>
           <div className="actions">
             <button

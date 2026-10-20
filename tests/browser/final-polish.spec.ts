@@ -1,5 +1,14 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { pdfBytes } from "../research/pdf-fixture.js";
+import { openAdventureBriefing } from "./journey-helpers.js";
+
+function response(page: Page, id: string) {
+  const responses = page.locator(".scene-responses");
+  return responses
+    .getByRole("radio")
+    .or(responses.getByRole("checkbox"))
+    .and(page.locator(`input[value="${id}"]`));
+}
 
 function deferred() {
   let resolve!: () => void;
@@ -39,11 +48,10 @@ test("incomplete saved-investigation links offer a recovery path", async ({
 test("unfinished choices and explanations survive help, refresh and exit", async ({
   page,
 }) => {
-  await page.goto("/#/research/learn");
-  await page.getByRole("button", { name: "Start investigation" }).click();
-  await page.getByRole("button", { name: "Begin investigation" }).click();
+  await openAdventureBriefing(page);
+  await page.getByRole("button", { name: "Start quest" }).click();
   for (const answer of ["A", "B"]) {
-    await page.locator(`.choices input[value="${answer}"]`).check();
+    await response(page, answer).check();
     await page.getByRole("button", { name: "Check Answer" }).click();
     await expect(page.locator(".feedback")).toBeFocused();
     await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -53,18 +61,18 @@ test("unfinished choices and explanations survive help, refresh and exit", async
   ).toBeVisible();
   const draft =
     "Each participant contributes to only one condition; compare independent group means.";
-  await page.locator('.choices input[value="A"]').check();
-  await page.locator('.choices input[value="B"]').check();
+  await response(page, "A").check();
+  await response(page, "B").check();
   await page.getByLabel("Defend your decision").fill(draft);
   await page.getByRole("link", { name: "Glossary", exact: true }).click();
-  await page.getByRole("link", { name: "Return to investigation" }).click();
+  await page.getByRole("link", { name: "Return to quest" }).click();
   await expect(page.getByLabel("Defend your decision")).toHaveValue(draft);
   await page.reload();
-  await expect(page.locator('.choices input[value="A"]')).toBeChecked();
-  await expect(page.locator('.choices input[value="B"]')).toBeChecked();
+  await expect(response(page, "A")).toBeChecked();
+  await expect(response(page, "B")).toBeChecked();
   await expect(page.getByLabel("Defend your decision")).toHaveValue(draft);
-  await page.getByRole("link", { name: "Save and exit investigation" }).click();
-  await page.getByRole("link", { name: "Resume investigation" }).click();
+  await page.getByRole("link", { name: "Save and exit quest" }).click();
+  await page.getByRole("link", { name: "Resume quest" }).click();
   await expect(page.getByLabel("Defend your decision")).toHaveValue(draft);
   await page.getByRole("button", { name: "Check Answer" }).click();
   await expect(page.locator(".feedback")).toBeFocused();
@@ -74,7 +82,7 @@ test("unfinished choices and explanations survive help, refresh and exit", async
   const revision = `${draft} I would also inspect assumptions.`;
   await page.getByLabel("Defend your decision").fill(revision);
   await page.getByRole("link", { name: "How it works", exact: true }).click();
-  await page.getByRole("link", { name: "Return to investigation" }).click();
+  await page.getByRole("link", { name: "Return to quest" }).click();
   await expect(page.getByLabel("Defend your decision")).toBeEditable();
   await expect(page.getByLabel("Defend your decision")).toHaveValue(revision);
   await page.getByRole("button", { name: "Cancel revision" }).click();
@@ -90,7 +98,6 @@ test("checked PDF and its usable original link survive a support detour", async 
     mimeType: "application/pdf",
     buffer: pdfBytes(),
   });
-  await page.getByRole("button", { name: "Check this document" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
@@ -103,7 +110,6 @@ test("checked PDF and its usable original link survive a support detour", async 
       ),
     ),
   ).toBe("%PDF-");
-  await page.locator(".upload-privacy > summary").click();
   await page
     .getByRole("link", { name: "Privacy & AI processing", exact: true })
     .click();
@@ -191,17 +197,17 @@ test("adventure history distinguishes loading, errors, and successful retry", as
   try {
     await page.goto("/#/research/history");
     await expect(page.getByRole("status")).toContainText(
-      "Loading your adventures…",
+      "Loading your quests…",
     );
     await expect(
       page.getByText("Your next investigation starts here.", { exact: true }),
     ).toHaveCount(0);
     gate.resolve();
     await expect(
-      page.getByText("Your adventures couldn’t be loaded.", { exact: true }),
+      page.getByText("Your quests couldn’t be loaded.", { exact: true }),
     ).toBeVisible();
     await expect(
-      page.getByRole("status").filter({ hasText: "Loading your adventures…" }),
+      page.getByRole("status").filter({ hasText: "Loading your quests…" }),
     ).toHaveCount(0);
     await expect(
       page.getByText("Your next investigation starts here.", { exact: true }),
@@ -212,68 +218,41 @@ test("adventure history distinguishes loading, errors, and successful retry", as
       page.getByRole("heading", { name: "Saved investigation after retry" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Resume investigation" }),
+      page.getByRole("link", { name: "Resume quest" }),
     ).toHaveAttribute("href", "#/research/adventure/saved-investigation-retry");
     await expect(
-      page.getByText("Your adventures couldn’t be loaded.", { exact: true }),
+      page.getByText("Your quests couldn’t be loaded.", { exact: true }),
     ).toHaveCount(0);
   } finally {
     gate.resolve();
   }
 });
 
-test("a completed start request cannot pull a learner back from the glossary", async ({
+test("the library start opens the authored quest without a saved-session request", async ({
   page,
 }) => {
-  const gate = deferred();
-  const captured = deferred();
   const errors: string[] = [];
+  const learningPosts: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.route("**/api/research/learning", async (route) => {
-    if (route.request().method() !== "POST") {
-      await route.continue();
-      return;
-    }
-    const response = await route.fetch();
-    expect(response.ok()).toBe(true);
-    captured.resolve();
-    await gate.promise;
-    await route.fulfill({ response });
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname === "/api/research/learning"
+    )
+      learningPosts.push(request.url());
   });
-  try {
-    await page.goto("/#/research/learn");
-    await page.getByRole("button", { name: "Start investigation" }).click();
-    await captured.promise;
-    await expect(page.getByRole("button", { name: "Opening…" })).toBeDisabled();
-    await page.getByRole("link", { name: "Glossary", exact: true }).click();
-    await expect(
-      page.getByRole("heading", { name: "Research glossary" }),
-    ).toBeVisible();
-    const finished = page.waitForResponse(
-      (response) =>
-        new URL(response.url()).pathname === "/api/research/learning" &&
-        response.request().method() === "POST",
-    );
-    gate.resolve();
-    await (await finished).finished();
-    // Let the released fetch and React update settle without a timed sleep.
-    await page.evaluate(
-      () =>
-        new Promise<void>((resolve) => {
-          requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-        }),
-    );
-    await expect(page).toHaveURL(/#\/research\/glossary$/);
-    await expect(
-      page.getByRole("heading", { name: "Research glossary" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "Your investigation briefing" }),
-    ).toHaveCount(0);
-    expect(errors).toEqual([]);
-  } finally {
-    gate.resolve();
-  }
+  await page.goto("/#/research/learn");
+  await page.getByRole("button", { name: "Start quest" }).click();
+  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
+  await expect(
+    page.getByRole("heading", { name: "Can students text and still keep up?" }),
+  ).toBeVisible();
+  await page.goto("/#/research/glossary");
+  await expect(
+    page.getByRole("heading", { name: "Research glossary" }),
+  ).toBeVisible();
+  expect(learningPosts).toEqual([]);
+  expect(errors).toEqual([]);
 });
 
 test("successful deletion clears document review even when history refresh fails", async ({
@@ -285,11 +264,13 @@ test("successful deletion clears document review even when history refresh fails
     mimeType: "application/pdf",
     buffer: pdfBytes(),
   });
-  await page.getByRole("button", { name: "Check this document" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "Adventures", exact: true }).click();
+  // Review is a focus screen without the site menu; open history directly.
+  await page.evaluate(() => {
+    location.hash = "#/research/history";
+  });
   await page
     .getByRole("button", { name: "Delete document", exact: true })
     .click();
@@ -342,12 +323,14 @@ test("successful deletion clears document review even when history refresh fails
   await expect(page.getByRole("alert")).toContainText(
     "History refresh interrupted",
   );
-  await page.getByRole("link", { name: "Learn", exact: true }).click();
+  await page
+    .getByRole("link", { name: "Prepared studies", exact: true })
+    .click();
   await page
     .getByRole("link", { name: "Upload a research paper", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Upload your Research Paper" }),
+    page.getByRole("heading", { name: "Upload your research paper" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
@@ -359,16 +342,18 @@ test("successful deletion clears document review even when history refresh fails
 
 test("touch layouts avoid stuck hover motion and answer selections stay immediate", async ({
   browser,
+  baseURL,
 }) => {
   const context = await browser.newContext({
+    baseURL,
     viewport: { width: 390, height: 844 },
     isMobile: true,
     hasTouch: true,
   });
   const page = await context.newPage();
   try {
-    await page.goto("http://127.0.0.1:5173/#/research/learn");
-    const start = page.getByRole("button", { name: "Start investigation" });
+    await page.goto("/#/research/learn");
+    const start = page.getByRole("button", { name: "Start quest" });
     await expect(start).toBeVisible();
     expect(
       await page.evaluate(() => matchMedia("(hover: hover)").matches),
@@ -377,21 +362,27 @@ test("touch layouts avoid stuck hover motion and answer selections stay immediat
     expect(await start.evaluate((el) => getComputedStyle(el).transform)).toBe(
       "none",
     );
-    await start.tap();
-    await page.getByRole("button", { name: "Begin investigation" }).tap();
-    const choices = page.locator(".choices .choice");
-    await choices.nth(0).tap();
-    await expect(choices.nth(0).locator("input")).toBeChecked();
-    await choices.nth(1).tap();
-    await expect(choices.nth(1).locator("input")).toBeChecked();
-    await expect(choices.nth(0).locator("input")).not.toBeChecked();
+    await openAdventureBriefing(page);
+    await page.getByRole("button", { name: "Start quest" }).tap();
+    const choices = page.locator(".scene-responses").getByRole("radio");
+    await choices.nth(0).locator("..").tap();
+    await expect(choices.nth(0)).toBeChecked();
+    await choices.nth(1).locator("..").tap();
+    await expect(choices.nth(1)).toBeChecked();
+    await expect(choices.nth(0)).not.toBeChecked();
     await expect
       .poll(() =>
-        choices.nth(0).evaluate((el) => getComputedStyle(el).backgroundColor),
+        choices
+          .nth(0)
+          .locator("..")
+          .evaluate((el) => getComputedStyle(el).backgroundColor),
       )
       .toBe("rgb(255, 255, 255)");
     expect(
-      await choices.nth(1).evaluate((el) => getComputedStyle(el).animationName),
+      await choices
+        .nth(1)
+        .locator("..")
+        .evaluate((el) => getComputedStyle(el).animationName),
     ).toBe("none");
     expect(
       await page.evaluate(

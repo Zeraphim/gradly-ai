@@ -69,3 +69,35 @@ Uploads are bounded before parsing, then checked for contents, MIME, extension a
 Document text is untrusted data. Prompts prohibit following embedded commands, and no document-driven tools or URL fetching exist. Model text renders as escaped text. Same-origin mutation checks, security headers, owner checks and request budgets add boundaries, without claiming immunity to prompt injection. Research has persistent shared/per-guest logical AI request budgets; retries can add billed calls. The curated service's existing process-local budgets remain separate.
 
 See `RESEARCH_INTEGRATION.md` for the deployment variables, function package settings and setup sequence. Hosted storage, OCR packaging and new live inference require configuration and smoke tests before release.
+
+## Paper-review presentation
+
+`components/PaperStory.tsx` presents authored reference context during curated
+preparation. It uses shared motion and has no assessment or provider calls.
+
+`components/SiteChrome.tsx` is the header and footer for the upload-first home,
+library, history and support routes; its styles load globally from `main.tsx`.
+The paper journey (review, preparation, the authored texting quest
+`TextingQuest.tsx` at `/meet/:id`, and the player) runs in focus mode instead:
+`FocusBar.tsx` with the journey stepper, styled by `journey.css`, `quest.css` and
+`play.css`. From the
+home page in sample mode, a PDF or any link (made into a "link note" document by
+`link-note.ts`) skips the consent review and goes straight to preparation.
+
+`UploadPage.tsx` retains the document-bound upload hook and consent API, with
+Check/Review presentation in `upload-review.css`. A file chosen on home or on the
+review route is checked immediately (`UploadDraft.autoCheck`). `useDocumentUpload`
+classifies failures by where they happened: client checks and 4xx validation
+responses are `rejected`; network, timeout, cancel and 5xx are `interrupted`.
+`FailureRecovery.tsx` renders both, and failed preparation stages, offering retry
+or the prepared-study library as a choice. `ProcessingPage.tsx` uses one layout
+for live and sample jobs. `PreparationTrack.tsx` reads saved audit roles,
+statuses and summaries; its document advances only when the saved stage
+advances. A ready sample job, and the library's Start quest, open the texting quest
+(`texting-quest.ts` script, `quest-visuals.tsx` visuals). It checks answers in the
+browser against the authored key and keeps progress in `sessionStorage`; it calls
+no API. Live jobs open the player's generated briefing through `start` with
+`lessonId`. Samples stay explicitly separate from uploaded
+text. `HistoryPage.tsx` fetches persisted errors for failed jobs through the
+existing job endpoint. No API or scene contract changed. See the
+[intake integration proposal](ui/INTAKE_PROCESSING.md) for unresolved fields.
