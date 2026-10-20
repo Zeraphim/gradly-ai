@@ -38,6 +38,11 @@ type Choice = Extract<QuestScreen, { kind: "choice" }>;
 type Phase = "answering" | "retry" | "correct" | "explained";
 type Record_ = { firstCorrect: boolean; revised: boolean };
 type Prediction = "Text lower" | "About the same" | "No text lower";
+const predictions: Prediction[] = [
+  "Text lower",
+  "About the same",
+  "No text lower",
+];
 type Exploration = { prediction?: Prediction; revealed?: boolean };
 
 const STORAGE = "gradly-texting-quest";
@@ -189,10 +194,24 @@ function Quest({
       const target = event.target as HTMLElement | null;
       if (target?.closest("input[type=range], textarea, select")) return;
       if (predicting) {
-        if (target?.closest("button, a, summary")) return;
         if (event.key === "Enter") {
+          if (target?.closest("button, a, summary")) return;
           event.preventDefault();
           revealResults();
+          return;
+        }
+        if (event.key.length !== 1) return;
+        const key = event.key.toUpperCase();
+        const choice =
+          predictions[
+            /[1-9]/.test(key) ? Number(key) - 1 : key.charCodeAt(0) - 65
+          ];
+        if (choice) {
+          event.preventDefault();
+          setProgress((p) => ({
+            ...p,
+            exploration: { ...p.exploration, prediction: choice },
+          }));
         }
         return;
       }
@@ -548,9 +567,7 @@ function ChoiceScreen({
           <p className="quest-prediction-note">
             Your prediction is ungraded. The paper may surprise you.
           </p>
-          {(
-            ["Text lower", "About the same", "No text lower"] as Prediction[]
-          ).map((value) => (
+          {predictions.map((value, i) => (
             <m.label
               key={value}
               className={`quest-option ${prediction === value ? "is-selected" : ""}`}
@@ -564,6 +581,9 @@ function ChoiceScreen({
                 checked={prediction === value}
                 onChange={() => onPrediction(value)}
               />
+              <span className="quest-key" aria-hidden="true">
+                {String.fromCharCode(65 + i)}
+              </span>
               <span className="quest-option-text">{value}</span>
             </m.label>
           ))}
@@ -932,9 +952,8 @@ function StudyFlow() {
     "56 undergraduates",
     "Random assignment",
     "Text  ·  No text",
-    "Same recorded lecture",
-    "Intervening task",
-    "Nine-item quiz",
+    "Same lecture, taking notes",
+    "Quiz on the lecture",
   ];
   return (
     <figure className="quest-figure">

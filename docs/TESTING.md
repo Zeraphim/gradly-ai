@@ -503,3 +503,48 @@ library's Start quest now opens it (see [intake notes](ui/INTAKE_PROCESSING.md))
 
 Not verified: live generation, hosted preview (#4), Safari/Firefox, and whether
 the quest format can be driven by the scene contract (needs agreement with JC).
+
+## Phone fit and keyboard pass · 21 October 2026
+
+Local, uncommitted, on `marc` after `434a9d0`.
+
+- **Phone fit:** at 375×812, the first answer started below the action bar on
+  4 of 11 quest questions, and all answers fitted on 1. A phone-only compact
+  layout (`quest.css`, `study-design.css`) now shows the first answer on 11 of 11
+  and all answers on 5 of 11. The design tree keeps its row heights because its
+  connecting lines are drawn for them. A new test in `intake-flow.spec.ts`
+  checks every question; it fails on the previous CSS.
+- **Prediction keys:** A/B/C and 1/2/3 now choose a prediction on the results
+  step, with key badges like the other questions. `quest-motion.spec.ts` covers
+  it; nothing is graded.
+- **Copy:** the phone header shows the step name (the count is read by screen
+  readers only), the library pill counts the quest's 10 decisions, and the
+  activity pilot's first question is reworded.
+
+Checks run: `npm run check` (21 Node, 215 Vitest in 23 files, builds) and the
+full Chromium suite, 62 of 62, before the new phone test was added. The new
+test was then run on its own and passed.
+Not verified: Safari/Firefox, real devices, hosted preview.
+
+## Activities, library and copy pass · 21 October 2026
+
+Local on `marc`, after the phone-fit pass above.
+
+- **Activities page** (`PaperActivityPilot.tsx`, `activity-pilot.css`) now uses
+  the quest frame: three-step progress, a bottom check bar, Try again, Next paper
+  and a summary. `activity-pilot.spec.ts` was updated (notes now sit in a
+  disclosure, and a checked answer is locked until Try again), plus a new
+  keyboard run to the summary with axe and Start over. The short 1000×640 window
+  initially hid the last answer behind the bar by 30px; tighter spacing on
+  short desktop windows fixed it.
+- **Library** (`PathPicker.tsx`): one intro line, the two main paths, then a
+  "More practice" row with the reasoning preview and the activities. The link
+  names are unchanged for existing tests.
+- **Quest copy:** "recorded lecture", "intervening task", "nine-item quiz" and
+  "9 questions" could not be confirmed from public sources (the full text was
+  unavailable), so the text now says "the same lecture" and "a quiz about the
+  lecture". The reported F(1, 54) = 4.33 is kept from the team's quest script
+  and still needs a check against the paper.
+- **Hosted preview:** Vercel shows "Deployment was blocked" for every commit
+  authored by `marcxxv` and success for JC's. That points to team access, not
+  the build; it remains unverified.

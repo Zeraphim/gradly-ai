@@ -237,7 +237,7 @@ export function PlansVisual({
         resolved
           ? {
               summary:
-                "In Experiment 2, the researchers randomly assigned undergraduates to text or not text during a recorded lecture, then gave them a nine-item quiz.",
+                "In Experiment 2, the researchers randomly assigned undergraduates to text or not text during the same lecture, then gave them a quiz about it.",
               citation:
                 "Gingerich & Lineweaver (2014), Experiment 2 · procedure summary",
               href: `https://doi.org/${questSource.doi}`,
@@ -280,7 +280,7 @@ export function InstrumentsVisual({ selected }: { selected?: string }) {
         ) : selected === "C" ? (
           <div className="qv-form">
             <small>Performance test</small>
-            <strong>Quiz on the lecture · 9 questions</strong>
+            <strong>Quiz on the lecture</strong>
             <ol className="qv-quiz" aria-hidden="true">
               {[1, 2, 3].map((n) => (
                 <li key={n}>
@@ -442,8 +442,8 @@ export function ScopeVisual() {
           <div className="qv-ring is-inner">
             <FlaskConical size={18} aria-hidden="true" />
             <span>
-              Tested here: students assigned to text or not, one recorded
-              lecture, a nine-item quiz
+              Tested here: students assigned to text or not, one lecture, one
+              quiz
             </span>
           </div>
         </div>

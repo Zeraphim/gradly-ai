@@ -2446,3 +2446,42 @@ html[data-reduced-motion="true"] .research-lab button.path-card {
   font-size: 12px;
   margin-bottom: 0;
 }
+
+/* Library: two main paths, then a quiet row of extra practice. */
+.research-lab .path-more {
+  display: grid;
+  grid-template-columns: auto repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 12px 24px;
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid #e3e8ec;
+  text-align: left;
+}
+.research-lab .path-more > span {
+  color: #526375;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.research-lab .path-more-item {
+  display: grid;
+  gap: 2px;
+}
+.research-lab .path-more-item a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: #006b93;
+  font-weight: 800;
+}
+.research-lab .path-more-item small {
+  color: #526375;
+  font-size: 13px;
+}
+@media (max-width: 720px) {
+  .research-lab .path-more {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

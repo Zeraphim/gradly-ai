@@ -45,7 +45,7 @@ export const activityPilot: PilotCase[] = [
   {
     id: "experiment",
     label: "Experiment",
-    question: "Does a higher average mean drawing always works better?",
+    question: "If drawing scored higher on average, is drawing always better?",
     context:
       "Students were randomly assigned to draw or write an explanation after a chemical-bonding video. Compare Experiment 2’s delayed post-test means.",
     source: {

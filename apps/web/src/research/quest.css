@@ -1288,3 +1288,76 @@
   border: 2px solid var(--j-ink);
   border-left: 0;
 }
+
+/* Phones: keep the picture compact so the answers start above the action bar. */
+@media (max-width: 640px) {
+  .research-lab .quest-top {
+    margin-bottom: 16px;
+  }
+  .research-lab .quest-choice .quest-heading {
+    margin-bottom: 10px;
+    font-size: 21px;
+  }
+  .research-lab .quest-figure {
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 18px;
+  }
+  .research-lab .quest-figure figcaption {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .research-lab .qv-frame-row {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 6px;
+  }
+  .research-lab .qv-arrow {
+    font-size: 20px;
+    transform: none;
+  }
+  .research-lab .qv-slot {
+    gap: 4px;
+    min-height: 0;
+    padding: 10px 8px;
+  }
+  .research-lab .qv-slot small {
+    font-size: 10px;
+  }
+  .research-lab .qv-slot strong {
+    font-size: 14px;
+  }
+  .research-lab .quest-chart-plot {
+    height: 180px;
+    padding: 20px 8px 28px 0;
+  }
+  .research-lab .qv-ring {
+    gap: 6px;
+    padding: 8px;
+  }
+  .research-lab .qv-ring span {
+    font-size: 13px;
+  }
+  .research-lab .qv-inspect li {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  .research-lab .qv-group {
+    gap: 6px;
+    padding: 10px;
+  }
+  .research-lab .qv-dots,
+  .research-lab .qv-links {
+    gap: 6px;
+  }
+  .research-lab .qv-links {
+    padding-bottom: 10px;
+  }
+  .research-lab .qv-dots i {
+    width: 12px;
+    height: 12px;
+  }
+  .research-lab .qv-links span {
+    height: 12px;
+  }
+}

@@ -60,8 +60,13 @@ export function FocusBar({
             </li>
           ))}
         </ol>
+        {/* Phones show the step name; the count is read, not shown, so it
+            never truncates the name. */}
         <span className="focus-step-mobile">
-          {step + 1}/{steps.length} · {steps[step]}
+          <span className="sr-only">
+            Step {step + 1} of {steps.length}:{" "}
+          </span>
+          {steps[step]}
         </span>
         <div className="focus-bar-tools">
           {sample ? (

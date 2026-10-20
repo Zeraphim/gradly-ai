@@ -3,6 +3,12 @@ import { ResearchLink as Link } from "./navigation.js";
 import { Mascot } from "./learning-ui.js";
 import { ActionLabel, Icon } from "./icon.js";
 import type { ResearchConfig } from "./types.js";
+import { textingQuest } from "./texting-quest.js";
+
+// Start quest opens the authored texting quest; count its required decisions.
+const questDecisions = textingQuest.filter(
+  (screen) => screen.kind === "choice" && !screen.optional,
+).length;
 
 export function PathPicker({
   config,
@@ -17,33 +23,15 @@ export function PathPicker({
 }) {
   return (
     <>
-      <div className="path-intro">
-        <Mascot small />
-        <p>Small decisions. Deeper understanding.</p>
-        <span className="tag">Your research companion</span>
-      </div>
       <section className="welcome">
-        <span className="tag">Your research-learning companion</span>
+        <div className="path-intro">
+          <Mascot small />
+        </div>
+        <span className="tag">Prepared studies</span>
         <h1 ref={heading} tabIndex={-1}>
           Think like a researcher.
         </h1>
-        <p>
-          Start with a guided investigation, or explore the journey with your
-          own PDF.
-        </p>
-        <aside
-          className="reasoning-preview-invitation"
-          aria-label="Research reasoning preview"
-        >
-          <div>
-            <strong>A correct choice can still hide a misconception.</strong>
-            <p>Choose → Explain → Check evidence → Revise</p>
-            <span className="quiet">Authored example · no AI calls</span>
-          </div>
-          <Link className="btn outline compact" href="/reasoning">
-            <ActionLabel>Try the reasoning preview</ActionLabel>
-          </Link>
-        </aside>
+        <p>Start with the guided quest, or bring your own paper.</p>
         <div className="path-grid">
           <article className="path-card featured-card">
             <div className="symbol blue">
@@ -60,7 +48,7 @@ export function PathPicker({
               discover what the evidence says.
             </p>
             <div className="pills">
-              <span>8 decisions</span>
+              <span>{questDecisions} decisions</span>
               <span>Optional bonus</span>
               <span>No API key needed</span>
             </div>
@@ -104,14 +92,18 @@ export function PathPicker({
             </Link>
           </article>
         </div>
-        <p>
-          <Link className="text-link" href="/activities">
-            Explore three paper activities · authored practice
-          </Link>
-        </p>
-        <p className="quiet">
-          Decisions first. Findings next. Understanding throughout.
-        </p>
+        {/* Secondary practice stays below the two main paths. */}
+        <nav className="path-more" aria-label="More practice">
+          <span>More practice</span>
+          <div className="path-more-item">
+            <Link href="/reasoning">Try the reasoning preview</Link>
+            <small>Choose → explain → check evidence → revise</small>
+          </div>
+          <div className="path-more-item">
+            <Link href="/activities">Explore three paper activities</Link>
+            <small>Experiment, observational study, interviews</small>
+          </div>
+        </nav>
       </section>
     </>
   );

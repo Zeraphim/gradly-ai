@@ -112,7 +112,9 @@ and their precision, label observational relationships without causal overreach,
 and keep interview themes contextual. Prepared feedback and custom unassessed
 writing must be distinguishable. Each paper retains its own tab draft and reset.
 Practice must work without assessment or inference requests and must not affect
-server progress or points. Desktop choices and Check controls remain visible at
-the supported pilot viewport sizes; narrow screens retain natural scrolling.
+server progress or points. Desktop choices stay above the fixed check bar at
+the supported pilot viewport sizes; narrow screens retain natural scrolling. The
+pilot follows the quest's rhythm: check, feedback, then the next paper, ending
+in a short summary.
 This pilot is evidence of authored rendering reuse, not automatic generation from
 arbitrary papers, proven learning benefit or production delivery.

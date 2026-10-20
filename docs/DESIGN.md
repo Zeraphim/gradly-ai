@@ -318,7 +318,8 @@ the same glossary, and buttons use the reference labels: "Build my quest",
 
 **Counts are derived, never typed.** The completion recap reads
 "8 decisions · 1 bonus" from `lesson.questions` instead of the hard-coded "Six
-completed checkpoints". The path-picker pill says "8 decisions" and the legacy
+completed checkpoints". The path-picker pill counts the texting quest's required decisions (currently
+10), because Start quest opens that quest, and the legacy
 home no longer offers a "six-quest adventure". A number in prose is treated as a
 claim that the data must be able to produce.
 
@@ -368,7 +369,6 @@ keeps both columns close to the same height. The reference-study row is a single
 line: icon, title, description, action — its label no longer wraps into a column
 of words at narrow widths.
 
-
 ## Authored results exploration · 21 October 2026
 
 The sample quiz-results decision begins with an ungraded prediction (Text lower,
@@ -413,10 +413,17 @@ invented quotations or population rates. Each activity links to its paper and
 section locator. Response headings are neutral and the supported interpretation
 occupies a different position in each case.
 
-Desktop puts response sentences and their Check control beside the evidence.
-Narrow screens scroll naturally; expanded source material and optional personal
-explanations follow the activity. Switching papers retains separate tab drafts,
-notes, inspected cards and pins. Reset affects only the active paper. Custom writing
+The page now uses the quest frame: a three-step paper progress row replaces the
+tabs, and Check, feedback, Try again and Next paper sit in the fixed bottom bar
+(Enter checks, then continues; letter keys stay with the scene). A checked
+answer is locked until Try again. The limitation appears in the feedback as
+"Keep in mind". Source details, the optional note and Reset fold into one "About
+this paper · your notes" disclosure. After the third paper, a summary lists which
+interpretations fit on the first check, with Review links, Start over and Back to
+studies. On desktop, response sentences sit beside the evidence and above the
+bar, including short 1000×640 windows; narrow screens scroll naturally.
+Switching papers retains separate tab drafts, notes, inspected cards and pins.
+Reset affects only the active paper. Custom writing
 is explicitly unassessed; storage failures show a warning. The shared live motion
 preferences, native controls, heading focus and feedback focus remain in use.
 

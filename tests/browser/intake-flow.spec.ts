@@ -273,3 +273,52 @@ test("the texting quest plays by keyboard, retries once, resumes and completes",
   }
   expect(errors).toEqual([]);
 });
+
+test("on a phone every quest question shows its first answer above the action bar", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/#/research/learn");
+  await page.evaluate(() => sessionStorage.clear());
+  await page.goto("/#/research/meet/featured");
+  const heading = page.locator("h1.quest-heading");
+  const check = page.getByRole("button", { name: "Check" });
+  const reveal = page.getByRole("button", { name: "Reveal reported means" });
+  let questions = 0;
+  for (let guard = 0; guard < 40; guard++) {
+    await expect(heading).toBeVisible();
+    if (/You investigated/.test(await heading.innerText())) break;
+    const finish = page.getByRole("button", { name: "Finish quest" });
+    if (await finish.isVisible()) {
+      await finish.click();
+      continue;
+    }
+    if ((await check.isVisible()) || (await reveal.isVisible())) {
+      const option = await page
+        .locator(".quest-screen .quest-option")
+        .first()
+        .boundingBox();
+      const bar = await page.locator(".quest-bar").boundingBox();
+      expect(
+        option!.y,
+        `first answer hidden on "${await heading.innerText()}"`,
+      ).toBeLessThan(bar!.y);
+      questions++;
+      if (await reveal.isVisible()) {
+        await page.keyboard.press("A");
+        await reveal.click();
+        continue;
+      }
+      await page.keyboard.press("A");
+      await page.keyboard.press("Enter");
+      await expect(page.locator(".quest-feedback")).toBeVisible();
+      const explain = page.getByRole("button", { name: "Show explanation" });
+      if (await explain.isVisible()) await explain.click();
+      await page.locator(".quest-bar .j-btn.is-go").click();
+    } else {
+      await page.locator(".quest-bar .j-btn:not(.is-quiet)").click();
+    }
+  }
+  expect(questions).toBeGreaterThanOrEqual(10);
+});

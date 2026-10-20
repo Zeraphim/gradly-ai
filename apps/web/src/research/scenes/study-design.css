@@ -148,6 +148,27 @@
   color: var(--j-accent-deep);
   font-weight: 700;
 }
+/* Phones: tighter boxes so the quest's answers stay in view. Row heights stay
+   fixed because the connecting lines are drawn for them. */
+@media (max-width: 640px) {
+  .research-lab .study-design-rule,
+  .research-lab .study-design-group {
+    padding: 6px;
+    font-size: 12px;
+  }
+  .research-lab .study-design-group-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+  }
+  .research-lab .study-design-outcome {
+    padding: 8px;
+  }
+  .research-lab .study-design figcaption p {
+    font-size: 13px;
+  }
+}
+
 @media (max-width: 480px) {
   .research-lab .study-design {
     padding: 16px 12px;

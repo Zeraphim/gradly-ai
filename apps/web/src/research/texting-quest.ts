@@ -292,7 +292,7 @@ export const textingQuest: QuestScreen[] = [
       },
       {
         label: "Procedure",
-        text: "Both groups watched the same recorded lecture and were instructed to take notes. After a short intervening task, participants completed a nine-item quiz about the lecture.",
+        text: "Both groups attended the same lecture and were instructed to take notes. Afterwards, participants completed a quiz about the lecture.",
       },
       {
         text: "From here on, you’ll analyze this actual study. Your earlier choices were recommendations. The results you’re about to see come from the researchers’ design.",

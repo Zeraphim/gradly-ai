@@ -385,10 +385,17 @@ test("results prediction is ungraded, survives reload and reveals only on reques
   await expect(
     page.getByText("View values as a table", { exact: true }),
   ).toHaveCount(0);
+  // Letter keys pick a prediction, as on other questions; nothing is graded.
   await page.keyboard.press("A");
-  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("radio", { name: "Text lower", exact: true }),
+  ).toBeChecked();
+  await expect(reveal).toBeEnabled();
   await expect(page.locator(".quest-feedback")).toHaveCount(0);
-  await page.getByRole("radio", { name: "No text lower", exact: true }).check();
+  await page.keyboard.press("3");
+  await expect(
+    page.getByRole("radio", { name: "No text lower", exact: true }),
+  ).toBeChecked();
   await page.reload();
   await expect(
     page.getByRole("radio", { name: "No text lower", exact: true }),

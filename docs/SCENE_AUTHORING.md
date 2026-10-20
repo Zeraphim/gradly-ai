@@ -254,7 +254,8 @@ verification coverage and remaining visual checks.
 explicit feedback/resolution gates. `PaperActivityPilot.tsx` owns local review and
 per-paper tab drafts; it does not use the server learning engine. Optional
 `responseFooter` supplies caller-owned local review controls inside the response
-column. Leaving it absent preserves the production caller's existing controls.
+column. Leaving it absent preserves the production caller's existing controls;
+the pilot now leaves it absent and places its controls in the quest-style bar.
 
 Comparisons accept optional integer `decimals` (0–6, default 2) for rendered values
 and differences. Supply precision justified by the paper and units: the pilot's
