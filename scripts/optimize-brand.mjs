@@ -7,7 +7,7 @@ const brand = fileURLToPath(
   new URL("../apps/web/public/brand/", import.meta.url),
 );
 const assets = [
-  ["gradly-logo.png", "gradly-logo.webp", 505, 480, 1740, 585],
+  ["gradly-logo.png", "gradly-logo.webp", 509, 443, 1906, 641],
   ...Object.entries({
     teaching: [102, 13, 408, 349],
     approving: [590, 14, 347, 347],
