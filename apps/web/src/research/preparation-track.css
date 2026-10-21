@@ -363,7 +363,7 @@
   color: #9b4d16;
 }
 .research-lab .is-retryable .failure-recovery-icon {
-  color: #006b93;
+  color: var(--green);
 }
 .research-lab .failure-recovery-body {
   min-width: 0;
@@ -390,7 +390,7 @@
   margin-top: 14px;
 }
 .research-lab .failure-alternatives summary {
-  color: #004566;
+  color: var(--green-shade);
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;

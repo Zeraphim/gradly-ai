@@ -127,7 +127,11 @@ export const activityPilot: PilotCase[] = [
         at: "resolution",
       },
       responses: responses(
-        [["draw", "write"], ["draw"], ["write"]],
+        [
+          ["draw", "write"],
+          ["draw", "write"],
+          ["draw", "write"],
+        ],
         ["Group comparison", "All subjects", "Individual scores"],
       ),
       resolution: {
@@ -246,9 +250,9 @@ export const activityPilot: PilotCase[] = [
       ],
       responses: responses(
         [
-          ["waiting", "achievement", "background", "model"],
-          ["waiting", "achievement"],
-          ["background", "model"],
+          ["waiting", "background", "model"],
+          ["waiting", "achievement", "model"],
+          ["background", "model", "achievement"],
         ],
         ["Observed association", "Training effect", "Random assignment"],
         [1, 0, 2],
@@ -319,7 +323,11 @@ export const activityPilot: PilotCase[] = [
         ),
       ],
       responses: responses(
-        [["sample", "digital", "social"], ["sample"], ["digital", "social"]],
+        [
+          ["digital", "social"],
+          ["sample", "digital"],
+          ["sample", "social"],
+        ],
         ["Contextual themes", "Population frequency", "Causal effect"],
         [1, 2, 0],
       ),

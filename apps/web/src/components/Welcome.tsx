@@ -29,7 +29,7 @@ export function Welcome({
   complete = false,
   uploadFirst = false,
 }: {
-  onStart: (label: string, note?: string) => void;
+  onStart: (label: string) => void;
   session: Session;
   onResume: () => void;
   onResearchFile?: (file: File) => void;

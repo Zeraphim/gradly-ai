@@ -15,17 +15,16 @@ const PaperStory = lazy(() =>
   })),
 );
 import { PaperIdentity } from "./PaperIdentity.js";
+import { ChunkBoundary } from "./ChunkBoundary.js";
 
 export function Prepare({
   lesson,
-  notice,
   error,
   onRetry,
   onStart,
   onBack,
 }: {
   lesson: Lesson | null;
-  notice?: string;
   error: string;
   onRetry: () => void;
   onStart: () => void;
@@ -43,14 +42,11 @@ export function Prepare({
           <PaperIdentity plain />
         </div>
       </section>
-      {notice ? (
-        <p className="paper-notice" role="status">
-          {notice}
-        </p>
-      ) : null}
-      <Suspense fallback={<p role="status">Opening the study story…</p>}>
-        <PaperStory />
-      </Suspense>
+      <ChunkBoundary label="The study story">
+        <Suspense fallback={<p role="status">Opening the study story…</p>}>
+          <PaperStory />
+        </Suspense>
+      </ChunkBoundary>
       <div className="paper-actions">
         <button
           className="button primary"

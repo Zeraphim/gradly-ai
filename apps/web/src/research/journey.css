@@ -10,8 +10,8 @@
   --j-line: #e7ebee;
   --j-tile: #f4f6f8;
   --j-tile-hover: #edf1f4;
-  --j-accent: #006b93;
-  --j-accent-deep: #004566;
+  --j-accent: var(--green);
+  --j-accent-deep: var(--green-shade);
   --j-accent-soft: #e6f3f8;
   --j-good: #1f7a4d;
   --j-good-soft: #e9f6ee;
@@ -712,7 +712,7 @@
 .research-lab .reader-heading {
   display: inline-block;
   margin-top: 6px;
-  color: var(--j-accent-deep, #004566);
+  color: var(--j-accent-deep, var(--green-shade));
   font-weight: 800;
   letter-spacing: 0.01em;
 }

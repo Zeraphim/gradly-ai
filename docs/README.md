@@ -32,7 +32,7 @@ implementation and pending backend/player integration decisions.
 records the current source audit, Brilliant research, targeted cleanup opportunities,
 proposed learning activities, effort estimates and verification limits. Larger
 automatic-generation changes remain recommendations. The bounded
-[three-paper activity pilot](DESIGN.md#three-paper-activity-pilot--21-october-2026)
+[three-paper activity pilot](DESIGN.md#three-paper-activity-pilot)
 now reuses the existing renderer with prepared experiment, observational and
 interview evidence; its [source checks](research/PAPER_SELECTION.md#three-design-activity-pilot--21-october-2026)
 record the distinction from live generation.

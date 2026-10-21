@@ -42,6 +42,17 @@ function checkedDocument(value: unknown): value is CheckedDocument {
   );
 }
 
+/**
+ * Whether retrying the same file can help. 4xx is the server's verdict on the
+ * file, except 429 (rate limit). 5xx, gateway failures and anything else are
+ * retryable.
+ */
+export function uploadFailureKind(status: number): "rejected" | "interrupted" {
+  return status >= 400 && status < 500 && status !== 429
+    ? "rejected"
+    : "interrupted";
+}
+
 export function useDocumentUpload({
   draft,
   onDraftChange,
@@ -214,11 +225,7 @@ export function useDocumentUpload({
             typeof message === "string"
               ? message
               : "Document checking failed. Try again.",
-            // 4xx is the server's validation verdict on this file; 5xx and
-            // gateway failures are retryable.
-            active.status >= 400 && active.status < 500
-              ? "rejected"
-              : "interrupted",
+            uploadFailureKind(active.status),
           );
           return;
         }
@@ -236,9 +243,17 @@ export function useDocumentUpload({
         setProgress(100);
         finish();
       } catch {
-        finish(
-          "Document checking was interrupted. Your PDF is still selected; try again.",
-        );
+        // A non-JSON body comes from a proxy or gateway. Only its size limit
+        // (413) is a verdict on the file.
+        if (active.status === 413)
+          finish(
+            `This PDF exceeds the ${maxBytes / 1000000} MB limit. Choose a smaller file.`,
+            "rejected",
+          );
+        else
+          finish(
+            "Document checking was interrupted. Your PDF is still selected; try again.",
+          );
       }
     };
     active.onerror = () =>
@@ -262,7 +277,7 @@ export function useDocumentUpload({
         "Document checking couldn’t start. Your PDF is still selected; try again.",
       );
     }
-  }, [onDraftChange, setError]);
+  }, [maxBytes, onDraftChange, setError]);
 
   return {
     file,

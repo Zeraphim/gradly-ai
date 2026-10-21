@@ -1,6 +1,7 @@
 import {
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
   type CSSProperties,
   type RefObject,
@@ -36,7 +37,9 @@ import "./quest.css";
 
 type Choice = Extract<QuestScreen, { kind: "choice" }>;
 type Phase = "answering" | "retry" | "correct" | "explained";
-type Record_ = { firstCorrect: boolean; revised: boolean };
+// `solved` marks a decision answered correctly on retry, so a refresh
+// reopens it as correct rather than as the shown explanation.
+type Record_ = { firstCorrect: boolean; revised: boolean; solved?: boolean };
 type Prediction = "Text lower" | "About the same" | "No text lower";
 const predictions: Prediction[] = [
   "Text lower",
@@ -51,7 +54,12 @@ const EMPTY_EXPLORATION: Exploration = {};
 function restore(id: string) {
   try {
     const saved = JSON.parse(sessionStorage.getItem(`${STORAGE}:${id}`) ?? "");
-    if (typeof saved?.index === "number" && saved.records)
+    if (
+      Number.isInteger(saved?.index) &&
+      saved.index >= 0 &&
+      saved.index < textingQuest.length &&
+      saved.records
+    )
       return saved as {
         index: number;
         records: Record<string, Record_>;
@@ -88,6 +96,10 @@ function Quest({
   heading: RefObject<HTMLHeadingElement | null>;
 }) {
   const motion = useSceneMotion();
+  const root = useRef<HTMLDivElement>(null);
+  const feedback = useRef<HTMLDivElement>(null);
+  // Set when a decision changes phase, so focus follows the replaced controls.
+  const refocus = useRef(false);
   const [{ index, records, exploration = EMPTY_EXPLORATION }, setProgress] =
     useState(() => restore(sessionKey));
   // A refresh reopens a resolved decision as resolved, not as a blank retry.
@@ -99,7 +111,9 @@ function Quest({
       (done.firstCorrect || done.revised)
       ? {
           selected: saved.correct,
-          phase: (done.firstCorrect ? "correct" : "explained") as Phase,
+          phase: (done.firstCorrect || done.solved
+            ? "correct"
+            : "explained") as Phase,
           message: saved.feedback.correct,
         }
       : { selected: [] as string[], phase: "answering" as Phase, message: "" };
@@ -145,6 +159,7 @@ function Quest({
     heading.current?.focus({ preventScroll: true });
   }, [screen.id, heading]);
   const goTo = (next: number) => {
+    refocus.current = false;
     setProgress((p) => ({ ...p, index: next }));
     setSelected([]);
     setPhase("answering");
@@ -159,6 +174,7 @@ function Quest({
   const check = () => {
     if (screen.kind !== "choice" || predicting || !selected.length) return;
     const result = feedbackFor(screen, selected);
+    refocus.current = true;
     setMessage(result.message);
     if (result.correct) {
       setPhase("correct");
@@ -167,7 +183,12 @@ function Quest({
           firstCorrect: phase === "answering",
           revised: false,
         });
-      else record(screen.id, { ...records[screen.id]!, revised: true });
+      else
+        record(screen.id, {
+          ...records[screen.id]!,
+          revised: true,
+          solved: true,
+        });
       return;
     }
     // One retry, then the reviewed explanation.
@@ -178,6 +199,7 @@ function Quest({
   };
   const explain = () => {
     if (screen.kind !== "choice") return;
+    refocus.current = true;
     setSelected(screen.correct);
     setMessage(screen.feedback.correct);
     setPhase("explained");
@@ -186,13 +208,40 @@ function Quest({
       revised: true,
     });
   };
+  const tryAgain = () => {
+    refocus.current = true;
+    setSelected([]);
+    setPhase("answering");
+    setMessage("");
+  };
+  // Check, Try again and Show explanation unmount the pressed button: move
+  // focus to the feedback, or to the first option for another attempt.
+  useEffect(() => {
+    if (!refocus.current) return;
+    refocus.current = false;
+    if (phase === "answering")
+      root.current
+        ?.querySelector<HTMLInputElement>(".quest-screen .quest-options input")
+        ?.focus({ preventScroll: true });
+    else feedback.current?.focus({ preventScroll: true });
+  }, [phase]);
   // Lesson-app keys: A/B/C or 1/2/3 choose, Enter checks, then continues.
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey || event.repeat)
         return;
+      // Keys belong to the quest only while focus is inside it (the screen
+      // heading receives focus on each screen) or nowhere in particular.
+      const active = document.activeElement;
+      if (active && active !== document.body && !root.current?.contains(active))
+        return;
       const target = event.target as HTMLElement | null;
-      if (target?.closest("input[type=range], textarea, select")) return;
+      if (
+        target?.closest(
+          "input[type=range], textarea, select, [contenteditable]",
+        )
+      )
+        return;
       if (predicting) {
         if (event.key === "Enter") {
           if (target?.closest("button, a, summary")) return;
@@ -222,11 +271,8 @@ function Quest({
         if (screen.kind === "story") advance();
         else if (screen.kind === "choice") {
           if (phase === "answering") check();
-          else if (phase === "retry") {
-            setSelected([]);
-            setPhase("answering");
-            setMessage("");
-          } else advance();
+          else if (phase === "retry") tryAgain();
+          else advance();
         }
         return;
       }
@@ -261,7 +307,7 @@ function Quest({
   };
   const progress = Math.min(index, total) / total;
   return (
-    <div className="journey quest">
+    <div className="journey quest" ref={root}>
       <div className="quest-top">
         <div
           className="quest-progress"
@@ -335,6 +381,8 @@ function Quest({
           <div className="journey-actions-inner">
             {screen.kind === "choice" && phase !== "answering" ? (
               <m.div
+                ref={feedback}
+                tabIndex={-1}
                 className="quest-feedback"
                 role="status"
                 initial={motion.still ? false : { opacity: 0, y: 12 }}
@@ -413,14 +461,7 @@ function Quest({
                   <button className="j-btn is-quiet" onClick={explain}>
                     Show explanation
                   </button>
-                  <button
-                    className="j-btn"
-                    onClick={() => {
-                      setSelected([]);
-                      setPhase("answering");
-                      setMessage("");
-                    }}
-                  >
+                  <button className="j-btn" onClick={tryAgain}>
                     <ActionLabel icon="retry">Try again</ActionLabel>
                   </button>
                 </>
@@ -835,7 +876,10 @@ function Visual({
       <figure className="quest-figure quest-stat">
         <span>F(1, 54) = 4.33</span>
         <span>p &lt; .05</span>
-        <figcaption>Reported test result for the two groups.</figcaption>
+        <figcaption>
+          Test result as given in our study summary, not yet checked against the
+          full paper.
+        </figcaption>
       </figure>
     );
   if (kind === "reveal") return <Reveal />;

@@ -126,7 +126,7 @@ export function ComparisonScene({
             initial={revealEntrance ? { opacity: 0, y: 4 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={motion.copy}
-            aria-label={`${scene.measure}, ${scene.unit}. ${scene.values.map((v) => `${v.label}: ${v.value}`).join("; ")}`}
+            aria-label={`${scene.measure}, ${scene.unit}. ${scene.values.map((v) => `${v.label}: ${v.value.toFixed(scene.decimals ?? 2)}`).join("; ")}`}
           >
             <m.figcaption data-scene-layout layout={motion.position}>
               <strong>{scene.measure}</strong>

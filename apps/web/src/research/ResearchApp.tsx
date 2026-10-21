@@ -25,6 +25,7 @@ import { TextingQuest } from "./TextingQuest.js";
 import "./journey.css";
 import "./play.css";
 import { AppLoading } from "../components/AppLoading.js";
+import { ChunkBoundary } from "../components/ChunkBoundary.js";
 import { Dialog } from "../components/Dialog.js";
 import { SupportPages } from "./SupportPages.js";
 import { HistoryPage } from "./HistoryPage.js";
@@ -110,16 +111,22 @@ export function ResearchApp({
   return (
     <div className="research-lab app-shell">
       {/^\/reasoning\/?$/.test(path) ? (
-        <Suspense fallback={<AppLoading label="Opening reasoning preview…" />}>
-          <ReasoningPreview
-            onExit={onExit}
-            returnHref={returnPath ?? "/learn"}
-          />
-        </Suspense>
+        <ChunkBoundary label="The reasoning preview">
+          <Suspense
+            fallback={<AppLoading label="Opening reasoning preview…" />}
+          >
+            <ReasoningPreview
+              onExit={onExit}
+              returnHref={returnPath ?? "/learn"}
+            />
+          </Suspense>
+        </ChunkBoundary>
       ) : /^\/activities\/?$/.test(path) ? (
-        <Suspense fallback={<AppLoading label="Opening paper activities…" />}>
-          <PaperActivityPilot onExit={onExit} />
-        </Suspense>
+        <ChunkBoundary label="Paper activities">
+          <Suspense fallback={<AppLoading label="Opening paper activities…" />}>
+            <PaperActivityPilot onExit={onExit} />
+          </Suspense>
+        </ChunkBoundary>
       ) : (
         <ResearchWorkspaceHost
           configuration={configuration}
@@ -182,6 +189,9 @@ function GradlyWorkspace({
   const [session, setSession] = useState<Session | null>(null);
   const [job, setJob] = useState<Job | null>(null);
   const [error, setError] = useState("");
+  // Set when `error` came from advancing a consented job's stage, so
+  // preparation can tell a paused stage from a failed page action.
+  const [stageError, setStageError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [sceneDraft, setSceneDraft] = useState<SceneDraft>(emptySceneDraft);
@@ -374,31 +384,18 @@ function GradlyWorkspace({
       if (mounted.current) setBusy(false);
     }
   };
-  // When preparation already introduced the study, the handoff enters the
-  // first challenge directly instead of a second briefing and Start button.
-  const startFirstChallenge = async (lessonId?: string, begin = false) => {
+  const startFirstChallenge = async (lessonId?: string) => {
     if (actionLock.current) return;
     actionLock.current = true;
     setBusy(true);
     setError("");
+    setStageError(false);
     try {
       const started = await api<Session>("/api/research/learning", {
         action: "start",
         ...(lessonId ? { lessonId } : {}),
       });
-      let target = started;
-      if (begin && started.phase === "briefing") {
-        try {
-          target = await api<Session>("/api/research/learning", {
-            action: "begin",
-            id: started.id,
-            version: started.version,
-          });
-        } catch {
-          // The briefing still offers Start, so the learner is never stranded.
-        }
-      }
-      if (mounted.current) router.push(`/adventure/${target.id}`);
+      if (mounted.current) router.push(`/adventure/${started.id}`);
     } catch (e) {
       if (mounted.current) setError((e as Error).message);
     } finally {
@@ -412,6 +409,7 @@ function GradlyWorkspace({
       actionLock.current = true;
       setBusy(true);
       setError("");
+      setStageError(false);
       try {
         if (!consent)
           setJob((j) =>
@@ -437,6 +435,7 @@ function GradlyWorkspace({
       } catch (e) {
         if (!mounted.current) return;
         setError((e as Error).message);
+        setStageError(!consent);
         api<Job>(`/api/research/jobs?id=${id}`)
           .then((j) => {
             if (mounted.current) setJob(j);
@@ -454,7 +453,7 @@ function GradlyWorkspace({
       route !== "processing" ||
       !job ||
       !job.consented ||
-      error ||
+      (stageError && error) ||
       (!config?.liveAI && job.mode !== "demo")
     )
       return;
@@ -475,12 +474,14 @@ function GradlyWorkspace({
             if (j.leaseUntil < Date.now()) void step();
           })
           .catch((e) => {
-            if (mounted.current) setError(e.message);
+            if (!mounted.current) return;
+            setError(e.message);
+            setStageError(true);
           });
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [route, job, error, config, step, id]);
+  }, [route, job, error, stageError, config, step, id]);
   const removeDocument = async (docId: string) => {
     setBusy(true);
     setError("");
@@ -708,11 +709,10 @@ function GradlyWorkspace({
             config={config}
             busy={busy}
             error={error}
+            stageInterrupted={stageError && !!error}
             heading={heading}
             sourcePages={sourcePages}
-            onStart={(lessonId, begin) =>
-              void startFirstChallenge(lessonId, begin)
-            }
+            onStart={(lessonId) => void startFirstChallenge(lessonId)}
             onStep={(retry, consent) => void step(retry, consent)}
             onLoadPages={async () => {
               if (!job) return;
@@ -722,7 +722,9 @@ function GradlyWorkspace({
                 }>(`/api/research/documents?id=${job.id}`);
                 if (mounted.current) setSourcePages(result.pages);
               } catch (e) {
-                if (mounted.current) setError((e as Error).message);
+                if (!mounted.current) return;
+                setError((e as Error).message);
+                setStageError(false);
               }
             }}
           />

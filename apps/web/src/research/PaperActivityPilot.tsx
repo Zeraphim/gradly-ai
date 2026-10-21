@@ -127,6 +127,8 @@ function Pilot({ onExit, reduced }: { onExit: () => void; reduced: boolean }) {
   const [storageFailed, setStorageFailed] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const review = useRef<HTMLDivElement>(null);
+  // Try again unmounts its own button; focus returns to the first response.
+  const retry = useRef(false);
   const index = Math.max(
     0,
     activityPilot.findIndex((candidate) => candidate.id === state.active),
@@ -177,6 +179,11 @@ function Pilot({ onExit, reduced }: { onExit: () => void; reduced: boolean }) {
   }, [paper.id, state.finished]);
   useEffect(() => {
     if (draft.reviewed) review.current?.focus({ preventScroll: true });
+    else if (retry.current)
+      document
+        .querySelector<HTMLInputElement>("#pilot-main .scene-response input")
+        ?.focus({ preventScroll: true });
+    retry.current = false;
   }, [draft.reviewed]);
   // Enter checks, then moves on, as in the quest. Letter keys belong to the scene.
   useEffect(() => {
@@ -380,7 +387,10 @@ function Pilot({ onExit, reduced }: { onExit: () => void; reduced: boolean }) {
                   <button
                     type="button"
                     className="j-btn is-quiet"
-                    onClick={() => patch({ reviewed: false, selected: [] })}
+                    onClick={() => {
+                      retry.current = true;
+                      patch({ reviewed: false, selected: [] });
+                    }}
                   >
                     <ActionLabel icon="retry">Try again</ActionLabel>
                   </button>
@@ -429,12 +439,17 @@ function PilotComplete({
   const first = activityPilot.filter(
     (paper) => state.drafts[paper.id]?.firstCorrect,
   ).length;
+  const allChecked = activityPilot.every(
+    (paper) => state.drafts[paper.id]?.reviewed,
+  );
   return (
     <section className="pilot-complete">
       <Mascot pose="celebrating" />
       <span className="journey-kicker">Activities complete</span>
       <h1 ref={heading} tabIndex={-1}>
-        You read three kinds of evidence.
+        {allChecked
+          ? "You read three kinds of evidence."
+          : "Your activity summary"}
       </h1>
       <p className="pilot-complete-lede">
         {first} of {activityPilot.length} interpretations fit on the first

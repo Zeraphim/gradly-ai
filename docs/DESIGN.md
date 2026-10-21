@@ -115,7 +115,7 @@ restricted content or a result that the server has withdrawn.
 
 ## Existing motion and icon implementation
 
-### Authored quest repair and study-design activity · 21 October 2026
+### Authored quest motion and study-design activity
 
 The authored texting quest replaces outgoing task content immediately and focuses
 the incoming heading after it mounts. Its brief entrance uses the shared copy
@@ -139,10 +139,9 @@ replaced plan-list styles were removed.
 
 The renderer accepts structured plan text, but its current integration is the
 authored sample. It does not add a new generated scene family or establish support
-for arbitrary papers. Implementation was authorized in the current task; visual
-acceptance remains pending Marc's review of the local preview.
+for arbitrary papers.
 
-### Choices remain visible beside visuals · 21 October 2026
+### Choices remain visible beside visuals
 
 All visual questions in the authored quest share one desktop layout: the heading
 and source note above, visual on the left, and answer controls on the right.
@@ -181,7 +180,7 @@ The final pass applies the supplied [jmo-skills better-ui guidance](https://gith
 
 The original PNG artwork remains unchanged. `scripts/optimize-brand.mjs` generates lossless WebP crops for the logo and individual mascot poses with optional local `cwebp`; builds use the committed derivatives and need no image tooling. All ten decoded crops were compared pixel for pixel with their original source regions. The library's brand-image payload fell from 5,755,210 to 718,904 bytes (87.5% smaller), without resampling the artwork. The browser check confirms the front door no longer requests the large PNG sheets.
 
-## Paper workspace refinement · October 2026
+## Paper workspace
 
 The upload-first home keeps the original centered Gradly composition: mascot and
 speech above one upload card, the PDF action, the visible URL/DOI field and the
@@ -254,9 +253,8 @@ is on the stage keeps full opacity and a white card, so its text holds the same
 contrast at any scale; the inactive set is either fully present or fully out of the
 frame. Node boxes scale from their own centre, which is also where the layout point
 sits (`transform-origin: 0 0` on the node), so an object lands exactly on its grid
-coordinate at every scale instead of drifting as it grows or shrinks. Chapter
-layouts were checked in a real browser at 1440 and 390 pixels: no overlap and no
-clipping in any of the four chapters at either width. A fully transparent node is
+coordinate at every scale instead of drifting as it grows or shrinks. A fully
+transparent node is
 outside the accessibility tree for the axe contrast audit, while any partially
 faded copy would be measured and could fail — which is why the layouts never use a
 faded middle state.
@@ -289,7 +287,7 @@ rule in the motion convention above).
 
 The public reference study and its boundaries are recorded in
 [INTERACTION_REFERENCES.md](INTERACTION_REFERENCES.md#19-october-2026-public-runtime-study-for-the-paper-workspace).
-Local browser evidence and verification limits are recorded in [TESTING.md](TESTING.md#paper-workspace-verification--19-october-2026).
+Local browser evidence and verification limits are recorded in the [intake verification history](ui/INTAKE_PROCESSING.md#verification-history).
 
 Live document preparation also leads with the actual filename and extracted text
 before consent, followed by saved stage summaries. Its visual changes do not add
@@ -301,13 +299,13 @@ Local implementation snapshots: [home](ui/paper-workspace/home-desktop.png),
 [paper story](ui/paper-workspace/paper-context-desktop.png) and
 [paper story on a phone](ui/paper-workspace/paper-context-mobile.png).
 
-## Quest vocabulary and copy pass · October 2026
+## Quest vocabulary and copy
 
 The learner-facing journey used five words for one thing — adventure,
 investigation, challenge, checkpoint and quest — and gave the number of
 decisions as eight, eight and six. The authored quest-flow reference (one guided
-path, eight core decisions, one optional transfer decision) settles both. This
-pass changes wording only: no screen, route, layout or count of work changed.
+path, eight core decisions, one optional transfer decision) settles both. These
+rules govern wording only: no screen, route, layout or count of work changed.
 
 **Glossary.** _Quest_ is the whole journey, _decision_ is one learner turn, and
 _investigate_ stays a verb for the activity. "Adventure", "challenge",
@@ -328,12 +326,12 @@ claims ("no AI calls" in the banner, the citation line and twice in the source
 card) plus two step counters six lines apart. The banner now reads "Reference
 study · authored · no AI calls"; the line under the citation is the only place
 that says the context is not an analysis of the upload; the source card keeps a
-single step count. Visible step-2 copy fell from 245 to 208 words, and the
-duplicate action note and preparation paragraph were removed. Nothing became
+single step count. The duplicate action note and preparation paragraph were
+removed. Nothing became
 less honest: the banner still marks every sample screen, live uploads keep their
 own stage count, and the findings gate is still named under the story.
 
-### Source review sheet · October 2026
+### Source review sheet
 
 The upload and review screen had grown into a stack of nested boxes: a progress
 bar, a mascot line, a card, a dashed drop target, a file strip, a preview frame,
@@ -369,7 +367,7 @@ keeps both columns close to the same height. The reference-study row is a single
 line: icon, title, description, action — its label no longer wraps into a column
 of words at narrow widths.
 
-## Authored results exploration · 21 October 2026
+## Authored results exploration
 
 The sample quiz-results decision begins with an ungraded prediction (Text lower,
 About the same, No text lower). The score plot, numerical table and assessed
@@ -396,7 +394,7 @@ Desktop retains the shared plot/answer grid through prediction, reveal and compa
 Narrow screens retain natural scrolling. This implementation is the authored texting
 sample; arbitrary-paper generation and its evidence-release contract are unchanged.
 
-## Three-paper activity pilot · 21 October 2026
+## Three-paper activity pilot
 
 `#/research/activities` is a local, authored practice area, linked from learning
 paths. It loads the existing `InvestigationScene` renderer with three source-backed

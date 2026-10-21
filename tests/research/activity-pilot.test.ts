@@ -23,6 +23,15 @@ describe("authored three-paper pilot", () => {
       expect(pilotScene(paper, false).resolution).toBeNull();
     },
   );
+  it.each(activityPilot)(
+    "$id link counts do not reveal the accepted response",
+    (paper) => {
+      const sizes = new Set(
+        paper.scene.responses.map((r) => r.targetIds.length),
+      );
+      expect(sizes.size).toBe(1);
+    },
+  );
   it("preserves the experiment's three-decimal means and gates the derived difference", () => {
     const paper = activityPilot[0]!;
     const before = pilotScene(paper, false);

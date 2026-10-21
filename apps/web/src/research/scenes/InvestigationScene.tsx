@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useRef } from "react";
 import {
   SceneMotion,
   AnimatePresence,
@@ -339,6 +339,7 @@ function SceneResponses({
   responseFooter,
 }: Props) {
   const motion = useSceneMotion();
+  const fieldset = useRef<HTMLFieldSetElement>(null);
   const shown = scene.responses.filter((response) =>
     options.some((option) => option.id === response.optionId),
   );
@@ -354,11 +355,22 @@ function SceneResponses({
   useEffect(() => {
     if (disabled) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat)
+        return;
+      // Act only with focus inside this scene, on nothing, or on a page focus
+      // anchor such as the screen heading (tabIndex -1), never on other controls.
+      const active = document.activeElement;
+      if (
+        active &&
+        active !== document.body &&
+        !fieldset.current?.closest(".investigation-scene")?.contains(active) &&
+        !active.matches("[tabindex='-1']")
+      )
+        return;
       const target = event.target as HTMLElement | null;
       if (
         target?.closest(
-          "input:not([type=radio]):not([type=checkbox]), textarea, select, [contenteditable=true]",
+          "input:not([type=radio]):not([type=checkbox]), textarea, select, [contenteditable]",
         )
       )
         return;
@@ -378,6 +390,7 @@ function SceneResponses({
   });
   return (
     <m.fieldset
+      ref={fieldset}
       data-scene-layout
       layout={motion.position}
       disabled={disabled}

@@ -209,6 +209,64 @@ are not stored in the repository. Browser checks:
 axe at 375/768/1366 px) and `tests/browser/preparation.spec.ts`. Suites that
 cover the challenge player open it through `tests/browser/journey-helpers.ts`.
 
+### Verification history
+
+Local results on the `marc` branch, in sample mode with Chromium and no model key.
+None of these passes verified live Nebius generation, hosted delivery,
+Safari/Firefox, real phones or screen-reader use. Durable suite coverage and
+limits are in [TESTING.md](../TESTING.md).
+
+- **19 October 2026, paper workspace.** `npm run check` (21 Node, 153 research
+  tests), `npm run build:vercel` and 41 Chromium scenarios passed. Synthetic-PDF
+  and fixture layouts at 320 to 1440 pixels showed no browser errors, overflow or
+  axe violations. A 60-frame desktop sample peaked at a 17.4 ms frame interval on
+  one machine, which is not a cross-device guarantee. The headless PDF viewer was
+  blank; the open-original fallback was exercised. Screenshots:
+  [desktop home](paper-workspace/home-desktop.png),
+  [mobile home](paper-workspace/home-mobile.png),
+  [PDF review](paper-workspace/pdf-review-desktop.png),
+  [paper context](paper-workspace/paper-context-desktop.png) and
+  [live-layout fixture](paper-workspace/live-source-fixture-mobile.png).
+- **20 October 2026, paper context and motion.** The context map appears once per
+  journey, and research surfaces share one entrance. 41 Chromium scenarios passed.
+  Browser measurement found and fixed a prop spread that left the context tabs
+  at zero opacity. Screenshots: [study map](paper-workspace/paper-context-desktop.png)
+  and [study map on a phone](paper-workspace/paper-context-mobile.png).
+- **20 October 2026, paper story and contrast.** `PaperStory.tsx` replaced the
+  tabbed map. Axe `color-contrast` passed again after partially faded stage nodes
+  were removed. Chapter geometry measured at 1440 and 390 pixels showed no
+  overlap or clipping after the `transform-origin: 0 0` fix.
+- **20 October 2026, quest copy and source review.** Copy moved to one
+  vocabulary (quest and decision), and step-2 visible copy fell from 245 to 208
+  words. Upload and review share one 980px column. 41 Chromium scenarios passed
+  after each pass, with tests updated only for changed labels.
+- **20 October 2026, intake flow (issue 12).** 47 Chromium scenarios passed,
+  including new `intake-flow.spec.ts` and updated `preparation.spec.ts`. Missing
+  accessible names on short header labels and a cross-tab reduced-motion gap were
+  fixed.
+- **20 October 2026, focus journey.** 46 of 47 Chromium cases passed in one run.
+  The `final-polish.spec.ts` draft-recovery case timed out once, then passed 3 of
+  3 alone. Contrast of upcoming step labels and narrow-screen overflow were fixed.
+- **20 October 2026, texting quest.** 50 of 50 Chromium cases passed. After
+  merging `main`, 49 of 50 passed, and the no-key sample flow case then passed 3
+  of 3 alone. A refresh reopening an answered decision as unanswered was fixed.
+- **21 October 2026, quest motion and study-design activity.** `npm run check`
+  (21 Node, 209 research tests) and 55 Chromium scenarios passed. The design
+  activity showed no overflow or axe violations at 320, 390, 768 and 1366 pixels.
+- **21 October 2026, desktop choice visibility.** The 77 question and viewport
+  combinations and the optional result table case passed. WebKit was not run.
+- **21 October 2026, results prediction.** Six focused Chromium cases passed,
+  including prediction and comparison axe checks at 320, 390 and 768 pixels.
+- **21 October 2026, three-paper activity pilot.** 21 Node and 215 research
+  tests and 15 Chromium cases passed. Fixing a `scene-flow` class collision did
+  not break the existing learning journey.
+- **21 October 2026, phone fit and activities.** At 375×812 the first answer is
+  above the action bar on 11 of 11 quest questions (previously 7 of 11). 62 of
+  62 Chromium cases passed before the phone test was added, which then passed
+  alone. The activities page adopted the quest frame. Vercel blocked deployments
+  for commits authored by `marcxxv` while JC's succeeded, which points to team
+  access, so the hosted preview remains unverified.
+
 ## Implementation References
 
 - `apps/web/src/components/SiteChrome.tsx`, `site-chrome.css`

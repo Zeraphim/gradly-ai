@@ -426,7 +426,8 @@ export const textingQuest: QuestScreen[] = [
     short: "p-value",
     stage: "Interpret",
     heading: "Which interpretation is most accurate?",
-    evidence: "The researchers reported F(1, 54) = 4.33, p < .05.",
+    evidence:
+      "The study summary we used reports F(1, 54) = 4.33, p < .05 (not yet checked against the full paper).",
     instruction: "Choose one.",
     visual: "distribution",
     options: options(

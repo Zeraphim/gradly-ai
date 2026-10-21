@@ -47,7 +47,7 @@
     color 160ms ease;
 }
 .gr-header .gr-nav a[aria-current="page"] {
-  color: #004566;
+  color: var(--blue-dark);
   background: #e8f3f8;
 }
 .gr-header .gr-label-short {
@@ -81,7 +81,7 @@
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  color: #006b93;
+  color: var(--green-dark);
   transition: background-color 160ms ease;
 }
 .gr-header a:focus-visible,
@@ -91,7 +91,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .gr-header .gr-nav a:hover {
-    color: #004566;
+    color: var(--blue-dark);
     background: #f1f6f8;
     text-decoration: none;
   }
@@ -133,7 +133,7 @@
   gap: 20px;
 }
 .gr-footer a {
-  color: #004566;
+  color: var(--blue-dark);
   font-weight: 700;
   text-decoration: none;
 }

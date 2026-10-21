@@ -23,8 +23,8 @@
 }
 .research-lab .upload-review-steps li.is-current,
 .research-lab .upload-review-steps li.is-complete {
-  border-color: #006b93;
-  color: #004566;
+  border-color: var(--green);
+  color: var(--green-shade);
 }
 .research-lab .upload-step-number {
   width: 30px;
@@ -39,8 +39,8 @@
   background: #fff;
 }
 .research-lab .is-current .upload-step-number {
-  background: #006b93;
-  border-color: #006b93;
+  background: var(--green);
+  border-color: var(--green);
   color: #fff;
 }
 .research-lab .is-complete .upload-step-number {
@@ -86,7 +86,7 @@
   padding: 26px;
 }
 .research-lab .upload-review-workspace .upload-review-surface.dragging {
-  outline: 3px dashed #006b93;
+  outline: 3px dashed var(--green);
   outline-offset: -8px;
   background: #f0faff;
 }
@@ -108,7 +108,7 @@
   border-bottom: 4px solid #a1cbde;
   border-radius: 13px;
   background: #eaf7ff;
-  color: #006b93;
+  color: var(--green);
   transform: rotate(-4deg);
 }
 .research-lab .upload-review-eyebrow {
@@ -187,7 +187,7 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  color: #006b93;
+  color: var(--green);
 }
 .research-lab .upload-file-details {
   flex: 1;
@@ -263,7 +263,7 @@
   grid-column: 1 / -1;
   width: 100%;
   height: 8px;
-  accent-color: #006b93;
+  accent-color: var(--green);
 }
 .research-lab .upload-checking p {
   margin: 0;
@@ -364,7 +364,7 @@
   mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
 }
 .research-lab .upload-review-workspace .page-reader-text:focus-visible {
-  outline: 2px solid #006b93;
+  outline: 2px solid var(--green);
   outline-offset: -2px;
 }
 .research-lab .upload-review-workspace .page-reader select {
@@ -448,7 +448,7 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  color: #006b93;
+  color: var(--green);
   background: #eaf7ff;
 }
 .research-lab .upload-reference-copy {

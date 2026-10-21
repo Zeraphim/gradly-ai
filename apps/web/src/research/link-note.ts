@@ -11,13 +11,33 @@ function host(value: string) {
   }
 }
 
+const PREFIX = "Paper link - ";
+
+/**
+ * Link notes exist only in sample preview. With live AI, a note's placeholder
+ * text would be sent to the model as if it were the paper, so links open the
+ * prepared study instead.
+ */
+export function linkNotesAllowed(
+  config: { liveAI: boolean; demoAvailable: boolean } | null,
+) {
+  return !!config && !config.liveAI && config.demoAvailable;
+}
+
 /** A short, filesystem-safe document name for the link. */
 export function linkNoteName(value: string) {
   const label = (host(value) || value)
     .replace(/[^\w.-]+/g, " ")
     .trim()
     .slice(0, 60);
-  return `Paper link - ${label || "submitted"}.pdf`;
+  return `${PREFIX}${label || "submitted"}.pdf`;
+}
+
+/** The link's label when a saved document name is a link note. */
+export function linkNoteLabel(name: string) {
+  return name.startsWith(PREFIX) && name.endsWith(".pdf")
+    ? name.slice(PREFIX.length, -4) || null
+    : null;
 }
 
 export function linkNoteText(value: string) {

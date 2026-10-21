@@ -2,7 +2,7 @@
 .paper-story {
   --story-ink: #163b50;
   --story-muted: #526775;
-  --story-accent: #006b93;
+  --story-accent: var(--green-dark);
   --story-line: #cfdee6;
   position: relative;
   margin: 22px 0;
@@ -433,7 +433,7 @@
   height: 36px;
   border-radius: 10px;
   background: #e6f3fa;
-  color: #006b93;
+  color: var(--green-dark);
 }
 .paper-cite-body {
   min-width: 0;
@@ -444,7 +444,7 @@
   font-weight: 750;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #006b93;
+  color: var(--green-dark);
 }
 .paper-cite-title {
   margin: 3px 0 3px;
@@ -508,7 +508,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 0 4px;
-  color: #006b93;
+  color: var(--green-dark);
 }
 .source-card .source-card-head h2 {
   margin: 0;

@@ -26,7 +26,7 @@
   transition: background-color 0.2s ease;
 }
 .research-lab .play-progress .is-done {
-  background: var(--j-accent, #006b93);
+  background: var(--j-accent, var(--green));
 }
 .research-lab .play-progress .is-current {
   background: #9cc9db;
@@ -71,7 +71,7 @@
 .research-lab .play-kicker {
   display: block;
   margin-bottom: 6px;
-  color: var(--j-accent, #006b93);
+  color: var(--j-accent, var(--green));
   font-size: 13px;
   font-weight: 800;
 }
@@ -125,7 +125,7 @@
     transform 0.1s ease-out;
 }
 .research-lab:has(.focus-bar) .scene-node.connected {
-  border-color: var(--j-accent, #006b93);
+  border-color: var(--j-accent, var(--green));
   box-shadow: none;
 }
 .research-lab:has(.focus-bar) .scene-response {
@@ -143,7 +143,7 @@
   transform: scale(0.98);
 }
 .research-lab:has(.focus-bar) .scene-response.selected {
-  border-color: var(--j-accent, #006b93);
+  border-color: var(--j-accent, var(--green));
   background: var(--j-accent-soft, #e6f3f8);
   box-shadow: none;
 }
@@ -177,7 +177,7 @@
     transform 0.1s ease-out;
 }
 .research-lab:has(.focus-bar) .choices .choice.selected {
-  border-color: var(--j-accent, #006b93);
+  border-color: var(--j-accent, var(--green));
   background: var(--j-accent-soft, #e6f3f8);
 }
 .research-lab:has(.focus-bar) .choices .choice:active {
@@ -208,7 +208,7 @@
   color: var(--j-warn, #9a4f12);
 }
 .research-lab:has(.focus-bar) .agent-panel > summary {
-  color: var(--j-accent-deep, #004566);
+  color: var(--j-accent-deep, var(--green-shade));
   font-weight: 800;
   cursor: pointer;
 }
@@ -259,8 +259,8 @@
   min-height: 52px;
   border: 0;
   border-radius: 999px;
-  background: var(--j-accent, #006b93);
-  box-shadow: 0 4px 0 var(--j-accent-deep, #004566);
+  background: var(--j-accent, var(--green));
+  box-shadow: 0 4px 0 var(--j-accent-deep, var(--green-shade));
   color: #fff;
   font-size: 16px;
 }
@@ -354,8 +354,8 @@
     transform 0.15s ease-out;
 }
 .research-lab:has(.focus-bar) .scene-response.selected .scene-response-key {
-  border-color: var(--j-accent, #006b93);
-  background: var(--j-accent, #006b93);
+  border-color: var(--j-accent, var(--green));
+  background: var(--j-accent, var(--green));
   color: #fff;
   transform: scale(1.06);
 }
@@ -412,7 +412,7 @@
   );
 }
 .research-lab .scene-link-strip.is-linked .scene-link-line {
-  background: var(--j-accent, #006b93);
+  background: var(--j-accent, var(--green));
 }
 .research-lab .scene-link-pill {
   display: inline-flex;
@@ -428,7 +428,7 @@
   text-align: center;
 }
 .research-lab .scene-link-strip.is-linked .scene-link-pill {
-  background: var(--j-accent, #006b93);
+  background: var(--j-accent, var(--green));
   color: #fff;
 }
 .research-lab .scene-connection-mark {
@@ -441,7 +441,7 @@
   height: 30px;
   border-radius: 50%;
   background: var(--j-accent-soft, #e6f3f8);
-  color: var(--j-accent-deep, #004566);
+  color: var(--j-accent-deep, var(--green-shade));
   font-size: 14px;
   font-weight: 800;
 }
@@ -449,7 +449,7 @@
   box-shadow: 0 0 0 4px rgba(0, 107, 147, 0.14);
 }
 .research-lab:has(.focus-bar) .scene-node.connected .scene-step {
-  background: var(--j-accent, #006b93);
+  background: var(--j-accent, var(--green));
   color: #fff;
 }
 .research-lab:has(.focus-bar) .scene-node strong {
@@ -464,13 +464,13 @@
   padding: 8px 12px;
   border-radius: 999px;
   background: #fff;
-  color: var(--j-accent-deep, #004566);
+  color: var(--j-accent-deep, var(--green-shade));
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
 }
 .research-lab:has(.focus-bar) .scene-pin:has(input:checked) {
-  background: var(--j-accent, #006b93);
+  background: var(--j-accent, var(--green));
   color: #fff;
 }
 .research-lab:has(.focus-bar) .scene-pin input {
@@ -501,7 +501,7 @@
   border-radius: 50%;
 }
 .research-lab:has(.focus-bar) .reveal-head .tag {
-  color: var(--j-accent, #006b93);
+  color: var(--j-accent, var(--green));
   font-weight: 800;
 }
 .research-lab:has(.focus-bar) .reveal-head h1 {
@@ -533,7 +533,7 @@
   box-shadow: none;
 }
 .research-lab:has(.focus-bar) .metrics .card strong {
-  color: var(--j-accent, #006b93);
+  color: var(--j-accent, var(--green));
   font-size: 30px;
 }
 .research-lab:has(.focus-bar) .paper-card {
@@ -554,7 +554,9 @@
   border-radius: 18px;
   background: var(--j-accent-soft, #e6f3f8);
 }
-.research-lab:has(.focus-bar) .scene-motion-page .card:not(.investigation-scene) {
+.research-lab:has(.focus-bar)
+  .scene-motion-page
+  .card:not(.investigation-scene) {
   border: 0;
   border-radius: 22px;
   background: var(--j-tile, #f4f6f8);
@@ -566,8 +568,8 @@
 }
 .research-lab:has(.focus-bar) .scene-motion-page .btn.primary {
   border: 0;
-  background: var(--j-accent, #006b93);
-  box-shadow: 0 4px 0 var(--j-accent-deep, #004566);
+  background: var(--j-accent, var(--green));
+  box-shadow: 0 4px 0 var(--j-accent-deep, var(--green-shade));
 }
 .research-lab:has(.focus-bar) .scene-motion-page .btn.outline,
 .research-lab:has(.focus-bar) .scene-motion-page .btn.secondary {

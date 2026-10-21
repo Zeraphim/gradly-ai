@@ -373,7 +373,7 @@
   fill: #f2c9a5;
 }
 .research-lab .quest-lecture .body {
-  fill: #006b93;
+  fill: var(--green);
 }
 .research-lab .quest-lecture .phone {
   fill: #14212b;

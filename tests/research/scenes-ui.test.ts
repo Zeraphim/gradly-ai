@@ -234,6 +234,10 @@ it("reuses projected scenes and recorded answers for the journey recap and saved
   recap.unmount();
   render(h(SceneReview, { record: records[5]!, reduced: true }));
   expect(screen.getByRole("figure").textContent).toContain("83.00");
+  // The accessible label uses the same precision as the visible values.
+  expect(screen.getByRole("figure").getAttribute("aria-label")).toContain(
+    "83.00",
+  );
   expect(
     screen
       .getByRole("group", { name: /Build your response/ })

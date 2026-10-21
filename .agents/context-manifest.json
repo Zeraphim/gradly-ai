@@ -538,7 +538,9 @@
       "status": "Reference",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": ["docs/research/**"],
+      "appliesTo": [
+        "docs/research/**"
+      ],
       "relationships": [
         {
           "type": "related",
@@ -914,7 +916,9 @@
         "apps/web/src/research/useDocumentUpload.ts",
         "apps/web/src/components/SiteChrome.tsx",
         "apps/web/src/research/FocusBar.tsx",
-        "apps/web/src/research/PaperBrief.tsx"
+        "apps/web/src/research/PaperActivityPilot.tsx",
+        "apps/web/src/research/activity-pilot.ts",
+        "apps/web/src/research/activity-pilot.css"
       ],
       "relationships": [
         {
@@ -941,7 +945,12 @@
         "apps/web/src/research/quest.css",
         "apps/web/src/research/journey.css",
         "apps/web/src/research/play.css",
-        "apps/web/src/research/link-note.ts"
+        "apps/web/src/research/link-note.ts",
+        "apps/web/src/research/PaperActivityPilot.tsx",
+        "apps/web/src/research/activity-pilot.ts",
+        "apps/web/src/research/activity-pilot.css",
+        "tests/browser/activity-pilot.spec.ts",
+        "tests/research/activity-pilot.test.ts"
       ],
       "review": {
         "commit": null,

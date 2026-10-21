@@ -4,6 +4,7 @@ const ResearchApp = lazy(() =>
 );
 import { BrandLogo } from "./components/BrandLogo.js";
 import { AppLoading } from "./components/AppLoading.js";
+import { ChunkBoundary } from "./components/ChunkBoundary.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BookOpen, Check, CircleHelp, Flag, Sparkles, X } from "lucide-react";
 import {
@@ -28,7 +29,7 @@ import { LessonView } from "./components/LessonView.js";
 import { Complete } from "./components/Complete.js";
 import { Dialog } from "./components/Dialog.js";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome.js";
-import { linkNotePdf } from "./research/link-note.js";
+import { linkNotePdf, linkNotesAllowed } from "./research/link-note.js";
 import { useResearchConfig } from "./research/useResearchConfig.js";
 const STORAGE = "paperquest.session.v1";
 function savedSession(ids: string[], mode: Lesson["mode"]): Session {
@@ -113,9 +114,19 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
     window.location.hash = file ? "/research/upload" : "/research/learn";
     setScreen("research");
   }
+  // Links aren't fetched. Sample preview records them as a link note; with
+  // live AI they open the prepared texting study and nothing is uploaded.
+  function openResearchLink(link: string) {
+    if (linkNotesAllowed(configuration.config)) {
+      openResearch(linkNotePdf(link));
+      return;
+    }
+    setResearchFile(null);
+    window.location.hash = "/research/meet/featured";
+    setScreen("research");
+  }
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [session, setSession] = useState(newSession);
-  const [linkNote, setLinkNote] = useState("");
   const [loadError, setLoadError] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
@@ -185,8 +196,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
     setError("");
     window.scrollTo({ top: 0, behavior: "instant" });
   }
-  function prepare(_source: string, note?: string) {
-    setLinkNote(note ?? "");
+  function prepare() {
     changeScreen("prepare");
     void loadLesson();
   }
@@ -277,18 +287,20 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   const reviewState = reviewId ? session.questions[reviewId] : null;
   if (screen === "research")
     return (
-      <Suspense
-        fallback={<AppLoading label="Opening the research workspace…" />}
-      >
-        <ResearchApp
-          initialFile={researchFile}
-          configuration={configuration}
-          onExit={() => {
-            window.location.hash = uploadFirst ? "" : "/classic";
-            changeScreen("welcome");
-          }}
-        />
-      </Suspense>
+      <ChunkBoundary label="The research workspace">
+        <Suspense
+          fallback={<AppLoading label="Opening the research workspace…" />}
+        >
+          <ResearchApp
+            initialFile={researchFile}
+            configuration={configuration}
+            onExit={() => {
+              window.location.hash = uploadFirst ? "" : "/classic";
+              changeScreen("welcome");
+            }}
+          />
+        </Suspense>
+      </ChunkBoundary>
     );
   return (
     <div className={`app-shell${simpleHome ? " upload-home-shell" : ""}`}>
@@ -392,9 +404,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
           // Upload-first home sends "try a prepared study" to the shared
           // study library (#14) instead of the retired classic quest.
           onStart={uploadFirst ? () => openResearch() : prepare}
-          onResearchLink={
-            uploadFirst ? (link) => openResearch(linkNotePdf(link)) : undefined
-          }
+          onResearchLink={uploadFirst ? openResearchLink : undefined}
           onResearchFile={
             uploadFirst || researchAvailable
               ? (file) => openResearch(file)
@@ -413,7 +423,6 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
       ) : screen === "prepare" ? (
         <Prepare
           lesson={lesson}
-          notice={linkNote}
           error={loadError}
           onRetry={() => void loadLesson()}
           onStart={start}
@@ -554,7 +563,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
                 className="button primary"
                 onClick={() => {
                   setDialog(null);
-                  prepare("Gingerich & Lineweaver · 2014");
+                  prepare();
                 }}
               >
                 Try the curated study

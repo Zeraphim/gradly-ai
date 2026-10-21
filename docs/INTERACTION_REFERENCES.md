@@ -4,15 +4,15 @@
 
 **Status: source audit with an authorized local implementation follow-up.**
 Follow-up: Marc authorized the repair pass and one study-design activity on
-21 October. Those changes are implemented locally and passed automated and
-Chromium checks; visual acceptance and pushing remain pending. See the
-[implementation description](DESIGN.md#authored-quest-repair-and-study-design-activity--21-october-2026).
+21 October. Those changes are implemented and passed automated and Chromium
+checks; no visual acceptance is recorded. See the
+[implementation description](DESIGN.md#authored-quest-motion-and-study-design-activity).
 The audit below describes the original `d474f6e` source, including issues addressed
 by that follow-up; its broader paper-type expansion remains a recommendation.
-The [21 October verification record](TESTING.md#quest-motion-and-study-design-activity--21-october-2026)
+The [21 October verification record](ui/INTAKE_PROCESSING.md#verification-history)
 records the checks and their limits.
-Reviewed `marc` at `d474f6e`. The three untracked Paper Brief files are not part of
-the integrated application and were left untouched. Current sources and public
+Reviewed `marc` at `d474f6e`. The three Paper Brief files were then untracked and
+not part of the integrated application; they have since been removed. Current sources and public
 reference material were inspected; no new browser session, production build,
 frame recording, live generation or learning study was run for this review.
 Earlier measurements later in this document are historical evidence.
@@ -374,9 +374,9 @@ Requested skill material inspected: the local `jmo-skills` checkout at commit `6
 This pass used the already installed REA skill and cached `rea-agents` 6.7.0 CLI.
 No second skill, MCP server or analysis engine was installed. Chromium needed the
 host's normal process access because the sandbox prevented macOS browser startup.
-Reference screenshots and full Evidence records were retained in the task's local
-`/private/tmp/gradly-reference-study/` folder, rather than copying third-party assets
-into the application. These are public-page observations, not an audit of either
+Reference screenshots and full Evidence records were kept in a temporary folder
+on the reviewer's machine, outside the repository, rather than copying third-party
+assets into the application. They are not available from this repository. These are public-page observations, not an audit of either
 product's authenticated lessons or internal implementation.
 
 | Reference                             | Declared scenario and observed state                                                                                                                                                                                                                     | REA Evidence                                                          |
@@ -437,7 +437,7 @@ here establishes the perceived quality of either product's learning flow.
 ## 21 October 2026 follow-up: three-paper pilot
 
 The bounded reuse recommendation now has an authored implementation at
-`#/research/activities`; see [the design record](DESIGN.md#three-paper-activity-pilot--21-october-2026)
+`#/research/activities`; see [the design record](DESIGN.md#three-paper-activity-pilot)
 and [source checks](research/PAPER_SELECTION.md#three-design-activity-pilot--21-october-2026).
 It reuses comparison, flow and connections scenes with three prepared papers.
 The numerical-precision gap identified above is partially addressed by optional

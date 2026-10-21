@@ -150,8 +150,9 @@ export function HistoryPage({
                   Your next quest starts here.
                 </h2>
                 <p>
-                  Quests appear here after you begin. Every submitted decision
-                  is saved.
+                  Quests from your papers appear here after you begin. The
+                  sample texting study keeps progress only in this browser tab
+                  and isn’t listed here.
                 </p>
                 <Link className="btn primary" href="/learn">
                   <ActionLabel>Choose a learning path</ActionLabel>

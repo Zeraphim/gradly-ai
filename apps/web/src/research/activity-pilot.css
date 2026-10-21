@@ -255,7 +255,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #006b93;
+  color: var(--green);
   font: inherit;
   cursor: pointer;
 }
@@ -325,7 +325,7 @@
   min-height: 44px;
   border: 0;
   background: transparent;
-  color: #006b93;
+  color: var(--green);
   font: inherit;
   font-weight: 800;
   cursor: pointer;

@@ -2,11 +2,12 @@ import { useEffect, type RefObject } from "react";
 import type { PageText } from "../../../api/src/research/contracts.js";
 import type { ProcessingJob, ResearchConfig } from "./types.js";
 import { ActionLabel, Icon } from "./icon.js";
-import { ExtractedPages } from "./learning-ui.js";
+import { ErrorMessage, ExtractedPages } from "./learning-ui.js";
 import { ResearchLink as Link } from "./navigation.js";
 import { PreparationStages, PreparationTrack } from "./PreparationTrack.js";
 import { FailureRecovery, readFailureReason } from "./FailureRecovery.js";
 import { SceneMotion } from "./scenes/scene-motion.js";
+import { linkNoteLabel } from "./link-note.js";
 import "./upload-review.css";
 
 export type ProcessingPageProps = {
@@ -14,10 +15,11 @@ export type ProcessingPageProps = {
   config: ResearchConfig | null;
   busy: boolean;
   error: string;
+  /** The error came from advancing a consented stage, not a page action. */
+  stageInterrupted?: boolean;
   heading: RefObject<HTMLHeadingElement | null>;
   sourcePages: PageText[] | null;
-  /** `begin` skips the player's briefing when the study was introduced. */
-  onStart: (lessonId?: string, begin?: boolean) => void;
+  onStart: (lessonId?: string) => void;
   onStep: (retry?: boolean, consent?: boolean) => void;
   onLoadPages: () => void;
   reduced?: boolean;
@@ -45,6 +47,7 @@ function PreparationPage({
   config,
   busy,
   error,
+  stageInterrupted = false,
   heading,
   sourcePages,
   onStart,
@@ -52,9 +55,12 @@ function PreparationPage({
   onLoadPages,
 }: ProcessingPageProps) {
   const demo = job?.mode === "demo";
-  const failed =
-    !!job && (["failed", "review"].includes(job.status) || !!error);
   const ready = job?.status === "ready";
+  const jobFailed = !!job && ["failed", "review"].includes(job.status);
+  const failed =
+    !!job && (jobFailed || (stageInterrupted && job.consented && !ready));
+  // Consent, inspection and opening errors stay inline; their own buttons retry.
+  const actionError = failed ? "" : error;
   const ocrPages = job?.extraction.filter((p) => p.method === "ocr") ?? [];
   const canProcess = !!(config?.liveAI || config?.demoAvailable);
   // Enter continues from a ready sample, like the rest of the quest.
@@ -70,9 +76,8 @@ function PreparationPage({
     return () => window.removeEventListener("keydown", onKey);
   }, [ready, demo, job?.id]);
   // Links become a "link note" document in sample mode (see link-note.ts).
-  const linkLabel = job?.name.match(/^Paper link - (.*)\.pdf$/)?.[1]
-    ? `Link · ${job.name.match(/^Paper link - (.*)\.pdf$/)![1]}`
-    : null;
+  const linkNote = job ? linkNoteLabel(job.name) : null;
+  const linkLabel = linkNote ? `Link · ${linkNote}` : null;
   const sourceReview = job ? (
     <details className="card processing-source-review" open={!job.consented}>
       <summary>View extracted text</summary>
@@ -147,11 +152,13 @@ function PreparationPage({
                     : "Retry this stage"
                 }
                 onRetry={
-                  config?.liveAI || demo ? () => onStep(true) : undefined
+                  config?.liveAI || demo ? () => onStep(jobFailed) : undefined
                 }
               />
             </div>
-          ) : null}
+          ) : (
+            <ErrorMessage message={actionError} />
+          )}
           <details className="prep-more">
             <summary>Details</summary>
             <div className="prep-more-body">
