@@ -1,0 +1,589 @@
+/*
+ * Play: one decision per screen inside the journey's focus shell.
+ * Scoped to the adventure page so the library, history and classic quest
+ * keep their own styles.
+ */
+.research-lab:has(.focus-bar) .main.scene-motion-page {
+  max-width: 880px;
+  padding: 28px 24px 170px;
+}
+.research-lab .play-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.research-lab .play-progress {
+  display: flex;
+  flex: 1;
+  gap: 5px;
+}
+.research-lab .play-progress span {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--j-line, #e7ebee);
+  transition: background-color 0.2s ease;
+}
+.research-lab .play-progress .is-done {
+  background: var(--j-accent, var(--green));
+}
+.research-lab .play-progress .is-current {
+  background: #9cc9db;
+}
+.research-lab .play-progress-label {
+  flex: 0 0 auto;
+  color: var(--j-muted, #5b6874);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Guide line: one quiet sentence, not a speech card. */
+.research-lab:has(.focus-bar) .scene-motion-page .speech-row {
+  gap: 12px;
+  margin: 0 0 18px;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .speech-row .mascot {
+  width: 48px;
+  height: 48px;
+  border-bottom-width: 3px;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .speech-row .mascot svg,
+.research-lab:has(.focus-bar) .scene-motion-page .speech-row .mascot img {
+  width: 44px;
+  height: 44px;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .speech {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--j-tile, #f4f6f8);
+  box-shadow: none;
+  color: var(--j-ink, #14212b);
+  font-size: 15px;
+  font-weight: 600;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .speech::before,
+.research-lab:has(.focus-bar) .scene-motion-page .speech::after {
+  display: none;
+}
+
+.research-lab .play-kicker {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--j-accent, var(--green));
+  font-size: 13px;
+  font-weight: 800;
+}
+.research-lab:has(.focus-bar) .challenge-heading {
+  margin: 0 0 8px;
+  color: var(--j-ink, #14212b);
+  font-size: clamp(26px, 3.4vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .question {
+  margin: 0 0 22px;
+  color: var(--j-ink, #14212b);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Scene: one soft surface, no card inside a card. */
+.research-lab:has(.focus-bar) .investigation-scene {
+  margin: 0 0 22px;
+  border: 0;
+  background: var(--j-tile, #f4f6f8);
+}
+.research-lab:has(.focus-bar) .scene-heading {
+  padding: 22px 24px 4px;
+  border-bottom: 0;
+}
+.research-lab:has(.focus-bar) .scene-eyebrow {
+  display: none;
+}
+.research-lab:has(.focus-bar) .scene-heading h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+.research-lab:has(.focus-bar) .scene-heading p {
+  font-size: 15px;
+}
+.research-lab:has(.focus-bar) .scene-workspace {
+  padding: 18px 24px 22px;
+  background: transparent;
+}
+.research-lab:has(.focus-bar) .scene-node {
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(20, 33, 43, 0.06);
+  transition:
+    border-color 0.2s ease,
+    transform 0.1s ease-out;
+}
+.research-lab:has(.focus-bar) .scene-node.connected {
+  border-color: var(--j-accent, var(--green));
+  box-shadow: none;
+}
+.research-lab:has(.focus-bar) .scene-response {
+  padding: 18px;
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(20, 33, 43, 0.06);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.1s ease-out;
+}
+.research-lab:has(.focus-bar) .scene-response:active {
+  transform: scale(0.98);
+}
+.research-lab:has(.focus-bar) .scene-response.selected {
+  border-color: var(--j-accent, var(--green));
+  background: var(--j-accent-soft, #e6f3f8);
+  box-shadow: none;
+}
+.research-lab:has(.focus-bar) .scene-response-description {
+  font-size: 14px;
+}
+.research-lab:has(.focus-bar) .scene-source,
+.research-lab:has(.focus-bar) .scene-first-response {
+  padding: 10px 24px 16px;
+  border-top: 0;
+  color: var(--j-muted, #5b6874);
+  font-size: 12px;
+}
+
+/* Plain-choice fallback for scene: null */
+.research-lab:has(.focus-bar) .choices {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 22px;
+  padding: 0;
+  border: 0;
+}
+.research-lab:has(.focus-bar) .choices .choice {
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background: var(--j-tile, #f4f6f8);
+  box-shadow: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.1s ease-out;
+}
+.research-lab:has(.focus-bar) .choices .choice.selected {
+  border-color: var(--j-accent, var(--green));
+  background: var(--j-accent-soft, #e6f3f8);
+}
+.research-lab:has(.focus-bar) .choices .choice:active {
+  transform: scale(0.99);
+}
+
+/* Supporting material: quiet, after the task */
+.research-lab:has(.focus-bar) .support-grid .support {
+  border: 0;
+  border-radius: 16px;
+  background: var(--j-tile, #f4f6f8);
+  box-shadow: none;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .feedback {
+  margin: 0 0 20px;
+  padding: 20px 22px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--j-good-soft, #e9f6ee);
+}
+.research-lab:has(.focus-bar) .scene-motion-page .feedback h2 {
+  color: var(--j-good, #1f7a4d);
+}
+.research-lab:has(.focus-bar) .scene-motion-page .feedback.incorrect {
+  background: var(--j-warn-soft, #fff4e8);
+}
+.research-lab:has(.focus-bar) .scene-motion-page .feedback.incorrect h2 {
+  color: var(--j-warn, #9a4f12);
+}
+.research-lab:has(.focus-bar) .agent-panel > summary {
+  color: var(--j-accent-deep, var(--green-shade));
+  font-weight: 800;
+  cursor: pointer;
+}
+.research-lab:has(.focus-bar) .audit-detail {
+  border: 0;
+  background: var(--j-tile, #f4f6f8);
+}
+
+/* Check bar */
+.research-lab:has(.focus-bar) .action-dock {
+  padding: 16px 24px calc(16px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--j-line, #e7ebee);
+  background: #fff;
+  transition: background-color 0.2s ease;
+}
+.research-lab:has(.focus-bar) .action-dock.correct {
+  border-color: #cfe9d9;
+  background: var(--j-good-soft, #e9f6ee);
+}
+.research-lab:has(.focus-bar) .action-dock.incorrect {
+  border-color: #f2dcc4;
+  background: var(--j-warn-soft, #fff4e8);
+}
+.research-lab:has(.focus-bar) .dock-inner {
+  width: 100%;
+  max-width: 832px;
+}
+.research-lab:has(.focus-bar) .dock-inner > div:first-child {
+  min-width: 0;
+  flex: 1;
+}
+.research-lab:has(.focus-bar) .dock-inner strong {
+  color: var(--j-ink, #14212b);
+  font-size: 18px;
+}
+.research-lab:has(.focus-bar) .action-dock.correct .dock-inner strong {
+  color: var(--j-good, #1f7a4d);
+}
+.research-lab:has(.focus-bar) .action-dock.incorrect .dock-inner strong {
+  color: var(--j-warn, #9a4f12);
+}
+.research-lab:has(.focus-bar) .dock-inner p {
+  color: var(--j-muted, #5b6874);
+  font-size: 14px;
+}
+.research-lab:has(.focus-bar) .dock-inner .btn {
+  min-width: 220px;
+  min-height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--j-accent, var(--green));
+  box-shadow: 0 4px 0 var(--j-accent-deep, var(--green-shade));
+  color: #fff;
+  font-size: 16px;
+}
+.research-lab:has(.focus-bar) .action-dock.correct .dock-inner .btn {
+  background: #23874f;
+  box-shadow: 0 4px 0 #17603a;
+}
+.research-lab:has(.focus-bar) .dock-inner .btn:disabled {
+  background: #c7d2d9;
+  box-shadow: 0 4px 0 #aebbc4;
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .research-lab:has(.focus-bar) .scene-response:hover:not(.selected),
+  .research-lab:has(.focus-bar) .choices .choice:hover:not(.selected) {
+    border-color: #d5dee4;
+  }
+}
+@media (max-width: 640px) {
+  .research-lab:has(.focus-bar) .main.scene-motion-page {
+    padding: 18px 16px 190px;
+  }
+  .research-lab .play-progress-label {
+    display: none;
+  }
+  .research-lab:has(.focus-bar) .scene-heading,
+  .research-lab:has(.focus-bar) .scene-workspace {
+    padding-inline: 16px;
+  }
+  .research-lab:has(.focus-bar) .dock-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .research-lab:has(.focus-bar) .dock-inner p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .research-lab:has(.focus-bar) .dock-inner .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .research-lab .play-progress span,
+  .research-lab:has(.focus-bar) .scene-response,
+  .research-lab:has(.focus-bar) .choices .choice,
+  .research-lab:has(.focus-bar) .action-dock {
+    transition: none;
+  }
+}
+
+/* Response tiles: letter keys instead of radio circles */
+.research-lab:has(.focus-bar) .scene-response {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-content: start;
+  column-gap: 14px;
+  align-items: start;
+  padding: 16px 18px;
+}
+.research-lab:has(.focus-bar) .scene-response input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.research-lab:has(.focus-bar) .scene-response-key {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #d5dee4;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--j-muted, #5b6874);
+  font-size: 14px;
+  font-weight: 800;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease-out;
+}
+.research-lab:has(.focus-bar) .scene-response.selected .scene-response-key {
+  border-color: var(--j-accent, var(--green));
+  background: var(--j-accent, var(--green));
+  color: #fff;
+  transform: scale(1.06);
+}
+.research-lab:has(.focus-bar) .scene-response-heading {
+  padding-left: 0;
+}
+.research-lab:has(.focus-bar) .scene-response-description {
+  margin-top: 6px;
+}
+.research-lab:has(.focus-bar) .scene-response-indicator {
+  display: none;
+}
+.research-lab:has(.focus-bar) .scene-response:focus-within {
+  outline: 3px solid #006590;
+  outline-offset: 2px;
+}
+.research-lab:has(.focus-bar) .scene-response.is-correct {
+  border-color: #23874f;
+  background: var(--j-good-soft, #e9f6ee);
+}
+.research-lab:has(.focus-bar) .scene-response.is-correct .scene-response-key {
+  border-color: #23874f;
+  background: #23874f;
+}
+.research-lab:has(.focus-bar) .scene-response.is-incorrect {
+  border-color: #d48a4e;
+  background: var(--j-warn-soft, #fff4e8);
+}
+.research-lab:has(.focus-bar) .scene-response.is-incorrect .scene-response-key {
+  border-color: #c27a45;
+  background: #c27a45;
+}
+.research-lab:has(.focus-bar) .scene-responses legend {
+  margin-bottom: 12px;
+  color: var(--j-ink, #14212b);
+  font-size: 16px;
+}
+
+/* Link strip: what the chosen response connects to */
+.research-lab .scene-link-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+.research-lab .scene-link-line {
+  flex: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #c9d4db 0 6px,
+    transparent 6px 12px
+  );
+}
+.research-lab .scene-link-strip.is-linked .scene-link-line {
+  background: var(--j-accent, var(--green));
+}
+.research-lab .scene-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 70%;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--j-muted, #5b6874);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+.research-lab .scene-link-strip.is-linked .scene-link-pill {
+  background: var(--j-accent, var(--green));
+  color: #fff;
+}
+.research-lab .scene-connection-mark {
+  display: none;
+}
+
+/* Study cards: clear number disc, linked glow */
+.research-lab:has(.focus-bar) .scene-step {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--j-accent-soft, #e6f3f8);
+  color: var(--j-accent-deep, var(--green-shade));
+  font-size: 14px;
+  font-weight: 800;
+}
+.research-lab:has(.focus-bar) .scene-node.connected {
+  box-shadow: 0 0 0 4px rgba(0, 107, 147, 0.14);
+}
+.research-lab:has(.focus-bar) .scene-node.connected .scene-step {
+  background: var(--j-accent, var(--green));
+  color: #fff;
+}
+.research-lab:has(.focus-bar) .scene-node strong {
+  font-size: 17px;
+}
+/* "Use in my reasoning" as a chip toggle */
+.research-lab:has(.focus-bar) .scene-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--j-accent-deep, var(--green-shade));
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.research-lab:has(.focus-bar) .scene-pin:has(input:checked) {
+  background: var(--j-accent, var(--green));
+  color: #fff;
+}
+.research-lab:has(.focus-bar) .scene-pin input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .research-lab:has(.focus-bar) .scene-response-key {
+    transition: none;
+  }
+}
+
+/* End of the quest: bonus offer, paper reveal and completion */
+.research-lab:has(.focus-bar) .scene-motion-page .mascot {
+  border: 0;
+  background: var(--j-accent-soft, #e6f3f8);
+}
+.research-lab:has(.focus-bar) .reveal-head {
+  max-width: 640px;
+  margin: 8px auto 32px;
+  text-align: center;
+}
+.research-lab:has(.focus-bar) .reveal-head .mascot {
+  margin: 0 auto 18px;
+  transform: none;
+  border-radius: 50%;
+}
+.research-lab:has(.focus-bar) .reveal-head .tag {
+  color: var(--j-accent, var(--green));
+  font-weight: 800;
+}
+.research-lab:has(.focus-bar) .reveal-head h1 {
+  margin: 6px 0 10px;
+  font-size: clamp(30px, 4.4vw, 44px);
+  letter-spacing: -0.03em;
+}
+.research-lab:has(.focus-bar) .research-points-total {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff7e3;
+  color: #7a5200;
+}
+.research-lab:has(.focus-bar) .metrics {
+  gap: 12px;
+  margin: 28px 0;
+}
+.research-lab:has(.focus-bar) .metrics .card {
+  border: 0;
+  border-radius: 20px;
+  background: var(--j-tile, #f4f6f8);
+  box-shadow: none;
+}
+.research-lab:has(.focus-bar) .metrics .symbol {
+  border: 0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: none;
+}
+.research-lab:has(.focus-bar) .metrics .card strong {
+  color: var(--j-accent, var(--green));
+  font-size: 30px;
+}
+.research-lab:has(.focus-bar) .paper-card {
+  padding: 28px 30px;
+  border: 0;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px var(--j-line, #e7ebee),
+    0 18px 40px rgba(20, 33, 43, 0.06);
+}
+.research-lab:has(.focus-bar) .paper-card h2 {
+  font-size: clamp(22px, 2.8vw, 28px);
+  letter-spacing: -0.02em;
+}
+.research-lab:has(.focus-bar) .paper-card .finding {
+  border: 0;
+  border-radius: 18px;
+  background: var(--j-accent-soft, #e6f3f8);
+}
+.research-lab:has(.focus-bar)
+  .scene-motion-page
+  .card:not(.investigation-scene) {
+  border: 0;
+  border-radius: 22px;
+  background: var(--j-tile, #f4f6f8);
+  box-shadow: none;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .btn {
+  min-height: 48px;
+  border-radius: 999px;
+}
+.research-lab:has(.focus-bar) .scene-motion-page .btn.primary {
+  border: 0;
+  background: var(--j-accent, var(--green));
+  box-shadow: 0 4px 0 var(--j-accent-deep, var(--green-shade));
+}
+.research-lab:has(.focus-bar) .scene-motion-page .btn.outline,
+.research-lab:has(.focus-bar) .scene-motion-page .btn.secondary {
+  border: 0;
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 2px var(--j-line, #e7ebee),
+    0 3px 0 var(--j-line, #e7ebee);
+}
+.research-lab:has(.focus-bar) .bonus-offer .card {
+  max-width: 560px;
+  margin-inline: auto;
+}
+.research-lab:has(.focus-bar) .scene-motion-page textarea {
+  border: 2px solid var(--j-line, #e7ebee);
+  border-radius: 16px;
+}

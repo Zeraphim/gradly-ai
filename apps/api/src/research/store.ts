@@ -1,6 +1,7 @@
 import { createClient, type Client } from "@libsql/client";
 import { mkdir } from "node:fs/promises";
 export class ConflictError extends Error {}
+export class RateLimitError extends Error {}
 let client: Client | undefined;
 let ready: Promise<void> | undefined;
 export async function db() {
@@ -111,7 +112,7 @@ export async function rateLimit(owner: string, bucket: string, max: number) {
     args: [key],
   });
   if (Number(r.rows[0]?.count ?? max + 1) > max)
-    throw Error("Hourly request limit reached. Try again later.");
+    throw new RateLimitError("Hourly request limit reached. Try again later.");
 }
 
 export async function deleteDocument(owner: string, id: string) {

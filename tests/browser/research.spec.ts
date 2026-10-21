@@ -1,25 +1,30 @@
 import { AxeBuilder } from "@axe-core/playwright";
 import { test, expect, type Page } from "@playwright/test";
 import { pdfBytes, multiPagePdfBytes } from "../research/pdf-fixture.js";
+import { settleMotion } from "./motion-helpers.js";
+import { openAdventureBriefing } from "./journey-helpers.js";
 async function begin(page: Page) {
-  await page.goto("/#/research/learn");
-  await page.getByRole("button", { name: "Start investigation" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Your investigation briefing" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Begin investigation" }).click();
+  await openAdventureBriefing(page);
+  await page.getByRole("button", { name: "Start quest" }).click();
   await expect(
     page.getByRole("heading", { name: "Frame the Research Question" }),
   ).toBeVisible();
 }
 async function choose(page: Page, ids: string[]) {
-  for (const id of ids)
-    await page
-      .locator(".choice")
-      .filter({
-        has: page.locator(".keycap", { hasText: new RegExp(`^${id}$`) }),
-      })
-      .click();
+  await expect(page.locator(".feedback")).toHaveCount(0);
+  // Comparison scenes make their evidence available before assessment. Predictions
+  // are optional exploration; they must not be mistaken for assessed responses.
+  const reveal = page.getByRole("button", { name: "Reveal reported results" });
+  if (await reveal.count()) await reveal.click();
+  const responses = page.locator(".scene-responses");
+  for (const id of ids) {
+    const response = responses
+      .getByRole("radio")
+      .or(responses.getByRole("checkbox"))
+      .and(page.locator(`input[value="${id}"]`));
+    await response.check();
+    await expect(response).toBeChecked();
+  }
   await page.getByRole("button", { name: "Check Answer" }).click();
 }
 const keys = [["A"], ["B"], ["A", "B"], ["B"], ["A", "B"], ["A"], ["B"], ["B"]];
@@ -51,7 +56,17 @@ test("featured adventure, ordered challenges, bonus, reveal, review and saved hi
     await expect(page.getByText("Gingerich", { exact: false })).toHaveCount(0);
     if (i < 5)
       await expect(page.getByText("73.41%", { exact: true })).toHaveCount(0);
-    if (i === 5) await expect(page.locator(".difference")).toHaveCount(0);
+    if (i === 5) {
+      await expect(page.getByRole("figure")).toHaveCount(0);
+      await expect(page.locator(".scene-difference")).toHaveCount(0);
+      await expect(page.locator(".scene-responses")).toHaveCount(0);
+      await page
+        .getByRole("radio", { name: "No-texting group higher", exact: true })
+        .check();
+      await expect(
+        page.getByRole("button", { name: "Check Answer" }),
+      ).toBeDisabled();
+    }
     if (i === 2)
       await page
         .getByLabel("Defend your decision")
@@ -63,7 +78,7 @@ test("featured adventure, ordered challenges, bonus, reveal, review and saved hi
       "Your choice matches",
     );
     if (i === 5)
-      await expect(page.locator(".difference")).toContainText("9.59");
+      await expect(page.locator(".scene-difference")).toContainText("9.59");
     await page.getByRole("button", { name: "Continue", exact: false }).click();
   }
   await expect(
@@ -81,9 +96,9 @@ test("featured adventure, ordered challenges, bonus, reveal, review and saved hi
   await page
     .getByLabel("What will you check first")
     .fill("The study design and independence of observations.");
-  await page.getByRole("button", { name: "Finish adventure" }).click();
+  await page.getByRole("button", { name: "Finish quest" }).click();
   await expect(
-    page.getByRole("heading", { name: "Investigation complete!" }),
+    page.getByRole("heading", { name: "Quest complete!" }),
   ).toBeVisible();
   await expect(page.locator(".metrics")).toContainText("8/8");
   await page.getByRole("button", { name: "Review Decisions" }).click();
@@ -92,15 +107,13 @@ test("featured adventure, ordered challenges, bonus, reveal, review and saved hi
   ).toBeVisible();
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Investigation complete!" }),
+    page.getByRole("heading", { name: "Quest complete!" }),
   ).toBeVisible();
   await page.goto("/#/research/history");
-  await expect(
-    page.getByRole("link", { name: "Review adventure" }),
-  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Review quest" })).toBeVisible();
   await page.goto(sessionUrl);
   await expect(
-    page.getByRole("heading", { name: "Investigation complete!" }),
+    page.getByRole("heading", { name: "Quest complete!" }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });
@@ -131,7 +144,7 @@ test("two misses, retry, agent panel, resume, bonus skip and restart confirmatio
     await page.getByRole("button", { name: "Continue" }).click();
   }
   await page.getByRole("button", { name: "Skip to paper reveal" }).click();
-  await page.getByRole("button", { name: "Finish adventure" }).click();
+  await page.getByRole("button", { name: "Finish quest" }).click();
   await expect(page.locator(".metrics")).toContainText("7/8");
   const original = page.url();
   await page.getByRole("button", { name: "Retry Missed Concepts" }).click();
@@ -143,22 +156,18 @@ test("two misses, retry, agent panel, resume, bonus skip and restart confirmatio
   await expect(page.locator(".metrics")).toContainText("1/1");
   await page.goto(original);
   await expect(page.locator(".metrics")).toContainText("7/8");
-  await page.getByRole("button", { name: "Restart Adventure" }).click();
+  await page.getByRole("button", { name: "Restart quest" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await page.getByRole("button", { name: "Restart Adventure" }).click();
+  await page.getByRole("button", { name: "Restart quest" }).click();
   await page.getByRole("button", { name: "Restart", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Your investigation briefing" }),
   ).toBeVisible();
   await page.goto("/#/research/history");
-  await expect(
-    page.getByRole("link", { name: "Resume investigation" }),
-  ).toHaveCount(1);
-  await expect(
-    page.getByRole("link", { name: "Review adventure" }),
-  ).toHaveCount(2);
+  await expect(page.getByRole("link", { name: "Resume quest" })).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "Review quest" })).toHaveCount(2);
 });
 test("PDF preview, real extraction, no-key recovery and document deletion", async ({
   page,
@@ -175,14 +184,14 @@ test("PDF preview, real extraction, no-key recovery and document deletion", asyn
     mimeType: "application/pdf",
     buffer: pdfBytes(),
   });
+  // The original PDF sits behind the review card's second view.
+  await page.getByRole("tab", { name: "Original PDF" }).click();
   await expect(page.getByTitle("Selected research PDF preview")).toBeVisible();
-  await page.getByRole("button", { name: "Check this document" }).click();
+  await page.getByRole("tab", { name: "What we read" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
-  await expect(
-    page.getByText("1 page with extracted text", { exact: false }),
-  ).toBeVisible();
+  await expect(page.locator(".review-count")).toHaveText("1 page");
   await expect(
     page.getByRole("button", { name: "Start sample preview" }),
   ).toBeEnabled();
@@ -192,16 +201,20 @@ test("PDF preview, real extraction, no-key recovery and document deletion", asyn
   ).toBeVisible();
   await page.getByRole("link", { name: "View processing" }).click();
   await expect(
-    page.getByRole("heading", { name: "Preview the adventure flow" }),
+    page.getByRole("heading", { name: "Confirm before preparing" }),
   ).toBeVisible();
   const documentId = page.url().split("/").pop();
   const unconfirmed = await page.request.post("/api/research/jobs", {
-    headers: { Origin: "http://127.0.0.1:5173" },
+    headers: { Origin: new URL(page.url()).origin },
     data: { id: documentId },
   });
   expect(unconfirmed.status()).toBe(400);
   expect((await unconfirmed.json()).error).toContain("Confirm sending");
-  await expect(page.locator(".status")).toHaveText([
+  await page.locator(".prep-more > summary").click();
+  await page
+    .getByText("View all 5 preparation stages", { exact: true })
+    .click();
+  await expect(page.locator(".preparation-audits summary small")).toHaveText([
     "Pending",
     "Pending",
     "Pending",
@@ -228,19 +241,19 @@ test("server ownership, version conflict, incomplete-stage protection and no sec
   const state = await response.json();
   expect(JSON.stringify(state)).not.toContain("3514177");
   const noSkip = await page.request.post("/api/research/learning", {
-    headers: { Origin: "http://127.0.0.1:5173" },
+    headers: { Origin: new URL(page.url()).origin },
     data: { action: "next", id, version: state.version },
   });
   expect(noSkip.status()).toBe(400);
   const outsider = await browser.newContext();
   const hidden = await outsider.request.get(
-    `http://127.0.0.1:5173/api/research/learning?id=${id}`,
+    `${new URL(page.url()).origin}/api/research/learning?id=${id}`,
   );
   expect(hidden.status()).toBe(400);
   await outsider.close();
   await choose(page, ["A"]);
   const stale = await page.request.post("/api/research/learning", {
-    headers: { Origin: "http://127.0.0.1:5173" },
+    headers: { Origin: new URL(page.url()).origin },
     data: { action: "submit", id, version: state.version, selected: ["A"] },
   });
   expect(stale.status()).toBe(409);
@@ -300,20 +313,20 @@ test("desktop, tablet, mobile layouts and keyboard access", async ({
 test("interrupted upload preserves the file and allows real retry", async ({
   page,
 }) => {
+  await page.route("**/api/research/documents", (route) =>
+    route.abort("failed"),
+  );
   await page.goto("/#/research/upload");
+  // Choosing a file starts the check immediately.
   await page.getByLabel("Choose PDF file").setInputFiles({
     name: "retry.pdf",
     mimeType: "application/pdf",
     buffer: pdfBytes(),
   });
-  await page.route("**/api/research/documents", (route) =>
-    route.abort("failed"),
-  );
-  await page.getByRole("button", { name: "Check this document" }).click();
-  await expect(page.locator(".error")).toContainText("interrupted");
+  await expect(page.getByRole("alert")).toContainText("interrupted");
   await expect(page.getByText("retry.pdf", { exact: true })).toBeVisible();
   await page.unroute("**/api/research/documents");
-  await page.getByRole("button", { name: "Check this document" }).click();
+  await page.getByRole("button", { name: "Check again" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
@@ -322,6 +335,11 @@ test("interrupted upload preserves the file and allows real retry", async ({
 test("automated accessibility checks on primary and supporting routes", async ({
   page,
 }) => {
+  // Audit settled pages rather than a partially transparent entrance frame.
+  // Motion remains enabled and has its own interaction checks below.
+  const settle = async () => {
+    await settleMotion(page);
+  };
   for (const path of [
     "/",
     "/upload",
@@ -332,6 +350,7 @@ test("automated accessibility checks on primary and supporting routes", async ({
   ]) {
     await page.goto("/#/research" + path);
     await page.getByRole("heading", { level: 1 }).waitFor();
+    await settle();
     const result = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
       .analyze();
@@ -343,6 +362,7 @@ test("automated accessibility checks on primary and supporting routes", async ({
     ).toEqual([]);
   }
   await begin(page);
+  await settle();
   const result = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
     .analyze();
@@ -364,7 +384,6 @@ test("scanned PDF OCR warning and no-key reasoning fallback are honest", async (
     mimeType: "application/pdf",
     buffer: await scannedPdfBytes(),
   });
-  await page.getByRole("button", { name: "Check this document" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
@@ -380,7 +399,7 @@ test("scanned PDF OCR warning and no-key reasoning fallback are honest", async (
   await choose(page, ["A", "B"]);
   const id = page.url().split("/").pop();
   const response = await page.request.post("/api/research/feedback", {
-    headers: { Origin: "http://127.0.0.1:5173" },
+    headers: { Origin: new URL(page.url()).origin },
     data: { id },
   });
   expect(response.status()).toBe(400);
@@ -471,22 +490,10 @@ test("legacy hero composition, responsive scaling, color contrast and PDF handof
     mimeType: "application/pdf",
     buffer: pdfBytes(),
   });
-  await expect(
-    page.getByRole("heading", { name: "Upload your Research Paper" }),
-  ).toBeVisible();
+  // The home handoff checks the PDF and, in sample mode, goes straight to
+  // preparation with the uploaded file named.
+  await page.waitForURL(/#\/research\/processing\//, { timeout: 60000 });
   await expect(page.getByText("hero-study.pdf", { exact: true })).toBeVisible();
-  const preview = page.getByTitle("Selected research PDF preview");
-  await expect(preview).toHaveAttribute("src", /^blob:/);
-  expect(
-    await preview.evaluate(async (frame) => {
-      const response = await fetch((frame as HTMLIFrameElement).src);
-      return (await response.text()).slice(0, 5);
-    }),
-  ).toBe("%PDF-");
-  await page.getByRole("button", { name: "Check this document" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Document checked" }),
-  ).toBeVisible();
 });
 
 test("no-key sample flow is explicit, resumable and separate from uploaded evidence", async ({
@@ -498,12 +505,13 @@ test("no-key sample flow is explicit, resumable and separate from uploaded evide
     mimeType: "application/pdf",
     buffer: multiPagePdfBytes(9),
   });
-  await page.getByRole("button", { name: "Check this document" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
   await expect(
-    page.getByText("Preview uses a separate sample study.", { exact: false }),
+    page.getByText("we prepare an authored texting study, not your PDF", {
+      exact: false,
+    }),
   ).toBeVisible();
   await page.getByLabel("Extracted PDF page").selectOption("8");
   await expect(
@@ -515,21 +523,32 @@ test("no-key sample flow is explicit, resumable and separate from uploaded evide
   await expect(page.getByLabel("Sample preview mode")).toBeVisible();
   const processingUrl = page.url();
   await expect(
-    page.getByRole("heading", { name: "Your adventure is ready!" }),
-  ).toBeVisible();
-  await expect(page.locator(".status")).toHaveText(Array(5).fill("Completed"));
+    page.getByRole("heading", { name: "Your investigation is ready" }),
+  ).toBeVisible({ timeout: 20000 });
+  await page.locator(".prep-more > summary").click();
+  await page
+    .getByText("View all 5 preparation stages", { exact: true })
+    .click();
+  await expect(page.locator(".preparation-audits summary small")).toHaveText(
+    Array(5).fill("Completed"),
+  );
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Your adventure is ready!" }),
+    page.getByRole("heading", { name: "Your investigation is ready" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Begin investigation" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Your investigation briefing" }),
-  ).toBeVisible();
+  // Ready samples hand off to the authored texting quest.
+  await page.getByRole("link", { name: "Start the quest" }).click();
+  await expect(page).toHaveURL(/#\/research\/meet\//);
   await expect(page.getByLabel("Sample preview mode")).toContainText(
-    "not an analysis of your upload",
+    "no AI calls",
   );
-  await page.getByRole("button", { name: "Begin investigation" }).click();
+  // The sample job's lesson still plays through the shared challenge player.
+  const jobId = processingUrl.split("/").pop()!;
+  await openAdventureBriefing(page, jobId);
+  await page.getByRole("button", { name: "Start quest" }).click();
+  await expect(page.getByLabel("Sample preview mode")).toContainText(
+    "no AI calls",
+  );
   for (const [index, answer] of keys.entries()) {
     if (index === 2)
       await page
@@ -553,9 +572,9 @@ test("no-key sample flow is explicit, resumable and separate from uploaded evide
     await page.getByRole("button", { name: "Continue", exact: false }).click();
   }
   await page.getByRole("button", { name: "Skip to paper reveal" }).click();
-  await page.getByRole("button", { name: "Finish adventure" }).click();
+  await page.getByRole("button", { name: "Finish quest" }).click();
   await expect(
-    page.getByRole("heading", { name: "Investigation complete!" }),
+    page.getByRole("heading", { name: "Quest complete!" }),
   ).toBeVisible();
   await expect(page.locator(".metrics")).toContainText("8/8");
   await page.goto("/#/research/history");
@@ -592,7 +611,6 @@ test("learning paths and nine-page document review fit desktop, tablet and mobil
     mimeType: "application/pdf",
     buffer: multiPagePdfBytes(9),
   });
-  await page.getByRole("button", { name: "Check this document" }).click();
   await expect(
     page.getByRole("heading", { name: "Document checked" }),
   ).toBeVisible();
@@ -602,6 +620,39 @@ test("learning paths and nine-page document review fit desktop, tablet and mobil
       page.getByRole("button", { name: "Start sample preview" }),
     ).toBeEnabled();
     await expect(page.getByLabel("Extracted PDF page")).toBeVisible();
+    const privacy = page.locator(".review-privacy");
+    await expect(privacy).toContainText(
+      "Extracted text is stored for 30 days or until deleted.",
+    );
+    // An icon alone must not satisfy visibility for this material privacy copy.
+    expect(
+      await privacy.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+        let text: Node | null;
+        let count = 0;
+        while ((text = walker.nextNode())) {
+          if (!text.textContent?.trim()) continue;
+          const range = document.createRange();
+          range.selectNodeContents(text);
+          const rects = [...range.getClientRects()].filter(
+            (rect) => rect.width > 0 && rect.height > 0,
+          );
+          if (
+            !rects.length ||
+            rects.some(
+              (rect) =>
+                rect.left < bounds.left - 1 ||
+                rect.right > bounds.right + 1 ||
+                rect.bottom > bounds.bottom + 1,
+            )
+          )
+            return false;
+          count += rects.length;
+        }
+        return count > 0;
+      }),
+    ).toBe(true);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -676,6 +727,11 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
   ).toBe(initialY);
   await page.mouse.move(4, 4);
   await page.mouse.up();
+  // The library start opens the authored quest; the briefing start saves state.
+  await start.click();
+  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
+  await openAdventureBriefing(page);
+  const briefingStart = page.getByRole("button", { name: "Start quest" });
   let release!: () => void;
   const gate = new Promise<void>((resolve) => {
     release = resolve;
@@ -685,22 +741,18 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
     await route.continue();
   });
   try {
-    await start.click();
-    await expect(start).toBeDisabled();
-    await expect(start).toHaveAttribute("aria-busy", "true");
-    await expect(start.locator(".is-spinning")).toBeVisible();
+    await briefingStart.click();
+    await expect(briefingStart).toBeDisabled();
+    await expect(briefingStart).toHaveAttribute("aria-busy", "true");
+    await expect(briefingStart.locator(".is-spinning")).toBeVisible();
     expect(
-      await start
+      await briefingStart
         .locator(".is-spinning")
         .evaluate((el) => getComputedStyle(el).animationName),
     ).toBe("gradly-spin");
   } finally {
     release();
   }
-  await expect(
-    page.getByRole("heading", { name: "Your investigation briefing" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Begin investigation" }).click();
   await expect(
     page.getByRole("heading", { name: "Frame the Research Question" }),
   ).toBeVisible();

@@ -37,4 +37,11 @@ export type CheckedDocument = {
 export type UploadDraft = {
   file: File | null;
   uploaded: CheckedDocument | null;
+  /** Check a newly chosen file immediately; cleared once the check starts. */
+  autoCheck?: boolean;
+  /**
+   * Started from the home page: in sample mode (no AI call, so nothing needs
+   * consent) the checked document goes straight to preparation.
+   */
+  autoContinue?: boolean;
 };

@@ -42,6 +42,17 @@ function checkedDocument(value: unknown): value is CheckedDocument {
   );
 }
 
+/**
+ * Whether retrying the same file can help. 4xx is the server's verdict on the
+ * file, except 429 (rate limit). 5xx, gateway failures and anything else are
+ * retryable.
+ */
+export function uploadFailureKind(status: number): "rejected" | "interrupted" {
+  return status >= 400 && status < 500 && status !== 429
+    ? "rejected"
+    : "interrupted";
+}
+
 export function useDocumentUpload({
   draft,
   onDraftChange,
@@ -57,7 +68,20 @@ export function useDocumentUpload({
   const [drag, setDrag] = useState(false);
   const [progress, setProgress] = useState(0);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setErrorText] = useState("");
+  // "rejected": the file itself can't be used (client checks or the server's
+  // validation response). "interrupted": transfer or checking failed and the
+  // same file can be retried. Classified by where it failed, never by wording.
+  const [errorKind, setErrorKind] = useState<"" | "rejected" | "interrupted">(
+    "",
+  );
+  const setError = useCallback(
+    (message: string, kind: "rejected" | "interrupted" = "rejected") => {
+      setErrorText(message);
+      setErrorKind(message ? kind : "");
+    },
+    [],
+  );
   const [previewState, setPreviewState] = useState<{
     file: File;
     url: string;
@@ -134,13 +158,14 @@ export function useDocumentUpload({
           ...previous,
           file: candidate,
           uploaded: null,
+          autoCheck: true,
         }));
       } catch {
         if (mounted.current && version === fileVersion.current)
           setError("This file couldn’t be read. Try selecting it again.");
       }
     },
-    [maxBytes, onDraftChange],
+    [maxBytes, onDraftChange, setError],
   );
 
   const cancel = useCallback(() => {
@@ -152,9 +177,9 @@ export function useDocumentUpload({
     if (mounted.current) {
       setBusy(false);
       setProgress(0);
-      setError("Upload cancelled. Choose or retry your PDF.");
+      setError("Upload cancelled. Choose or retry your PDF.", "interrupted");
     }
-  }, []);
+  }, [setError]);
 
   const removeFile = useCallback(() => {
     fileVersion.current++;
@@ -163,7 +188,7 @@ export function useDocumentUpload({
     setProgress(0);
     setDrag(false);
     onDraftChange((previous) => ({ ...previous, file: null, uploaded: null }));
-  }, [cancel, onDraftChange]);
+  }, [cancel, onDraftChange, setError]);
 
   const upload = useCallback(() => {
     const selectedFile = current.current.file;
@@ -172,12 +197,15 @@ export function useDocumentUpload({
     const active = new XMLHttpRequest();
     request.current = active;
     const isCurrent = () => mounted.current && request.current === active;
-    const finish = (message = "") => {
+    const finish = (
+      message = "",
+      kind: "rejected" | "interrupted" = "interrupted",
+    ) => {
       if (!isCurrent()) return;
       detach(active);
       request.current = null;
       setBusy(false);
-      setError(message);
+      setError(message, kind);
       if (message) setProgress(0);
     };
     setBusy(true);
@@ -197,6 +225,7 @@ export function useDocumentUpload({
             typeof message === "string"
               ? message
               : "Document checking failed. Try again.",
+            uploadFailureKind(active.status),
           );
           return;
         }
@@ -214,9 +243,17 @@ export function useDocumentUpload({
         setProgress(100);
         finish();
       } catch {
-        finish(
-          "Document checking was interrupted. Your PDF is still selected; try again.",
-        );
+        // A non-JSON body comes from a proxy or gateway. Only its size limit
+        // (413) is a verdict on the file.
+        if (active.status === 413)
+          finish(
+            `This PDF exceeds the ${maxBytes / 1000000} MB limit. Choose a smaller file.`,
+            "rejected",
+          );
+        else
+          finish(
+            "Document checking was interrupted. Your PDF is still selected; try again.",
+          );
       }
     };
     active.onerror = () =>
@@ -240,7 +277,7 @@ export function useDocumentUpload({
         "Document checking couldn’t start. Your PDF is still selected; try again.",
       );
     }
-  }, [onDraftChange]);
+  }, [maxBytes, onDraftChange, setError]);
 
   return {
     file,
@@ -251,6 +288,7 @@ export function useDocumentUpload({
     progress,
     busy,
     error,
+    errorKind,
     pickFile,
     upload,
     cancel,

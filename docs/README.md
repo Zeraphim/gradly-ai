@@ -19,11 +19,23 @@ protection or authorization to merge or deploy.
 [The site-wide motion convention](DESIGN.md#site-wide-motion-convention) defines
 consistent interaction behavior across screens. The project-local
 [gradly-motion skill](../.agents/skills/gradly-motion/SKILL.md) routes contributors
-to shared primitives, accessibility handling and relevant verification. The current
-Motion implementation is research-scoped; these instructions do not claim all
+to shared primitives, accessibility handling and relevant verification. The shared Motion provider is used by research scenes, PDF review and the paper
+story (including curated preparation). These instructions do not claim all
 existing pages have already adopted it.
 
+[Intake and processing notes](ui/INTAKE_PROCESSING.md) record the issue-12
+implementation and pending backend/player integration decisions.
+
 ## Research scene development
+
+[The 21 October animation and dynamic-paper review](INTERACTION_REFERENCES.md#21-october-2026-animation-and-dynamic-paper-review)
+records the current source audit, Brilliant research, targeted cleanup opportunities,
+proposed learning activities, effort estimates and verification limits. Larger
+automatic-generation changes remain recommendations. The bounded
+[three-paper activity pilot](DESIGN.md#three-paper-activity-pilot)
+now reuses the existing renderer with prepared experiment, observational and
+interview evidence; its [source checks](research/PAPER_SELECTION.md#three-design-activity-pilot--21-october-2026)
+record the distinction from live generation.
 
 [SCENE_AUTHORING.md](SCENE_AUTHORING.md) explains the reusable scene contract,
 generation instructions, public-response gates and backend setup.

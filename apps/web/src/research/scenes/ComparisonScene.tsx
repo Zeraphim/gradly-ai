@@ -96,7 +96,8 @@ export function ComparisonScene({
               <ScanSearch size={32} aria-hidden="true" />
               <strong>Inspect the reported findings</strong>
               <p>
-                Your expectation stays visible when you reveal the group means.
+                Your expectation stays visible when you reveal the reported
+                values.
               </p>
               <m.button
                 type="button"
@@ -109,7 +110,8 @@ export function ComparisonScene({
                   onDraft({ ...draft, revealed: true });
                 }}
               >
-                Reveal group results <ArrowRight size={18} aria-hidden="true" />
+                Reveal reported results{" "}
+                <ArrowRight size={18} aria-hidden="true" />
               </m.button>
             </PresenceBlock>
           ) : null}
@@ -124,7 +126,7 @@ export function ComparisonScene({
             initial={revealEntrance ? { opacity: 0, y: 4 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={motion.copy}
-            aria-label={`${scene.measure}, ${scene.unit}. ${scene.values.map((v) => `${v.label}: ${v.value}`).join("; ")}`}
+            aria-label={`${scene.measure}, ${scene.unit}. ${scene.values.map((v) => `${v.label}: ${v.value.toFixed(scene.decimals ?? 2)}`).join("; ")}`}
           >
             <m.figcaption data-scene-layout layout={motion.position}>
               <strong>{scene.measure}</strong>
@@ -145,7 +147,7 @@ export function ComparisonScene({
                 <div className="scene-measure-label">
                   <span>{item.label}</span>
                   <strong>
-                    {item.value.toFixed(2)}
+                    {item.value.toFixed(scene.decimals ?? 2)}
                     <small> {scene.unit}</small>
                   </strong>
                 </div>
@@ -182,7 +184,7 @@ export function ComparisonScene({
                       .value -
                     scene.values.find((v) => v.id === scene.difference!.from)!
                       .value
-                  ).toFixed(2)}
+                  ).toFixed(scene.decimals ?? 2)}
                 </strong>
               </m.div>
             ) : null}

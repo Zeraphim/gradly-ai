@@ -25,17 +25,18 @@ export function Welcome({
   session,
   onResume,
   onResearchFile,
+  onResearchLink,
   complete = false,
   uploadFirst = false,
-  samplePreview = false,
 }: {
   onStart: (label: string) => void;
   session: Session;
   onResume: () => void;
   onResearchFile?: (file: File) => void;
+  /** Upload-first home: any pasted link starts the sample journey. */
+  onResearchLink?: (link: string) => void;
   complete?: boolean;
   uploadFirst?: boolean;
-  samplePreview?: boolean;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const checkVersion = useRef(0);
@@ -110,17 +111,26 @@ export function Welcome({
   function submitLink(event: FormEvent) {
     event.preventDefault();
     const value = link.trim();
-    if (
+    if (!value) {
+      setError("Paste a paper link or DOI to continue.");
+      return;
+    }
+    setError("");
+    if (uploadFirst && onResearchLink) {
+      onResearchLink(value);
+      return;
+    }
+    const isSample =
       /^(?:https?:\/\/(?:dx\.)?doi\.org\/)?10\.1177\/0098628313514177\/?$/i.test(
         value,
-      )
-    ) {
-      setError("");
-      onStart("Gingerich & Lineweaver · 2014");
-    } else
-      setError(
-        "For this pilot, use 10.1177/0098628313514177 or choose the curated sample below.",
       );
+    if (!isSample) {
+      setError(
+        "We can’t open this link. Upload the PDF instead, or try a prepared study.",
+      );
+      return;
+    }
+    onStart("Gingerich & Lineweaver · 2014");
   }
   function drop(event: DragEvent) {
     event.preventDefault();
@@ -262,41 +272,45 @@ export function Welcome({
               onChange={(e) => setLink(e.target.value)}
               placeholder={
                 uploadFirst
-                  ? "Paste a paper URL or DOI…"
+                  ? "Paste any paper link or DOI (not fetched in this preview)"
                   : "Paste the curated paper’s link…"
               }
             />
             <button
               className="icon-button blue"
               type="submit"
-              aria-label="Open paper adventure"
+              aria-label="Build my quest"
             >
               <ArrowRight size={22} />
             </button>
           </form>
           <p className="scope-note">
             {uploadFirst
-              ? "Link preview: sample paper only."
+              ? "Sample preview: links aren’t fetched yet. Any link opens the prepared texting study."
               : onResearchFile
-                ? "Use a PDF for a new investigation, or the curated paper’s DOI below for the six-quest adventure."
+                ? "Use a PDF for a new quest, or the curated paper’s DOI below for the eight-decision quest."
                 : "A focused pilot with one curated paper. General paper extraction is not enabled on this host."}
           </p>
         </div>
-        {samplePreview ? (
-          <details className="home-preview-details">
-            <summary>Preview details</summary>
-            <p>
-              PDF checking and text review work locally. Lessons use a separate
-              sample, not an AI analysis of your upload. The link preview
-              supports DOI 10.1177/0098628313514177; upload a PDF for other
-              papers.
-            </p>
-          </details>
-        ) : null}
         {error ? (
-          <p className="error-message" role="alert">
-            {error}
-          </p>
+          <div>
+            <p className="error-message" role="alert">
+              {error}
+            </p>
+            {uploadFirst ? (
+              <div className="actions">
+                <button
+                  className="btn outline compact"
+                  onClick={() => fileInput.current?.click()}
+                >
+                  Upload a different paper
+                </button>
+                <a className="btn outline compact" href="#/research/learn">
+                  View prepared studies
+                </a>
+              </div>
+            ) : null}
+          </div>
         ) : null}
       </section>
       {uploadFirst ? (
@@ -318,7 +332,7 @@ export function Welcome({
           </button>
           {session.started ? (
             <button className="home-resume-action" onClick={onResume}>
-              {complete ? "Review adventure" : "Resume adventure"}
+              {complete ? "Review quest" : "Resume quest"}
               <ArrowRight size={18} />
             </button>
           ) : null}
@@ -329,8 +343,8 @@ export function Welcome({
           <div>
             <strong>
               {complete
-                ? "You completed this adventure."
-                : "You have an adventure in progress."}
+                ? "You completed this quest."
+                : "You have a quest in progress."}
             </strong>
             <p>
               {complete
@@ -339,7 +353,7 @@ export function Welcome({
             </p>
           </div>
           <button className="button neutral" onClick={onResume}>
-            {complete ? "Review adventure" : "Resume"} <ArrowRight size={18} />
+            {complete ? "Review quest" : "Resume"} <ArrowRight size={18} />
           </button>
         </div>
       ) : null}

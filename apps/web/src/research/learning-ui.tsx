@@ -1,17 +1,33 @@
 import { Icon } from "./icon.js";
-import { useState } from "react";
-import { Mascot as ExistingMascot } from "../components/Mascot.js";
-export function Mascot({ small = false }: { small?: boolean }) {
+import { Fragment, useState } from "react";
+import { isHeadingLine } from "./paper-signals.js";
+import {
+  Mascot as ExistingMascot,
+  type MascotPose,
+} from "../components/Mascot.js";
+export function Mascot({
+  small = false,
+  pose = "guiding",
+}: {
+  small?: boolean;
+  pose?: MascotPose;
+}) {
   return (
     <div className={`mascot ${small ? "small" : ""}`}>
-      <ExistingMascot size={small ? "small" : "normal"} pose="guiding" />
+      <ExistingMascot size={small ? "small" : "normal"} pose={pose} />
     </div>
   );
 }
-export function Speech({ children }: { children: React.ReactNode }) {
+export function Speech({
+  children,
+  pose,
+}: {
+  children: React.ReactNode;
+  pose?: MascotPose;
+}) {
   return (
     <div className="speech-row">
-      <Mascot />
+      <Mascot pose={pose} />
       <div className="speech">{children}</div>
     </div>
   );
@@ -57,7 +73,6 @@ export function ExtractedPages({
     <section className="page-reader" aria-label="Extracted document pages">
       <div className="page-reader-toolbar">
         <label>
-          <span className="reader-label">Extracted text</span>
           <select
             aria-label="Extracted PDF page"
             value={Math.min(index, pages.length - 1)}
@@ -89,11 +104,12 @@ export function ExtractedPages({
           </button>
         </div>
       </div>
-      <p className="reader-meta">
-        {page.method === "ocr"
-          ? `English OCR · confidence estimate ${page.confidence}% · compare with original`
-          : "Embedded text · compare with your original PDF"}
-      </p>
+      {page.method === "ocr" ? (
+        <p className="reader-meta">
+          English OCR · confidence estimate {page.confidence}% · compare with
+          the original
+        </p>
+      ) : null}
       <div
         className="page-reader-text"
         role="region"
@@ -101,7 +117,18 @@ export function ExtractedPages({
         tabIndex={0}
         key={page.page}
       >
-        {page.text || "No readable text was found on this page."}
+        {page.text
+          ? page.text.split("\n").map((line, i, lines) => (
+              <Fragment key={i}>
+                {isHeadingLine(line) ? (
+                  <strong className="reader-heading">{line}</strong>
+                ) : (
+                  line
+                )}
+                {i < lines.length - 1 ? "\n" : null}
+              </Fragment>
+            ))
+          : "No readable text was found on this page."}
       </div>
     </section>
   );

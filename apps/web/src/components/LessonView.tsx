@@ -76,7 +76,7 @@ export function LessonView({
     <main id="main" className="lesson-layout">
       <aside className="quest-sidebar">
         <button className="text-button" onClick={onPause}>
-          <ChevronLeft size={18} /> Pause adventure
+          <ChevronLeft size={18} /> Pause quest
         </button>
         <div className="sidebar-title">
           <span className="eyebrow">YOUR ADVENTURE</span>
@@ -170,7 +170,7 @@ export function LessonView({
                 aria-expanded={hint}
                 onClick={() => setHint(!hint)}
               >
-                <Lightbulb size={17} /> {hint ? "Hide hint" : "Need a clue?"}
+                <Lightbulb size={17} /> {hint ? "Hide hint" : "Give me a hint"}
               </button>
             </div>
             <p>{question.study}</p>
@@ -263,7 +263,7 @@ export function LessonView({
                       </strong>
                       <p>
                         {response?.feedback.outcome === "insufficient_evidence"
-                          ? "Knowing what is missing matters. No points for this checkpoint."
+                          ? "Knowing what is missing matters. No points for this decision."
                           : "Read the evidence, then take the next step."}
                       </p>
                     </div>
@@ -290,7 +290,7 @@ export function LessonView({
                   onClick={onNext}
                 >
                   {session.current === lesson.questions.length - 1
-                    ? "Finish adventure"
+                    ? "Finish quest"
                     : "Continue"}
                   <ArrowRight size={20} />
                 </button>

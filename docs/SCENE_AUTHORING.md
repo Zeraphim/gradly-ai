@@ -17,7 +17,27 @@ A paper need not use every family. Use `scene: null` when no honest visual fits.
 qualitative work, prefer processes, accounts and bounded interpretations. Themes do
 not establish prevalence. A conceptual argument is not an observed mechanism.
 
+## Authored sample results interaction
+
+`TextingQuest.tsx` retains the sample's reported mean/SD chart and adds an ungraded
+prediction before explicit reveal. Its session-bound `exploration` stores only the
+prediction and reveal state, independently of assessed answer records. The existing
+feedback still gates the worked difference. Compare means is a local geometric
+bracket and prompt; the following variation decision reveals summary SD bars.
+This is authored browser content, not a new generated scene schema, raw score data,
+or a relaxation of the server release gates below.
+
 ## Contract and boundaries
+
+The authored sample's study-design activity also uses
+`apps/web/src/research/scenes/StudyDesignVisual.tsx`. It accepts a bounded grouping
+rule, group labels, outcome and description from `quest-visuals.tsx`, retains the
+same diagram across choices and resolves active paths immediately for reduced
+motion. Its source procedure summary is supplied only after the sample decision is
+resolved. The diagram has a textual equivalent and is explicitly schematic.
+This is a reusable presentation pilot, **not** a fifth `sceneSchema` family or an
+automatic template-selection feature for generated papers. The four-family
+server contract and its evidence gates below remain the authority for generation.
 
 `packages/contracts/src/scenes.ts` exports `sceneSchema`, `Scene`, `sceneProblems`
 and `projectScene`. `apps/api/src/research/contracts.ts` adds optional `scene` to
@@ -226,3 +246,26 @@ support touch and keyboard, and meaning stays available without motion.
 See [the motion inventory and implementation review](ui/FRESH_ADVENTURE_MOTION.md),
 [the scene storyboard](ui/FRESH_ADVENTURE.md) and [TESTING.md](TESTING.md) for
 verification coverage and remaining visual checks.
+
+## Three-paper reuse pilot
+
+`activity-pilot.ts` supplies three bounded, authored examples to the production
+`InvestigationScene` renderer through `pilotScene`, which uses `projectScene` with
+explicit feedback/resolution gates. `PaperActivityPilot.tsx` owns local review and
+per-paper tab drafts; it does not use the server learning engine. Optional
+`responseFooter` supplies caller-owned local review controls inside the response
+column. Leaving it absent preserves the production caller's existing controls;
+the pilot now leaves it absent and places its controls in the quest-style bar.
+
+Comparisons accept optional integer `decimals` (0–6, default 2) for rendered values
+and differences. Supply precision justified by the paper and units: the pilot's
+0.822 and 0.631 proportions use three places and subtract to 0.191. This field is
+backward compatible with existing version-1 scenes. It does not model uncertainty,
+denominators, unlike measures or arbitrary precision. The generic reveal control
+says “Reveal reported results.” Container variants use `scene-kind-*` to avoid
+colliding with the inner `.scene-flow` and `.scene-comparison` class names.
+
+The qualitative example uses contextual summaries instead of a frequency chart;
+the observational example shows timing and model inputs. These are teaching choices
+for these tasks. They do not prohibit an appropriately sourced numerical display
+in another qualitative or observational task.

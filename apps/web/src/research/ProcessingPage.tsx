@@ -1,241 +1,273 @@
-import type { RefObject } from "react";
+import { useEffect, type RefObject } from "react";
 import type { PageText } from "../../../api/src/research/contracts.js";
 import type { ProcessingJob, ResearchConfig } from "./types.js";
-import { ResearchLink as Link } from "./navigation.js";
 import { ActionLabel, Icon } from "./icon.js";
-import {
-  Speech,
-  Progress,
-  ErrorMessage,
-  ExtractedPages,
-} from "./learning-ui.js";
+import { ErrorMessage, ExtractedPages } from "./learning-ui.js";
+import { ResearchLink as Link } from "./navigation.js";
+import { PreparationStages, PreparationTrack } from "./PreparationTrack.js";
+import { FailureRecovery, readFailureReason } from "./FailureRecovery.js";
+import { SceneMotion } from "./scenes/scene-motion.js";
+import { linkNoteLabel } from "./link-note.js";
+import "./upload-review.css";
 
-export function ProcessingPage({
-  job,
-  config,
-  busy,
-  error,
-  heading,
-  sourcePages,
-  onStart,
-  onStep,
-  onLoadPages,
-}: {
+export type ProcessingPageProps = {
   job: ProcessingJob | null;
   config: ResearchConfig | null;
   busy: boolean;
   error: string;
+  /** The error came from advancing a consented stage, not a page action. */
+  stageInterrupted?: boolean;
   heading: RefObject<HTMLHeadingElement | null>;
   sourcePages: PageText[] | null;
   onStart: (lessonId?: string) => void;
   onStep: (retry?: boolean, consent?: boolean) => void;
   onLoadPages: () => void;
-}) {
-  const demo = job?.mode === "demo";
+  reduced?: boolean;
+};
+
+/** Uploads and explicitly labeled samples share one preparation and recovery flow. */
+export function ProcessingPage(props: ProcessingPageProps) {
   return (
-    <>
-      <Speech>
-        {demo
-          ? "Explore how an adventure comes together. These steps use the reference sample, not AI analysis of your PDF."
-          : "Our research crew builds from the paper’s evidence. Each stage must succeed before you begin."}
-      </Speech>
-      <h1 ref={heading} tabIndex={-1}>
-        {demo
-          ? "Your sample adventure is taking shape"
-          : "AI Agents Crafting Adventure"}
-      </h1>
+    <SceneMotion reduced={props.reduced ?? false}>
+      <PreparationPage {...props} />
+    </SceneMotion>
+  );
+}
+
+function headingFor(job: ProcessingJob | null, failed: boolean) {
+  if (!job) return "Opening your saved paper";
+  if (!job.consented) return "Confirm before preparing";
+  if (job.status === "ready") return "Your investigation is ready";
+  if (failed) return "Preparation paused";
+  return "Preparing your investigation";
+}
+
+function PreparationPage({
+  job,
+  config,
+  busy,
+  error,
+  stageInterrupted = false,
+  heading,
+  sourcePages,
+  onStart,
+  onStep,
+  onLoadPages,
+}: ProcessingPageProps) {
+  const demo = job?.mode === "demo";
+  const ready = job?.status === "ready";
+  const jobFailed = !!job && ["failed", "review"].includes(job.status);
+  const failed =
+    !!job && (jobFailed || (stageInterrupted && job.consented && !ready));
+  // Consent, inspection and opening errors stay inline; their own buttons retry.
+  const actionError = failed ? "" : error;
+  const ocrPages = job?.extraction.filter((p) => p.method === "ocr") ?? [];
+  const canProcess = !!(config?.liveAI || config?.demoAvailable);
+  // Enter continues from a ready sample, like the rest of the quest.
+  useEffect(() => {
+    if (!ready || !demo || !job) return;
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (event.key !== "Enter" || target?.closest("button, a, summary, input"))
+        return;
+      window.location.hash = `#/research/meet/${job.id}`;
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [ready, demo, job?.id]);
+  // Links become a "link note" document in sample mode (see link-note.ts).
+  const linkNote = job ? linkNoteLabel(job.name) : null;
+  const linkLabel = linkNote ? `Link · ${linkNote}` : null;
+  const sourceReview = job ? (
+    <details className="card processing-source-review" open={!job.consented}>
+      <summary>View extracted text</summary>
+      {!sourcePages ? <blockquote>{job.excerpt}</blockquote> : null}
+      {sourcePages ? (
+        <ExtractedPages pages={sourcePages} />
+      ) : (
+        <button
+          className="btn outline compact"
+          disabled={busy}
+          onClick={onLoadPages}
+        >
+          Inspect all extracted pages
+        </button>
+      )}
+    </details>
+  ) : null;
+  return (
+    <div className="journey prep-page">
+      <header className="journey-head is-centered">
+        <h1 ref={heading} tabIndex={-1}>
+          {headingFor(job, failed)}
+        </h1>
+        <p>
+          {!job
+            ? "Loading the saved document and its preparation state."
+            : !job.consented
+              ? "Check the extracted text, then choose whether to continue."
+              : demo
+                ? "Sample preview: we prepare the texting study, not your file."
+                : ready
+                  ? "Generated content can contain errors; the source stays one tap away."
+                  : "Five agents read your paper in turn."}
+        </p>
+      </header>
       {job ? (
         <>
-          <div className="card">
-            <span className="tag">
-              {demo ? "Your upload · sample flow" : "Uploaded document"}
-            </span>
-            <h2>{job.name}</h2>
-            <p>
-              {job.pageCount} {job.pageCount === 1 ? "page" : "pages"} extracted
-              • {demo ? "Sample flow · no AI calls" : config?.model}
-            </p>
-            <Progress
-              value={job.stage}
-              max={5}
-              label={
-                demo ? "Sample preparation steps" : "Verified processing stages"
-              }
-            />
-          </div>
-          {job.status === "ready" ? (
-            <div className="center">
-              <h2>Your adventure is ready!</h2>
-              <p>
-                {demo
-                  ? "All sample steps are complete. Explore eight guided challenges, feedback, the paper reveal and your learning summary."
-                  : "All five stages passed. Generated content is AI-reviewed, rather than instructor-reviewed."}
-              </p>
-              <button
-                className="btn primary"
-                disabled={busy}
-                onClick={() => onStart(job.id)}
-              >
-                <ActionLabel>Begin investigation</ActionLabel>
-              </button>
-            </div>
-          ) : null}
-          <div className="agent-stack">
-            {job.audits.map((a, i) => (
-              <details
-                className={`agent-card ${a.status === "Processing" ? "active" : ""}`}
-                key={a.role}
-                open={a.status === "Failed" || a.status === "Needs Review"}
-              >
-                <summary>
-                  <span className={`symbol ${i % 2 ? "blue" : "green"}`}>
-                    <Icon
-                      name={
-                        (
-                          [
-                            "search",
-                            "layout",
-                            "chart",
-                            "coach",
-                            "shield",
-                          ] as const
-                        )[i]!
-                      }
-                    />
-                  </span>
-                  <div>
-                    <strong>{a.role}</strong>
-                    <p>{a.task}</p>
-                  </div>
-                  <span
-                    className={`status ${a.status.toLowerCase().replace(" ", "-")}`}
-                  >
-                    {a.status === "Completed" ? (
-                      <Icon name="check" size={13} />
-                    ) : ["Processing", "Retrying"].includes(a.status) ? (
-                      <Icon name="loading" size={13} className="is-spinning" />
-                    ) : null}
-                    {a.status}
-                  </span>
-                  <Icon
-                    name="chevron"
-                    size={18}
-                    className="disclosure-chevron"
-                  />
-                </summary>
-                <div className="agent-details">
-                  <p>{a.summary}</p>
-                  <p>Model / role: {a.model}</p>
-                  {a.refs.length ? (
-                    <p>Evidence references: {a.refs.join(", ")}</p>
-                  ) : null}
-                  {a.error ? <ErrorMessage message={a.error} /> : null}
-                </div>
-              </details>
-            ))}
-          </div>
-          {!job.consented && (config?.liveAI || config?.demoAvailable) ? (
-            <div className="notice">
-              <h2>
-                {config?.liveAI
-                  ? "Confirm external AI processing"
-                  : "Preview the adventure flow"}
-              </h2>
-              <p>
-                {config?.liveAI
-                  ? "Continuing sends extracted text to Nebius Token Factory. Review it first; AI can make mistakes."
-                  : "Use a separate sample investigation to explore every step. No AI is called and no findings are generated from your upload."}
-              </p>
-              <button
-                className="btn primary"
-                disabled={busy}
-                onClick={() => onStep(false, true)}
-              >
-                <ActionLabel busy={busy}>
-                  {busy
-                    ? "Opening…"
-                    : config?.liveAI
-                      ? "Confirm AI processing"
-                      : config?.demoAvailable
-                        ? "Start sample preview"
-                        : "Confirm AI processing"}
-                </ActionLabel>
-              </button>
-            </div>
-          ) : null}
-          {config && !config.liveAI && !demo && !config.demoAvailable ? (
-            <div className="notice">
-              <h2>Live inference needs configuration</h2>
-              <p>
-                The document has been extracted. No AI model has been called.
-                Configure the server’s Nebius API key to generate an adventure.
-              </p>
-              <button className="btn primary" onClick={() => onStart()}>
-                <ActionLabel>Start reference investigation</ActionLabel>
-              </button>
-            </div>
-          ) : null}
-          {["failed", "review"].includes(job.status) || error ? (
-            <div className="notice">
-              <ErrorMessage message={job.error ?? ""} />
-              <button
-                className="btn secondary"
-                disabled={busy || (!config?.liveAI && !demo)}
-                onClick={() => onStep(true)}
-              >
-                {job.status === "review"
-                  ? "Regenerate & review again"
-                  : "Retry failed stage"}
-              </button>
-            </div>
-          ) : null}
-          {job.evidence.length ? (
-            <details className="card">
-              <summary>
-                {demo
-                  ? "Inspect sample study evidence"
-                  : "Inspect extracted evidence"}
-              </summary>
-              {job.evidence.map((r) => (
-                <div key={r.id}>
-                  <h3>
-                    {r.id} • {demo ? "Sample source page" : "PDF page"} {r.page}
-                  </h3>
-                  <blockquote>{r.excerpt}</blockquote>
-                </div>
-              ))}
-            </details>
-          ) : null}
-          <details className="card">
-            <summary>View extracted text</summary>
-            {job.extraction.some((p) => p.method === "ocr") ? (
-              <p>
-                English OCR was used. Check transcription and statistics against
-                the original document. Pages:{" "}
-                {job.extraction
-                  .filter((p) => p.method === "ocr")
-                  .map(
-                    (p) => `${p.page} (confidence estimate ${p.confidence}%)`,
-                  )
-                  .join(", ")}
-              </p>
-            ) : null}
-            <blockquote>{job.excerpt}</blockquote>
-            {sourcePages ? (
-              <ExtractedPages pages={sourcePages} />
+          <p className="prep-file">
+            <Icon name="document" size={16} />
+            <span className="prep-document-name">{linkLabel ?? job.name}</span>
+            {linkLabel ? (
+              <span>· link noted, not fetched</span>
             ) : (
-              <button className="btn outline compact" onClick={onLoadPages}>
-                Inspect all extracted pages
-              </button>
+              <span>
+                · {job.pageCount} {job.pageCount === 1 ? "page" : "pages"} read
+              </span>
             )}
+          </p>
+          {ocrPages.length ? (
+            <p className="prep-ocr-note">
+              {ocrPages.length === 1 ? "Page" : "Pages"}{" "}
+              {ocrPages.map((p) => p.page).join(", ")}{" "}
+              {ocrPages.length === 1 ? "was" : "were"} transcribed from a scan
+              with English OCR and may contain errors. Check numbers against the
+              original.
+            </p>
+          ) : null}
+          {job.consented ? (
+            <PreparationTrack job={job} />
+          ) : (
+            <div className="prep-source-first">{sourceReview}</div>
+          )}
+          {failed ? (
+            <div className="prep-recovery">
+              <FailureRecovery
+                reason={readFailureReason((job as { reason?: unknown }).reason)}
+                message={job.error || error || "This stage needs another try."}
+                busy={busy}
+                retryLabel={
+                  job.status === "review"
+                    ? "Regenerate and review again"
+                    : "Retry this stage"
+                }
+                onRetry={
+                  config?.liveAI || demo ? () => onStep(jobFailed) : undefined
+                }
+              />
+            </div>
+          ) : (
+            <ErrorMessage message={actionError} />
+          )}
+          <details className="prep-more">
+            <summary>Details</summary>
+            <div className="prep-more-body">
+              <PreparationStages job={job} />
+              {job.consented ? sourceReview : null}
+              {job.evidence.length ? (
+                <details className="card">
+                  <summary>
+                    {demo
+                      ? "Inspect sample study evidence"
+                      : "Inspect extracted evidence"}
+                  </summary>
+                  {job.evidence.map((r) => (
+                    <div key={r.id}>
+                      <h3>
+                        {r.id} • {demo ? "Sample source page" : "PDF page"}{" "}
+                        {r.page}
+                      </h3>
+                      <blockquote>{r.excerpt}</blockquote>
+                    </div>
+                  ))}
+                </details>
+              ) : null}
+            </div>
           </details>
-          <Link className="btn outline" href="/upload">
-            Return to upload
-          </Link>
+          {!job.consented || ready ? (
+            <div className="journey-actions">
+              <div className="journey-actions-inner">
+                {!job.consented ? (
+                  canProcess ? (
+                    <>
+                      <p>
+                        <Icon name="shield" size={16} />
+                        {config?.liveAI
+                          ? "Continuing sends extracted text to Nebius Token Factory for AI processing. AI can make mistakes."
+                          : "No AI is called. A separate authored sample study is prepared instead of your upload."}
+                      </p>
+                      <div className="journey-actions-buttons">
+                        <button
+                          className="j-btn"
+                          disabled={busy}
+                          onClick={() => onStep(false, true)}
+                        >
+                          <ActionLabel busy={busy}>
+                            {busy
+                              ? "Opening…"
+                              : config?.liveAI
+                                ? "Confirm AI processing"
+                                : "Start sample preview"}
+                          </ActionLabel>
+                        </button>
+                      </div>
+                    </>
+                  ) : config ? (
+                    <>
+                      <p>
+                        <Icon name="shield" size={16} />
+                        The document has been extracted. Live AI isn’t
+                        configured on this server, so no model has been called.
+                      </p>
+                      <div className="journey-actions-buttons">
+                        <button className="j-btn" onClick={() => onStart()}>
+                          <ActionLabel>
+                            Start reference investigation
+                          </ActionLabel>
+                        </button>
+                      </div>
+                    </>
+                  ) : null
+                ) : demo ? (
+                  <>
+                    <p>
+                      <Icon name="shield" size={16} />
+                      Press Enter or start when you’re ready.
+                    </p>
+                    <div className="journey-actions-buttons">
+                      <Link className="j-btn" href={`/meet/${job.id}`}>
+                        <ActionLabel>Start the quest</ActionLabel>
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      <Icon name="shield" size={16} />
+                      One question per screen. Check each choice, then continue.
+                    </p>
+                    <div className="journey-actions-buttons">
+                      <button
+                        className="j-btn"
+                        disabled={busy}
+                        onClick={() => onStart(job.id)}
+                      >
+                        <ActionLabel busy={busy}>
+                          {busy ? "Opening…" : "Open your investigation"}
+                        </ActionLabel>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          ) : null}
         </>
       ) : !error ? (
-        <p role="status">Loading saved processing state…</p>
+        <p role="status" className="prep-loading">
+          Loading saved processing state…
+        </p>
       ) : null}
-    </>
+    </div>
   );
 }

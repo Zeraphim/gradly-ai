@@ -13,20 +13,63 @@ npm run build:vercel
 
 ## Retained coverage
 
-| Suite                                     | Coverage                                                                                                                                           |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/*.test.ts`                         | Curated learner journey, feedback guards, unique rewards, resumption and stale PDF callbacks                                                       |
-| `tests/research/`                         | Learning engine, points, PDF/OCR, provider validation, processing, sample-mode gates, ownership, retention, drafts and authored reasoning fixtures |
-| `tests/research/stored-papers.test.ts`    | Stored `papers/` PDFs carry the DOI and title, and have an entry, matching `papers/README.md`                                                      |
-| `tests/browser/upload-home.spec.ts`       | PDF/DOI entry, retired-link recovery, responsive/axe checks, upload → review → sample lesson → persisted points                                    |
-| `tests/browser/viewport-layout.spec.ts`   | Shared viewport shell across home, preparation, curated lessons, research and reasoning preview; narrow-screen controls and expanded/error content |
-| `tests/browser/research.spec.ts`          | Full research journey, uploads/OCR, consent, ownership, history, deletion, responsive views and classic compatibility                              |
-| `tests/browser/final-polish.spec.ts`      | Draft recovery, failed requests, late navigation, dialogs, configuration reuse and accurate support copy                                           |
-| `tests/browser/reasoning-preview.spec.ts` | API-free reasoning/revision flow, custom-text abstention, storage failure, keyboard, responsive and axe checks                                     |
+| Suite                                     | Coverage                                                                                                                                                                                                                                                                                                               |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/*.test.ts`                         | Curated learner journey, feedback guards, unique rewards, resumption and stale PDF callbacks                                                                                                                                                                                                                           |
+| `tests/research/`                         | Learning engine, points, PDF/OCR, provider validation, processing, sample-mode gates, ownership, retention, drafts and authored reasoning fixtures                                                                                                                                                                     |
+| `tests/research/stored-papers.test.ts`    | Stored `papers/` PDFs carry the DOI and title, and have an entry, matching `papers/README.md`                                                                                                                                                                                                                          |
+| `tests/browser/upload-home.spec.ts`       | PDF/DOI entry, retired-link recovery, responsive/axe checks, upload → review → sample lesson → persisted points                                                                                                                                                                                                        |
+| `tests/browser/viewport-layout.spec.ts`   | Shared viewport shell across home, preparation, curated lessons, research and reasoning preview; narrow-screen controls and expanded/error content                                                                                                                                                                     |
+| `tests/browser/research.spec.ts`          | Full research journey, uploads/OCR, consent, ownership, history, deletion, responsive views and classic compatibility                                                                                                                                                                                                  |
+| `tests/browser/final-polish.spec.ts`      | Draft recovery, failed requests, late navigation, dialogs, configuration reuse and accurate support copy                                                                                                                                                                                                               |
+| `tests/browser/reasoning-preview.spec.ts` | API-free reasoning/revision flow, custom-text abstention, storage failure, keyboard, responsive and axe checks                                                                                                                                                                                                         |
+| `tests/browser/quest-motion.spec.ts`      | Shared bootstrap configuration, classic deferral, quest heading focus, direct slider response, persistent design/reveal state, rapid reversal, reduced motion, touch, resumption and stable chart labels                                                                                                               |
+| `tests/browser/intake-flow.spec.ts`       | Home PDF straight to preparation and the sample quest, pasted links labelled as not fetched, rejected and interrupted checks, home sample entry, Play letter keys, keyboard-only quest with retry/resume/completion and axe, and the phone check that every quest question shows its first answer above the action bar |
+| `tests/browser/preparation.spec.ts`       | Preparation waits for saved state, stops on failure, retries and resumes without fake progress, reduced motion, axe at 375/768/1366, and history keeping a failed job with its reason                                                                                                                                  |
+| `tests/browser/activity-pilot.spec.ts`    | Three-paper `/activities` pilot: shared scene renderer, separate drafts and notes, no assessment requests, desktop fit of choices and Check, narrow screens, reduced motion, and a keyboard run to the summary                                                                                                         |
+| `tests/research/activity-pilot.test.ts`   | Pilot data keeps three-decimal means and gates the derived difference, uses no fabricated outcome values, and bounds restored drafts to their own paper                                                                                                                                                                |
 
 The retired standalone paper-case implementation and its dedicated tests are removed together. The retained reasoning preview still blocks API requests during its browser tests. Provider tests use synthetic outputs; these are not live model verification. PDF and OCR tests process synthetic PDFs. Sample-mode tests verify no inference calls and rejection on Vercel/in production.
 
 Format changed files with Prettier and run `git diff --check`. Browser traces are retained on failure. Automated accessibility checks cover exercised states; Safari/Firefox, assistive-technology sessions and arbitrary uploaded-document layouts remain outside this matrix.
+
+## Authored quest and activity checks
+
+Run one browser suite with `npx playwright test tests/browser/<name>.spec.ts`.
+Suites that cover the challenge player open it through
+`tests/browser/journey-helpers.ts`, which sends the same `start` request as the
+app, rather than through the library button.
+
+- The desktop layout sweep in `quest-motion.spec.ts` derives every choice step
+  from the authored `textingQuest` script, so new questions are checked
+  automatically. It runs under reduced motion at 1366×768, 1440×900, 1920×1080,
+  1280×720, 1024×768, 1280×640 and 1000×640, with Help closed and open, and
+  checks no page scrolling, no horizontal overflow, complete label rectangles
+  above the action bar, 44px minimum targets and pointer coverage. It also covers
+  revealed result choices, Compare means and the optional result table.
+- The results cases check that a prediction creates no answer record, numerical
+  marks stay hidden until an explicit reveal, the worked difference waits for
+  feedback, and SD markers match mean ± SD.
+- The activity pilot checks all three papers at 1366×768, 1000×640 and 1440×900,
+  axe at 320, 390, 768 and 1366 CSS pixels, and runs with API requests blocked.
+- The phone check in `intake-flow.spec.ts` runs every quest question at 375×812.
+
+Do not run `npm run check` against a development server that the browser suite is
+using: rebuilding shared contracts restarts the API and fails unrelated cases.
+Two cases have failed once and then passed alone, so treat them as intermittent:
+`final-polish.spec.ts` "unfinished choices and explanations survive help, refresh
+and exit", and `research.spec.ts` "no-key sample flow is explicit, resumable and
+separate from uploaded evidence". The embedded PDF viewer is blank in headless
+Chromium; the tests exercise the open-original link and extracted text instead.
+
+These checks cover the authored sample and prepared pilot cases in Chromium. They
+do not establish live Nebius generation, study-design selection for arbitrary
+papers, Safari/Firefox or WebKit (its Playwright runtime was unavailable locally),
+real iOS/Android phones or frame rates, screen-reader use, hosted delivery,
+learning benefit, or perceived quality. The quest's reported F(1, 54) = 4.33
+comes from the team's quest script and has not been checked against the paper.
+Dated local results are recorded in the
+[intake verification history](ui/INTAKE_PROCESSING.md#verification-history).
 
 ## Historical consolidated verification
 

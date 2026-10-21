@@ -30,9 +30,12 @@ export function Complete({
       "correct",
   ).length;
   const scoringCount = lesson.questions.length - 1;
+  /* Count what the learner actually finished, not a number typed into the copy. */
+  const requiredCount = lesson.questions.filter((q) => !q.transfer).length;
+  const bonusCount = lesson.questions.filter((q) => q.transfer).length;
   function download() {
     const text = [
-      "Gradly · Adventure notes",
+      "Gradly · Quest notes",
       lesson.title,
       lesson.authors,
       lesson.sourceUrl,
@@ -60,10 +63,10 @@ export function Complete({
     );
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "gradly-adventure-notes.txt";
+    anchor.download = "gradly-quest-notes.txt";
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setNotice("Your adventure notes are ready to keep.");
+    setNotice("Your quest notes are ready to keep.");
   }
   return (
     <main id="main" className="complete page-enter">
@@ -75,7 +78,7 @@ export function Complete({
         </div>
         <Mascot size="large" pose="celebrating" />
         <span className="badge green">
-          <Check size={15} /> ADVENTURE COMPLETE
+          <Check size={15} /> QUEST COMPLETE
         </span>
         <h1>Curiosity, meet evidence.</h1>
         <p>
@@ -191,7 +194,7 @@ export function Complete({
           <Download size={18} /> Keep my notes
         </button>
         <button className="button primary" onClick={onRestart}>
-          <RotateCcw size={18} /> Practice again
+          <RotateCcw size={18} /> Try another quest
         </button>
       </div>
       <p className="micro notice" role="status">

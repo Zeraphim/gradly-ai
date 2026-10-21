@@ -639,7 +639,7 @@ export function ReasoningPreview({
           <p className="quiet">
             {storageUnavailable
               ? "Browser storage is unavailable. Your draft lasts while this page stays open."
-              : "Draft saved in this tab · separate from your investigation"}
+              : "Draft saved in this tab · separate from your quest"}
           </p>
           <button
             className="btn outline compact"

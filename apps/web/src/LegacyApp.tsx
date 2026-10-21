@@ -4,6 +4,7 @@ const ResearchApp = lazy(() =>
 );
 import { BrandLogo } from "./components/BrandLogo.js";
 import { AppLoading } from "./components/AppLoading.js";
+import { ChunkBoundary } from "./components/ChunkBoundary.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BookOpen, Check, CircleHelp, Flag, Sparkles, X } from "lucide-react";
 import {
@@ -27,6 +28,9 @@ import { Prepare } from "./components/Prepare.js";
 import { LessonView } from "./components/LessonView.js";
 import { Complete } from "./components/Complete.js";
 import { Dialog } from "./components/Dialog.js";
+import { SiteFooter, SiteHeader } from "./components/SiteChrome.js";
+import { linkNotePdf, linkNotesAllowed } from "./research/link-note.js";
+import { useResearchConfig } from "./research/useResearchConfig.js";
 const STORAGE = "paperquest.session.v1";
 function savedSession(ids: string[], mode: Lesson["mode"]): Session {
   try {
@@ -72,8 +76,8 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   const [screen, setScreen] = useState<
     "welcome" | "prepare" | "lesson" | "research"
   >(isResearchRoute() ? "research" : "welcome");
-  const [researchAvailable, setResearchAvailable] = useState(false);
-  const [liveResearchAI, setLiveResearchAI] = useState(false);
+  const configuration = useResearchConfig();
+  const researchAvailable = configuration.config?.storage === true;
   const [researchPoints, setResearchPoints] = useState(0);
   useEffect(() => {
     if (!uploadFirst || screen !== "welcome") return;
@@ -98,13 +102,6 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   }, [uploadFirst, screen]);
   const [researchFile, setResearchFile] = useState<File | null>(null);
   useEffect(() => {
-    fetch("/api/research/config")
-      .then((r) => r.json())
-      .then((data) => {
-        setResearchAvailable(data.storage === true);
-        setLiveResearchAI(data.liveAI === true);
-      })
-      .catch(() => {});
     const changed = () =>
       setScreen((s) =>
         isResearchRoute() ? "research" : s === "research" ? "welcome" : s,
@@ -117,9 +114,19 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
     window.location.hash = file ? "/research/upload" : "/research/learn";
     setScreen("research");
   }
+  // Links aren't fetched. Sample preview records them as a link note; with
+  // live AI they open the prepared texting study and nothing is uploaded.
+  function openResearchLink(link: string) {
+    if (linkNotesAllowed(configuration.config)) {
+      openResearch(linkNotePdf(link));
+      return;
+    }
+    setResearchFile(null);
+    window.location.hash = "/research/meet/featured";
+    setScreen("research");
+  }
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [session, setSession] = useState(newSession);
-  const [label, setLabel] = useState("");
   const [loadError, setLoadError] = useState("");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
@@ -160,10 +167,12 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
         );
     }
   }, []);
+  const classicVisible = screen !== "research";
   useEffect(() => {
-    void loadLesson();
+    if (!classicVisible) return;
+    if (!initialized.current) void loadLesson();
     return () => loadController.current?.abort();
-  }, [loadLesson]);
+  }, [loadLesson, classicVisible]);
   useEffect(() => {
     if (!initialized.current) return;
     try {
@@ -187,8 +196,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
     setError("");
     window.scrollTo({ top: 0, behavior: "instant" });
   }
-  function prepare(source: string) {
-    setLabel(source);
+  function prepare() {
     changeScreen("prepare");
     void loadLesson();
   }
@@ -279,17 +287,20 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   const reviewState = reviewId ? session.questions[reviewId] : null;
   if (screen === "research")
     return (
-      <Suspense
-        fallback={<AppLoading label="Opening the research workspace…" />}
-      >
-        <ResearchApp
-          initialFile={researchFile}
-          onExit={() => {
-            window.location.hash = uploadFirst ? "" : "/classic";
-            changeScreen("welcome");
-          }}
-        />
-      </Suspense>
+      <ChunkBoundary label="The research workspace">
+        <Suspense
+          fallback={<AppLoading label="Opening the research workspace…" />}
+        >
+          <ResearchApp
+            initialFile={researchFile}
+            configuration={configuration}
+            onExit={() => {
+              window.location.hash = uploadFirst ? "" : "/classic";
+              changeScreen("welcome");
+            }}
+          />
+        </Suspense>
+      </ChunkBoundary>
     );
   return (
     <div className={`app-shell${simpleHome ? " upload-home-shell" : ""}`}>
@@ -301,67 +312,75 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
           document.getElementById("main")?.focus();
         }}
       >
-        Skip to adventure
+        Skip to content
       </a>
-      <header className="app-header">
-        <div className="header-inner">
-          <button
-            className="brand"
-            onClick={() =>
-              pending ? setDialog("pause") : changeScreen("welcome")
-            }
-            aria-label="Gradly home"
-          >
-            <BrandLogo />
-          </button>
-          <nav aria-label="Main navigation">
-            {simpleHome ? (
-              <button
-                onClick={() => {
-                  window.location.hash = "/research/history";
-                }}
-              >
-                My documents
-              </button>
-            ) : (
-              <>
-                <button
-                  className={screen !== "welcome" ? "active" : ""}
-                  onClick={() =>
-                    pending ? setDialog("pause") : changeScreen("welcome")
-                  }
-                >
-                  Adventure
-                </button>
-                <button onClick={() => setDialog("progress")}>
-                  My progress
-                </button>
-                {researchAvailable ? (
-                  <button onClick={() => openResearch()}>Research Lab</button>
-                ) : null}
-              </>
-            )}
-          </nav>
-          <div className="header-badges">
-            <span className="points-pill">
-              <Sparkles size={17} />
-              <strong>
-                {points(session) + (simpleHome ? researchPoints : 0)}
-              </strong>
-              <span className="points-label">
-                {lesson?.mode === "preview" ? "sample points" : "points"}
-              </span>
-            </span>
+      {simpleHome ? (
+        <SiteHeader
+          current="upload"
+          points={points(session) + researchPoints}
+          onHome={() => changeScreen("welcome")}
+        />
+      ) : (
+        <header className="app-header">
+          <div className="header-inner">
             <button
-              className="icon-button help-button"
-              aria-label="How Gradly works"
-              onClick={() => setDialog("help")}
+              className="brand"
+              onClick={() =>
+                pending ? setDialog("pause") : changeScreen("welcome")
+              }
+              aria-label="Gradly home"
             >
-              <CircleHelp size={23} />
+              <BrandLogo />
             </button>
+            <nav aria-label="Main navigation">
+              {simpleHome ? (
+                <button
+                  onClick={() => {
+                    window.location.hash = "/research/history";
+                  }}
+                >
+                  My documents
+                </button>
+              ) : (
+                <>
+                  <button
+                    className={screen !== "welcome" ? "active" : ""}
+                    onClick={() =>
+                      pending ? setDialog("pause") : changeScreen("welcome")
+                    }
+                  >
+                    Quest
+                  </button>
+                  <button onClick={() => setDialog("progress")}>
+                    My progress
+                  </button>
+                  {researchAvailable ? (
+                    <button onClick={() => openResearch()}>Research Lab</button>
+                  ) : null}
+                </>
+              )}
+            </nav>
+            <div className="header-badges">
+              <span className="points-pill">
+                <Sparkles size={17} />
+                <strong>
+                  {points(session) + (simpleHome ? researchPoints : 0)}
+                </strong>
+                <span className="points-label">
+                  {lesson?.mode === "preview" ? "sample points" : "points"}
+                </span>
+              </span>
+              <button
+                className="icon-button help-button"
+                aria-label="How Gradly works"
+                onClick={() => setDialog("help")}
+              >
+                <CircleHelp size={23} />
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
       {lesson?.mode === "preview" && !simpleHome ? (
         <div className="mode-banner">
           Local preview · choices are checked, explanations are not assessed.
@@ -382,8 +401,10 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
       {screen === "welcome" ? (
         <Welcome
           uploadFirst={uploadFirst}
-          samplePreview={uploadFirst && !liveResearchAI}
-          onStart={prepare}
+          // Upload-first home sends "try a prepared study" to the shared
+          // study library (#14) instead of the retired classic quest.
+          onStart={uploadFirst ? () => openResearch() : prepare}
+          onResearchLink={uploadFirst ? openResearchLink : undefined}
           onResearchFile={
             uploadFirst || researchAvailable
               ? (file) => openResearch(file)
@@ -402,7 +423,6 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
       ) : screen === "prepare" ? (
         <Prepare
           lesson={lesson}
-          label={label}
           error={loadError}
           onRetry={() => void loadLesson()}
           onStart={start}
@@ -447,17 +467,21 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
           />
         )
       ) : null}
-      <footer className="app-footer">
-        <span className="footer-brand">
-          <BrandLogo />
-          <span>Stay curious. Follow the evidence.</span>
-        </span>
-        <button className="text-button" onClick={() => setDialog("help")}>
-          About this pilot <ArrowFooter />
-        </button>
-      </footer>
+      {simpleHome ? (
+        <SiteFooter />
+      ) : (
+        <footer className="app-footer">
+          <span className="footer-brand">
+            <BrandLogo />
+            <span>Stay curious. Follow the evidence.</span>
+          </span>
+          <button className="text-button" onClick={() => setDialog("help")}>
+            About this pilot <ArrowFooter />
+          </button>
+        </footer>
+      )}
       {dialog === "pause" ? (
-        <Dialog title="Pause your adventure?" onClose={() => setDialog(null)}>
+        <Dialog title="Pause your quest?" onClose={() => setDialog(null)}>
           <p>
             {pending
               ? "Feedback is still being requested. Stay here until the request finishes to review it."
@@ -483,13 +507,10 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
         </Dialog>
       ) : null}
       {dialog === "restart" ? (
-        <Dialog
-          title="Start a fresh adventure?"
-          onClose={() => setDialog(null)}
-        >
+        <Dialog title="Start a fresh quest?" onClose={() => setDialog(null)}>
           <p>
-            This replaces the saved adventure on this device. Download your
-            notes from the completed adventure first if you want to keep them.
+            This replaces the saved quest on this device. Download your notes
+            from the completed quest first if you want to keep them.
           </p>
           <div className="modal-actions">
             <button className="button neutral" onClick={() => setDialog(null)}>
@@ -502,7 +523,7 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
         </Dialog>
       ) : null}
       {dialog === "progress" ? (
-        <Dialog title="Your adventure progress" onClose={() => setDialog(null)}>
+        <Dialog title="Your quest progress" onClose={() => setDialog(null)}>
           {session.started && lesson ? (
             <>
               <p>
@@ -529,22 +550,20 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
                   changeScreen("lesson");
                 }}
               >
-                {complete
-                  ? "Review completed adventure"
-                  : "Return to adventure"}
+                {complete ? "Review completed quest" : "Return to quest"}
               </button>
             </>
           ) : (
             <>
               <p>
-                Your first adventure starts with one research paper and one
-                choice. Your progress will appear here.
+                Your first quest starts with one research paper and one choice.
+                Your progress will appear here.
               </p>
               <button
                 className="button primary"
                 onClick={() => {
                   setDialog(null);
-                  prepare("Gingerich & Lineweaver · 2014");
+                  prepare();
                 }}
               >
                 Try the curated study

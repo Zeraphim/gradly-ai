@@ -36,7 +36,24 @@ The added browser-only reasoning showcase demonstrates separate choice and expla
 | Unsubmitted drafts, context return and request recovery        | Version-bound tab drafts, retained upload, safe navigation and explicit load states | Final-polish browser scenarios and client-state/request unit tests                      |
 | Glossary, help, settings and privacy                           | Connected research routes                                                           | Browser navigation and axe scans                                                        |
 
+## Authored results exploration
+
+The authored sample must offer an ungraded prediction before deliberately revealing
+reported quiz means. Prediction and reveal survive refresh within the current tab;
+restarting clears them. Prediction controls must not submit or grade an answer.
+Comparison may show the reported heights and prompt a calculation, while the worked
+difference remains behind answer feedback. Preserve the following SD inspection,
+interpretation, retry and completion path, source values and reduced-motion behavior.
+Do not imply this sample interaction automatically supports arbitrary research papers.
+
 ## Nonfunctional acceptance
+
+For the authored quest's desktop question layout, the full answer choices must
+be visible above the pinned action bar without scrolling at the supported
+viewport sizes in `tests/browser/quest-motion.spec.ts`. An illustration or an
+always-expanded duplicate data table must not displace those controls. Keep long
+answer text readable and complete; preserve natural scrolling on narrow screens,
+enlarged text and deliberately expanded source material.
 
 - Keep the existing TypeScript/Vite/Express architecture, self-hosted font and supplied blue logo/mascot.
 - Keep model secrets server-side and make endpoint/model configurable. Missing credentials produce explicit unavailable/fallback states, not synthetic AI results.
@@ -62,3 +79,42 @@ validated contract. Preserve legacy lessons, server-side reveal gates, ownership
 versioning, retries, drafts, reasoning revisions and once-per-solved-challenge
 points. Exploration does not establish correctness or learning benefit.
 See [scene authoring](SCENE_AUTHORING.md) and [local design evidence](ui/FRESH_ADVENTURE.md).
+
+## Paper context before the investigation
+
+The upload and sample entries must introduce the study before assessment begins.
+Reference context narrates the question, assignment, measurement and limitations in
+four chapters without revealing numerical findings early. Learners move through the
+chapters by pointer, keyboard, the story's own Back/Next controls or a horizontal
+swipe; exploration is not an assessment and awards no points. In the upload sample journey
+and from the library, the texting quest follows: short story screens, then one
+decision per screen with a hint-led retry and an explanation. Numerical results
+and the authors' conclusion stay hidden until the quest reaches them. The reference study's
+published identity (title, authors, journal issue, DOI) is shown as authored
+citation text, never as an AI analysis of an arbitrary PDF. Generated paper
+briefings and extraction/consent remain tied to their own document. In sample
+mode any pasted link is accepted as a labelled "link note" (not fetched) and
+continues to the sample journey; nothing claims the linked paper was analysed.
+
+A journey shows the story once. In the upload sample flow the quest follows
+preparation directly; where the player's briefing is shown, it recaps the same
+points briefly instead of repeating the story.
+The context must stay readable at every supported width: the stage and its caption
+share one card, the chapter rail wraps on narrow screens, the schematic switches to
+a vertical composition, and the caption carries the meaning when the stage is hidden
+from assistive technology.
+
+## Three-paper authored activity pilot
+
+The activity pilot must demonstrate existing scene families using three distinct
+research designs and linked source evidence. Preserve the experiment's proportions
+and their precision, label observational relationships without causal overreach,
+and keep interview themes contextual. Prepared feedback and custom unassessed
+writing must be distinguishable. Each paper retains its own tab draft and reset.
+Practice must work without assessment or inference requests and must not affect
+server progress or points. Desktop choices stay above the fixed check bar at
+the supported pilot viewport sizes; narrow screens retain natural scrolling. The
+pilot follows the quest's rhythm: check, feedback, then the next paper, ending
+in a short summary.
+This pilot is evidence of authored rendering reuse, not automatic generation from
+arbitrary papers, proven learning benefit or production delivery.
