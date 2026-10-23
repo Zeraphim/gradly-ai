@@ -114,3 +114,87 @@ it("rejects truncated or unexpected-model responses before accepting valid JSON"
     ).rejects.toThrow("incomplete or came from an unexpected model");
   }
 });
+
+it("rejects when PREVIEW_MODE is true even if API key exists", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "valid-key");
+  vi.stubEnv("PREVIEW_MODE", "true");
+  const mock = vi.fn();
+  vi.stubGlobal("fetch", mock);
+  await expect(
+    new NebiusProvider().generate("Test", "test", {}, schema),
+  ).rejects.toThrow("Nebius API key is not configured");
+  expect(mock).not.toHaveBeenCalled();
+});
+
+it("retries transient 429 rate-limit and succeeds on attempt 1", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "unit-test-secret");
+  vi.useFakeTimers();
+
+  const fetcher = vi
+    .fn()
+    .mockResolvedValueOnce(new Response("Too Many Requests", { status: 429 }))
+    .mockResolvedValueOnce(
+      Response.json({
+        model: nebiusConfig().modelId,
+        choices: [
+          {
+            finish_reason: "stop",
+            message: { content: '{"answer":"recovered"}' },
+          },
+        ],
+      }),
+    );
+  vi.stubGlobal("fetch", fetcher);
+
+  const promise = new NebiusProvider().generate(
+    "Reviewer",
+    "verify",
+    {},
+    schema,
+  );
+  await vi.runAllTimersAsync();
+  const output = await promise;
+
+  expect(output.answer).toBe("recovered");
+  expect(fetcher).toHaveBeenCalledTimes(2);
+  vi.useRealTimers();
+});
+
+it("fails when transient errors exhaust all retry attempts", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "unit-test-secret");
+  vi.useFakeTimers();
+
+  const fetcher = vi
+    .fn()
+    .mockResolvedValue(new Response("Gateway Timeout", { status: 504 }));
+  vi.stubGlobal("fetch", fetcher);
+
+  const promise = new NebiusProvider().generate(
+    "Reviewer",
+    "verify",
+    {},
+    schema,
+  );
+  const expectation = expect(promise).rejects.toThrow("(504)");
+  await vi.runAllTimersAsync();
+  await expectation;
+
+  expect(fetcher).toHaveBeenCalledTimes(2);
+  vi.useRealTimers();
+});
+
+it("does not retry permanent 401 client error", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "unit-test-secret");
+  const fetcher = vi
+    .fn()
+    .mockResolvedValue(new Response("Unauthorized", { status: 401 }));
+  vi.stubGlobal("fetch", fetcher);
+
+  await expect(
+    new NebiusProvider().generate("Test", "test", {}, schema),
+  ).rejects.toThrow("(401)");
+
+  // Must fail immediately on attempt 0 without retrying
+  expect(fetcher).toHaveBeenCalledTimes(1);
+});
+
