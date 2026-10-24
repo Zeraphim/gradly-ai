@@ -62,7 +62,7 @@ async function createSessionWithReasoning(ownerId: string) {
 
 beforeEach(() => {
   process.env.RESEARCH_ENABLED = "true";
-  process.env.DATABASE_URL = "file:.data/gradly.db";
+  process.env.DATABASE_URL = "file:.data/feedback-route.db";
   process.env.DATABASE_AUTH_TOKEN = "";
   process.env.SESSION_SECRET =
     "local-test-session-secret-at-least-32-chars-long-0123456789";
