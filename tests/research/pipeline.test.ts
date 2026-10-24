@@ -65,6 +65,37 @@ it("rejects invented exact excerpts and incomplete evidence", async () => {
   );
   expect(missing.error).toContain("Insufficient");
 });
+it("accepts PDF typography differences, drops paraphrased excerpts and hides narrated findings", async () => {
+  const pdfPage =
+    "we report on two studies aimed specifically at replicating the original findings while improving on its design and exploring the extent to which the experimenter’s own expectan- cies may influence the results.";
+  const j = newJob("typography", "paper.pdf", [{ page: 1, text: pdfPage }]);
+  const next = await runStage(
+    j,
+    provider([
+      {
+        findings: "The user wants me to analyze the document.",
+        refs: [
+          {
+            id: "typography",
+            page: 1,
+            excerpt:
+              "exploring the extent to which the experimenter's own expectancies may influence the results.",
+          },
+          {
+            id: "paraphrase",
+            page: 1,
+            excerpt:
+              "exploring the extent to which the experimenter's own expectations may influence the results.",
+          },
+        ],
+        missing: [],
+      },
+    ]),
+  );
+  expect(next.status).not.toBe("failed");
+  expect(next.evidence?.refs.map((r) => r.id)).toEqual(["typography"]);
+  expect(next.audits[0]?.summary).not.toMatch(/user wants/i);
+});
 it("clears obsolete stage and job errors after a successful retry", async () => {
   const j = newJob("retry-job", "paper.pdf", [{ page: 1, text: page }]);
   const failed = await runStage(j, {

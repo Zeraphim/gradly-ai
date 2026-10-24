@@ -35,7 +35,8 @@
     "vercel-build": "npm run build:vercel",
     "context:check": "node .agents/scripts/context-audit.mjs check",
     "context:index": "node .agents/scripts/context-audit.mjs index",
-    "context:acknowledge": "node .agents/scripts/context-audit.mjs acknowledge"
+    "context:acknowledge": "node .agents/scripts/context-audit.mjs acknowledge",
+    "diagnose:nebius": "node --env-file-if-exists=.env --import tsx scripts/diagnose-nebius.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

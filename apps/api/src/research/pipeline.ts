@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { nebiusConfig } from "../nebius-config.js";
 import {
+  excerptMatches,
   lessonSchema,
   refSchema,
   verifyLesson,
@@ -66,25 +67,34 @@ export async function runStage(
         `${audit.task} Adapt to qualitative, quantitative, mixed-methods, review, or conceptual research as supported by the document. Return exact excerpts, not paraphrases. Use the physical PDF page numbers provided. List in missing only evidence essential to a grounded investigation of this paper; a statistical test, numerical result, or experimental design is not required for every research approach. Do not infer study type or claims from absent evidence. If the document cannot support at least three evidence-grounded research decisions, mark that essential evidence as missing. Pages marked method=ocr are uncertain transcriptions; do not imply wording or numbers were verified against original pixels.`,
         { pages: j.pages },
         z.object({
-          findings: z.string(),
+          findings: z
+            .string()
+            .describe(
+              "Two to four sentences for a learner summarizing what the paper studied and found. Describe the paper, not your own process.",
+            ),
           refs: z.array(refSchema).min(1).max(20),
           missing: z.array(z.string()),
         }),
         pipelineModel,
       );
-      const norm = (s: string) => s.replace(/\s+/g, " ").trim();
+      // Discard any excerpt that is not verbatim on its page; never show it.
+      const verified = j.evidence.refs.filter((r) =>
+        j.pages.some(
+          (p) => p.page === r.page && excerptMatches(p.text, r.excerpt),
+        ),
+      );
+      if (!verified.length)
+        throw Error(
+          `Extracted evidence does not match the document (0 of ${j.evidence.refs.length} excerpts verified). Verification requires exact page excerpts.`,
+        );
+      j.evidence.refs = verified;
+      // Reasoning models sometimes narrate their process in the summary field.
       if (
-        j.evidence.refs.some(
-          (r) =>
-            !j.pages.some(
-              (p) =>
-                p.page === r.page && norm(p.text).includes(norm(r.excerpt)),
-            ),
+        /^\s*(the user|user wants|i need|i will|i'll|let me|we need|okay|first,? i)\b/i.test(
+          j.evidence.findings,
         )
       )
-        throw Error(
-          "Extracted evidence does not match the document. Verification requires exact page excerpts.",
-        );
+        j.evidence.findings = `Located ${verified.length} verified page excerpts for the investigation.`;
       if (j.evidence.missing.length)
         throw Error(
           `Insufficient research evidence: ${j.evidence.missing.join("; ").slice(0, 200)}. Try a complete research paper with enough source evidence.`,
@@ -97,6 +107,8 @@ export async function runStage(
         `${audit.task} Use 3–14 challenges depending on evidence, adapting to this paper’s research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. Restrict evidence to the supplied exact excerpts. paper.url must be an actual DOI/source appearing in the supplied document; otherwise set paper.url=null and explicitly mark unavailable metadata. Do not invent references, participants, quotes, results, or a single best answer where the source permits alternatives. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
+          evidenceRule:
+            "Copy every lesson evidence excerpt character-for-character from evidence.refs or the page text. Do not paraphrase, shorten words, or fix typography.",
           pages: j.pages,
           schemaExample: JSON.parse(
             JSON.stringify({ id: j.id, source: "generated" }),

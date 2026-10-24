@@ -130,6 +130,26 @@ export type Job = {
   error?: string;
   version: number;
 };
+/**
+ * Canonical form for exact-excerpt checks. It removes PDF typography only:
+ * ligatures, curly quotes, dash variants, soft hyphens and line-break
+ * hyphenation ("expectan- cies"). Words must still match exactly, so a
+ * paraphrase is still rejected.
+ */
+export function canonicalText(s: string) {
+  return s
+    .normalize("NFKC")
+    .replace(/[\u2018\u2019\u201A\u201B\u2032`]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F\u2033]/g, '"')
+    .replace(/[\u00AD\u2010-\u2015\u2212]/g, "-")
+    .replace(/\s*-\s*/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+export function excerptMatches(pageText: string, excerpt: string) {
+  const target = canonicalText(excerpt);
+  return target.length > 0 && canonicalText(pageText).includes(target);
+}
 export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
   const problems: string[] = [];
   const ids = new Set<string>();
@@ -144,7 +164,7 @@ export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
   }
   for (const r of lesson.evidence) {
     const page = pages.find((p) => p.page === r.page);
-    if (!page || !normalize(page.text).includes(normalize(r.excerpt)))
+    if (!page || !excerptMatches(page.text, r.excerpt))
       problems.push(
         `Evidence ${r.id} is not an exact excerpt from page ${r.page}.`,
       );

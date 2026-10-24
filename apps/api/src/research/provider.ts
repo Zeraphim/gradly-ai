@@ -22,7 +22,11 @@ export class NebiusProvider implements ModelProvider {
     const config = nebiusConfig();
     const model = modelOverride || config.pipelineModelId;
     const isUltra = model.includes("Ultra") || model.includes("550b");
-    const timeoutMs = isUltra ? 45000 : 20000;
+    // Reasoning tokens count toward max_tokens (3.6k of 4k on a 7-page
+    // evidence pass), so lesson drafting needs a much larger budget.
+    // Two Ultra attempts (2 x 110s) stay inside the 230s job lease.
+    const timeoutMs = isUltra ? 110000 : 45000;
+    const maxTokens = isUltra ? 32000 : 8000;
     const jsonSchema = z.toJSONSchema(schema);
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
@@ -38,7 +42,7 @@ export class NebiusProvider implements ModelProvider {
             body: JSON.stringify({
               model,
               temperature: 0.2,
-              max_tokens: 12000,
+              max_tokens: maxTokens,
               response_format: {
                 type: "json_schema",
                 json_schema: {
@@ -83,6 +87,10 @@ export class NebiusProvider implements ModelProvider {
           finishReason === "end_turn" ||
           finishReason === "stop_sequence";
 
+        if (modelMatches && finishReason === "length")
+          throw Error(
+            `The AI response was incomplete because it reached the ${maxTokens}-token output limit. Retry this stage.`,
+          );
         if (!modelMatches || !isComplete) {
           console.warn(
             `[Nebius Provider Warning] Expected model "${model}", received "${body.model}". Finish reason: "${finishReason}"`,
