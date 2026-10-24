@@ -115,6 +115,105 @@ it("rejects truncated or unexpected-model responses before accepting valid JSON"
   }
 });
 
+it("carries a typed errorCode and logs token usage on the output limit", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "test");
+  const model = nebiusConfig().modelId;
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue(
+      Response.json({
+        model,
+        usage: {
+          completion_tokens: 8000,
+          completion_tokens_details: { reasoning_tokens: 4100 },
+        },
+        choices: [{ finish_reason: "length", message: { content: "{" } }],
+      }),
+    ),
+  );
+  const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+  try {
+    const attempt = new NebiusProvider().generate(
+      "Reviewer",
+      "verify",
+      {},
+      schema,
+    );
+    await expect(attempt).rejects.toThrow("output limit");
+    await expect(attempt).rejects.toMatchObject({ code: "output_limit" });
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("completion_tokens: 8000"),
+    );
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("reasoning_tokens: 4100"),
+    );
+  } finally {
+    warn.mockRestore();
+  }
+});
+
+it("sizes the output budget by caller slot, not model name", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "test");
+  const fetcher = vi.fn().mockImplementation(() =>
+    Response.json({
+      model: nebiusConfig().modelId,
+      choices: [
+        { finish_reason: "stop", message: { content: '{"answer":"ok"}' } },
+      ],
+    }),
+  );
+  vi.stubGlobal("fetch", fetcher);
+
+  await new NebiusProvider().generate(
+    "Lesson Architect",
+    "draft",
+    {},
+    schema,
+    undefined,
+    { tier: "pipeline" },
+  );
+  await new NebiusProvider().generate("Coach", "feedback", {}, schema);
+
+  const [pipelineRequest, feedbackRequest] = fetcher.mock.calls.map(
+    (call) => JSON.parse(call[1]!.body),
+  );
+  expect(pipelineRequest.max_tokens).toBe(32000);
+  expect(feedbackRequest.max_tokens).toBe(8000);
+  expect(pipelineRequest.model).toBe("nvidia/nemotron-3-super-120b-a12b");
+});
+
+it("strips propertyNames from the wire schema but keeps Zod validation", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "unit-test-secret");
+  const recordSchema = z.object({
+    misconceptions: z.record(z.string(), z.string()),
+  });
+  const fetcher = vi.fn().mockImplementation(() =>
+    Response.json({
+      model: nebiusConfig().modelId,
+      choices: [
+        {
+          finish_reason: "stop",
+          message: { content: '{"misconceptions":{"opt1":"text"}}' },
+        },
+      ],
+    }),
+  );
+  vi.stubGlobal("fetch", fetcher);
+
+  const output = await new NebiusProvider().generate(
+    "Test",
+    "test",
+    {},
+    recordSchema,
+  );
+  const sent = JSON.parse(fetcher.mock.calls[0]![1]!.body);
+  const sentJson = JSON.stringify(sent.response_format.json_schema.schema);
+  expect(sentJson).not.toContain("propertyNames");
+  // Zod still validates the reply against the record shape.
+  expect(output.misconceptions.opt1).toBe("text");
+});
+
 it("rejects when PREVIEW_MODE is true even if API key exists", async () => {
   vi.stubEnv("NEBIUS_API_KEY", "valid-key");
   vi.stubEnv("PREVIEW_MODE", "true");

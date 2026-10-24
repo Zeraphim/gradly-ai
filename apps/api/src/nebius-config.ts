@@ -1,5 +1,6 @@
-export const DEFAULT_PIPELINE_MODEL = "nvidia/Nemotron-3-Ultra-550b-a55b";
-// Listed by Token Factory /v1/models; the earlier 70B ID is not available.
+export const DEFAULT_PIPELINE_MODEL = "nvidia/nemotron-3-super-120b-a12b";
+// Ultra-550b remains available through NEBIUS_PIPELINE_MODEL when its larger
+// reasoning budget is needed; no recorded evaluation data favors it as default.
 export const DEFAULT_FEEDBACK_MODEL = "nvidia/nemotron-3-super-120b-a12b";
 export const DEFAULT_MODEL = DEFAULT_PIPELINE_MODEL;
 export const DEFAULT_BASE_URL =

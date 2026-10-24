@@ -66,6 +66,7 @@ export function runDemoStage(job: Job): Job {
   audit.summary = summaries[j.stage]!;
   audit.refs = featured.evidence.map((r) => r.id);
   delete audit.error;
+  delete audit.errorCode;
   j.stage++;
   j.status = j.stage === 5 ? "ready" : "pending";
   j.leaseUntil = 0;

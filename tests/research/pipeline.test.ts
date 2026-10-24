@@ -1,7 +1,7 @@
 import { it, expect } from "vitest";
 import { newJob, runStage } from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
-import { type ModelProvider } from "../../apps/api/src/research/provider.js";
+import { ProviderError, type ModelProvider } from "../../apps/api/src/research/provider.js";
 import {
   lessonSchema,
   type Lesson,
@@ -96,6 +96,28 @@ it("accepts PDF typography differences, drops paraphrased excerpts and hides nar
   expect(next.evidence?.refs.map((r) => r.id)).toEqual(["typography"]);
   expect(next.audits[0]?.summary).not.toMatch(/user wants/i);
 });
+
+it("replaces an empty or truncated findings summary with the neutral fallback", async () => {
+  const j = newJob("empty-findings", "paper.pdf", [{ page: 1, text: page }]);
+  const next = await runStage(
+    j,
+    provider([
+      { findings: "", refs, missing: [] },
+    ]),
+  );
+  expect(next.status).toBe("pending");
+  expect(next.audits[0]?.summary).toBe(
+    `Located ${refs.length} verified page excerpts for the investigation.`,
+  );
+});
+
+it("rejects a bare https:// paper.url without a domain", () => {
+  const lesson = structuredClone(featured);
+  lesson.paper.url = "https://";
+  expect(lessonSchema.safeParse(lesson).success).toBe(false);
+  lesson.paper.url = "https://doi.org/10.1177/0098628313514177";
+  expect(lessonSchema.safeParse(lesson).success).toBe(true);
+});
 it("clears obsolete stage and job errors after a successful retry", async () => {
   const j = newJob("retry-job", "paper.pdf", [{ page: 1, text: page }]);
   const failed = await runStage(j, {
@@ -118,6 +140,28 @@ it("clears obsolete stage and job errors after a successful retry", async () => 
   expect(recovered.audits[0]?.summary).toBe("Evidence recovered");
   expect(recovered.error).toBeUndefined();
   expect(recovered.audits[0]?.error).toBeUndefined();
+});
+
+it("persists a typed errorCode when a stage hits the output limit", async () => {
+  const j = newJob("limit-job", "paper.pdf", [{ page: 1, text: page }]);
+  const failed = await runStage(j, {
+    async generate() {
+      throw new ProviderError(
+        "output_limit",
+        "The AI response was incomplete because it reached the 32000-token output limit. Retry this stage.",
+      );
+    },
+  });
+  expect(failed.status).toBe("failed");
+  expect(failed.audits[0]?.errorCode).toBe("output_limit");
+  expect(failed.audits[0]?.error).toContain("output limit");
+
+  const recovered = await runStage(
+    failed,
+    provider([{ findings: "Evidence recovered", refs, missing: [] }]),
+  );
+  expect(recovered.status).toBe("pending");
+  expect(recovered.audits[0]?.errorCode).toBeUndefined();
 });
 it("prevents a flagged methods review from becoming playable", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);

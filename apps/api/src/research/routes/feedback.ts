@@ -107,6 +107,7 @@ export async function POST(
       },
       schema,
       feedbackModel,
+      { tier: "feedback" },
     );
 
     if (output.refs.some((r) => !c.refs.includes(r)))
