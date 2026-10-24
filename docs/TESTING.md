@@ -43,9 +43,10 @@ app, rather than through the library button.
 - The desktop layout sweep in `quest-motion.spec.ts` derives every choice step
   from the authored `textingQuest` script, so new questions are checked
   automatically. It runs under reduced motion at 1366×768, 1440×900, 1920×1080,
-  1280×720, 1024×768, 1280×640 and 1000×640, with Help closed and open, and
-  checks no page scrolling, no horizontal overflow, complete label rectangles
-  above the action bar, 44px minimum targets and pointer coverage. It also covers
+  1280×720, 1024×768, 1280×640, 1000×640 and portrait 1024×1366, with Help
+  closed and open, and checks no page scrolling, no horizontal overflow,
+  complete label rectangles above the action bar, 44px minimum targets and
+  pointer coverage. It also covers
   revealed result choices, Compare means and the optional result table.
 - The results cases check that a prediction creates no answer record, numerical
   marks stay hidden until an explicit reveal, the worked difference waits for
