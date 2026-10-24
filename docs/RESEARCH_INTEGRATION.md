@@ -63,7 +63,9 @@ The existing curated production demo needs only its existing `NEBIUS_API_KEY` an
 | `CRON_SECRET`                        | Separate random secret to authorize retention cleanup                            |
 | `NEBIUS_API_KEY`                     | Server-only key for live generation/feedback                                     |
 | `PREVIEW_MODE`                       | `false` for live calls; `true` for explicitly offline reference use              |
-| `NEBIUS_BASE_URL`, `NEBIUS_MODEL_ID` | Optional overrides; defaults preserve the deployed repository’s configuration    |
+| `NEBIUS_BASE_URL`, `NEBIUS_MODEL_ID` | Optional overrides; `NEBIUS_MODEL_ID` forces one model for both tiers            |
+| `NEBIUS_PIPELINE_MODEL`              | Quest pipeline model; default `nvidia/Nemotron-3-Ultra-550b-a55b`                |
+| `NEBIUS_FEEDBACK_MODEL`              | Live reasoning feedback model; default `nvidia/nemotron-3-super-120b-a12b`       |
 
 ### Setup sequence
 

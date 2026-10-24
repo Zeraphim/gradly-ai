@@ -81,8 +81,9 @@ it needs free configured ports and an installed Chromium.
 
 Read `.env.example`, configuration code, and `docs/RESEARCH_INTEGRATION.md` for
 variable names and requirements, never a teammate's real values. Server-side
-`NEBIUS_API_KEY` enables live calls; `NEBIUS_BASE_URL` and `NEBIUS_MODEL_ID` override
-the configured defaults. `PREVIEW_MODE` disables live research calls; explicit local
+`NEBIUS_API_KEY` enables live calls. `NEBIUS_PIPELINE_MODEL` (quest pipeline) and
+`NEBIUS_FEEDBACK_MODEL` (live feedback) select the two model tiers; `NEBIUS_MODEL_ID`
+forces one model for both, and `NEBIUS_BASE_URL` overrides the endpoint. `PREVIEW_MODE` disables live research calls; explicit local
 `DEMO_MODE` enables separately labeled sample lessons. Demo is refused in production.
 
 Research uses local SQLite through libSQL for local work. Hosted research requires

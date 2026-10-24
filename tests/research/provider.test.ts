@@ -91,9 +91,9 @@ it("reports model access errors and timeouts without response body leakage", asy
 
 it("rejects truncated or unexpected-model responses before accepting valid JSON", async () => {
   vi.stubEnv("NEBIUS_API_KEY", "test");
-  for (const [model, finishReason] of [
-    ["unexpected-model", "stop"],
-    [nebiusConfig().modelId, "length"],
+  for (const [model, finishReason, message] of [
+    ["unexpected-model", "stop", "incomplete or came from an unexpected model"],
+    [nebiusConfig().modelId, "length", "output limit"],
   ]) {
     vi.stubGlobal(
       "fetch",
@@ -111,7 +111,7 @@ it("rejects truncated or unexpected-model responses before accepting valid JSON"
     );
     await expect(
       new NebiusProvider().generate("Test", "test", {}, schema),
-    ).rejects.toThrow("incomplete or came from an unexpected model");
+    ).rejects.toThrow(message);
   }
 });
 
@@ -197,4 +197,3 @@ it("does not retry permanent 401 client error", async () => {
   // Must fail immediately on attempt 0 without retrying
   expect(fetcher).toHaveBeenCalledTimes(1);
 });
-
