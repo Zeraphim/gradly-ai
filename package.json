@@ -22,6 +22,7 @@
     "test:live": "node --env-file-if-exists=.env --import tsx scripts/verify-live.ts",
     "test:issue5": "node --import tsx scripts/verify-issue-5.ts",
     "test:issue6": "node --import tsx scripts/verify-issue-6.ts",
+    "test:flow": "node --env-file-if-exists=.env --import tsx scripts/run-live-flow.ts",
     "build:vercel": "npm run build --workspace @paperquest/contracts && npm run build --workspace @paperquest/web && node scripts/prepare-vercel.mjs",
     "predev": "npm run build --workspace @paperquest/contracts",
     "pretest": "npm run build --workspace @paperquest/contracts",

@@ -92,6 +92,7 @@ export async function POST(
       refs: z.array(z.string()),
     });
 
+    const feedbackModel = nebiusConfig().feedbackModelId;
     const output = await provider.generate(
       "Learning Coach",
       "Evaluate submitted reasoning using only the current permitted evidence and reference guidance. Do not change deterministic scoring. Do not reveal paper identity or future findings. Return concise feedback and a targeted question; mark uncertainty.",
@@ -105,6 +106,7 @@ export async function POST(
         refs: c.refs,
       },
       schema,
+      feedbackModel,
     );
 
     if (output.refs.some((r) => !c.refs.includes(r)))
@@ -129,21 +131,23 @@ export async function POST(
       );
     }
 
-    const model = nebiusConfig().modelId;
     const saved = await write(
       who,
       "session",
       id,
       {
         ...latest,
-        aiFeedback: { ...latest.aiFeedback, [c.id]: { ...output, model } },
+        aiFeedback: {
+          ...latest.aiFeedback,
+          [c.id]: { ...output, model: feedbackModel },
+        },
       },
       latest.version,
     );
     return Response.json({
       ...output,
       mode: "live",
-      model,
+      model: feedbackModel,
       session: publicSession(saved, l),
     });
   } catch (e) {
