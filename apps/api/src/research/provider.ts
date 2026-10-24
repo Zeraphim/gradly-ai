@@ -70,10 +70,27 @@ export class NebiusProvider implements ModelProvider {
           );
         }
         const body = await response.json();
-        if (body.model !== model || body.choices?.[0]?.finish_reason !== "stop")
-          throw Error(
-            "The AI response was incomplete or came from an unexpected model. Retry this stage.",
+        const finishReason = body.choices?.[0]?.finish_reason;
+        const returnedModel = (body.model || "").toLowerCase();
+        const expectedModel = model.toLowerCase();
+        const modelMatches =
+          returnedModel === expectedModel ||
+          returnedModel.endsWith(expectedModel) ||
+          expectedModel.endsWith(returnedModel);
+        const isComplete =
+          finishReason === "stop" ||
+          finishReason === "eos" ||
+          finishReason === "end_turn" ||
+          finishReason === "stop_sequence";
+
+        if (!modelMatches || !isComplete) {
+          console.warn(
+            `[Nebius Provider Warning] Expected model "${model}", received "${body.model}". Finish reason: "${finishReason}"`,
           );
+          throw Error(
+            `The AI response was incomplete or came from an unexpected model (model: ${body.model}, finish_reason: ${finishReason}). Retry this stage.`,
+          );
+        }
         const content = body.choices?.[0]?.message?.content;
         if (typeof content !== "string")
           throw Error(
