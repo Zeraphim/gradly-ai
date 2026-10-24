@@ -25,6 +25,7 @@
     "pregenerate:studies": "npm run build --workspace @paperquest/contracts",
     "generate:studies": "node --env-file-if-exists=.env --import tsx scripts/generate-prepared-studies.ts",
     "test:issue5": "node --import tsx scripts/verify-issue-5.ts",
+    "test:issue6": "node --import tsx scripts/verify-issue-6.ts",
     "build:vercel": "npm run build --workspace @paperquest/contracts && npm run build --workspace @paperquest/web && node scripts/prepare-vercel.mjs",
     "predev": "npm run build --workspace @paperquest/contracts",
     "pretest": "npm run build --workspace @paperquest/contracts",
