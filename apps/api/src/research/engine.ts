@@ -155,6 +155,7 @@ export function publicSession(s: LearningSession, l: Lesson) {
         attempts: a.length,
         previousSelection: last?.selected ?? [],
         reasoning: last?.reasoning ?? "",
+        reasoningRevision: last?.reasoningRevisions?.length ?? 0,
       }
     : null;
   const active = s.reviewIds
