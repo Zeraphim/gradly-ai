@@ -30,9 +30,10 @@ export function syncFlowConnectors(
     const sx = (host.clientWidth || box.width) / box.width;
     const sy = (host.clientHeight || box.height) / box.height;
     const nodes = new Map(
-      [...host.querySelectorAll<HTMLElement>("button[data-scene-node]")].map(
-        (el) => [el.dataset.sceneNode!, el.getBoundingClientRect()],
-      ),
+      [...host.querySelectorAll<HTMLElement>("[data-scene-node]")].map((el) => [
+        el.dataset.sceneNode!,
+        el.getBoundingClientRect(),
+      ]),
     );
     const paths = [
       ...host.querySelectorAll<SVGPathElement>("path[data-scene-edge]"),
@@ -83,7 +84,7 @@ export function syncFlowConnectors(
   const observer =
     typeof ResizeObserver !== "undefined" ? new ResizeObserver(resized) : null;
   observer?.observe(host);
-  for (const node of host.querySelectorAll("button[data-scene-node]"))
+  for (const node of host.querySelectorAll("[data-scene-node]"))
     observer?.observe(node);
   window.addEventListener("resize", resized);
   measure();

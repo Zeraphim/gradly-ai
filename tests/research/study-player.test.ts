@@ -1,0 +1,194 @@
+// @vitest-environment jsdom
+import { createElement as h } from "react";
+import { afterEach, beforeEach, expect, it } from "vitest";
+import { act, cleanup, render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
+import { StudyPreview } from "../../apps/web/src/research/studies/StudyPreview.js";
+import {
+  loadStudy,
+  studies,
+} from "../../apps/web/src/research/studies/catalog.js";
+import { setShowUnreviewed } from "../../apps/web/src/research/studies/progress.js";
+
+beforeEach(() => {
+  localStorage.clear();
+  setShowUnreviewed(false);
+  Object.defineProperty(window, "matchMedia", {
+    configurable: true,
+    value: () => ({
+      matches: false,
+      addListener() {},
+      removeListener() {},
+      addEventListener() {},
+      removeEventListener() {},
+    }),
+  });
+  window.scrollTo = () => {};
+});
+afterEach(cleanup);
+
+const view = (path: string) => h(StudyPreview, { path, onExit: () => {} });
+
+it("hides unreviewed studies by default and lists them behind the flag", async () => {
+  render(view("/studies"));
+  expect(
+    screen.getByRole("heading", { name: "Studies are being checked" }),
+  ).toBeTruthy();
+  await userEvent.click(
+    screen.getByRole("button", { name: /Preview unreviewed studies/ }),
+  );
+  expect(
+    screen
+      .getAllByRole("link", { name: /./ })
+      .filter((a) => a.className === "library-card-link"),
+  ).toHaveLength(studies.length);
+  await userEvent.click(screen.getByRole("button", { name: /Longitudinal/ }));
+  expect(
+    screen.getByRole("link", { name: "Restless nights and grades" }),
+  ).toBeTruthy();
+  expect(
+    screen.queryByRole("link", { name: "Breakfast and grades" }),
+  ).toBeNull();
+});
+
+it("blocks a direct link to an unreviewed study until the flag is on", () => {
+  render(view("/studies/breakfast-grades"));
+  expect(
+    screen.getByRole("heading", { name: "This study isn’t available" }),
+  ).toBeTruthy();
+});
+
+it("plays choose → check → retry → explain with points once per solve, and restores on reload", async () => {
+  setShowUnreviewed(true);
+  const study = (await loadStudy("breakfast-grades"))!;
+  const [first, second] = study.lesson.challenges;
+  const { unmount } = render(view("/studies/breakfast-grades"));
+  // The paper's identity stays hidden until the final reveal.
+  await userEvent.click(
+    await screen.findByRole("button", { name: /Begin study/ }),
+  );
+  expect(screen.queryByText(study.lesson.paper.title)).toBeNull();
+  const check = () => screen.getByRole("button", { name: /^Check/ });
+  expect((check() as HTMLButtonElement).disabled).toBe(true);
+
+  // Solve the first challenge on the first try.
+  const right = first!.options.find((o) => first!.accepted.includes(o.id))!;
+  await userEvent.click(
+    screen.getByRole("radio", { name: new RegExp(escape(right.text)) }),
+  );
+  await userEvent.click(check());
+  expect(screen.getByText(/\+10 points/)).toBeTruthy();
+  expect(
+    screen.getByLabelText("10 practice points in this study"),
+  ).toBeTruthy();
+  await act(() => new Promise((r) => setTimeout(r, 300)));
+  await userEvent.click(screen.getByRole("button", { name: /^Continue/ }));
+
+  // Miss the second twice: one retry with a hint, then the explanation, no points.
+  const wrong = second!.options.filter((o) => !second!.accepted.includes(o.id));
+  const pickText = async (text: string) =>
+    userEvent.click(
+      screen
+        .getAllByRole("radio")
+        .find(
+          (el) =>
+            el.getAttribute("aria-label")?.includes(text) ||
+            el.closest("label")?.textContent?.includes(text),
+        )!,
+    );
+  await pickText(
+    second!.scene
+      ? second!.scene.responses.find((r) => r.optionId === wrong[0]!.id)!.label
+      : wrong[0]!.text,
+  );
+  await userEvent.click(check());
+  expect(screen.getByRole("heading", { name: "Not quite yet" })).toBeTruthy();
+  expect(screen.getAllByText(second!.hint).length).toBeGreaterThan(0);
+  await act(() => new Promise((r) => setTimeout(r, 300)));
+  await userEvent.click(screen.getByRole("button", { name: /^Try again/ }));
+  await pickText(
+    second!.scene
+      ? second!.scene.responses.find(
+          (r) => r.optionId === (wrong[1] ?? wrong[0])!.id,
+        )!.label
+      : (wrong[1] ?? wrong[0])!.text,
+  );
+  await userEvent.click(check());
+  expect(
+    screen.getByRole("heading", { name: "Here’s the reasoning" }),
+  ).toBeTruthy();
+  expect(
+    screen.getByLabelText("10 practice points in this study"),
+  ).toBeTruthy();
+
+  // Reload: the explained state comes back without losing answers.
+  unmount();
+  render(view("/studies/breakfast-grades"));
+  expect(
+    await screen.findByRole("heading", { name: "Here’s the reasoning" }),
+  ).toBeTruthy();
+  expect(
+    screen.getByLabelText("10 practice points in this study"),
+  ).toBeTruthy();
+});
+
+it("chooses with number keys and checks with Enter", async () => {
+  setShowUnreviewed(true);
+  const study = (await loadStudy("learning-styles"))!;
+  const first = study.lesson.challenges[0]!;
+  render(view("/studies/learning-styles"));
+  await userEvent.click(
+    await screen.findByRole("button", { name: /Begin study/ }),
+  );
+  const index = first.options.findIndex((o) => first.accepted.includes(o.id));
+  await userEvent.keyboard(String(index + 1));
+  expect(
+    (screen.getAllByRole("radio")[index] as HTMLInputElement).checked,
+  ).toBe(true);
+  await userEvent.keyboard("{Enter}");
+  expect(screen.getByText(/\+10 points/)).toBeTruthy();
+});
+
+it("shows the recovery screen for a slug that no longer exists", () => {
+  setShowUnreviewed(true);
+  render(view("/studies/removed-paper"));
+  expect(
+    screen.getByRole("heading", { name: "This study isn’t available" }),
+  ).toBeTruthy();
+  expect(screen.getByText("The link may be out of date.")).toBeTruthy();
+});
+
+it("ignores saved progress for removed studies when offering a resume", () => {
+  const started = {
+    phase: "challenge",
+    index: 1,
+    bonus: false,
+    attempts: { q1: [{ selected: ["A"], correct: true }] },
+    retrying: null,
+    draft: null,
+    completed: false,
+  };
+  // Saved progress arrives as another tab would write it, so the store rereads it.
+  const save = (store: object) =>
+    act(() => {
+      localStorage.setItem("gradly-study-progress:v1", JSON.stringify(store));
+      window.dispatchEvent(
+        new StorageEvent("storage", { key: "gradly-study-progress:v1" }),
+      );
+    });
+  const resume = () =>
+    screen.queryByRole("region", { name: "Continue where you left off" });
+  setShowUnreviewed(true);
+  render(view("/studies"));
+  save({ "removed-paper": { ...started, updated: 2 } });
+  expect(resume()).toBeNull();
+  save({
+    "removed-paper": { ...started, updated: 2 },
+    "sleep-school": { ...started, updated: 1 },
+  });
+  expect(resume()?.textContent).toContain("Restless nights and grades");
+});
+
+function escape(text: string) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").slice(0, 40);
+}

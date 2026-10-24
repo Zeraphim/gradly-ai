@@ -77,6 +77,11 @@ const PaperActivityPilot = lazy(() =>
     default: module.PaperActivityPilot,
   })),
 );
+const StudyPreview = lazy(() =>
+  import("./studies/StudyPreview.js").then((module) => ({
+    default: module.StudyPreview,
+  })),
+);
 export function ResearchApp({
   onExit,
   initialFile,
@@ -125,6 +130,12 @@ export function ResearchApp({
         <ChunkBoundary label="Paper activities">
           <Suspense fallback={<AppLoading label="Opening paper activities…" />}>
             <PaperActivityPilot onExit={onExit} />
+          </Suspense>
+        </ChunkBoundary>
+      ) : /^\/studies(?:\/[a-z0-9-]+)?\/?$/.test(path) ? (
+        <ChunkBoundary label="Prepared studies">
+          <Suspense fallback={<AppLoading label="Opening prepared studies…" />}>
+            <StudyPreview path={path} onExit={onExit} />
           </Suspense>
         </ChunkBoundary>
       ) : (

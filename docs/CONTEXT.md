@@ -30,6 +30,7 @@
 | `root-instructions` | instruction | Active | Repository agent instructions | `AGENTS.md` |  |
 | `web-instructions` | instruction | Active | Learner interface instructions | `apps/web/AGENTS.md` |  |
 | `adr-template` | other | Template | Architecture decision template | `docs/adr/TEMPLATE.md` |  |
+| `generated-studies` | other | Reference | Nemotron-generated prepared studies record | `docs/research/GENERATED_STUDIES.md` |  |
 | `interaction-references` | other | Reference | Historical interaction research and design proposals | `docs/INTERACTION_REFERENCES.md` |  |
 | `nemotron-evaluation` | other | Reference | Nemotron paper-reading and hallucination evaluation | `docs/research/NEMOTRON_EVALUATION.md` |  |
 | `paper-selection` | other | Reference | Vetted candidate paper studies for Gradly | `docs/research/PAPER_SELECTION.md` |  |
@@ -54,6 +55,7 @@
 | `fresh-adventure-motion` | ui | Proposed | Fresh Adventure shared motion and interaction coverage | `docs/ui/FRESH_ADVENTURE_MOTION.md` |  |
 | `fresh-adventure-ui` | ui | Proposed | Fresh Adventure visual scenes and verification limits | `docs/ui/FRESH_ADVENTURE.md` |  |
 | `intake-processing-ui` | ui | Proposed | Intake, review, preparation and player handoff (issue 12) | `docs/ui/INTAKE_PROCESSING.md` |  |
+| `prepared-studies-ui` | ui | Proposed | Prepared-study library and journey player | `docs/ui/PREPARED_STUDIES.md` |  |
 | `ui-polish-review` | validation | Historical report | Historical source and browser polish review | `docs/UI_POLISH_REVIEW.md` |  |
 
 ## Context Commands

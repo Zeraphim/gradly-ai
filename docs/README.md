@@ -76,6 +76,10 @@ current code before changing behavior. Do not create a competing work-status tra
 - [research/NEMOTRON_EVALUATION.md](research/NEMOTRON_EVALUATION.md) measures how
   reliably each Nemotron model reads a paper through the real pipeline, where it invents
   content, and which guards the pipeline needs. Rerun it with `npm run eval:nemotron`.
+- [research/GENERATED_STUDIES.md](research/GENERATED_STUDIES.md) records which
+  prepared-study lessons Nemotron generated for the stored papers, which were skipped
+  and why, and every mechanical fix. None is content-reviewed. Rerun it with
+  `npm run generate:studies`.
 - [research/papers/](research/papers/README.md) stores only source PDFs whose licence
   permits redistribution, with attribution and retrieval notes.
 

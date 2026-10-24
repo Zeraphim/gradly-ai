@@ -126,16 +126,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Attribution:** © 2020 Cloutier, Fernandez, Houde-Archambault et al., published by Frontiers in Psychology under CC BY 4.0.
 - **Design group:** Within-subjects / repeated measures. Content review by Tymee pending.
 
-### karpicke-2016-retrieval-practice-children.pdf — CC BY 4.0
-
-- **Work:** Karpicke, Blunt & Smith (2016), "Retrieval-Based Learning: Positive Effects of Retrieval Practice in Elementary School Children", _Frontiers in Psychology_ 7: 350. doi:10.3389/fpsyg.2016.00350
-- **Version:** published version of record (9 pages).
-- **Licence:** CC BY 4.0 (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2016.00350/full · PMC4786565.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2016 Karpicke, Blunt & Smith, published by Frontiers in Psychology under CC BY 4.0.
-- **Design group:** Within-subjects / repeated measures. Content review by Tymee pending.
-
 ### icht-2014-production-effect-distinctiveness.pdf — CC BY
 
 - **Work:** Icht, Mama & Algom (2014), "The production effect in memory: multiple species of distinctiveness", _Frontiers in Psychology_ 5: 886. doi:10.3389/fpsyg.2014.00886
@@ -144,16 +134,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2014.00886/full · PMC4128297.
 - **Retrieved:** 2026-10-20.
 - **Attribution:** © 2014 Icht, Mama & Algom, published by Frontiers in Psychology under CC BY.
-- **Design group:** Within-subjects / repeated measures. Content review by Tymee pending.
-
-### sundqvist-2017-covert-overt-retrieval.pdf — CC BY
-
-- **Work:** Sundqvist, Mäntylä & Jönsson (2017), "Assessing Boundary Conditions of the Testing Effect: On the Relative Efficacy of Covert vs. Overt Retrieval", _Frontiers in Psychology_ 8: 1018. doi:10.3389/fpsyg.2017.01018
-- **Version:** published version of record (15 pages).
-- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01018/full · PMC5478738.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2017 Sundqvist, Mäntylä & Jönsson, published by Frontiers in Psychology under CC BY.
 - **Design group:** Within-subjects / repeated measures. Content review by Tymee pending.
 
 ### bentley-2017-self-reference-online.pdf — CC BY 4.0
@@ -184,16 +164,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0287911 · PMC10310002.
 - **Retrieved:** 2026-10-20.
 - **Attribution:** © 2023 Carruth, Ramos & Miyake, published by PLOS ONE under CC BY 4.0.
-- **Design group:** Replication. Content review by Tymee pending.
-
-### inglis-2022-stereotype-threat-replication.pdf — CC BY 4.0
-
-- **Work:** Inglis & O'Hagan (2022), "Stereotype threat, gender and mathematics attainment: A conceptual replication of Stricker & Ward", _PLOS ONE_ 17(5): e0267699. doi:10.1371/journal.pone.0267699
-- **Version:** published version of record (12 pages).
-- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
-- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0267699 · PMC9140291.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2022 Inglis & O'Hagan, published by PLOS ONE under CC BY 4.0.
 - **Design group:** Replication. Content review by Tymee pending.
 
 ### harris-2013-goal-priming-failures.pdf — CC BY
@@ -276,16 +246,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Attribution:** © 2023 Marciano & Viswanath, published by Frontiers in Psychology under CC BY 4.0.
 - **Design group:** Cross-sectional correlational. Content review by Tymee pending.
 
-### armand-2021-sleep-wellbeing-grades.pdf — CC BY
-
-- **Work:** Armand, Biassoni & Corrias (2021), "Sleep, Well-Being and Academic Performance: A Study in a Singapore Residential College", _Frontiers in Psychology_ 12: 672238. doi:10.3389/fpsyg.2021.672238
-- **Version:** published version of record (14 pages).
-- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2021.672238/full · PMC8200680.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2021 Armand, Biassoni & Corrias, published by Frontiers in Psychology under CC BY.
-- **Design group:** Cross-sectional correlational. Content review by Tymee pending.
-
 ### gorgol-2023-chronotype-religiosity-life-satisfaction.pdf — CC BY 4.0
 
 - **Work:** Gorgol, Łowicki & Stolarski (2023), "Godless owls, devout larks: Religiosity and conscientiousness are associated with morning preference and (partly) explain its effects on life satisfaction", _PLOS ONE_ 18(5): e0284787. doi:10.1371/journal.pone.0284787
@@ -294,26 +254,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0284787 · PMC10208493.
 - **Retrieved:** 2026-10-20.
 - **Attribution:** © 2023 Gorgol, Łowicki & Stolarski, published by PLOS ONE under CC BY 4.0.
-- **Design group:** Cross-sectional correlational. Content review by Tymee pending.
-
-### zhang-2021-sleep-anxiety-academic-performance.pdf — CC BY 4.0
-
-- **Work:** Zhang, Dimitriou & Halstead (2021), "Sleep, Anxiety, and Academic Performance: A Study of Adolescents From Public High Schools in China", _Frontiers in Psychology_ 12: 678839. doi:10.3389/fpsyg.2021.678839
-- **Version:** published version of record (7 pages).
-- **Licence:** CC BY 4.0 (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2021.678839/full · PMC8281015.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2021 Zhang, Dimitriou & Halstead, published by Frontiers in Psychology under CC BY 4.0.
-- **Design group:** Cross-sectional correlational. Content review by Tymee pending.
-
-### bracero-malagon-2022-physical-fitness-math-intelligence.pdf — CC BY
-
-- **Work:** Bracero-Malagón, Juárez-Ruiz de Mier, Reigal et al. (2022), "Logical Intelligence and Mathematical Competence Are Determined by Physical Fitness in a Sample of School Children", _Frontiers in Psychology_ 13: 833844. doi:10.3389/fpsyg.2022.833844
-- **Version:** published version of record (7 pages).
-- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2022.833844/full · PMC9135127.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2022 Bracero-Malagón, Juárez-Ruiz de Mier, Reigal et al., published by Frontiers in Psychology under CC BY.
 - **Design group:** Cross-sectional correlational. Content review by Tymee pending.
 
 ### gao-2021-breakfast-academic-achievement.pdf — CC BY
@@ -325,16 +265,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Retrieved:** 2026-10-20.
 - **Attribution:** © 2021 Gao, Zhao & Shu, published by Frontiers in Psychology under CC BY.
 - **Design group:** Cross-sectional correlational. Content review by Tymee pending.
-
-### mazzocco-2011-ans-predicts-math.pdf — CC BY 4.0
-
-- **Work:** Mazzocco, Feigenson & Halberda (2011), "Preschoolers' Precision of the Approximate Number System Predicts Later School Mathematics Performance", _PLOS ONE_ 6(9): e23749. doi:10.1371/journal.pone.0023749
-- **Version:** published version of record (8 pages).
-- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
-- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0023749 · PMC3173357.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2011 Mazzocco, Feigenson & Halberda, published by PLOS ONE under CC BY 4.0.
-- **Design group:** Longitudinal / cohort. Content review by Tymee pending.
 
 ### giuliani-2021-delay-gratification-eating.pdf — CC BY 4.0
 
@@ -386,26 +316,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Attribution:** © 2019 Stormark, Fosse & Pallesen et al., published by PLOS ONE under CC BY 4.0.
 - **Design group:** Longitudinal / cohort. Content review by Tymee pending.
 
-### gygi-2017-intelligence-tests-school-grades.pdf — CC BY 4.0
-
-- **Work:** Gygi, Hagmann-von Arx & Schweizer et al. (2017), "The Predictive Validity of Four Intelligence Tests for School Grades: A Small Sample Longitudinal Study", _Frontiers in Psychology_ 8: 375. doi:10.3389/fpsyg.2017.00375
-- **Version:** published version of record (9 pages).
-- **Licence:** CC BY 4.0 (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2017.00375/full · PMC5346574.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2017 Gygi, Hagmann-von Arx & Schweizer et al., published by Frontiers in Psychology under CC BY 4.0.
-- **Design group:** Longitudinal / cohort. Content review by Tymee pending.
-
-### franzoi-2025-retrieval-practice-primary.pdf — CC BY 4.0
-
-- **Work:** Franzoi, Cembrani, Mulatti et al. (2025), "Retrieval practice enhances learning in real primary school settings, whether distributed or not", _Frontiers in Psychology_ 16: 1632206. doi:10.3389/fpsyg.2025.1632206
-- **Version:** published version of record (11 pages).
-- **Licence:** CC BY 4.0 (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2025.1632206 · PMC12372469.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2025 Franzoi, Cembrani, Mulatti et al., published by Frontiers in Psychology under CC BY 4.0.
-- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
-
 ### janz-2019-mindfulness-calmspace.pdf — CC BY 4.0
 
 - **Work:** Janz, Dawe & Wyllie (2019), "Mindfulness-Based Program Embedded Within the Existing Curriculum Improves Executive Functioning and Behavior in Young Children: A Waitlist Controlled Trial", _Frontiers in Psychology_ 10: 2052. doi:10.3389/fpsyg.2019.02052
@@ -416,16 +326,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Attribution:** © 2019 Janz, Dawe & Wyllie, published by Frontiers in Psychology under CC BY 4.0.
 - **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
 
-### nemeth-2019-interleaved-subtraction.pdf — CC BY 4.0
-
-- **Work:** Nemeth, Werker, Arend et al. (2019), "Interleaved Learning in Elementary School Mathematics: Effects on the Flexible and Adaptive Use of Subtraction Strategies", _Frontiers in Psychology_ 10: 86. doi:10.3389/fpsyg.2019.00086
-- **Version:** published version of record (21 pages).
-- **Licence:** CC BY 4.0 (Frontiers in Psychology). Redistribution permitted with attribution.
-- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2019.00086 · PMC6385790.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2019 Nemeth, Werker, Arend et al., published by Frontiers in Psychology under CC BY 4.0.
-- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
-
 ### rohrer-2021-seating-friendships.pdf — CC BY 4.0
 
 - **Work:** Rohrer, Keller & Elwert (2021), "Proximity can induce diverse friendships: A large randomized classroom experiment", _PLOS ONE_ 16(8): e0255097. doi:10.1371/journal.pone.0255097
@@ -434,26 +334,6 @@ wrong version or a different publication cannot be described as the cited work.
 - **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0255097 · PMC8357142.
 - **Retrieved:** 2026-10-20.
 - **Attribution:** © 2021 Rohrer, Keller & Elwert, published by PLOS ONE under CC BY 4.0.
-- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
-
-### keller-2021-ego-depletion-cheating.pdf — CC BY 4.0
-
-- **Work:** Keller & Kiss (2021), "Do exhausted primary school students cheat more? A randomized field experiment", _PLOS ONE_ 16(12): e0260141. doi:10.1371/journal.pone.0260141
-- **Version:** published version of record (11 pages).
-- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
-- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0260141 · PMC8635394.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2021 Keller & Kiss, published by PLOS ONE under CC BY 4.0.
-- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
-
-### solanki-2019-ease-learning-community.pdf — CC BY 4.0
-
-- **Work:** Solanki, McPartlan, Xu et al. (2019), "Success with EASE: Who benefits from a STEM learning community?", _PLOS ONE_ 14(3): e0213827. doi:10.1371/journal.pone.0213827
-- **Version:** published version of record (20 pages).
-- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
-- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0213827 · PMC6430422.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2019 Solanki, McPartlan, Xu et al., published by PLOS ONE under CC BY 4.0.
 - **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
 
 ### wienecke-2021-basketball-mathematics.pdf — CC BY 4.0
@@ -516,24 +396,144 @@ wrong version or a different publication cannot be described as the cited work.
 - **Attribution:** © 2025 Bertram, Lalot, van der Werff et al., published by Frontiers in Psychology under CC BY 4.0.
 - **Design group:** Null or equivalence result. Content review by Tymee pending.
 
-### richey-2014-wm-training-analogy.pdf — CC BY 4.0
+### stephens-2020-swearing-pain.pdf — CC BY
 
-- **Work:** Richey, Phillips, Schunn et al. (2014), "Is the Link from Working Memory to Analogy Causal? No Analogy Improvements following Working Memory Training Gains", _PLOS ONE_ 9(9): e106616. doi:10.1371/journal.pone.0106616
-- **Version:** published version of record (9 pages).
+- **Work:** Stephens & Robertson (2020), "Swearing as a Response to Pain: Assessing Hypoalgesic Effects of Novel “Swear” Words", _Frontiers in Psychology_ 11: 723. doi:10.3389/fpsyg.2020.00723
+- **Version:** published version of record (10 pages).
+- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
+- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2020.00723/full · PMC7204505.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2020 Stephens & Robertson, published by Frontiers in Psychology under CC BY.
+- **Design group:** Within-subjects / repeated measures. Content review by Tymee pending.
+
+### mcnabb-2016-smartphone-driving.pdf — CC BY 4.0
+
+- **Work:** McNabb & Gray (2016), "Staying Connected on the Road: A Comparison of Different Types of Smart Phone Use in a Driving Simulator", _PLOS ONE_ 11(2): e0148555. doi:10.1371/journal.pone.0148555
+- **Version:** published version of record (12 pages).
 - **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
-- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0106616 · PMC4154731.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2014 Richey, Phillips, Schunn et al., published by PLOS ONE under CC BY 4.0.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0148555 · PMC4757568.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2016 McNabb & Gray, published by PLOS ONE under CC BY 4.0.
+- **Design group:** Within-subjects / repeated measures. Content review by Tymee pending.
+
+### boch-2019-tv-death-penalty-replication.pdf — CC BY
+
+- **Work:** Boch, Tran & Voracek (2019), "Does Really One in Ten Believe Capital Punishment Exists in a Contemporary European Community Country? An Endorsed, Prereviewed, Preregistered Replication Study and Meta-Analysis", _Frontiers in Psychology_ 10: 1601. doi:10.3389/fpsyg.2019.01601
+- **Version:** published version of record (13 pages).
+- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
+- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2019.01601/full · PMC6658835.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2019 Boch, Tran & Voracek, published by Frontiers in Psychology under CC BY.
+- **Design group:** Replication. Content review by Tymee pending.
+
+### an-2016-nature-sunlight-work.pdf — CC BY 4.0
+
+- **Work:** An, Colarelli, O'Brien & Boyajian (2016), "Why We Need More Nature at Work: Effects of Natural Elements and Sunlight on Employee Mental Health and Work Attitudes", _PLOS ONE_ 11(5): e0155614. doi:10.1371/journal.pone.0155614
+- **Version:** published version of record (17 pages).
+- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0155614 · PMC4877070.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2016 An, Colarelli, O'Brien & Boyajian, published by PLOS ONE under CC BY 4.0.
+- **Design group:** Cross-sectional correlational. Content review by Tymee pending.
+
+### shevlin-2022-debt-mental-health.pdf — CC BY 4.0
+
+- **Work:** Shevlin, Redican, Hyland et al. (2022), "Perceived manageability of debt and mental health during the COVID-19 pandemic: A UK population analysis", _PLOS ONE_ 17(9): e0274052. doi:10.1371/journal.pone.0274052
+- **Version:** published version of record (13 pages).
+- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0274052 · PMC9491596.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2022 Shevlin, Redican, Hyland et al., published by PLOS ONE under CC BY 4.0.
+- **Design group:** Cross-sectional correlational. Content review by Tymee pending.
+
+### fu-2022-hearing-loss-loneliness.pdf — CC BY
+
+- **Work:** Fu, Eikelboom, Liu, Wang & Jayakody (2022), "The impact of untreated hearing loss on depression, anxiety, stress, and loneliness in tonal language-speaking older adults in China", _Frontiers in Psychology_ 13: 917276. doi:10.3389/fpsyg.2022.917276
+- **Version:** published version of record (9 pages).
+- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
+- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2022.917276 · PMC9751871.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2022 Fu, Eikelboom, Liu, Wang & Jayakody, published by Frontiers in Psychology under CC BY.
+- **Design group:** Cross-sectional correlational. Content review by Tymee pending.
+
+### taniguchi-2022-dog-ownership-disability.pdf — CC BY 4.0
+
+- **Work:** Taniguchi, Seino, Headey et al. (2022), "Evidence that dog ownership protects against the onset of disability in an older community-dwelling Japanese population", _PLOS ONE_ 17(2): e0263791. doi:10.1371/journal.pone.0263791
+- **Version:** published version of record (13 pages).
+- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0263791 · PMC8865647.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2022 Taniguchi, Seino, Headey et al., published by PLOS ONE under CC BY 4.0.
+- **Design group:** Longitudinal / cohort. Content review by Tymee pending.
+
+### stannard-2019-birth-order-wellbeing.pdf — CC BY 4.0
+
+- **Work:** Stannard, Berrington & Alwan (2019), "Associations between birth order with mental wellbeing and psychological distress in midlife: Findings from the 1970 British Cohort Study (BCS70)", _PLOS ONE_ 14(9): e0222184. doi:10.1371/journal.pone.0222184
+- **Version:** published version of record (15 pages).
+- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0222184 · PMC6748419.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2019 Stannard, Berrington & Alwan, published by PLOS ONE under CC BY 4.0.
+- **Design group:** Longitudinal / cohort. Content review by Tymee pending.
+
+### franssens-2021-bus-nudge-social-label.pdf — CC BY
+
+- **Work:** Franssens, Botchway, de Swart et al. (2021), "Nudging Commuters to Increase Public Transport Use: A Field Experiment in Rotterdam", _Frontiers in Psychology_ 12: 633865. doi:10.3389/fpsyg.2021.633865
+- **Version:** published version of record (7 pages).
+- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
+- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2021.633865/full · PMC7990888.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2021 Franssens, Botchway, de Swart et al., published by Frontiers in Psychology under CC BY.
+- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
+
+### gaube-2018-emoticon-hand-hygiene.pdf — CC BY 4.0
+
+- **Work:** Gaube, Tsivrikos, Dollinger et al. (2018), "How a smiley protects health: A pilot intervention to improve hand hygiene in hospitals by activating injunctive norms through emoticons", _PLOS ONE_ 13(5): e0197465. doi:10.1371/journal.pone.0197465
+- **Version:** published version of record (16 pages).
+- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0197465 · PMC5962087.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2018 Gaube, Tsivrikos, Dollinger et al., published by PLOS ONE under CC BY 4.0.
+- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
+
+### mundt-2020-straw-default-nudge.pdf — CC BY
+
+- **Work:** Mundt, Carl & Harhoff (2020), "A Field Experiment on Reducing Drinking Straw Consumption by Default", _Frontiers in Psychology_ 11: 565537. doi:10.3389/fpsyg.2020.565537
+- **Version:** published version of record (6 pages).
+- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
+- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2020.565537/full · PMC7525030.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2020 Mundt, Carl & Harhoff, published by Frontiers in Psychology under CC BY.
+- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
+
+### baillon-2019-phishing-information-experience.pdf — CC BY 4.0
+
+- **Work:** Baillon, de Bruin, Emirmahmutoglu et al. (2019), "Informing, simulating experience, or both: A field experiment on phishing risks", _PLOS ONE_ 14(12): e0224216. doi:10.1371/journal.pone.0224216
+- **Version:** published version of record (15 pages).
+- **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0224216 · PMC6919577.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2019 Baillon, de Bruin, Emirmahmutoglu et al., published by PLOS ONE under CC BY 4.0.
+- **Design group:** Classroom, field or quasi-experiment. Content review by Tymee pending.
+
+### rennung-2016-power-pose-backlash.pdf — CC BY
+
+- **Work:** Rennung, Blum & Göritz (2016), "To Strike a Pose: No Stereotype Backlash for Power Posing Women", _Frontiers in Psychology_ 7: 1463. doi:10.3389/fpsyg.2016.01463
+- **Version:** published version of record (12 pages).
+- **Licence:** CC BY (version not stated in the article) (Frontiers in Psychology). Redistribution permitted with attribution.
+- **Source:** https://www.frontiersin.org/articles/10.3389/fpsyg.2016.01463/full · PMC5037219.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2016 Rennung, Blum & Göritz, published by Frontiers in Psychology under CC BY.
 - **Design group:** Null or equivalence result. Content review by Tymee pending.
 
-### rode-2014-wm-training-school.pdf — CC BY 4.0
+### raff-2025-earmarking-donations.pdf — CC BY 4.0
 
-- **Work:** Rode, Robson, Purviance et al. (2014), "Is Working Memory Training Effective? A Study in a School Setting", _PLOS ONE_ 9(8): e104796. doi:10.1371/journal.pone.0104796
-- **Version:** published version of record (8 pages).
+- **Work:** Raff, Böhm & Fuchs (2025), "Earmarking donations to boost study participation? Evidence from a field experiment", _PLOS ONE_ 20(9): e0331498. doi:10.1371/journal.pone.0331498
+- **Version:** published version of record (13 pages).
 - **Licence:** CC BY 4.0 (PLOS ONE). Redistribution permitted with attribution.
-- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104796 · PMC4146527.
-- **Retrieved:** 2026-10-20.
-- **Attribution:** © 2014 Rode, Robson, Purviance et al., published by PLOS ONE under CC BY 4.0.
+- **Source:** https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0331498 · PMC12416732.
+- **Retrieved:** 2026-10-24.
+- **Attribution:** © 2025 Raff, Böhm & Fuchs, published by PLOS ONE under CC BY 4.0.
 - **Design group:** Null or equivalence result. Content review by Tymee pending.
 
 ## Not stored, and why

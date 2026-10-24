@@ -1,8 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, inject, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PDFParse } from "pdf-parse";
+import type {} from "./papers-setup.js";
 
 // Stored source papers must match the work their entry names. The 2014 CogSci
 // proceedings file was once stored under a 2016 journal citation, so this check reads
@@ -30,17 +30,10 @@ function sectionFor(file: string) {
   return (end === -1 ? rest : rest.slice(0, end)).join("\n");
 }
 
-async function ownText(file: string) {
-  const parser = new PDFParse({
-    data: new Uint8Array(readFileSync(join(papersDir, file))),
-  });
-  try {
-    const result = await parser.getText();
-    return (result.pages ?? []).map((page) => page?.text ?? "").join("\n");
-  } finally {
-    await parser.destroy();
-  }
-}
+// Page text comes from tests/research/papers-setup.ts, which parses each PDF once.
+const paperPages = inject("paperPages");
+const ownText = (file: string) =>
+  (paperPages[file] ?? []).map((page) => page.text).join("\n");
 
 // Whitespace is dropped so line breaks, hyphenation and PDF spacing cannot hide a match.
 const squash = (value: string) => value.replace(/\s+/g, "").toLowerCase();
@@ -51,35 +44,31 @@ describe("stored source papers", () => {
     expect(pdfFiles).toEqual([...documented].sort());
   });
 
-  it.each(pdfFiles)(
-    "%s contains the identity its entry records",
-    async (file) => {
-      const section = sectionFor(file);
-      expect(section, `no README entry names ${file}`).not.toBe("");
+  it.each(pdfFiles)("%s contains the identity its entry records", (file) => {
+    const section = sectionFor(file);
+    expect(section, `no README entry names ${file}`).not.toBe("");
 
-      const doi = section.match(/doi:\s*(10\.\d{4,9}\/\S+)/i)?.[1];
-      expect(doi, `entry for ${file} records no DOI`).toBeTruthy();
+    const doi = section.match(/doi:\s*(10\.\d{4,9}\/\S+)/i)?.[1];
+    expect(doi, `entry for ${file} records no DOI`).toBeTruthy();
 
-      const text = squash(await ownText(file));
-      expect(
-        text.includes(squash(doi!)),
-        `${file} does not contain its recorded DOI ${doi}`,
-      ).toBe(true);
+    const text = squash(ownText(file));
+    expect(
+      text.includes(squash(doi!)),
+      `${file} does not contain its recorded DOI ${doi}`,
+    ).toBe(true);
 
-      const title = section.match(/"([^"]+)"/)?.[1] ?? "";
-      const words = title
-        .toLowerCase()
-        .split(/\W+/)
-        .filter((word) => word.length >= 5);
-      expect(
-        words.length,
-        `entry for ${file} records no title`,
-      ).toBeGreaterThan(0);
-      const present = words.filter((word) => text.includes(word));
-      expect(
-        present.length,
-        `${file} text does not match its recorded title "${title}"`,
-      ).toBeGreaterThanOrEqual(Math.ceil(words.length * 0.6));
-    },
-  );
+    const title = section.match(/"([^"]+)"/)?.[1] ?? "";
+    const words = title
+      .toLowerCase()
+      .split(/\W+/)
+      .filter((word) => word.length >= 5);
+    expect(words.length, `entry for ${file} records no title`).toBeGreaterThan(
+      0,
+    );
+    const present = words.filter((word) => text.includes(word));
+    expect(
+      present.length,
+      `${file} text does not match its recorded title "${title}"`,
+    ).toBeGreaterThanOrEqual(Math.ceil(words.length * 0.6));
+  });
 });

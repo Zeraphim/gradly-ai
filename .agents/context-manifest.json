@@ -538,9 +538,7 @@
       "status": "Reference",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": [
-        "docs/research/**"
-      ],
+      "appliesTo": ["docs/research/**"],
       "relationships": [
         {
           "type": "related",
@@ -574,6 +572,45 @@
         }
       ],
       "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "generated-studies",
+      "kind": "other",
+      "title": "Nemotron-generated prepared studies record",
+      "path": "docs/research/GENERATED_STUDIES.md",
+      "status": "Reference",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "scripts/generate-prepared-studies.ts",
+        "scripts/prepared-study-checks.ts",
+        "apps/web/src/research/studies/data/**",
+        "apps/web/src/research/studies/cards.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "nemotron-evaluation"
+        },
+        {
+          "type": "related",
+          "target": "prepared-studies-ui"
+        },
+        {
+          "type": "related",
+          "target": "paper-selection"
+        }
+      ],
+      "implementationRefs": [
+        "scripts/generate-prepared-studies.ts",
+        "scripts/prepared-study-checks.ts",
+        "tests/research/prepared-studies.test.ts"
+      ],
       "review": {
         "commit": null,
         "at": null,
@@ -977,6 +1014,53 @@
         "apps/web/src/research/activity-pilot.css",
         "tests/browser/activity-pilot.spec.ts",
         "tests/research/activity-pilot.test.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
+      "id": "prepared-studies-ui",
+      "kind": "ui",
+      "title": "Prepared-study library and journey player",
+      "path": "docs/ui/PREPARED_STUDIES.md",
+      "status": "Proposed",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/studies/**",
+        "tests/research/prepared-studies.test.ts",
+        "tests/research/study-player.test.ts",
+        "tests/browser/studies.spec.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "fresh-adventure-motion"
+        },
+        {
+          "type": "related",
+          "target": "design"
+        },
+        {
+          "type": "related",
+          "target": "scene-authoring"
+        }
+      ],
+      "implementationRefs": [
+        "apps/web/src/research/studies/JourneyPlayer.tsx",
+        "apps/web/src/research/studies/StudyLibrary.tsx",
+        "apps/web/src/research/studies/types.ts",
+        "tests/research/prepared-studies.test.ts",
+        "tests/research/study-player.test.ts",
+        "tests/browser/studies.spec.ts",
+        "apps/web/src/research/studies/cards.ts",
+        "apps/web/src/research/studies/catalog.ts",
+        "apps/web/src/research/PathPicker.tsx",
+        "scripts/prepared-study-checks.ts",
+        "tests/research/papers-setup.ts"
       ],
       "review": {
         "commit": null,
