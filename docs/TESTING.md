@@ -122,7 +122,7 @@ The existing automatic Vercel preview was blocked by project access restrictions
   guides, scene mappings, gating, scene-kind variety, a stored PDF for every study
   except the texting study, and verbatim evidence excerpts. The per-study checks
   live in `scripts/prepared-study-checks.ts`, which the Nemotron generator also
-  uses as its gate. `study-player.test.ts` exercises the library flag, filters,
+  uses as its gate. `study-player.test.ts` exercises the full library list, filters,
   check/retry/explain, points once per solve, reload, keyboard, unknown slugs and
   saved progress for removed studies.
 - `tests/research/papers-setup.ts` is Vitest's global setup: it parses every stored

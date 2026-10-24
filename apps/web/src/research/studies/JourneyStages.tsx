@@ -18,7 +18,6 @@ import {
   resetProgress,
   studyState,
   useAllProgress,
-  useShowUnreviewed,
   type StudyProgress,
 } from "./progress.js";
 import { StudyArt, groupTone } from "./StudyArt.js";
@@ -161,7 +160,6 @@ export function StudyReveal({
   const motion = useSceneMotion();
   const celebrate = motion.canEnter();
   const all = useAllProgress();
-  const showUnreviewed = useShowUnreviewed();
   const list = journeyChallenges(study, progress.bonus);
   const outcome = (id: string) => {
     const attempts = progress.attempts[id] ?? [];
@@ -171,12 +169,8 @@ export function StudyReveal({
   };
   const counts = { first: 0, retry: 0, explained: 0 };
   for (const challenge of list) counts[outcome(challenge.id)] += 1;
-  // Suggest only studies the library would list, never one still hidden for review.
   const open = studies.filter(
-    (s) =>
-      s.slug !== study.slug &&
-      (s.reviewed || showUnreviewed) &&
-      studyState(all[s.slug]) !== "done",
+    (s) => s.slug !== study.slug && studyState(all[s.slug]) !== "done",
   );
   const next = open.find((s) => s.group !== study.group) ?? open[0];
   const paper = study.lesson.paper;

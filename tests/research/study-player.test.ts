@@ -8,11 +8,9 @@ import {
   loadStudy,
   studies,
 } from "../../apps/web/src/research/studies/catalog.js";
-import { setShowUnreviewed } from "../../apps/web/src/research/studies/progress.js";
 
 beforeEach(() => {
   localStorage.clear();
-  setShowUnreviewed(false);
   Object.defineProperty(window, "matchMedia", {
     configurable: true,
     value: () => ({
@@ -29,14 +27,9 @@ afterEach(cleanup);
 
 const view = (path: string) => h(StudyPreview, { path, onExit: () => {} });
 
-it("hides unreviewed studies by default and lists them behind the flag", async () => {
+it("lists every study, reviewed or not, without a flag", async () => {
   render(view("/studies"));
-  expect(
-    screen.getByRole("heading", { name: "Studies are being checked" }),
-  ).toBeTruthy();
-  await userEvent.click(
-    screen.getByRole("button", { name: /Preview unreviewed studies/ }),
-  );
+  expect(screen.queryByRole("switch")).toBeNull();
   expect(
     screen
       .getAllByRole("link", { name: /./ })
@@ -51,15 +44,14 @@ it("hides unreviewed studies by default and lists them behind the flag", async (
   ).toBeNull();
 });
 
-it("blocks a direct link to an unreviewed study until the flag is on", () => {
+it("opens a direct link to an unreviewed study", async () => {
   render(view("/studies/breakfast-grades"));
   expect(
-    screen.getByRole("heading", { name: "This study isn’t available" }),
+    await screen.findByRole("button", { name: /Begin study/ }),
   ).toBeTruthy();
 });
 
 it("plays choose → check → retry → explain with points once per solve, and restores on reload", async () => {
-  setShowUnreviewed(true);
   const study = (await loadStudy("breakfast-grades"))!;
   const [first, second] = study.lesson.challenges;
   const { unmount } = render(view("/studies/breakfast-grades"));
@@ -133,7 +125,6 @@ it("plays choose → check → retry → explain with points once per solve, and
 });
 
 it("chooses with number keys and checks with Enter", async () => {
-  setShowUnreviewed(true);
   const study = (await loadStudy("learning-styles"))!;
   const first = study.lesson.challenges[0]!;
   render(view("/studies/learning-styles"));
@@ -150,7 +141,6 @@ it("chooses with number keys and checks with Enter", async () => {
 });
 
 it("shows the recovery screen for a slug that no longer exists", () => {
-  setShowUnreviewed(true);
   render(view("/studies/removed-paper"));
   expect(
     screen.getByRole("heading", { name: "This study isn’t available" }),
@@ -178,7 +168,6 @@ it("ignores saved progress for removed studies when offering a resume", () => {
     });
   const resume = () =>
     screen.queryByRole("region", { name: "Continue where you left off" });
-  setShowUnreviewed(true);
   render(view("/studies"));
   save({ "removed-paper": { ...started, updated: 2 } });
   expect(resume()).toBeNull();

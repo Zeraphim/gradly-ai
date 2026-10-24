@@ -20,10 +20,8 @@ export type StudyProgress = {
 type Store = Record<string, StudyProgress>;
 
 const KEY = "gradly-study-progress:v1";
-const REVIEW_KEY = "gradly-show-unreviewed";
 const listeners = new Set<() => void>();
 let memory: Store | null = null;
-let showUnreviewedMemory: boolean | null = null;
 
 function valid(value: unknown): value is StudyProgress {
   if (!value || typeof value !== "object") return false;
@@ -83,9 +81,8 @@ function write(next: Store) {
 function subscribe(listener: () => void) {
   listeners.add(listener);
   const sync = (event: StorageEvent) => {
-    if (event.key === KEY || event.key === REVIEW_KEY) {
+    if (event.key === KEY) {
       memory = null;
-      showUnreviewedMemory = null;
       listener();
     }
   };
@@ -134,24 +131,4 @@ export function studyState(progress: StudyProgress | undefined): StudyState {
   return progress.phase === "intro" && !Object.keys(progress.attempts).length
     ? "new"
     : "started";
-}
-
-function readShowUnreviewed() {
-  if (showUnreviewedMemory !== null) return showUnreviewedMemory;
-  try {
-    showUnreviewedMemory = localStorage.getItem(REVIEW_KEY) === "true";
-  } catch {
-    showUnreviewedMemory = false;
-  }
-  return showUnreviewedMemory;
-}
-export function useShowUnreviewed() {
-  return useSyncExternalStore(subscribe, readShowUnreviewed, () => false);
-}
-export function setShowUnreviewed(value: boolean) {
-  showUnreviewedMemory = value;
-  try {
-    localStorage.setItem(REVIEW_KEY, String(value));
-  } catch {}
-  for (const listener of listeners) listener();
 }

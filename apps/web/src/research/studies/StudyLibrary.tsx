@@ -1,17 +1,10 @@
 import { forwardRef, useMemo, useState } from "react";
-import { ArrowRight, Check, Clock, EyeOff, Play } from "lucide-react";
-import { Mascot } from "../../components/Mascot.js";
+import { ArrowRight, Check, Clock, Play } from "lucide-react";
 import { ResearchLink as Link } from "../navigation.js";
 import { LayoutGroup, useIsPresent, type HTMLMotionProps } from "motion/react";
 import { AnimatePresence, m, useSceneMotion } from "../scenes/scene-motion.js";
 import { studies } from "./catalog.js";
-import {
-  setShowUnreviewed,
-  studyState,
-  useAllProgress,
-  useShowUnreviewed,
-  type StudyProgress,
-} from "./progress.js";
+import { studyState, useAllProgress, type StudyProgress } from "./progress.js";
 import { StudyArt, groupTone } from "./StudyArt.js";
 import {
   designGroups,
@@ -24,10 +17,9 @@ import {
 export function StudyLibrary() {
   const motion = useSceneMotion();
   const all = useAllProgress();
-  const showUnreviewed = useShowUnreviewed();
   const [group, setGroup] = useState<DesignGroup | "all">("all");
   const [topic, setTopic] = useState<StudyTopic | "all">("all");
-  const available = studies.filter((s) => s.reviewed || showUnreviewed);
+  const available = studies;
   const shown = available.filter(
     (s) =>
       (group === "all" || s.group === group) &&
@@ -55,138 +47,95 @@ export function StudyLibrary() {
             find out which paper at the end.
           </p>
         </div>
-        <label className="library-flag">
-          <input
-            type="checkbox"
-            role="switch"
-            checked={showUnreviewed}
-            onChange={(event) => setShowUnreviewed(event.target.checked)}
-          />
-          <span className="library-switch" aria-hidden="true">
-            <m.span
-              className="library-switch-knob"
-              layout={motion.position}
-              transition={
-                motion.still
-                  ? { duration: 0 }
-                  : { type: "spring", duration: 0.25, bounce: 0.3 }
-              }
-            />
-          </span>
-          <span>
-            Show studies awaiting review
-            <small>Not content-reviewed yet</small>
-          </span>
-        </label>
       </header>
 
       {resume ? (
         <ResumeCard study={resume} progress={all[resume.slug]!} />
       ) : null}
 
-      {available.length ? (
-        <>
-          <nav className="library-filters" aria-label="Filter studies">
-            <LayoutGroup id="groups">
-              <div className="library-chips" role="group" aria-label="Design">
-                {(["all", ...groups] as const).map((value) => (
-                  <Chip
-                    key={value}
-                    active={group === value}
-                    onClick={() => setGroup(value)}
-                    count={
-                      value === "all"
-                        ? available.length
-                        : available.filter((s) => s.group === value).length
-                    }
-                    pill="group"
-                  >
-                    {value === "all"
-                      ? "All designs"
-                      : designGroups[value].label}
-                  </Chip>
-                ))}
-              </div>
-            </LayoutGroup>
-            <LayoutGroup id="topics">
-              <div
-                className="library-chips small"
-                role="group"
-                aria-label="Topic"
-              >
-                {(["all", ...usedTopics] as const).map((value) => (
-                  <Chip
-                    key={value}
-                    active={topic === value}
-                    onClick={() => setTopic(value)}
-                    pill="topic"
-                  >
-                    {value === "all" ? "Any topic" : studyTopics[value].short}
-                  </Chip>
-                ))}
-              </div>
-            </LayoutGroup>
-          </nav>
-          <p className="sr-only" aria-live="polite">
-            {shown.length} {shown.length === 1 ? "study" : "studies"} shown
-          </p>
-          <m.ul className="library-grid" layout={motion.position}>
-            <AnimatePresence initial={false} mode="popLayout">
-              {shown.map((study) => (
-                <LibraryItem
-                  key={study.slug}
-                  layout={motion.position}
-                  initial={motion.still ? false : { opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{
-                    opacity: 0,
-                    scale: motion.still ? 1 : 0.96,
-                    transition: { duration: motion.still ? 0 : 0.12 },
-                  }}
-                  transition={
-                    motion.still
-                      ? { duration: 0 }
-                      : { type: "spring", duration: 0.3, bounce: 0 }
+      <>
+        <nav className="library-filters" aria-label="Filter studies">
+          <LayoutGroup id="groups">
+            <div className="library-chips" role="group" aria-label="Design">
+              {(["all", ...groups] as const).map((value) => (
+                <Chip
+                  key={value}
+                  active={group === value}
+                  onClick={() => setGroup(value)}
+                  count={
+                    value === "all"
+                      ? available.length
+                      : available.filter((s) => s.group === value).length
                   }
+                  pill="group"
                 >
-                  <StudyCard study={study} progress={all[study.slug]} />
-                </LibraryItem>
+                  {value === "all" ? "All designs" : designGroups[value].label}
+                </Chip>
               ))}
-            </AnimatePresence>
-          </m.ul>
-          {!shown.length ? (
-            <div className="library-empty small">
-              <p>No study matches both filters.</p>
-              <button
-                type="button"
-                className="journey-skip"
-                onClick={() => {
-                  setGroup("all");
-                  setTopic("all");
-                }}
-              >
-                Clear filters
-              </button>
             </div>
-          ) : null}
-        </>
-      ) : (
-        <div className="library-empty">
-          <Mascot pose="reading" size="normal" />
-          <h2>Studies are being checked</h2>
-          <p>
-            Each prepared study needs a content review before it appears here.
-            You can preview the ones still waiting.
-          </p>
-          <button
-            type="button"
-            className="journey-begin"
-            onClick={() => setShowUnreviewed(true)}
-          >
-            <EyeOff size={18} aria-hidden="true" /> Preview unreviewed studies
-          </button>
-        </div>
-      )}
+          </LayoutGroup>
+          <LayoutGroup id="topics">
+            <div
+              className="library-chips small"
+              role="group"
+              aria-label="Topic"
+            >
+              {(["all", ...usedTopics] as const).map((value) => (
+                <Chip
+                  key={value}
+                  active={topic === value}
+                  onClick={() => setTopic(value)}
+                  pill="topic"
+                >
+                  {value === "all" ? "Any topic" : studyTopics[value].short}
+                </Chip>
+              ))}
+            </div>
+          </LayoutGroup>
+        </nav>
+        <p className="sr-only" aria-live="polite">
+          {shown.length} {shown.length === 1 ? "study" : "studies"} shown
+        </p>
+        <m.ul className="library-grid" layout={motion.position}>
+          <AnimatePresence initial={false} mode="popLayout">
+            {shown.map((study) => (
+              <LibraryItem
+                key={study.slug}
+                layout={motion.position}
+                initial={motion.still ? false : { opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{
+                  opacity: 0,
+                  scale: motion.still ? 1 : 0.96,
+                  transition: { duration: motion.still ? 0 : 0.12 },
+                }}
+                transition={
+                  motion.still
+                    ? { duration: 0 }
+                    : { type: "spring", duration: 0.3, bounce: 0 }
+                }
+              >
+                <StudyCard study={study} progress={all[study.slug]} />
+              </LibraryItem>
+            ))}
+          </AnimatePresence>
+        </m.ul>
+        {!shown.length ? (
+          <div className="library-empty small">
+            <p>No study matches both filters.</p>
+            <button
+              type="button"
+              className="journey-skip"
+              onClick={() => {
+                setGroup("all");
+                setTopic("all");
+              }}
+            >
+              Clear filters
+            </button>
+          </div>
+        ) : null}
+      </>
     </main>
   );
 }

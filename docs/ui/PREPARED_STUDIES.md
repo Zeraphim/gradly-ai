@@ -11,7 +11,7 @@ Unassigned. Issue #14 names JC as the build owner; no design approval is recorde
 ## Affected Surfaces
 
 - `#/research/studies`: study library with design-group and topic filters,
-  progress, resume and an unreviewed-studies flag. Linked from the learn page's
+  progress and resume. Linked from the learn page's
   "More practice" row as "Browse prepared studies" (it replaces the three-paper
   activities link; `#/research/activities` still opens directly).
 - `#/research/studies/<slug>`: intro, one challenge per screen, optional bonus
@@ -28,8 +28,8 @@ results only from results-stage challenges, paper identity hidden until the fina
 reveal, one retry then an explanation, and points once per solved challenge. No
 lives, streaks, leaderboards or shops.
 
-Studies stay hidden until content review. `reviewed: false` studies appear only
-behind the library flag, which also gates direct links.
+Every study is listed, reviewed or not. A `reviewed: false` study says on its
+reveal that it is not content-reviewed yet.
 
 ## Direction
 
@@ -88,13 +88,10 @@ entrances: the shared provider only allows entrances after it has mounted.
 
 ## Required States
 
-- Library: empty (no reviewed studies) with a preview action, filtered empty with
-  clear filters, resume card for the most recent study in progress. Saved progress
-  for a slug with no card (a removed paper) is ignored. The reveal suggests only
-  studies the library would list.
+- Library: filtered empty with clear filters, resume card for the most recent study in progress. Saved progress
+  for a slug with no card (a removed paper) is ignored.
 - Player: loading, intro, answering, retry feedback, retrying, solved, explained,
-  bonus offer, reveal. Unavailable or unreviewed links show a recovery screen; an
-  unreviewed body is not fetched while the flag is off.
+  bonus offer, reveal. An unknown slug shows a recovery screen.
 - Scenes that fail validation fall back to plain choices.
 
 ## Local Evidence

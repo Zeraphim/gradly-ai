@@ -6,12 +6,6 @@ const library = "/#/research/studies";
 
 async function openLibrary(page: Page) {
   await page.goto(library);
-  await expect(
-    page.getByRole("heading", { name: "Studies are being checked" }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: /Preview unreviewed studies/ })
-    .click();
   await expect(page.locator(".library-card")).toHaveCount(studyCards.length);
 }
 
@@ -58,8 +52,9 @@ for (const width of [375, 768, 1366]) {
     await link.focus();
     await page.keyboard.press("Enter");
     await expect(
-      page.getByRole("heading", { name: "Studies are being checked" }),
+      page.getByRole("heading", { name: /Pick a study/ }),
     ).toBeVisible();
+    await expect(page.locator(".library-card")).toHaveCount(studyCards.length);
     await noViolations(page);
   });
 
@@ -147,10 +142,6 @@ test("every study opens and checks its first challenge at 375px", async ({
 }) => {
   test.setTimeout(240000);
   await page.setViewportSize({ width: 375, height: 800 });
-  await page.goto(library);
-  await page.evaluate(() =>
-    localStorage.setItem("gradly-show-unreviewed", "true"),
-  );
   for (const card of studyCards) {
     await page.goto(`/#/research/studies/${card.slug}`);
     await page.reload();
