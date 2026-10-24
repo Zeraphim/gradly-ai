@@ -8,7 +8,7 @@ import {
   type Job,
   type Audit,
 } from "./contracts.js";
-import { type ModelProvider } from "./provider.js";
+import { ProviderError, type ModelProvider } from "./provider.js";
 import { sceneAuthoringInstructions } from "./scene-authoring.js";
 const roles: [string, string][] = [
   [
@@ -76,6 +76,7 @@ export async function runStage(
           missing: z.array(z.string()),
         }),
         pipelineModel,
+        { tier: "pipeline" },
       );
       // Discard any excerpt that is not verbatim on its page; never show it.
       const verified = j.evidence.refs.filter((r) =>
@@ -88,8 +89,10 @@ export async function runStage(
           `Extracted evidence does not match the document (0 of ${j.evidence.refs.length} excerpts verified). Verification requires exact page excerpts.`,
         );
       j.evidence.refs = verified;
-      // Reasoning models sometimes narrate their process in the summary field.
+      // Reasoning models sometimes narrate their process or return an
+      // empty summary; neither teaches a learner anything about the paper.
       if (
+        !j.evidence.findings.trim() ||
         /^\s*(the user|user wants|i need|i will|i'll|let me|we need|okay|first,? i)\b/i.test(
           j.evidence.findings,
         )
@@ -104,7 +107,7 @@ export async function runStage(
     } else if (j.stage === 1) {
       j.lesson = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–14 challenges depending on evidence, adapting to this paper’s research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. Restrict evidence to the supplied exact excerpts. paper.url must be an actual DOI/source appearing in the supplied document; otherwise set paper.url=null and explicitly mark unavailable metadata. Do not invent references, participants, quotes, results, or a single best answer where the source permits alternatives. ${sceneAuthoringInstructions}`,
+        `${audit.task} Use 3–14 challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes, results, or a single best answer where the source permits alternatives. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
           evidenceRule:
@@ -116,6 +119,7 @@ export async function runStage(
         },
         lessonSchema,
         pipelineModel,
+        { tier: "pipeline" },
       );
       j.lesson = lessonSchema.parse(j.lesson);
       j.lesson.id = j.id;
@@ -136,6 +140,7 @@ export async function runStage(
           summary: z.string(),
         }),
         pipelineModel,
+        { tier: "pipeline" },
       );
       audit.summary = assessment.summary;
       audit.refs = j.lesson!.evidence.map((r) => r.id);
@@ -169,6 +174,7 @@ export async function runStage(
     }
     audit.status = "Completed";
     delete audit.error;
+    delete audit.errorCode;
     j.stage++;
     j.status = j.stage === 5 ? "ready" : "pending";
     j.leaseUntil = 0;
@@ -177,6 +183,8 @@ export async function runStage(
   } catch (e) {
     audit.status = "Failed";
     audit.error = e instanceof Error ? e.message : "Processing failed.";
+    if (e instanceof ProviderError) audit.errorCode = e.code;
+    else delete audit.errorCode;
     audit.summary = "Stage did not complete.";
     j.status = "failed";
     j.error = audit.error;

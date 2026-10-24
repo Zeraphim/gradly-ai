@@ -61,7 +61,7 @@ async function main() {
   job.mode = "live";
   console.log(`   ✅ Created Job [${jobId}] with consent=true, mode=live.\n`);
 
-  // 3. Execute 5-Stage Multi-Agent Pipeline (using Ultra model)
+  // 3. Execute 5-Stage Multi-Agent Pipeline (pipeline-tier model and budget)
   console.log(`2. Executing 5-Stage Multi-Agent Pipeline with ${config.pipelineModelId}...`);
   for (let s = 0; s < 5; s++) {
     const role = job.audits[s]!.role;

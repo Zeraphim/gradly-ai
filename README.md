@@ -53,7 +53,7 @@ NEBIUS_API_KEY=your_server_only_credential
 PREVIEW_MODE=false
 ```
 
-Restart the server. The live route uses `nvidia/Nemotron-3-Ultra-550b-a55b` at Nebius Token Factory’s [documented regional endpoint](https://github.com/nebius/token-factory-cookbook/blob/main/models/nemotron/nemotron3-ultra-550b-a55b.md). An absent credential with preview disabled produces an explicit unavailable state. Provider failure never silently switches to preview.
+Restart the server. The live route uses `nvidia/nemotron-3-super-120b-a12b` at Nebius Token Factory’s [documented regional endpoint](https://github.com/nebius/token-factory-cookbook/blob/main/models/nemotron/nemotron3-super-120B.md); pipeline stages may run larger models such as `nvidia/Nemotron-3-Ultra-550b-a55b` via `NEBIUS_PIPELINE_MODEL`. An absent credential with preview disabled produces an explicit unavailable state. Provider failure never silently switches to preview.
 
 ## Workspaces
 

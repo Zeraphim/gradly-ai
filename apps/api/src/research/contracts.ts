@@ -46,7 +46,7 @@ export const lessonSchema = z.object({
     url: z
       .string()
       .url()
-      .regex(/^https:\/\//)
+      .regex(/^https:\/\/[^/]+\.[^/]+/)
       .nullable(),
     limitations: z.array(z.string()),
   }),
@@ -109,6 +109,8 @@ export type Audit = {
   refs: string[];
   model: string;
   error?: string;
+  /** Stable machine-readable failure code next to the human message. */
+  errorCode?: "output_limit" | "timeout";
 };
 export type Job = {
   mode?: "demo" | "live";
