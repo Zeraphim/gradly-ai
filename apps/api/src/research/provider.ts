@@ -6,6 +6,7 @@ export interface ModelProvider {
     task: string,
     input: unknown,
     schema: z.ZodType<T>,
+    modelOverride?: string,
   ): Promise<T>;
 }
 export class NebiusProvider implements ModelProvider {
@@ -14,18 +15,22 @@ export class NebiusProvider implements ModelProvider {
     task: string,
     input: unknown,
     schema: z.ZodType<T>,
+    modelOverride?: string,
   ): Promise<T> {
     if (!process.env.NEBIUS_API_KEY || process.env.PREVIEW_MODE === "true")
       throw Error("Nebius API key is not configured.");
-    const { baseUrl: base, modelId: model } = nebiusConfig();
+    const config = nebiusConfig();
+    const model = modelOverride || config.pipelineModelId;
+    const isUltra = model.includes("Ultra") || model.includes("550b");
+    const timeoutMs = isUltra ? 45000 : 20000;
     const jsonSchema = z.toJSONSchema(schema);
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
         const response = await fetch(
-          `${base.replace(/\/$/, "")}/chat/completions`,
+          `${config.baseUrl.replace(/\/$/, "")}/chat/completions`,
           {
             method: "POST",
-            signal: AbortSignal.timeout(20000),
+            signal: AbortSignal.timeout(timeoutMs),
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${process.env.NEBIUS_API_KEY}`,

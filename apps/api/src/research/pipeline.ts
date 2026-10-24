@@ -47,7 +47,7 @@ export function newJob(id: string, name: string, pages: Job["pages"]): Job {
       status: "Pending",
       summary: "Waiting for this stage.",
       refs: [],
-      model: nebiusConfig().modelId,
+      model: nebiusConfig().pipelineModelId,
     })),
   };
 }
@@ -55,6 +55,7 @@ export async function runStage(
   job: Job,
   provider: ModelProvider,
 ): Promise<Job> {
+  const pipelineModel = nebiusConfig().pipelineModelId;
   const j = structuredClone(job);
   const audit = j.audits[j.stage];
   if (!audit) throw Error("Processing is already complete.");
@@ -69,6 +70,7 @@ export async function runStage(
           refs: z.array(refSchema).min(1).max(20),
           missing: z.array(z.string()),
         }),
+        pipelineModel,
       );
       const norm = (s: string) => s.replace(/\s+/g, " ").trim();
       if (
@@ -101,6 +103,7 @@ export async function runStage(
           ),
         },
         lessonSchema,
+        pipelineModel,
       );
       j.lesson = lessonSchema.parse(j.lesson);
       j.lesson.id = j.id;
@@ -120,6 +123,7 @@ export async function runStage(
           issues: z.array(z.string()),
           summary: z.string(),
         }),
+        pipelineModel,
       );
       audit.summary = assessment.summary;
       audit.refs = j.lesson!.evidence.map((r) => r.id);
