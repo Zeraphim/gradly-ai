@@ -555,6 +555,32 @@
       }
     },
     {
+      "id": "nemotron-evaluation",
+      "kind": "other",
+      "title": "Nemotron paper-reading and hallucination evaluation",
+      "path": "docs/research/NEMOTRON_EVALUATION.md",
+      "status": "Reference",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "scripts/eval-nemotron*.ts",
+        "apps/api/src/research/provider.ts",
+        "apps/api/src/research/pipeline.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "paper-selection"
+        }
+      ],
+      "implementationRefs": [],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
       "id": "testing",
       "kind": "runbook",
       "title": "Validation commands and retained historical test reports",

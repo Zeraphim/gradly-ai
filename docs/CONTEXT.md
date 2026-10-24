@@ -31,6 +31,7 @@
 | `web-instructions` | instruction | Active | Learner interface instructions | `apps/web/AGENTS.md` |  |
 | `adr-template` | other | Template | Architecture decision template | `docs/adr/TEMPLATE.md` |  |
 | `interaction-references` | other | Reference | Historical interaction research and design proposals | `docs/INTERACTION_REFERENCES.md` |  |
+| `nemotron-evaluation` | other | Reference | Nemotron paper-reading and hallucination evaluation | `docs/research/NEMOTRON_EVALUATION.md` |  |
 | `paper-selection` | other | Reference | Vetted candidate paper studies for Gradly | `docs/research/PAPER_SELECTION.md` |  |
 | `research-learning-design` | other | Reference | Learning research and future content proposals | `docs/RESEARCH_LEARNING_DESIGN.md` |  |
 | `ui-template` | other | Template | Local interface evidence template | `docs/ui/TEMPLATE.md` |  |

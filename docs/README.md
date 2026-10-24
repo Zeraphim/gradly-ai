@@ -73,6 +73,9 @@ current code before changing behavior. Do not create a competing work-status tra
   source studies that could seed Gradly paper cases, with a per-study fit against the
   selection criteria. It is a research input; it commits no one to implementing any of
   it, and its access and licensing notes describe what could be verified when written.
+- [research/NEMOTRON_EVALUATION.md](research/NEMOTRON_EVALUATION.md) measures how
+  reliably each Nemotron model reads a paper through the real pipeline, where it invents
+  content, and which guards the pipeline needs. Rerun it with `npm run eval:nemotron`.
 - [research/papers/](research/papers/README.md) stores only source PDFs whose licence
   permits redistribution, with attribution and retrieval notes.
 
