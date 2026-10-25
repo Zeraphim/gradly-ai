@@ -1,5 +1,6 @@
 import { type Lesson, type LearningSession } from "./contracts.js";
 import { projectScene } from "@paperquest/contracts";
+import { lessonStudyCard, lessonTakeaway } from "./study-card.js";
 /** Practice credit, once per solved challenge in this adventure. */
 export function learningPoints(session: LearningSession): number {
   return (
@@ -148,6 +149,8 @@ export function publicSession(s: LearningSession, l: Lesson) {
               correct: last.correct,
               message: last.feedback,
               explanation: last.correct || a.length >= 2 ? c.explanation : null,
+              // The keyed answer, under the same gate as the explanation.
+              accepted: last.correct || a.length >= 2 ? c.accepted : null,
               retryAvailable: a.length === 1 && !last.correct,
             }
           : null,
@@ -185,6 +188,7 @@ export function publicSession(s: LearningSession, l: Lesson) {
   const completed = active.filter((c) => !!s.answers[c.id]?.length).length;
   return {
     id: s.id,
+    lessonId: s.lessonId,
     title: s.title,
     source: l.source,
     index: s.index,
@@ -207,6 +211,11 @@ export function publicSession(s: LearningSession, l: Lesson) {
         .map((c) => c.title),
     },
     paper: ["reveal", "complete"].includes(s.phase) ? l.paper : null,
+    // Card fields for the study player; identity-safe by construction.
+    study: lessonStudyCard(l),
+    takeaway: ["reveal", "complete"].includes(s.phase)
+      ? lessonTakeaway(l)
+      : null,
     review,
     reflection: s.reflection,
     bonusAvailable: !!l.bonus,

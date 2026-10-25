@@ -231,6 +231,15 @@ export function publicJob(j: Job) {
       confidence: p.confidence,
     })),
     evidence: j.evidence?.refs ?? [],
+    // Counts only, so preparation can preview the lesson without content.
+    outline: j.lesson
+      ? {
+          challenges: j.lesson.challenges.length,
+          bonus: !!j.lesson.bonus,
+          reasoning: j.lesson.challenges.filter((c) => c.writtenReasoning)
+            .length,
+        }
+      : null,
     ready: j.status === "ready",
   };
 }

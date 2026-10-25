@@ -30,8 +30,9 @@ import { Dialog } from "../components/Dialog.js";
 import { SupportPages } from "./SupportPages.js";
 import { HistoryPage } from "./HistoryPage.js";
 import { ActionLabel, Icon } from "./icon.js";
-import { api } from "./request.js";
+import { api, ResearchRequestError } from "./request.js";
 import {
+  clearActivePreparation,
   clearDraft,
   readDraft,
   readLastAdventure,
@@ -80,6 +81,11 @@ const PaperActivityPilot = lazy(() =>
 const StudyPreview = lazy(() =>
   import("./studies/StudyPreview.js").then((module) => ({
     default: module.StudyPreview,
+  })),
+);
+const UploadedJourney = lazy(() =>
+  import("./studies/UploadedJourney.js").then((module) => ({
+    default: module.UploadedJourney,
   })),
 );
 export function ResearchApp({
@@ -136,6 +142,15 @@ export function ResearchApp({
         <ChunkBoundary label="Prepared studies">
           <Suspense fallback={<AppLoading label="Opening prepared studies…" />}>
             <StudyPreview path={path} onExit={onExit} />
+          </Suspense>
+        </ChunkBoundary>
+      ) : /^\/play\/[^/]+\/?$/.test(path) ? (
+        <ChunkBoundary label="Your study">
+          <Suspense fallback={<AppLoading label="Opening your study…" />}>
+            <UploadedJourney
+              key={path}
+              sessionId={decodeURIComponent(path.split("/")[2]!)}
+            />
           </Suspense>
         </ChunkBoundary>
       ) : (
@@ -288,7 +303,16 @@ function GradlyWorkspace({
         .then((j) => {
           if (!controller.signal.aborted) setJob(j);
         })
-        .catch(failed);
+        .catch((e: Error) => {
+          // A deleted or missing job must not stay offered on the home page.
+          if (
+            e instanceof ResearchRequestError &&
+            e.status >= 400 &&
+            e.status < 500
+          )
+            clearActivePreparation(id);
+          failed(e);
+        });
     }
     if (route === "history") {
       setHistoryStatus("loading");
@@ -406,7 +430,14 @@ function GradlyWorkspace({
         action: "start",
         ...(lessonId ? { lessonId } : {}),
       });
-      if (mounted.current) router.push(`/adventure/${started.id}`);
+      // Uploaded papers play in the shared study player; the featured quest
+      // keeps its investigation screen.
+      if (mounted.current)
+        router.push(
+          started.source === "generated"
+            ? `/play/${started.id}`
+            : `/adventure/${started.id}`,
+        );
     } catch (e) {
       if (mounted.current) setError((e as Error).message);
     } finally {

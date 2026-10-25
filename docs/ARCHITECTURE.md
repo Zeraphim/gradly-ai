@@ -96,10 +96,17 @@ statuses and summaries; its document advances only when the saved stage
 advances. A ready sample job, and the library's Start quest, open the texting quest
 (`texting-quest.ts` script, `quest-visuals.tsx` visuals). It checks answers in the
 browser against the authored key and keeps progress in `sessionStorage`; it calls
-no API. Live jobs open the player's generated briefing through `start` with
-`lessonId`. Samples stay explicitly separate from uploaded
+no API. A ready live job starts a session with `lessonId` and opens
+`#/research/play/<sessionId>`: the prepared-study `JourneyPlayer` driven by the
+saved session (`studies/UploadedJourney.tsx`, adapter `studies/uploaded.ts`).
+The browser receives one public challenge at a time and no answer keys.
+`publicJob` adds count-only `outline`; `publicSession` adds `lessonId`, the
+identity-safe `study` card from `study-card.ts`, `takeaway` at the reveal and
+`feedback.accepted` under the explanation gate. Failed stages are classified by
+their saved `errorCode`. Samples stay explicitly separate from uploaded
 text. `HistoryPage.tsx` fetches persisted errors for failed jobs through the
-existing job endpoint. No API or scene contract changed. See the
+existing job endpoint and links generated sessions to `/play`. The scene contract
+is unchanged. See the
 [intake integration proposal](ui/INTAKE_PROCESSING.md) for unresolved fields.
 
 The generated lesson prompt requests a source-supported briefing: a concise

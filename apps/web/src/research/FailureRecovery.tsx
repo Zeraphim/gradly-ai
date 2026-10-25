@@ -1,14 +1,19 @@
+import type { ProcessingJob } from "./types.js";
 import { ResearchLink as Link } from "./navigation.js";
 import { ActionLabel, Icon } from "./icon.js";
 
-// Proposed wire values; no backend contract is changed here. Unknown values stay
-// unclassified. Never derive suitability from a provider's free-text message.
+// One reason list for intake and preparation. The first five are proposed
+// wire values (not yet sent by the server); `timeout` and `output_limit` are
+// the stage `errorCode` values the server saves on a failed audit. Unknown
+// values stay unclassified. Never derive suitability from free-text messages.
 export type FailureReason =
   | "inaccessible"
   | "invalid_file"
   | "unreadable_scan"
   | "not_applicable"
-  | "temporary";
+  | "temporary"
+  | "timeout"
+  | "output_limit";
 
 const reasons: FailureReason[] = [
   "inaccessible",
@@ -16,6 +21,8 @@ const reasons: FailureReason[] = [
   "unreadable_scan",
   "not_applicable",
   "temporary",
+  "timeout",
+  "output_limit",
 ];
 
 export function readFailureReason(value: unknown): FailureReason | undefined {
@@ -24,12 +31,38 @@ export function readFailureReason(value: unknown): FailureReason | undefined {
     : undefined;
 }
 
+/** The failed stage's saved `errorCode`, else a proposed job-level reason. */
+export function jobFailureReason(job: ProcessingJob) {
+  const failed = job.audits[job.stage] ?? job.audits.find((a) => a.errorCode);
+  return (
+    readFailureReason(failed?.errorCode) ??
+    readFailureReason((job as { reason?: unknown }).reason)
+  );
+}
+
+/** Both stage codes are retryable: the model call can succeed next time. */
+const retryable = new Set<FailureReason>([
+  "temporary",
+  "timeout",
+  "output_limit",
+]);
+
 const headings: Record<FailureReason, string> = {
   inaccessible: "We can’t open this link",
   invalid_file: "This file can’t be used",
   unreadable_scan: "We couldn’t read this scan",
   not_applicable: "This paper needs more research detail",
   temporary: "Preparation was interrupted",
+  timeout: "The AI took too long on this step",
+  output_limit: "This step needed a longer answer than the AI can give",
+};
+
+/** Plain explanations for the stage codes; their server text moves to a disclosure. */
+const explanations: Partial<Record<FailureReason, string>> = {
+  timeout:
+    "Nebius didn’t answer in time, even after one automatic retry. Busy moments usually pass, so trying again often works.",
+  output_limit:
+    "Long or dense papers can produce more than one AI answer can hold. Each attempt is drafted fresh, so a retry often fits. If it happens again, a shorter paper or a prepared study will work better.",
 };
 
 /**
@@ -59,7 +92,8 @@ export function FailureRecovery({
   onChooseFile?: () => void;
 }) {
   const permanent =
-    permanentOverride ?? (reason !== undefined && reason !== "temporary");
+    permanentOverride ?? (reason !== undefined && !retryable.has(reason));
+  const explanation = reason ? explanations[reason] : undefined;
   const choices = (
     <div className="failure-choices">
       <p>Do you want to try one of our prepared studies?</p>
@@ -96,11 +130,23 @@ export function FailureRecovery({
           {heading ??
             (reason ? headings[reason] : "We couldn’t finish this step")}
         </h2>
-        <p role="alert">{message}</p>
+        {explanation ? (
+          <>
+            <p role="alert">{explanation}</p>
+            <details className="failure-detail">
+              <summary>Technical detail</summary>
+              <p>{message}</p>
+            </details>
+          </>
+        ) : (
+          <p role="alert">{message}</p>
+        )}
         {!permanent && onRetry ? (
           <>
             <p className="failure-recovery-note">
-              Your document is still saved. Retry when you’re ready.
+              {reason === "timeout" || reason === "output_limit"
+                ? "Your paper and finished steps are saved. Only this step runs again."
+                : "Your document is still saved. Retry when you’re ready."}
             </p>
             <div className="actions">
               <button

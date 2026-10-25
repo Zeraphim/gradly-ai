@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   ArrowRight,
   BookOpenCheck,
@@ -21,21 +22,28 @@ import {
   type StudyProgress,
 } from "./progress.js";
 import { StudyArt, groupTone } from "./StudyArt.js";
+import { Burst } from "./Burst.js";
 import { designGroups, type PreparedStudy } from "./types.js";
 
 export function StudyIntro({
   study,
   onBegin,
+  backHref = "/studies",
+  backLabel = "All studies",
+  busy = false,
 }: {
   study: PreparedStudy;
   onBegin: () => void;
+  backHref?: string;
+  backLabel?: string;
+  busy?: boolean;
 }) {
   const motion = useSceneMotion();
   const tone = groupTone[study.group];
   return (
     <main className="journey-intro">
-      <Link className="journey-back" href="/studies">
-        ← All studies
+      <Link className="journey-back" href={backHref}>
+        ← {backLabel}
       </Link>
       <m.div
         className="journey-intro-card"
@@ -58,7 +66,7 @@ export function StudyIntro({
             className="study-group"
             style={{ background: tone.wash, color: tone.ink }}
           >
-            {designGroups[study.group].label}
+            {study.kicker ?? designGroups[study.group].label}
           </span>
           <h1 tabIndex={-1}>{study.question}</h1>
           <p>{study.lesson.briefing}</p>
@@ -89,7 +97,8 @@ export function StudyIntro({
             className="journey-begin"
             data-scene-motion-control
             style={{ borderRadius: 16 }}
-            {...motion.gestures()}
+            {...motion.gestures(busy)}
+            disabled={busy}
             onClick={onBegin}
           >
             Begin study{" "}
@@ -152,10 +161,16 @@ export function StudyReveal({
   study,
   progress,
   points,
+  extra,
+  actions,
 }: {
   study: PreparedStudy;
   progress: StudyProgress;
   points: number;
+  /** Shown after the paper card, for example the learner's earlier prediction. */
+  extra?: ReactNode;
+  /** Replaces the library actions, for example on an uploaded paper. */
+  actions?: ReactNode;
 }) {
   const motion = useSceneMotion();
   const celebrate = motion.canEnter();
@@ -260,6 +275,7 @@ export function StudyReveal({
           </p>
         ) : null}
       </m.article>
+      {extra}
       <section className="journey-recap" aria-label="Your challenges">
         <h2>Your decisions</h2>
         <ol>
@@ -290,65 +306,27 @@ export function StudyReveal({
         </ol>
       </section>
       <div className="journey-reveal-actions">
-        {next ? (
-          <Link className="journey-begin" href={`/studies/${next.slug}`}>
-            Next: {next.teaser}{" "}
-            <ArrowRight size={18} strokeWidth={2.5} aria-hidden="true" />
-          </Link>
-        ) : null}
-        <Link className="journey-skip" href="/studies">
-          Back to all studies
-        </Link>
-        <button
-          type="button"
-          className="journey-skip"
-          onClick={() => resetProgress(study.slug)}
-        >
-          Replay this study
-        </button>
+        {actions ?? (
+          <>
+            {next ? (
+              <Link className="journey-begin" href={`/studies/${next.slug}`}>
+                Next: {next.teaser}{" "}
+                <ArrowRight size={18} strokeWidth={2.5} aria-hidden="true" />
+              </Link>
+            ) : null}
+            <Link className="journey-skip" href="/studies">
+              Back to all studies
+            </Link>
+            <button
+              type="button"
+              className="journey-skip"
+              onClick={() => resetProgress(study.slug)}
+            >
+              Replay this study
+            </button>
+          </>
+        )}
       </div>
     </main>
-  );
-}
-
-/** The single completion moment: rings and sparks, once, never on restore. */
-function Burst() {
-  const motion = useSceneMotion();
-  if (motion.still) return null;
-  const sparks = Array.from({ length: 10 }, (_, i) => (i / 10) * Math.PI * 2);
-  return (
-    <svg
-      className="journey-burst"
-      viewBox="-100 -100 200 200"
-      aria-hidden="true"
-    >
-      {[0, 1].map((ring) => (
-        <m.circle
-          key={ring}
-          r="40"
-          fill="none"
-          stroke={ring ? "#1cb0f6" : "#ffc845"}
-          strokeWidth="4"
-          initial={{ scale: 0.4, opacity: 0.9 }}
-          animate={{ scale: 2.1, opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: ring * 0.12 }}
-        />
-      ))}
-      {sparks.map((angle, i) => (
-        <m.circle
-          key={angle}
-          r={i % 2 ? 4 : 6}
-          fill={["#1cb0f6", "#ffc845", "#58cc9b", "#ff8a65"][i % 4]}
-          initial={{ x: 0, y: 0, opacity: 1, scale: 0.6 }}
-          animate={{
-            x: Math.cos(angle) * 88,
-            y: Math.sin(angle) * 88,
-            opacity: 0,
-            scale: 1,
-          }}
-          transition={{ duration: 0.75, ease: [0.2, 0.7, 0.3, 1], delay: 0.05 }}
-        />
-      ))}
-    </svg>
   );
 }

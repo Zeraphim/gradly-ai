@@ -67,6 +67,7 @@ function job(overrides: Partial<ProcessingJob> = {}): ProcessingJob {
       { page: 2, method: "text", confidence: undefined },
     ],
     evidence: [],
+    outline: null,
     ready: false,
     ...overrides,
   };
