@@ -62,8 +62,16 @@ export function pdfBytes(
 // This fixture contains no searchable text and exercises the actual OCR path.
 export async function scannedPdfBytes() {
   const { PDFParse } = await import("pdf-parse");
-  const { createCanvas, loadImage } = await import("@napi-rs/canvas");
+  const { createCanvas, loadImage, GlobalFonts } = await import("@napi-rs/canvas");
   const { deflateSync } = await import("node:zlib");
+  const { resolve } = await import("node:path");
+  const { existsSync } = await import("node:fs");
+  const fontPath = resolve("node_modules/pdfjs-dist/standard_fonts/LiberationSans-Regular.ttf");
+  if (existsSync(fontPath)) {
+    GlobalFonts.registerFromPath(fontPath, "Liberation Sans");
+    GlobalFonts.registerFromPath(fontPath, "Helvetica");
+    GlobalFonts.registerFromPath(fontPath, "sans-serif");
+  }
   const parser = new PDFParse({ data: new Uint8Array(pdfBytes()) });
   let png: Uint8Array;
   try {

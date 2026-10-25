@@ -3,7 +3,7 @@ import { owner, sameOrigin, safeError } from "../auth.js";
 import { read, write, rateLimit, ConflictError } from "../store.js";
 import { type Job } from "../contracts.js";
 import { runStage, publicJob } from "../pipeline.js";
-import { NebiusProvider } from "../provider.js";
+import { NebiusProvider, type ModelProvider } from "../provider.js";
 export const runtime = "nodejs";
 export const maxDuration = 240;
 export async function GET(request: Request) {
@@ -15,7 +15,10 @@ export async function GET(request: Request) {
     return Response.json({ error: safeError(e) }, { status: 400 });
   }
 }
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  provider: ModelProvider = new NebiusProvider(),
+) {
   try {
     sameOrigin(request);
     const who = await owner();
@@ -76,7 +79,7 @@ export async function POST(request: Request) {
     j.leaseUntil = Date.now() + 230000;
     j.audits[j.stage]!.status = retry ? "Retrying" : "Processing";
     j = await write(who, "job", id, j, j.version);
-    const result = await runStage(j, new NebiusProvider());
+    const result = await runStage(j, provider);
     const saved = await write(who, "job", id, result, j.version);
     return Response.json(publicJob(saved));
   } catch (e) {

@@ -1217,6 +1217,9 @@ function GradlyWorkspace({
                                     session: Session;
                                   }>("/api/research/feedback", {
                                     id: session.id,
+                                    version: session.version,
+                                    challengeId: c.id,
+                                    reasoningRevision: c.reasoningRevision,
                                   });
                                   if (!mounted.current) return;
                                   clearDraft(session.id);

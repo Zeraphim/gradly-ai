@@ -1,9 +1,12 @@
 import { it, expect } from "vitest";
-import { newJob, runStage } from "../../apps/api/src/research/pipeline.js";
+import { newJob, publicJob, runStage } from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
-import { type ModelProvider } from "../../apps/api/src/research/provider.js";
+import { ProviderError, type ModelProvider } from "../../apps/api/src/research/provider.js";
+import { z } from "zod";
 import {
+  generatedLessonSchema,
   lessonSchema,
+  MAX_GENERATED_CHALLENGES,
   type Lesson,
 } from "../../apps/api/src/research/contracts.js";
 import {
@@ -65,6 +68,152 @@ it("rejects invented exact excerpts and incomplete evidence", async () => {
   );
   expect(missing.error).toContain("Insufficient");
 });
+it("accepts PDF typography differences, drops paraphrased excerpts and hides narrated findings", async () => {
+  const pdfPage =
+    "we report on two studies aimed specifically at replicating the original findings while improving on its design and exploring the extent to which the experimenter’s own expectan- cies may influence the results.";
+  const j = newJob("typography", "paper.pdf", [{ page: 1, text: pdfPage }]);
+  const next = await runStage(
+    j,
+    provider([
+      {
+        findings: "The user wants me to analyze the document.",
+        refs: [
+          {
+            id: "typography",
+            page: 1,
+            excerpt:
+              "exploring the extent to which the experimenter's own expectancies may influence the results.",
+          },
+          {
+            id: "paraphrase",
+            page: 1,
+            excerpt:
+              "exploring the extent to which the experimenter's own expectations may influence the results.",
+          },
+        ],
+        missing: [],
+      },
+    ]),
+  );
+  expect(next.status).not.toBe("failed");
+  expect(next.evidence?.refs.map((r) => r.id)).toEqual(["typography"]);
+  expect(next.audits[0]?.summary).not.toMatch(/user wants/i);
+});
+
+it("replaces an empty or truncated findings summary with the neutral fallback", async () => {
+  const j = newJob("empty-findings", "paper.pdf", [{ page: 1, text: page }]);
+  const next = await runStage(
+    j,
+    provider([
+      { findings: "", refs, missing: [] },
+    ]),
+  );
+  expect(next.status).toBe("pending");
+  expect(next.audits[0]?.summary).toBe(
+    `Located ${refs.length} verified page excerpts for the investigation.`,
+  );
+});
+
+it("treats a paper.url without a host as unavailable metadata", () => {
+  const lesson = structuredClone(featured);
+  for (const missing of ["https://", "", "unavailable", "https://doi org.x/a"]) {
+    lesson.paper.url = missing;
+    const parsed = lessonSchema.safeParse(lesson);
+    expect(parsed.success).toBe(true);
+    expect(parsed.data?.paper.url).toBeNull();
+  }
+  lesson.paper.url = "https://doi.org/10.1177/0098628313514177";
+  expect(lessonSchema.parse(lesson).paper.url).toBe(
+    "https://doi.org/10.1177/0098628313514177",
+  );
+  // The wire schema still asks the model for a host, not just a prefix.
+  const wire = z.toJSONSchema(lessonSchema) as unknown as {
+    properties: {
+      paper: { properties: { url: { anyOf: { pattern?: string }[] } } };
+    };
+  };
+  const pattern = new RegExp(
+    wire.properties.paper.properties.url.anyOf[0]!.pattern!,
+  );
+  expect(pattern.test("https://")).toBe(false);
+  expect(pattern.test("https://doi.org/10.1/x")).toBe(true);
+});
+it("caps live lesson drafts at the generated challenge limit", async () => {
+  let schemaSent: unknown;
+  let taskSent = "";
+  const nine = Array.from({ length: MAX_GENERATED_CHALLENGES + 1 }, (_, n) => ({
+    ...draft.challenges[n % draft.challenges.length]!,
+    id: `c${n}`,
+  }));
+  const evidenceJob = await runStage(
+    newJob("cap-job", "paper.pdf", [{ page: 1, text: page }]),
+    provider([{ findings: "Study evidence located", refs, missing: [] }]),
+  );
+  const failed = await runStage(evidenceJob, {
+    async generate<T>(_role: string, task: string, _input: unknown, schema: unknown) {
+      taskSent = task;
+      schemaSent = schema;
+      return { ...draft, challenges: nine } as T;
+    },
+  });
+  expect(MAX_GENERATED_CHALLENGES).toBe(8);
+  expect(taskSent).toContain("Use 3–8 challenges");
+  expect(taskSent).toMatch(/Fill every required field.*keep each one brief/);
+  expect(taskSent).toContain("Set writtenReasoning=true on at least one");
+  const wire = z.toJSONSchema(schemaSent as z.ZodType) as unknown as {
+    properties: { challenges: { maxItems: number } };
+  };
+  expect(wire.properties.challenges.maxItems).toBe(8);
+  expect(failed.status).toBe("failed");
+  expect(failed.stage).toBe(1);
+  // Stored and featured lessons keep the wider limit.
+  expect(lessonSchema.safeParse({ ...draft, challenges: nine }).success).toBe(true);
+  expect(
+    generatedLessonSchema.safeParse({ ...draft, challenges: nine.slice(0, 8) })
+      .success,
+  ).toBe(true);
+  // A live draft must name and brief the investigation.
+  expect(
+    generatedLessonSchema.safeParse({ ...draft, title: "", briefing: "" })
+      .success,
+  ).toBe(false);
+});
+it("limits lesson references to stage-0 ids and attaches verified evidence server-side", async () => {
+  const evidenceJob = await runStage(
+    newJob("refs-job", "paper.pdf", [{ page: 1, text: page }]),
+    provider([{ findings: "Study evidence located", refs, missing: [] }]),
+  );
+  let schemaSent: z.ZodType | undefined;
+  const drafted = await runStage(evidenceJob, {
+    async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
+      schemaSent = schema as z.ZodType;
+      // A re-copied, altered excerpt from the model must not be kept.
+      return {
+        ...draft,
+        evidence: [{ id: "source1", page: 1, excerpt: "An altered excerpt text." }],
+      } as T;
+    },
+  });
+  const wire = JSON.stringify(z.toJSONSchema(schemaSent!));
+  expect(wire).toContain('"enum":["source1"]');
+  expect(
+    (z.toJSONSchema(schemaSent!) as { properties: object }).properties,
+  ).not.toHaveProperty("evidence");
+  expect(drafted.status).toBe("pending");
+  expect(drafted.lesson?.evidence).toEqual(refs);
+
+  const unknownRef = await runStage(
+    evidenceJob,
+    provider([
+      {
+        ...draft,
+        challenges: draft.challenges.map((c) => ({ ...c, refs: ["invented"] })),
+      },
+    ]),
+  );
+  expect(unknownRef.status).toBe("failed");
+  expect(unknownRef.stage).toBe(1);
+});
 it("clears obsolete stage and job errors after a successful retry", async () => {
   const j = newJob("retry-job", "paper.pdf", [{ page: 1, text: page }]);
   const failed = await runStage(j, {
@@ -87,6 +236,42 @@ it("clears obsolete stage and job errors after a successful retry", async () => 
   expect(recovered.audits[0]?.summary).toBe("Evidence recovered");
   expect(recovered.error).toBeUndefined();
   expect(recovered.audits[0]?.error).toBeUndefined();
+});
+
+it("persists a typed errorCode when a stage hits the output limit", async () => {
+  const j = newJob("limit-job", "paper.pdf", [{ page: 1, text: page }]);
+  const failed = await runStage(j, {
+    async generate() {
+      throw new ProviderError(
+        "output_limit",
+        "The AI response was incomplete because it reached the 32000-token output limit. Retry this stage.",
+      );
+    },
+  });
+  expect(failed.status).toBe("failed");
+  expect(failed.audits[0]?.errorCode).toBe("output_limit");
+  expect(failed.audits[0]?.error).toContain("output limit");
+
+  const recovered = await runStage(
+    failed,
+    provider([{ findings: "Evidence recovered", refs, missing: [] }]),
+  );
+  expect(recovered.status).toBe("pending");
+  expect(recovered.audits[0]?.errorCode).toBeUndefined();
+
+  const timedOut = await runStage(j, {
+    async generate() {
+      throw new ProviderError("timeout", "The AI request timed out.");
+    },
+  });
+  expect(timedOut.audits[0]?.errorCode).toBe("timeout");
+  expect(publicJob(timedOut).audits[0]?.errorCode).toBe("timeout");
+  const otherFailure = await runStage(timedOut, {
+    async generate() {
+      throw Error("Nebius request failed (503).");
+    },
+  });
+  expect(otherFailure.audits[0]?.errorCode).toBeUndefined();
 });
 it("prevents a flagged methods review from becoming playable", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);

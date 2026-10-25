@@ -34,6 +34,10 @@ export const challengeSchema = z.object({
     "bonus",
   ]),
 });
+const paperUrl = z
+  .string()
+  .url()
+  .regex(/^https:\/\/[^/]+\.[^/]+/);
 export const lessonSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -43,16 +47,27 @@ export const lessonSchema = z.object({
     title: z.string(),
     authors: z.string(),
     journal: z.string(),
-    url: z
-      .string()
-      .url()
-      .regex(/^https:\/\//)
-      .nullable(),
+    // Models answer a bare "https://" or another unusable link for unknown
+    // sources; that means unavailable metadata, so it becomes null rather
+    // than failing the whole lesson. The wire schema keeps the host pattern.
+    url: z.preprocess(
+      (v) =>
+        typeof v === "string" && !paperUrl.safeParse(v).success ? null : v,
+      paperUrl.nullable(),
+    ),
     limitations: z.array(z.string()),
   }),
   evidence: z.array(refSchema),
   challenges: z.array(challengeSchema).min(3).max(14),
   bonus: challengeSchema.nullable(),
+});
+/** Live drafting asks for fewer challenges than stored lessons may hold, so
+ *  one lesson fits the output budget. */
+export const MAX_GENERATED_CHALLENGES = 8;
+export const generatedLessonSchema = lessonSchema.extend({
+  title: z.string().min(1),
+  briefing: z.string().min(1),
+  challenges: z.array(challengeSchema).min(3).max(MAX_GENERATED_CHALLENGES),
 });
 export type Challenge = z.infer<typeof challengeSchema>;
 export type Lesson = z.infer<typeof lessonSchema>;
@@ -109,6 +124,8 @@ export type Audit = {
   refs: string[];
   model: string;
   error?: string;
+  /** Stable machine-readable failure code next to the human message. */
+  errorCode?: "output_limit" | "timeout";
 };
 export type Job = {
   mode?: "demo" | "live";
@@ -130,6 +147,26 @@ export type Job = {
   error?: string;
   version: number;
 };
+/**
+ * Canonical form for exact-excerpt checks. It removes PDF typography only:
+ * ligatures, curly quotes, dash variants, soft hyphens and line-break
+ * hyphenation ("expectan- cies"). Words must still match exactly, so a
+ * paraphrase is still rejected.
+ */
+export function canonicalText(s: string) {
+  return s
+    .normalize("NFKC")
+    .replace(/[\u2018\u2019\u201A\u201B\u2032`]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F\u2033]/g, '"')
+    .replace(/[\u00AD\u2010-\u2015\u2212]/g, "-")
+    .replace(/\s*-\s*/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+export function excerptMatches(pageText: string, excerpt: string) {
+  const target = canonicalText(excerpt);
+  return target.length > 0 && canonicalText(pageText).includes(target);
+}
 export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
   const problems: string[] = [];
   const ids = new Set<string>();
@@ -144,7 +181,7 @@ export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
   }
   for (const r of lesson.evidence) {
     const page = pages.find((p) => p.page === r.page);
-    if (!page || !normalize(page.text).includes(normalize(r.excerpt)))
+    if (!page || !excerptMatches(page.text, r.excerpt))
       problems.push(
         `Evidence ${r.id} is not an exact excerpt from page ${r.page}.`,
       );
