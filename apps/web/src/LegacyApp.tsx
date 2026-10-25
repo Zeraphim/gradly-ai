@@ -111,7 +111,9 @@ export function LegacyApp({ uploadFirst = false }: { uploadFirst?: boolean }) {
   }, []);
   function openResearch(file?: File) {
     setResearchFile(file ?? null);
-    window.location.hash = file ? "/research/upload" : "/research/learn";
+    window.location.hash = file
+      ? "/research/upload"
+      : "/research/meet/featured";
     setScreen("research");
   }
   // Links aren't fetched. Sample preview records them as a link note; with

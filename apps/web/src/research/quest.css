@@ -63,6 +63,11 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+.research-lab .quest-story p.quest-briefing-source {
+  margin: 0 0 20px;
+  color: var(--j-muted);
+  font-size: 14px;
+}
 
 /* Choice screens */
 .research-lab .quest-label {
@@ -217,6 +222,7 @@
   transition:
     border-color 0.15s ease,
     background-color 0.15s ease,
+    color 0.15s ease,
     box-shadow 0.15s ease;
 }
 .research-lab .quest-option input {
@@ -238,21 +244,30 @@
   color: var(--j-muted);
   font-size: 13px;
   font-weight: 800;
+  background: #fff;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease-out;
 }
 .research-lab .quest-option.is-selected {
-  border-color: #84c3dc;
-  background: var(--j-accent-soft);
-  box-shadow: 0 3px 0 #84c3dc;
+  border-color: transparent;
+  background: #def2fb;
+  color: var(--j-accent-deep);
+  box-shadow: none;
 }
 .research-lab .quest-option.is-selected .quest-key {
-  border-color: var(--j-accent);
+  border-color: transparent;
   background: var(--j-accent);
   color: #fff;
+  transform: scale(1.06);
 }
 .research-lab .quest-option.is-right {
   border-color: #6cc497;
   background: var(--j-good-soft);
   box-shadow: 0 3px 0 #6cc497;
+  color: var(--j-ink);
 }
 .research-lab .quest-option.is-right .quest-key {
   border-color: #23874f;
@@ -263,13 +278,14 @@
   border-color: #e7b58c;
   background: var(--j-warn-soft);
   box-shadow: 0 3px 0 #e7b58c;
+  color: var(--j-ink);
 }
 .research-lab .quest-option.is-wrong .quest-key {
   border-color: #c27a45;
   background: #c27a45;
   color: #fff;
 }
-.research-lab .quest-option:focus-within {
+.research-lab .quest-option:has(input:focus-visible) {
   outline: 3px solid #006590;
   outline-offset: 2px;
 }
@@ -282,6 +298,12 @@
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease;
+}
+.research-lab .quest-bar .journey-actions-buttons {
+  flex-wrap: wrap;
+}
+.research-lab .quest-bar .j-btn.is-quiet {
+  min-width: 0;
 }
 .research-lab .quest-bar.is-correct {
   border-color: #cfe9d9;
@@ -881,6 +903,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .research-lab .quest-option,
+  .research-lab .quest-key,
   .research-lab .quest-bar {
     transition: none;
   }

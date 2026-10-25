@@ -368,7 +368,7 @@
 .research-lab:has(.focus-bar) .scene-response-indicator {
   display: none;
 }
-.research-lab:has(.focus-bar) .scene-response:focus-within {
+.research-lab:has(.focus-bar) .scene-response:has(input:focus-visible) {
   outline: 3px solid #006590;
   outline-offset: 2px;
 }

@@ -102,6 +102,17 @@ text. `HistoryPage.tsx` fetches persisted errors for failed jobs through the
 existing job endpoint. No API or scene contract changed. See the
 [intake integration proposal](ui/INTAKE_PROCESSING.md) for unresolved fields.
 
+The generated lesson prompt requests a source-supported briefing: a concise
+plain-language orientation covering the topic, why it matters, the setting and
+participants or source material, and unfamiliar terms, without findings,
+conclusions or challenge answers; both reviewers check the briefing. The meet
+screen renders generated briefings as paragraphs. The authored quest’s Back
+action caches unfinished screen state for the current visit and reuses resolved
+answer records; refresh still restores resolved progress from session storage.
+Its opening screen carries a data-driven provenance line under the heading.
+Home sample and upload-recovery actions link directly to `/meet/featured`, while
+`/learn` remains the separately accessible path chooser. No provider configuration
+or OCR confidence threshold is changed by this navigation work.
 
 ## Authored multi-paper scene pilot
 

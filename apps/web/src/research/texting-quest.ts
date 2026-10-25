@@ -56,6 +56,8 @@ export type QuestScreen =
       id: string;
       stage: string;
       heading: string;
+      /** Optional provenance line shown under the heading. */
+      source?: string;
       paragraphs: { label?: string; text: string }[];
       visual?: QuestVisual;
       button: string;
@@ -112,11 +114,9 @@ export const textingQuest: QuestScreen[] = [
     id: "ready",
     stage: "Start",
     heading: "Can students text and still keep up?",
+    source: "Prepared from Gingerich & Lineweaver (2014), Experiment 2.",
     visual: "lecture",
     paragraphs: [
-      {
-        text: "Based on Gingerich and Lineweaver’s OMG! Texting in Class = U Fail :( (2014). This paper contains two experiments. For this quest, we’ll explore Experiment 2.",
-      },
       {
         label: "Mission",
         text: "Investigate whether texting during a lecture affects learning.",
