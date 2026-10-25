@@ -17,6 +17,7 @@ import {
   Clock3,
 } from "lucide-react";
 import { Mascot } from "./Mascot.js";
+import { readActivePreparation } from "../research/client-state.js";
 import type { Session } from "@paperquest/lesson-state";
 const PAPER_DIGEST =
   "6df5c8f670f4cf8ac0044e0f26111f479a130ce62d5a7d31d763ea5beee7b178";
@@ -44,6 +45,8 @@ export function Welcome({
   const [error, setError] = useState("");
   const [dragging, setDragging] = useState(false);
   const [checking, setChecking] = useState(false);
+  // A paper still being prepared in this browser comes first on return.
+  const [preparing] = useState(readActivePreparation);
   useEffect(
     () => () => {
       checkVersion.current += 1;
@@ -315,7 +318,7 @@ export function Welcome({
       </section>
       {uploadFirst ? (
         <div
-          className={`home-secondary-actions ${session.started ? "has-resume" : ""}`}
+          className={`home-secondary-actions ${session.started || preparing ? "has-resume" : ""}`}
         >
           <button
             className="home-sample-action"
@@ -330,7 +333,15 @@ export function Welcome({
             </span>
             <ArrowRight size={19} />
           </button>
-          {session.started ? (
+          {preparing ? (
+            <a
+              className="home-resume-action"
+              href={`#/research/processing/${encodeURIComponent(preparing.id)}`}
+            >
+              Return to your paper
+              <ArrowRight size={18} />
+            </a>
+          ) : session.started ? (
             <button className="home-resume-action" onClick={onResume}>
               {complete ? "Review quest" : "Resume quest"}
               <ArrowRight size={18} />

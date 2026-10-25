@@ -131,7 +131,7 @@ export function HistoryPage({
                       </div>
                       <Link
                         className="btn outline"
-                        href={`/adventure/${adventure.id}`}
+                        href={`/${adventure.source === "generated" ? "play" : "adventure"}/${adventure.id}`}
                       >
                         <ActionLabel>
                           {adventure.phase === "complete"

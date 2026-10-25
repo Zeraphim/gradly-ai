@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ProcessingJob } from "./types.js";
 import { Icon, type IconName } from "./icon.js";
 import {
@@ -34,11 +34,13 @@ const stageIcons: IconName[] = [
 export function PreparationTrack({ job }: { job: ProcessingJob }) {
   const motion = useSceneMotion();
   const count = job.audits.length;
-  if (!count) return null;
   const state = trackState(job);
+  const done = state === "ready" ? count : job.stage;
+  const finished = useFinishedStages(done, job.audits);
+  const elapsed = useStageClock(job.id, job.stage, state === "working");
+  if (!count) return null;
   const index = state === "ready" ? count - 1 : Math.min(job.stage, count - 1);
   const current = job.audits[index];
-  const done = state === "ready" ? count : job.stage;
   return (
     <section
       className={`preparation-track is-${state}`}
@@ -104,6 +106,7 @@ export function PreparationTrack({ job }: { job: ProcessingJob }) {
           <ol className="preparation-track-stops">
             {job.audits.map((audit, i) => {
               const complete = state === "ready" || i < job.stage;
+              const celebrate = finished.stages.includes(i) && !motion.still;
               return (
                 <li
                   key={audit.role}
@@ -111,13 +114,25 @@ export function PreparationTrack({ job }: { job: ProcessingJob }) {
                     complete ? "is-complete" : i === index ? "is-current" : ""
                   }
                 >
-                  <span className="preparation-stop">
+                  <m.span
+                    className="preparation-stop"
+                    data-scene-settle
+                    initial={false}
+                    animate={
+                      celebrate ? { scale: [1, 1.24, 0.96, 1] } : { scale: 1 }
+                    }
+                    transition={
+                      celebrate
+                        ? { duration: 0.5, ease: "easeOut" }
+                        : { duration: 0 }
+                    }
+                  >
                     <Icon
                       name={complete ? "check" : (stageIcons[i] ?? "document")}
                       size={18}
                       strong={complete}
                     />
-                  </span>
+                  </m.span>
                   <span className="preparation-stop-label">{audit.role}</span>
                 </li>
               );
@@ -131,6 +146,20 @@ export function PreparationTrack({ job }: { job: ProcessingJob }) {
         aria-live="polite"
       >
         {/* The rail already names every agent, so the caption stays short. */}
+        <AnimatePresence initial={false}>
+          {finished.label ? (
+            <m.span
+              key={finished.label}
+              className="prep-finished"
+              initial={motion.still ? false : { opacity: 0, y: 6, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
+              transition={motion.still ? { duration: 0 } : sceneTiming.enter}
+            >
+              <Icon name="check" size={14} strong /> {finished.label}
+            </m.span>
+          ) : null}
+        </AnimatePresence>
         <span className="journey-kicker">
           {state === "ready"
             ? `All ${count} agents finished`
@@ -141,9 +170,88 @@ export function PreparationTrack({ job }: { job: ProcessingJob }) {
                 : `${index + 1}/${count} · ${current?.role}`}
         </span>
         {state === "working" ? <Thinking /> : null}
+        {state === "working" ? <SlowStage elapsed={elapsed} /> : null}
         {state === "failed" ? <p>{current?.summary}</p> : null}
       </div>
     </section>
+  );
+}
+
+/**
+ * Stages that finished while this page was open. Restored progress never
+ * celebrates; a live advance pops its stop and names the agent briefly.
+ */
+function useFinishedStages(done: number, audits: ProcessingJob["audits"]) {
+  const seen = useRef(done);
+  const [finished, setFinished] = useState<{
+    stages: number[];
+    label: string;
+  }>({ stages: [], label: "" });
+  useEffect(() => {
+    const before = seen.current;
+    seen.current = done;
+    if (done <= before) {
+      // A regenerate moves back; drop any celebration still on screen.
+      setFinished({ stages: [], label: "" });
+      return;
+    }
+    const stages = Array.from({ length: done - before }, (_, i) => before + i);
+    const last = audits[done - 1];
+    setFinished({ stages, label: last ? `${last.role} finished` : "" });
+    const timer = setTimeout(
+      () => setFinished({ stages: [], label: "" }),
+      2600,
+    );
+    return () => clearTimeout(timer);
+  }, [done]);
+  return finished;
+}
+
+/**
+ * Seconds the current stage has been running, measured in this browser since
+ * the stage was first seen working. It survives a reload in this tab. It is a
+ * clock, not a progress estimate: nothing here predicts when a stage ends.
+ */
+export function useStageClock(jobId: string, stage: number, running: boolean) {
+  const [now, setNow] = useState(() => Date.now());
+  const key = `gradly-stage-start:${jobId}:${stage}`;
+  const [started, setStarted] = useState<number | null>(null);
+  useEffect(() => {
+    if (!running) {
+      setStarted(null);
+      return;
+    }
+    let start = Date.now();
+    try {
+      const saved = Number(sessionStorage.getItem(key));
+      if (saved > 0 && saved <= start) start = saved;
+      else sessionStorage.setItem(key, String(start));
+    } catch {}
+    setStarted(start);
+    setNow(Date.now());
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [key, running]);
+  return started === null ? 0 : Math.max(0, Math.floor((now - started) / 1000));
+}
+
+const clock = (seconds: number) =>
+  `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+
+/** Honest waiting copy: elapsed time and what happens next, never a forecast. */
+export function SlowStage({ elapsed }: { elapsed: number }) {
+  if (elapsed < 30) return null;
+  return (
+    <div className="prep-slow">
+      <p className="prep-elapsed">On this step for {clock(elapsed)}</p>
+      {elapsed >= 60 ? (
+        <p className="prep-slow-note">
+          {elapsed >= 180
+            ? "This step is taking longer than usual. It will finish, start this step again by itself, or offer a retry. Nothing you have done is lost."
+            : "Long papers can take a few minutes per step. If the AI doesn’t answer in time, Gradly retries once by itself. Your progress is saved, so you can leave and come back."}
+        </p>
+      ) : null}
+    </div>
   );
 }
 

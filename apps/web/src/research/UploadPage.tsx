@@ -177,9 +177,19 @@ function UploadContent({
           }}
         >
           <header className="upload-review-intro">
-            <div className="document-icon">
-              <Icon name="document" size={30} />
-            </div>
+            {/* The document lifts toward the cursor while a file is held over it. */}
+            <m.div
+              className="document-icon"
+              data-scene-settle
+              animate={
+                drag && !motion.still
+                  ? { y: -6, scale: 1.08, rotate: -4 }
+                  : { y: 0, scale: 1, rotate: 0 }
+              }
+              transition={motion.copy}
+            >
+              <Icon name={drag ? "upload" : "document"} size={30} />
+            </m.div>
             <div>
               <span className="upload-review-eyebrow">
                 Start with your source
@@ -187,10 +197,16 @@ function UploadContent({
               <h1 ref={heading} tabIndex={-1}>
                 Upload your research paper
               </h1>
-              <p>
-                Research PDF · up to{" "}
-                {(config?.maxUploadBytes ?? 4000000) / 1000000} MB · up to 80
-                pages
+              <p aria-live="polite">
+                {drag ? (
+                  <strong>Drop it here and we’ll check it right away</strong>
+                ) : (
+                  <>
+                    Research PDF · up to{" "}
+                    {(config?.maxUploadBytes ?? 4000000) / 1000000} MB · up to
+                    80 pages
+                  </>
+                )}
               </p>
             </div>
           </header>
@@ -419,7 +435,19 @@ function UploadContent({
         <div className="review-card-head">
           <div className="review-card-title">
             <h2>
-              <Icon name="check" size={16} strong />
+              {/* One pop when extraction finishes; a restored review is settled. */}
+              <m.span
+                className="review-check-pop"
+                initial={motion.canEnter() ? { scale: 0.3, opacity: 0 } : false}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={
+                  motion.still
+                    ? { duration: 0 }
+                    : { type: "spring", duration: 0.45, bounce: 0.5 }
+                }
+              >
+                <Icon name="check" size={16} strong />
+              </m.span>
               Document checked
             </h2>
             <span className="review-count">

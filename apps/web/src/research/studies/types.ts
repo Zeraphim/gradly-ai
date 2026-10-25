@@ -131,6 +131,8 @@ export type StudyBody = {
   };
   /** What the final reveal says the study found, in plain language. */
   takeaway: string;
+  /** Shown instead of the design-group label, for example on an uploaded paper. */
+  kicker?: string;
 };
 
 export type PreparedStudy = Omit<StudyCard, "challenges"> & StudyBody;

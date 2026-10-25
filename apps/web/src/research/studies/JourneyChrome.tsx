@@ -9,19 +9,19 @@ export function JourneyChrome({
   total,
   points,
   label,
+  closeHref = "/studies",
+  closeLabel = "Close study and return to the library",
 }: {
   done: number;
   total: number;
   points: number;
   label: string;
+  closeHref?: string;
+  closeLabel?: string;
 }) {
   return (
     <header className="journey-chrome">
-      <Link
-        className="journey-close"
-        href="/studies"
-        aria-label="Close study and return to the library"
-      >
+      <Link className="journey-close" href={closeHref} aria-label={closeLabel}>
         <X size={22} strokeWidth={2.5} aria-hidden="true" />
       </Link>
       <JourneyProgress done={done} total={total} label={label} />

@@ -981,7 +981,12 @@
         "apps/web/src/research/FocusBar.tsx",
         "apps/web/src/research/PaperActivityPilot.tsx",
         "apps/web/src/research/activity-pilot.ts",
-        "apps/web/src/research/activity-pilot.css"
+        "apps/web/src/research/activity-pilot.css",
+        "apps/web/src/research/PreparationOutline.tsx",
+        "apps/web/src/research/PreparationWarmup.tsx",
+        "apps/web/src/research/ReadyHandoff.tsx",
+        "apps/web/src/research/warmup.ts",
+        "tests/browser/upload-journey.spec.ts"
       ],
       "relationships": [
         {
@@ -1031,8 +1036,11 @@
       "owners": [],
       "appliesTo": [
         "apps/web/src/research/studies/**",
+        "apps/api/src/research/study-card.ts",
         "tests/research/prepared-studies.test.ts",
         "tests/research/study-player.test.ts",
+        "tests/research/upload-journey.test.ts",
+        "tests/research/study-card.test.ts",
         "tests/browser/studies.spec.ts"
       ],
       "relationships": [

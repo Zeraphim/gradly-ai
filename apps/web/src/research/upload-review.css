@@ -613,3 +613,7 @@
     min-height: 44px;
   }
 }
+.research-lab .review-check-pop {
+  display: inline-grid;
+  place-items: center;
+}

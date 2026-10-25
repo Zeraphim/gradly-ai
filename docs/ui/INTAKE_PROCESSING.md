@@ -63,16 +63,19 @@ evidence) sit in one uniform group below the card.
 
 **Recovery.** `FailureRecovery.tsx` is shared by intake and preparation.
 
-| Where it fails                                    | Classification                                   | Offer                                                                     |
-| ------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
-| Client checks, or the upload endpoint answers 4xx | File can't be used (the message names the limit) | Prepared studies or a different paper, as a choice                        |
-| Network error, timeout, cancel, 5xx               | Interrupted                                      | Check again; file stays selected                                          |
-| Failed or review job                              | Unclassified until a structured reason exists    | Retry this stage; prepared studies inside "Explore another study instead" |
-| Unsupported link on home                          | Inaccessible link                                | Upload the PDF or view prepared studies                                   |
+| Where it fails                                    | Classification                                    | Offer                                                                     |
+| ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
+| Client checks, or the upload endpoint answers 4xx | File can't be used (the message names the limit)  | Prepared studies or a different paper, as a choice                        |
+| Network error, timeout, cancel, 5xx               | Interrupted                                       | Check again; file stays selected                                          |
+| Failed or review job                              | The failed stage's `errorCode`, else unclassified | Retry this stage; prepared studies inside "Explore another study instead" |
+| Unsupported link on home                          | Inaccessible link                                 | Upload the PDF or view prepared studies                                   |
 
-Classification uses where the failure happened, never the error wording. If a
-job later carries `reason` (proposal below), `readFailureReason` uses it and
-permanent reasons switch to the prepared-study choice.
+Classification uses where the failure happened, never the error wording. A failed
+stage's saved `errorCode` (`timeout`, `output_limit`) is read first by
+`jobFailureReason`; both are retryable reasons with their own heading and plain
+explanation, and the provider text moves into a "Technical detail" disclosure.
+If a job later carries `reason` (proposal below), it is used next, and permanent
+reasons switch to the prepared-study choice.
 
 ### Focus journey (second pass, 20 October 2026)
 
@@ -167,6 +170,47 @@ Choose a study → Investigate.
   generated lessons" on its own; agree with JC (#14) whether the quest format
   becomes data in the shared player.
 
+### Seventh pass (25 October 2026): waiting and the study player
+
+Live preparation takes minutes, so the Prepare step now carries the patterns
+recorded in [DESIGN.md](../DESIGN.md#upload-waiting-and-uploaded-study-player)
+(U1–U8 adopted, X1–X7 rejected). Upload → Prepare → Play:
+
+- **Drop and extract.** While a file is held over the upload area, the document
+  icon lifts and becomes an upload arrow, and the size line reads "Drop it here and
+  we'll check it right away". When text extraction finishes, the "Document
+  checked" tick pops once.
+- **Consent.** After "Confirm AI processing", the preparation track enters once.
+  A reopened job starts settled.
+- **Stages (U1, U2).** The rail still moves only with the saved `stage`. A stage
+  finished on this page pops its stop and shows "<agent> finished" for about
+  2.6 seconds, announced through the caption's live region.
+- **Your study so far (U3).** Count-only chips from the saved job: evidence
+  passages after stage 1, then "N challenges drafted + a bonus" and "N ask you to
+  explain your thinking" from `publicJob().outline`, then methods checked and
+  quotes matched. Only the next pending item shows, with a dashed border and a
+  slow breath. The evidence analyst's summary is never shown here because it
+  states the paper's findings.
+- **Warm-up (U4, U5).** Four authored cards and an optional prediction sit below
+  the track while a stage runs, labelled "Warm-up · not scored". The current card
+  is kept per tab and the prediction per job in this browser. It hides when
+  preparation pauses or finishes.
+- **Slow steps.** After 30 seconds on one step the caption shows "On this step for
+  m:ss", measured in this browser since the step was first seen and kept across a
+  reload. After 60 seconds it explains that long papers take minutes, that Gradly
+  retries once by itself and that leaving is safe. After 180 seconds it says the
+  step will finish, start again by itself, or offer a retry. It never estimates time remaining.
+- **Leaving and returning.** An unfinished preparation is remembered in this
+  browser, and the home page offers "Return to your paper". Reopening the job
+  resumes from its saved state, without replaying celebrations.
+- **Ready (U6, U7).** Live jobs show the celebrating mascot, the single burst and
+  tiles (challenges, bonus, evidence passages, reasoning prompts), then one
+  "Start your study" action. Sample jobs keep "Start the quest".
+- **Play.** "Start your study" starts a session and opens
+  `#/research/play/<sessionId>`, the prepared-study player driven by the saved
+  session (see [PREPARED_STUDIES.md](PREPARED_STUDIES.md#uploaded-papers)).
+  History links generated sessions there; older `/adventure/:id` links still work.
+
 Reference evidence: Brilliant's public onboarding (`/welcome/`) uses the same
 lesson shell. Measured in headless Chromium: screen swaps complete in under
 0.1s, progress width transitions over 0.2s `ease`, a choice press animates
@@ -185,6 +229,8 @@ and a live browser gives the direct evidence for a web interface.
 - Disabled or unavailable: live AI unconfigured and no sample mode offers the
   reference investigation; sample mode is labelled as an authored study.
 - Restore: refresh resumes preparation from the saved job without replaying.
+- Waiting: slow step (30, 60 and 180 seconds), warm-up card and prediction,
+  stage finished while open, ready hand-off.
 
 ## Proposal for Jan and JC — not yet agreed or implemented
 
@@ -196,8 +242,12 @@ the document for history. Validation failures before a job exists need a
 retention decision. Until agreed, "not applicable" pipeline failures can't be
 told apart from temporary ones and both offer retry first.
 
-Handoff today: `onStart(job.id)` → `start` with `lessonId` → `begin` →
-`/adventure/:sessionId`. Agree with JC before replacing that boundary. Jake's
+The stage codes `timeout` and `output_limit` from #6 are now read from the failed
+audit; the five proposed reasons above remain unsent by the server.
+
+Handoff for live jobs (seventh pass): `onStart(job.id)` → `start` with `lessonId`
+→ `#/research/play/:sessionId`, where the study intro's Begin calls `begin`. The
+featured quest still opens `/adventure/:sessionId`. Jake's
 measured durations and size limits are still needed; no countdown, average
 duration or tested size recommendation is shown.
 
@@ -275,11 +325,22 @@ limits are in [TESTING.md](../TESTING.md).
   `preparation-track.css`, `FailureRecovery.tsx`, `IntakeSteps.tsx`
 - `apps/web/src/research/TextingQuest.tsx`, `texting-quest.ts`,
   `quest-visuals.tsx`, `quest.css`
-- `apps/web/src/research/ResearchApp.tsx` (`startFirstChallenge`, `/meet` route)
+- `apps/web/src/research/ResearchApp.tsx` (`startFirstChallenge`, `/meet` and
+  `/play` routes)
+- `apps/web/src/research/PreparationOutline.tsx`, `PreparationWarmup.tsx`,
+  `warmup.ts`, `ReadyHandoff.tsx`, `studies/Burst.tsx`
+- `apps/web/src/research/studies/UploadedJourney.tsx`, `uploaded.ts`,
+  `ReasoningCoach.tsx`, `uploaded-journey.css`
+- `apps/api/src/research/study-card.ts`; `publicJob().outline` and
+  `publicSession()` `study`, `takeaway`, `lessonId` and `feedback.accepted`
 - `apps/web/src/LegacyApp.tsx` (home chrome and sample entry)
 
 Verification is local sample mode only. No live generation or hosted preview
-(#4) has been checked for this change.
+(#4) has been checked for this change. The seventh pass was checked with mocked
+live jobs and the real learning engine on a fixture lesson
+(`tests/browser/upload-journey.spec.ts`, `tests/research/upload-journey.test.ts`,
+`tests/research/study-card.test.ts`). Screenshots of every waiting state at 375
+and 1366 pixels were reviewed locally and are not stored in the repository.
 
 ## Related Decisions
 
