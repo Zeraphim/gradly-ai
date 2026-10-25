@@ -59,6 +59,30 @@ which are frontend-only until agreed with the pipeline owner (#8):
 | `association` | Correlational             | Reported r, β or OR on a gauge; derived r² grid after Check                |
 | `estimate`    | Null result, longitudinal | Reported intervals against a reference value, optional predict-then-reveal |
 
+## Uploaded papers
+
+Uploaded papers (#12) now share this player at `#/research/play/<sessionId>`.
+`JourneyPlayer` takes an optional `driver`. Without one, prepared studies keep
+the browser store and authored keys exactly as before. With one, the saved
+learning session checks every answer and owns every transition, and the player
+keeps only the unchecked draft (`client-state.ts`, version-bound, per tab).
+`studies/uploaded.ts` maps the public session to `PreparedStudy` and
+`StudyProgress`. Challenges the server has not sent yet are placeholders that
+are never rendered, because the server releases one challenge at a time. Sending
+the whole lesson would let the browser read results-stage scenes and evidence
+before the design decisions.
+
+Small seams in this player's components, all optional with the previous defaults:
+`JourneyChrome` `closeHref`/`closeLabel`, `StudyIntro` `backHref`/`backLabel`/`busy`,
+`StudyReveal` `extra`/`actions`, `PreparedStudy.kicker` (replaces the design-group
+label), and `Burst` moved to `studies/Burst.tsx` so preparation can reuse it.
+The driver's `renderExtra` adds the written-reasoning field and the AI coach
+(`ReasoningCoach.tsx`) for uploads only. Card fields for an upload (teaser,
+question, minutes, decorative group and topic, reveal takeaway) are derived on
+the server by `apps/api/src/research/study-card.ts`, which hides the paper's title
+and authors. See [HANDOFF_UPLOAD_JOURNEY.md](../HANDOFF_UPLOAD_JOURNEY.md) for
+the decisions waiting on review.
+
 ## Micro-interaction inventory
 
 Timings reuse `sceneTiming` and the shared `SceneMotion` provider. Reduced motion

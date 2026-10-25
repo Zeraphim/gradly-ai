@@ -440,3 +440,57 @@ may specify `decimals` from zero to six; existing scenes default to two. Generic
 reveal copy now refers to reported values instead of assuming every chart shows
 group means. These changes do not establish arbitrary-paper or live generation
 quality. The next evaluation is independent content review and observed learner use.
+
+## Upload waiting and uploaded-study player
+
+Preparing a live upload takes several minutes: five model calls; in the recorded Super runs a
+stage took from about 20 seconds to over two minutes. The waiting screen now gives
+the learner honest progress, a small win at each real milestone and something
+useful to do. A ready lesson then plays in the prepared-study player (#14)
+instead of the older investigation screen. Surface details, states and
+verification are in [INTAKE_PROCESSING.md](ui/INTAKE_PROCESSING.md#seventh-pass-25-october-2026-waiting-and-the-study-player).
+
+These patterns come from Duolingo and Brilliant's public products and from the
+observations recorded in [INTERACTION_REFERENCES.md](INTERACTION_REFERENCES.md).
+No signed-in lesson of either product was inspected in this pass, and no asset,
+code or timing was copied. Each is a Gradly design choice built on the shared
+`sceneTiming`, the supplied mascot and the blue palette.
+
+| Code | Reference pattern                                                                | Gradly adaptation                                                                                                                                                                                                                             |
+| ---- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| U1   | Segmented lesson progress (both)                                                 | The five-agent rail moves only when the saved job's `stage` changes. No percentage, countdown or simulated clock.                                                                                                                             |
+| U2   | A small win per completed part (Duolingo's per-exercise check)                   | When a stage finishes while the page is open, its stop pops once and a short "Lesson Architect finished" chip appears and is announced. Restored progress never celebrates.                                                                   |
+| U3   | A preview of what is coming (Brilliant's lesson outline, Duolingo's lesson card) | "Your study so far" chips show only counts from the saved job: evidence passages, challenges drafted, bonus, reasoning prompts, methods checked, quotes matched. The next pending item breathes; finished items pop in only on a live change. |
+| U4   | Practice while you wait (Brilliant's short warm-up problems)                     | Four authored research-habit cards (association or cause, fair comparison, who was asked, reading "no difference") with instant feedback. Labelled "Warm-up · not scored", unrelated to the uploaded paper, and resumable after a reload.     |
+| U5   | Predict, then see (Brilliant)                                                    | The warm-up ends with an optional "What do you think this paper found?" note, saved only in this browser and shown beside the real paper at the reveal.                                                                                       |
+| U6   | Lesson-complete celebration with the mascot (Duolingo)                           | Ready shows the celebrating mascot, the shared single burst and count tiles once, then one "Start your study" action. Reopening a ready job shows it settled.                                                                                 |
+| U7   | One primary action per screen (both)                                             | Consent, ready and every challenge keep a single bottom action. The upload player reuses Marc's dock: Check → Try again or Continue.                                                                                                          |
+| U8   | Immediate, colour-coded answer feedback (Duolingo's green and orange bar)        | Warm-up options turn green or soft amber at once, with a one-sentence reason. In the upload player the same dock shows the server's saved result, never a browser guess.                                                                      |
+
+Rejected, with reasons:
+
+| Code | Rejected pattern                                         | Why                                                                                                                                                                  |
+| ---- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| X1   | Percentages, countdowns or time estimates                | Stage durations vary from seconds to minutes and are not measured per paper. Elapsed time appears after 30 seconds on a step, with plain copy, and never a forecast. |
+| X2   | Streaks, hearts, gems and leaderboards                   | The prepared-study rules already exclude them, and they would reward waiting rather than reasoning.                                                                  |
+| X3   | Scoring the warm-up                                      | It is not about the paper and is not a learning measure; points stay one per solved challenge.                                                                       |
+| X4   | Sound and haptics                                        | Sound stays off by requirement; web vibration is inconsistent and not needed.                                                                                        |
+| X5   | Confetti on every stage and looping celebrations         | The motion convention forbids decorative loops. Stages get one small pop; the burst plays once, at ready.                                                            |
+| X6   | Auto-starting the lesson when it is ready                | The learner may still be on a warm-up card; an explicit start keeps them in control.                                                                                 |
+| X7   | Showing generated titles or questions during preparation | A generated title often repeats the paper's own title, and questions could reveal design answers early. Preparation shows counts only.                               |
+
+Reduced motion (system or saved setting) turns every pop, breath, swap and burst
+into an immediate state. The text, counts and announcements are unchanged.
+
+**Uploaded-study player.** `#/research/play/<sessionId>` renders Marc's
+`JourneyPlayer` with a server driver (`studies/UploadedJourney.tsx`). The browser
+never holds an uploaded lesson's answer keys: each Check, retry and step is a
+learning-session request, and `studies/uploaded.ts` maps the public session to the
+player's study and progress shapes. The intro shows "Your paper · AI-generated"
+instead of a design-group label, and its teaser and question are identity-safe
+fields computed on the server. Written-reasoning challenges add an optional
+"Explain your thinking" field sent with the answer. After the check, "Ask the AI
+coach" requests the saved live feedback, labelled as AI output that can be wrong.
+The reveal adds the learner's prediction and replaces the library actions with
+"Try a prepared study", "Back to your quests" and "Replay this study". Prepared
+studies under `/studies` keep their browser-only behaviour.

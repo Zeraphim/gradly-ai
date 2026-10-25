@@ -38,6 +38,7 @@ function savedJob(): ProcessingJob {
       { page: 2, method: "ocr", confidence: 80 },
     ],
     evidence: [],
+    outline: null,
     ready: false,
     error: undefined,
   };
@@ -151,8 +152,8 @@ test("processing waits for saved state, stops on failure, retries and resumes wi
   job.audits.forEach((audit) => {
     audit.status = "Completed";
   });
-  // Live lessons keep their generated briefing, so the handoff opens it.
+  // Live lessons open their generated briefing in the shared study player.
   await expect(
-    page.getByRole("button", { name: "Open your investigation" }),
+    page.getByRole("button", { name: "Start your study" }),
   ).toBeVisible();
 });

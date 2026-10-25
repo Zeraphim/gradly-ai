@@ -119,3 +119,31 @@ export function subscribeReducedMotion(changed: () => void) {
     observer.disconnect();
   };
 }
+
+/** The preparation still running in this browser, so home can lead back to it. */
+export type ActivePreparation = { id: string; name: string };
+const preparationKey = "gradly-active-preparation";
+export function readActivePreparation(): ActivePreparation | null {
+  try {
+    const value = JSON.parse(localStorage.getItem(preparationKey) ?? "null");
+    return value &&
+      typeof value.id === "string" &&
+      /^[\w-]{1,100}$/.test(value.id) &&
+      typeof value.name === "string"
+      ? { id: value.id, name: value.name.slice(0, 200) }
+      : null;
+  } catch {
+    return null;
+  }
+}
+export function writeActivePreparation(preparation: ActivePreparation) {
+  try {
+    localStorage.setItem(preparationKey, JSON.stringify(preparation));
+  } catch {}
+}
+export function clearActivePreparation(id: string) {
+  try {
+    if (readActivePreparation()?.id === id)
+      localStorage.removeItem(preparationKey);
+  } catch {}
+}

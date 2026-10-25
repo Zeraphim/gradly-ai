@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, type ReactNode } from "react";
 import {
   FileSearch,
   Lightbulb,
@@ -16,6 +16,7 @@ import { JourneyChrome } from "./JourneyChrome.js";
 import {
   POINTS_PER_SOLVE,
   challengeStatus,
+  type ChallengeStatus,
   isCorrect,
   journeyChallenges,
   tapTargets,
@@ -33,25 +34,58 @@ export function solvedCount(study: PreparedStudy, progress: StudyProgress) {
   ).length;
 }
 
+/**
+ * Server-backed play for an uploaded paper. The saved learning session decides
+ * correctness and every transition, because the browser never holds the answer
+ * keys; the player keeps only the unchecked draft. Prepared studies omit it and
+ * keep the browser store.
+ */
+export type JourneyDriver = {
+  points: number;
+  /** Main challenges already resolved, from the session's position. */
+  finished: number;
+  busy: boolean;
+  closeHref: string;
+  closeLabel: string;
+  saveDraft: (change: (p: StudyProgress) => StudyProgress) => void;
+  begin: () => void;
+  check: (challenge: StudyChallenge, selected: string[]) => void;
+  retry: () => void;
+  next: () => void;
+  bonus: (accept: boolean) => void;
+  /** Content under the answer choices, such as written reasoning. */
+  renderExtra?: (
+    challenge: StudyChallenge,
+    status: ChallengeStatus,
+  ) => ReactNode;
+  revealExtra?: ReactNode;
+  revealActions?: ReactNode;
+};
+
 /** One question per screen: choose → check → feedback → retry or continue. */
 export function JourneyPlayer({
   study,
   progress,
+  driver,
 }: {
   study: PreparedStudy;
   progress: StudyProgress;
+  driver?: JourneyDriver;
 }) {
   const list = journeyChallenges(study, progress.bonus);
   const main = study.lesson.challenges.length;
-  const finished = study.lesson.challenges.filter((c) => {
-    const attempts = progress.attempts[c.id] ?? [];
-    return attempts.some((a) => a.correct) || attempts.length >= 2;
-  }).length;
-  const points = solvedCount(study, progress) * POINTS_PER_SOLVE;
+  const finished =
+    driver?.finished ??
+    study.lesson.challenges.filter((c) => {
+      const attempts = progress.attempts[c.id] ?? [];
+      return attempts.some((a) => a.correct) || attempts.length >= 2;
+    }).length;
+  const points =
+    driver?.points ?? solvedCount(study, progress) * POINTS_PER_SOLVE;
   const save = useCallback(
     (change: (p: StudyProgress) => StudyProgress) =>
-      updateProgress(study.slug, change),
-    [study.slug],
+      driver ? driver.saveDraft(change) : updateProgress(study.slug, change),
+    [study.slug, driver],
   );
   const chrome = (
     <JourneyChrome
@@ -59,13 +93,22 @@ export function JourneyPlayer({
       total={main}
       points={points}
       label={`${study.teaser} progress`}
+      closeHref={driver?.closeHref}
+      closeLabel={driver?.closeLabel}
     />
   );
   if (progress.phase === "intro")
     return (
       <StudyIntro
         study={study}
-        onBegin={() => save((p) => ({ ...p, phase: "challenge", index: 0 }))}
+        backHref={driver?.closeHref}
+        backLabel={driver ? "Your quests" : undefined}
+        busy={driver?.busy}
+        onBegin={
+          driver
+            ? driver.begin
+            : () => save((p) => ({ ...p, phase: "challenge", index: 0 }))
+        }
       />
     );
   if (progress.phase === "bonus-offer" && study.lesson.bonus)
@@ -73,16 +116,21 @@ export function JourneyPlayer({
       <>
         {chrome}
         <BonusOffer
-          onAccept={() =>
-            save((p) => ({
-              ...p,
-              bonus: true,
-              phase: "challenge",
-              index: main,
-            }))
+          onAccept={
+            driver
+              ? () => driver.bonus(true)
+              : () =>
+                  save((p) => ({
+                    ...p,
+                    bonus: true,
+                    phase: "challenge",
+                    index: main,
+                  }))
           }
-          onSkip={() =>
-            save((p) => ({ ...p, phase: "reveal", completed: true }))
+          onSkip={
+            driver
+              ? () => driver.bonus(false)
+              : () => save((p) => ({ ...p, phase: "reveal", completed: true }))
           }
         />
       </>
@@ -91,7 +139,13 @@ export function JourneyPlayer({
     return (
       <>
         {chrome}
-        <StudyReveal study={study} progress={progress} points={points} />
+        <StudyReveal
+          study={study}
+          progress={progress}
+          points={points}
+          extra={driver?.revealExtra}
+          actions={driver?.revealActions}
+        />
       </>
     );
   const challenge = list[Math.min(progress.index, list.length - 1)]!;
@@ -106,27 +160,34 @@ export function JourneyPlayer({
         previous={list[progress.index - 1] ?? null}
         progress={progress}
         save={save}
-        solvedSoFar={solvedCount(study, progress)}
+        driver={driver}
+        solvedSoFar={
+          driver
+            ? driver.points / POINTS_PER_SOLVE
+            : solvedCount(study, progress)
+        }
         onContinue={() =>
-          save((p) => {
-            const next = p.index + 1;
-            if (next < journeyChallenges(study, p.bonus).length)
-              return { ...p, index: next, draft: null, retrying: null };
-            if (!p.bonus && study.lesson.bonus)
-              return {
-                ...p,
-                phase: "bonus-offer",
-                draft: null,
-                retrying: null,
-              };
-            return {
-              ...p,
-              phase: "reveal",
-              completed: true,
-              draft: null,
-              retrying: null,
-            };
-          })
+          driver
+            ? driver.next()
+            : save((p) => {
+                const next = p.index + 1;
+                if (next < journeyChallenges(study, p.bonus).length)
+                  return { ...p, index: next, draft: null, retrying: null };
+                if (!p.bonus && study.lesson.bonus)
+                  return {
+                    ...p,
+                    phase: "bonus-offer",
+                    draft: null,
+                    retrying: null,
+                  };
+                return {
+                  ...p,
+                  phase: "reveal",
+                  completed: true,
+                  draft: null,
+                  retrying: null,
+                };
+              })
         }
       />
     </>
@@ -158,6 +219,7 @@ function ChallengeScreen({
   previous,
   progress,
   save,
+  driver,
   solvedSoFar,
   onContinue,
 }: {
@@ -167,6 +229,7 @@ function ChallengeScreen({
   previous: StudyChallenge | null;
   progress: StudyProgress;
   save: (change: (p: StudyProgress) => StudyProgress) => void;
+  driver?: JourneyDriver;
   solvedSoFar: number;
   onContinue: () => void;
 }) {
@@ -247,6 +310,14 @@ function ChallengeScreen({
   const act = () => {
     // A double click on Check must not also skip the feedback it just opened.
     if (!answering && performance.now() - lastChange.current < 280) return;
+    if (driver?.busy) return;
+    if (driver) {
+      // The server checks the answer; focus follows the saved result below.
+      if (answering) selected.length && driver.check(challenge, selected);
+      else if (status === "retry-feedback") driver.retry();
+      else onContinue();
+      return;
+    }
     if (answering) {
       if (!selected.length) return;
       const correct = isCorrect(challenge, selected);
@@ -315,6 +386,17 @@ function ChallengeScreen({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // Server-backed checks resolve later: move focus when the saved status changes.
+  const previousStatus = useRef(status);
+  useEffect(() => {
+    const before = previousStatus.current;
+    previousStatus.current = status;
+    if (!driver || before === status) return;
+    if (status === "retrying") heading.current?.focus({ preventScroll: true });
+    else if (before === "answering" || before === "retrying")
+      feedbackHeading.current?.focus({ preventScroll: true });
+  }, [status]);
 
   // Move focus to the new question only after a learner action, never on restore.
   const firstRender = useRef(true);
@@ -449,6 +531,7 @@ function ChallengeScreen({
                 onChange={setSelected}
               />
             ) : null}
+            {driver?.renderExtra?.(challenge, status)}
           </div>
         </SceneTransition>
       </main>
@@ -456,13 +539,17 @@ function ChallengeScreen({
         ref={feedbackHeading}
         identity={challenge.id}
         feedback={feedback}
-        ready={answering ? selected.length > 0 : true}
+        ready={!driver?.busy && (answering ? selected.length > 0 : true)}
         action={
-          answering
-            ? "Check"
-            : status === "retry-feedback"
-              ? "Try again"
-              : "Continue"
+          driver?.busy
+            ? answering
+              ? "Checking…"
+              : "Saving…"
+            : answering
+              ? "Check"
+              : status === "retry-feedback"
+                ? "Try again"
+                : "Continue"
         }
         note={
           status === "retrying"

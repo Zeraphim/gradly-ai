@@ -1,0 +1,154 @@
+/* Uploaded-paper additions to the study player. Scoped to .uploaded-journey. */
+.research-lab .uploaded-journey .uploaded-alert {
+  width: min(788px, calc(100% - 32px));
+  margin: 12px auto 0;
+  padding: 10px 14px;
+  border: 2px solid var(--s-amber-line);
+  border-radius: 14px;
+  background: var(--s-amber-soft);
+  color: var(--s-amber);
+  font-weight: 700;
+  font-size: 14.5px;
+}
+.research-lab .uploaded-journey .uploaded-recovery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.research-lab .uploaded-journey .coach {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 2px solid var(--s-line);
+  border-radius: 16px;
+  background: #fff;
+}
+.research-lab .uploaded-journey .coach-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--s-ink);
+  font-weight: 800;
+  font-size: 15px;
+}
+.research-lab .uploaded-journey .coach-label span {
+  color: var(--s-muted);
+  font-weight: 600;
+  font-size: 13px;
+}
+.research-lab .uploaded-journey .coach-input {
+  width: 100%;
+  min-height: 84px;
+  padding: 10px 12px;
+  border: 2px solid var(--s-line-strong);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--s-ink);
+  resize: vertical;
+  transition: border-color 160ms ease-out;
+}
+.research-lab .uploaded-journey .coach-input:focus-visible {
+  outline: 3px solid var(--s-sky);
+  outline-offset: 1px;
+  border-color: var(--s-blue);
+}
+.research-lab .uploaded-journey .coach-note {
+  margin: 0;
+  color: var(--s-muted);
+  font-size: 13.5px;
+}
+.research-lab .uploaded-journey .coach-quote {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 8px 12px;
+  border-left: 4px solid var(--s-sky);
+  border-radius: 4px 12px 12px 4px;
+  background: var(--s-sky-soft);
+  color: var(--s-body);
+  font-size: 15px;
+}
+.research-lab .uploaded-journey .coach-quote span {
+  color: var(--s-blue-ink);
+  font-weight: 800;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.research-lab .uploaded-journey .coach-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--s-blue);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--s-blue-ink);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--s-blue-shade);
+}
+.research-lab .uploaded-journey .coach-button:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+.research-lab .uploaded-journey .coach-reply {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--s-slate-soft);
+  color: var(--s-ink);
+}
+.research-lab .uploaded-journey .coach-reply p {
+  margin: 0;
+}
+.research-lab .uploaded-journey .coach-category,
+.research-lab .uploaded-journey .coach-followup {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-weight: 800;
+}
+.research-lab .uploaded-journey .coach-category {
+  color: var(--s-blue-ink);
+}
+.research-lab .uploaded-journey .coach-reply small {
+  color: var(--s-muted);
+}
+.research-lab .uploaded-journey .coach-error {
+  margin: 8px 0 0;
+  color: var(--s-amber);
+  font-size: 14px;
+  font-weight: 700;
+}
+.research-lab .uploaded-journey .uploaded-prediction {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  border: 2px dashed var(--s-line-strong);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--s-amber-action);
+  text-align: left;
+}
+.research-lab .uploaded-journey .uploaded-prediction p {
+  margin: 4px 0;
+  color: var(--s-ink);
+  font-size: 15.5px;
+}
+.research-lab .uploaded-journey .uploaded-prediction strong {
+  color: var(--s-ink);
+}
+.research-lab .uploaded-journey .uploaded-prediction small {
+  color: var(--s-muted);
+}
