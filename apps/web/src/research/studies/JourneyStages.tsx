@@ -69,7 +69,12 @@ export function StudyIntro({
             {study.kicker ?? designGroups[study.group].label}
           </span>
           <h1 tabIndex={-1}>{study.question}</h1>
-          <p>{study.lesson.briefing}</p>
+          {study.lesson.briefing
+            .split(/\n+/)
+            .filter(Boolean)
+            .map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
           <ul className="journey-intro-facts">
             <li>
               <ListChecks size={17} aria-hidden="true" />
