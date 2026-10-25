@@ -2,6 +2,8 @@
 
 Date: 2026-10-25 · Branch: `feat/issue-6-scene-pipeline` (uncommitted at time of writing)
 
+> Superseded by [HANDOFF_JAN_BACKEND.md](HANDOFF_JAN_BACKEND.md). The stage-1 500 below was the `propertyNames` keyword and is resolved; this record is kept as history.
+
 ## Context
 
 Users reported "The AI response was incomplete because it reached the

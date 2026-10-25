@@ -282,3 +282,59 @@ it("provider failure preserves reasoning without altering score or progression",
   );
   expect(stateAfter.phase).toBe("challenge");
 });
+
+it("keeps paper identity and unrelated evidence out of feedback", async () => {
+  const session = await withGuest(guestA, () =>
+    createSessionWithReasoning(guestA),
+  );
+  const challenge = featured.challenges[2]!;
+  let capturedInput: any = null;
+  const reply = (guidance: string): ModelProvider => ({
+    async generate(_role, _task, input) {
+      capturedInput = input;
+      return {
+        category: "Partially Supported",
+        guidance,
+        followup: "Which excerpt supports that?",
+        refs: [],
+      } as any;
+    },
+  });
+  const request = () =>
+    new Request("http://localhost/api/research/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: session.id }),
+    });
+
+  const ok = await withGuest(guestA, () =>
+    POST(request(), reply("Connect the allocation to the outcome.")),
+  );
+  expect(ok.status).toBe(200);
+  const sent = JSON.stringify(capturedInput);
+  expect(sent).not.toContain(featured.paper.title);
+  expect(sent).not.toContain(featured.paper.authors);
+  expect(
+    capturedInput.permittedExcerpts.every((e: { id: string }) =>
+      challenge.refs.includes(e.id),
+    ),
+  ).toBe(true);
+  const unrelated = featured.evidence.filter(
+    (e) => !challenge.refs.includes(e.id),
+  );
+  expect(unrelated.length).toBeGreaterThan(0);
+  for (const e of unrelated) expect(sent).not.toContain(e.excerpt);
+
+  const before = await withGuest(guestA, () =>
+    read<LearningSession>(guestA, "session", session.id),
+  );
+  const leaked = await withGuest(guestA, () =>
+    POST(request(), reply(`As shown in ${featured.paper.title}, yes.`)),
+  );
+  expect(leaked.status).toBe(400);
+  expect((await leaked.json()).error).toMatch(/paper identity/);
+  const after = await withGuest(guestA, () =>
+    read<LearningSession>(guestA, "session", session.id),
+  );
+  expect(after.aiFeedback).toEqual(before.aiFeedback);
+});

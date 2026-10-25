@@ -75,7 +75,13 @@ async function main() {
       process.exit(1);
     }
     if (job.status === "review") {
-      console.warn(`   ⚠️ Stage ${s} Flagged for Review: ${job.error}`);
+      // The app requires an explicit regenerate here; stop rather than
+      // re-running stages and reporting them under the wrong label.
+      console.error(`   ⚠️ Stage ${s} Flagged for Review: ${job.error}`);
+      console.error(
+        `   Reviewer issues: ${JSON.stringify(job.review?.issues ?? [])}`,
+      );
+      process.exit(1);
     } else {
       console.log(`   ✅ Stage ${s} Completed in ${stageElapsed}s: ${job.audits[s]!.summary}`);
     }
@@ -85,7 +91,16 @@ async function main() {
   console.log(`\n🎉 Quest Generation Complete!`);
   console.log(`   Title:      "${job.lesson!.title}"`);
   console.log(`   Challenges: ${job.lesson!.challenges.length} generated challenges`);
-  console.log(`   Scenes:     ${job.lesson!.challenges.filter((c) => c.scene).length} interactive visual scenes\n`);
+  console.log(`   Scenes:     ${job.lesson!.challenges.filter((c) => c.scene).length} interactive visual scenes`);
+  const written = job.lesson!.challenges.filter((c) => c.writtenReasoning).length;
+  console.log(`   Written-reasoning challenges: ${written}\n`);
+  // Feedback is only offered on written-reasoning challenges and this runner
+  // answers challenge 1. Mark it explicitly so the live feedback route runs;
+  // the generated output above is reported unmodified.
+  if (!job.lesson!.challenges[0]!.writtenReasoning) {
+    job.lesson!.challenges[0]!.writtenReasoning = true;
+    console.log("   [harness] Challenge 1 marked writtenReasoning=true to exercise feedback.\n");
+  }
 
   // 4. Spin up local Express server to simulate frontend learning session & feedback
   const app = createApp({ preview: false });

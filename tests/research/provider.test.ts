@@ -2,6 +2,7 @@ import { it, expect, vi, afterEach } from "vitest";
 import { z } from "zod";
 import { nebiusConfig } from "../../apps/api/src/nebius-config.js";
 import { NebiusProvider } from "../../apps/api/src/research/provider.js";
+import { generatedLessonSchema } from "../../apps/api/src/research/contracts.js";
 const schema = z.object({ answer: z.string() });
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -212,6 +213,86 @@ it("strips propertyNames from the wire schema but keeps Zod validation", async (
   expect(sentJson).not.toContain("propertyNames");
   // Zod still validates the reply against the record shape.
   expect(output.misconceptions.opt1).toBe("text");
+  fetcher.mockImplementation(() =>
+    Response.json({
+      model: nebiusConfig().modelId,
+      choices: [
+        {
+          finish_reason: "stop",
+          message: { content: '{"misconceptions":{"opt1":5}}' },
+        },
+      ],
+    }),
+  );
+  await expect(
+    new NebiusProvider().generate("Test", "test", {}, recordSchema),
+  ).rejects.toThrow("did not match the required schema");
+});
+
+it("strips propertyNames from the real lesson schema", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "test");
+  const fetcher = vi.fn().mockResolvedValue(
+    new Response("stop after capture", { status: 400 }),
+  );
+  vi.stubGlobal("fetch", fetcher);
+  const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+  try {
+    await expect(
+      new NebiusProvider().generate(
+        "Lesson Architect",
+        "draft",
+        {},
+        generatedLessonSchema,
+        undefined,
+        { tier: "pipeline" },
+      ),
+    ).rejects.toThrow("(400)");
+  } finally {
+    warn.mockRestore();
+  }
+  expect(JSON.stringify(z.toJSONSchema(generatedLessonSchema))).toContain(
+    "propertyNames",
+  );
+  const sent = JSON.parse(fetcher.mock.calls[0]![1]!.body);
+  expect(JSON.stringify(sent.response_format.json_schema.schema)).not.toContain(
+    "propertyNames",
+  );
+});
+
+it("retries one timeout, then fails with a typed timeout code and a log line", async () => {
+  vi.stubEnv("NEBIUS_API_KEY", "test");
+  const fetcher = vi
+    .fn()
+    .mockRejectedValue(new DOMException("timeout", "TimeoutError"));
+  vi.stubGlobal("fetch", fetcher);
+  const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+  try {
+    const attempt = new NebiusProvider().generate(
+      "Lesson Architect",
+      "draft",
+      {},
+      schema,
+      undefined,
+      { tier: "pipeline" },
+    );
+    await expect(attempt).rejects.toThrow("timed out");
+    await expect(attempt).rejects.toMatchObject({ code: "timeout" });
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /Timeout after 110000ms .*role: Lesson Architect, tier: pipeline/,
+      ),
+    );
+    warn.mockClear();
+    await expect(
+      new NebiusProvider().generate("Coach", "feedback", {}, schema),
+    ).rejects.toMatchObject({ code: "timeout" });
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("Timeout after 45000ms"),
+    );
+  } finally {
+    warn.mockRestore();
+  }
 });
 
 it("rejects when PREVIEW_MODE is true even if API key exists", async () => {
@@ -225,13 +306,13 @@ it("rejects when PREVIEW_MODE is true even if API key exists", async () => {
   expect(mock).not.toHaveBeenCalled();
 });
 
-it("retries transient 429 rate-limit and succeeds on attempt 1", async () => {
+it.each([429, 529])("retries transient %i and succeeds on attempt 1", async (status) => {
   vi.stubEnv("NEBIUS_API_KEY", "unit-test-secret");
   vi.useFakeTimers();
 
   const fetcher = vi
     .fn()
-    .mockResolvedValueOnce(new Response("Too Many Requests", { status: 429 }))
+    .mockResolvedValueOnce(new Response("Too Many Requests", { status }))
     .mockResolvedValueOnce(
       Response.json({
         model: nebiusConfig().modelId,

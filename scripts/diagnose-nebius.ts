@@ -10,7 +10,10 @@ import { nebiusConfig } from "../apps/api/src/nebius-config.js";
 import { NebiusProvider } from "../apps/api/src/research/provider.js";
 import { extractPdf } from "../apps/api/src/research/pdf.js";
 import { newJob, runStage } from "../apps/api/src/research/pipeline.js";
-import { lessonSchema } from "../apps/api/src/research/contracts.js";
+import {
+  generatedLessonSchema,
+  lessonSchema,
+} from "../apps/api/src/research/contracts.js";
 
 if (!process.env.NEBIUS_API_KEY) {
   console.error("NEBIUS_API_KEY is not set (checked env and .env).");
@@ -49,6 +52,7 @@ try {
 
 // 2. Wrap fetch so the real stage call logs the raw response metadata.
 const realFetch = globalThis.fetch;
+let lastContent = "";
 globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
   const started = performance.now();
   const response = await realFetch(input, init);
@@ -58,6 +62,7 @@ globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
   try {
     const body = JSON.parse(text);
     const choice = body.choices?.[0];
+    lastContent = String(choice?.message?.content ?? "");
     console.log({
       model: body.model,
       finish_reason: choice?.finish_reason,
@@ -245,6 +250,20 @@ if (job.status !== "failed") {
   console.log("Stage error:  ", job.error ?? "(none)");
   if (job.status === "failed") {
     console.log("errorCode:   ", job.audits[1]?.errorCode ?? "(none)");
+    // Name the failing fields (paths and messages only, never values).
+    try {
+      const raw = JSON.parse(lastContent);
+      const parsed = generatedLessonSchema.safeParse(raw);
+      if (!parsed.success)
+        for (const issue of parsed.error.issues.slice(0, 20)) {
+          console.log(`  schema issue at ${issue.path.join(".")}: ${issue.message}`);
+          // Paper metadata is not learner data; show it to name the cause.
+          if (issue.path.join(".") === "paper.url")
+            console.log("  paper.url value:", JSON.stringify(raw?.paper?.url));
+        }
+    } catch {
+      console.log("  stage-1 content is not JSON");
+    }
     await runLadder();
   } else console.log("Challenges:  ", job.lesson?.challenges.length);
 }

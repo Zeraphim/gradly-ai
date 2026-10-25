@@ -1,8 +1,10 @@
 import { z } from "zod";
 import { nebiusConfig } from "../nebius-config.js";
 import {
+  challengeSchema,
   excerptMatches,
-  lessonSchema,
+  generatedLessonSchema,
+  MAX_GENERATED_CHALLENGES,
   refSchema,
   verifyLesson,
   type Job,
@@ -32,6 +34,18 @@ const roles: [string, string][] = [
     "Validate schema, excerpts, answer guides, and reviewer decisions.",
   ],
 ];
+/** Stage-1 output: references are limited to verified stage-0 ids and the
+ *  excerpts themselves are attached server-side, not re-emitted. */
+export function lessonDraftSchema(evidenceIds: string[]) {
+  const ids = [...new Set(evidenceIds)] as [string, ...string[]];
+  const challenge = challengeSchema.extend({
+    refs: z.array(z.enum(ids)).min(1),
+  });
+  return generatedLessonSchema.omit({ evidence: true }).extend({
+    challenges: z.array(challenge).min(3).max(MAX_GENERATED_CHALLENGES),
+    bonus: challenge.nullable(),
+  });
+}
 export function newJob(id: string, name: string, pages: Job["pages"]): Job {
   return {
     id,
@@ -105,23 +119,28 @@ export async function runStage(
       audit.summary = j.evidence.findings;
       audit.refs = j.evidence.refs.map((r) => r.id);
     } else if (j.stage === 1) {
-      j.lesson = await provider.generate(
+      const draftSchema = lessonDraftSchema(j.evidence!.refs.map((r) => r.id));
+      const draft = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–14 challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes, results, or a single best answer where the source permits alternatives. ${sceneAuthoringInstructions}`,
+        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes, results, or a single best answer where the source permits alternatives. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
           evidenceRule:
-            "Copy every lesson evidence excerpt character-for-character from evidence.refs or the page text. Do not paraphrase, shorten words, or fix typography.",
+            "Cite evidence only by the ids in evidence.refs. The server attaches those verified excerpts to the lesson, so do not copy excerpts.",
           pages: j.pages,
           schemaExample: JSON.parse(
             JSON.stringify({ id: j.id, source: "generated" }),
           ),
         },
-        lessonSchema,
+        draftSchema,
         pipelineModel,
         { tier: "pipeline" },
       );
-      j.lesson = lessonSchema.parse(j.lesson);
+      // Evidence is the verified stage-0 set, never the model's re-copy.
+      j.lesson = generatedLessonSchema.parse({
+        ...draftSchema.parse(draft),
+        evidence: j.evidence!.refs,
+      });
       j.lesson.id = j.id;
       j.lesson.source = "generated";
       if (j.pages.some((p) => p.method === "ocr"))

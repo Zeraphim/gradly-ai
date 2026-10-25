@@ -34,6 +34,10 @@ export const challengeSchema = z.object({
     "bonus",
   ]),
 });
+const paperUrl = z
+  .string()
+  .url()
+  .regex(/^https:\/\/[^/]+\.[^/]+/);
 export const lessonSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -43,16 +47,27 @@ export const lessonSchema = z.object({
     title: z.string(),
     authors: z.string(),
     journal: z.string(),
-    url: z
-      .string()
-      .url()
-      .regex(/^https:\/\/[^/]+\.[^/]+/)
-      .nullable(),
+    // Models answer a bare "https://" or another unusable link for unknown
+    // sources; that means unavailable metadata, so it becomes null rather
+    // than failing the whole lesson. The wire schema keeps the host pattern.
+    url: z.preprocess(
+      (v) =>
+        typeof v === "string" && !paperUrl.safeParse(v).success ? null : v,
+      paperUrl.nullable(),
+    ),
     limitations: z.array(z.string()),
   }),
   evidence: z.array(refSchema),
   challenges: z.array(challengeSchema).min(3).max(14),
   bonus: challengeSchema.nullable(),
+});
+/** Live drafting asks for fewer challenges than stored lessons may hold, so
+ *  one lesson fits the output budget. */
+export const MAX_GENERATED_CHALLENGES = 8;
+export const generatedLessonSchema = lessonSchema.extend({
+  title: z.string().min(1),
+  briefing: z.string().min(1),
+  challenges: z.array(challengeSchema).min(3).max(MAX_GENERATED_CHALLENGES),
 });
 export type Challenge = z.infer<typeof challengeSchema>;
 export type Lesson = z.infer<typeof lessonSchema>;

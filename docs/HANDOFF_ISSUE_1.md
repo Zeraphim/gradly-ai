@@ -20,7 +20,7 @@
 | `PREVIEW_MODE` | Boolean flag. `true` runs the research extension without external AI inference (reference answers & extracted text checks only). `false` invokes Nebius Nemotron. | Preview, Production, Local | JC applies | Set `true` initially for zero-cost preview verification; switch to `false` when enabling live generation. |
 | `DEMO_MODE` | Explicit sample-flow opt-in. Refused on Vercel and in production by runtime guard. | Local only | Developer | Set `false` on Vercel preview/production; `true` only for local offline walkthroughs. |
 | `NEBIUS_BASE_URL` | Regional API base URL for Nebius Token Factory. | Preview, Production, Local | Default / JC | Default: `https://api.tokenfactory.us-central1.nebius.com/v1`. Override only if region changes. |
-| `NEBIUS_MODEL_ID` | Model identifier for Nemotron inference. | Preview, Production, Local | Default / JC | Default: `nvidia/Nemotron-3-Ultra-550b-a55b`. |
+| `NEBIUS_MODEL_ID` | Optional override forcing one Nemotron model for both the pipeline and feedback tiers. | Preview, Production, Local | Default / JC | Unset by default. Both tiers default to `nvidia/nemotron-3-super-120b-a12b`; `NEBIUS_PIPELINE_MODEL` and `NEBIUS_FEEDBACK_MODEL` override one tier each. |
 | `APP_ORIGIN` | Allowed origin for CSRF/origin checks (`sameOrigin()`). | *Not required / Omitted* | JC | The deployment is same-origin (frontend & API served from the same domain). Leave unset unless distinct origins are used. |
 
 ---

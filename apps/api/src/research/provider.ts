@@ -92,7 +92,8 @@ export class NebiusProvider implements ModelProvider {
         );
         if (!response.ok) {
           if (
-            [429, 500, 502, 503, 504].includes(response.status) &&
+            // 529 is Nebius's "System is overloaded" status, observed live.
+            [429, 500, 502, 503, 504, 529].includes(response.status) &&
             attempt < 1
           ) {
             await sleep(1000 * 2 ** attempt);

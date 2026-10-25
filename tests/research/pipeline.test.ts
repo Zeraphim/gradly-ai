@@ -1,9 +1,12 @@
 import { it, expect } from "vitest";
-import { newJob, runStage } from "../../apps/api/src/research/pipeline.js";
+import { newJob, publicJob, runStage } from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
 import { ProviderError, type ModelProvider } from "../../apps/api/src/research/provider.js";
+import { z } from "zod";
 import {
+  generatedLessonSchema,
   lessonSchema,
+  MAX_GENERATED_CHALLENGES,
   type Lesson,
 } from "../../apps/api/src/research/contracts.js";
 import {
@@ -111,12 +114,105 @@ it("replaces an empty or truncated findings summary with the neutral fallback", 
   );
 });
 
-it("rejects a bare https:// paper.url without a domain", () => {
+it("treats a paper.url without a host as unavailable metadata", () => {
   const lesson = structuredClone(featured);
-  lesson.paper.url = "https://";
-  expect(lessonSchema.safeParse(lesson).success).toBe(false);
+  for (const missing of ["https://", "", "unavailable", "https://doi org.x/a"]) {
+    lesson.paper.url = missing;
+    const parsed = lessonSchema.safeParse(lesson);
+    expect(parsed.success).toBe(true);
+    expect(parsed.data?.paper.url).toBeNull();
+  }
   lesson.paper.url = "https://doi.org/10.1177/0098628313514177";
-  expect(lessonSchema.safeParse(lesson).success).toBe(true);
+  expect(lessonSchema.parse(lesson).paper.url).toBe(
+    "https://doi.org/10.1177/0098628313514177",
+  );
+  // The wire schema still asks the model for a host, not just a prefix.
+  const wire = z.toJSONSchema(lessonSchema) as unknown as {
+    properties: {
+      paper: { properties: { url: { anyOf: { pattern?: string }[] } } };
+    };
+  };
+  const pattern = new RegExp(
+    wire.properties.paper.properties.url.anyOf[0]!.pattern!,
+  );
+  expect(pattern.test("https://")).toBe(false);
+  expect(pattern.test("https://doi.org/10.1/x")).toBe(true);
+});
+it("caps live lesson drafts at the generated challenge limit", async () => {
+  let schemaSent: unknown;
+  let taskSent = "";
+  const nine = Array.from({ length: MAX_GENERATED_CHALLENGES + 1 }, (_, n) => ({
+    ...draft.challenges[n % draft.challenges.length]!,
+    id: `c${n}`,
+  }));
+  const evidenceJob = await runStage(
+    newJob("cap-job", "paper.pdf", [{ page: 1, text: page }]),
+    provider([{ findings: "Study evidence located", refs, missing: [] }]),
+  );
+  const failed = await runStage(evidenceJob, {
+    async generate<T>(_role: string, task: string, _input: unknown, schema: unknown) {
+      taskSent = task;
+      schemaSent = schema;
+      return { ...draft, challenges: nine } as T;
+    },
+  });
+  expect(MAX_GENERATED_CHALLENGES).toBe(8);
+  expect(taskSent).toContain("Use 3–8 challenges");
+  expect(taskSent).toMatch(/Fill every required field.*keep each one brief/);
+  expect(taskSent).toContain("Set writtenReasoning=true on at least one");
+  const wire = z.toJSONSchema(schemaSent as z.ZodType) as unknown as {
+    properties: { challenges: { maxItems: number } };
+  };
+  expect(wire.properties.challenges.maxItems).toBe(8);
+  expect(failed.status).toBe("failed");
+  expect(failed.stage).toBe(1);
+  // Stored and featured lessons keep the wider limit.
+  expect(lessonSchema.safeParse({ ...draft, challenges: nine }).success).toBe(true);
+  expect(
+    generatedLessonSchema.safeParse({ ...draft, challenges: nine.slice(0, 8) })
+      .success,
+  ).toBe(true);
+  // A live draft must name and brief the investigation.
+  expect(
+    generatedLessonSchema.safeParse({ ...draft, title: "", briefing: "" })
+      .success,
+  ).toBe(false);
+});
+it("limits lesson references to stage-0 ids and attaches verified evidence server-side", async () => {
+  const evidenceJob = await runStage(
+    newJob("refs-job", "paper.pdf", [{ page: 1, text: page }]),
+    provider([{ findings: "Study evidence located", refs, missing: [] }]),
+  );
+  let schemaSent: z.ZodType | undefined;
+  const drafted = await runStage(evidenceJob, {
+    async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
+      schemaSent = schema as z.ZodType;
+      // A re-copied, altered excerpt from the model must not be kept.
+      return {
+        ...draft,
+        evidence: [{ id: "source1", page: 1, excerpt: "An altered excerpt text." }],
+      } as T;
+    },
+  });
+  const wire = JSON.stringify(z.toJSONSchema(schemaSent!));
+  expect(wire).toContain('"enum":["source1"]');
+  expect(
+    (z.toJSONSchema(schemaSent!) as { properties: object }).properties,
+  ).not.toHaveProperty("evidence");
+  expect(drafted.status).toBe("pending");
+  expect(drafted.lesson?.evidence).toEqual(refs);
+
+  const unknownRef = await runStage(
+    evidenceJob,
+    provider([
+      {
+        ...draft,
+        challenges: draft.challenges.map((c) => ({ ...c, refs: ["invented"] })),
+      },
+    ]),
+  );
+  expect(unknownRef.status).toBe("failed");
+  expect(unknownRef.stage).toBe(1);
 });
 it("clears obsolete stage and job errors after a successful retry", async () => {
   const j = newJob("retry-job", "paper.pdf", [{ page: 1, text: page }]);
@@ -162,6 +258,20 @@ it("persists a typed errorCode when a stage hits the output limit", async () => 
   );
   expect(recovered.status).toBe("pending");
   expect(recovered.audits[0]?.errorCode).toBeUndefined();
+
+  const timedOut = await runStage(j, {
+    async generate() {
+      throw new ProviderError("timeout", "The AI request timed out.");
+    },
+  });
+  expect(timedOut.audits[0]?.errorCode).toBe("timeout");
+  expect(publicJob(timedOut).audits[0]?.errorCode).toBe("timeout");
+  const otherFailure = await runStage(timedOut, {
+    async generate() {
+      throw Error("Nebius request failed (503).");
+    },
+  });
+  expect(otherFailure.audits[0]?.errorCode).toBeUndefined();
 });
 it("prevents a flagged methods review from becoming playable", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);

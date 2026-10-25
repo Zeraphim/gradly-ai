@@ -112,6 +112,14 @@ export async function POST(
 
     if (output.refs.some((r) => !c.refs.includes(r)))
       throw Error("Feedback contained an unsupported reference.");
+    // The model never receives paper metadata; reject a reply that still
+    // names the paper so its identity stays hidden until the reveal.
+    const title = l.paper.title.trim().toLowerCase();
+    if (
+      title.length >= 12 &&
+      `${output.guidance} ${output.followup}`.toLowerCase().includes(title)
+    )
+      throw Error("Feedback revealed the paper identity.");
 
     // Concurrency check before saving: verify session wasn't modified during inference
     const latest = await read<LearningSession>(who, "session", id);
