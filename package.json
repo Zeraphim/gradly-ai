@@ -20,6 +20,13 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "check": "npm run typecheck && npm test && npm run test:research && npm run build",
     "test:live": "node --env-file-if-exists=.env --import tsx scripts/verify-live.ts",
+    "preeval:nemotron": "npm run build --workspace @paperquest/contracts",
+    "eval:nemotron": "node --env-file-if-exists=.env --import tsx scripts/eval-nemotron.ts",
+    "pregenerate:studies": "npm run build --workspace @paperquest/contracts",
+    "generate:studies": "node --env-file-if-exists=.env --import tsx scripts/generate-prepared-studies.ts",
+    "test:issue5": "node --import tsx scripts/verify-issue-5.ts",
+    "test:issue6": "node --import tsx scripts/verify-issue-6.ts",
+    "test:flow": "node --env-file-if-exists=.env --import tsx scripts/run-live-flow.ts",
     "build:vercel": "npm run build --workspace @paperquest/contracts && npm run build --workspace @paperquest/web && node scripts/prepare-vercel.mjs",
     "predev": "npm run build --workspace @paperquest/contracts",
     "pretest": "npm run build --workspace @paperquest/contracts",
@@ -28,7 +35,8 @@
     "vercel-build": "npm run build:vercel",
     "context:check": "node .agents/scripts/context-audit.mjs check",
     "context:index": "node .agents/scripts/context-audit.mjs index",
-    "context:acknowledge": "node .agents/scripts/context-audit.mjs acknowledge"
+    "context:acknowledge": "node .agents/scripts/context-audit.mjs acknowledge",
+    "diagnose:nebius": "node --env-file-if-exists=.env --import tsx scripts/diagnose-nebius.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

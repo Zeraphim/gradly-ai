@@ -14,7 +14,7 @@ The whole interface uses Gradly’s blue palette: deep blue primary actions with
 - PDF validation by size/MIME/contents, local browser preview, explicit extraction request, upload progress/cancellation, per-page text inspection, bounded English OCR and recovery.
 - Persistent sessions/jobs in SQLite locally or remote libSQL on Vercel, signed guest ownership, optimistic version checks, document deletion and a protected retention-cleanup endpoint.
 - Five observable stages: evidence analysis, lesson architecture, statistical review, coach review and deterministic verification. Actual requests drive statuses; lessons that fail review cannot be opened.
-- Configurable Nebius model/endpoint shared with the existing service. The default remains the repository’s regional endpoint and Nemotron Ultra identifier. `PREVIEW_MODE=true` disables external AI calls for the research extension; reference answer checking still works.
+- Configurable Nebius model/endpoint shared with the existing service. The default is the repository’s regional endpoint and the Nemotron Super 120B identifier; pipeline stages use a larger output budget than feedback requests. `PREVIEW_MODE=true` disables external AI calls for the research extension; reference answer checking still works.
 
 The reference adventure checks option selections against its authored answer guide. Optional live review of written explanations cannot change that score. The original curated adventure assesses both the choice and reasoning; its six-quest teaching behavior is preserved.
 
@@ -63,7 +63,9 @@ The existing curated production demo needs only its existing `NEBIUS_API_KEY` an
 | `CRON_SECRET`                        | Separate random secret to authorize retention cleanup                            |
 | `NEBIUS_API_KEY`                     | Server-only key for live generation/feedback                                     |
 | `PREVIEW_MODE`                       | `false` for live calls; `true` for explicitly offline reference use              |
-| `NEBIUS_BASE_URL`, `NEBIUS_MODEL_ID` | Optional overrides; defaults preserve the deployed repository’s configuration    |
+| `NEBIUS_BASE_URL`, `NEBIUS_MODEL_ID` | Optional overrides; `NEBIUS_MODEL_ID` forces one model for both tiers            |
+| `NEBIUS_PIPELINE_MODEL`              | Quest pipeline model; default `nvidia/nemotron-3-super-120b-a12b`                 |
+| `NEBIUS_FEEDBACK_MODEL`              | Live reasoning feedback model; default `nvidia/nemotron-3-super-120b-a12b`       |
 
 ### Setup sequence
 
@@ -74,7 +76,7 @@ The existing curated production demo needs only its existing `NEBIUS_API_KEY` an
 5. Before enabling the extension for learners, smoke-test a searchable PDF and an image scan on the actual hosted function, complete generation, reload the saved adventure, and delete the test document. Confirm the original curated adventure still works. Local checks cannot verify hosted database access, OCR packaging, model access or generation quality.
 6. Configure the optional retention cron below when `CRON_SECRET` is set. Leave the extension disabled if these dependencies are unavailable; the curated adventure remains usable.
 
-The Express function duration is 240 seconds to accommodate bounded OCR (75-second deadline), while existing curated model requests remain bounded at 45 seconds and research model requests at 20 seconds per attempt. The function configuration explicitly includes OCR worker, WASM and language files using [Vercel’s `includeFiles` setting](https://vercel.com/docs/project-configuration/vercel-json#functions). These are source/package settings; the new extension has not been deployed or tested with hosted storage.
+The Express function duration is 240 seconds to accommodate bounded OCR (75-second deadline), while existing curated model requests remain bounded at 45 seconds. Research pipeline stages allow 110 seconds and 32,000 output tokens per attempt, and reasoning feedback 45 seconds and 8,000 tokens; a timed-out or selected transient failure is retried once, so two pipeline attempts stay inside the 230-second job lease. The function configuration explicitly includes OCR worker, WASM and language files using [Vercel’s `includeFiles` setting](https://vercel.com/docs/project-configuration/vercel-json#functions). These are source/package settings; the new extension has not been deployed or tested with hosted storage.
 
 Records become inaccessible after 30 days. History reads remove expired records, and the maintenance endpoint atomically removes expired papers, their linked sessions and stale rate counters. For unattended production cleanup, add this cron after enabling the extension and setting `CRON_SECRET`:
 

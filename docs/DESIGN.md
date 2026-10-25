@@ -155,7 +155,15 @@ The layout starts at 1000 CSS pixels, with shorter-window spacing and a bounded
 chart height. It removes the old single-column arrangement that pushed choices
 below the pinned action bar. No answer text is clipped, scaled down to fit, or
 placed in an inner scrolling panel. Smaller screens retain a readable stacked
-flow and normal page scrolling.
+flow and normal page scrolling. Portrait windows at least 1000 pixels wide also
+stack when their height exceeds 1.25 times their width, because they have
+the height for it.
+
+Each quest screen is centered between the progress bar and the action bar
+instead of leaving an empty band above the actions. Desktop windows 940, 1200
+and 1400 pixels tall scale quest type, spacing and visuals by 1.18, 1.25 and
+1.4 through the `--qs` property, so taller windows fill with content. Shorter
+windows and screens under 1000 pixels wide keep their original sizes.
 
 The chart's duplicate table is available through the native "View values as a
 table" disclosure. Opening it keeps the desktop choices in place. The SD caution

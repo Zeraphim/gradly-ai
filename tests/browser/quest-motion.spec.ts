@@ -267,6 +267,7 @@ test("every authored question keeps all choices above the desktop action bar", a
     [1024, 768],
     [1280, 640],
     [1000, 640],
+    [1024, 1366],
   ];
   for (const [width, height] of sizes) {
     await page.setViewportSize({ width: width!, height: height! });

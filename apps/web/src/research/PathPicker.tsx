@@ -100,8 +100,8 @@ export function PathPicker({
             <small>Choose → explain → check evidence → revise</small>
           </div>
           <div className="path-more-item">
-            <Link href="/activities">Explore three paper activities</Link>
-            <small>Experiment, observational study, interviews</small>
+            <Link href="/studies">Browse prepared studies</Link>
+            <small>Short runs of research decisions on real papers</small>
           </div>
         </nav>
       </section>

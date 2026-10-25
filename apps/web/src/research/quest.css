@@ -1,12 +1,20 @@
-/* Step-by-step quest: one task per screen, lesson-app rhythm. */
+/* Step-by-step quest: one task per screen, lesson-app rhythm. The quest fills
+   the viewport below the 65px focus bar and centers each screen between the
+   progress bar and the pinned action bar, so short screens do not leave an
+   empty band above the actions. Taller content grows the page and scrolls. */
 .research-lab .quest {
+  --qs: 1;
+  display: flex;
+  flex-direction: column;
   max-width: 760px;
+  min-height: calc(100vh - 65px);
+  min-height: calc(100dvh - 65px);
 }
 .research-lab .quest-top {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 30px;
+  margin-bottom: calc(30px * var(--qs));
 }
 .research-lab .quest-progress {
   flex: 1;
@@ -33,12 +41,33 @@
   letter-spacing: 0.04em;
 }
 .research-lab .quest-screen {
-  min-height: 460px;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Taller desktop windows scale type, spacing and visuals by --qs so the screen
+   fills the extra height with content. Narrower windows already stack and
+   scroll, so they keep --qs: 1. */
+@media (min-width: 1000px) and (min-height: 940px) {
+  .research-lab .quest {
+    --qs: 1.18;
+  }
+}
+@media (min-width: 1000px) and (min-height: 1200px) {
+  .research-lab .quest {
+    --qs: 1.25;
+  }
+}
+@media (min-width: 1000px) and (min-height: 1400px) {
+  .research-lab .quest {
+    --qs: 1.4;
+  }
 }
 .research-lab .quest-heading {
   margin: 0 0 14px;
   color: var(--j-ink);
-  font-size: clamp(24px, 3.2vw, 32px);
+  font-size: calc(clamp(24px, 3.2vw, 32px) * var(--qs));
   line-height: 1.2;
   letter-spacing: -0.025em;
 }
@@ -46,12 +75,12 @@
 /* Story screens */
 .research-lab .quest-story.has-visual {
   display: grid;
-  gap: 24px;
+  gap: calc(24px * var(--qs));
 }
 .research-lab .quest-story p {
   margin: 0 0 14px;
   color: #3d4b56;
-  font-size: 17px;
+  font-size: calc(17px * var(--qs));
   line-height: 1.6;
 }
 .research-lab .quest-story p.has-label span {
@@ -88,14 +117,14 @@
 }
 .research-lab .quest-ask .mascot {
   flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
+  width: calc(56px * var(--qs));
+  height: calc(56px * var(--qs));
   border: 0;
   background: var(--j-accent-soft);
 }
 .research-lab .quest-ask .mascot svg {
-  width: 50px;
-  height: 50px;
+  width: calc(50px * var(--qs));
+  height: calc(50px * var(--qs));
 }
 .research-lab .quest-ask .quest-heading {
   margin-bottom: 8px;
@@ -106,7 +135,7 @@
   border-radius: 14px;
   background: var(--j-tile);
   color: var(--j-ink);
-  font-size: 15px;
+  font-size: calc(15px * var(--qs));
   font-weight: 700;
   line-height: 1.5;
 }
@@ -124,7 +153,7 @@
 }
 .research-lab .quest-options {
   display: grid;
-  gap: 10px;
+  gap: calc(10px * var(--qs));
   margin: 0;
   padding: 0;
   border: 0;
@@ -136,17 +165,15 @@
   font-weight: 700;
 }
 /* The question, visual and answers share the desktop working area. A tall
-   illustration must never push the answer controls below the action dock. */
-@media (min-width: 1000px) {
+   illustration must never push the answer controls below the action dock.
+   Portrait windows have the height to stack them instead. */
+@media (min-width: 1000px) and (min-aspect-ratio: 4/5) {
   .research-lab .quest:has(.quest-choice.has-visual) {
     max-width: 1120px;
     padding-top: 24px;
   }
   .research-lab .quest:has(.quest-choice.has-visual) .quest-top {
     margin-bottom: 20px;
-  }
-  .research-lab .quest:has(.quest-choice.has-visual) .quest-screen {
-    min-height: 0;
   }
   .research-lab .quest-choice.has-visual {
     display: grid;
@@ -208,14 +235,14 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
-  padding: 15px 18px;
+  gap: calc(14px * var(--qs));
+  padding: calc(15px * var(--qs)) calc(18px * var(--qs));
   border: 2px solid #dfe5ea;
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 3px 0 #dfe5ea;
   color: var(--j-ink);
-  font-size: 16px;
+  font-size: calc(16px * var(--qs));
   font-weight: 600;
   line-height: 1.45;
   cursor: pointer;
@@ -237,8 +264,8 @@
 .research-lab .quest-key {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: calc(30px * var(--qs));
+  height: calc(30px * var(--qs));
   border: 2px solid #dfe5ea;
   border-radius: 9px;
   color: var(--j-muted);
@@ -361,20 +388,20 @@
 /* Figures */
 .research-lab .quest-figure {
   display: grid;
-  gap: 12px;
+  gap: calc(12px * var(--qs));
   margin: 0 0 18px;
-  padding: 22px;
+  padding: calc(22px * var(--qs));
   border-radius: 22px;
   background: var(--j-tile);
 }
 .research-lab .quest-figure figcaption {
   color: var(--j-muted);
-  font-size: 13px;
+  font-size: calc(13px * var(--qs));
   text-align: center;
 }
 .research-lab .quest-lecture {
   width: 100%;
-  max-height: 260px;
+  max-height: calc(260px * var(--qs));
 }
 .research-lab .quest-lecture .slide,
 .research-lab .quest-lecture .bubble {
@@ -506,7 +533,7 @@
   display: grid;
   grid-template-columns: 34px minmax(0, 1fr);
   gap: 8px;
-  height: 260px;
+  height: calc(260px * var(--qs));
   padding: 26px 8px 34px 0;
 }
 .research-lab .quest-axis-label {
@@ -607,7 +634,7 @@
 }
 @media (min-width: 1000px) {
   .research-lab .quest-chart-plot {
-    height: clamp(180px, 28vh, 240px);
+    height: calc(clamp(180px, 28vh, 240px) * var(--qs));
   }
 }
 .research-lab .quest-table {
@@ -874,9 +901,6 @@
   }
 }
 @media (max-width: 640px) {
-  .research-lab .quest-screen {
-    min-height: 0;
-  }
   .research-lab .quest-ask .mascot {
     display: none;
   }
@@ -959,7 +983,7 @@
 .research-lab .qv-slot {
   display: grid;
   gap: 6px;
-  min-height: 92px;
+  min-height: calc(92px * var(--qs));
   padding: 16px;
   border: 2px dashed #cdd7de;
   border-radius: 18px;
@@ -973,14 +997,14 @@
 }
 .research-lab .qv-slot small {
   color: var(--j-muted);
-  font-size: 12px;
+  font-size: calc(12px * var(--qs));
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 .research-lab .qv-slot strong {
   color: var(--j-ink);
-  font-size: 17px;
+  font-size: calc(17px * var(--qs));
 }
 .research-lab .qv-arrow {
   color: var(--j-accent);
@@ -996,8 +1020,8 @@
 .research-lab .qv-person {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: calc(40px * var(--qs));
+  height: calc(40px * var(--qs));
   border-radius: 50%;
   background: #fff;
   color: var(--j-accent);
@@ -1018,7 +1042,7 @@
   justify-content: center;
   gap: 6px 16px;
   color: var(--j-ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--qs));
   font-weight: 700;
 }
 .research-lab .qv-legend span {
@@ -1038,7 +1062,7 @@
 .research-lab .qv-form {
   display: grid;
   gap: 10px;
-  padding: 18px;
+  padding: calc(18px * var(--qs));
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 2px 0 #d9e2e8;
@@ -1052,7 +1076,7 @@
 }
 .research-lab .qv-form strong {
   color: var(--j-ink);
-  font-size: 17px;
+  font-size: calc(17px * var(--qs));
 }
 .research-lab .qv-stars {
   display: flex;
@@ -1125,11 +1149,11 @@
 .research-lab .qv-dots,
 .research-lab .qv-links {
   display: grid;
-  gap: 10px;
+  gap: calc(10px * var(--qs));
 }
 .research-lab .qv-dots i {
-  width: 16px;
-  height: 16px;
+  width: calc(16px * var(--qs));
+  height: calc(16px * var(--qs));
   border-radius: 50%;
   background: var(--j-accent);
 }
@@ -1141,7 +1165,7 @@
   padding-bottom: 14px;
 }
 .research-lab .qv-links span {
-  height: 16px;
+  height: calc(16px * var(--qs));
   background: linear-gradient(#c27a45, #c27a45) center / 100% 2px no-repeat;
   transform-origin: center;
 }
@@ -1157,7 +1181,7 @@
   align-items: center;
   gap: 10px;
   margin: 0;
-  padding: 12px 14px;
+  padding: calc(12px * var(--qs)) calc(14px * var(--qs));
   border-radius: 14px;
   background: #fff;
   color: var(--j-ink);
