@@ -1,3 +1,4 @@
+import { asDraft } from "./fixtures/draft.js";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { POST as jobsPost } from "../../apps/api/src/research/routes/jobs.js";
 import { POST as learningPost } from "../../apps/api/src/research/routes/learning.js";
@@ -136,7 +137,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const mockProvider: ModelProvider = {
       async generate(_role, _task, _input, schema) {
         const next = stageOutputs.shift();
-        return schema.parse(next);
+        return schema.parse(asDraft(next));
       },
     };
 
@@ -190,22 +191,22 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const mockProvider: ModelProvider = {
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
-          return schema.parse({
+          return schema.parse(asDraft({
             paperSummary: "Qualitative interview evidence.",
             refs: qualitativeSceneLesson.evidence,
             missing: [],
-          });
+          }));
         }
         if (task.includes("Create a sequential investigation")) {
-          return schema.parse({ ...qualitativeSceneLesson, id: jobId });
+          return schema.parse(asDraft({ ...qualitativeSceneLesson, id: jobId }));
         }
         if (task.includes("Check whether decisions and interpretations fit")) {
           // Reviewer rejects due to causal overclaiming
-          return schema.parse({
+          return schema.parse(asDraft({
             approved: false,
             issues: ["Association cannot be framed as causal navigation improvement."],
             summary: "Causal language rejected in qualitative thematic study.",
-          });
+          }));
         }
         throw new Error("Unexpected stage invoked");
       },
@@ -303,7 +304,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       async generate(_role, task, _input, schema) {
         if (task.includes("Create a sequential investigation")) {
           // Returns revised lesson
-          return schema.parse({ ...quantitativeSceneLesson, id: jobId });
+          return schema.parse(asDraft({ ...quantitativeSceneLesson, id: jobId }));
         }
         throw new Error("Unexpected stage during retry");
       },
@@ -408,29 +409,29 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const mockProvider: ModelProvider = {
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
-          return schema.parse({
+          return schema.parse(asDraft({
             paperSummary: "Findings",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
-          });
+          }));
         }
         if (task.includes("Create a sequential investigation")) {
-          return schema.parse({ ...quantitativeSceneLesson, id: jobId });
+          return schema.parse(asDraft({ ...quantitativeSceneLesson, id: jobId }));
         }
         if (task.includes("Check whether decisions and interpretations fit")) {
-          return schema.parse({
+          return schema.parse(asDraft({
             approved: true,
             issues: [],
             summary: "Methods approved.",
-          });
+          }));
         }
         if (task.includes("Check that feedback supports revision")) {
           // Coach rejects: hint gives away the answer
-          return schema.parse({
+          return schema.parse(asDraft({
             approved: false,
             issues: ["Hint reveals the correct answer directly instead of teaching reasoning."],
             summary: "Coaching review rejected unguided spoiler hint.",
-          });
+          }));
         }
         throw new Error("Unexpected stage");
       },
@@ -478,11 +479,11 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const mockProvider: ModelProvider = {
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
-          return schema.parse({
+          return schema.parse(asDraft({
             paperSummary: "Evidence",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
-          });
+          }));
         }
         if (task.includes("Create a sequential investigation")) {
           return malformedLesson as any;
@@ -542,18 +543,18 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const failingProvider: ModelProvider = {
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
-          return schema.parse({
+          return schema.parse(asDraft({
             paperSummary: "Evidence",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
-          });
+          }));
         }
         if (task.includes("Create a sequential investigation")) {
           attempts++;
           if (attempts === 1) {
             throw new Error("Nebius 503 Service Unavailable");
           }
-          return schema.parse({ ...quantitativeSceneLesson, id: jobId });
+          return schema.parse(asDraft({ ...quantitativeSceneLesson, id: jobId }));
         }
         throw new Error("Unexpected stage");
       },

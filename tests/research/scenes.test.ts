@@ -1,3 +1,4 @@
+import { asDraft } from "./fixtures/draft.js";
 import { describe, it, expect } from "vitest";
 import {
   sceneSchema,
@@ -178,7 +179,7 @@ for (const fixture of [
         job = await runStage(job, {
           async generate(_role, task, _input, schema) {
             tasks.push(task);
-            return schema.parse(outputs.shift());
+            return schema.parse(asDraft(outputs.shift()));
           },
         });
       expect(job.status).toBe("ready");

@@ -1,3 +1,4 @@
+import { asDraft } from "./fixtures/draft.js";
 import { it, expect, vi } from "vitest";
 import express from "express";
 import { researchRouter } from "../../apps/api/src/research/router.js";
@@ -112,7 +113,7 @@ it("delivers a scene through the real learning route, submits mapped answers, re
     for (let i = 0; i < 5; i++)
       job = await runStage(job, {
         async generate(_role, _task, _input, schema) {
-          return schema.parse(outputs.shift());
+          return schema.parse(asDraft(outputs.shift()));
         },
       });
     expect(job.status).toBe("ready");

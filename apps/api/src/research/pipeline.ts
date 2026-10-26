@@ -50,14 +50,28 @@ export function lessonDraftSchema(evidenceIds: string[]) {
   const ids = [...new Set(evidenceIds)] as [string, ...string[]];
   // No `alternatives`: drafts filled it with wrong options and reasons, and
   // grading accepts every alternative as correct. The server sets it empty.
-  const challenge = challengeSchema.omit({ alternatives: true }).extend({
-    refs: z.array(z.enum(ids)).min(1),
-    // Last, so it covers the details the teaching text above it uses.
-    addedExcerpts: z
-      .array(refSchema.omit({ id: true }))
-      .max(MAX_ADDED_EXCERPTS)
-      .default([]),
-  });
+  // No `accepted` either: drafts listed ids no option had, such as
+  // "opt_opt_a", so each option carries its own correct flag instead.
+  const challenge = challengeSchema
+    .omit({ alternatives: true, accepted: true })
+    .extend({
+      options: z
+        .array(
+          z.object({
+            id: z.string(),
+            text: z.string().min(1),
+            correct: z.boolean(),
+          }),
+        )
+        .min(2)
+        .max(6),
+      refs: z.array(z.enum(ids)).min(1),
+      // Last, so it covers the details the teaching text above it uses.
+      addedExcerpts: z
+        .array(refSchema.omit({ id: true }))
+        .max(MAX_ADDED_EXCERPTS)
+        .default([]),
+    });
   return generatedLessonSchema.omit({ evidence: true }).extend({
     challenges: z.array(challenge).min(3).max(MAX_GENERATED_CHALLENGES),
     bonus: challenge.nullable(),
@@ -66,13 +80,18 @@ export function lessonDraftSchema(evidenceIds: string[]) {
 type DraftChallenge = z.infer<
   ReturnType<typeof lessonDraftSchema>
 >["challenges"][number];
+/** True when a drafted challenge has at least one correct and one wrong option. */
+function answerable(c: DraftChallenge) {
+  const correct = c.options.filter((o) => o.correct).length;
+  return correct > 0 && correct < c.options.length;
+}
 /**
  * Adds a challenge's verbatim added excerpts to the lesson evidence and its
  * refs, dropping any not found in the document. Reviewers and learners see
  * only cited excerpts, so details used outside them read as unsupported.
  */
 function attachAddedExcerpts(
-  { addedExcerpts, ...c }: DraftChallenge,
+  { addedExcerpts, options, ...c }: DraftChallenge,
   evidence: Lesson["evidence"],
   pages: Job["pages"],
 ): Challenge {
@@ -93,7 +112,16 @@ function attachAddedExcerpts(
     }
     if (!refs.includes(id)) refs.push(id);
   }
-  return { ...c, refs, alternatives: [] };
+  const accepted = options.filter((o) => o.correct).map((o) => o.id);
+  return {
+    ...c,
+    // A draft marking two options correct is a multiple-response question.
+    type: accepted.length > 1 ? "multiple" : c.type,
+    options: options.map(({ id, text }) => ({ id, text })),
+    accepted,
+    refs,
+    alternatives: [],
+  };
 }
 /**
  * A connections scene for one challenge. It shows the challenge's evidence
@@ -247,7 +275,7 @@ export async function runStage(
       const draftSchema = lessonDraftSchema(j.evidence!.refs.map((r) => r.id));
       const draft = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Write briefing as a concise, plain-language orientation before any quiz: explain the topic and why it matters, the setting and participants or source material where supported, and unfamiliar terms needed to read the paper. Use short paragraphs separated by newlines, aiming for 150–220 words when source evidence supports it. Do not reveal findings, conclusions, correct choices, statistical test selections, or details the learner must decide in the challenges. Omit unavailable context instead of inventing it. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
+        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, correct=true on each accepted option and false on every other option, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Write briefing as a concise, plain-language orientation before any quiz: explain the topic and why it matters, the setting and participants or source material where supported, and unfamiliar terms needed to read the paper. Use short paragraphs separated by newlines, aiming for 150–220 words when source evidence supports it. Do not reveal findings, conclusions, correct choices, statistical test selections, or details the learner must decide in the challenges. Omit unavailable context instead of inventing it. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
           evidenceRule:
@@ -264,13 +292,24 @@ export async function runStage(
       // Evidence is the verified stage-0 set plus verified added excerpts,
       // never the model's re-copy.
       const parsed = draftSchema.parse(draft);
+      // A challenge with no correct option, or no wrong one, cannot be
+      // answered or failed, so it is removed rather than stopping the lesson.
+      const keyed = parsed.challenges.filter(answerable);
+      const unkeyed = parsed.challenges.length - keyed.length;
+      if (keyed.length < 3)
+        throw Error(
+          `The draft marked correct answers on only ${keyed.length} of ${parsed.challenges.length} challenges; at least 3 are needed. Retry this stage.`,
+        );
       const evidence = [...j.evidence!.refs];
       const ground = (c: DraftChallenge) =>
         attachAddedExcerpts(c, evidence, j.pages);
       j.lesson = generatedLessonSchema.parse({
         ...parsed,
-        challenges: parsed.challenges.map(ground),
-        bonus: parsed.bonus && ground(parsed.bonus),
+        challenges: keyed.map(ground),
+        bonus:
+          parsed.bonus && answerable(parsed.bonus)
+            ? ground(parsed.bonus)
+            : null,
         evidence,
       });
       j.lesson.id = j.id;
@@ -324,7 +363,7 @@ export async function runStage(
         j.lesson.briefing +=
           " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
       const added = evidence.length - j.evidence!.refs.length;
-      audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${removed ? ` Removed ${removed} scene${removed === 1 ? "" : "s"} that failed checks.` : ""}${built ? " Added a server-built scene." : ""}`;
+      audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${unkeyed ? ` Removed ${unkeyed} challenge${unkeyed === 1 ? "" : "s"} without a usable answer.` : ""}${removed ? ` Removed ${removed} scene${removed === 1 ? "" : "s"} that failed checks.` : ""}${built ? " Added a server-built scene." : ""}`;
       audit.refs = j.lesson.evidence.map((r) => r.id);
     } else if (j.stage === 2 || j.stage === 3) {
       // Reviews are advisory. Their notes are shown on the stage and logged,

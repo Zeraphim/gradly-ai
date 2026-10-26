@@ -1,3 +1,4 @@
+import { asDraft } from "./fixtures/draft.js";
 import { it, expect } from "vitest";
 import { newJob, publicJob, runStage } from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
@@ -74,7 +75,7 @@ const draft = {
 function provider(outputs: unknown[]): ModelProvider {
   return {
     async generate<T>() {
-      return outputs.shift() as T;
+      return asDraft(outputs.shift()) as T;
     },
   };
 }
@@ -201,7 +202,7 @@ it("caps live lesson drafts at the generated challenge limit", async () => {
     async generate<T>(_role: string, task: string, _input: unknown, schema: unknown) {
       taskSent = task;
       schemaSent = schema;
-      return { ...draft, challenges: nine } as T;
+      return asDraft({ ...draft, challenges: nine }) as T;
     },
   });
   expect(MAX_GENERATED_CHALLENGES).toBe(8);
@@ -236,10 +237,10 @@ it("limits lesson references to stage-0 ids and attaches verified evidence serve
     async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
       schemaSent = schema as z.ZodType;
       // A re-copied, altered excerpt from the model must not be kept.
-      return {
+      return asDraft({
         ...draft,
         evidence: [{ id: "source1", page: 1, excerpt: "An altered excerpt text." }],
-      } as T;
+      }) as T;
     },
   });
   const wire = JSON.stringify(z.toJSONSchema(schemaSent!));
@@ -475,7 +476,7 @@ it("supports a nonnumeric qualitative investigation through verification and the
   const mocked: ModelProvider = {
     async generate(role, task, _input, schema) {
       requests.push({ role, task });
-      return schema.parse(outputs.shift());
+      return schema.parse(asDraft(outputs.shift()));
     },
   };
   let job = newJob("qualitative-job", "interview-study.pdf", pages);
@@ -622,7 +623,7 @@ it("ignores unreadable reviewer text and continues when a review call fails", as
     ];
     const p: ModelProvider = {
       async generate<T>() {
-        return (outputs.length ? outputs.shift() : coach()) as T;
+        return asDraft(outputs.length ? outputs.shift() : coach()) as T;
       },
     };
     for (let n = 0; n < 5; n++) j = await runStage(j, p);
@@ -746,12 +747,12 @@ it("drafts without alternatives so grading accepts only the accepted answer", as
     async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
       schemaSent = schema as z.ZodType;
       // Drafts listed wrong options, alone or with a reason, as alternatives.
-      return {
+      return asDraft({
         ...draft,
         challenges: draft.challenges.map((d, i) =>
           i === 0 ? { ...d, alternatives: [[wrong], [wrong, "Not the design."]] } : d,
         ),
-      } as T;
+      }) as T;
     },
   });
   const wire = z.toJSONSchema(schemaSent!) as unknown as WireLesson;
@@ -762,6 +763,62 @@ it("drafts without alternatives so grading accepts only the accepted answer", as
   let s = transition(newSession(j.lesson!, "guards-session"), j.lesson!, "begin");
   s = submit(s, j.lesson!, [wrong], "");
   expect(s.answers[c.id]?.[0]?.correct).toBe(false);
+});
+
+it("derives answer keys from option flags and removes challenges without one", async () => {
+  const evidenceJob = await evidenceFor([{ page: 1, text: page }]);
+  const four = asDraft({
+    ...draft,
+    challenges: featured.challenges.slice(0, 4).map((c, i) => ({
+      ...draft.challenges[i % 3]!,
+      id: `c${i}`,
+      type: "single" as const,
+      options: c.options,
+      accepted: c.accepted,
+    })),
+  });
+  // c1 marks two options correct; c2 marks none; c3 marks every option.
+  four.challenges[1]!.options = four.challenges[1]!.options.map((o, i) => ({
+    ...o,
+    correct: i < 2,
+  }));
+  four.challenges[2]!.options = four.challenges[2]!.options.map((o) => ({
+    ...o,
+    correct: false,
+  }));
+  four.challenges[3]!.options = four.challenges[3]!.options.map((o) => ({
+    ...o,
+    correct: true,
+  }));
+  let schemaSent: z.ZodType | undefined;
+  const failed = await runStage(evidenceJob, {
+    async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
+      schemaSent = schema as z.ZodType;
+      return four as T;
+    },
+  });
+  const wire = z.toJSONSchema(schemaSent!) as unknown as WireLesson;
+  expect(wire.properties.challenges.items.properties).not.toHaveProperty(
+    "accepted",
+  );
+  // Two of four challenges have a usable key, and a lesson needs three.
+  expect(failed.status).toBe("failed");
+  expect(failed.error).toBe(
+    "The draft marked correct answers on only 2 of 4 challenges; at least 3 are needed. Retry this stage.",
+  );
+  const five = structuredClone(four);
+  five.challenges.push({ ...structuredClone(four.challenges[0]!), id: "c4" });
+  const j = await runStage(failed, provider([five]));
+  expect(j.status).toBe("pending");
+  expect(j.lesson!.challenges.map((c) => c.id)).toEqual(["c0", "c1", "c4"]);
+  const two = j.lesson!.challenges[1]!;
+  expect(two.type).toBe("multiple");
+  expect(two.accepted).toEqual(two.options.slice(0, 2).map((o) => o.id));
+  expect(two.options.every((o) => !("correct" in o))).toBe(true);
+  expect(j.audits[1]!.summary).toContain(
+    "Removed 2 challenges without a usable answer.",
+  );
+  expect((await finish(j)).status).toBe("ready");
 });
 
 it("attaches verified added excerpts to a challenge and drops unverifiable ones", async () => {
@@ -776,7 +833,7 @@ it("attaches verified added excerpts to a challenge and drops unverifiable ones"
   let j = await runStage(evidenceJob, {
     async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
       schemaSent = schema as z.ZodType;
-      return {
+      return asDraft({
         ...draft,
         challenges: draft.challenges.map((d, i) =>
           i === 0
@@ -794,7 +851,7 @@ it("attaches verified added excerpts to a challenge and drops unverifiable ones"
                 { ...d, addedExcerpts: [{ page: 1, excerpt: refs[1]!.excerpt }] }
               : d,
         ),
-      } as T;
+      }) as T;
     },
   });
   const wire = z.toJSONSchema(schemaSent!) as unknown as WireLesson;
