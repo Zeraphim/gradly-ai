@@ -166,6 +166,13 @@ export function UploadedJourney({ sessionId }: { sessionId: string }) {
     void act("finish", { reflection: "" });
   }, [session?.phase, session?.id, act]);
 
+  // A lesson without a bonus has nothing to offer, so go straight to the paper.
+  const skipBonus =
+    session?.phase === "bonus-choice" && !session.bonusAvailable;
+  useEffect(() => {
+    if (skipBonus) void act("skip");
+  }, [skipBonus, act]);
+
   const askCoach = async () => {
     const c = session?.challenge;
     if (!session || !c || coach.pending || lock.current) return;
@@ -313,7 +320,27 @@ export function UploadedJourney({ sessionId }: { sessionId: string }) {
             {actionError}
           </p>
         ) : null}
-        <JourneyPlayer study={study} progress={progress} driver={driver} />
+        {!skipBonus ? (
+          <JourneyPlayer study={study} progress={progress} driver={driver} />
+        ) : actionError ? (
+          <main className="library">
+            <div className="library-empty">
+              <h1 tabIndex={-1}>We couldn’t open the paper</h1>
+              <div className="uploaded-recovery">
+                <button
+                  type="button"
+                  className="journey-begin"
+                  disabled={busy}
+                  onClick={() => void act("skip")}
+                >
+                  Try again
+                </button>
+              </div>
+            </div>
+          </main>
+        ) : (
+          <AppLoading label="Opening the paper…" />
+        )}
       </div>
     </SceneMotion>
   );

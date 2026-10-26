@@ -154,9 +154,8 @@ describe("session adapter", () => {
 });
 
 /** The learning and feedback APIs, served by the real engine in memory. */
-function serve() {
+function serve(l: Lesson = lesson, s0 = newSession(l, "s1")) {
   const sessions = new Map<string, LearningSession>();
-  const s0 = newSession(lesson, "s1");
   sessions.set(s0.id, s0);
   const calls: { url: string; body: Record<string, unknown> | null }[] = [];
   const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
@@ -174,7 +173,7 @@ function serve() {
       });
     if (url.startsWith("/api/research/learning?id=")) {
       const id = decodeURIComponent(url.split("id=")[1]!);
-      return json(publicSession(sessions.get(id)!, lesson));
+      return json(publicSession(sessions.get(id)!, l));
     }
     if (url === "/api/research/feedback") {
       const s = sessions.get(String(body!.id))!;
@@ -192,7 +191,7 @@ function serve() {
         },
       };
       sessions.set(s.id, saved);
-      return json({ session: publicSession(saved, lesson) });
+      return json({ session: publicSession(saved, l) });
     }
     const s = sessions.get(String(body!.id))!;
     if (body!.version !== s.version) return json({ error: "Changed." }, 409);
@@ -201,14 +200,14 @@ function serve() {
         body!.action === "submit"
           ? submit(
               s,
-              lesson,
+              l,
               body!.selected as string[],
               String(body!.reasoning ?? ""),
             )
-          : transition(s, lesson, String(body!.action));
+          : transition(s, l, String(body!.action));
       const saved = { ...next, version: s.version + 1 };
       sessions.set(s.id, saved);
-      return json(publicSession(saved, lesson));
+      return json(publicSession(saved, l));
     } catch (error) {
       return json({ error: (error as Error).message }, 400);
     }
@@ -295,6 +294,29 @@ describe("uploaded journey", () => {
       screen.getByText("Which detail rules out self-selection?"),
     ).toBeTruthy();
     expect(screen.getByText(/it can be wrong/)).toBeTruthy();
+  });
+
+  it("goes from the last challenge to the paper when there is no bonus", async () => {
+    const plain = { ...lesson, bonus: null };
+    let s = transition(newSession(plain, "s1"), plain, "begin");
+    for (const c of plain.challenges.slice(0, -1))
+      s = transition(submit(s, plain, c.accepted, ""), plain, "next");
+    const last = plain.challenges.at(-1)!;
+    s = submit(s, plain, last.accepted, "");
+    const { sessions, calls } = serve(plain, s);
+    render(h(UploadedJourney, { sessionId: "s1" }));
+    await screen.findByRole("heading", { level: 1, name: last.prompt });
+    await pause();
+    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Study complete" }),
+    ).toBeTruthy();
+    expect(calls.map((c) => c.body?.action).filter(Boolean)).toEqual([
+      "next",
+      "skip",
+      "finish",
+    ]);
+    await waitFor(() => expect(sessions.get("s1")!.phase).toBe("complete"));
   });
 
   it("recovers when another tab saved first", async () => {
