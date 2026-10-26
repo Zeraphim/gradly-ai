@@ -408,13 +408,34 @@ test("an uploaded lesson plays in the study player with server scoring and AI fe
 
   // Intro: Marc's study intro, labelled as generated, without the paper's identity.
   await expect(page.getByText("Your paper · AI-generated")).toBeVisible();
-  await expect(page.getByText("8 challenges + optional bonus")).toBeVisible();
+  await expect(page.getByText("8 decisions", { exact: true })).toBeVisible();
   await expect(page.getByText(lesson.paper.title)).toHaveCount(0);
   for (const width of [375, 1366]) {
     await page.setViewportSize({ width, height: 900 });
     await noOverflow(page);
     await page.screenshot({
       path: `${shots}/player-intro-${width}.png`,
+      fullPage: true,
+    });
+  }
+  // Orientation: hunch, route, practice, each answered by tapping.
+  await choose(page, "One thing causes another");
+  await expect(page.getByRole("status").first()).toContainText("Saved");
+  await page.getByRole("button", { name: /Next/ }).click();
+  await page.getByRole("button", { name: /Design/ }).click();
+  await expect(page.getByText(/who took part/)).toBeVisible();
+  await page.getByRole("button", { name: /Next/ }).click();
+  await choose(page, "Never, it stays hidden");
+  await page.getByRole("button", { name: "Check" }).click();
+  await expect(page.getByText("Not quite. You have one retry.")).toBeVisible();
+  await choose(page, "After your last decision");
+  await page.getByRole("button", { name: "Check" }).click();
+  await expect(page.getByText("+10")).toBeVisible();
+  for (const width of [375, 1366]) {
+    await page.setViewportSize({ width, height: 900 });
+    await noOverflow(page);
+    await page.screenshot({
+      path: `${shots}/player-intro-practice-${width}.png`,
       fullPage: true,
     });
   }
@@ -485,11 +506,12 @@ test("an uploaded lesson plays in the study player with server scoring and AI fe
   }
 });
 
-test("a long generated briefing keeps Begin study on screen and folds the rest", async ({
+test("a long generated briefing stays folded and the way into the study stays on screen", async ({
   page,
 }) => {
   // Reported on 27 October 2026: a one-block generated briefing pushed the
-  // Begin button below the screen. The intro now shows a short lead.
+  // Begin button below the screen. Uploads now fold the whole briefing behind
+  // a disclosure under the tap steps, and "Skip to study" begins from any step.
   const lesson = lessonFixture();
   lesson.briefing = Array.from(
     { length: 12 },
@@ -502,8 +524,8 @@ test("a long generated briefing keeps Begin study on screen and folds the rest",
   await page.goto(`/#/research/processing/${JOB_ID}`);
   await page.getByRole("button", { name: "Start your study" }).click();
   await expect(page).toHaveURL(/#\/research\/play\/session-1$/);
-  const more = page.locator(".journey-intro-more");
-  const begin = page.getByRole("button", { name: /Begin study/ });
+  const more = page.getByRole("button", { name: "Read the full briefing" });
+  const begin = page.getByRole("button", { name: "Skip to study" });
   for (const [width, height] of [
     [1366, 900],
     [1400, 1040],
@@ -512,34 +534,29 @@ test("a long generated briefing keeps Begin study on screen and folds the rest",
     await page.setViewportSize({ width, height });
     await page.evaluate(() => window.scrollTo(0, 0));
     await noOverflow(page);
-    await expect(more).not.toHaveAttribute("open", "");
+    await expect(more).toHaveAttribute("aria-expanded", "false");
     await expect(page.getByText("Sentence 12 explains")).toBeHidden();
     await page.screenshot({ path: `${shots}/player-intro-long-${width}.png` });
     if (width > 400) {
       const box = (await begin.boundingBox())!;
       expect(
         box.y + box.height,
-        `Begin study at ${width}px`,
+        `Skip to study at ${width}px`,
       ).toBeLessThanOrEqual(height);
     }
   }
-  // However long the briefing, the intro is no taller than a prepared study's.
-  await page.setViewportSize({ width: 1366, height: 768 });
-  const generated = (await page.locator(".journey-intro-card").boundingBox())!
-    .height;
-  const prepared = await page.context().newPage();
-  await prepared.setViewportSize({ width: 1366, height: 768 });
-  await prepared.goto("/#/research/studies/basketball-maths");
-  const authored = (await prepared
-    .locator(".journey-intro-card")
-    .boundingBox())!.height;
-  await prepared.close();
-  expect(generated).toBeLessThanOrEqual(authored);
+  // However long the briefing, none of it adds height until the learner opens it.
+  await expect(page.getByText("Sentence 1 explains")).toBeHidden();
   // The rest is one keyboard press away, and nothing is lost.
-  await page.getByText("Read more background").focus();
+  await more.focus();
   await page.keyboard.press("Enter");
-  await expect(more).toHaveAttribute("open", "");
+  await expect(more).toHaveAttribute("aria-expanded", "true");
   await expect(page.getByText("Sentence 12 explains")).toBeVisible();
+  // Axe reads colour, so let the disclosure's short fade settle first.
+  await expect(page.locator(".scene-disclosure-content")).toHaveCSS(
+    "opacity",
+    "1",
+  );
   expect(
     (await new AxeBuilder({ page }).include(".studies").analyze()).violations,
   ).toEqual([]);

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import {
   ArrowRight,
   BookOpenCheck,
@@ -8,11 +8,18 @@ import {
   Lightbulb,
   ListChecks,
   RotateCcw,
+  ScanText,
   Sparkles,
 } from "lucide-react";
 import { Mascot } from "../../components/Mascot.js";
 import { ResearchLink as Link } from "../navigation.js";
-import { m, useSceneMotion } from "../scenes/scene-motion.js";
+import { SceneDisclosure } from "../scenes/SceneDisclosure.js";
+import {
+  AnimatePresence,
+  PresenceBlock,
+  m,
+  useSceneMotion,
+} from "../scenes/scene-motion.js";
 import { studies } from "./catalog.js";
 import { journeyChallenges } from "./journey.js";
 import {
@@ -24,6 +31,7 @@ import {
 import { StudyArt, groupTone } from "./StudyArt.js";
 import { Burst } from "./Burst.js";
 import { briefingParts } from "./briefing.js";
+import { StudyOrientation, type IntroOrientation } from "./StudyOrientation.js";
 import { designGroups, type PreparedStudy } from "./types.js";
 
 export function StudyIntro({
@@ -32,12 +40,18 @@ export function StudyIntro({
   backHref = "/studies",
   backLabel = "All studies",
   busy = false,
+  orientation,
+  ocr = false,
 }: {
   study: PreparedStudy;
   onBegin: () => void;
   backHref?: string;
   backLabel?: string;
   busy?: boolean;
+  /** Uploaded papers replace the briefing text with three tap steps. */
+  orientation?: IntroOrientation;
+  /** Some source pages were read with OCR. */
+  ocr?: boolean;
 }) {
   const motion = useSceneMotion();
   const tone = groupTone[study.group];
@@ -71,54 +85,153 @@ export function StudyIntro({
             {study.kicker ?? designGroups[study.group].label}
           </span>
           <h1 tabIndex={-1}>{study.question}</h1>
-          {briefing.lead.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-          {briefing.more.length ? (
-            <details className="journey-intro-more">
-              <summary>Read more background</summary>
-              {briefing.more.map((paragraph, index) => (
+          {orientation ? (
+            <>
+              <IntroChips study={study} ocr={ocr} />
+              <StudyOrientation
+                orientation={orientation}
+                busy={busy}
+                onBegin={onBegin}
+              />
+              {briefing.lead.length ? (
+                <SceneDisclosure
+                  title="Read the full briefing"
+                  reduced={motion.still}
+                  className="journey-intro-briefing"
+                >
+                  {[...briefing.lead, ...briefing.more].map(
+                    (paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    ),
+                  )}
+                </SceneDisclosure>
+              ) : null}
+            </>
+          ) : (
+            <>
+              {briefing.lead.map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
-            </details>
-          ) : null}
-          <ul className="journey-intro-facts">
-            <li>
-              <ListChecks size={17} aria-hidden="true" />
-              {study.lesson.challenges.length} challenges
-              {study.lesson.bonus ? " + optional bonus" : ""}
-            </li>
-            <li>
-              <Clock size={17} aria-hidden="true" />
-              About {study.minutes} min (estimate)
-            </li>
-            <li>
-              <BookOpenCheck size={17} aria-hidden="true" />
-              The paper is revealed at the end
-            </li>
-          </ul>
-          <div className="journey-intro-speech">
-            <Mascot pose="guiding" size="small" />
-            <p>
-              Make each research decision before you see the findings. One retry
-              per question, then I’ll explain.
-            </p>
-          </div>
-          <m.button
-            type="button"
-            className="journey-begin"
-            data-scene-motion-control
-            style={{ borderRadius: 16 }}
-            {...motion.gestures(busy)}
-            disabled={busy}
-            onClick={onBegin}
-          >
-            Begin study{" "}
-            <ArrowRight size={18} strokeWidth={2.5} aria-hidden="true" />
-          </m.button>
+              {briefing.more.length ? (
+                <details className="journey-intro-more">
+                  <summary>Read more background</summary>
+                  {briefing.more.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </details>
+              ) : null}
+              <IntroText study={study} busy={busy} onBegin={onBegin} />
+            </>
+          )}
         </div>
       </m.div>
     </main>
+  );
+}
+
+function IntroChips({ study, ocr }: { study: PreparedStudy; ocr: boolean }) {
+  const motion = useSceneMotion();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <ul className="journey-intro-chips">
+        <li>
+          <ListChecks size={16} aria-hidden="true" />
+          {study.lesson.challenges.length} decisions
+        </li>
+        <li>
+          <Clock size={16} aria-hidden="true" />~{study.minutes} min
+        </li>
+        <li>
+          <BookOpenCheck size={16} aria-hidden="true" />
+          Paper revealed at the end
+        </li>
+        {ocr ? (
+          <li>
+            <m.button
+              type="button"
+              className="journey-intro-ocr"
+              data-scene-motion-control
+              style={{ borderRadius: 999 }}
+              aria-expanded={open}
+              aria-controls="journey-intro-ocr-note"
+              {...motion.gestures()}
+              onClick={() => setOpen((v) => !v)}
+            >
+              <ScanText size={16} aria-hidden="true" />
+              Scanned pages
+            </m.button>
+          </li>
+        ) : null}
+      </ul>
+      <AnimatePresence initial={false} mode="popLayout">
+        {ocr && open ? (
+          <PresenceBlock
+            key="ocr"
+            id="journey-intro-ocr-note"
+            className="journey-intro-ocr-note"
+            initial={motion.enter}
+            animate={{ opacity: 1, y: 0 }}
+            exit={motion.exit}
+            transition={motion.copy}
+          >
+            Some source pages were read with OCR. Check quotations and numbers
+            against your original PDF. Source matching checks the extracted
+            text, not the page images.
+          </PresenceBlock>
+        ) : null}
+      </AnimatePresence>
+    </>
+  );
+}
+
+function IntroText({
+  study,
+  busy,
+  onBegin,
+}: {
+  study: PreparedStudy;
+  busy: boolean;
+  onBegin: () => void;
+}) {
+  const motion = useSceneMotion();
+  return (
+    <>
+      <ul className="journey-intro-facts">
+        <li>
+          <ListChecks size={17} aria-hidden="true" />
+          {study.lesson.challenges.length} challenges
+          {study.lesson.bonus ? " + optional bonus" : ""}
+        </li>
+        <li>
+          <Clock size={17} aria-hidden="true" />
+          About {study.minutes} min (estimate)
+        </li>
+        <li>
+          <BookOpenCheck size={17} aria-hidden="true" />
+          The paper is revealed at the end
+        </li>
+      </ul>
+      <div className="journey-intro-speech">
+        <Mascot pose="guiding" size="small" />
+        <p>
+          Make each research decision before you see the findings. One retry per
+          question, then I’ll explain.
+        </p>
+      </div>
+      <m.button
+        type="button"
+        className="journey-begin"
+        data-scene-motion-control
+        style={{ borderRadius: 16 }}
+        {...motion.gestures(busy)}
+        disabled={busy}
+        onClick={onBegin}
+      >
+        Begin study{" "}
+        <ArrowRight size={18} strokeWidth={2.5} aria-hidden="true" />
+      </m.button>
+    </>
   );
 }
 

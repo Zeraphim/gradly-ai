@@ -108,6 +108,9 @@ was rebuilt around a lesson-style focus shell (`FocusBar.tsx`, `journey.css`):
   sentences up to 60 words and folds the rest into a native "Read more
   background" disclosure (`studies/briefing.ts`), so "Begin study" stays in view.
   Added 27 October 2026 after a 250-word generated briefing pushed it off screen.
+  Uploaded papers fold the whole briefing behind "Read the full briefing" under
+  three tap steps (`studies/StudyOrientation.tsx`), with "Skip to study" in view
+  on the first screen.
 - **Meet the study** (`MeetTheStudy.tsx`, route `#/research/meet/:jobId`). Four
   parts with segmented progress: the question (animated lecture/phone
   illustration), divided attention (an interactive slider, labelled as an

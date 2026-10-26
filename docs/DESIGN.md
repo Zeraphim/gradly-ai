@@ -503,7 +503,13 @@ never holds an uploaded lesson's answer keys: each Check, retry and step is a
 learning-session request, and `studies/uploaded.ts` maps the public session to the
 player's study and progress shapes. The intro shows "Your paper · AI-generated"
 instead of a design-group label, and its teaser and question are identity-safe
-fields computed on the server. Written-reasoning challenges add an optional
+fields computed on the server. Below the question, chips give the decision count,
+time and reveal, plus a "Scanned pages" badge whose note opens when the session's
+`ocr` flag is set. Three tap steps (`studies/StudyOrientation.tsx`) replace the
+briefing text: a hunch saved as the learner's prediction, a route built from the
+session's `stages` (stage names only) and a practice question with one retry. "Skip
+to study" begins at any step, and the briefing stays behind "Read the full
+briefing". Written-reasoning challenges add an optional
 "Explain your thinking" field sent with the answer. After the check, "Ask the AI
 coach" requests the saved live feedback, labelled as AI output that can be wrong.
 The reveal adds the learner's prediction and replaces the library actions with

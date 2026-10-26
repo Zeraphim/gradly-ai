@@ -26,6 +26,7 @@ import { updateProgress, type StudyProgress } from "./progress.js";
 import { ResponseChoices, type ChoiceMark } from "./ResponseChoices.js";
 import { StudySceneView } from "./scenes/StudySceneView.js";
 import { BonusOffer, StudyIntro, StudyReveal } from "./JourneyStages.js";
+import type { IntroOrientation } from "./StudyOrientation.js";
 import type { PreparedStudy, StudyChallenge } from "./types.js";
 
 export function solvedCount(study: PreparedStudy, progress: StudyProgress) {
@@ -60,6 +61,8 @@ export type JourneyDriver = {
   ) => ReactNode;
   revealExtra?: ReactNode;
   revealActions?: ReactNode;
+  orientation?: IntroOrientation;
+  ocr?: boolean;
 };
 
 /** One question per screen: choose → check → feedback → retry or continue. */
@@ -104,6 +107,8 @@ export function JourneyPlayer({
         backHref={driver?.closeHref}
         backLabel={driver ? "Your quests" : undefined}
         busy={driver?.busy}
+        orientation={driver?.orientation}
+        ocr={driver?.ocr}
         onBegin={
           driver
             ? driver.begin

@@ -72,6 +72,8 @@ export const lessonSchema = z.object({
   evidence: z.array(refSchema),
   challenges: z.array(challengeSchema).min(3).max(14),
   bonus: challengeSchema.nullable(),
+  /** Set by the pipeline when any source page was read with OCR; never drafted. */
+  ocr: z.boolean().optional(),
 });
 /** Live drafting asks for fewer challenges than stored lessons may hold, so
  *  one lesson fits the output budget. */

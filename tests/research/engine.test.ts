@@ -82,6 +82,22 @@ describe("featured learning engine", () => {
       expect(payload).not.toContain(value);
     expect(publicSession(s, featured).challenge?.feedback).toBeNull();
   });
+  it("sends the intro only stage names and the OCR flag before play", () => {
+    const view = publicSession(newSession(featured, "intro"), featured);
+    expect(view.stages).toEqual(featured.challenges.map((c) => c.reveal));
+    expect(view.ocr).toBe(false);
+    const scanned = { ...featured, ocr: true };
+    expect(publicSession(newSession(scanned, "intro"), scanned).ocr).toBe(true);
+    // Older lessons carried the notice in the briefing text instead.
+    const legacy = {
+      ...featured,
+      briefing: `${featured.briefing} Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.`,
+    };
+    const old = publicSession(newSession(legacy, "intro"), legacy);
+    expect(old.ocr).toBe(true);
+    expect(old.briefing).toBe(featured.briefing);
+  });
+
   it("prevents skipping and invalid selections", () => {
     const s = begun();
     expect(() => transition(s, featured, "next")).toThrow();

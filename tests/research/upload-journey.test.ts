@@ -230,7 +230,9 @@ describe("uploaded journey", () => {
     const right = first.options.find((o) => first.accepted.includes(o.id))!;
     const { unmount } = render(h(UploadedJourney, { sessionId: "s1" }));
     expect(await screen.findByText(UPLOADED_KICKER)).toBeTruthy();
-    await userEvent.click(screen.getByRole("button", { name: /Begin study/ }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Skip to study" }),
+    );
     await screen.findByRole("heading", { level: 1, name: first.prompt });
 
     // An unchecked choice survives a remount in this tab.
@@ -319,6 +321,55 @@ describe("uploaded journey", () => {
     await waitFor(() => expect(sessions.get("s1")!.phase).toBe("complete"));
   });
 
+  it("orients with a saved hunch, the stage route and a practice retry", async () => {
+    serve();
+    render(h(UploadedJourney, { sessionId: "s1" }));
+    await screen.findByText(UPLOADED_KICKER);
+    // Step 1: a hunch is saved as the learner's prediction.
+    await choose("Two things go together");
+    expect(readPrediction(JOB_ID)).toBe(
+      "It will show that two things go together.",
+    );
+    expect(screen.getByRole("status").textContent).toContain("Saved");
+    await userEvent.click(screen.getByRole("button", { name: /Next/ }));
+    // Step 2: stage groups come from the server's stage names.
+    const design = lesson.challenges.filter((c) => c.reveal === "design");
+    const stage = screen.getByRole("button", { name: /Design/ });
+    expect(stage.textContent).toContain(String(design.length));
+    expect(stage.getAttribute("aria-expanded")).toBe("false");
+    await userEvent.click(stage);
+    expect(stage.getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getByText(/who took part/)).toBeTruthy();
+    await userEvent.click(screen.getByRole("button", { name: /Next/ }));
+    // Step 3: one miss gives a retry, then the right answer earns points.
+    await choose("Before the first decision");
+    await userEvent.click(screen.getByRole("button", { name: "Check" }));
+    expect(screen.getByText("Not quite. You have one retry.")).toBeTruthy();
+    await choose("After your last decision");
+    await userEvent.click(screen.getByRole("button", { name: "Check" }));
+    expect(screen.getByText("+10")).toBeTruthy();
+    await userEvent.click(screen.getByRole("button", { name: /Begin study/ }));
+    await screen.findByRole("heading", {
+      level: 1,
+      name: lesson.challenges[0]!.prompt,
+    });
+  });
+
+  it("keeps a written warm-up prediction until the learner replaces it", async () => {
+    serve();
+    localStorage.setItem(
+      `gradly-prediction:${JOB_ID}`,
+      "Texting hurts recall.",
+    );
+    render(h(UploadedJourney, { sessionId: "s1" }));
+    expect(await screen.findByText("“Texting hurts recall.”")).toBeTruthy();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Pick a new one" }),
+    );
+    await choose("Not sure yet");
+    expect(readPrediction(JOB_ID)).toBe("I wasn’t sure yet.");
+  });
+
   it("recovers when another tab saved first", async () => {
     const { sessions } = serve();
     render(h(UploadedJourney, { sessionId: "s1" }));
@@ -329,7 +380,9 @@ describe("uploaded journey", () => {
       ...transition(other, lesson, "begin"),
       version: other.version + 1,
     });
-    await userEvent.click(screen.getByRole("button", { name: /Begin study/ }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Skip to study" }),
+    );
     expect(await screen.findByRole("alert")).toBeTruthy();
     await screen.findByRole("heading", {
       level: 1,

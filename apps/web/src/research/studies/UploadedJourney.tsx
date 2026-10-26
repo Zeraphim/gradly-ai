@@ -9,7 +9,7 @@ import { emptySceneDraft } from "../scenes/InvestigationScene.js";
 import { SceneMotion } from "../scenes/scene-motion.js";
 import type { ResearchSession } from "../types.js";
 import { useResearchConfig } from "../useResearchConfig.js";
-import { readPrediction } from "../warmup.js";
+import { readPrediction, writePrediction } from "../warmup.js";
 import { JourneyPlayer, type JourneyDriver } from "./JourneyPlayer.js";
 import type { StudyProgress } from "./progress.js";
 import { ReasoningCoach, type CoachRequest } from "./ReasoningCoach.js";
@@ -54,6 +54,8 @@ export function UploadedJourney({ sessionId }: { sessionId: string }) {
     error: "",
   });
   const [attempt, setAttempt] = useState(0);
+  // The intro's hunch replaces the stored prediction for this render onward.
+  const [hunch, setHunch] = useState<string | null>(null);
   const lock = useRef(false);
   const mounted = useRef(true);
   const finishing = useRef<string | null>(null);
@@ -233,7 +235,7 @@ export function UploadedJourney({ sessionId }: { sessionId: string }) {
       <AppLoading label="Opening your study…" />
     );
 
-  const prediction = readPrediction(session.lessonId);
+  const prediction = hunch ?? readPrediction(session.lessonId);
   const driver: JourneyDriver = {
     points: session.points ?? 0,
     finished: finishedCount(session),
@@ -265,6 +267,16 @@ export function UploadedJourney({ sessionId }: { sessionId: string }) {
           onAsk={() => void askCoach()}
         />
       ) : null,
+    orientation: {
+      stages: session.stages,
+      bonus: session.bonusAvailable,
+      prediction,
+      onPrediction: (text) => {
+        writePrediction(session.lessonId, text);
+        setHunch(text);
+      },
+    },
+    ocr: session.ocr,
     revealExtra: prediction ? (
       <section className="uploaded-prediction" aria-label="Your prediction">
         <Lightbulb size={18} aria-hidden="true" />

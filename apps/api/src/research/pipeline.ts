@@ -83,7 +83,7 @@ export function lessonDraftSchema(evidenceIds: string[]) {
         .max(MAX_ADDED_EXCERPTS)
         .default([]),
     });
-  return generatedLessonSchema.omit({ evidence: true }).extend({
+  return generatedLessonSchema.omit({ evidence: true, ocr: true }).extend({
     challenges: z.array(challenge).min(3).max(MAX_GENERATED_CHALLENGES),
     bonus: challenge.nullable(),
   });
@@ -360,9 +360,7 @@ export async function runStage(
       const coverage = sceneCoverageProblems(j.lesson);
       if (coverage.length)
         throw new ContentCheckError(`${coverage.join(" ")} Retry this stage.`);
-      if (j.pages.some((p) => p.method === "ocr"))
-        j.lesson.briefing +=
-          " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
+      if (j.pages.some((p) => p.method === "ocr")) j.lesson.ocr = true;
       const added = evidence.length - j.evidence!.refs.length;
       audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${unkeyed ? ` Removed ${unkeyed} challenge${unkeyed === 1 ? "" : "s"} without a usable answer.` : ""}${removed ? ` Removed ${removed} scene${removed === 1 ? "" : "s"} that failed checks.` : ""}${built ? " Added a server-built scene." : ""}`;
       audit.refs = j.lesson.evidence.map((r) => r.id);

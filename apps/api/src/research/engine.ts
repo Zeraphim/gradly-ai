@@ -113,6 +113,10 @@ export function transition(
     return { ...s, phase: "complete" };
   throw Error("That action is not available at this stage.");
 }
+/** Lessons generated before the `ocr` flag carried the OCR notice in the briefing. */
+const LEGACY_OCR_NOTE =
+  " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
+
 export function publicSession(s: LearningSession, l: Lesson) {
   const c = ["challenge", "bonus"].includes(s.phase)
     ? currentChallenge(s, l)
@@ -196,7 +200,11 @@ export function publicSession(s: LearningSession, l: Lesson) {
     phase: s.phase,
     version: s.version,
     points: learningPoints(s),
-    briefing: l.briefing,
+    briefing: l.briefing.replace(LEGACY_OCR_NOTE, ""),
+    ocr: !!l.ocr || l.briefing.includes(LEGACY_OCR_NOTE),
+    // Each main challenge's stage, in order. Stage names carry no findings,
+    // so the intro can show the route before the learner begins.
+    stages: active.map((c) => c.reveal),
     challenge,
     retrying: s.retrying,
     total: s.reviewIds?.length ?? l.challenges.length,
