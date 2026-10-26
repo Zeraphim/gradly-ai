@@ -1,15 +1,20 @@
 import { z } from "zod";
+import type { SceneOf } from "@paperquest/contracts";
 import { nebiusConfig } from "../nebius-config.js";
 import {
+  canonicalText,
   challengeSchema,
-  excerptMatches,
+  locateExcerpt,
   paperLinkSupported,
   generatedLessonSchema,
   MAX_GENERATED_CHALLENGES,
   refSchema,
   sceneCoverageProblems,
+  sceneFaults,
   verifyLesson,
+  type Challenge,
   type Job,
+  type Lesson,
   type Audit,
 } from "./contracts.js";
 import { ProviderError, type ModelProvider } from "./provider.js";
@@ -38,17 +43,107 @@ const roles: [string, string][] = [
 ];
 /** Fewest verified stage-0 excerpts that can ground a lesson. */
 export const MIN_VERIFIED_EXCERPTS = 3;
+/** Most excerpts a drafted challenge may add beyond the stage-0 evidence. */
+export const MAX_ADDED_EXCERPTS = 3;
 /** Stage-1 output: references are limited to verified stage-0 ids and the
  *  excerpts themselves are attached server-side, not re-emitted. */
 export function lessonDraftSchema(evidenceIds: string[]) {
   const ids = [...new Set(evidenceIds)] as [string, ...string[]];
-  const challenge = challengeSchema.extend({
+  // No `alternatives`: drafts filled it with wrong options and reasons, and
+  // grading accepts every alternative as correct. The server sets it empty.
+  const challenge = challengeSchema.omit({ alternatives: true }).extend({
     refs: z.array(z.enum(ids)).min(1),
+    // Last, so it covers the details the teaching text above it uses.
+    addedExcerpts: z
+      .array(refSchema.omit({ id: true }))
+      .max(MAX_ADDED_EXCERPTS)
+      .default([]),
   });
   return generatedLessonSchema.omit({ evidence: true }).extend({
     challenges: z.array(challenge).min(3).max(MAX_GENERATED_CHALLENGES),
     bonus: challenge.nullable(),
   });
+}
+type DraftChallenge = z.infer<
+  ReturnType<typeof lessonDraftSchema>
+>["challenges"][number];
+/**
+ * Adds a challenge's verbatim added excerpts to the lesson evidence and its
+ * refs, dropping any not found in the document. Reviewers and learners see
+ * only cited excerpts, so details used outside them read as unsupported.
+ */
+function attachAddedExcerpts(
+  { addedExcerpts, ...c }: DraftChallenge,
+  evidence: Lesson["evidence"],
+  pages: Job["pages"],
+): Challenge {
+  const refs = [...c.refs];
+  for (const added of addedExcerpts) {
+    const found = locateExcerpt(pages, added);
+    if (!found) continue;
+    let id = evidence.find(
+      (r) =>
+        r.page === found.page &&
+        canonicalText(r.excerpt) === canonicalText(found.excerpt),
+    )?.id;
+    if (!id) {
+      let n = 1;
+      while (evidence.some((r) => r.id === `${c.id}_added_${n}`)) n++;
+      id = `${c.id}_added_${n}`;
+      evidence.push({ id, ...found });
+    }
+    if (!refs.includes(id)) refs.push(id);
+  }
+  return { ...c, refs, alternatives: [] };
+}
+/**
+ * A connections scene for one challenge. It shows the challenge's evidence
+ * text, which the player already shows before an answer when a challenge has
+ * no scene, or else the verified excerpts the challenge cites.
+ */
+function evidenceScene(
+  c: Challenge,
+  evidence: Lesson["evidence"],
+): SceneOf<"connections"> {
+  const texts = c.evidence.filter((e) => e.trim());
+  const provenance = texts.length
+    ? {
+        kind: "source-summary" as const,
+        refs: c.refs,
+        note: "Summary of the cited evidence.",
+      }
+    : {
+        kind: "reported" as const,
+        refs: c.refs,
+        note: "Verified excerpts from the paper.",
+      };
+  const details = texts.length
+    ? texts
+    : evidence.filter((r) => c.refs.includes(r.id)).map((r) => r.excerpt);
+  const anchors = details.slice(0, 6).map((detail, i) => ({
+    id: `evidence_${i + 1}`,
+    label: `Evidence ${i + 1}`,
+    detail: detail.slice(0, 600),
+    at: "setup" as const,
+    provenance,
+  }));
+  return {
+    version: 1,
+    kind: "connections",
+    title: "Connect the evidence",
+    instruction:
+      "Read the evidence, then connect the response you would choose.",
+    description: "The challenge's evidence with one response per option.",
+    provenance,
+    actionLabel: "Connect a response",
+    anchors,
+    responses: c.options.map((o) => ({
+      optionId: o.id,
+      label: o.text.slice(0, 600),
+      targetIds: anchors.map((a) => a.id),
+    })),
+    resolution: null,
+  };
 }
 export function newJob(id: string, name: string, pages: Job["pages"]): Job {
   return {
@@ -117,22 +212,11 @@ export async function runStage(
         refs: found.refs,
         missing: found.missing,
       };
-      // Keep only verbatim excerpts; never show one that is not. Models
-      // sometimes cite the wrong page, so an excerpt found on exactly one
-      // other page is kept with that page.
+      // Keep only verbatim excerpts; never show one that is not.
       const cited = j.evidence.refs.length;
-      const verified = j.evidence.refs.flatMap((r) => {
-        if (
-          j.pages.some(
-            (p) => p.page === r.page && excerptMatches(p.text, r.excerpt),
-          )
-        )
-          return [r];
-        const [only, ...more] = j.pages.filter((p) =>
-          excerptMatches(p.text, r.excerpt),
-        );
-        return only && !more.length ? [{ ...r, page: only.page }] : [];
-      });
+      const verified = j.evidence.refs.flatMap(
+        (r) => locateExcerpt(j.pages, r) ?? [],
+      );
       if (!verified.length)
         throw Error(
           `Extracted evidence does not match the document (0 of ${j.evidence.refs.length} excerpts verified). Verification requires exact page excerpts.`,
@@ -163,11 +247,11 @@ export async function runStage(
       const draftSchema = lessonDraftSchema(j.evidence!.refs.map((r) => r.id));
       const draft = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, hints, misconceptions, defensible alternatives, source refs and staged findings reveals. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes, results, or a single best answer where the source permits alternatives. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
+        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
           evidenceRule:
-            "Cite evidence only by the ids in evidence.refs. The server attaches those verified excerpts to the lesson, so do not copy excerpts.",
+            "Cite evidence by the ids in evidence.refs. The server attaches those verified excerpts to the lesson, so do not copy them. Put only other excerpts in addedExcerpts.",
           pages: j.pages,
           schemaExample: JSON.parse(
             JSON.stringify({ id: j.id, source: "generated" }),
@@ -177,13 +261,60 @@ export async function runStage(
         pipelineModel,
         { tier: "pipeline" },
       );
-      // Evidence is the verified stage-0 set, never the model's re-copy.
+      // Evidence is the verified stage-0 set plus verified added excerpts,
+      // never the model's re-copy.
+      const parsed = draftSchema.parse(draft);
+      const evidence = [...j.evidence!.refs];
+      const ground = (c: DraftChallenge) =>
+        attachAddedExcerpts(c, evidence, j.pages);
       j.lesson = generatedLessonSchema.parse({
-        ...draftSchema.parse(draft),
-        evidence: j.evidence!.refs,
+        ...parsed,
+        challenges: parsed.challenges.map(ground),
+        bonus: parsed.bonus && ground(parsed.bonus),
+        evidence,
       });
       j.lesson.id = j.id;
       j.lesson.source = "generated";
+      const all = [
+        ...j.lesson.challenges,
+        ...(j.lesson.bonus ? [j.lesson.bonus] : []),
+      ];
+      // A hint is the learner's only help before the first attempt.
+      const hintless = all.filter((c) => !c.hint.trim()).map((c) => c.id);
+      if (hintless.length)
+        throw Error(
+          `The draft has no hint for ${hintless.join(", ")}. Retry this stage.`,
+        );
+      // Scenes are optional per challenge, so a broken one is removed rather
+      // than stopping the lesson at verification.
+      let removed = 0;
+      for (const c of all)
+        if (c.scene && sceneFaults(c, j.lesson.evidence).length) {
+          c.scene = null;
+          if (c.responseStyle === "tap") delete c.responseStyle;
+          removed++;
+        }
+      // When no drafted scene survives, one challenge gets a scene built from
+      // its evidence, installed only if it passes the same checks. Challenges
+      // with their own evidence text come first.
+      let built = false;
+      if (sceneCoverageProblems(j.lesson).length)
+        for (const c of [...j.lesson.challenges].sort(
+          (a, b) =>
+            Number(!a.evidence.some((e) => e.trim())) -
+            Number(!b.evidence.some((e) => e.trim())),
+        )) {
+          const scene = evidenceScene(c, j.lesson.evidence);
+          if (
+            !scene.anchors.length ||
+            sceneFaults({ ...c, scene }, j.lesson.evidence).length
+          )
+            continue;
+          c.scene = scene;
+          if (c.responseStyle === "tap") delete c.responseStyle;
+          built = true;
+          break;
+        }
       // A lesson without a usable scene fails here, where a retry redraws the
       // lesson, rather than after two reviewer calls.
       const coverage = sceneCoverageProblems(j.lesson);
@@ -192,8 +323,9 @@ export async function runStage(
       if (j.pages.some((p) => p.method === "ocr"))
         j.lesson.briefing +=
           " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
-      audit.summary = `Drafted ${j.lesson.challenges.length} challenges.`;
-      audit.refs = j.evidence!.refs.map((r) => r.id);
+      const added = evidence.length - j.evidence!.refs.length;
+      audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${removed ? ` Removed ${removed} scene${removed === 1 ? "" : "s"} that failed checks.` : ""}${built ? " Added a server-built scene." : ""}`;
+      audit.refs = j.lesson.evidence.map((r) => r.id);
     } else if (j.stage === 2 || j.stage === 3) {
       // The coach read "feedback" as a learner answer to grade and rejected
       // drafts for having none, so it is told what it reviews.

@@ -34,9 +34,12 @@ not establish prevalence. A conceptual argument is not an observed mechanism.
 The Lesson Architect is asked for a scene on at least two required challenges,
 including one design-stage challenge, wherever the evidence supports one.
 `sceneCoverageProblems` in `apps/api/src/research/contracts.ts` enforces at least
-one valid scene. The pipeline checks it right after drafting and fails that stage
-with "Retry this stage", so the existing retry redrafts the lesson before any
-reviewer call. `verifyLesson` repeats the check for generated lessons. Demo and
+one valid scene. Right after drafting, the pipeline removes drafted scenes that
+fail validation. If none remains, it builds a `connections` scene for one
+challenge from that challenge's evidence text, or else its cited excerpts, and
+keeps it only if it passes the same checks. Only when no scene can be built does
+the stage fail with "Retry this stage", so the existing retry redrafts the lesson
+before any reviewer call. `verifyLesson` repeats the check for generated lessons. Demo and
 featured lessons are exempt. `connections` fits any paper with evidence, so a
 qualitative or conceptual paper can always meet the rule without numbers.
 
