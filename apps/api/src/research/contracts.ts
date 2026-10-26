@@ -180,6 +180,22 @@ export function excerptMatches(pageText: string, excerpt: string) {
   return target.length > 0 && canonicalText(pageText).includes(target);
 }
 /**
+ * The excerpt's verified location, or null when it is not verbatim. Models
+ * sometimes cite the wrong page, so an excerpt found on exactly one other
+ * page is kept with that page.
+ */
+export function locateExcerpt<T extends { page: number; excerpt: string }>(
+  pages: PageText[],
+  r: T,
+): T | null {
+  if (pages.some((p) => p.page === r.page && excerptMatches(p.text, r.excerpt)))
+    return r;
+  const [only, ...more] = pages.filter((p) =>
+    excerptMatches(p.text, r.excerpt),
+  );
+  return only && !more.length ? { ...r, page: only.page } : null;
+}
+/**
  * Whether a paper link appears in the document. A DOI is matched wherever it
  * sits in the link (doi.org, dx.doi.org or a publisher URL), ignoring case and
  * PDF line breaks; any other link must appear as written, minus its scheme.
@@ -230,50 +246,52 @@ export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
     }
     if (c.refs.some((r) => !refs.has(r)))
       problems.push(`${c.id}: unknown evidence reference.`);
-    if (c.scene) {
-      const parsed = sceneSchema.safeParse(c.scene);
-      if (!parsed.success)
-        problems.push(`${c.id}: malformed scene; retry lesson generation.`);
-      else {
-        problems.push(
-          ...sceneProblems(
-            parsed.data,
-            c.options.map((o) => o.id),
-            c.refs,
-          ).map((issue) => `${c.id}: ${issue}.`),
-        );
-        if (
-          parsed.data.kind === "comparison" &&
-          parsed.data.values.some((v) => v.provenance.kind !== "reported")
-        )
-          problems.push(
-            `${c.id}: comparison values must be reported source measurements.`,
-          );
-        for (const reported of reportedSceneNumbers(parsed.data)) {
-          const numbers = numbersIn(
-            lesson.evidence
-              .filter((ref) => reported.refs.includes(ref.id))
-              .map((ref) => ref.excerpt)
-              .join(" "),
-          );
-          if (reported.values.some((value) => !numbers.includes(value)))
-            problems.push(
-              `${c.id}: reported scene value is not in its referenced evidence (${reported.id}).`,
-            );
-        }
-        const setup = sceneItems(parsed.data).filter(
-          (item) => item.at === "setup",
-        );
-        if (!setup.length)
-          problems.push(`${c.id}: scene needs visible setup content.`);
-      }
-    }
+    if (c.scene) problems.push(...sceneFaults(c, lesson.evidence));
     problems.push(...responseStyleProblems(c));
     if (c.reveal === "bonus" && lesson.challenges.includes(c))
       problems.push(`${c.id}: bonus in required sequence.`);
   }
   if (lesson.source === "generated")
     problems.push(...sceneCoverageProblems(lesson));
+  return problems;
+}
+/** Problems with a challenge's scene, checked against the lesson evidence. */
+export function sceneFaults(c: Challenge, evidence: Lesson["evidence"]) {
+  const problems: string[] = [];
+  const parsed = sceneSchema.safeParse(c.scene);
+  if (!parsed.success)
+    problems.push(`${c.id}: malformed scene; retry lesson generation.`);
+  else {
+    problems.push(
+      ...sceneProblems(
+        parsed.data,
+        c.options.map((o) => o.id),
+        c.refs,
+      ).map((issue) => `${c.id}: ${issue}.`),
+    );
+    if (
+      parsed.data.kind === "comparison" &&
+      parsed.data.values.some((v) => v.provenance.kind !== "reported")
+    )
+      problems.push(
+        `${c.id}: comparison values must be reported source measurements.`,
+      );
+    for (const reported of reportedSceneNumbers(parsed.data)) {
+      const numbers = numbersIn(
+        evidence
+          .filter((ref) => reported.refs.includes(ref.id))
+          .map((ref) => ref.excerpt)
+          .join(" "),
+      );
+      if (reported.values.some((value) => !numbers.includes(value)))
+        problems.push(
+          `${c.id}: reported scene value is not in its referenced evidence (${reported.id}).`,
+        );
+    }
+    const setup = sceneItems(parsed.data).filter((item) => item.at === "setup");
+    if (!setup.length)
+      problems.push(`${c.id}: scene needs visible setup content.`);
+  }
   return problems;
 }
 /** Fewest required challenges with a valid scene in a generated lesson. */

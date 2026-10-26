@@ -657,27 +657,201 @@ it("asks stage 0 for a paper summary field that no evidence aspect shares", asyn
   expect(j.evidence?.findings).toBe("A study of two groups.");
 });
 
-it("rejects a drafted lesson without a valid scene at drafting and redrafts on retry", async () => {
-  const evidenceJob = await runStage(
-    newJob("scene-job", "paper.pdf", [{ page: 1, text: page }]),
-    provider([{ paperSummary: "Study evidence located", refs, missing: [] }]),
-  );
+it("builds a scene from the evidence when no drafted scene passes", async () => {
+  const evidenceJob = await evidenceFor([{ page: 1, text: page }]);
   const plain = {
     ...draft,
-    challenges: draft.challenges.map((c) => ({ ...c, scene: null })),
+    challenges: draft.challenges.map((c, i) => ({
+      ...c,
+      scene: null,
+      // The challenge with its own evidence text is preferred.
+      evidence: i === 2 ? ["Two independent groups were compared."] : [],
+    })),
   };
   // A scene that breaks its own response mapping does not count either.
   const broken = structuredClone(draft);
   broken.challenges[0]!.scene!.responses[0]!.optionId = "unmapped";
-  for (const lesson of [plain, broken]) {
-    const failed = await runStage(evidenceJob, provider([lesson]));
-    expect(failed.status).toBe("failed");
-    expect(failed.stage).toBe(1);
-    expect(failed.error).toContain("0 valid interactive scenes");
-    expect(failed.error).toContain("Retry this stage.");
-    // The existing retry reruns the drafting stage, and a lesson with a scene passes.
-    const retried = await runStage(failed, provider([draft]));
-    expect(retried.status).toBe("pending");
-    expect(retried.stage).toBe(2);
+  for (const [lesson, at, summary] of [
+    [plain, 2, "Drafted 3 challenges. Added a server-built scene."],
+    [
+      broken,
+      0,
+      "Drafted 3 challenges. Removed 1 scene that failed checks. Added a server-built scene.",
+    ],
+  ] as const) {
+    let j = await runStage(evidenceJob, provider([lesson]));
+    expect(j.status).toBe("pending");
+    expect(j.audits[1]?.summary).toBe(summary);
+    const scenes = j.lesson!.challenges.filter((c) => c.scene);
+    expect(scenes.map((c) => c.id)).toEqual([draft.challenges[at]!.id]);
+    expect(scenes[0]!.scene!.kind).toBe("connections");
+    j = await finish(j);
+    expect(j.status).toBe("ready");
   }
+  const ready = await finish(await runStage(evidenceJob, provider([plain])));
+  const anchors = ready.lesson!.challenges[2]!.scene;
+  expect(anchors?.kind === "connections" && anchors.anchors[0]?.detail).toBe(
+    "Two independent groups were compared.",
+  );
+});
+
+it("fails drafting when no scene can be built and redrafts on retry", async () => {
+  const evidenceJob = await evidenceFor([{ page: 1, text: page }]);
+  // Scene element ids allow no spaces, so no scene fits these options.
+  const unfit = {
+    ...draft,
+    challenges: draft.challenges.map((c) => ({
+      ...c,
+      scene: null,
+      options: c.options.map((o) => ({ ...o, id: `${o.id} x` })),
+      accepted: c.accepted.map((a) => `${a} x`),
+      misconceptions: {},
+    })),
+  };
+  const failed = await runStage(evidenceJob, provider([unfit]));
+  expect(failed.status).toBe("failed");
+  expect(failed.stage).toBe(1);
+  expect(failed.error).toContain("0 valid interactive scenes");
+  expect(failed.error).toContain("Retry this stage.");
+  // The existing retry reruns the drafting stage, and a lesson with a scene passes.
+  const retried = await runStage(failed, provider([draft]));
+  expect(retried.status).toBe("pending");
+  expect(retried.stage).toBe(2);
+});
+
+type WireLesson = {
+  properties: { challenges: { items: { properties: object } } };
+};
+async function evidenceFor(pages: { page: number; text: string }[]) {
+  return runStage(
+    newJob("guards", "paper.pdf", pages),
+    provider([{ paperSummary: "Study evidence located", refs, missing: [] }]),
+  );
+}
+async function finish(j: Awaited<ReturnType<typeof runStage>>) {
+  const p = provider([
+    { approved: true, issues: [], summary: "Methods fit evidence" },
+    { approved: true, issues: [], summary: "Guidance supports revision" },
+  ]);
+  for (let n = 0; n < 3; n++) j = await runStage(j, p);
+  return j;
+}
+
+it("drafts without alternatives so grading accepts only the accepted answer", async () => {
+  const evidenceJob = await evidenceFor([{ page: 1, text: page }]);
+  const c = draft.challenges[0]!;
+  const wrong = c.options.find((o) => !c.accepted.includes(o.id))!.id;
+  let schemaSent: z.ZodType | undefined;
+  let j = await runStage(evidenceJob, {
+    async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
+      schemaSent = schema as z.ZodType;
+      // Drafts listed wrong options, alone or with a reason, as alternatives.
+      return {
+        ...draft,
+        challenges: draft.challenges.map((d, i) =>
+          i === 0 ? { ...d, alternatives: [[wrong], [wrong, "Not the design."]] } : d,
+        ),
+      } as T;
+    },
+  });
+  const wire = z.toJSONSchema(schemaSent!) as unknown as WireLesson;
+  expect(wire.properties.challenges.items.properties).not.toHaveProperty("alternatives");
+  expect(j.lesson?.challenges.every((d) => d.alternatives.length === 0)).toBe(true);
+  j = await finish(j);
+  expect(j.status).toBe("ready");
+  let s = transition(newSession(j.lesson!, "guards-session"), j.lesson!, "begin");
+  s = submit(s, j.lesson!, [wrong], "");
+  expect(s.answers[c.id]?.[0]?.correct).toBe(false);
+});
+
+it("attaches verified added excerpts to a challenge and drops unverifiable ones", async () => {
+  const payment = "Participants were paid $0.50 for taking part.";
+  const pages = [
+    { page: 1, text: page },
+    { page: 2, text: `${payment} Sessions lasted twenty minutes.` },
+  ];
+  const evidenceJob = await evidenceFor(pages);
+  let schemaSent: z.ZodType | undefined;
+  const id = draft.challenges[0]!.id;
+  let j = await runStage(evidenceJob, {
+    async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
+      schemaSent = schema as z.ZodType;
+      return {
+        ...draft,
+        challenges: draft.challenges.map((d, i) =>
+          i === 0
+            ? {
+                ...d,
+                addedExcerpts: [
+                  { page: 2, excerpt: payment },
+                  // Wrong page: moved to the one page that holds it, not duplicated.
+                  { page: 1, excerpt: payment },
+                  { page: 2, excerpt: "Participants were paid one dollar each." },
+                ],
+              }
+            : i === 1
+              ? // Already stage-0 evidence: cited by its existing id.
+                { ...d, addedExcerpts: [{ page: 1, excerpt: refs[1]!.excerpt }] }
+              : d,
+        ),
+      } as T;
+    },
+  });
+  const wire = z.toJSONSchema(schemaSent!) as unknown as WireLesson;
+  expect(wire.properties.challenges.items.properties).toHaveProperty("addedExcerpts");
+  expect(j.status).toBe("pending");
+  expect(j.lesson?.evidence).toEqual([
+    ...refs,
+    { id: `${id}_added_1`, page: 2, excerpt: payment },
+  ]);
+  expect(j.lesson?.challenges[0]?.refs).toEqual(["source1", `${id}_added_1`]);
+  expect(j.lesson?.challenges[1]?.refs).toEqual(["source1", "source2"]);
+  expect(j.lesson?.challenges[0]).not.toHaveProperty("addedExcerpts");
+  expect(j.audits[1]?.summary).toBe("Drafted 3 challenges with 1 added excerpt.");
+  j = await finish(j);
+  expect(j.status).toBe("ready");
+});
+
+it("fails drafting with a retry when a challenge has no hint", async () => {
+  const evidenceJob = await evidenceFor([{ page: 1, text: page }]);
+  const hintless = {
+    ...draft,
+    challenges: draft.challenges.map((d, i) => (i === 1 ? { ...d, hint: " " } : d)),
+  };
+  const failed = await runStage(evidenceJob, provider([hintless]));
+  expect(failed.status).toBe("failed");
+  expect(failed.stage).toBe(1);
+  expect(failed.error).toBe(
+    `The draft has no hint for ${draft.challenges[1]!.id}. Retry this stage.`,
+  );
+  const retried = await runStage(failed, provider([draft]));
+  expect(retried.stage).toBe(2);
+});
+
+it("removes a broken scene at drafting and keeps the lesson's valid one", async () => {
+  const evidenceJob = await evidenceFor([{ page: 1, text: page }]);
+  const second = draft.challenges[1]!;
+  const broken = anchorScene(second.options, "source1");
+  // A response pointing at a missing element, as drafts produced live.
+  broken.responses[0]!.targetIds = ["s1"];
+  let j = await runStage(
+    evidenceJob,
+    provider([
+      {
+        ...draft,
+        challenges: draft.challenges.map((d, i) =>
+          i === 1 ? { ...d, scene: broken, responseStyle: "tap" } : d,
+        ),
+      },
+    ]),
+  );
+  expect(j.status).toBe("pending");
+  expect(j.lesson?.challenges[0]?.scene).toBeTruthy();
+  expect(j.lesson?.challenges[1]?.scene).toBeNull();
+  expect(j.lesson?.challenges[1]).not.toHaveProperty("responseStyle");
+  expect(j.audits[1]?.summary).toBe(
+    "Drafted 3 challenges. Removed 1 scene that failed checks.",
+  );
+  j = await finish(j);
+  expect(j.status).toBe("ready");
 });
