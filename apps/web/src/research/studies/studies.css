@@ -1630,6 +1630,17 @@
 .research-lab .studies .journey-intro-body > p:last-child {
   margin-bottom: 0;
 }
+/* Long generated briefings keep a short lead; the rest stays one tap away. */
+.research-lab .studies .journey-intro-more summary {
+  cursor: pointer;
+  color: var(--s-slate);
+  font-size: 14px;
+  font-weight: 700;
+}
+.research-lab .studies .journey-intro-more p {
+  margin: 10px 0 0;
+  color: var(--s-body);
+}
 .research-lab .studies .journey-intro-facts {
   display: flex;
   flex-wrap: wrap;

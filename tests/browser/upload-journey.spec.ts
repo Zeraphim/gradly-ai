@@ -485,6 +485,70 @@ test("an uploaded lesson plays in the study player with server scoring and AI fe
   }
 });
 
+test("a long generated briefing keeps Begin study on screen and folds the rest", async ({
+  page,
+}) => {
+  // Reported on 27 October 2026: a one-block generated briefing pushed the
+  // Begin button below the screen. The intro now shows a short lead.
+  const lesson = lessonFixture();
+  lesson.briefing = Array.from(
+    { length: 12 },
+    (_, i) =>
+      `Sentence ${i + 1} explains the setting, the people involved and the terms a learner needs before starting.`,
+  ).join(" ");
+  await liveConfig(page);
+  await serveJob(page, () => job(5, { status: "ready" }));
+  await serveLearning(page, lesson);
+  await page.goto(`/#/research/processing/${JOB_ID}`);
+  await page.getByRole("button", { name: "Start your study" }).click();
+  await expect(page).toHaveURL(/#\/research\/play\/session-1$/);
+  const more = page.locator(".journey-intro-more");
+  const begin = page.getByRole("button", { name: /Begin study/ });
+  for (const [width, height] of [
+    [1366, 900],
+    [1400, 1040],
+    [375, 812],
+  ] as const) {
+    await page.setViewportSize({ width, height });
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await noOverflow(page);
+    await expect(more).not.toHaveAttribute("open", "");
+    await expect(page.getByText("Sentence 12 explains")).toBeHidden();
+    await page.screenshot({ path: `${shots}/player-intro-long-${width}.png` });
+    if (width > 400) {
+      const box = (await begin.boundingBox())!;
+      expect(
+        box.y + box.height,
+        `Begin study at ${width}px`,
+      ).toBeLessThanOrEqual(height);
+    }
+  }
+  // However long the briefing, the intro is no taller than a prepared study's.
+  await page.setViewportSize({ width: 1366, height: 768 });
+  const generated = (await page.locator(".journey-intro-card").boundingBox())!
+    .height;
+  const prepared = await page.context().newPage();
+  await prepared.setViewportSize({ width: 1366, height: 768 });
+  await prepared.goto("/#/research/studies/basketball-maths");
+  const authored = (await prepared
+    .locator(".journey-intro-card")
+    .boundingBox())!.height;
+  await prepared.close();
+  expect(generated).toBeLessThanOrEqual(authored);
+  // The rest is one keyboard press away, and nothing is lost.
+  await page.getByText("Read more background").focus();
+  await page.keyboard.press("Enter");
+  await expect(more).toHaveAttribute("open", "");
+  await expect(page.getByText("Sentence 12 explains")).toBeVisible();
+  expect(
+    (await new AxeBuilder({ page }).include(".studies").analyze()).violations,
+  ).toEqual([]);
+  await begin.click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: lesson.challenges[0]!.prompt }),
+  ).toBeVisible();
+});
+
 test("the reveal shows the paper, its takeaway and the learner's own prediction", async ({
   page,
 }) => {
