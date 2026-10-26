@@ -112,7 +112,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const stageOutputs: unknown[] = [
       // Stage 0: Evidence Analyst
       {
-        findings: "Statistical comparison of quiet vs noisy environments.",
+        paperSummary: "Statistical comparison of quiet vs noisy environments.",
         refs: quantitativeSceneLesson.evidence,
         missing: [],
       },
@@ -191,7 +191,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
           return schema.parse({
-            findings: "Qualitative interview evidence.",
+            paperSummary: "Qualitative interview evidence.",
             refs: qualitativeSceneLesson.evidence,
             missing: [],
           });
@@ -409,7 +409,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
           return schema.parse({
-            findings: "Findings",
+            paperSummary: "Findings",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
           });
@@ -478,7 +478,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
           return schema.parse({
-            findings: "Evidence",
+            paperSummary: "Evidence",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
           });
@@ -542,7 +542,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
           return schema.parse({
-            findings: "Evidence",
+            paperSummary: "Evidence",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
           });

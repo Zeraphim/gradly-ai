@@ -155,7 +155,7 @@ for (const fixture of [quantitativeSceneLesson, qualitativeSceneLesson])
       expect(verifyLesson(fixture, sceneFixturePages(fixture))).toEqual([]);
       const outputs: unknown[] = [
         {
-          findings: "Authored fixture only",
+          paperSummary: "Authored fixture only",
           refs: fixture.evidence,
           missing: [],
         },

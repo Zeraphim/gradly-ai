@@ -85,22 +85,37 @@ export async function runStage(
   if (!audit) throw Error("Processing is already complete.");
   try {
     if (j.stage === 0) {
-      j.evidence = await provider.generate(
+      // The wire field is `paperSummary`, not `findings`: a field named after
+      // one evidence aspect led the model to return only findings excerpts
+      // and list every other aspect as missing.
+      const found = await provider.generate(
         audit.role,
-        `${audit.task} Adapt to qualitative, quantitative, mixed-methods, review, or conceptual research as supported by the document. Return exact excerpts, not paraphrases. Use the physical PDF page numbers provided. List in missing only evidence essential to a grounded investigation of this paper; a statistical test, numerical result, or experimental design is not required for every research approach. Do not infer study type or claims from absent evidence. If the document cannot support at least three evidence-grounded research decisions, mark that essential evidence as missing. Pages marked method=ocr are uncertain transcriptions; do not imply wording or numbers were verified against original pixels.`,
+        `${audit.task} Adapt to qualitative, quantitative, mixed-methods, review, or conceptual research as supported by the document. Return 5 to 12 refs that together cover every aspect the paper states: research question, approach, source of observations or arguments, findings or claims, and limitations. Name each ref id after its aspect, such as approach_1. Return exact excerpts, not paraphrases: one to three consecutive sentences copied from a single page. Set paperSummary to two to four plain sentences telling a learner what the paper studied and found. Use the physical PDF page numbers provided. List in missing only evidence essential to a grounded investigation of this paper; a statistical test, numerical result, or experimental design is not required for every research approach. Do not infer study type or claims from absent evidence. If the document cannot support at least three evidence-grounded research decisions, mark that essential evidence as missing. Pages marked method=ocr are uncertain transcriptions; do not imply wording or numbers were verified against original pixels.`,
         { pages: j.pages },
         z.object({
-          findings: z
+          refs: z
+            .array(refSchema)
+            .min(1)
+            .max(20)
+            .describe(
+              "Exact page excerpts, at least one per aspect the paper states.",
+            ),
+          missing: z.array(z.string()),
+          // After refs, so the summary is written from the located evidence.
+          paperSummary: z
             .string()
             .describe(
-              "Two to four sentences for a learner summarizing what the paper studied and found. Describe the paper, not your own process.",
+              "Two to four plain sentences for a learner summarizing what the paper studied and found. Describe the paper, not your own process.",
             ),
-          refs: z.array(refSchema).min(1).max(20),
-          missing: z.array(z.string()),
         }),
         pipelineModel,
         { tier: "pipeline" },
       );
+      j.evidence = {
+        findings: found.paperSummary,
+        refs: found.refs,
+        missing: found.missing,
+      };
       // Keep only verbatim excerpts; never show one that is not. Models
       // sometimes cite the wrong page, so an excerpt found on exactly one
       // other page is kept with that page.
@@ -174,9 +189,15 @@ export async function runStage(
       audit.summary = `Drafted ${j.lesson.challenges.length} challenges.`;
       audit.refs = j.evidence!.refs.map((r) => r.id);
     } else if (j.stage === 2 || j.stage === 3) {
+      // The coach read "feedback" as a learner answer to grade and rejected
+      // drafts for having none, so it is told what it reviews.
+      const coachBrief =
+        j.stage === 3
+          ? " You review the lesson draft before any learner sees it; there is no learner response to grade. Judge each challenge's hint, misconception notes and explanation: they should help a learner who chose a wrong option revise their reasoning without giving the answer away early. If you return approved=false, list every concrete problem in issues."
+          : "";
       const assessment = await provider.generate(
         audit.role,
-        `${audit.task} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Review all scene text, values, edges, response labels and reveal gates too. Reject unsupported visual relationships, findings or answer leakage in setup metadata, invented numerical data, misleading provenance, or diagrams that imply unavailable observations. Return approved=false when uncertain.`,
+        `${audit.task}${coachBrief} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Review all scene text, values, edges, response labels and reveal gates too. Reject unsupported visual relationships, findings or answer leakage in setup metadata, invented numerical data, misleading provenance, or diagrams that imply unavailable observations. Return approved=false when uncertain.`,
         { lesson: j.lesson, pages: j.pages },
         z.object({
           approved: z.boolean(),

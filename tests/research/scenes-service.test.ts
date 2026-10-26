@@ -101,7 +101,7 @@ it("delivers a scene through the real learning route, submits mapped answers, re
     );
     const outputs: unknown[] = [
       {
-        findings: "Authored fixture only",
+        paperSummary: "Authored fixture only",
         refs: quantitativeSceneLesson.evidence,
         missing: [],
       },

@@ -43,7 +43,7 @@ function provider(outputs: unknown[]): ModelProvider {
 it("completes actual stage orchestration against an explicitly mocked provider", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);
   const p = provider([
-    { findings: "Study evidence located", refs, missing: [] },
+    { paperSummary: "Study evidence located", refs, missing: [] },
     draft,
     { approved: true, issues: [], summary: "Methods fit evidence" },
     { approved: true, issues: [], summary: "Guidance supports revision" },
@@ -59,7 +59,7 @@ it("rejects invented exact excerpts and incomplete evidence", async () => {
     j,
     provider([
       {
-        findings: "Invented",
+        paperSummary: "Invented",
         refs: [{ id: "bad", page: 2, excerpt: "fabricated evidence" }],
         missing: [],
       },
@@ -68,7 +68,7 @@ it("rejects invented exact excerpts and incomplete evidence", async () => {
   expect(invalid.status).toBe("failed");
   const missing = await runStage(
     j,
-    provider([{ findings: "Not enough", refs, missing: ["Reported results"] }]),
+    provider([{ paperSummary: "Not enough", refs, missing: ["Reported results"] }]),
   );
   expect(missing.error).toContain("Insufficient");
 });
@@ -80,7 +80,7 @@ it("accepts PDF typography differences, drops paraphrased excerpts and hides nar
     j,
     provider([
       {
-        findings: "The user wants me to analyze the document.",
+        paperSummary: "The user wants me to analyze the document.",
         refs: [
           {
             id: "typography",
@@ -115,7 +115,7 @@ it("replaces an empty or truncated findings summary with the neutral fallback", 
   const next = await runStage(
     j,
     provider([
-      { findings: "", refs, missing: [] },
+      { paperSummary: "", refs, missing: [] },
     ]),
   );
   expect(next.status).toBe("pending");
@@ -157,7 +157,7 @@ it("caps live lesson drafts at the generated challenge limit", async () => {
   }));
   const evidenceJob = await runStage(
     newJob("cap-job", "paper.pdf", [{ page: 1, text: page }]),
-    provider([{ findings: "Study evidence located", refs, missing: [] }]),
+    provider([{ paperSummary: "Study evidence located", refs, missing: [] }]),
   );
   const failed = await runStage(evidenceJob, {
     async generate<T>(_role: string, task: string, _input: unknown, schema: unknown) {
@@ -191,7 +191,7 @@ it("caps live lesson drafts at the generated challenge limit", async () => {
 it("limits lesson references to stage-0 ids and attaches verified evidence server-side", async () => {
   const evidenceJob = await runStage(
     newJob("refs-job", "paper.pdf", [{ page: 1, text: page }]),
-    provider([{ findings: "Study evidence located", refs, missing: [] }]),
+    provider([{ paperSummary: "Study evidence located", refs, missing: [] }]),
   );
   let schemaSent: z.ZodType | undefined;
   const drafted = await runStage(evidenceJob, {
@@ -238,7 +238,7 @@ it("clears obsolete stage and job errors after a successful retry", async () => 
 
   const recovered = await runStage(
     failed,
-    provider([{ findings: "Evidence recovered", refs, missing: [] }]),
+    provider([{ paperSummary: "Evidence recovered", refs, missing: [] }]),
   );
   expect(recovered.status).toBe("pending");
   expect(recovered.stage).toBe(1);
@@ -264,7 +264,7 @@ it("persists a typed errorCode when a stage hits the output limit", async () => 
 
   const recovered = await runStage(
     failed,
-    provider([{ findings: "Evidence recovered", refs, missing: [] }]),
+    provider([{ paperSummary: "Evidence recovered", refs, missing: [] }]),
   );
   expect(recovered.status).toBe("pending");
   expect(recovered.audits[0]?.errorCode).toBeUndefined();
@@ -286,7 +286,7 @@ it("persists a typed errorCode when a stage hits the output limit", async () => 
 it("prevents a flagged methods review from becoming playable", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);
   const p = provider([
-    { findings: "Evidence", refs, missing: [] },
+    { paperSummary: "Evidence", refs, missing: [] },
     draft,
     {
       approved: false,
@@ -417,7 +417,7 @@ it("supports a nonnumeric qualitative investigation through verification and the
   }));
   const outputs: unknown[] = [
     {
-      findings: "An interview approach and bounded theme are available.",
+      paperSummary: "An interview approach and bounded theme are available.",
       refs: qualitativeRefs,
       missing: [],
     },
@@ -497,7 +497,7 @@ it("blocks an evidence-poor document without falling back to authored research",
     job,
     provider([
       {
-        findings: "A project proposal only.",
+        paperSummary: "A project proposal only.",
         refs: [{ id: "note", page: 1, excerpt: document }],
         missing: ["Research evidence for grounded decisions"],
       },
@@ -522,7 +522,7 @@ it("moves an exact excerpt cited on the wrong page to the one page that holds it
     j,
     provider([
       {
-        findings: "Evidence",
+        paperSummary: "Evidence",
         refs: [
           { id: "moved", page: 5, excerpt: page },
           { id: "nowhere", page: 1, excerpt: "A sentence on no page at all." },
@@ -543,7 +543,7 @@ it("moves an exact excerpt cited on the wrong page to the one page that holds it
 it("drops an unsupported paper link at verification instead of blocking the lesson", async () => {
   let j = newJob("link", "paper.pdf", [{ page: 1, text: page }]);
   const p = provider([
-    { findings: "Study evidence located", refs, missing: [] },
+    { paperSummary: "Study evidence located", refs, missing: [] },
     {
       ...draft,
       paper: { ...draft.paper, url: "https://doi.org/10.9999/not-in-this-paper" },
@@ -562,7 +562,7 @@ it("fails stage 0 with a retry when fewer than three excerpts verify", async () 
     j,
     provider([
       {
-        findings: "Evidence",
+        paperSummary: "Evidence",
         refs: [...refs.slice(0, 1), { id: "x", page: 1, excerpt: "Not in the paper." }],
         missing: [],
       },
@@ -579,7 +579,7 @@ it("explains a reviewer rejection that lists no issues", async () => {
   const toCoach = async (coach: unknown) => {
     let j = base;
     const p = provider([
-      { findings: "Study evidence located", refs, missing: [] },
+      { paperSummary: "Study evidence located", refs, missing: [] },
       draft,
       { approved: true, issues: [], summary: "Methods fit evidence" },
       coach,
@@ -602,4 +602,18 @@ it("explains a reviewer rejection that lists no issues", async () => {
     "The Learning Coach did not approve this lesson: Hints give away the answer. Regenerate to draft and review it again.",
   );
   expect(summarized.audits[3]?.summary).toBe("Hints give away the answer.");
+});
+
+it("asks stage 0 for a paper summary field that no evidence aspect shares", async () => {
+  let schemaSent: z.ZodType | undefined;
+  const j = await runStage(newJob("wire", "paper.pdf", [{ page: 1, text: page }]), {
+    async generate<T>(_r: string, _t: string, _i: unknown, schema: unknown) {
+      schemaSent = schema as z.ZodType;
+      return { refs, missing: [], paperSummary: "A study of two groups." } as T;
+    },
+  });
+  // A field named "findings" made the model return only findings excerpts.
+  const wire = z.toJSONSchema(schemaSent!) as { properties: object };
+  expect(Object.keys(wire.properties)).toEqual(["refs", "missing", "paperSummary"]);
+  expect(j.evidence?.findings).toBe("A study of two groups.");
 });

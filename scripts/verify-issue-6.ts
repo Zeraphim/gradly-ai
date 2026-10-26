@@ -116,7 +116,7 @@ async function main() {
     const stageOutputs: unknown[] = [
       // Stage 0: Evidence Analyst
       {
-        findings: "Empirical water consumption comparisons between observed districts.",
+        paperSummary: "Empirical water consumption comparisons between observed districts.",
         refs: quantitativeSceneLesson.evidence,
         missing: [],
       },
@@ -226,7 +226,7 @@ async function main() {
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
           return schema.parse({
-            findings: "Findings",
+            paperSummary: "Findings",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
           });
@@ -273,7 +273,7 @@ async function main() {
       async generate(_role, task, _input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
           return schema.parse({
-            findings: "Evidence gathered",
+            paperSummary: "Evidence gathered",
             refs: quantitativeSceneLesson.evidence,
             missing: [],
           });
