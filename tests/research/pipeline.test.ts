@@ -1059,7 +1059,70 @@ it("redrafts once from the Lesson Architect when the final check rejects a lesso
     summary: "Redrafting automatically after the final check found: cq1: invalid answer guide.",
   });
   expect(j.audits[4]!.status).toBe("Pending");
+  expect(j.audits[4]!.errorCode).toBeUndefined();
   const again = structuredClone(after);
   again.autoRedrafts = 1;
-  expect(autoRecover(before, again).status).toBe("review");
+  const stopped = autoRecover(before, again);
+  expect(stopped.status).toBe("review");
+  expect(publicJob(stopped).audits[4]?.errorCode).toBe("not_applicable");
+});
+
+it("reports missing stage-0 evidence as not applicable without retrying", async () => {
+  const before = newJob("unsuitable", "paper.pdf", [{ page: 1, text: page }]);
+  const j = autoRecover(
+    before,
+    await runStage(
+      before,
+      provider([{ paperSummary: "Not enough", refs, missing: ["Reported results"] }]),
+    ),
+  );
+  expect(j.status).toBe("failed");
+  expect(j.autoRetries).toBeUndefined();
+  expect(j.audits[0]).toMatchObject({ status: "Failed", errorCode: "not_applicable" });
+  expect(publicJob(j).audits[0]?.errorCode).toBe("not_applicable");
+});
+
+it("retries a failed content check and reports not applicable once retries are used up", async () => {
+  const hintless = {
+    ...draft,
+    challenges: draft.challenges.map((d, i) => (i === 1 ? { ...d, hint: " " } : d)),
+  };
+  let j = await evidenceFor([{ page: 1, text: page }]);
+  for (let n = 1; n <= AUTO_RETRIES; n++) {
+    j = autoRecover(j, await runStage(j, provider([hintless])));
+    expect(j).toMatchObject({ status: "pending", stage: 1, autoRetries: n });
+    expect(j.audits[1]!.errorCode).toBeUndefined();
+  }
+  j = autoRecover(j, await runStage(j, provider([hintless])));
+  expect(j.status).toBe("failed");
+  expect(j.audits[1]).toMatchObject({ status: "Failed", errorCode: "not_applicable" });
+  // The learner can still retry, and a passing draft clears the code.
+  const retried = await runStage(j, provider([draft]));
+  expect(retried.stage).toBe(2);
+  expect(retried.audits[1]!.errorCode).toBeUndefined();
+});
+
+it("keeps timeouts and provider failures out of not applicable after retries are used up", async () => {
+  const before = await evidenceFor([{ page: 1, text: page }]);
+  before.autoRetries = AUTO_RETRIES;
+  const failWith = async (e: Error) =>
+    autoRecover(
+      before,
+      await runStage(before, {
+        async generate() {
+          throw e;
+        },
+      }),
+    );
+  const timedOut = await failWith(new ProviderError("timeout", "The AI request timed out."));
+  expect(timedOut.status).toBe("failed");
+  expect(timedOut.audits[1]!.errorCode).toBe("timeout");
+  const badKey = await failWith(
+    Error("Nebius request failed (401). Check model access and configuration."),
+  );
+  expect(badKey.status).toBe("failed");
+  expect(badKey.audits[1]!.errorCode).toBeUndefined();
+  const malformed = await failWith(Error("The AI response did not match the schema."));
+  expect(malformed.status).toBe("failed");
+  expect(malformed.audits[1]!.errorCode).toBeUndefined();
 });

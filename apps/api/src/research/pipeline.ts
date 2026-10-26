@@ -42,6 +42,12 @@ const roles: [string, string][] = [
 export const MIN_VERIFIED_EXCERPTS = 3;
 /** Most excerpts a drafted challenge may add beyond the stage-0 evidence. */
 export const MAX_ADDED_EXCERPTS = 3;
+/** A deterministic content check rejected the model output. It is saved as
+ *  `not_applicable`, which autoRecover clears while retries remain, so it
+ *  reaches the learner only once they are used up. */
+class ContentCheckError extends Error {
+  readonly code = "not_applicable";
+}
 /** True when text has at least one word. Rejects degenerate replies like ":{". */
 const readable = (s: string) => /\p{L}{3,}/u.test(s);
 /** Stage-1 output: references are limited to verified stage-0 ids and the
@@ -246,7 +252,7 @@ export async function runStage(
         (r) => locateExcerpt(j.pages, r) ?? [],
       );
       if (!verified.length)
-        throw Error(
+        throw new ContentCheckError(
           `Extracted evidence does not match the document (0 of ${j.evidence.refs.length} excerpts verified). Verification requires exact page excerpts.`,
         );
       j.evidence.refs = verified;
@@ -260,13 +266,13 @@ export async function runStage(
       )
         j.evidence.findings = `Located ${verified.length} verified page excerpts for the investigation.`;
       if (j.evidence.missing.length)
-        throw Error(
+        throw new ContentCheckError(
           `Insufficient research evidence: ${j.evidence.missing.join("; ").slice(0, 200)}. Try a complete research paper with enough source evidence.`,
         );
       // A lesson needs at least three grounded decisions. Fewer excerpts fail
       // here, where a retry redraws evidence, not at review, where it cannot.
       if (verified.length < MIN_VERIFIED_EXCERPTS)
-        throw Error(
+        throw new ContentCheckError(
           `Too little extracted evidence matches the document (${verified.length} of ${cited} excerpts verified, ${MIN_VERIFIED_EXCERPTS} needed). Verification requires exact page excerpts. Retry this stage.`,
         );
       audit.summary = j.evidence.findings;
@@ -297,7 +303,7 @@ export async function runStage(
       const keyed = parsed.challenges.filter(answerable);
       const unkeyed = parsed.challenges.length - keyed.length;
       if (keyed.length < 3)
-        throw Error(
+        throw new ContentCheckError(
           `The draft marked correct answers on only ${keyed.length} of ${parsed.challenges.length} challenges; at least 3 are needed. Retry this stage.`,
         );
       const evidence = [...j.evidence!.refs];
@@ -321,7 +327,7 @@ export async function runStage(
       // A hint is the learner's only help before the first attempt.
       const hintless = all.filter((c) => !c.hint.trim()).map((c) => c.id);
       if (hintless.length)
-        throw Error(
+        throw new ContentCheckError(
           `The draft has no hint for ${hintless.join(", ")}. Retry this stage.`,
         );
       // Scenes are optional per challenge, so a broken one is removed rather
@@ -353,7 +359,7 @@ export async function runStage(
       // lesson, rather than after two reviewer calls.
       const coverage = sceneCoverageProblems(j.lesson);
       if (coverage.length)
-        throw Error(`${coverage.join(" ")} Retry this stage.`);
+        throw new ContentCheckError(`${coverage.join(" ")} Retry this stage.`);
       if (j.pages.some((p) => p.method === "ocr"))
         j.lesson.briefing +=
           " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
@@ -443,7 +449,8 @@ export async function runStage(
   } catch (e) {
     audit.status = "Failed";
     audit.error = e instanceof Error ? e.message : "Processing failed.";
-    if (e instanceof ProviderError) audit.errorCode = e.code;
+    if (e instanceof ProviderError || e instanceof ContentCheckError)
+      audit.errorCode = e.code;
     else delete audit.errorCode;
     audit.summary = "Stage did not complete.";
     j.status = "failed";
@@ -462,20 +469,25 @@ export function redraft(j: Job) {
   j.stage = 1;
   j.lesson = undefined;
   j.review = undefined;
-  for (let i = 1; i < j.audits.length; i++)
+  for (let i = 1; i < j.audits.length; i++) {
     j.audits[i] = {
       ...j.audits[i]!,
       status: "Pending",
       summary: "Waiting for revision.",
     };
+    delete j.audits[i]!.errorCode;
+  }
 }
 /** A Nebius 4xx other than 429, such as a bad key or no model access, fails
  *  the same way every time. A timeout already had an in-request retry and
- *  each attempt takes up to 220s, so it waits for the learner instead. */
+ *  each attempt takes up to 220s, so it waits for the learner instead. Stage 0
+ *  reporting missing evidence is the model's verdict on the paper, so a
+ *  retry would only repeat it. */
 function retryable(audit: Audit) {
   return (
     audit.errorCode !== "timeout" &&
-    !/Nebius request failed \(4(?!29)\d\d\)/.test(audit.error ?? "")
+    !/Nebius request failed \(4(?!29)\d\d\)/.test(audit.error ?? "") &&
+    !/^Insufficient research evidence/.test(audit.error ?? "")
   );
 }
 /** Queues a failed stage or a rejected lesson again instead of stopping. The
@@ -501,7 +513,12 @@ export function autoRecover(before: Job, after: Job): Job {
     redraft(j);
     j.audits[1]!.status = "Retrying";
     j.audits[1]!.summary = `Redrafting automatically after the final check found: ${problems}`;
-  } else return j;
+  } else {
+    // A lesson rejected again after its redraft points at the paper, as do
+    // content checks that failed through every retry (their code is kept).
+    if (j.status === "review") audit.errorCode = "not_applicable";
+    return j;
+  }
   delete j.error;
   j.status = "pending";
   return j;
