@@ -135,23 +135,24 @@ The proof set already had scenes on most required questions before this work:
 association, not a risk ratio. No new scene kind or shared-player behavior was
 introduced. Across the library, the current count is **255/313 without scenes**.
 
-### Second batch: five more studies (26 October)
+### Second batch: six more studies (26 October)
 
-Five more generated studies had every question rewritten as a decision, keeping ids and
+Six more generated studies had every question rewritten as a decision, keeping ids and
 card challenge lists unchanged. Each kept fact was compared with the stored PDF, and
 every new excerpt is verbatim on its cited page. The full per-study status, open
 defects and unverified leads are in the
 [review register](PREPARED_STUDY_REVIEW.md). All five remain `reviewed: false`.
 
-| Study                          | Before (all lookups of the shown evidence)                            | After (decisions)                                                                                                                                                              |
-| ------------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| judging-statement-truthfulness | c1–c6: sample size, mean, coefficients, conclusion, a definition      | c1 two sessions, c2 unclear statements, c3 reading three intervals (new estimate scene), c4 Bayes factors that depend on the prior, c5 reach of a null result, c6 a follow-up  |
-| being-a-later-born             | q1–q6: design label, sex handling, two table cells, conclusion, list  | q1 recording birth order early, q2 separate sexes, q3 five models (new estimate scene), q4 opposite directions, q5 half the cohort missing, q6 era                             |
-| hand-washing-in-restrooms      | c1–c6: why a follow-up test, the screen picture, three F-test lookups | c1 which comparison isolates the message (new matrix scene), c2 random rooms, c3 an interaction, c4 a claim that goes too far (new comparison scene), c5 few rooms, c6 measure |
-| food-warning-labels            | c1–c6: design list (with an invented control group), PME scale, means | c1 no control group, c2 why rate effectiveness, c3 size of a gap (new comparison scene), c4 wording, c5 people who already cut back, c6 policy reach                           |
-| daily-conversation-hearing     | c1–c6: design label, inclusion rule, two named variables, a reason    | c1 two hearing measures, c2 two kinds of loneliness, c3 two separate links (new association scene), c4 speech versus high frequencies, c5 causation, c6 reach                  |
+| Study                          | Before (all lookups of the shown evidence)                                                                                                              | After (decisions)                                                                                                                                                                                         |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| judging-statement-truthfulness | c1–c6: sample size, mean, coefficients, conclusion, a definition                                                                                        | c1 two sessions, c2 unclear statements, c3 reading three intervals (new estimate scene), c4 Bayes factors that depend on the prior, c5 reach of a null result, c6 a follow-up                             |
+| being-a-later-born             | q1–q6: design label, sex handling, two table cells, conclusion, list                                                                                    | q1 recording birth order early, q2 separate sexes, q3 five models (new estimate scene), q4 opposite directions, q5 half the cohort missing, q6 era                                                        |
+| hand-washing-in-restrooms      | c1–c6: why a follow-up test, the screen picture, three F-test lookups                                                                                   | c1 which comparison isolates the message (new matrix scene), c2 random rooms, c3 an interaction, c4 a claim that goes too far (new comparison scene), c5 few rooms, c6 measure                            |
+| food-warning-labels            | c1–c6: design list (with an invented control group), PME scale, means                                                                                   | c1 no control group, c2 why rate effectiveness, c3 size of a gap (new comparison scene), c4 wording, c5 people who already cut back, c6 policy reach                                                      |
+| daily-gratitude-and-well-being | c1–c6: design label, two hypotheses, two coefficients, a stability comparison, a causality statement, a sample statement (c1 diagram was a placeholder) | c1 why both scales at each wave, c2 why stability paths, c3 small links beside stability (new association scene), c4 equal-strength test, c5 who stayed in (new timeline scene), c6 a workplace programme |
+| daily-conversation-hearing     | c1–c6: design label, inclusion rule, two named variables, a reason                                                                                      | c1 two hearing measures, c2 two kinds of loneliness, c3 two separate links (new association scene), c4 speech versus high frequencies, c5 causation, c6 reach                                             |
 
-Corrections made while checking the PDFs: the food-warning study had no control group
+Corrections made while checking the PDFs: the gratitude study had a placeholder diagram; the food-warning study had no control group
 (its lesson said it did); five lessons said no limitations were noted although each paper
 states several; and `judging-statement-truthfulness` stored funding and conflict-of-interest
 lines as evidence excerpts. The garbled step labels (for example "2 of 6 · , ") on 181
@@ -159,7 +160,7 @@ questions across 31 studies were replaced from each question's reveal stage.
 
 ### Outstanding scope and agreement
 
-- Agent: continue the source-based question review across the remaining 39 drafts
+- Agent: continue the source-based question review across the remaining 38 drafts
   (see the [review register](PREPARED_STUDY_REVIEW.md) for order and open defects),
   including the existing television lesson correctness warning above.
   The original texting sample is separate. No full-library semantic audit is claimed.

@@ -2,6 +2,7 @@ import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { body as foodWarnings } from "../../apps/web/src/research/studies/data/food-warning-labels.js";
 import { body as handHygiene } from "../../apps/web/src/research/studies/data/hand-washing-in-restrooms.js";
+import { body as gratitude } from "../../apps/web/src/research/studies/data/daily-gratitude-and-well-being.js";
 import { body as hearing } from "../../apps/web/src/research/studies/data/daily-conversation-hearing.js";
 import { body as laterBorn } from "../../apps/web/src/research/studies/data/being-a-later-born.js";
 import { body as trust } from "../../apps/web/src/research/studies/data/judging-statement-truthfulness.js";
@@ -14,6 +15,7 @@ const rewritten = [
   ["hand-washing-in-restrooms", handHygiene],
   ["food-warning-labels", foodWarnings],
   ["daily-conversation-hearing", hearing],
+  ["daily-gratitude-and-well-being", gratitude],
 ] as const;
 
 for (const width of [375, 1366]) {
