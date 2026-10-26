@@ -68,12 +68,17 @@ evidence) sit in one uniform group below the card.
 | Client checks, or the upload endpoint answers 4xx | File can't be used (the message names the limit)  | Prepared studies or a different paper, as a choice                        |
 | Network error, timeout, cancel, 5xx               | Interrupted                                       | Check again; file stays selected                                          |
 | Failed or review job                              | The failed stage's `errorCode`, else unclassified | Retry this stage; prepared studies inside "Explore another study instead" |
+| Failed or review job with `not_applicable`        | The paper may not suit a lesson                   | Prepared studies shown openly; retry stays available                      |
 | Unsupported link on home                          | Inaccessible link                                 | Upload the PDF or view prepared studies                                   |
 
 Classification uses where the failure happened, never the error wording. A failed
-stage's saved `errorCode` (`timeout`, `output_limit`) is read first by
-`jobFailureReason`; both are retryable reasons with their own heading and plain
-explanation, and the provider text moves into a "Technical detail" disclosure.
+stage's saved `errorCode` (`timeout`, `output_limit`, `not_applicable`) is read
+first by `jobFailureReason`. The first two are retryable reasons with their own
+heading and plain explanation, and the provider text moves into a "Technical
+detail" disclosure. The server saves `not_applicable` when stage 0 reports missing
+evidence (not retried automatically), when content checks fail through every
+automatic retry, or when the final check rejects the lesson again after its
+automatic redraft.
 If a job later carries `reason` (proposal below), it is used next, and permanent
 reasons switch to the prepared-study choice.
 
@@ -239,11 +244,11 @@ reason to failed jobs and upload error responses:
 `inaccessible | invalid_file | unreadable_scan | not_applicable | temporary`,
 with a safe explanation (missing evidence or the actual limit), persisted with
 the document for history. Validation failures before a job exists need a
-retention decision. Until agreed, "not applicable" pipeline failures can't be
-told apart from temporary ones and both offer retry first.
+retention decision.
 
-The stage codes `timeout` and `output_limit` from #6 are now read from the failed
-audit; the five proposed reasons above remain unsent by the server.
+The stage codes `timeout` and `output_limit` from #6, and `not_applicable`, are now
+read from the failed audit; the other four proposed reasons remain unsent by the
+server.
 
 Handoff for live jobs (seventh pass): `onStart(job.id)` → `start` with `lessonId`
 → `#/research/play/:sessionId`, where the study intro's Begin calls `begin`. The

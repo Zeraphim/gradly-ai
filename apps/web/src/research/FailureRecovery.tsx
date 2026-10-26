@@ -2,10 +2,11 @@ import type { ProcessingJob } from "./types.js";
 import { ResearchLink as Link } from "./navigation.js";
 import { ActionLabel, Icon } from "./icon.js";
 
-// One reason list for intake and preparation. The first five are proposed
-// wire values (not yet sent by the server); `timeout` and `output_limit` are
-// the stage `errorCode` values the server saves on a failed audit. Unknown
-// values stay unclassified. Never derive suitability from free-text messages.
+// One reason list for intake and preparation. `timeout`, `output_limit` and
+// `not_applicable` are the stage `errorCode` values the server saves on a
+// failed audit; the other four are proposed wire values (not yet sent by the
+// server). Unknown values stay unclassified. Never derive suitability from
+// free-text messages.
 export type FailureReason =
   | "inaccessible"
   | "invalid_file"
@@ -93,6 +94,9 @@ export function FailureRecovery({
 }) {
   const permanent =
     permanentOverride ?? (reason !== undefined && !retryable.has(reason));
+  // An unsuitable paper may still pass on another attempt, so retry stays
+  // available next to the prepared studies.
+  const offerRetry = !!onRetry && (!permanent || reason === "not_applicable");
   const explanation = reason ? explanations[reason] : undefined;
   const choices = (
     <div className="failure-choices">
@@ -141,7 +145,7 @@ export function FailureRecovery({
         ) : (
           <p role="alert">{message}</p>
         )}
-        {!permanent && onRetry ? (
+        {offerRetry ? (
           <>
             <p className="failure-recovery-note">
               {reason === "timeout" || reason === "output_limit"
@@ -150,7 +154,7 @@ export function FailureRecovery({
             </p>
             <div className="actions">
               <button
-                className="btn primary compact"
+                className={`btn ${permanent ? "outline" : "primary"} compact`}
                 disabled={busy}
                 onClick={onRetry}
               >
@@ -159,10 +163,14 @@ export function FailureRecovery({
                 </ActionLabel>
               </button>
             </div>
-            <details className="failure-alternatives">
-              <summary>Explore another study instead</summary>
-              {choices}
-            </details>
+            {permanent ? (
+              <div className="failure-alternatives">{choices}</div>
+            ) : (
+              <details className="failure-alternatives">
+                <summary>Explore another study instead</summary>
+                {choices}
+              </details>
+            )}
           </>
         ) : (
           choices

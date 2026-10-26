@@ -137,7 +137,7 @@ export type Audit = {
   model: string;
   error?: string;
   /** Stable machine-readable failure code next to the human message. */
-  errorCode?: "output_limit" | "timeout";
+  errorCode?: "output_limit" | "timeout" | "not_applicable";
 };
 export type Job = {
   mode?: "demo" | "live";

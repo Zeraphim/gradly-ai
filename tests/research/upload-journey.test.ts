@@ -448,7 +448,7 @@ describe("waiting experience", () => {
   });
 
   it("explains stage error codes and keeps retry first", async () => {
-    const failed = (code: "timeout" | "output_limit") =>
+    const failed = (code: "timeout" | "output_limit" | "not_applicable") =>
       job(1, {
         status: "failed",
         error: "Provider detail.",
@@ -487,6 +487,22 @@ describe("waiting experience", () => {
     expect(
       screen.queryByRole("region", { name: "Warm-up while you wait" }),
     ).toBeNull();
+    // An unsuitable paper offers the prepared studies openly and keeps retry.
+    rerender(
+      h(ProcessingPage, pageProps({ job: failed("not_applicable"), onStep })),
+    );
+    expect(
+      screen.getByText("This paper needs more research detail"),
+    ).toBeTruthy();
+    expect(
+      screen
+        .getByRole("link", { name: /View prepared studies/ })
+        .closest("details"),
+    ).toBeNull();
+    await userEvent.click(
+      screen.getByRole("button", { name: /Retry this stage/ }),
+    );
+    expect(onStep).toHaveBeenCalledTimes(2);
   });
 
   it("offers an unscored warm-up and keeps the prediction in this browser", async () => {
