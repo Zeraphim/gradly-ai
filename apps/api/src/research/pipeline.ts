@@ -35,6 +35,8 @@ const roles: [string, string][] = [
     "Validate schema, excerpts, answer guides, and reviewer decisions.",
   ],
 ];
+/** Fewest verified stage-0 excerpts that can ground a lesson. */
+export const MIN_VERIFIED_EXCERPTS = 3;
 /** Stage-1 output: references are limited to verified stage-0 ids and the
  *  excerpts themselves are attached server-side, not re-emitted. */
 export function lessonDraftSchema(evidenceIds: string[]) {
@@ -102,6 +104,7 @@ export async function runStage(
       // Keep only verbatim excerpts; never show one that is not. Models
       // sometimes cite the wrong page, so an excerpt found on exactly one
       // other page is kept with that page.
+      const cited = j.evidence.refs.length;
       const verified = j.evidence.refs.flatMap((r) => {
         if (
           j.pages.some(
@@ -131,6 +134,12 @@ export async function runStage(
       if (j.evidence.missing.length)
         throw Error(
           `Insufficient research evidence: ${j.evidence.missing.join("; ").slice(0, 200)}. Try a complete research paper with enough source evidence.`,
+        );
+      // A lesson needs at least three grounded decisions. Fewer excerpts fail
+      // here, where a retry redraws evidence, not at review, where it cannot.
+      if (verified.length < MIN_VERIFIED_EXCERPTS)
+        throw Error(
+          `Too little extracted evidence matches the document (${verified.length} of ${cited} excerpts verified, ${MIN_VERIFIED_EXCERPTS} needed). Verification requires exact page excerpts. Retry this stage.`,
         );
       audit.summary = j.evidence.findings;
       audit.refs = j.evidence.refs.map((r) => r.id);
@@ -183,7 +192,12 @@ export async function runStage(
         j.review = assessment;
         j.status = "review";
         audit.status = "Needs Review";
-        j.error = assessment.issues.join("; ") || "This lesson needs review.";
+        // A rejection without issues still needs a reason the learner can read.
+        const summary = assessment.summary.trim();
+        j.error =
+          assessment.issues.join("; ") ||
+          `The ${audit.role} did not approve this lesson${summary ? `: ${summary}` : " and gave no reason."} Regenerate to draft and review it again.`;
+        if (!summary) audit.summary = j.error;
         j.leaseUntil = 0;
         logStop(j, j.error);
         return j;

@@ -17,7 +17,11 @@ import {
 } from "../../apps/api/src/research/engine.js";
 const page =
   "A complete empirical study of independent groups with a numerical outcome and random assignment. Reported group results and statistical test are described here.";
-const refs = [{ id: "source1", page: 1, excerpt: page }];
+const refs = [
+  { id: "source1", page: 1, excerpt: page },
+  { id: "source2", page: 1, excerpt: "independent groups with a numerical outcome" },
+  { id: "source3", page: 1, excerpt: "Reported group results and statistical test" },
+];
 const draft = {
   ...structuredClone(featured),
   id: "generated",
@@ -90,13 +94,19 @@ it("accepts PDF typography differences, drops paraphrased excerpts and hides nar
             excerpt:
               "exploring the extent to which the experimenter's own expectations may influence the results.",
           },
+          { id: "aim", page: 1, excerpt: "we report on two studies" },
+          { id: "design", page: 1, excerpt: "while improving on its design" },
         ],
         missing: [],
       },
     ]),
   );
   expect(next.status).not.toBe("failed");
-  expect(next.evidence?.refs.map((r) => r.id)).toEqual(["typography"]);
+  expect(next.evidence?.refs.map((r) => r.id)).toEqual([
+    "typography",
+    "aim",
+    "design",
+  ]);
   expect(next.audits[0]?.summary).not.toMatch(/user wants/i);
 });
 
@@ -195,7 +205,7 @@ it("limits lesson references to stage-0 ids and attaches verified evidence serve
     },
   });
   const wire = JSON.stringify(z.toJSONSchema(schemaSent!));
-  expect(wire).toContain('"enum":["source1"]');
+  expect(wire).toContain('"enum":["source1","source2","source3"]');
   expect(
     (z.toJSONSchema(schemaSent!) as { properties: object }).properties,
   ).not.toHaveProperty("evidence");
@@ -298,6 +308,7 @@ const qualitativeFinding =
 const qualitativeRefs = [
   { id: "approach", page: 1, excerpt: qualitativeDesign },
   { id: "accounts", page: 2, excerpt: qualitativeFinding },
+  { id: "memos", page: 1, excerpt: "researcher memos documenting interpretive decisions" },
 ];
 const qualitativeLesson: Lesson = {
   id: "qualitative-fixture",
@@ -400,9 +411,9 @@ const qualitativeLesson: Lesson = {
 };
 
 it("supports a nonnumeric qualitative investigation through verification and the learning loop", async () => {
-  const pages = qualitativeRefs.map(({ page, excerpt }) => ({
-    page,
-    text: excerpt,
+  const pages = [qualitativeDesign, qualitativeFinding].map((text, i) => ({
+    page: i + 1,
+    text,
   }));
   const outputs: unknown[] = [
     {
@@ -516,13 +527,17 @@ it("moves an exact excerpt cited on the wrong page to the one page that holds it
           { id: "moved", page: 5, excerpt: page },
           { id: "nowhere", page: 1, excerpt: "A sentence on no page at all." },
           { id: "ambiguous", page: 1, excerpt: other },
+          ...refs.slice(1),
         ],
         missing: [],
       },
     ]),
   );
   expect(next.status).toBe("pending");
-  expect(next.evidence?.refs).toEqual([{ id: "moved", page: 1, excerpt: page }]);
+  expect(next.evidence?.refs).toEqual([
+    { id: "moved", page: 1, excerpt: page },
+    ...refs.slice(1),
+  ]);
 });
 
 it("drops an unsupported paper link at verification instead of blocking the lesson", async () => {
@@ -539,4 +554,52 @@ it("drops an unsupported paper link at verification instead of blocking the less
   for (let n = 0; n < 5; n++) j = await runStage(j, p);
   expect(j.status).toBe("ready");
   expect(j.lesson?.paper.url).toBeNull();
+});
+
+it("fails stage 0 with a retry when fewer than three excerpts verify", async () => {
+  const j = newJob("thin", "paper.pdf", [{ page: 1, text: page }]);
+  const thin = await runStage(
+    j,
+    provider([
+      {
+        findings: "Evidence",
+        refs: [...refs.slice(0, 1), { id: "x", page: 1, excerpt: "Not in the paper." }],
+        missing: [],
+      },
+    ]),
+  );
+  expect(thin.status).toBe("failed");
+  expect(thin.stage).toBe(0);
+  expect(thin.error).toContain("1 of 2 excerpts verified, 3 needed");
+  expect(thin.error).toContain("Retry this stage");
+});
+
+it("explains a reviewer rejection that lists no issues", async () => {
+  const base = newJob("coach", "paper.pdf", [{ page: 1, text: page }]);
+  const toCoach = async (coach: unknown) => {
+    let j = base;
+    const p = provider([
+      { findings: "Study evidence located", refs, missing: [] },
+      draft,
+      { approved: true, issues: [], summary: "Methods fit evidence" },
+      coach,
+    ]);
+    for (let n = 0; n < 4; n++) j = await runStage(j, p);
+    return j;
+  };
+  const silent = await toCoach({ approved: false, issues: [], summary: " " });
+  expect(silent.status).toBe("review");
+  expect(silent.error).toBe(
+    "The Learning Coach did not approve this lesson and gave no reason. Regenerate to draft and review it again.",
+  );
+  expect(silent.audits[3]?.summary).toBe(silent.error);
+  const summarized = await toCoach({
+    approved: false,
+    issues: [],
+    summary: "Hints give away the answer.",
+  });
+  expect(summarized.error).toBe(
+    "The Learning Coach did not approve this lesson: Hints give away the answer. Regenerate to draft and review it again.",
+  );
+  expect(summarized.audits[3]?.summary).toBe("Hints give away the answer.");
 });

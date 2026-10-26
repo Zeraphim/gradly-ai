@@ -30,6 +30,17 @@ const refs = {
     excerpt:
       "The authored station study recruited commuters purposively for open-ended interviews, compared accounts and documented interpretive decisions. It did not measure population frequencies or test a signage intervention.",
   },
+  // Stage 0 needs three excerpts, so each lesson cites one narrower passage too.
+  observed: {
+    id: "observed",
+    page: 1,
+    excerpt: "District membership was observed, not randomly assigned.",
+  },
+  decisions: {
+    id: "decisions",
+    page: 1,
+    excerpt: "compared accounts and documented interpretive decisions",
+  },
 };
 const p = (
   ref: string,
@@ -230,7 +241,7 @@ export const quantitativeSceneLesson = lesson(
       ],
     ),
   ],
-  [refs.design, refs.results],
+  [refs.design, refs.results, refs.observed],
 );
 
 const interviewFlow: Scene = {
@@ -335,7 +346,14 @@ export const qualitativeSceneLesson = lesson(
       ],
     ),
   ],
-  [refs.interviews, refs.accounts],
+  [refs.interviews, refs.accounts, refs.decisions],
 );
+/** One page per cited page number; narrower excerpts sit inside a longer one. */
 export const sceneFixturePages = (value: Lesson) =>
-  value.evidence.map((ref) => ({ page: ref.page, text: ref.excerpt }));
+  [...new Set(value.evidence.map((ref) => ref.page))].map((page) => ({
+    page,
+    text: value.evidence
+      .filter((ref) => ref.page === page)
+      .map((ref) => ref.excerpt)
+      .join(" "),
+  }));
