@@ -254,6 +254,10 @@ it("limits lesson references to stage-0 ids and attaches verified evidence serve
   expect(
     (z.toJSONSchema(schemaSent!) as { properties: object }).properties,
   ).not.toHaveProperty("evidence");
+  expect(
+    (z.toJSONSchema(schemaSent!) as unknown as WireLesson).properties.challenges
+      .items.properties,
+  ).not.toHaveProperty("evidence");
   expect(drafted.status).toBe("pending");
   expect(drafted.lesson?.evidence).toEqual(refs);
 
@@ -668,18 +672,13 @@ it("builds a scene from the evidence when no drafted scene passes", async () => 
   const evidenceJob = await evidenceFor([{ page: 1, text: page }]);
   const plain = {
     ...draft,
-    challenges: draft.challenges.map((c, i) => ({
-      ...c,
-      scene: null,
-      // The challenge with its own evidence text is preferred.
-      evidence: i === 2 ? ["Two independent groups were compared."] : [],
-    })),
+    challenges: draft.challenges.map((c) => ({ ...c, scene: null })),
   };
   // A scene that breaks its own response mapping does not count either.
   const broken = structuredClone(draft);
   broken.challenges[0]!.scene!.responses[0]!.optionId = "unmapped";
   for (const [lesson, at, summary] of [
-    [plain, 2, "Drafted 3 challenges. Added a server-built scene."],
+    [plain, 0, "Drafted 3 challenges. Added a server-built scene."],
     [
       broken,
       0,
@@ -696,10 +695,8 @@ it("builds a scene from the evidence when no drafted scene passes", async () => 
     expect(j.status).toBe("ready");
   }
   const ready = await finish(await runStage(evidenceJob, provider([plain])));
-  const anchors = ready.lesson!.challenges[2]!.scene;
-  expect(anchors?.kind === "connections" && anchors.anchors[0]?.detail).toBe(
-    "Two independent groups were compared.",
-  );
+  const anchors = ready.lesson!.challenges[0]!.scene;
+  expect(anchors?.kind === "connections" && anchors.anchors[0]?.detail).toBe(page);
 });
 
 it("fails drafting when no scene can be built and redrafts on retry", async () => {
@@ -873,6 +870,60 @@ it("attaches verified added excerpts to a challenge and drops unverifiable ones"
   expect(j.audits[1]?.summary).toBe("Drafted 3 challenges with 1 added excerpt.");
   j = await finish(j);
   expect(j.status).toBe("ready");
+});
+
+it("shows cited excerpts as evidence, never ref ids, and no findings before a design answer", async () => {
+  const aspects = [
+    { id: "research_question_1", page: 1, excerpt: "We asked whether group size changes recall." },
+    { id: "approach_1", page: 1, excerpt: "Participants were randomly assigned to two groups." },
+    { id: "findings_1", page: 1, excerpt: "Recall was higher in the smaller group." },
+    { id: "limitations_1", page: 1, excerpt: "The sample came from one university." },
+  ];
+  const evidenceJob = await runStage(
+    newJob("aspects", "paper.pdf", [
+      { page: 1, text: aspects.map((r) => r.excerpt).join(" ") },
+    ]),
+    provider([{ paperSummary: "Study evidence located", refs: aspects, missing: [] }]),
+  );
+  const cited = [
+    // A design question citing a finding, with ids written as its evidence.
+    { reveal: "design", refs: ["research_question_1", "approach_1", "findings_1"], evidence: ["research_question_1"] },
+    { reveal: "results", refs: ["findings_1", "limitations_1"], evidence: ["limitations_2"] },
+    { reveal: "interpretation", refs: ["limitations_1"], evidence: ["limitations_1"] },
+  ] as const;
+  // No drafted scene, so the server builds one from the design question.
+  let j = await runStage(
+    evidenceJob,
+    provider([
+      {
+        ...draft,
+        challenges: draft.challenges.map((c, i) => ({ ...c, ...cited[i], scene: null })),
+      },
+    ]),
+  );
+  expect(j.status).toBe("pending");
+  const [design, results, limits] = j.lesson!.challenges;
+  const excerpt = (id: string) => aspects.find((r) => r.id === id)!.excerpt;
+  expect(design!.evidence).toEqual([
+    excerpt("research_question_1"),
+    excerpt("approach_1"),
+  ]);
+  expect(design!.refs).toContain("findings_1");
+  expect(results!.evidence).toEqual([excerpt("findings_1"), excerpt("limitations_1")]);
+  expect(limits!.evidence).toEqual([excerpt("limitations_1")]);
+  const ids = [...aspects.map((r) => r.id), "limitations_2"];
+  expect(
+    j.lesson!.challenges.flatMap((c) => c.evidence).some((e) => ids.includes(e)),
+  ).toBe(false);
+  // The server-built scene shows the same excerpts, so no finding leaks there.
+  const scene = design!.scene;
+  expect(scene?.kind === "connections" && scene.anchors.map((a) => a.detail)).toEqual(
+    design!.evidence,
+  );
+  j = await finish(j);
+  expect(j.status).toBe("ready");
+  const s = transition(newSession(j.lesson!, "aspects-session"), j.lesson!, "begin");
+  expect(publicSession(s, j.lesson!).challenge?.evidence).toEqual(design!.evidence);
 });
 
 it("fails drafting with a retry when a challenge has no hint", async () => {

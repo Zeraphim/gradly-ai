@@ -52,8 +52,10 @@ export function lessonDraftSchema(evidenceIds: string[]) {
   // grading accepts every alternative as correct. The server sets it empty.
   // No `accepted` either: drafts listed ids no option had, such as
   // "opt_opt_a", so each option carries its own correct flag instead.
+  // No `evidence`: drafts wrote ref ids such as "limitations_2" there, which
+  // learners saw as evidence. The server shows the cited excerpts instead.
   const challenge = challengeSchema
-    .omit({ alternatives: true, accepted: true })
+    .omit({ alternatives: true, accepted: true, evidence: true })
     .extend({
       options: z
         .array(
@@ -85,10 +87,15 @@ function answerable(c: DraftChallenge) {
   const correct = c.options.filter((o) => o.correct).length;
   return correct > 0 && correct < c.options.length;
 }
+/** Stage-0 ref ids named after a findings, claims or limitations aspect. */
+const resultsRef = /^(finding|claim|result|limitation)/i;
 /**
  * Adds a challenge's verbatim added excerpts to the lesson evidence and its
  * refs, dropping any not found in the document. Reviewers and learners see
  * only cited excerpts, so details used outside them read as unsupported.
+ * The challenge's evidence is the excerpts of its refs. A design question
+ * shows no results-side excerpt; its own added excerpts have no aspect and
+ * stay, since they were copied for that question.
  */
 function attachAddedExcerpts(
   { addedExcerpts, options, ...c }: DraftChallenge,
@@ -120,34 +127,24 @@ function attachAddedExcerpts(
     options: options.map(({ id, text }) => ({ id, text })),
     accepted,
     refs,
+    evidence: refs
+      .filter((id) => c.reveal !== "design" || !resultsRef.test(id))
+      .map((id) => evidence.find((r) => r.id === id)!.excerpt),
     alternatives: [],
   };
 }
 /**
  * A connections scene for one challenge. It shows the challenge's evidence
- * text, which the player already shows before an answer when a challenge has
- * no scene, or else the verified excerpts the challenge cites.
+ * excerpts, which the player already shows before an answer when a challenge
+ * has no scene.
  */
-function evidenceScene(
-  c: Challenge,
-  evidence: Lesson["evidence"],
-): SceneOf<"connections"> {
-  const texts = c.evidence.filter((e) => e.trim());
-  const provenance = texts.length
-    ? {
-        kind: "source-summary" as const,
-        refs: c.refs,
-        note: "Summary of the cited evidence.",
-      }
-    : {
-        kind: "reported" as const,
-        refs: c.refs,
-        note: "Verified excerpts from the paper.",
-      };
-  const details = texts.length
-    ? texts
-    : evidence.filter((r) => c.refs.includes(r.id)).map((r) => r.excerpt);
-  const anchors = details.slice(0, 6).map((detail, i) => ({
+function evidenceScene(c: Challenge): SceneOf<"connections"> {
+  const provenance = {
+    kind: "reported" as const,
+    refs: c.refs,
+    note: "Verified excerpts from the paper.",
+  };
+  const anchors = c.evidence.slice(0, 6).map((detail, i) => ({
     id: `evidence_${i + 1}`,
     label: `Evidence ${i + 1}`,
     detail: detail.slice(0, 600),
@@ -334,16 +331,11 @@ export async function runStage(
           removed++;
         }
       // When no drafted scene survives, one challenge gets a scene built from
-      // its evidence, installed only if it passes the same checks. Challenges
-      // with their own evidence text come first.
+      // its evidence, installed only if it passes the same checks.
       let built = false;
       if (sceneCoverageProblems(j.lesson).length)
-        for (const c of [...j.lesson.challenges].sort(
-          (a, b) =>
-            Number(!a.evidence.some((e) => e.trim())) -
-            Number(!b.evidence.some((e) => e.trim())),
-        )) {
-          const scene = evidenceScene(c, j.lesson.evidence);
+        for (const c of j.lesson.challenges) {
+          const scene = evidenceScene(c);
           if (
             !scene.anchors.length ||
             sceneFaults({ ...c, scene }, j.lesson.evidence).length
