@@ -49,6 +49,9 @@ export async function extractPdf(file: File): Promise<PageText[]> {
   } catch (e) {
     if (e instanceof ExtractionError) throw e;
     const message = e instanceof Error ? e.message : "";
+    console.warn(
+      `[PDF Extraction Warning] ${file.size} bytes — detail: ${message.slice(0, 300)}`,
+    );
     if (/password|encrypted/i.test(message))
       throw Error(
         "This PDF is password-protected. Upload an unlocked copy you may use.",

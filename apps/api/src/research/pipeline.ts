@@ -3,6 +3,7 @@ import { nebiusConfig } from "../nebius-config.js";
 import {
   challengeSchema,
   excerptMatches,
+  paperLinkSupported,
   generatedLessonSchema,
   MAX_GENERATED_CHALLENGES,
   refSchema,
@@ -66,6 +67,12 @@ export function newJob(id: string, name: string, pages: Job["pages"]): Job {
     })),
   };
 }
+/** Server log for a stopped stage. No page text or learner identifiers. */
+function logStop(j: Job, detail: string) {
+  console.warn(
+    `[Research Pipeline Warning] Job ${j.id} stopped — stage: ${j.stage} (${j.audits[j.stage]?.role}), status: ${j.status}, detail: ${detail.slice(0, 300)}`,
+  );
+}
 export async function runStage(
   job: Job,
   provider: ModelProvider,
@@ -92,12 +99,21 @@ export async function runStage(
         pipelineModel,
         { tier: "pipeline" },
       );
-      // Discard any excerpt that is not verbatim on its page; never show it.
-      const verified = j.evidence.refs.filter((r) =>
-        j.pages.some(
-          (p) => p.page === r.page && excerptMatches(p.text, r.excerpt),
-        ),
-      );
+      // Keep only verbatim excerpts; never show one that is not. Models
+      // sometimes cite the wrong page, so an excerpt found on exactly one
+      // other page is kept with that page.
+      const verified = j.evidence.refs.flatMap((r) => {
+        if (
+          j.pages.some(
+            (p) => p.page === r.page && excerptMatches(p.text, r.excerpt),
+          )
+        )
+          return [r];
+        const [only, ...more] = j.pages.filter((p) =>
+          excerptMatches(p.text, r.excerpt),
+        );
+        return only && !more.length ? [{ ...r, page: only.page }] : [];
+      });
       if (!verified.length)
         throw Error(
           `Extracted evidence does not match the document (0 of ${j.evidence.refs.length} excerpts verified). Verification requires exact page excerpts.`,
@@ -169,10 +185,18 @@ export async function runStage(
         audit.status = "Needs Review";
         j.error = assessment.issues.join("; ") || "This lesson needs review.";
         j.leaseUntil = 0;
+        logStop(j, j.error);
         return j;
       }
       if (j.stage === 2) j.review = assessment;
     } else {
+      // The paper link is reveal-only metadata, so an unsupported one is
+      // dropped instead of blocking the lesson.
+      if (
+        j.lesson!.paper.url &&
+        !paperLinkSupported(j.lesson!.paper.url, j.pages)
+      )
+        j.lesson!.paper.url = null;
       const problems = verifyLesson(j.lesson!, j.pages);
       if (!j.review?.approved)
         problems.push("Research methods review is missing.");
@@ -183,6 +207,7 @@ export async function runStage(
         audit.summary = problems.join(" ");
         j.error = audit.summary;
         j.leaseUntil = 0;
+        logStop(j, j.error);
         return j;
       }
       audit.model = "Deterministic validator";
@@ -208,6 +233,7 @@ export async function runStage(
     j.status = "failed";
     j.error = audit.error;
     j.leaseUntil = 0;
+    logStop(j, `${audit.errorCode ? `${audit.errorCode}: ` : ""}${j.error}`);
     return j;
   }
 }

@@ -498,3 +498,45 @@ it("blocks an evidence-poor document without falling back to authored research",
   expect(result.error).toContain("Insufficient research evidence");
   expect(result.audits[0]?.status).toBe("Failed");
 });
+
+it("moves an exact excerpt cited on the wrong page to the one page that holds it", async () => {
+  const other =
+    "Participants logged the behaviour each day in a smartphone app for twelve weeks of the field study.";
+  const j = newJob("wrong-page", "paper.pdf", [
+    { page: 1, text: page },
+    { page: 2, text: other },
+    { page: 3, text: `${other} The same sentence appears again here.` },
+  ]);
+  const next = await runStage(
+    j,
+    provider([
+      {
+        findings: "Evidence",
+        refs: [
+          { id: "moved", page: 5, excerpt: page },
+          { id: "nowhere", page: 1, excerpt: "A sentence on no page at all." },
+          { id: "ambiguous", page: 1, excerpt: other },
+        ],
+        missing: [],
+      },
+    ]),
+  );
+  expect(next.status).toBe("pending");
+  expect(next.evidence?.refs).toEqual([{ id: "moved", page: 1, excerpt: page }]);
+});
+
+it("drops an unsupported paper link at verification instead of blocking the lesson", async () => {
+  let j = newJob("link", "paper.pdf", [{ page: 1, text: page }]);
+  const p = provider([
+    { findings: "Study evidence located", refs, missing: [] },
+    {
+      ...draft,
+      paper: { ...draft.paper, url: "https://doi.org/10.9999/not-in-this-paper" },
+    },
+    { approved: true, issues: [], summary: "Methods fit evidence" },
+    { approved: true, issues: [], summary: "Guidance supports revision" },
+  ]);
+  for (let n = 0; n < 5; n++) j = await runStage(j, p);
+  expect(j.status).toBe("ready");
+  expect(j.lesson?.paper.url).toBeNull();
+});
