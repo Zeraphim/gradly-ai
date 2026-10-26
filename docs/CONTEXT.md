@@ -4,60 +4,60 @@
 
 ## Authority Domains
 
-| Domain              | Purpose                           | Sources                                                                                                                 |
-| ------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| architecture        | Why the system is shaped this way | Accepted records under docs/adr/; none currently accepted                                                               |
-| delivery-status     | What work is active or complete   | Explicit current task and verified change state; no active tracker nominated in this repository                         |
-| operating-procedure | How contributors and agents work  | AGENTS.md → Project-local skills                                                                                        |
-| product-intent      | What the product should do        | Explicit current task clarification → docs/REQUIREMENTS.md; distinguish documented requirements from approved proposals |
-| runtime             | What currently executes           | Current code → Passing tests                                                                                            |
-| visual-intent       | Approved interface direction      | Explicitly approved local design evidence; no approval event established for adopted documents                          |
+| Domain | Purpose | Sources |
+|---|---|---|
+| architecture | Why the system is shaped this way | Accepted records under docs/adr/; none currently accepted |
+| delivery-status | What work is active or complete | Explicit current task and verified change state; no active tracker nominated in this repository |
+| operating-procedure | How contributors and agents work | AGENTS.md → Project-local skills |
+| product-intent | What the product should do | Explicit current task clarification → docs/REQUIREMENTS.md; distinguish documented requirements from approved proposals |
+| runtime | What currently executes | Current code → Passing tests |
+| visual-intent | Approved interface direction | Explicitly approved local design evidence; no approval event established for adopted documents |
 
 ## Repository Scopes
 
-| Scope      | Instructions         | Skills                                                                          |
-| ---------- | -------------------- | ------------------------------------------------------------------------------- |
-| `.`        | `AGENTS.md`          | project-context, documentation-maintenance, vercel-delivery, merge-verification |
-| `apps/api` | `apps/api/AGENTS.md` |                                                                                 |
-| `apps/web` | `apps/web/AGENTS.md` | gradly-motion                                                                   |
+| Scope | Instructions | Skills |
+|---|---|---|
+| `.` | `AGENTS.md` | project-context, documentation-maintenance, vercel-delivery, merge-verification |
+| `apps/api` | `apps/api/AGENTS.md` |  |
+| `apps/web` | `apps/web/AGENTS.md` | gradly-motion |
 
 ## Context Artifacts
 
-| ID                          | Kind        | Status                                       | Title                                                                 | Path                                                | Owners |
-| --------------------------- | ----------- | -------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------- | ------ |
-| `adr-0001`                  | adr         | Proposed                                     | Proposed architecture decision record process                         | `docs/adr/ADR-0001-we-use-adrs.md`                  |        |
-| `api-instructions`          | instruction | Active                                       | Application server instructions                                       | `apps/api/AGENTS.md`                                |        |
-| `root-instructions`         | instruction | Active                                       | Repository agent instructions                                         | `AGENTS.md`                                         |        |
-| `web-instructions`          | instruction | Active                                       | Learner interface instructions                                        | `apps/web/AGENTS.md`                                |        |
-| `adr-template`              | other       | Template                                     | Architecture decision template                                        | `docs/adr/TEMPLATE.md`                              |        |
-| `generated-studies`         | other       | Reference                                    | Nemotron-generated prepared studies record                            | `docs/research/GENERATED_STUDIES.md`                |        |
-| `interaction-references`    | other       | Reference                                    | Historical interaction research and design proposals                  | `docs/INTERACTION_REFERENCES.md`                    |        |
-| `nemotron-evaluation`       | other       | Reference                                    | Nemotron paper-reading and hallucination evaluation                   | `docs/research/NEMOTRON_EVALUATION.md`              |        |
-| `paper-selection`           | other       | Reference                                    | Vetted candidate paper studies for Gradly                             | `docs/research/PAPER_SELECTION.md`                  |        |
-| `prepared-study-review`     | other       | Reference                                    | Prepared-study review register                                        | `docs/research/PREPARED_STUDY_REVIEW.md`            |        |
-| `research-learning-design`  | other       | Reference                                    | Learning research and future content proposals                        | `docs/RESEARCH_LEARNING_DESIGN.md`                  |        |
-| `ui-template`               | other       | Template                                     | Local interface evidence template                                     | `docs/ui/TEMPLATE.md`                               |        |
-| `product-direction`         | plan        | Reference                                    | Product direction and evaluation proposals                            | `docs/PRODUCT_DIRECTION.md`                         |        |
-| `reasoning-preview`         | requirement | Mixed current behavior and proposed contract | Authored showcase and proposed live-review contract                   | `docs/REASONING_PREVIEW.md`                         |        |
-| `requirements`              | requirement | Documented                                   | Product requirements and acceptance                                   | `docs/REQUIREMENTS.md`                              |        |
-| `architecture`              | runbook     | Descriptive                                  | Current module and data-flow descriptions                             | `docs/ARCHITECTURE.md`                              |        |
-| `contributor-readme`        | runbook     | Active                                       | Setup and contributor entrypoint                                      | `README.md`                                         |        |
-| `documentation-guide`       | runbook     | Active                                       | Documentation provenance and shared agent setup                       | `docs/README.md`                                    |        |
-| `merge-guardrails`          | runbook     | Documented                                   | Integration failure evidence and merge verification matrix            | `docs/MERGE_GUARDRAILS.md`                          |        |
-| `research-integration`      | runbook     | Documented                                   | Research configuration, boundaries, and historical integration checks | `docs/RESEARCH_INTEGRATION.md`                      |        |
-| `scene-authoring`           | runbook     | Documented                                   | Reusable research scene contract and integration                      | `docs/SCENE_AUTHORING.md`                           |        |
-| `testing`                   | runbook     | Documented                                   | Validation commands and retained historical test reports              | `docs/TESTING.md`                                   |        |
-| `documentation-maintenance` | skill       | Active                                       | Documentation and context lifecycle                                   | `.agents/skills/documentation-maintenance/SKILL.md` |        |
-| `gradly-motion`             | skill       | Active                                       | Site-wide micro-interaction and motion consistency                    | `.agents/skills/gradly-motion/SKILL.md`             |        |
-| `merge-verification`        | skill       | Active                                       | Pull-request readiness and post-integration verification              | `.agents/skills/merge-verification/SKILL.md`        |        |
-| `project-context`           | skill       | Active                                       | Stack, layout, commands, and configuration                            | `.agents/skills/project-context/SKILL.md`           |        |
-| `vercel-delivery`           | skill       | Active                                       | Vercel packaging and delivery checks                                  | `.agents/skills/vercel-delivery/SKILL.md`           |        |
-| `design`                    | ui          | Proposed                                     | Interface conventions and retained historical design sections         | `docs/DESIGN.md`                                    |        |
-| `fresh-adventure-motion`    | ui          | Proposed                                     | Fresh Adventure shared motion and interaction coverage                | `docs/ui/FRESH_ADVENTURE_MOTION.md`                 |        |
-| `fresh-adventure-ui`        | ui          | Proposed                                     | Fresh Adventure visual scenes and verification limits                 | `docs/ui/FRESH_ADVENTURE.md`                        |        |
-| `intake-processing-ui`      | ui          | Proposed                                     | Intake, review, preparation and player handoff (issue 12)             | `docs/ui/INTAKE_PROCESSING.md`                      |        |
-| `prepared-studies-ui`       | ui          | Proposed                                     | Prepared-study library and journey player                             | `docs/ui/PREPARED_STUDIES.md`                       |        |
-| `ui-polish-review`          | validation  | Historical report                            | Historical source and browser polish review                           | `docs/UI_POLISH_REVIEW.md`                          |        |
+| ID | Kind | Status | Title | Path | Owners |
+|---|---|---|---|---|---|
+| `adr-0001` | adr | Proposed | Proposed architecture decision record process | `docs/adr/ADR-0001-we-use-adrs.md` |  |
+| `api-instructions` | instruction | Active | Application server instructions | `apps/api/AGENTS.md` |  |
+| `root-instructions` | instruction | Active | Repository agent instructions | `AGENTS.md` |  |
+| `web-instructions` | instruction | Active | Learner interface instructions | `apps/web/AGENTS.md` |  |
+| `adr-template` | other | Template | Architecture decision template | `docs/adr/TEMPLATE.md` |  |
+| `generated-studies` | other | Reference | Nemotron-generated prepared studies record | `docs/research/GENERATED_STUDIES.md` |  |
+| `interaction-references` | other | Reference | Historical interaction research and design proposals | `docs/INTERACTION_REFERENCES.md` |  |
+| `nemotron-evaluation` | other | Reference | Nemotron paper-reading and hallucination evaluation | `docs/research/NEMOTRON_EVALUATION.md` |  |
+| `paper-selection` | other | Reference | Vetted candidate paper studies for Gradly | `docs/research/PAPER_SELECTION.md` |  |
+| `prepared-study-review` | other | Reference | Prepared-study review register | `docs/research/PREPARED_STUDY_REVIEW.md` |  |
+| `research-learning-design` | other | Reference | Learning research and future content proposals | `docs/RESEARCH_LEARNING_DESIGN.md` |  |
+| `ui-template` | other | Template | Local interface evidence template | `docs/ui/TEMPLATE.md` |  |
+| `product-direction` | plan | Reference | Product direction and evaluation proposals | `docs/PRODUCT_DIRECTION.md` |  |
+| `reasoning-preview` | requirement | Mixed current behavior and proposed contract | Authored showcase and proposed live-review contract | `docs/REASONING_PREVIEW.md` |  |
+| `requirements` | requirement | Documented | Product requirements and acceptance | `docs/REQUIREMENTS.md` |  |
+| `architecture` | runbook | Descriptive | Current module and data-flow descriptions | `docs/ARCHITECTURE.md` |  |
+| `contributor-readme` | runbook | Active | Setup and contributor entrypoint | `README.md` |  |
+| `documentation-guide` | runbook | Active | Documentation provenance and shared agent setup | `docs/README.md` |  |
+| `merge-guardrails` | runbook | Documented | Integration failure evidence and merge verification matrix | `docs/MERGE_GUARDRAILS.md` |  |
+| `research-integration` | runbook | Documented | Research configuration, boundaries, and historical integration checks | `docs/RESEARCH_INTEGRATION.md` |  |
+| `scene-authoring` | runbook | Documented | Reusable research scene contract and integration | `docs/SCENE_AUTHORING.md` |  |
+| `testing` | runbook | Documented | Validation commands and retained historical test reports | `docs/TESTING.md` |  |
+| `documentation-maintenance` | skill | Active | Documentation and context lifecycle | `.agents/skills/documentation-maintenance/SKILL.md` |  |
+| `gradly-motion` | skill | Active | Site-wide micro-interaction and motion consistency | `.agents/skills/gradly-motion/SKILL.md` |  |
+| `merge-verification` | skill | Active | Pull-request readiness and post-integration verification | `.agents/skills/merge-verification/SKILL.md` |  |
+| `project-context` | skill | Active | Stack, layout, commands, and configuration | `.agents/skills/project-context/SKILL.md` |  |
+| `vercel-delivery` | skill | Active | Vercel packaging and delivery checks | `.agents/skills/vercel-delivery/SKILL.md` |  |
+| `design` | ui | Proposed | Interface conventions and retained historical design sections | `docs/DESIGN.md` |  |
+| `fresh-adventure-motion` | ui | Proposed | Fresh Adventure shared motion and interaction coverage | `docs/ui/FRESH_ADVENTURE_MOTION.md` |  |
+| `fresh-adventure-ui` | ui | Proposed | Fresh Adventure visual scenes and verification limits | `docs/ui/FRESH_ADVENTURE.md` |  |
+| `intake-processing-ui` | ui | Proposed | Intake, review, preparation and player handoff (issue 12) | `docs/ui/INTAKE_PROCESSING.md` |  |
+| `prepared-studies-ui` | ui | Proposed | Prepared-study library and journey player | `docs/ui/PREPARED_STUDIES.md` |  |
+| `ui-polish-review` | validation | Historical report | Historical source and browser polish review | `docs/UI_POLISH_REVIEW.md` |  |
 
 ## Context Commands
 

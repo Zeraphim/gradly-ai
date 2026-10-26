@@ -5,6 +5,8 @@ import { body as handHygiene } from "../../apps/web/src/research/studies/data/ha
 import { body as gratitude } from "../../apps/web/src/research/studies/data/daily-gratitude-and-well-being.js";
 import { body as hearing } from "../../apps/web/src/research/studies/data/daily-conversation-hearing.js";
 import { body as laterBorn } from "../../apps/web/src/research/studies/data/being-a-later-born.js";
+import { body as morning } from "../../apps/web/src/research/studies/data/morning-people-and-life-satisfaction.js";
+import { body as tracing } from "../../apps/web/src/research/studies/data/tracing-shapes-while-brainstorming.js";
 import { body as trust } from "../../apps/web/src/research/studies/data/judging-statement-truthfulness.js";
 
 // Studies whose questions were rewritten as decisions for issue #31. Each is walked
@@ -16,6 +18,8 @@ const rewritten = [
   ["food-warning-labels", foodWarnings],
   ["daily-conversation-hearing", hearing],
   ["daily-gratitude-and-well-being", gratitude],
+  ["tracing-shapes-while-brainstorming", tracing],
+  ["morning-people-and-life-satisfaction", morning],
 ] as const;
 
 for (const width of [375, 1366]) {

@@ -22,10 +22,10 @@ stored PDF. It is not approval by the content-review owner.
 
 | Measure                                                                         | Before (`main`) | Now       |
 | ------------------------------------------------------------------------------- | --------------- | --------- |
-| Studies rewritten and checked against the PDF                                   | 0               | 7         |
-| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 50 of 305 |
-| Questions with a scene                                                          | 43              | 56        |
-| Studies with no limitations recorded                                            | 30              | 23        |
+| Studies rewritten and checked against the PDF                                   | 0               | 9         |
+| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 43 of 305 |
+| Questions with a scene                                                          | 43              | 57        |
+| Studies with no limitations recorded                                            | 30              | 22        |
 | Questions with a garbled step label (for example "2 of 6 · , ")                 | 181             | 0         |
 
 The detector misses paraphrased giveaways, so the flagged counts understate the problem.
@@ -45,7 +45,7 @@ Verified against the stored PDF or the data file, not inferred.
 | recalling-personal-details                                                                                                     | c2 asks which variables were manipulated; every option is a task order.                                                                                             | **Open**                                                        |
 | daily-gratitude-and-well-being                                                                                                 | c1 scene was a placeholder: one node, a self-loop, every option pointing at it.                                                                                     | Fixed (study rewritten)                                         |
 | stroop-task-performance                                                                                                        | c1 scene node text restates the accepted answer.                                                                                                                    | **Open**                                                        |
-| tracing-shapes-while-brainstorming                                                                                             | c5 scene node text restates the accepted answer.                                                                                                                    | **Open**                                                        |
+| tracing-shapes-while-brainstorming                                                                                             | c5 scene node text restated the accepted answer.                                                                                                                    | Fixed (study rewritten)                                         |
 | imagining-survival-scenarios                                                                                                   | c1 asks for "factor(s)" and accepts one, while its own evidence names two manipulated factors.                                                                      | **Open**                                                        |
 | body-posture-judgments, walking-speed-test                                                                                     | A bare number not found in the paper is the accepted answer (body-posture c3); an evidence line contains "F(1,119) = ?" (walking-speed c3).                         | **Open**                                                        |
 | 31 studies                                                                                                                     | Step labels were punctuation fragments (181 questions). Replaced by "Read the design", "Read the results" or "Draw a conclusion" from each question's reveal stage. | Fixed                                                           |
@@ -111,7 +111,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | food-warning-labels                   | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 13 of 13          | —                                                                                                              |
 | imagining-survival-scenarios          | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 7 of 10           | c1 asks for "factor(s)" but accepts one while its own evidence names two (confirmed)                           |
 | stroop-task-performance               | generated | Draft: not reviewed                                               | 1 → 1 of 5 | 3 of 8            | c1 scene text states the answer (confirmed); c5 reference unconfirmed                                          |
-| morning-people-and-life-satisfaction  | generated | Draft: not reviewed                                               | 3 → 3 of 6 | 3 of 10           | no limitations recorded                                                                                        |
+| morning-people-and-life-satisfaction  | generated | Rewritten and checked against the PDF                             | 3 → 0 of 6 | 13 of 13          | —                                                                                                              |
 | daily-gratitude-and-well-being        | generated | Rewritten and checked against the PDF                             | 4 → 1 of 6 | 13 of 13          | —                                                                                                              |
 | bus-ridership-behavior                | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 9 of 11           | no limitations recorded                                                                                        |
 | anticipating-a-shock                  | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 1 of 10           | —                                                                                                              |
@@ -124,7 +124,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | body-posture-judgments                | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 11 of 12          | no limitations recorded; takeaway says none; c3 accepted answer "0.93" is a bare number not found in the paper |
 | science-video-trust                   | generated | Draft: not reviewed                                               | 2 → 2 of 6 | 4 of 6            | no limitations recorded                                                                                        |
 | phone-use-while-driving               | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 2 of 6            | —                                                                                                              |
-| tracing-shapes-while-brainstorming    | generated | Draft: not reviewed                                               | 4 → 4 of 6 | 5 of 8            | c5 scene text states the answer (confirmed)                                                                    |
+| tracing-shapes-while-brainstorming    | generated | Rewritten and checked against the PDF                             | 4 → 0 of 6 | 15 of 15          | —                                                                                                              |
 | daily-conversation-hearing            | generated | Rewritten and checked against the PDF                             | 3 → 0 of 6 | 12 of 12          | —                                                                                                              |
 | building-daily-habits                 | generated | Draft: not reviewed                                               | 2 → 2 of 6 | 9 of 14           | —                                                                                                              |
 | judging-statement-truthfulness        | generated | Rewritten and checked against the PDF                             | 3 → 1 of 6 | 16 of 16          | —                                                                                                              |
@@ -167,6 +167,6 @@ the same way as `tests/research/papers-setup.ts`.
 ## Next steps
 
 1. A reader with the paper open works through the "Open" rows and the leads table.
-2. Rewrite the remaining 38 drafts in order of
+2. Rewrite the remaining 36 drafts in order of
    flagged count, checking every kept fact against the PDF, as the rewritten studies were.
 3. Set `reviewed: true` only after the content-review owner approves a study.
