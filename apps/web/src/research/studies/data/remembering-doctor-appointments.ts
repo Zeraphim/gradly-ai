@@ -115,7 +115,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design Overview",
         type: "single",
         prompt:
@@ -149,7 +149,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Controlling for Reading Comprehension",
         type: "single",
         prompt:
@@ -182,7 +182,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Main Effect of ABST on TBPM Accuracy",
         type: "single",
         prompt:
@@ -290,7 +290,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Age‑Stratified Effect of ABST",
         type: "single",
         prompt:
@@ -323,7 +323,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation of the Age‑Specific Effect",
         type: "single",
         prompt:
@@ -356,7 +356,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Limitation Regarding Intersectional Stereotypes",
         type: "single",
         prompt:

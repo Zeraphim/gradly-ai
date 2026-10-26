@@ -206,7 +206,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Goal",
         type: "single",
         prompt: "What was the primary aim of the preregistered study?",
@@ -320,7 +320,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Detectable Effect Size",
         type: "single",
         prompt:
@@ -363,7 +363,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Main Effect Result",
         type: "single",
         prompt:
@@ -401,7 +401,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Moderation Effect Result",
         type: "multiple",
         prompt:
@@ -503,7 +503,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Limitation – Power",
         type: "single",
         prompt:

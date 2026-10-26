@@ -198,7 +198,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design Identification",
         type: "single",
         prompt:
@@ -242,7 +242,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Identifying the Hypotheses Tested",
         type: "multiple",
         prompt:
@@ -286,7 +286,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Interpreting Regression Coefficients for Natural Elements",
         type: "single",
         prompt:
@@ -329,7 +329,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Understanding the Mediating Effect",
         type: "single",
         prompt:
@@ -372,7 +372,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Recognizing Limits of Causal Inference",
         type: "single",
         prompt:

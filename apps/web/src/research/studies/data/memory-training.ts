@@ -85,7 +85,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "How were participants assigned to groups?",
         type: "single",
         prompt:
@@ -124,7 +124,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "What comparison tested the placebo effect hypothesis?",
         type: "single",
         prompt:
@@ -163,7 +163,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title:
           "What were the reported statistics for the Raven’s Advanced Progressive Matrices (far‑transfer) test?",
         type: "single",
@@ -202,7 +202,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title:
           "What overall conclusion did the authors draw about placebo effects?",
         type: "single",
@@ -242,7 +242,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title:
           "Which alternative explanation could account for the null finding regarding mindset and placebo effects?",
         type: "single",
@@ -282,7 +282,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title:
           "What does the lack of fluid‑intelligence improvement in either group imply about the earlier Foroughi et al. (2016) finding?",
         type: "single",

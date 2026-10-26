@@ -570,7 +570,66 @@ export const body: StudyBody = {
           "Badminton vs rest: t(19) = 3.6, p = .002, d = 0.80.",
           "Running vs rest: t(19) = 1.3, p = .207, d = 0.29.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "tests",
+          title: "Two comparisons with seated rest",
+          instruction: "Compare each p-value with the corrected threshold.",
+          description: "Two comparisons with seated rest",
+          provenance: {
+            kind: "reported",
+            refs: ["alpha", "vsrest"],
+            note: "Threshold and p-values as reported in the cited passages.",
+          },
+          responses: [
+            {
+              optionId: "A",
+              label:
+                "Badminton's gain was significantly larger than rest's. Running's gain was not.",
+              targetIds: ["badminton", "running"],
+            },
+            {
+              optionId: "B",
+              label:
+                "Both exercises beat rest, because both gained more items than rest did.",
+              targetIds: ["badminton", "running"],
+            },
+            {
+              optionId: "C",
+              label: "Running made performance significantly worse than rest.",
+              targetIds: ["badminton", "running"],
+            },
+          ],
+          resolution: null,
+          alpha: 0.008,
+          tests: [
+            {
+              id: "badminton",
+              label: "Badminton vs rest",
+              detail: "p = .002.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["alpha", "vsrest"],
+                note: "Threshold and p-values as reported in the cited passages.",
+              },
+              p: 0.002,
+            },
+            {
+              id: "running",
+              label: "Running vs rest",
+              detail: "p = .207.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["alpha", "vsrest"],
+                note: "Threshold and p-values as reported in the cited passages.",
+              },
+              p: 0.207,
+            },
+          ],
+          prediction: null,
+        },
         refs: ["alpha", "vsrest"],
         writtenReasoning: false,
         responseStyle: "cards",

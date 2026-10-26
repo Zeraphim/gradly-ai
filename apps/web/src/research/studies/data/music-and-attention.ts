@@ -186,7 +186,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Within‑Subject Factors",
         type: "single",
         prompt: "Which factors were manipulated within participants?",
@@ -228,7 +228,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Dependent Variables Measured",
         type: "single",
         prompt: "What outcome measures were collected in the flanker task?",
@@ -270,7 +270,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Flanker Effect Across Music Conditions",
         type: "single",
         prompt:
@@ -313,7 +313,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Age Interaction",
         type: "single",
         prompt:
@@ -357,7 +357,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Implication for Arousal‑Mood Theory",
         type: "single",
         prompt:
@@ -402,7 +402,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Limitation Concerning Error Rates",
         type: "single",
         prompt:

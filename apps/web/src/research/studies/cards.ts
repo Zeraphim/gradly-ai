@@ -299,7 +299,14 @@ export const studyCards: StudyCard[] = [
     topic: "environment",
     minutes: 10,
     reviewed: false,
-    challenges: ["c1", "c2", "c3", "c4", "c5", "c6"],
+    challenges: [
+      "decision1",
+      "decision2",
+      "decision3",
+      "decision4",
+      "decision5",
+      "decision6",
+    ],
   },
   {
     slug: "body-posture-judgments",

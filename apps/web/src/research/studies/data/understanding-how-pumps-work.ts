@@ -203,7 +203,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ",type: ",
+        stage: "Read the design",
         title: "Design Choice: Participant Grouping",
         type: "single",
         prompt: "How were participants assigned to spatial ability groups?",
@@ -236,7 +236,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ",type: ",
+        stage: "Read the design",
         title: "Design Choice: Dependent Variable",
         type: "single",
         prompt:
@@ -270,7 +270,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ",type: ",
+        stage: "Read the results",
         title: "Result: Interaction Effect",
         type: "single",
         prompt:
@@ -303,7 +303,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ",type: ",
+        stage: "Read the results",
         title: "Result: Structural Components Difference",
         type: "single",
         prompt:
@@ -336,7 +336,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ",type: ",
+        stage: "Draw a conclusion",
         title: "Interpretation: Mechanism for Visual Benefit",
         type: "single",
         prompt:
@@ -370,7 +370,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ",type: ",
+        stage: "Draw a conclusion",
         title: "Interpretation: Limits of the Finding",
         type: "single",
         prompt:

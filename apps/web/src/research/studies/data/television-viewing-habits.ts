@@ -197,7 +197,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design Identification",
         type: "single",
         prompt:
@@ -242,7 +242,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the results",
         title: "Prevalence of Incorrect Answers",
         type: "single",
         prompt:
@@ -287,7 +287,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Association Between TV Viewing and Incorrect Answers",
         type: "single",
         prompt:
@@ -332,7 +332,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation of the Low Direct‑Question Error Rate",
         type: "single",
         prompt:
@@ -378,7 +378,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Role of Age and Sample Limitations",
         type: "single",
         prompt:

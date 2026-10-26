@@ -205,7 +205,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study hypothesis and design",
         type: "single",
         prompt:
@@ -245,7 +245,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Planned analytic approach",
         type: "single",
         prompt:
@@ -285,7 +285,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Observed participation rates",
         type: "single",
         prompt:
@@ -325,7 +325,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Statistical test outcomes",
         type: "single",
         prompt:
@@ -365,7 +365,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation of the null finding",
         type: "multiple",
         prompt:
@@ -413,7 +413,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Limitation that could be addressed in future work",
         type: "single",
         prompt:

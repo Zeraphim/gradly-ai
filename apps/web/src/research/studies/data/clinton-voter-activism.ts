@@ -202,7 +202,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "What interaction does the study test?",
         type: "single",
         prompt:
@@ -246,7 +246,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Why did the authors choose a longitudinal design?",
         type: "single",
         prompt:
@@ -290,7 +290,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "What was the main effect of activism on well‑being?",
         type: "single",
         prompt:
@@ -334,7 +334,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title:
           "For highly identified Clinton voters, how does activism relate to depressive symptoms?",
         type: "single",
@@ -379,7 +379,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title:
           "What does the gender difference in follow‑up completion suggest?",
         type: "single",

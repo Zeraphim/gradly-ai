@@ -90,7 +90,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Identify the Independent Variable Conditions",
         type: "single",
         prompt:
@@ -133,7 +133,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Identify the Dependent Variables Measured",
         type: "single",
         prompt: "Which dependent variables were assessed in the experiment?",
@@ -176,7 +176,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Effect of the Conventional Swear Word on Pain Outcomes",
         type: "single",
         prompt:
@@ -220,7 +220,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Effect of the Novel Swear Words on Pain Outcomes",
         type: "single",
         prompt:
@@ -264,7 +264,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Role of Distraction as a Mediator",
         type: "single",
         prompt:
@@ -307,7 +307,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Putative Mechanism Underlying Swearing’s Analgesia",
         type: "single",
         prompt:

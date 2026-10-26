@@ -172,7 +172,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design Identification",
         type: "single",
         prompt:
@@ -216,7 +216,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Sampling Approach",
         type: "single",
         prompt: "How was the sample obtained for this study?",
@@ -258,7 +258,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Adjusted Associations",
         type: "single",
         prompt:
@@ -302,7 +302,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Effect Size for Female Gender",
         type: "single",
         prompt:
@@ -343,7 +343,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Explaining the Null Finding for Social Media",
         type: "single",
         prompt:
@@ -386,7 +386,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Alternative Aspects of Social Media Use",
         type: "single",
         prompt:

@@ -204,7 +204,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design – Assignment and Conditions",
         type: "single",
         prompt: "How were participants allocated to the experimental groups?",
@@ -324,7 +324,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design – Sample Description",
         type: "single",
         prompt: "Which description matches the sample used in the experiment?",
@@ -355,7 +355,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Results – Reliability Difference",
         type: "single",
         prompt:
@@ -388,7 +388,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Results – Satisfaction Difference",
         type: "single",
         prompt:
@@ -421,7 +421,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation – Meaning and Limits",
         type: "single",
         prompt:

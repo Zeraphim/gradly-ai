@@ -35,6 +35,17 @@ npm run build:vercel
 
 The retired standalone paper-case implementation and its dedicated tests are removed together. The retained reasoning preview still blocks API requests during its browser tests. Provider tests use synthetic outputs; these are not live model verification. Live model behaviour is measured separately by the dev-only, billed `npm run eval:nemotron`, which is not part of `check` (see [research/NEMOTRON_EVALUATION.md](research/NEMOTRON_EVALUATION.md)). Only its pure checks run in `check`, through `tests/research/eval-nemotron-checks.test.ts`. `npm run diagnose:nebius` (evidence and lesson stages on one stored paper) and `npm run test:flow` (all five stages, a learner session and one feedback request on a local server) are also dev-only billed live probes outside `check`. Their results vary between runs and are evidence for one revision only. PDF and OCR tests process synthetic PDFs. Sample-mode tests verify no inference calls and rejection on Vercel/in production.
 
+`tests/browser/prepared-review.spec.ts` checks the revised beverage journey at
+375/768/1366px, old-answer isolation, feedback, final reveal, overflow and axe.
+The proof-set content checks require scenes on a majority of required challenges;
+semantic question quality still needs source-based review.
+
+`tests/browser/choice-focus.spec.ts` checks mouse and touch selection of prepared
+cards, pills, multi-answer checkboxes, interval predictions and diagram answers,
+plus shared research-activity responses. Pointer selections and restored drafts
+must have no extra outline; keyboard focus retains a visible 3px ring. The
+first card case was observed failing before the 26 October focus fix.
+
 Format changed files with Prettier and run `git diff --check`. Browser traces are retained on failure. Automated accessibility checks cover exercised states; Safari/Firefox, assistive-technology sessions and arbitrary uploaded-document layouts remain outside this matrix.
 
 ## Authored quest and activity checks

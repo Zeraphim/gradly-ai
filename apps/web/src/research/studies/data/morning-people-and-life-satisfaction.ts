@@ -157,7 +157,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Research question identification",
         type: "single",
         prompt:
@@ -201,7 +201,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study design and sampling",
         type: "single",
         prompt: "What type of study design was used in the reported research?",
@@ -244,7 +244,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the design",
         title: "Mediator variables examined",
         type: "single",
         prompt:
@@ -288,7 +288,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Total indirect effect",
         type: "single",
         prompt:
@@ -331,7 +331,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Read the results",
         title: "Proportion of effect explained",
         type: "single",
         prompt:
@@ -374,7 +374,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation of mediation findings",
         type: "single",
         prompt:

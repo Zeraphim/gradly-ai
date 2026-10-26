@@ -184,7 +184,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Identify the research question",
         type: "single",
         prompt:
@@ -233,7 +233,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Recognize the study design and sampling",
         type: "single",
         prompt:
@@ -282,7 +282,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the design",
         title: "Specify exposure, outcome, and covariates",
         type: "single",
         prompt:
@@ -333,7 +333,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Recall the adjusted odds ratio for disability",
         type: "single",
         prompt:
@@ -380,7 +380,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Read the results",
         title: "Recall the raw disability and mortality rates",
         type: "single",
         prompt:
@@ -430,7 +430,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpret the findings and consider limits",
         type: "single",
         prompt:

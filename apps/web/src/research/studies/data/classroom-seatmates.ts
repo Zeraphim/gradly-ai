@@ -126,7 +126,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design: Randomization of Seating",
         type: "single",
         prompt:
@@ -161,7 +161,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Outcome Measurement: Reciprocated Friendship",
         type: "single",
         prompt:
@@ -196,7 +196,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Overall Effect Size of Proximity on Friendship",
         type: "single",
         prompt:
@@ -235,7 +235,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Heterogeneous Effects by Gender",
         type: "single",
         prompt:
@@ -274,7 +274,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Limitation Regarding Similarity and Causality",
         type: "single",
         prompt:
@@ -308,7 +308,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation of Gender Boundary Findings",
         type: "single",
         prompt:

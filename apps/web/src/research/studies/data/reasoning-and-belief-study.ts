@@ -65,7 +65,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design Overview",
         type: "single",
         prompt: "Which description best matches the study’s design?",
@@ -98,7 +98,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Participant Selection and Exclusions",
         type: "single",
         prompt:
@@ -132,7 +132,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Effect Size and Confidence Interval",
         type: "single",
         prompt:
@@ -165,7 +165,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Interaction Test Between Site and Prime",
         type: "single",
         prompt:
@@ -198,7 +198,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation of the Null Effect",
         type: "single",
         prompt:
@@ -232,7 +232,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Site‑Specific Findings and Limits",
         type: "single",
         prompt:

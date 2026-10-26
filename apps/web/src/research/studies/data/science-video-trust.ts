@@ -167,7 +167,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "q1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Random Assignment",
         type: "single",
         prompt:
@@ -205,7 +205,7 @@ export const body: StudyBody = {
       },
       {
         id: "q2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Sample Size per Condition",
         type: "single",
         prompt:
@@ -243,7 +243,7 @@ export const body: StudyBody = {
       },
       {
         id: "q3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Significance of Trustworthiness Effect",
         type: "single",
         prompt:
@@ -281,7 +281,7 @@ export const body: StudyBody = {
       },
       {
         id: "q4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Estimated Marginal Means for Trustworthiness",
         type: "single",
         prompt:
@@ -319,7 +319,7 @@ export const body: StudyBody = {
       },
       {
         id: "q5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation – Objectives vs. Goals",
         type: "single",
         prompt:
@@ -357,7 +357,7 @@ export const body: StudyBody = {
       },
       {
         id: "q6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Limitation – Sample and Exposure",
         type: "single",
         prompt:

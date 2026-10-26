@@ -491,7 +491,63 @@ const challenges: StudyChallenge[] = [
     refs: ["poor", "table2"],
     writtenReasoning: false,
     responseStyle: "cards",
-    scene: null,
+    scene: {
+      version: 1,
+      kind: "association",
+      title: "What is being compared?",
+      instruction:
+        "Inspect the reported association before interpreting its scale.",
+      description: "What is being compared?",
+      provenance: {
+        kind: "reported",
+        refs: ["poor", "table2"],
+        note: "Adjusted odds ratio from the cited table, not a probability ratio.",
+      },
+      responses: [
+        {
+          optionId: "A",
+          label:
+            "Children with persistent sleep problems were 87% more likely to be rated as poor performers.",
+          targetIds: ["sleep-poor"],
+        },
+        {
+          optionId: "B",
+          label:
+            "After adjustment, the odds of a low rating were about 1.87 times the odds for children without sleep problems.",
+          targetIds: ["sleep-poor"],
+        },
+        {
+          optionId: "C",
+          label:
+            "1.87% of children with persistent sleep problems received a low rating.",
+          targetIds: ["sleep-poor"],
+        },
+        {
+          optionId: "D",
+          label:
+            "87% of children with persistent sleep problems received a low rating.",
+          targetIds: ["sleep-poor"],
+        },
+      ],
+      resolution: null,
+      pairs: [
+        {
+          id: "sleep-poor",
+          label: "Persistent vs no sleep problems",
+          detail: "Adjusted OR = 1.87; 95% CI 1.19 to 2.95.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["poor", "table2"],
+            note: "Adjusted odds ratio from the cited table, not a probability ratio.",
+          },
+          x: "Persistent sleep problems",
+          y: "Poor teacher-rated performance",
+          statistic: "OR",
+          value: 1.87,
+        },
+      ],
+    },
   },
   {
     id: "q6",

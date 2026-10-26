@@ -177,7 +177,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Study Design",
         type: "single",
         prompt: "Which design was employed?",
@@ -220,7 +220,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Sampling Procedure",
         type: "single",
         prompt:
@@ -264,7 +264,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Competence Effect Size",
         type: "single",
         prompt:
@@ -307,7 +307,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Warmth Effect",
         type: "single",
         prompt:
@@ -351,7 +351,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Gender Moderation",
         type: "single",
         prompt:
@@ -395,7 +395,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Alternative Explanation for Null Warmth",
         type: "single",
         prompt:
