@@ -384,7 +384,69 @@ export const body: StudyBody = {
         refs: ["e6"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Perceived reliability of the response",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Perceived reliability of the response",
+          provenance: {
+            kind: "reported",
+            refs: ["e6"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Condition 2 produced higher reliability scores than Condition 1",
+              targetIds: ["common", "recommended"],
+            },
+            {
+              optionId: "o2",
+              label: "No difference in reliability between the conditions",
+              targetIds: ["common", "recommended"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Mean reliability rating",
+          unit: "rating",
+          min: 0,
+          max: 7,
+          decimals: 2,
+          values: [
+            {
+              id: "common",
+              label: "Common correction",
+              detail: "Mean reliability rating",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e6"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 4.64,
+            },
+            {
+              id: "recommended",
+              label: "Recommended correction",
+              detail: "Mean reliability rating",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e6"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 5.68,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
       },
       {
         id: "c4",
@@ -449,10 +511,89 @@ export const body: StudyBody = {
         },
         explanation:
           "The hypothesis expected the recommended correction to give the highest satisfaction; the results show higher satisfaction in Condition 2, supporting it. The cited limitations warn about sample representativeness and lack of longitudinal data.",
-        refs: ["e19", "e23", "e28"],
+        refs: ["e19", "e23", "e28", "e24"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "What the experiment covers",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "What the experiment covers",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e24", "e23", "e28"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "The results support the hypothesis that the recommended correction increases satisfaction, but the sample is not representative and long‑term effects are unknown.",
+              targetIds: ["sample", "response", "later"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "The results disprove the hypothesis because satisfaction did not differ between conditions.",
+              targetIds: ["sample", "response", "later"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "sample",
+              label: "University sample",
+              detail: "Graduate students from health and welfare departments.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e24", "e23", "e28"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "response",
+              label: "Immediate reactions",
+              detail: "Ratings after the correction.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e24", "e23", "e28"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "later",
+              label: "Long-term responses",
+              detail: "Not established by this experiment.",
+              at: "resolution",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e24", "e23", "e28"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "sample",
+              to: "response",
+              label: "observed here",
+              at: "setup",
+            },
+            {
+              from: "response",
+              to: "later",
+              label: "would require follow-up",
+              at: "resolution",
+            },
+          ],
+        },
       },
     ],
     bonus: null,

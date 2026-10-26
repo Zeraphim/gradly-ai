@@ -241,7 +241,88 @@ export const body: StudyBody = {
         refs: ["e1", "e11", "e6"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Three donation-incentive arrangements",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Three donation-incentive arrangements",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Hypothesis: Earmarking increases participation; Design: Three-group between‑subjects experiment.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "Hypothesis: Earmarking decreases participation; Design: Paired‑samples crossover.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "Hypothesis: Donation amount influences participation; Design: Correlational survey.",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Random purpose",
+            },
+            {
+              id: "condition1",
+              label: "Earmarking",
+            },
+            {
+              id: "condition2",
+              label: "Earmarking with flexibility",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Invitation",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e11"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Survey invitation",
+                "Survey invitation",
+                "Survey invitation",
+              ],
+            },
+            {
+              id: "row1",
+              label: "Donation purpose",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e11"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Assigned purpose",
+                "Participant chooses",
+                "Participant chooses with flexibility",
+              ],
+            },
+          ],
+        },
       },
       {
         id: "c2",
@@ -454,7 +535,95 @@ export const body: StudyBody = {
         refs: ["e9", "e21"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "A follow-up question about the incentive",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "A follow-up question about the incentive",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9", "e21"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label: "Increasing the donation amount to raise leverage.",
+              targetIds: ["offer", "value", "follow"],
+            },
+            {
+              optionId: "o2",
+              label: "Measuring participants’ trust in the charity.",
+              targetIds: ["offer", "value", "follow"],
+            },
+            {
+              optionId: "o3",
+              label: "Using a more varied set of earmarking causes.",
+              targetIds: ["offer", "value", "follow"],
+            },
+            {
+              optionId: "o4",
+              label:
+                "Adding a manipulation check to ensure participants noticed the earmarking cue.",
+              targetIds: ["offer", "value", "follow"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "offer",
+              label: "The existing offer",
+              detail: "A modest donation accompanies participation.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e9", "e21"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "value",
+              label: "Perceived value",
+              detail: "One candidate constraint raised in the discussion.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e9", "e21"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "follow",
+              label: "A future comparison",
+              detail: "Test a larger donation rather than assume it works.",
+              at: "resolution",
+              provenance: {
+                kind: "authored",
+                refs: ["e9", "e21"],
+                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "offer",
+              to: "value",
+              label: "may influence",
+              at: "setup",
+            },
+            {
+              from: "value",
+              to: "follow",
+              label: "motivates a test",
+              at: "resolution",
+            },
+          ],
+        },
       },
     ],
     bonus: null,

@@ -288,7 +288,94 @@ export const body: StudyBody = {
         refs: ["e2", "e8"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "The allocation decision",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "The allocation decision",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2", "e8"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "opt_a",
+              label: "Amount of money given to the recipient",
+              targetIds: ["endowment", "keep", "recipient"],
+            },
+            {
+              optionId: "opt_b",
+              label: "Speed of decision making",
+              targetIds: ["endowment", "keep", "recipient"],
+            },
+            {
+              optionId: "opt_c",
+              label: "Number of times participants looked at the eyes",
+              targetIds: ["endowment", "keep", "recipient"],
+            },
+            {
+              optionId: "opt_d",
+              label: "Self‑reported mood after the game",
+              targetIds: ["endowment", "keep", "recipient"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "endowment",
+              label: "A monetary endowment",
+              detail: "Participants receive money to allocate.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e8"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "keep",
+              label: "Keep for oneself",
+              detail: "One part of the decision.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e8"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+            {
+              id: "recipient",
+              label: "Give to the recipient",
+              detail: "The other part of the decision.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e8"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+          ],
+          edges: [
+            {
+              from: "endowment",
+              to: "keep",
+              label: "allocation",
+              at: "setup",
+            },
+            {
+              from: "endowment",
+              to: "recipient",
+              label: "allocation",
+              at: "setup",
+            },
+          ],
+        },
       },
       {
         id: "c3",
@@ -419,7 +506,78 @@ export const body: StudyBody = {
         refs: ["e4"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Allocations by social-value orientation",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Allocations by social-value orientation",
+          provenance: {
+            kind: "reported",
+            refs: ["e4"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "opt_a",
+              label: "Prosocials gave more than egoists (medium effect)",
+              targetIds: ["prosocial", "egoist"],
+            },
+            {
+              optionId: "opt_b",
+              label: "Egoists gave more than prosocials (small effect)",
+              targetIds: ["prosocial", "egoist"],
+            },
+            {
+              optionId: "opt_c",
+              label: "No difference between prosocials and egoists",
+              targetIds: ["prosocial", "egoist"],
+            },
+            {
+              optionId: "opt_d",
+              label: "Only condition predicted giving, not SVO",
+              targetIds: ["prosocial", "egoist"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Mean amount given",
+          unit: "CAD",
+          min: 0,
+          max: 10,
+          decimals: 2,
+          values: [
+            {
+              id: "prosocial",
+              label: "Prosocial participants",
+              detail: "Mean amount given",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e4"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 4.33,
+            },
+            {
+              id: "egoist",
+              label: "Egoist participants",
+              detail: "Mean amount given",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e4"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 3.29,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
       },
       {
         id: "c6",

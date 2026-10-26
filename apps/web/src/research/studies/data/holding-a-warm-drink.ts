@@ -95,7 +95,114 @@ export const body: StudyBody = {
         refs: ["e3"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "A participant’s route through the session",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "A participant’s route through the session",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "The second experimenter was blind to condition (single‑blind).",
+              targetIds: ["attachment", "cup", "cover", "task"],
+            },
+            {
+              optionId: "o2",
+              label: "The first experimenter was blind to condition.",
+              targetIds: ["attachment", "cup", "cover", "task"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "Both experimenters were blind to condition (double‑blind).",
+              targetIds: ["attachment", "cup", "cover", "task"],
+            },
+            {
+              optionId: "o4",
+              label: "No experimenter was blind to condition.",
+              targetIds: ["attachment", "cup", "cover", "task"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "attachment",
+              label: "Questionnaire",
+              detail: "Attachment questionnaire first.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "cup",
+              label: "Hold a cup",
+              detail: "Participants were instructed not to drink.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "cover",
+              label: "Consumer questions",
+              detail: "Rate the cup and suggest a change.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "task",
+              label: "Perceptual focus task",
+              detail: "The later task measures perceptual choices.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "attachment",
+              to: "cup",
+              label: "then",
+              at: "setup",
+            },
+            {
+              from: "cup",
+              to: "cover",
+              label: "then",
+              at: "setup",
+            },
+            {
+              from: "cover",
+              to: "task",
+              label: "then",
+              at: "setup",
+            },
+          ],
+        },
       },
       {
         id: "c2",
@@ -305,10 +412,82 @@ export const body: StudyBody = {
         },
         explanation:
           "Without a room‑temperature (neutral) mug, the study cannot tell whether the observed difference stems from the warm mug, the cold mug, or both.",
-        refs: ["e5"],
+        refs: ["e5", "e2", "e3"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "The temperature comparison",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "The temperature comparison",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2", "e3", "e5"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o21",
+              label:
+                "The lack of a neutral condition makes it impossible to separate warmth versus cold effects.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o22",
+              label: "The sample size was too small to detect an effect.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o23",
+              label: "The perceptual focus task was not valid.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o24",
+              label: "Experimenter bias was not controlled.",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Warm cup",
+            },
+            {
+              id: "condition1",
+              label: "Cold cup",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Exposure",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3", "e5"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Hold without drinking", "Hold without drinking"],
+            },
+            {
+              id: "row1",
+              label: "Later task",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3", "e5"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Perceptual focus", "Perceptual focus"],
+            },
+          ],
+        },
       },
     ],
     bonus: null,

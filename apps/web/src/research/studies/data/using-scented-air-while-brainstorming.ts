@@ -194,10 +194,82 @@ export const body: StudyBody = {
         },
         explanation:
           "The only systematic difference was the verbal suggestion about the odorant’s creativity‑enhancing effect.",
-        refs: [],
+        refs: ["e6", "e7"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "What differs between the two groups?",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "What differs between the two groups?",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e6", "e7"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Receiving the verbal suggestion that the odorant boosts creativity (placebo) vs. receiving no suggestion (control)",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o2",
+              label: "Exposure to different concentrations of the odorant",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o3",
+              label: "Order in which the creativity tests were administered",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o4",
+              label: "Amount of monetary compensation",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Suggestion group",
+            },
+            {
+              id: "condition1",
+              label: "Comparison group",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Odour exposure",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6", "e7"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Odour present", "Odour present"],
+            },
+            {
+              id: "row1",
+              label: "Message",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6", "e7"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Creativity suggestion", "No creativity suggestion"],
+            },
+          ],
+        },
       },
       {
         id: "c2",
@@ -410,10 +482,100 @@ export const body: StudyBody = {
         },
         explanation:
           "A between‑subjects design bars within‑person change assessment.",
-        refs: [],
+        refs: ["e9", "e20", "e21"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Different people rather than repeated treatment",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Different people rather than repeated treatment",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9", "e20", "e21"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "It prevents assessing whether the same individual shows increased creativity after placebo.",
+              targetIds: ["row0", "row1", "row2"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "It makes it impossible to randomize participants to groups.",
+              targetIds: ["row0", "row1", "row2"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "It eliminates the possibility of using objective physiological measures.",
+              targetIds: ["row0", "row1", "row2"],
+            },
+            {
+              optionId: "o4",
+              label:
+                "It confounds the effect of the odorant with the suggestion.",
+              targetIds: ["row0", "row1", "row2"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Placebo group",
+            },
+            {
+              id: "condition1",
+              label: "Control group",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "People",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e9", "e20", "e21"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["A separate group", "A separate group"],
+            },
+            {
+              id: "row1",
+              label: "CFG timing",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e9", "e20", "e21"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Completed first", "Completed first"],
+            },
+            {
+              id: "row2",
+              label: "Repeated placebo comparison",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e9", "e20", "e21"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "No before/after placebo contrast",
+                "No before/after placebo contrast",
+              ],
+            },
+          ],
+        },
       },
     ],
     bonus: null,

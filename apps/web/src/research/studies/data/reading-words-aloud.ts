@@ -96,7 +96,88 @@ export const body: StudyBody = {
         refs: ["e3"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "How the word lists differ",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "How the word lists differ",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Subset‑size (20%, 50%, 80%) as a between‑subjects factor; type of learning (aloud, silent) as a within‑subjects factor.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "Subset‑size as a within‑subjects factor; type of learning as a between‑subjects factor.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "Only one independent variable: the proportion of aloud words.",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "20% aloud",
+            },
+            {
+              id: "condition1",
+              label: "50% aloud",
+            },
+            {
+              id: "condition2",
+              label: "80% aloud",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "List allocation",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Different participants",
+                "Different participants",
+                "Different participants",
+              ],
+            },
+            {
+              id: "row1",
+              label: "Within a list",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Aloud and silent words",
+                "Aloud and silent words",
+                "Aloud and silent words",
+              ],
+            },
+          ],
+        },
       },
       {
         id: "c2",
@@ -207,10 +288,118 @@ export const body: StudyBody = {
         },
         explanation:
           "Because p > .3, the difference between aloud and silent recognition is not statistically significant; the production effect effectively vanished.",
-        refs: ["e5"],
+        refs: ["e5", "e4"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Recognition across two list compositions",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Recognition across two list compositions",
+          provenance: {
+            kind: "reported",
+            refs: ["e4", "e5"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "A significant production effect favoring aloud words remained.",
+              targetIds: [
+                "half-aloud",
+                "half-silent",
+                "most-aloud",
+                "most-silent",
+              ],
+            },
+            {
+              optionId: "o2",
+              label:
+                "A significant reversed effect favoring silent words appeared.",
+              targetIds: [
+                "half-aloud",
+                "half-silent",
+                "most-aloud",
+                "most-silent",
+              ],
+            },
+            {
+              optionId: "o3",
+              label:
+                "No significant difference between aloud and silent words (the PE vanished).",
+              targetIds: [
+                "half-aloud",
+                "half-silent",
+                "most-aloud",
+                "most-silent",
+              ],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Words recognised correctly",
+          unit: "%",
+          min: 0,
+          max: 100,
+          decimals: 2,
+          values: [
+            {
+              id: "half-aloud",
+              label: "50% list · aloud",
+              detail: "Words recognised correctly",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e4", "e5"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 69.2,
+            },
+            {
+              id: "half-silent",
+              label: "50% list · silent",
+              detail: "Words recognised correctly",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e4", "e5"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 54.2,
+            },
+            {
+              id: "most-aloud",
+              label: "80% list · aloud",
+              detail: "Words recognised correctly",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e4", "e5"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 65.3,
+            },
+            {
+              id: "most-silent",
+              label: "80% list · silent",
+              detail: "Words recognised correctly",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e4", "e5"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 63.1,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
       },
       {
         id: "c5",

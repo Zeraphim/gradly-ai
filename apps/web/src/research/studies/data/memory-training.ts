@@ -120,7 +120,113 @@ export const body: StudyBody = {
         refs: ["e5", "e10"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "How the training groups were formed",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "How the training groups were formed",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e5", "e10"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label: "Random assignment",
+              targetIds: ["scale", "high", "low", "training"],
+            },
+            {
+              optionId: "o2",
+              label: "Based on Theories of Intelligence Scale (TIS) scores",
+              targetIds: ["scale", "high", "low", "training"],
+            },
+            {
+              optionId: "o3",
+              label: "Based on gender distribution",
+              targetIds: ["scale", "high", "low", "training"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "scale",
+              label: "Complete the TIS",
+              detail: "Score on the intelligence-mindset questionnaire.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e5", "e10"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "high",
+              label: "Higher scores",
+              detail: "Growth-mindset group.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e5", "e10"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+            {
+              id: "low",
+              label: "Lower scores",
+              detail: "Fixed-mindset group.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e5", "e10"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+            {
+              id: "training",
+              label: "Training and outcome tasks",
+              detail: "Both groups undertake the training study.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e5", "e10"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 2,
+            },
+          ],
+          edges: [
+            {
+              from: "scale",
+              to: "high",
+              label: "score-based grouping",
+              at: "setup",
+            },
+            {
+              from: "scale",
+              to: "low",
+              label: "score-based grouping",
+              at: "setup",
+            },
+            {
+              from: "high",
+              to: "training",
+              label: "then",
+              at: "setup",
+            },
+            {
+              from: "low",
+              to: "training",
+              label: "then",
+              at: "setup",
+            },
+          ],
+        },
       },
       {
         id: "c2",
@@ -198,7 +304,74 @@ export const body: StudyBody = {
         refs: ["e2"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Between-group comparisons of fluid-intelligence scores",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Between-group comparisons of fluid-intelligence scores",
+          provenance: {
+            kind: "reported",
+            refs: ["e2"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Both pretest and posttest comparisons were statistically significant (p < .05).",
+              targetIds: ["pre", "post"],
+            },
+            {
+              optionId: "o2",
+              label: "Only the pretest comparison was significant.",
+              targetIds: ["pre", "post"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "Neither the pretest nor the posttest comparison reached statistical significance.",
+              targetIds: ["pre", "post"],
+            },
+          ],
+          resolution: null,
+          kind: "tests",
+          alpha: 0.05,
+          tests: [
+            {
+              id: "pre",
+              label: "Pretest",
+              detail:
+                "Reported test; compare its p-value with the stated threshold.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e2"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              p: 0.203,
+              bound: "=",
+            },
+            {
+              id: "post",
+              label: "Posttest",
+              detail:
+                "Reported test; compare its p-value with the stated threshold.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e2"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              p: 0.762,
+              bound: "=",
+            },
+          ],
+          prediction: {
+            label: "Before inspecting the tests, what result do you expect?",
+            options: ["Clear differences", "Uncertain differences", "Not sure"],
+          },
+        },
       },
       {
         id: "c4",

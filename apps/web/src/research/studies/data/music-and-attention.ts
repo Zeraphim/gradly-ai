@@ -193,7 +193,90 @@ export const body: StudyBody = {
         evidence: [
           "The ANOVA treated Age Group as a between‑subject factor and Auditory Condition and Flanker Congruency as within‑subject factors.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Sound conditions and trial types",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Sound conditions and trial types",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "c1-optA",
+              label: "Auditory Condition only",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c1-optB",
+              label: "Flanker Congruency only",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c1-optC",
+              label: "Both Auditory Condition and Flanker Congruency",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c1-optD",
+              label: "Neither",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Stimulating music",
+            },
+            {
+              id: "condition1",
+              label: "Relaxing music",
+            },
+            {
+              id: "condition2",
+              label: "Silence",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Trial types",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Congruent and incongruent",
+                "Congruent and incongruent",
+                "Congruent and incongruent",
+              ],
+            },
+            {
+              id: "row1",
+              label: "Who completes them",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Each participant",
+                "Each participant",
+                "Each participant",
+              ],
+            },
+          ],
+        },
         options: [
           {
             id: "c1-optA",
@@ -410,7 +493,94 @@ export const body: StudyBody = {
         evidence: [
           "The effects on ER seemed quite limited, probably due to the ceiling effect observed in both older and young adults (success rate > 95% for all participants).",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "When accuracy is near the top of a scale",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "When accuracy is near the top of a scale",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e21"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "c6-optA",
+              label: "ER differences were large and reliable",
+              targetIds: ["accuracy", "room", "measure"],
+            },
+            {
+              optionId: "c6-optB",
+              label: "ER differences were limited due to a ceiling effect",
+              targetIds: ["accuracy", "room", "measure"],
+            },
+            {
+              optionId: "c6-optC",
+              label: "ER was not measured",
+              targetIds: ["accuracy", "room", "measure"],
+            },
+            {
+              optionId: "c6-optD",
+              label: "ER showed the opposite pattern to RT",
+              targetIds: ["accuracy", "room", "measure"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "accuracy",
+              label: "Success above 95%",
+              detail: "Reported for both age groups.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e21"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "room",
+              label: "Limited room to improve",
+              detail: "A near-top score leaves little upward range.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e21"],
+                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+              },
+              column: 0,
+            },
+            {
+              id: "measure",
+              label: "Read timing alongside accuracy",
+              detail: "Reaction time offers a different performance measure.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e21"],
+                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "accuracy",
+              to: "room",
+              label: "measurement constraint",
+              at: "setup",
+            },
+            {
+              from: "room",
+              to: "measure",
+              label: "interpretation context",
+              at: "setup",
+            },
+          ],
+        },
         options: [
           {
             id: "c6-optA",

@@ -41,6 +41,15 @@ The retired standalone paper-case implementation and its dedicated tests are rem
 The proof-set content checks require scenes on a majority of required challenges;
 semantic question quality still needs source-based review.
 
+`tests/research/prepared-visuals.test.ts` checks that every prepared study has at least
+one required visual and verifies the issue-32 additions against their source excerpts,
+numerical validation and reveal contract. The original eight-study majority guard remains
+in `prepared-studies.test.ts`. `tests/browser/prepared-visuals.spec.ts` walks the other
+21 studies at 375/768/1366, exercising every added scene before and after checking,
+explicit numerical reveals, feedback, overflow and axe. Coverage and the separately
+approved live-production probe are recorded in
+[PREPARED_VISUAL_COVERAGE.md](research/PREPARED_VISUAL_COVERAGE.md).
+
 `tests/research/prepared-choice-quality.test.ts` guards the 26 studies revised in
 PR #33 against fixed-position and shortest/longest-answer shortcuts, disproportionate
 choice lengths, scene response ordering drift and one-word stage labels. Its scope

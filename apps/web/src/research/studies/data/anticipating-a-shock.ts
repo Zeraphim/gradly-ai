@@ -247,7 +247,96 @@ export const body: StudyBody = {
         refs: ["e13"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Two questions after a non-significant result",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Two questions after a non-significant result",
+          provenance: {
+            kind: "authored",
+            refs: ["e13"],
+            note: "Authored guide to two interpretations of a non-significant test.",
+          },
+          responses: [
+            {
+              optionId: "c3-opt-a",
+              label: "To test whether the anxiety induction was successful.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+            {
+              optionId: "c3-opt-b",
+              label:
+                "To determine whether null results reflected true absence of an effect or merely low sensitivity due to the small sample.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+            {
+              optionId: "c3-opt-c",
+              label: "To replace missing data with imputed values.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+            {
+              optionId: "c3-opt-d",
+              label:
+                "To compare left‑leaning and right‑leaning subgroups directly.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "observed",
+              label: "No clear difference",
+              detail: "The classical test does not reject its null.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e13"],
+                note: "Authored guide to two interpretations of a non-significant test.",
+              },
+              column: 0,
+            },
+            {
+              id: "small",
+              label: "Effect close to zero?",
+              detail: "One possibility to evaluate.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e13"],
+                note: "Authored guide to two interpretations of a non-significant test.",
+              },
+              column: 1,
+            },
+            {
+              id: "uncertain",
+              label: "Too uncertain to tell?",
+              detail: "Another possibility to evaluate.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e13"],
+                note: "Authored guide to two interpretations of a non-significant test.",
+              },
+              column: 1,
+            },
+          ],
+          edges: [
+            {
+              from: "observed",
+              to: "small",
+              label: "possible interpretation",
+              at: "setup",
+            },
+            {
+              from: "observed",
+              to: "uncertain",
+              label: "possible interpretation",
+              at: "setup",
+            },
+          ],
+        },
       },
       {
         id: "c4",
@@ -290,10 +379,82 @@ export const body: StudyBody = {
         },
         explanation:
           "Across all explicit and implicit measures, the t‑tests showed no statistically significant difference between participants assessed under threat and those assessed under safety.",
-        refs: ["e3", "e14"],
+        refs: ["e3", "e14", "e2", "e10"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Two ways to measure political attitudes",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Two ways to measure political attitudes",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2", "e10"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "c4-opt-a",
+              label: "A significant increase in conservatism under threat.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c4-opt-b",
+              label: "No significant differences between threat and safety.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c4-opt-c",
+              label: "A significant decrease in conservatism under threat.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c4-opt-d",
+              label:
+                "A mixed pattern with some measures significant and others not.",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Explicit tasks",
+            },
+            {
+              id: "condition1",
+              label: "Implicit task",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Response",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e10"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Report a judgement", "Classify associations"],
+            },
+            {
+              id: "row1",
+              label: "Instrument",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e10"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Self-report measures", "Single Target IAT"],
+            },
+          ],
+        },
       },
       {
         id: "c5",

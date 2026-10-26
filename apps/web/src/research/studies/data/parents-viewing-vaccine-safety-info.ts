@@ -162,7 +162,82 @@ export const body: StudyBody = {
         refs: ["e6", "e3"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Two presentations of safety information",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Two presentations of safety information",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e6"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label: "Randomized experiment with a convenience sample.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "Observational correlational study using existing survey data.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o3",
+              label: "Longitudinal cohort tracking parents over time.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o4",
+              label: "Qualitative interview study with purposive sampling.",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Negative framing",
+            },
+            {
+              id: "condition1",
+              label: "Positive framing",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Information",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Incidence of side effects",
+                "Inverse incidence of side effects",
+              ],
+            },
+            {
+              id: "row1",
+              label: "Study setting",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Online parent survey", "Online parent survey"],
+            },
+          ],
+        },
       },
       {
         id: "c2",
@@ -382,7 +457,99 @@ export const body: StudyBody = {
         refs: ["e8", "e15"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "What the adjusted comparison includes",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "What the adjusted comparison includes",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e8", "e15"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Differences in parents’ gender, education, income, children’s age, or baseline mood could account for the observed framing effect.",
+              targetIds: ["frame", "background", "outcome"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "The timing of the survey (January‑February 2022) might have influenced responses independently of framing.",
+              targetIds: ["frame", "background", "outcome"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "Parents’ prior experience with COVID‑19 infection could explain differences in reactions.",
+              targetIds: ["frame", "background", "outcome"],
+            },
+            {
+              optionId: "o4",
+              label:
+                "The length of the questionnaire may have caused fatigue, affecting answers.",
+              targetIds: ["frame", "background", "outcome"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "frame",
+              label: "Information framing",
+              detail: "The comparison of interest.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8", "e15"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "background",
+              label: "Measured covariates",
+              detail: "Gender, education, income, child age and baseline mood.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8", "e15"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+            {
+              id: "outcome",
+              label: "Parental reactions",
+              detail:
+                "Compare the frames while including the listed covariates.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8", "e15"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 2,
+            },
+          ],
+          edges: [
+            {
+              from: "frame",
+              to: "outcome",
+              label: "estimated contrast",
+              at: "setup",
+            },
+            {
+              from: "background",
+              to: "outcome",
+              label: "included in model",
+              at: "setup",
+            },
+          ],
+        },
       },
     ],
     bonus: null,

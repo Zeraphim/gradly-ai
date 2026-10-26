@@ -238,7 +238,94 @@ export const body: StudyBody = {
         refs: ["e1", "e2", "e24", "e25", "e27", "e28"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Three parts of the research programme",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Three parts of the research programme",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1", "e24"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label: "Close replication only",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+            {
+              optionId: "o2",
+              label: "Close replication + conceptual extension",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+            {
+              optionId: "o3",
+              label: "Close replication + conceptual extension + meta‑analysis",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+            {
+              optionId: "o4",
+              label: "Meta‑analysis only",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "replicate",
+              label: "Close replication",
+              detail: "Re-test the earlier television-viewing relationship.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e24"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "extend",
+              label: "Conceptual extension",
+              detail: "Add streaming and other potential explanations.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e24"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+            {
+              id: "synthesise",
+              label: "Meta-analysis",
+              detail: "Combine this estimate with earlier studies.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e24"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 2,
+            },
+          ],
+          edges: [
+            {
+              from: "replicate",
+              to: "extend",
+              label: "broaden the inquiry",
+              at: "setup",
+            },
+            {
+              from: "replicate",
+              to: "synthesise",
+              label: "contributes an estimate",
+              at: "setup",
+            },
+          ],
+        },
       },
       {
         id: "c2",
@@ -328,7 +415,72 @@ export const body: StudyBody = {
         refs: ["e5", "e13", "e15", "e20"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "TV viewing and the direct question",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "TV viewing and the direct question",
+          provenance: {
+            kind: "reported",
+            refs: ["e13", "e20"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label: "Yes, TV viewing was a significant predictor.",
+              targetIds: ["estimate"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "No, TV viewing did not predict incorrect answers after controlling for age and education.",
+              targetIds: ["estimate"],
+            },
+            {
+              optionId: "o3",
+              label: "Only streaming predicted incorrect answers.",
+              targetIds: ["estimate"],
+            },
+            {
+              optionId: "o4",
+              label:
+                "The effect was significant only for the electric‑chair item.",
+              targetIds: ["estimate"],
+            },
+          ],
+          resolution: null,
+          kind: "estimate",
+          measure: "Correlation with direct-question performance",
+          min: -0.2,
+          max: 0.2,
+          reference: {
+            value: 0,
+            label: "No difference",
+          },
+          band: null,
+          estimates: [
+            {
+              id: "estimate",
+              label: "Correlation with direct-question performance",
+              detail: "Reported estimate and confidence interval.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e13", "e20"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: -0.02,
+              lower: -0.1,
+              upper: 0.06,
+            },
+          ],
+          prediction: {
+            label: "Before reading the interval, where might the estimate lie?",
+            options: ["Below zero", "Near zero", "Above zero"],
+          },
+        },
       },
       {
         id: "c4",
