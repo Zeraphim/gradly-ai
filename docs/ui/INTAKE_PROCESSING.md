@@ -102,6 +102,12 @@ was rebuilt around a lesson-style focus shell (`FocusBar.tsx`, `journey.css`):
   its summary when complete). Everything else sits behind one "Details"
   disclosure. Ready sample jobs offer "Meet the study"; live jobs open their
   generated briefing.
+- **Study intro.** The shared intro (`StudyIntro` in `JourneyStages.tsx`) shows a
+  briefing of up to 80 words whole, as every prepared study's is. A longer
+  generated briefing, which can arrive as one block, shows a lead of whole
+  sentences up to 60 words and folds the rest into a native "Read more
+  background" disclosure (`studies/briefing.ts`), so "Begin study" stays in view.
+  Added 27 October 2026 after a 250-word generated briefing pushed it off screen.
 - **Meet the study** (`MeetTheStudy.tsx`, route `#/research/meet/:jobId`). Four
   parts with segmented progress: the question (animated lecture/phone
   illustration), divided attention (an interactive slider, labelled as an

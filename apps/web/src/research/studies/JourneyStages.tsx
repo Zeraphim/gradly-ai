@@ -23,6 +23,7 @@ import {
 } from "./progress.js";
 import { StudyArt, groupTone } from "./StudyArt.js";
 import { Burst } from "./Burst.js";
+import { briefingParts } from "./briefing.js";
 import { designGroups, type PreparedStudy } from "./types.js";
 
 export function StudyIntro({
@@ -40,6 +41,7 @@ export function StudyIntro({
 }) {
   const motion = useSceneMotion();
   const tone = groupTone[study.group];
+  const briefing = briefingParts(study.lesson.briefing);
   return (
     <main className="journey-intro">
       <Link className="journey-back" href={backHref}>
@@ -69,12 +71,17 @@ export function StudyIntro({
             {study.kicker ?? designGroups[study.group].label}
           </span>
           <h1 tabIndex={-1}>{study.question}</h1>
-          {study.lesson.briefing
-            .split(/\n+/)
-            .filter(Boolean)
-            .map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+          {briefing.lead.map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+          {briefing.more.length ? (
+            <details className="journey-intro-more">
+              <summary>Read more background</summary>
+              {briefing.more.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </details>
+          ) : null}
           <ul className="journey-intro-facts">
             <li>
               <ListChecks size={17} aria-hidden="true" />
