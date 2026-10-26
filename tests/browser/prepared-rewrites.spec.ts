@@ -19,6 +19,9 @@ import { body as video } from "../../apps/web/src/research/studies/data/science-
 import { body as posture } from "../../apps/web/src/research/studies/data/body-posture-judgments.js";
 import { body as bus } from "../../apps/web/src/research/studies/data/bus-ridership-behavior.js";
 import { body as mindful } from "../../apps/web/src/research/studies/data/classroom-mindfulness-practice.js";
+import { body as seatmates } from "../../apps/web/src/research/studies/data/classroom-seatmates.js";
+import { body as cursing } from "../../apps/web/src/research/studies/data/cursing-while-in-pain.js";
+import { body as dogs } from "../../apps/web/src/research/studies/data/dog-ownership-among-seniors.js";
 import { body as trust } from "../../apps/web/src/research/studies/data/judging-statement-truthfulness.js";
 
 // Studies whose questions were rewritten as decisions for issue #31. Each is walked
@@ -44,6 +47,9 @@ const rewritten = [
   ["body-posture-judgments", posture],
   ["bus-ridership-behavior", bus],
   ["classroom-mindfulness-practice", mindful],
+  ["classroom-seatmates", seatmates],
+  ["cursing-while-in-pain", cursing],
+  ["dog-ownership-among-seniors", dogs],
 ] as const;
 
 for (const width of [375, 1366]) {

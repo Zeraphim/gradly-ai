@@ -22,10 +22,10 @@ stored PDF. It is not approval by the content-review owner.
 
 | Measure                                                                         | Before (`main`) | Now       |
 | ------------------------------------------------------------------------------- | --------------- | --------- |
-| Studies rewritten and checked against the PDF                                   | 0               | 21        |
-| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 23 of 305 |
-| Questions with a scene                                                          | 43              | 67        |
-| Studies with no limitations recorded                                            | 30              | 13        |
+| Studies rewritten and checked against the PDF                                   | 0               | 24        |
+| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 21 of 305 |
+| Questions with a scene                                                          | 43              | 69        |
+| Studies with no limitations recorded                                            | 30              | 11        |
 | Questions with a garbled step label (for example "2 of 6 · , ")                 | 181             | 0         |
 
 The detector misses paraphrased giveaways, so the flagged counts understate the problem.
@@ -63,6 +63,8 @@ Facts checked against the stored PDF during the rewrites. Some are errors in the
 | remembering-doctor-appointments | the paper's text says the stereotyped group made fewer clock checks but prints M = 65.24 against 47.57 (the reverse); its own age-group table shows fewer checks in the stereotyped groups                                                         | paper's own inconsistency; the rewrite does not rely on it         |
 | body-posture-judgments          | an earlier version of this register listed the old c3 answer "0.93" as a number not in the paper; it is 4.01 − 3.08, correctly computed from the paper's means                                                                                     | Register corrected; study rewritten                                |
 | classroom-mindfulness-practice  | the paper's abstract reports DCCS gains "relative to waitlist control" of d = 0.48 and 1.10, but its Table 4 lists these as the programme group's own change over time; the old lesson repeated the abstract's framing                             | paper's own inconsistency; the rewrite asks learners to spot it    |
+| classroom-seatmates             | the paper's abstract gives N = 2,966 students while its results report N = 2,996 analysed                                                                                                                                                          | paper's own inconsistency; the rewrite uses the results figure     |
+| cursing-while-in-pain           | the paper reports an indirect effect of β = 4.767 with a 95% CI of −0.093 to 4.282, so the point estimate lies outside its own interval                                                                                                            | paper's own inconsistency; the rewrite does not use that figure    |
 
 ## Audit leads checked and not confirmed
 
@@ -71,8 +73,8 @@ Two were checked against the PDF:
 
 - `cursing-while-in-pain` takeaway "about one-third": **refuted**. The paper reports a 32%
   increase in pain threshold and 33% in tolerance.
-- `dog-ownership-among-seniors` "CI 0.37–0.78 versus 0.37–0.79": **the paper itself prints
-  both** for the same odds ratio (in different models). Not a study error; worth a footnote.
+- `dog-ownership-among-seniors` "CI 0.37–0.78 versus 0.37–0.79": the paper's table gives 0.37–0.78
+  (Model 1) and 0.38–0.79 (Model 2); its abstract mixes the two as 0.37–0.79. Not a study error.
 
 ## Unverified leads still to read against the paper
 
@@ -80,7 +82,6 @@ Each needs a person to read the paper. None is a finding yet.
 
 | Study                               | Lead                                                                                                         |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| classroom-seatmates                 | c6 "doubled from under 2 to 4 percentage points" is not in any excerpt                                       |
 | clinton-voter-activism              | c3/c4 recall; one misconception note appears garbled                                                         |
 | holding-a-warm-drink                | c5 states a result no shown excerpt supports                                                                 |
 | music-and-mood-perception           | c2 and c3 evidence not in the excerpt list                                                                   |
@@ -105,7 +106,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | exercise-focus                        | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 6 | n/a               | —                                                                                     |
 | conformity-replication                | featured  | Hand-authored proof set; no independent content review            | 1 → 1 of 6 | n/a               | —                                                                                     |
 | natural-light-at-work                 | generated | Rewritten and checked against the PDF                             | 2 → 0 of 5 | 10 of 10          | —                                                                                     |
-| dog-ownership-among-seniors           | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 6 of 13           | —                                                                                     |
+| dog-ownership-among-seniors           | generated | Rewritten and checked against the PDF                             | 1 → 1 of 6 | 12 of 12          | —                                                                                     |
 | hand-washing-in-restrooms             | generated | Rewritten and checked against the PDF                             | 0 → 0 of 6 | 13 of 13          | —                                                                                     |
 | memory-training                       | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 1 of 11           | no limitations recorded                                                               |
 | stress-affirmation                    | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 7 | n/a               | —                                                                                     |
@@ -142,7 +143,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | being-a-later-born                    | generated | Rewritten and checked against the PDF                             | 4 → 0 of 6 | 14 of 14          | —                                                                                     |
 | online-charity-giving                 | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 16 of 19          | no limitations recorded                                                               |
 | vaccine-misinformation-correction     | generated | Draft: not reviewed                                               | 1 → 1 of 5 | 7 of 8            | no limitations recorded                                                               |
-| cursing-while-in-pain                 | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 0 of 10           | no limitations recorded                                                               |
+| cursing-while-in-pain                 | generated | Rewritten and checked against the PDF                             | 1 → 0 of 6 | 12 of 12          | —                                                                                     |
 | walking-speed-test                    | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 10 of 10          | no limitations recorded; takeaway says none; c3 evidence line contains "F(1,119) = ?" |
 | using-scented-air-while-brainstorming | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 6 of 10           | —                                                                                     |
 | puzzle-solving-after-motivation       | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 12 of 12          | —                                                                                     |
@@ -152,7 +153,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | sleep-school                          | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 6 | n/a               | —                                                                                     |
 | basketball-maths                      | featured  | Hand-authored proof set; no independent content review            | 1 → 1 of 6 | n/a               | —                                                                                     |
 | learning-styles                       | featured  | Hand-authored proof set; no independent content review            | 1 → 1 of 6 | n/a               | —                                                                                     |
-| classroom-seatmates                   | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 3 of 11           | no limitations recorded                                                               |
+| classroom-seatmates                   | generated | Rewritten and checked against the PDF                             | 1 → 0 of 6 | 12 of 12          | —                                                                                     |
 | classroom-mindfulness-practice        | generated | Rewritten and checked against the PDF                             | 1 → 0 of 5 | 10 of 10          | —                                                                                     |
 
 ## How the numbers were produced
@@ -174,6 +175,6 @@ the same way as `tests/research/papers-setup.ts`.
 ## Next steps
 
 1. A reader with the paper open works through the "Open" rows and the leads table.
-2. Rewrite the remaining 24 drafts in order of
+2. Rewrite the remaining 21 drafts in order of
    flagged count, checking every kept fact against the PDF, as the rewritten studies were.
 3. Set `reviewed: true` only after the content-review owner approves a study.
