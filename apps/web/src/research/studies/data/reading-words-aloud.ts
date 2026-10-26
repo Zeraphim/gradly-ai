@@ -61,7 +61,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Identify the independent variables",
         type: "single",
         prompt:
@@ -100,7 +100,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the results",
         title: "Recall difference significance in the 50–50% group",
         type: "single",
         prompt:
@@ -138,7 +138,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Recognition difference significance in the 50–50% group",
         type: "single",
         prompt:
@@ -176,7 +176,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Production effect in the 80% aloud condition",
         type: "single",
         prompt:
@@ -214,7 +214,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation of the significant interaction",
         type: "single",
         prompt:
@@ -253,7 +253,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Limitation concerning the reversed PE",
         type: "single",
         prompt:

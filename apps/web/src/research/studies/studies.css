@@ -637,7 +637,8 @@
   height: 1px;
   pointer-events: none;
 }
-.research-lab .studies .study-choice:focus-within {
+/* Answer focus rings follow keyboard navigation, never pointer selection. */
+.research-lab .studies .study-choice:has(input:focus-visible) {
   outline: 3px solid var(--blue-ink);
   outline-offset: 3px;
 }
@@ -1410,7 +1411,7 @@
   width: 1px;
   height: 1px;
 }
-.research-lab .studies .study-predict-options label:focus-within {
+.research-lab .studies .study-predict-options label:has(input:focus-visible) {
   outline: 3px solid var(--blue-ink);
   outline-offset: 3px;
 }

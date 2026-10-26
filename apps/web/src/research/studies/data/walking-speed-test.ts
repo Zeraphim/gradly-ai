@@ -100,7 +100,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Design Challenge 1 – Experiment 1",
         type: "single",
         prompt: "What was the independent variable in Experiment 1?",
@@ -138,7 +138,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: ", ",
+        stage: "Read the design",
         title: "Design Challenge 2 – Experiment 2",
         type: "single",
         prompt:
@@ -177,7 +177,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: ", ",
+        stage: "Read the results",
         title: "Results Challenge 1 – Experiment 1 Walking Speed",
         type: "single",
         prompt:
@@ -215,7 +215,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: ", ",
+        stage: "Read the results",
         title: "Results Challenge 2 – Experiment 2 Conditional Effect",
         type: "single",
         prompt:
@@ -253,7 +253,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation Challenge 1 – Meaning of Null Result",
         type: "single",
         prompt:
@@ -292,7 +292,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: ", ",
+        stage: "Draw a conclusion",
         title: "Interpretation Challenge 2 – Alternative Explanation",
         type: "single",
         prompt:

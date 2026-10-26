@@ -185,7 +185,7 @@
   accent-color: var(--green);
   margin: 0;
 }
-.research-lab .scene-response:focus-within {
+.research-lab .scene-response:has(input:focus-visible) {
   outline: 3px solid var(--blue-ink);
   outline-offset: 3px;
 }

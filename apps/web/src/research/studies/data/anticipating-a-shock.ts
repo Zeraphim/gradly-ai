@@ -112,7 +112,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Identifying the anxiety manipulation",
         type: "single",
         prompt:
@@ -159,7 +159,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Measures of political attitudes",
         type: "single",
         prompt:
@@ -206,7 +206,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "design",
+        stage: "Read the design",
         title: "Reason for using Bayesian analysis",
         type: "single",
         prompt:
@@ -251,7 +251,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Outcome of the frequentist tests",
         type: "single",
         prompt:
@@ -297,7 +297,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "results",
+        stage: "Read the results",
         title: "Interpretation of the Bayes factors",
         type: "single",
         prompt:
@@ -343,7 +343,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title:
           "What the results mean for theories of anxiety‑driven conservatism",
         type: "single",

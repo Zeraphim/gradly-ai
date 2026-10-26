@@ -110,6 +110,15 @@ shared hover/press gesture supplies tactile feedback; selection never implies
 correctness before checking. Pointer selection has no extra outline, keyboard
 focus stays visible, and reduced motion removes the badge transition.
 
+The same pointer/keyboard distinction applies to prepared and uploaded study
+cards, pills, multi-answer choices, predictions and shared scene responses.
+An answer label uses `:has(input:focus-visible)` for its keyboard ring;
+`:focus-within` would also outline ordinary mouse clicks and touch selections and
+must not be used on these choice labels. Selection keeps its normal fill/check
+without that extra dark outline. Diagram buttons retain native `:focus-visible`
+behavior. `tests/browser/choice-focus.spec.ts` protects pointer selection,
+reselection, restoration and keyboard focus across these controls.
+
 The current Motion implementation and its style selectors are research-scoped.
 Adopting it on another screen requires checking feature-provider ownership, styling
 scope and projection-reset assumptions. Share the smallest appropriate primitive

@@ -122,7 +122,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Identify the study design",
         type: "single",
         prompt: "Which description best captures how the study was conducted?",
@@ -166,7 +166,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "results",
+        stage: "Read the results",
         title: "Interpret the involvement—government priorities result",
         type: "single",
         prompt:
@@ -211,7 +211,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Identify another significant framing effect",
         type: "single",
         prompt:
@@ -254,7 +254,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "What does the involvement—government priorities finding imply?",
         type: "single",
         prompt:
@@ -297,7 +297,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Identify a limitation concerning sample representativeness",
         type: "single",
         prompt:
@@ -341,7 +341,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title:
           "Consider a possible alternative explanation for the observed framing effect",
         type: "single",

@@ -80,6 +80,10 @@ current code before changing behavior. Do not create a competing work-status tra
   prepared-study lessons Nemotron generated for the stored papers, which were skipped
   and why, and every mechanical fix. None is content-reviewed. Rerun it with
   `npm run generate:studies`.
+- [research/PREPARED_STUDY_REVIEW.md](research/PREPARED_STUDY_REVIEW.md) is the register
+  for issues #31/#32: which prepared studies were rewritten and checked against their
+  PDFs, confirmed errors in the original text, unverified leads, and the reading queue.
+  Treat every unreviewed study as a draft.
 - [research/papers/](research/papers/README.md) stores only source PDFs whose licence
   permits redistribution, with attribution and retrieval notes.
 

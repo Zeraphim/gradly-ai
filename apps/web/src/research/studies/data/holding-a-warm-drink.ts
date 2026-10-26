@@ -57,7 +57,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: ", ",
+        stage: "Read the design",
         title: "Blinding Procedure",
         type: "single",
         prompt: "Who was blind to the temperature condition?",
@@ -99,7 +99,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "",
+        stage: "Read the design",
         title: "Group Formation",
         type: "single",
         prompt:
@@ -142,7 +142,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "",
+        stage: "Read the results",
         title: "Attractiveness Ratings Outcome",
         type: "single",
         prompt:
@@ -183,7 +183,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "",
+        stage: "Read the results",
         title: "Participant Exclusions",
         type: "single",
         prompt: "How many participants were excluded and for what reasons?",
@@ -225,7 +225,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "",
+        stage: "Draw a conclusion",
         title: "Interpretation of the Warmth Effect",
         type: "single",
         prompt:
@@ -269,7 +269,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "",
+        stage: "Draw a conclusion",
         title: "Limitation Regarding Neutral Condition",
         type: "single",
         prompt:

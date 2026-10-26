@@ -618,6 +618,38 @@
       }
     },
     {
+      "id": "prepared-study-review",
+      "kind": "other",
+      "title": "Prepared-study review register",
+      "path": "docs/research/PREPARED_STUDY_REVIEW.md",
+      "status": "Reference",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/studies/data/**",
+        "apps/web/src/research/studies/cards.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "generated-studies"
+        },
+        {
+          "type": "related",
+          "target": "prepared-studies-ui"
+        }
+      ],
+      "implementationRefs": [
+        "scripts/prepared-study-checks.ts",
+        "tests/research/prepared-studies.test.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
       "id": "testing",
       "kind": "runbook",
       "title": "Validation commands and retained historical test reports",

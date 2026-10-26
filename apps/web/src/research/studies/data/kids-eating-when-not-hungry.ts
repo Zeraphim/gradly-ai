@@ -131,7 +131,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Study Design",
         type: "single",
         prompt:
@@ -170,7 +170,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "results",
+        stage: "Read the results",
         title: "Effect Size of Delay of Gratification",
         type: "single",
         prompt:
@@ -209,7 +209,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Meaning of the Interaction",
         type: "single",
         prompt:
@@ -248,7 +248,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Limitations on Generalizability",
         type: "single",
         prompt:
@@ -288,7 +288,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Alternative Explanation for the Main Effect",
         type: "single",
         prompt:

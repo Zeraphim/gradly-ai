@@ -157,7 +157,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Independent variable",
         type: "single",
         prompt:
@@ -201,7 +201,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Measure of out‑of‑the‑boxness",
         type: "single",
         prompt:
@@ -245,7 +245,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Effect size for OB",
         type: "single",
         prompt:
@@ -287,7 +287,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Tests showing increased originality",
         type: "multiple",
         prompt:
@@ -329,7 +329,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Why TTCT showed no effect",
         type: "single",
         prompt:
@@ -374,7 +374,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Limitation of the design",
         type: "single",
         prompt:

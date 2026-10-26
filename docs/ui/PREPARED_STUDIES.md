@@ -61,9 +61,9 @@ original kinds (see [SCENE_AUTHORING.md](../SCENE_AUTHORING.md)):
 | `units`       | bus-ridership-behavior (classroom), breakfast-grades (correlational)             | Nested assigned, sampled, measured and analysed counts; derived ratio after Check       |
 | `matrix`      | vaccine-misinformation-correction (between), phone-use-while-driving (within)    | Conditions side by side; same/differs markers after Check show what else changed        |
 
-The added scenes in generated lessons attach to existing challenges and cite
-existing verbatim evidence; questions, answers and excerpts are unchanged. Where a
-scene cites an excerpt the challenge did not list, that id was added to `refs`.
+The initial scene-library additions attached to existing challenges without changing
+questions or answers. The 26 October beverage revision also rewrites six questions
+and adds source excerpts; see the [manual review record](../research/GENERATED_STUDIES.md#manual-review-in-progress--26-october-2026-3132).
 
 ## Uploaded papers
 
@@ -150,3 +150,81 @@ read in full (see `docs/research/GENERATED_STUDIES.md` "Known limits").
 
 - Supersedes: None
 - Superseded by: None
+
+## Shared-player proposal for JC — 26 October 2026
+
+**For review; not applied.** Issue #31 asks for JC's agreement because uploaded
+lessons use this player. Marc confirmed that agreement is still pending. No
+contract, generated-lesson behavior or player timing was changed in this pass.
+
+Recommended distinction: keep the facts needed to decide (procedure, observations,
+reported numerical results) available before the answer. Keep source passages
+that explicitly justify the accepted answer out of the initial screen. Show those
+passages with the full explanation once the learner solves the question or uses
+the second attempt. Revealing them on the first miss would give away the retry.
+Keep the normal targeted misconception and hint for that first miss.
+
+JC and Jan should agree how to distinguish decision context from answer-bearing
+source rationale in the shared lesson/public-session contract before implementation.
+Do not guess based on strings or hide already-sent answer keys with CSS. The
+server must preserve its release gates for uploaded lessons, including refresh and
+retry. Results evidence still waits until its results-stage question, and paper
+identity waits until the final reveal.
+
+Review examples: the beverage decision1 needs the two arrangements and binary
+choice, but not the authors' sentence naming logistic regression. A numerical
+results question needs its reported numbers before Check; those should not be
+blanked along with explanatory conclusions.
+
+Proposed regression coverage: initial screen, first miss, retry, correct answer,
+second miss, reload in each state, keyboard focus, reduced motion and both prepared
+and server-driven lessons. This proposal is prepared for discussion, not a claim
+that the tests or implementation of a new shared timing rule exist.
+
+## Local content verification — 26 October 2026
+
+Work is isolated on `fix/prepared-study-learning` based on `b9798d6`, because the
+original checkout has an unrelated rebase conflict. No rebase resolution, commit,
+push or deployment was performed. All edits in this pass were made by Codex.
+
+- `npm run check`: passed, 21 Node/interface and 702 research tests, type checks
+  and production builds. An initial sandboxed run was not used as verification.
+- `prepared-studies.test.ts` adds a majority-scene requirement for each of the
+  eight proof-set studies. It does not prove visual quality or learning benefit.
+- `prepared-review.spec.ts` walks all six revised beverage decisions at 375, 768
+  and 1366 pixels, checks accessibility after each answer, and seeds an old c1
+  answer to ensure it does not solve the new decision1. It checks the initial
+  context does not name logistic regression or repeat the binary-variable rationale.
+- Before/after screenshots and comparison are local review artifacts under
+  `.data/review/`; they are deliberately not evidence of hosted delivery.
+
+Browser verification: all nine focused cases passed (six revised decisions at
+three widths; two numerical scenes at three widths with keyboard use). The ten
+existing study-library cases also passed: seven in the initial run and the three
+learn-page links on rerun after starting the required sample API. The initial
+three failures showed the missing API settings, not a source assertion failure.
+The existing every-study case exercised all 53 first questions at 375px. The full-library semantic review,
+JC agreement and fresh production-upload acceptance remain open. The authored
+question rewrite is not Tymee's content approval.
+
+## Pointer focus regression — 26 October 2026
+
+Marc reported the dark blue outline again while clicking a multiple-choice answer
+in Safari's local beverage study. The prepared player's `:focus-within` style
+added the keyboard ring to ordinary pointer focus. The same rule existed on
+interval/test prediction labels and the shared research scene response labels.
+All three now use `:has(input:focus-visible)`. This changes focus presentation,
+not source-excerpt timing, answer checking or scene data.
+
+A real Chromium click reproduced `outline-style: solid` before the fix. After
+it, all 12 `choice-focus.spec.ts` cases passed: mouse and touch for cards, pills,
+multi-answer checkboxes, interval predictions, diagram answers and shared research
+activity responses. The study cases also reselect answers and reload saved drafts;
+all cases retain a 3px keyboard focus ring. Safari was used to reproduce the
+reported case and inspect the updated selection. These checks reduce recurrence;
+they are not a guarantee about every browser or future change.
+
+Local before/after screenshots: `.data/review/choice-focus-before.png` and
+`.data/review/choice-focus-after.png`. The original checkout's rebase remains
+untouched. Codex applied the style fix directly. Broader #31/#32 content work is
+still active, and the shared excerpt proposal remains for JC's review.

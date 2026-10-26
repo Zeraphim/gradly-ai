@@ -16,12 +16,12 @@
 
 **Scenes added after generation (scene library work).** Six generated lessons carry hand-authored scenes on existing challenges, citing existing verbatim excerpts. Where a scene cites an excerpt its challenge did not list, the id was added to that challenge's `refs`. Questions, answers and excerpts are unchanged. Regenerating these slugs drops the scenes, so re-add them afterwards: `bus-ridership-behavior` c5 (units), `stroop-task-performance` c4 (tests), `remembering-doctor-appointments` c3 (tests), `vaccine-misinformation-correction` c1 (matrix), `phone-use-while-driving` c1 (matrix), and `dog-ownership-among-seniors` c6 (association).
 
-Questions, answers, explanations and excerpts are model output and were not edited. Mechanical fixes are listed per study.
+Questions, answers and explanations were originally unedited model output. The beverage lesson now has a manual revision described below; its source excerpts remain verbatim. Mechanical generation fixes are listed per study.
 
 ## Known limits
 
 - **Passing is not correctness.** The gate checks structure, exact excerpts and the reviewers' approval. It cannot tell whether an accepted answer reads the paper correctly. The evaluation found this "real numbers, wrong meaning" failure passes every code check. One instance found by reading a passed study: `television-viewing-habits` (Boch 2019) challenge c5 accepts that the younger, better-educated sample "may have underestimated" false beliefs, while the paper says incorrect answers might decrease in older samples, which points the other way. Content review must check every accepted answer against the paper.
-- **Easy evidence.** Several results challenges paraphrase the answer in their own evidence lines. The gate rejects only verbatim copies.
+- **Easy evidence.** Several results challenges paraphrase the answer in their own evidence lines. The gate rejects only verbatim copies. Issue #31 remains open across the library; the manual beverage rewrite below is one completed content pass, not a claim that all studies are corrected.
 - **Cost.** The Cost column covers every round since the record was reset. Development runs on 2026-10-25 before that reset (smoke tests on single papers, and a first full run stopped after batch 1 to fix systematic failures) spent at least $0.75 more.
 - **Many papers needed several rounds.** The first round passed 17 of 45. Later rounds (`--round 2` to `--round 12`), each a fresh sample plus one retry, passed the rest; the Attempts column shows how many attempts each study took. A study that needed many attempts passed the same gate, but the model found it harder, so review it with extra care.
 - **Stricter than the original gate.** Generated lessons also had to pass checks added for them: at least five challenges, stage order, a hint and readable evidence lines per challenge, and no accepted answer copied from its evidence lines.
@@ -77,3 +77,104 @@ Questions, answers, explanations and excerpts are model output and were not edit
 | `baillon-2019-phishing-information-experience.pdf`         | passed | `clicking-phishing-links`               | nvidia/nemotron-3-super-120b-a12b | 2026-10-25 | 2        | 24       | $0.053 | #1: c5: option optC has no misconception note; c5: option optD has no misconception note; c6: option optD has no misconception note; c3: evidence lines state the accepted answer                                                                                                                                                                                                                                                                                                                                                                                                                                        | snapped 2 near-miss excerpt(s) to the source text in window 1; dropped 1 unmatched excerpt(s) from window 1; snapped 1 near-miss excerpt(s) to the source text in window 2; snapped 2 near-miss excerpt(s) to the source text in window 3; evidence window 5 returned nothing: The AI returned malformed JSON. Retry this stage.; snapped 6 near-miss excerpt(s) to the source text in window 7; stage 0 ran over 7 page window(s); ids renumbered e1–e24; stages 1–4 read 8 of 13 pages; lesson re-read with paper.url null (schema url shim); paper title, authors, journal and DOI set from papers/README.md; lesson  |
 | `rennung-2016-power-pose-backlash.pdf`                     | passed | `body-posture-judgments`                | nvidia/nemotron-3-super-120b-a12b | 2026-10-25 | 3        | 26       | $0.038 | #1: Learning Coach: Challenge c2: The evidence provided does not support the claim about recruitment via WiSoPanel or the exclusion of 41 participants for smartphone use. The cited references (e2 and e8) only contain a citation and response-time exclusions, respectively. To be acceptable, the challenge should either cite explicit statements about the recruitment source and smartphone exclusions, or the claim should be revised to match the available evidence. #2: Research Methods Reviewer: Challenge c6 includes a claim about ecological validity ('static, blurred‑face photos limit ecological val | dropped 1 unmatched excerpt(s) from window 2; snapped 1 near-miss excerpt(s) to the source text in window 3; dropped 1 unmatched excerpt(s) from window 3; snapped 1 near-miss excerpt(s) to the source text in window 5; stage 0 ran over 6 page window(s); ids renumbered e1–e18; stages 1–4 read 7 of 11 pages; lesson re-read with paper.url null (schema url shim); paper title, authors, journal and DOI set from papers/README.md; lesson evidence copied from all 18 stage-0 excerpt(s); moved 10 misconception note(s) out of alternatives, or dropped alternatives naming no option; moved 18 misconception no |
 | `raff-2025-earmarking-donations.pdf`                       | passed | `online-charity-giving`                 | nvidia/nemotron-3-super-120b-a12b | 2026-10-25 | 6        | 30       | $0.147 | #1: Learning Coach: Challenge c2: The accepted answer includes the detail 'invited via email', which is not specified in the provided evidence; the text only states that faculty were invited, without specifying the mode of invitation. #2: Research Methods Reviewer: Challenge c3: The accepted answer states the one‑tailed hypothesis was that earmarking conditions would have higher participation than Random, but none of the provided evidence excerpts (e6) contains this hypothesis statement; the evidence does not support the answer.; Challenge c6: The accepted answer cites evidence e6 to support t | snapped 2 near-miss excerpt(s) to the source text in window 1; snapped 1 near-miss excerpt(s) to the source text in window 2; evidence window 4 returned nothing: The AI returned malformed JSON. Retry this stage.; snapped 10 near-miss excerpt(s) to the source text in window 5; stage 0 ran over 5 page window(s); ids renumbered e1–e17; stages 1–4 read 6 of 10 pages; lesson re-read with paper.url null (schema url shim); paper title, authors, journal and DOI set from papers/README.md; lesson evidence copied from all 17 stage-0 excerpt(s); moved 10 misconception note(s) out of alternatives, or dropp |
+
+## Manual review in progress — 26 October 2026 (#31/#32)
+
+Baseline: `b9798d6`. The live local inventory has **53 studies and 313 required
+challenges**, of which **262 lack a scene**. This differs from the older issue's
+approximate 311/267 counts. There are 45 generated bodies and eight authored
+proof-set bodies. Those structural counts do not establish content correctness.
+
+### Rewritten questions
+
+`selecting-a-beverage` has all six questions rewritten as decisions. The old ids
+`c1`–`c6` became `decision1`–`decision6`, with the card updated, so saved answers to
+the old recall questions do not solve the replacements. Accepted options occupy
+different positions. This is a manual content revision; paid regeneration would
+overwrite it. It remains `reviewed: false` pending the content owner's review.
+
+| Before                                                          | After                                                                                                     | Source          |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| c1: repeat why the authors chose logistic regression            | decision1: select an analysis for a two-category outcome and separate visitors                            | pp. 2–3, e6/e8  |
+| c2: repeat the stated hypothesis                                | decision2: choose a testable prediction while preserving straw availability                               | pp. 1–2, e3/e8  |
+| c3: accept the reversed directional interpretation of OR = 0.32 | decision3: flag conflicting coding, coefficient and plotted direction before interpreting the exact ratio | p. 3, e2/e9/e10 |
+| c4: repeat the authors' effect-size label                       | decision4: identify the unsupported transfer from an effect-size label to every café                      | p. 3, e2/e11    |
+| c5: repeat the discussion's social-norm limitation              | decision5: choose a follow-up that tests peer influence                                                   | p. 4, e7        |
+| c6: repeat the recommended replication setting                  | decision6: choose a comparable paid-cocktail replication rather than assume transfer                      | pp. 2/4, e8/e12 |
+
+The PDF's Figure 1 and discussion describe lower consumption in the separate-box
+condition. The printed outcome coding, positive coefficient and OR = 0.32 do not
+align. The revised lesson records that inconsistency instead of treating its old
+reversed takeaway as verified. The exact coding/directional ratio still needs an
+analysis-script check. New excerpts e8–e12 are checked verbatim against the stored
+PDF; no original excerpt was rewritten to fit the lesson.
+
+### Scene changes
+
+The beverage lesson goes from **0/6 to 5/6** required challenges with scenes:
+matrix (arrangements), flow (available choices), estimate (printed OR interval
+with a coding caveat), connections (public social context), and designs (original
+setting versus a clearly labelled proposed replication). The effect-size transfer
+question stays plain because another diagram adds little there.
+
+The proof set already had scenes on most required questions before this work:
+
+| Study                  | Before | Current local |
+| ---------------------- | ------ | ------------- |
+| texting-lecture        | 8/8    | 8/8           |
+| stress-affirmation     | 4/7    | 4/7           |
+| exercise-focus         | 4/6    | 5/6           |
+| conformity-replication | 5/6    | 5/6           |
+| breakfast-grades       | 6/6    | 6/6           |
+| sleep-school           | 4/6    | 5/6           |
+| basketball-maths       | 5/6    | 5/6           |
+| learning-styles        | 5/6    | 5/6           |
+
+`exercise-focus` q5 now plots the two reported p-values against the corrected
+.008 threshold. `sleep-school` q5 shows the reported 1.87 odds ratio as an
+association, not a risk ratio. No new scene kind or shared-player behavior was
+introduced. Across the library, the current count is **255/313 without scenes**.
+
+### Further rewrites: 14 more studies (26–27 October)
+
+23 more generated studies had every question rewritten as a decision, keeping ids and
+card challenge lists unchanged. Each kept fact was compared with the stored PDF, and
+every new excerpt is verbatim on its cited page. The full per-study status, open
+defects and unverified leads are in the
+[review register](PREPARED_STUDY_REVIEW.md). All five remain `reviewed: false`.
+
+| Study                                | Before (all lookups of the shown evidence)                                                                                                              | After (decisions)                                                                                                                                                                                                         |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| judging-statement-truthfulness       | c1–c6: sample size, mean, coefficients, conclusion, a definition                                                                                        | c1 two sessions, c2 unclear statements, c3 reading three intervals (new estimate scene), c4 Bayes factors that depend on the prior, c5 reach of a null result, c6 a follow-up                                             |
+| being-a-later-born                   | q1–q6: design label, sex handling, two table cells, conclusion, list                                                                                    | q1 recording birth order early, q2 separate sexes, q3 five models (new estimate scene), q4 opposite directions, q5 half the cohort missing, q6 era                                                                        |
+| hand-washing-in-restrooms            | c1–c6: why a follow-up test, the screen picture, three F-test lookups                                                                                   | c1 which comparison isolates the message (new matrix scene), c2 random rooms, c3 an interaction, c4 a claim that goes too far (new comparison scene), c5 few rooms, c6 measure                                            |
+| food-warning-labels                  | c1–c6: design list (with an invented control group), PME scale, means                                                                                   | c1 no control group, c2 why rate effectiveness, c3 size of a gap (new comparison scene), c4 wording, c5 people who already cut back, c6 policy reach                                                                      |
+| tracing-shapes-while-brainstorming   | c1–c6: the manipulated variable, controlled variables, two result directions, a conclusion (c5 diagram restated the answer)                             | c1 matched drawings, c2 when mood was asked, c3 smaller gap than the original (new comparison scene), c4 a non-significant originality result and power, c5 the missing no-movement group, c6 whether culture explains it |
+| morning-people-and-life-satisfaction | c1–c6: research question, design label, mediators, two numbers, a share                                                                                 | c1 a noisy measure, c2 dropping small groups, c3 who carries the effect (new estimate scene), c4 the unexplained share, c5 whether the arrows show cause, c6 reach to other cultures                                      |
+| daily-gratitude-and-well-being       | c1–c6: design label, two hypotheses, two coefficients, a stability comparison, a causality statement, a sample statement (c1 diagram was a placeholder) | c1 why both scales at each wave, c2 why stability paths, c3 small links beside stability (new association scene), c4 equal-strength test, c5 who stayed in (new timeline scene), c6 a workplace programme                 |
+| daily-conversation-hearing           | c1–c6: design label, inclusion rule, two named variables, a reason                                                                                      | c1 two hearing measures, c2 two kinds of loneliness, c3 two separate links (new association scene), c4 speech versus high frequencies, c5 causation, c6 reach                                                             |
+
+Corrections made while checking the PDFs: the gratitude study had a placeholder diagram; the food-warning study had no control group
+(its lesson said it did); five lessons said no limitations were noted although each paper
+states several; and `judging-statement-truthfulness` stored funding and conflict-of-interest
+lines as evidence excerpts. The garbled step labels (for example "2 of 6 · , ") on 181
+questions across 31 studies were replaced from each question's reveal stage.
+
+### Outstanding scope and agreement
+
+- Agent: continue the source-based question review across the remaining 21 drafts
+  (see the [review register](PREPARED_STUDY_REVIEW.md) for order and open defects),
+  including the existing television lesson correctness warning above.
+  The original texting sample is separate. No full-library semantic audit is claimed.
+- Agent: add suitable scenes beyond this first batch; do not manufacture plots or
+  pad every question with a restatement of its text.
+- Marc/JC: review the shared-player proposal in
+  [prepared-study UI notes](../ui/PREPARED_STUDIES.md#shared-player-proposal-for-jc--26-october-2026).
+  Marc confirmed on 26 October that no agreement exists yet. No shared evidence
+  timing change is applied and no message has been sent.
+- Agent/team: check a fresh production upload for scenes. No live generation,
+  provider spending, deployment or production verification is established here.
+- Agent: review remaining #12 acceptance against the current implementation;
+  this content pass does not close that older issue.
+
+Verification and browser findings are recorded in the prepared-study UI notes.

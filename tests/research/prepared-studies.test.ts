@@ -105,6 +105,16 @@ describe("prepared-study catalog", () => {
     expect(cards.every((s) => !s.reviewed)).toBe(true);
   });
 
+  it("keeps scenes on most required challenges in every proof-set study", () => {
+    for (const slug of proofSet) {
+      const challenges = studies.find((s) => s.slug === slug)!.lesson
+        .challenges;
+      expect(challenges.filter((c) => c.scene).length, slug).toBeGreaterThan(
+        challenges.length / 2,
+      );
+    }
+  });
+
   it("uses the timeline, association and estimate kinds where the design needs them", () => {
     const kinds = (slug: string) =>
       studies

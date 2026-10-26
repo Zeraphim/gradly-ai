@@ -35,6 +35,29 @@ npm run build:vercel
 
 The retired standalone paper-case implementation and its dedicated tests are removed together. The retained reasoning preview still blocks API requests during its browser tests. Provider tests use synthetic outputs; these are not live model verification. Live model behaviour is measured separately by the dev-only, billed `npm run eval:nemotron`, which is not part of `check` (see [research/NEMOTRON_EVALUATION.md](research/NEMOTRON_EVALUATION.md)). Only its pure checks run in `check`, through `tests/research/eval-nemotron-checks.test.ts`. `npm run diagnose:nebius` (evidence and lesson stages on one stored paper) and `npm run test:flow` (all five stages, a learner session and one feedback request on a local server) are also dev-only billed live probes outside `check`. Their results vary between runs and are evidence for one revision only. PDF and OCR tests process synthetic PDFs. Sample-mode tests verify no inference calls and rejection on Vercel/in production.
 
+`tests/browser/prepared-review.spec.ts` checks the revised beverage journey at
+375/768/1366px, old-answer isolation, feedback, final reveal, overflow and axe.
+The proof-set content checks require scenes on a majority of required challenges;
+semantic question quality still needs source-based review.
+
+`tests/research/prepared-choice-quality.test.ts` guards the 26 studies revised in
+PR #33 against fixed-position and shortest/longest-answer shortcuts, disproportionate
+choice lengths, scene response ordering drift and one-word stage labels. Its scope
+is listed in `tests/fixtures/rewritten-studies.ts`; `scripts/audit-prepared-choices.ts`
+prints reproducible required-question counts, including ties. These checks do not
+verify that distractors are plausible or that teaching claims are correct.
+
+`tests/browser/prepared-rewrites.spec.ts` walks all 26 revised studies at 375×812 and
+1366×768 through the paper reveal, including optional bonuses and multiple-answer
+selection. It exercises numeric-result disclosure before assessment, scene taps,
+answer feedback, horizontal overflow and axe for each checked question.
+
+`tests/browser/choice-focus.spec.ts` checks mouse and touch selection of prepared
+cards, pills, multi-answer checkboxes, interval predictions and diagram answers,
+plus shared research-activity responses. Pointer selections and restored drafts
+must have no extra outline; keyboard focus retains a visible 3px ring. The
+first card case was observed failing before the 26 October focus fix.
+
 Format changed files with Prettier and run `git diff --check`. Browser traces are retained on failure. Automated accessibility checks cover exercised states; Safari/Firefox, assistive-technology sessions and arbitrary uploaded-document layouts remain outside this matrix.
 
 ## Authored quest and activity checks
