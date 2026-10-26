@@ -9,7 +9,7 @@ export const body: StudyBody = {
     id: "prepared-being-a-later-born",
     title: "Study design",
     briefing:
-      "A long-running British birth cohort recorded each child's position in the family and followed them to age 42. Decide how birth order and sex should be handled, read how the estimate for later-born men moves across five models, and judge what the missing half of the cohort means for a no-association finding.",
+      "Decide how to test whether birth order shapes midlife wellbeing, and what a missing half of the cohort means.",
     source: "generated",
     paper: {
       title:

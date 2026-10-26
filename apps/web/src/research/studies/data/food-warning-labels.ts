@@ -9,7 +9,7 @@ export const body: StudyBody = {
     id: "prepared-food-warning-labels",
     title: "Study Design Identification",
     briefing:
-      "Researchers tested warning messages about eating red meat. Decide what a design without a no-warning group can and cannot answer, why they chose an effectiveness rating, how big a difference in ratings really is, and how far a study like this can be pushed into policy.",
+      "Decide how to compare health and environmental warnings about red meat, and how far the results can go.",
     source: "generated",
     paper: {
       title:

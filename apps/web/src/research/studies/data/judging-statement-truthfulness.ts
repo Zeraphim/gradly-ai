@@ -9,7 +9,7 @@ export const body: StudyBody = {
     id: "prepared-judging-statement-truthfulness",
     title: "Trust and Truth Judgments Null Findings",
     briefing:
-      "Researchers asked whether people who describe themselves as trusting are quicker to call a statement true. Decide why the study was set up in two sessions and why unclear statements were used, read three sets of results, and judge how far the conclusion reaches.",
+      "Decide how to test whether trusting people judge statements as true more often, and how far the answer reaches.",
     source: "generated",
     paper: {
       title:

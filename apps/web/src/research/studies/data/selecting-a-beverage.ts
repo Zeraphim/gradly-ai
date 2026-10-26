@@ -8,7 +8,7 @@ export const body: StudyBody = {
     id: "prepared-selecting-a-beverage",
     title: "Field Experiment on Reducing Drinking Straw Consumption by Default",
     briefing:
-      "A team offered lemonade with straws either beside the cups or already inside some cups. Choose an analysis for the recorded choices, turn the proposed mechanism into a testable prediction, and inspect the results before deciding what a replication needs.",
+      "Decide how to test whether picking up a straw changes how many people take one, and what a replication needs.",
     source: "generated",
     paper: {
       title:

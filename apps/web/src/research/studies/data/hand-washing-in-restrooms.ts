@@ -9,7 +9,7 @@ export const body: StudyBody = {
     id: "prepared-hand-washing-in-restrooms",
     title: "Prepared study: Emoticon feedback and hand hygiene",
     briefing:
-      "A hospital ward fitted screens and pictures above hand-rub dispensers in eight patient rooms. Work out which comparison isolates the message, why rooms were assigned at random, how to read an interaction, how far a fading effect can be pushed, and what the outcome measure does and does not show.",
+      "Decide how to test whether a smiley screen over a hand-rub dispenser changes hand hygiene, and what the measure shows.",
     source: "generated",
     paper: {
       title:

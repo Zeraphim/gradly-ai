@@ -9,7 +9,7 @@ export const body: StudyBody = {
     id: "prepared-daily-conversation-hearing",
     title: "Study Design Identification",
     briefing:
-      "Researchers tested the hearing of 293 older Mandarin speakers in China and asked about loneliness and mood. Decide why two kinds of hearing measure and two kinds of loneliness were used, read which links appeared, and judge what a one-time study of volunteers can say.",
+      "Decide what hearing tests and loneliness scales can show about older adults' mood, and what they cannot.",
     source: "generated",
     paper: {
       title:
