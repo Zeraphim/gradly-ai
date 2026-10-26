@@ -158,6 +158,10 @@ export type Job = {
   leaseUntil: number;
   error?: string;
   version: number;
+  /** Automatic retries used by the current stage. */
+  autoRetries?: number;
+  /** Automatic redrafts used after the final check rejected a lesson. */
+  autoRedrafts?: number;
 };
 /**
  * Canonical form for exact-excerpt checks. It removes PDF typography only:

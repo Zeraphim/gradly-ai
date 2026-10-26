@@ -507,28 +507,45 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       ),
     );
 
-    // Stage 1 encounters malformed scene schema
-    const stage1Res = await withGuest(testGuest, () =>
-      jobsPost(
-        new Request("http://localhost/api/research/jobs", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Origin: "http://localhost",
-          },
-          body: JSON.stringify({ id: job.id }),
-        }),
-        mockProvider,
-      ),
-    );
-    expect(stage1Res.status).toBe(200);
+    // Stage 1 encounters malformed scene schema, retries automatically
+    // three times, then stops for the learner.
+    const post = (retry = false) =>
+      withGuest(testGuest, () =>
+        jobsPost(
+          new Request("http://localhost/api/research/jobs", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Origin: "http://localhost",
+            },
+            body: JSON.stringify({ id: job.id, retry }),
+          }),
+          mockProvider,
+        ),
+      );
+    const current = () =>
+      withGuest(testGuest, () => read<Job>(testGuest, "job", job.id));
+    for (let n = 1; n <= 3; n++) {
+      expect((await post()).status).toBe(200);
+      const retrying = await current();
+      expect(retrying.status).toBe("pending");
+      expect(retrying.audits[1]!.status).toBe("Retrying");
+      expect(retrying.audits[1]!.summary).toContain(
+        `Retrying automatically (${n} of 3)`,
+      );
+    }
+    expect((await post()).status).toBe(200);
 
-    const failedJob = await withGuest(testGuest, () =>
-      read<Job>(testGuest, "job", job.id),
-    );
+    const failedJob = await current();
     expect(failedJob.status).toBe("failed");
     expect(failedJob.stage).toBe(1);
     expect(failedJob.audits[1]!.status).toBe("Failed");
+
+    // A learner's retry starts a fresh set of automatic retries.
+    await post(true);
+    const retried = await current();
+    expect(retried.status).toBe("pending");
+    expect(retried.autoRetries).toBe(1);
   });
 
   it("preserves stage progress and live mode across provider transport failure and retry", async () => {
@@ -594,12 +611,13 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const failedState = await withGuest(testGuest, () =>
       read<Job>(testGuest, "job", job.id),
     );
-    expect(failedState.status).toBe("failed");
+    expect(failedState.status).toBe("pending");
     expect(failedState.mode).toBe("live"); // Never converts to demo!
     expect(failedState.stage).toBe(1);
-    expect(failedState.error).toContain("503 Service Unavailable");
+    expect(failedState.error).toBeUndefined();
+    expect(failedState.audits[1]!.summary).toContain("503 Service Unavailable");
 
-    // Retry stage 1
+    // The browser runs the queued stage 1 again without a learner retry
     const retryRes = await withGuest(testGuest, () =>
       jobsPost(
         new Request("http://localhost/api/research/jobs", {
@@ -608,7 +626,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
             "Content-Type": "application/json",
             Origin: "http://localhost",
           },
-          body: JSON.stringify({ id: job.id, retry: true }),
+          body: JSON.stringify({ id: job.id }),
         }),
         failingProvider,
       ),

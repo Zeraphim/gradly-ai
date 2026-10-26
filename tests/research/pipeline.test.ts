@@ -1,6 +1,12 @@
 import { asDraft } from "./fixtures/draft.js";
 import { it, expect } from "vitest";
-import { newJob, publicJob, runStage } from "../../apps/api/src/research/pipeline.js";
+import {
+  AUTO_RETRIES,
+  autoRecover,
+  newJob,
+  publicJob,
+  runStage,
+} from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
 import { ProviderError, type ModelProvider } from "../../apps/api/src/research/provider.js";
 import { z } from "zod";
@@ -911,4 +917,70 @@ it("removes a broken scene at drafting and keeps the lesson's valid one", async 
   );
   j = await finish(j);
   expect(j.status).toBe("ready");
+});
+
+it("queues a failed stage again up to three times, but not a timeout or bad key", () => {
+  const before = newJob("auto", "paper.pdf", [{ page: 1, text: page }]);
+  before.stage = 1;
+  const fail = (j: typeof before, error: string, errorCode?: "timeout") => {
+    const after = structuredClone(j);
+    after.status = "failed";
+    after.error = error;
+    after.audits[1] = { ...after.audits[1]!, status: "Failed", error, errorCode };
+    return after;
+  };
+  let j = before;
+  for (let n = 1; n <= AUTO_RETRIES; n++) {
+    j = autoRecover(j, fail(j, "The draft has no hint for c1. Retry this stage."));
+    expect(j.status).toBe("pending");
+    expect(j.autoRetries).toBe(n);
+    expect(j.error).toBeUndefined();
+    expect(j.audits[1]).toMatchObject({ status: "Retrying" });
+    expect(j.audits[1]!.error).toBeUndefined();
+    expect(j.audits[1]!.summary).toBe(
+      `Retrying automatically (${n} of 3): The draft has no hint for c1. Retry this stage.`,
+    );
+  }
+  expect(autoRecover(j, fail(j, "Malformed.")).status).toBe("failed");
+  expect(
+    autoRecover(before, fail(before, "The AI request timed out.", "timeout")).status,
+  ).toBe("failed");
+  expect(
+    autoRecover(
+      before,
+      fail(before, "Nebius request failed (401). Check model access and configuration."),
+    ).status,
+  ).toBe("failed");
+  expect(
+    autoRecover(before, fail(before, "Nebius request failed (429). Check model access and configuration."))
+      .status,
+  ).toBe("pending");
+  // A completed stage gives the next one its own three retries.
+  const advanced = structuredClone(j);
+  advanced.stage = 2;
+  advanced.status = "pending";
+  expect(autoRecover(j, advanced).autoRetries).toBeUndefined();
+});
+
+it("redrafts once from the Lesson Architect when the final check rejects a lesson", () => {
+  const before = newJob("redraft", "paper.pdf", [{ page: 1, text: page }]);
+  before.stage = 4;
+  before.autoRetries = 2;
+  before.lesson = structuredClone(featured);
+  const after = structuredClone(before);
+  after.status = "review";
+  after.error = "cq1: invalid answer guide.";
+  after.audits[4] = { ...after.audits[4]!, status: "Needs Review", summary: after.error };
+  const j = autoRecover(before, after);
+  expect(j).toMatchObject({ stage: 1, status: "pending", autoRedrafts: 1, lesson: undefined });
+  expect(j.error).toBeUndefined();
+  expect(j.autoRetries).toBeUndefined();
+  expect(j.audits[1]).toMatchObject({
+    status: "Retrying",
+    summary: "Redrafting automatically after the final check found: cq1: invalid answer guide.",
+  });
+  expect(j.audits[4]!.status).toBe("Pending");
+  const again = structuredClone(after);
+  again.autoRedrafts = 1;
+  expect(autoRecover(before, again).status).toBe("review");
 });

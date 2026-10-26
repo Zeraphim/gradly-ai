@@ -2,7 +2,7 @@ import { demoAvailable, runDemoStage } from "../demo.js";
 import { owner, sameOrigin, safeError } from "../auth.js";
 import { read, write, rateLimit, ConflictError } from "../store.js";
 import { type Job } from "../contracts.js";
-import { runStage, publicJob } from "../pipeline.js";
+import { autoRecover, redraft, runStage, publicJob } from "../pipeline.js";
 import { NebiusProvider, type ModelProvider } from "../provider.js";
 export const runtime = "nodejs";
 export const maxDuration = 240;
@@ -64,22 +64,18 @@ export async function POST(
       throw Error("Nebius API key is not configured.");
     await rateLimit("__research_global_ai_budget__", "ai", 120);
     await rateLimit(who, "ai-stage", 40);
-    if (retry && j.status === "review") {
-      j.stage = 1;
-      j.lesson = undefined;
-      j.review = undefined;
-      for (let i = 1; i < j.audits.length; i++)
-        j.audits[i] = {
-          ...j.audits[i]!,
-          status: "Pending",
-          summary: "Waiting for revision.",
-        };
+    // A learner's retry starts a fresh set of automatic retries.
+    if (retry) {
+      delete j.autoRetries;
+      delete j.autoRedrafts;
     }
+    if (retry && j.status === "review") redraft(j);
     j.status = "processing";
     j.leaseUntil = Date.now() + 230000;
-    j.audits[j.stage]!.status = retry ? "Retrying" : "Processing";
+    j.audits[j.stage]!.status =
+      retry || j.autoRetries ? "Retrying" : "Processing";
     j = await write(who, "job", id, j, j.version);
-    const result = await runStage(j, provider);
+    const result = autoRecover(j, await runStage(j, provider));
     const saved = await write(who, "job", id, result, j.version);
     return Response.json(publicJob(saved));
   } catch (e) {

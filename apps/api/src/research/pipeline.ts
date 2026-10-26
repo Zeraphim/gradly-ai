@@ -458,6 +458,59 @@ export async function runStage(
     return j;
   }
 }
+/** Automatic retries per stage, so up to four attempts before a learner must retry. */
+export const AUTO_RETRIES = 3;
+/** Automatic redrafts after the final check rejects a lesson. */
+export const AUTO_REDRAFTS = 1;
+/** Sends a rejected lesson back to the Lesson Architect, keeping the evidence. */
+export function redraft(j: Job) {
+  j.stage = 1;
+  j.lesson = undefined;
+  j.review = undefined;
+  for (let i = 1; i < j.audits.length; i++)
+    j.audits[i] = {
+      ...j.audits[i]!,
+      status: "Pending",
+      summary: "Waiting for revision.",
+    };
+}
+/** A Nebius 4xx other than 429, such as a bad key or no model access, fails
+ *  the same way every time. A timeout already had an in-request retry and
+ *  each attempt takes up to 220s, so it waits for the learner instead. */
+function retryable(audit: Audit) {
+  return (
+    audit.errorCode !== "timeout" &&
+    !/Nebius request failed \(4(?!29)\d\d\)/.test(audit.error ?? "")
+  );
+}
+/** Queues a failed stage or a rejected lesson again instead of stopping. The
+ *  browser runs a pending job's next stage on its own. */
+export function autoRecover(before: Job, after: Job): Job {
+  const j = structuredClone(after);
+  if (j.stage !== before.stage) delete j.autoRetries;
+  const audit = j.audits[j.stage]!;
+  if (
+    j.status === "failed" &&
+    retryable(audit) &&
+    (j.autoRetries ?? 0) < AUTO_RETRIES
+  ) {
+    j.autoRetries = (j.autoRetries ?? 0) + 1;
+    audit.status = "Retrying";
+    audit.summary = `Retrying automatically (${j.autoRetries} of ${AUTO_RETRIES}): ${audit.error}`;
+    delete audit.error;
+    delete audit.errorCode;
+  } else if (j.status === "review" && (j.autoRedrafts ?? 0) < AUTO_REDRAFTS) {
+    const problems = audit.summary;
+    j.autoRedrafts = (j.autoRedrafts ?? 0) + 1;
+    delete j.autoRetries;
+    redraft(j);
+    j.audits[1]!.status = "Retrying";
+    j.audits[1]!.summary = `Redrafting automatically after the final check found: ${problems}`;
+  } else return j;
+  delete j.error;
+  j.status = "pending";
+  return j;
+}
 export function publicJob(j: Job) {
   return {
     id: j.id,
