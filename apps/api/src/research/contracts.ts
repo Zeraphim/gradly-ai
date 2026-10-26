@@ -167,18 +167,30 @@ export function excerptMatches(pageText: string, excerpt: string) {
   const target = canonicalText(excerpt);
   return target.length > 0 && canonicalText(pageText).includes(target);
 }
+/**
+ * Whether a paper link appears in the document. A DOI is matched wherever it
+ * sits in the link (doi.org, dx.doi.org or a publisher URL), ignoring case and
+ * PDF line breaks; any other link must appear as written, minus its scheme.
+ */
+export function paperLinkSupported(url: string, pages: PageText[]) {
+  const text = canonicalText(pages.map((p) => p.text).join(" ")).toLowerCase();
+  const has = (s: string) => text.includes(canonicalText(s).toLowerCase());
+  const doi = url.match(/10\.\d{4,9}\/[^\s?#]+/i)?.[0].replace(/[/.]+$/, "");
+  if (!doi) return has(url.replace(/^https?:\/\//i, ""));
+  // Publisher links append segments such as "/full" after the DOI.
+  const parts = doi.split("/");
+  for (let n = parts.length; n >= 2; n--)
+    if (has(parts.slice(0, n).join("/"))) return true;
+  return false;
+}
 export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
   const problems: string[] = [];
   const ids = new Set<string>();
   const refs = new Set(lesson.evidence.map((r) => r.id));
-  const normalize = (s: string) => s.replace(/\s+/g, " ").trim();
   if (refs.size !== lesson.evidence.length)
     problems.push("Duplicate evidence identifiers.");
-  if (lesson.paper.url) {
-    const source = lesson.paper.url.replace(/^https:\/\/doi.org\//, "");
-    if (!normalize(pages.map((p) => p.text).join(" ")).includes(source))
-      problems.push("The paper source link is not supported by the document.");
-  }
+  if (lesson.paper.url && !paperLinkSupported(lesson.paper.url, pages))
+    problems.push("The paper source link is not supported by the document.");
   for (const r of lesson.evidence) {
     const page = pages.find((p) => p.page === r.page);
     if (!page || !excerptMatches(page.text, r.excerpt))
