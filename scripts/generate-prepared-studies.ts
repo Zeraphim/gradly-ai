@@ -966,7 +966,7 @@ function writeLog(state: State, papers: Paper[]) {
 - **Gate:** every check in \`scripts/prepared-study-checks.ts\`, the same functions \`tests/research/prepared-studies.test.ts\` runs: answer guides, author and research-line identity, scene validation, answer gating, no back-to-back scene kinds, stage order with at least five required challenges, a hint and readable evidence lines per challenge, no accepted answer copied from its evidence lines, and verbatim excerpts on the cited page of the stored PDF.
 - **Regeneration:** a study that fails gets one more attempt with the failures appended to the lesson and card tasks. A second failure is skipped and logged. Skipped papers can be given later rounds (\`--round 2\` and up), each a fresh sample plus one retry; the Attempts column counts every attempt across rounds.
 - **Harness settings, not product changes:** like the evaluation, \`propertyNames\` is stripped from request schemas (Nebius rejects it), the 20 s production timeout is replaced by ${TIMEOUT_MS / 1000} s, and a lesson rejected only for \`paper.url\` is re-read with \`url: null\`. Paper title, authors, journal and DOI are always set from [papers/README.md](papers/README.md).
-- **Not changed:** pipeline prompts, contracts and scene kinds (#8). Generated lessons use only the four contract scene kinds.
+- **Not changed:** pipeline prompts, contracts and scene kinds. Generated lessons use the shared contract's scene kinds, and the pipeline requires at least one valid scene per lesson.
 
 Questions, answers, explanations and excerpts are model output and were not edited. Mechanical fixes are listed per study.
 

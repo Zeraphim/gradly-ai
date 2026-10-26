@@ -1,8 +1,8 @@
 import "./styles.css";
-import { sceneSchema } from "@paperquest/contracts";
 import {
   InvestigationScene,
   emptySceneDraft,
+  investigationScene,
   type SceneDraft,
 } from "./scenes/InvestigationScene.js";
 import {
@@ -555,10 +555,7 @@ function GradlyWorkspace({
     }
   };
   const c = session?.challenge;
-  const scene = useMemo(() => {
-    const parsed = sceneSchema.safeParse(c?.scene);
-    return parsed.success ? parsed.data : null;
-  }, [c?.scene]);
+  const scene = useMemo(() => investigationScene(c?.scene), [c?.scene]);
   const demo = job?.mode === "demo" || session?.source === "demo";
   const shownFeedback = feedback ?? c?.aiFeedback;
   const bottom =

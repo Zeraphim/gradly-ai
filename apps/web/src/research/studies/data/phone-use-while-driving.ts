@@ -238,10 +238,92 @@ export const body: StudyBody = {
         },
         explanation:
           "The researchers explicitly varied interaction medium (text versus image) and task pacing (self‑paced versus experimenter‑paced) to create the four experimental conditions (see e2, e6, e3‑e5, e7, e17‑e21).",
-        refs: [],
+        refs: ["e18", "e20"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "matrix",
+          title: "Four phone tasks, side by side",
+          instruction:
+            "Compare the tasks row by row and find the features that were arranged on purpose.",
+          description:
+            "Texting, Facebook, Instagram and Snapchat compared on their content and on who set the pace.",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e18", "e20"],
+            note: "Summary of the stated hypotheses, which name each task's medium and pacing.",
+          },
+          conditions: [
+            { id: "texting", label: "Texting" },
+            { id: "facebook", label: "Facebook" },
+            { id: "instagram", label: "Instagram" },
+            { id: "snapchat", label: "Snapchat" },
+          ],
+          rows: [
+            {
+              id: "content",
+              label: "Content",
+              detail: "What the driver read or looked at.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e18"],
+                note: "Paraphrase of the cited method.",
+              },
+              cells: ["Text", "Text", "Images", "Images"],
+            },
+            {
+              id: "pacing",
+              label: "Pacing",
+              detail: "Who decided when the next item arrived.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e20"],
+                note: "Paraphrase of the cited method.",
+              },
+              cells: ["Experimenter", "Self", "Self", "Experimenter"],
+            },
+            {
+              id: "platform",
+              label: "App",
+              detail: "The app used for the task.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e18", "e20"],
+                note: "Paraphrase of the cited method.",
+              },
+              cells: ["Texting", "Facebook", "Instagram", "Snapchat"],
+            },
+          ],
+          responses: [
+            {
+              optionId: "o1",
+              label: "Medium and pacing",
+              targetIds: ["content", "pacing"],
+            },
+            {
+              optionId: "o2",
+              label: "Platform and duration",
+              targetIds: ["platform"],
+            },
+            { optionId: "o3", label: "Age and time of day", targetIds: [] },
+          ],
+          resolution: {
+            id: "matrix-resolution",
+            label: "Two factors, crossed",
+            detail:
+              "Content and pacing each split the four tasks two and two, so every combination appears once. The app names only label the four cells.",
+            at: "resolution",
+            provenance: {
+              kind: "authored",
+              refs: ["e18", "e20"],
+              note: "Authored methods guidance.",
+            },
+          },
+        },
       },
       {
         id: "c2",

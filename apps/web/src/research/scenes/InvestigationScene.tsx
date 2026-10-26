@@ -10,7 +10,12 @@ import { ComparisonScene } from "./ComparisonScene.js";
 import { FlowDiagram } from "./FlowDiagram.js";
 import { EvidenceCard } from "./EvidenceCard.js";
 import { ArrowDown, ArrowRight, Check, Link2, ScanSearch } from "lucide-react";
-import type { Scene, SceneItem } from "@paperquest/contracts";
+import {
+  sceneSchema,
+  type Scene,
+  type SceneItem,
+  type SceneOf,
+} from "@paperquest/contracts";
 import "./scenes.css";
 
 export type SceneDraft = {
@@ -23,6 +28,20 @@ export const emptySceneDraft: SceneDraft = {
   inspectedId: null,
   prediction: null,
 };
+/** The four families this workspace renderer draws; the study player draws all kinds. */
+export type InvestigationSceneData = SceneOf<
+  "flow" | "connections" | "comparison" | "designs"
+>;
+const investigationKinds = ["flow", "connections", "comparison", "designs"];
+/** A valid scene this renderer can draw, otherwise null so plain choices show. */
+export function investigationScene(
+  value: unknown,
+): InvestigationSceneData | null {
+  const parsed = sceneSchema.safeParse(value);
+  return parsed.success && investigationKinds.includes(parsed.data.kind)
+    ? (parsed.data as InvestigationSceneData)
+    : null;
+}
 type Props = {
   scene: Scene;
   options: { id: string; text: string }[];

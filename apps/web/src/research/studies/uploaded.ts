@@ -50,6 +50,8 @@ export function toStudyChallenge(c: PublicChallenge): StudyChallenge {
     prompt: c.prompt,
     evidence: c.evidence,
     scene: c.scene,
+    // The server checked that a tap style has one setup element per option.
+    responseStyle: c.responseStyle ?? undefined,
     options: c.options,
     accepted: feedback?.accepted ?? [],
     alternatives: [],

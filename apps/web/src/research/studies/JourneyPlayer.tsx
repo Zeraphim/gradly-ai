@@ -566,7 +566,7 @@ function ChallengeScreen({
   );
 }
 
-/** A covered comparison or estimate asks for a reveal before answers appear. */
+/** A covered comparison, estimate or test family asks for a reveal before answers appear. */
 function sceneGatesChoices(
   scene: ReturnType<typeof visibleScene>,
   draft: SceneDraft,
@@ -574,7 +574,9 @@ function sceneGatesChoices(
 ) {
   if (!scene || !answering) return true;
   if (
-    (scene.kind === "comparison" || scene.kind === "estimate") &&
+    (scene.kind === "comparison" ||
+      scene.kind === "estimate" ||
+      scene.kind === "tests") &&
     scene.prediction
   )
     return !!draft.revealed;

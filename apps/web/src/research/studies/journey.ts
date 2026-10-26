@@ -1,8 +1,4 @@
-import {
-  projectScene,
-  type Scene,
-  type SceneGate,
-} from "@paperquest/contracts";
+import { projectScene, tapTargets } from "@paperquest/contracts";
 import type { PreparedStudy, StudyChallenge, StudyScene } from "./types.js";
 
 /** Attempts recorded for one challenge, oldest first. */
@@ -41,9 +37,9 @@ export function journeyChallenges(study: PreparedStudy, withBonus: boolean) {
 }
 
 /**
- * Only content permitted at the current status is rendered, mirroring the server's
- * projectScene for the shared kinds. Proposed kinds follow the same gate rules.
- * Returns null for unsafe or unknown scenes, which fall back to plain choices.
+ * Only content permitted at the current status is rendered, using the server's
+ * projectScene for every kind. Returns null for unsafe or unknown scenes, which
+ * fall back to plain choices.
  */
 export function visibleScene(
   scene: StudyScene | null,
@@ -53,53 +49,10 @@ export function visibleScene(
   if (!scene) return null;
   const feedback = status !== "answering" && status !== "retrying";
   const resolution = status === "solved" || status === "explained";
-  if (
-    scene.kind === "flow" ||
-    scene.kind === "connections" ||
-    scene.kind === "comparison" ||
-    scene.kind === "designs"
-  )
-    return projectScene(scene as Scene, feedback, resolution, options);
-  const visible = (at: SceneGate) =>
-    at === "setup" ||
-    (at === "feedback" && feedback) ||
-    (at === "resolution" && resolution);
-  const mapped = new Set(scene.responses.map((r) => r.optionId));
-  if (mapped.size !== options.length || options.some((id) => !mapped.has(id)))
-    return null;
-  const resolutionItem =
-    scene.resolution && visible(scene.resolution.at) ? scene.resolution : null;
-  if (scene.kind === "timeline")
-    return {
-      ...scene,
-      resolution: resolutionItem,
-      events: scene.events.filter((event) => visible(event.at)),
-    };
-  if (scene.kind === "association")
-    return {
-      ...scene,
-      resolution: resolutionItem,
-      pairs: scene.pairs.filter((pair) => visible(pair.at)),
-    };
-  return {
-    ...scene,
-    resolution: resolutionItem,
-    band: scene.band && visible(scene.band.at) ? scene.band : null,
-    estimates: scene.estimates.filter((estimate) => visible(estimate.at)),
-  };
+  return projectScene(scene, feedback, resolution, options);
 }
 
 /** A tap response needs a diagram whose elements each stand for one option. */
-export function tapTargets(scene: StudyScene | null) {
-  if (
-    !scene ||
-    !["flow", "designs", "timeline"].includes(scene.kind) ||
-    scene.responses.some((response) => response.targetIds.length !== 1)
-  )
-    return null;
-  return new Map(
-    scene.responses.map((response) => [response.targetIds[0]!, response]),
-  );
-}
+export { tapTargets };
 
 export const POINTS_PER_SOLVE = 10;

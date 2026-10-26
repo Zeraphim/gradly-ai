@@ -4,8 +4,11 @@ import {
   ArrowRight,
   Check,
   ChartColumn,
+  FlaskConical,
   GitFork,
+  Grid3x3,
   History,
+  Layers,
   Link2,
   Ruler,
   Shapes,
@@ -20,8 +23,11 @@ import "../../scenes/scenes.css";
 import type { StudyScene } from "../types.js";
 import { AssociationScene } from "./AssociationScene.js";
 import { EstimateScene } from "./EstimateScene.js";
+import { MatrixScene } from "./MatrixScene.js";
 import { TapNode, type TapProps } from "./TapNode.js";
+import { TestsScene } from "./TestsScene.js";
 import { TimelineScene } from "./TimelineScene.js";
+import { UnitsScene } from "./UnitsScene.js";
 
 const kinds: Record<StudyScene["kind"], { label: string; icon: typeof Link2 }> =
   {
@@ -32,6 +38,9 @@ const kinds: Record<StudyScene["kind"], { label: string; icon: typeof Link2 }> =
     timeline: { label: "Timeline", icon: History },
     association: { label: "Association", icon: Shapes },
     estimate: { label: "Estimate", icon: Ruler },
+    tests: { label: "Tests", icon: FlaskConical },
+    units: { label: "Units", icon: Layers },
+    matrix: { label: "Conditions", icon: Grid3x3 },
   };
 
 /**
@@ -103,7 +112,9 @@ export function StudySceneView({
         </span>
         <h2>{scene.title}</h2>
         <p>
-          {tap ? `${scene.instruction} Tap one to answer.` : scene.instruction}
+          {tap
+            ? `${scene.instruction} Tap ${tap.multiple ? "every one that applies" : "one"} to answer.`
+            : scene.instruction}
         </p>
       </m.header>
       <p className="sr-only">{scene.description}</p>
@@ -184,6 +195,22 @@ export function StudySceneView({
             answered={answered}
             disabled={disabled}
           />
+        ) : null}
+        {scene.kind === "tests" ? (
+          <TestsScene
+            scene={scene}
+            draft={draft}
+            onDraft={onDraft}
+            answered={answered}
+            disabled={disabled}
+            tap={tap}
+          />
+        ) : null}
+        {scene.kind === "units" ? (
+          <UnitsScene scene={scene} answered={answered} tap={tap} />
+        ) : null}
+        {scene.kind === "matrix" ? (
+          <MatrixScene scene={scene} answered={answered} tap={tap} />
         ) : null}
       </m.div>
       {/* Resolution has no exit presence: withdrawn content leaves immediately. */}

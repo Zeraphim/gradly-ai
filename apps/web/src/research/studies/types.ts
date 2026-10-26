@@ -1,4 +1,4 @@
-import type { Scene, SceneItem } from "@paperquest/contracts";
+import type { ResponseStyle, Scene, SceneOf } from "@paperquest/contracts";
 import type {
   Challenge,
   Lesson,
@@ -6,9 +6,9 @@ import type {
 
 /**
  * Prepared-study preview format. It reuses the pipeline's Lesson and Challenge
- * shapes so prepared and generated papers can share one player. The three extra
- * scene kinds below are frontend proposals only. They are not part of the shared
- * contract until agreed with the pipeline owner (#8).
+ * shapes so prepared and generated papers can share one player. Every scene kind,
+ * including timeline, association and estimate (first proposed in #8), is part of
+ * the shared contract in packages/contracts.
  */
 export type DesignGroup =
   | "between"
@@ -49,60 +49,21 @@ export const studyTopics: Record<StudyTopic, { label: string; short: string }> =
     },
   };
 
-/** A wave or event on a shared time axis. `n` is the reported sample at that point. */
-export type TimelineEvent = SceneItem & { when: string; n?: number };
-export type TimelineScene = Omit<Scene, "kind"> & {
-  kind: "timeline";
-  events: TimelineEvent[];
-  responses: Scene["responses"];
-};
-
-/** A reported association. `value` is the coefficient as stated in the paper. */
-export type AssociationPair = SceneItem & {
-  x: string;
-  y: string;
-  statistic: "r" | "beta" | "OR";
-  value: number;
-  n?: number;
-};
-export type AssociationScene = Omit<Scene, "kind"> & {
-  kind: "association";
-  pairs: AssociationPair[];
-  responses: Scene["responses"];
-};
-
-/** A reported estimate with its interval, drawn against a reference value. */
-export type IntervalEstimate = SceneItem & {
-  value: number;
-  lower: number;
-  upper: number;
-};
-export type EstimateScene = Omit<Scene, "kind"> & {
-  kind: "estimate";
-  measure: string;
-  min: number;
-  max: number;
-  reference: { value: number; label: string };
-  band: {
-    lower: number;
-    upper: number;
-    label: string;
-    at: SceneItem["at"];
-  } | null;
-  estimates: IntervalEstimate[];
-  prediction: { label: string; options: string[] } | null;
-  responses: Scene["responses"];
-};
-
-export type StudyScene =
-  Scene | TimelineScene | AssociationScene | EstimateScene;
-
-/** How a challenge collects its answer. All styles submit the same option ids. */
-export type ResponseStyle = "cards" | "pills" | "tap";
+/** Scene families come from the shared contract, so prepared and generated papers match. */
+export type TimelineScene = SceneOf<"timeline">;
+export type TimelineEvent = TimelineScene["events"][number];
+export type AssociationScene = SceneOf<"association">;
+export type AssociationPair = AssociationScene["pairs"][number];
+export type EstimateScene = SceneOf<"estimate">;
+export type IntervalEstimate = EstimateScene["estimates"][number];
+export type TestsScene = SceneOf<"tests">;
+export type UnitsScene = SceneOf<"units">;
+export type MatrixScene = SceneOf<"matrix">;
+export type StudyScene = Scene;
+export type { ResponseStyle };
 
 export type StudyChallenge = Omit<Challenge, "scene"> & {
   scene: StudyScene | null;
-  responseStyle?: ResponseStyle;
 };
 
 /**

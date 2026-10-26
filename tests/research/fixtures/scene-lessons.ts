@@ -30,6 +30,23 @@ const refs = {
     excerpt:
       "The authored station study recruited commuters purposively for open-ended interviews, compared accounts and documented interpretive decisions. It did not measure population frequencies or test a signage intervention.",
   },
+  trial: {
+    id: "trial",
+    page: 1,
+    excerpt:
+      "The authored field trial assigned 4 clinics to a text reminder or no reminder and analysed 2,400 appointment records. Reminder clinics also opened on weekends.",
+  },
+  outcomes: {
+    id: "outcomes",
+    page: 2,
+    excerpt:
+      "The authored fixture reports three outcome tests: attendance p = .03, punctuality p = .41 and rebooking p = .27.",
+  },
+  records: {
+    id: "records",
+    page: 1,
+    excerpt: "analysed 2,400 appointment records",
+  },
   // Stage 0 needs three excerpts, so each lesson cites one narrower passage too.
   observed: {
     id: "observed",
@@ -347,6 +364,153 @@ export const qualitativeSceneLesson = lesson(
     ),
   ],
   [refs.interviews, refs.accounts, refs.decisions],
+);
+const trialUnits: Scene = {
+  ...base("What was assigned, what was counted?", "trial", []),
+  responses: [
+    { optionId: "bounded", label: "Clinics", targetIds: ["clinics"] },
+    { optionId: "broad", label: "Records", targetIds: ["records"] },
+  ],
+  kind: "units",
+  levels: [
+    {
+      ...n(
+        "clinics",
+        "Clinics assigned",
+        "Each clinic got one condition.",
+        "trial",
+      ),
+      provenance: p("trial", "reported"),
+      count: 4,
+      unit: "clinics",
+      role: "assigned",
+    },
+    {
+      ...n(
+        "records",
+        "Records analysed",
+        "Appointments from those clinics.",
+        "trial",
+      ),
+      provenance: p("trial", "reported"),
+      count: 2400,
+      unit: "records",
+      role: "analysed",
+    },
+  ],
+};
+const trialTests: Scene = {
+  ...base("Three outcomes, one threshold", "outcomes", [
+    "attendance",
+    "punctuality",
+    "rebooking",
+  ]),
+  responses: [
+    { optionId: "bounded", label: "One of three", targetIds: ["attendance"] },
+    {
+      optionId: "broad",
+      label: "All outcomes",
+      targetIds: ["attendance", "punctuality", "rebooking"],
+    },
+  ],
+  kind: "tests",
+  alpha: 0.05,
+  tests: [
+    {
+      ...n("attendance", "Attendance", "Kept appointments.", "outcomes"),
+      provenance: p("outcomes", "reported"),
+      p: 0.03,
+    },
+    {
+      ...n("punctuality", "Punctuality", "Arrived on time.", "outcomes"),
+      provenance: p("outcomes", "reported"),
+      p: 0.41,
+    },
+    {
+      ...n("rebooking", "Rebooking", "Booked a follow-up.", "outcomes"),
+      provenance: p("outcomes", "reported"),
+      p: 0.27,
+    },
+  ],
+  prediction: {
+    label: "How many will cross .05?",
+    options: ["None", "One", "All three"],
+  },
+};
+const trialMatrix: Scene = {
+  ...base("What else differed?", "trial", []),
+  responses: [
+    { optionId: "bounded", label: "Weekend opening", targetIds: ["weekend"] },
+    { optionId: "broad", label: "The reminder", targetIds: ["message"] },
+  ],
+  kind: "matrix",
+  conditions: [
+    { id: "reminder", label: "Reminder clinics" },
+    { id: "none", label: "No-reminder clinics" },
+  ],
+  rows: [
+    {
+      ...n("message", "Text reminder", "The planned manipulation.", "trial"),
+      cells: ["Sent", "Not sent"],
+    },
+    {
+      ...n("weekend", "Weekend opening", "Opening hours.", "trial"),
+      cells: ["Yes", "No"],
+    },
+  ],
+  resolution: {
+    id: "matrix-resolution",
+    label: "Two rows differ",
+    detail: "Weekend opening changed along with the reminder.",
+    at: "resolution",
+    provenance: p("trial", "authored"),
+  },
+};
+export const fieldTrialSceneLesson = lesson(
+  "authored-field-trial-fixture",
+  "Authored clinic reminder trial",
+  [
+    {
+      ...challenge(
+        "trial-units",
+        trialUnits,
+        "trial",
+        "design",
+        "Which count limits how independent the evidence is?",
+        [
+          "The 4 clinics that received a condition.",
+          "The 2,400 records analysed.",
+        ],
+      ),
+      responseStyle: "tap",
+    },
+    challenge(
+      "trial-tests",
+      trialTests,
+      "outcomes",
+      "results",
+      "What do the three outcome tests show?",
+      [
+        "One of three outcomes crossed .05.",
+        "The reminder improved every outcome.",
+      ],
+    ),
+    {
+      ...challenge(
+        "trial-matrix",
+        trialMatrix,
+        "trial",
+        "interpretation",
+        "Which difference stops the attendance gain being credited to the reminder alone?",
+        [
+          "Reminder clinics also opened on weekends.",
+          "The reminder was the only difference.",
+        ],
+      ),
+      responseStyle: "tap",
+    },
+  ],
+  [refs.trial, refs.outcomes, refs.records],
 );
 /** One page per cited page number; narrower excerpts sit inside a longer one. */
 export const sceneFixturePages = (value: Lesson) =>

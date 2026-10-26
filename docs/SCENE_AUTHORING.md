@@ -1,21 +1,61 @@
 # Reusable research scenes
 
-Fresh Adventure renders optional, versioned scene data through four components. The
-featured texting investigation uses all four families across eight required challenges
-and a bonus. Existing lessons without scenes retain the original choice interface.
+Scenes are versioned, data-only visuals in one shared contract. Prepared studies,
+generated lessons and uploaded papers use the same ten families. The study player
+(`apps/web/src/research/studies/scenes/StudySceneView.tsx`) renders all ten. The
+Fresh Adventure workspace renderer (`InvestigationScene`) draws the first four and
+falls back to plain choices for the rest. The featured texting investigation uses
+those four across eight required challenges and a bonus. Challenges without a scene
+keep the original choice interface.
 
 ## Choose a scene
 
-| Kind          | Teaching task                                             | Required support                                         | Avoid                                                                       |
-| ------------- | --------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `flow`        | Trace a process or branching research design              | Supported nodes and labeled relationships                | Invented mechanisms, pairing or participant records                         |
-| `connections` | Assemble evidence, select methods, connect a claim        | Evidence anchors and candidate response mappings         | Treating an interpretation as uniquely correct without support              |
-| `comparison`  | Inspect reported numerical measurements on a shared scale | Values, units, scale and references for each measurement | Invented raw data, distributions or causal effects                          |
-| `designs`     | Compare group formation or evidence-gathering processes   | At least two supported steps per panel                   | Suggesting equivalent participants or identical procedures without evidence |
+| Kind          | Teaching task                                              | Required support                                         | Avoid                                                                       |
+| ------------- | ---------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `flow`        | Trace a process or branching research design               | Supported nodes and labeled relationships                | Invented mechanisms, pairing or participant records                         |
+| `connections` | Assemble evidence, select methods, connect a claim         | Evidence anchors and candidate response mappings         | Treating an interpretation as uniquely correct without support              |
+| `comparison`  | Inspect reported numerical measurements on a shared scale  | Values, units, scale and references for each measurement | Invented raw data, distributions or causal effects                          |
+| `designs`     | Compare group formation or evidence-gathering processes    | At least two supported steps per panel                   | Suggesting equivalent participants or identical procedures without evidence |
+| `timeline`    | Order waves or events and show attrition                   | Reported `when` labels and optional reported n           | Implying causal order from timing alone                                     |
+| `association` | Judge strength versus significance or causation            | A reported r, β or OR, exactly as stated, optional n     | Deriving coefficients the paper does not state                              |
+| `estimate`    | Read precision, null and equivalence results               | Reported estimates with interval bounds on one scale     | Treating a nonsignificant interval as evidence of no effect                 |
+| `tests`       | Weigh multiple comparisons and marginal results            | Every reported p in the family and the threshold α       | Listing only the significant tests                                          |
+| `units`       | Compare what was assigned or sampled with what was counted | Reported counts per level and a role for each            | Treating nested records as independent participants                         |
+| `matrix`      | Spot what else differs between conditions                  | One short, supported cell per condition and feature      | Inventing features the method does not describe                             |
 
-A paper need not use every family. Use `scene: null` when no honest visual fits. For
+A paper need not use every family. Use `scene: null` on a challenge when no honest
+visual fits it, but a generated lesson needs at least one valid scene (see
+[Required scenes and response styles](#required-scenes-and-response-styles)). For
 qualitative work, prefer processes, accounts and bounded interpretations. Themes do
 not establish prevalence. A conceptual argument is not an observed mechanism.
+
+## Required scenes and response styles
+
+The Lesson Architect is asked for a scene on at least two required challenges,
+including one design-stage challenge, wherever the evidence supports one.
+`sceneCoverageProblems` in `apps/api/src/research/contracts.ts` enforces at least
+one valid scene. The pipeline checks it right after drafting and fails that stage
+with "Retry this stage", so the existing retry redrafts the lesson before any
+reviewer call. `verifyLesson` repeats the check for generated lessons. Demo and
+featured lessons are exempt. `connections` fits any paper with evidence, so a
+qualitative or conceptual paper can always meet the rule without numbers.
+
+`responseStyle` is optional on every challenge: `cards` (default), `pills` for
+short labels, or `tap`. `tap` needs a `flow`, `designs`, `timeline`, `tests`,
+`units` or `matrix` scene whose responses each target exactly one distinct element
+that is visible before the first attempt. `tapTargets` in the contract package is
+the single rule. The server rejects anything else in `responseStyleProblems`, and
+the player falls back to cards if a stored scene stops qualifying. The public
+challenge carries `responseStyle`, and `studies/uploaded.ts` passes it to the
+player.
+
+Every number on a `reported` element (comparison value, timeline n, association
+value and n, estimate value and bounds, tests p, units count) must appear in that
+element's referenced excerpts. `numbersIn` reads thousands separators, leading-dot
+decimals (`p = .04`) and typographic minus signs as printed. Derived elements, such
+as interval midpoints, say so in their provenance note. The renderers add only
+labelled derived teaching values after an attempt: r², tests × α, and the ratio
+between unit levels.
 
 ## Authored sample results interaction
 
@@ -35,9 +75,9 @@ rule, group labels, outcome and description from `quest-visuals.tsx`, retains th
 same diagram across choices and resolves active paths immediately for reduced
 motion. Its source procedure summary is supplied only after the sample decision is
 resolved. The diagram has a textual equivalent and is explicitly schematic.
-This is a reusable presentation pilot, **not** a fifth `sceneSchema` family or an
-automatic template-selection feature for generated papers. The four-family
-server contract and its evidence gates below remain the authority for generation.
+This is a reusable presentation pilot, **not** a `sceneSchema` family or an
+automatic template-selection feature for generated papers. The shared scene
+contract and its evidence gates below remain the authority for generation.
 
 `packages/contracts/src/scenes.ts` exports `sceneSchema`, `Scene`, `sceneProblems`
 and `projectScene`. `apps/api/src/research/contracts.ts` adds optional `scene` to

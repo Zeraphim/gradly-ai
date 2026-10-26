@@ -1,5 +1,15 @@
 import { z } from "zod";
-import { sceneSchema, sceneProblems, sceneItems } from "@paperquest/contracts";
+import {
+  numbersIn,
+  projectScene,
+  reportedSceneNumbers,
+  responseStyles,
+  sceneItems,
+  sceneProblems,
+  sceneSchema,
+  tapKinds,
+  tapTargets,
+} from "@paperquest/contracts";
 export const refSchema = z.object({
   id: z.string().min(1),
   page: z.number().int().positive(),
@@ -13,6 +23,8 @@ export const challengeSchema = z.object({
   prompt: z.string().min(10),
   evidence: z.array(z.string()),
   scene: sceneSchema.nullable().optional(),
+  // How the answer is collected. "tap" needs a scene whose elements are the options.
+  responseStyle: z.enum(responseStyles).optional(),
   options: z
     .array(z.object({ id: z.string(), text: z.string().min(1) }))
     .min(2)
@@ -230,26 +242,24 @@ export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
             c.refs,
           ).map((issue) => `${c.id}: ${issue}.`),
         );
-        if (parsed.data.kind === "comparison") {
-          for (const value of parsed.data.values) {
-            if (value.provenance.kind !== "reported") {
-              problems.push(
-                `${c.id}: comparison values must be reported source measurements.`,
-              );
-              continue;
-            }
-            const excerpts = lesson.evidence
-              .filter((ref) => value.provenance.refs.includes(ref.id))
+        if (
+          parsed.data.kind === "comparison" &&
+          parsed.data.values.some((v) => v.provenance.kind !== "reported")
+        )
+          problems.push(
+            `${c.id}: comparison values must be reported source measurements.`,
+          );
+        for (const reported of reportedSceneNumbers(parsed.data)) {
+          const numbers = numbersIn(
+            lesson.evidence
+              .filter((ref) => reported.refs.includes(ref.id))
               .map((ref) => ref.excerpt)
-              .join(" ");
-            const numbers = (excerpts.match(/-?\d+(?:\.\d+)?/g) ?? []).map(
-              Number,
+              .join(" "),
+          );
+          if (reported.values.some((value) => !numbers.includes(value)))
+            problems.push(
+              `${c.id}: reported scene value is not in its referenced evidence (${reported.id}).`,
             );
-            if (!numbers.includes(value.value))
-              problems.push(
-                `${c.id}: comparison value is not in its referenced evidence.`,
-              );
-          }
         }
         const setup = sceneItems(parsed.data).filter(
           (item) => item.at === "setup",
@@ -258,8 +268,54 @@ export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
           problems.push(`${c.id}: scene needs visible setup content.`);
       }
     }
+    problems.push(...responseStyleProblems(c));
     if (c.reveal === "bonus" && lesson.challenges.includes(c))
       problems.push(`${c.id}: bonus in required sequence.`);
   }
+  if (lesson.source === "generated")
+    problems.push(...sceneCoverageProblems(lesson));
   return problems;
+}
+/** Fewest required challenges with a valid scene in a generated lesson. */
+export const MIN_GENERATED_SCENES = 1;
+/**
+ * Generated lessons must be interactive: at least one required challenge carries
+ * a scene that passes validation. `connections` fits any paper with evidence.
+ */
+export function sceneCoverageProblems(lesson: Lesson): string[] {
+  const valid = lesson.challenges.filter((c) => {
+    const parsed = sceneSchema.safeParse(c.scene);
+    return (
+      parsed.success &&
+      !sceneProblems(
+        parsed.data,
+        c.options.map((o) => o.id),
+        c.refs,
+      ).length
+    );
+  }).length;
+  return valid >= MIN_GENERATED_SCENES
+    ? []
+    : [
+        `The lesson has ${valid} valid interactive scene${valid === 1 ? "" : "s"}; at least ${MIN_GENERATED_SCENES} required challenge needs one. A connections scene fits any paper with evidence.`,
+      ];
+}
+/**
+ * The player draws tap answers only when every option is one distinct element
+ * visible before the first attempt, so the server accepts nothing less.
+ */
+export function responseStyleProblems(c: Challenge): string[] {
+  if (c.responseStyle !== "tap") return [];
+  const setup = projectScene(
+    c.scene,
+    false,
+    false,
+    c.options.map((o) => o.id),
+    c.refs,
+  );
+  return tapTargets(setup)
+    ? []
+    : [
+        `${c.id}: responseStyle tap needs a ${tapKinds.join(", ")} scene whose responses each target one distinct setup element.`,
+      ];
 }

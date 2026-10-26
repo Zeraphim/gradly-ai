@@ -134,9 +134,60 @@ export const body: StudyBody = {
           "Students reported whether they ate breakfast before school.",
           "Science achievement was measured in the same assessment.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "units",
+          title: "Who was in the study",
+          instruction:
+            "Read each level: how students entered the study and how often they were measured.",
+          description:
+            "Two nested levels: 268 schools in the survey and 8,000 students measured in one assessment.",
+          provenance: reported(
+            ["method"],
+            "Counts from the participants section.",
+          ),
+          levels: [
+            {
+              ...item(
+                "schools",
+                "Schools in the survey",
+                "Students came from the schools taking part in the international assessment.",
+                reported(["method"], "Count as reported."),
+              ),
+              count: 268,
+              unit: "schools",
+              role: "sampled",
+            },
+            {
+              ...item(
+                "students",
+                "Students measured once",
+                "Each student answered the breakfast question and took the science test in the same assessment.",
+                reported(["method", "item"], "Count as reported."),
+              ),
+              count: 8000,
+              unit: "students",
+              role: "measured",
+            },
+          ],
+          responses: [
+            { optionId: "A", label: "Experiment", targetIds: [] },
+            {
+              optionId: "B",
+              label: "One-time survey",
+              targetIds: ["students"],
+            },
+            { optionId: "C", label: "Follow-up", targetIds: ["students"] },
+          ],
+          resolution: resolution(
+            "units-resolution",
+            "Sampled, then measured once",
+            "No level was assigned by the researchers, and each student was measured at one time. Students from the same school also share circumstances, so they are not fully independent observations.",
+            authored(["method", "limits"], "Authored methods guidance."),
+          ),
+        },
         responseStyle: "pills",
-        refs: ["item", "limits"],
+        refs: ["item", "limits", "method"],
         writtenReasoning: false,
       },
       {

@@ -22,15 +22,53 @@ const refs = [
   { id: "source2", page: 1, excerpt: "independent groups with a numerical outcome" },
   { id: "source3", page: 1, excerpt: "Reported group results and statistical test" },
 ];
+/** A minimal connections scene: one evidence anchor every option connects to. */
+function anchorScene(
+  options: { id: string }[],
+  ref: string,
+): NonNullable<Lesson["challenges"][number]["scene"]> {
+  const provenance = {
+    kind: "source-summary" as const,
+    refs: [ref],
+    note: "Paraphrase of the cited evidence.",
+  };
+  return {
+    version: 1,
+    kind: "connections",
+    title: "Connect the evidence",
+    instruction: "Inspect the evidence, then choose a response.",
+    description: "One evidence anchor with a response per option.",
+    provenance,
+    actionLabel: "Connect a response",
+    anchors: [
+      {
+        id: "anchor",
+        label: "Reported design",
+        detail: "Independent groups with a numerical outcome.",
+        at: "setup",
+        provenance,
+      },
+    ],
+    responses: options.map((o) => ({
+      optionId: o.id,
+      label: `Option ${o.id}`,
+      targetIds: ["anchor"],
+    })),
+    resolution: null,
+  };
+}
 const draft = {
   ...structuredClone(featured),
   id: "generated",
   source: "generated",
   evidence: refs,
   paper: { ...featured.paper, url: null },
-  challenges: featured.challenges
-    .slice(0, 3)
-    .map((c) => ({ ...c, scene: undefined, refs: ["source1"] })),
+  challenges: featured.challenges.slice(0, 3).map((c, i) => ({
+    ...c,
+    // Generated lessons need at least one valid scene.
+    scene: i === 0 ? anchorScene(c.options, "source1") : undefined,
+    refs: ["source1"],
+  })),
   bonus: null,
 };
 function provider(outputs: unknown[]): ModelProvider {
@@ -349,6 +387,7 @@ const qualitativeLesson: Lesson = {
       refs: ["approach"],
       writtenReasoning: true,
       reveal: "design",
+      scene: anchorScene([{ id: "A" }, { id: "B" }], "approach"),
     },
     {
       id: "theme-boundary",
@@ -616,4 +655,29 @@ it("asks stage 0 for a paper summary field that no evidence aspect shares", asyn
   const wire = z.toJSONSchema(schemaSent!) as { properties: object };
   expect(Object.keys(wire.properties)).toEqual(["refs", "missing", "paperSummary"]);
   expect(j.evidence?.findings).toBe("A study of two groups.");
+});
+
+it("rejects a drafted lesson without a valid scene at drafting and redrafts on retry", async () => {
+  const evidenceJob = await runStage(
+    newJob("scene-job", "paper.pdf", [{ page: 1, text: page }]),
+    provider([{ paperSummary: "Study evidence located", refs, missing: [] }]),
+  );
+  const plain = {
+    ...draft,
+    challenges: draft.challenges.map((c) => ({ ...c, scene: null })),
+  };
+  // A scene that breaks its own response mapping does not count either.
+  const broken = structuredClone(draft);
+  broken.challenges[0]!.scene!.responses[0]!.optionId = "unmapped";
+  for (const lesson of [plain, broken]) {
+    const failed = await runStage(evidenceJob, provider([lesson]));
+    expect(failed.status).toBe("failed");
+    expect(failed.stage).toBe(1);
+    expect(failed.error).toContain("0 valid interactive scenes");
+    expect(failed.error).toContain("Retry this stage.");
+    // The existing retry reruns the drafting stage, and a lesson with a scene passes.
+    const retried = await runStage(failed, provider([draft]));
+    expect(retried.status).toBe("pending");
+    expect(retried.stage).toBe(2);
+  }
 });

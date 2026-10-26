@@ -286,10 +286,75 @@ export const body: StudyBody = {
         },
         explanation:
           "Anonymous tapping‑in data prevent linking individual treatment receipt to ride counts, forcing analysis at the line level and limiting causal interpretation (e11).",
-        refs: ["e11"],
+        refs: ["e11", "e12"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "units",
+          title: "What was assigned, what was counted",
+          instruction:
+            "Compare how many bus lines received a condition with how many counts were analysed.",
+          description:
+            "Six bus lines were assigned to conditions; 93,083 hourly ride counts from those lines were analysed.",
+          provenance: {
+            kind: "reported",
+            refs: ["e12"],
+            note: "Counts from the analysis section.",
+          },
+          levels: [
+            {
+              id: "lines",
+              label: "Bus lines assigned",
+              detail: "Three experimental and three control lines.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e12"],
+                note: "Count as reported.",
+              },
+              count: 6,
+              unit: "bus lines",
+              role: "assigned",
+            },
+            {
+              id: "hours",
+              label: "Hourly ride counts analysed",
+              detail:
+                "Anonymous tap-ins summed per line per hour over 791 days. Rides cannot be linked to passengers.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e11", "e12"],
+                note: "Count as reported.",
+              },
+              count: 93083,
+              unit: "hourly counts",
+              role: "analysed",
+            },
+          ],
+          responses: [
+            {
+              optionId: "opt1",
+              label: "Riders can't be linked",
+              targetIds: ["hours"],
+            },
+            { optionId: "opt2", label: "Short intervention", targetIds: [] },
+            { optionId: "opt3", label: "Construction works", targetIds: [] },
+          ],
+          resolution: {
+            id: "units-resolution",
+            label: "Six lines, not thousands of riders",
+            detail:
+              "The condition was assigned to lines, and rides could not be traced to the passengers who got a holder. Thousands of hourly counts still come from only six assigned lines.",
+            at: "resolution",
+            provenance: {
+              kind: "authored",
+              refs: ["e11", "e12"],
+              note: "Authored methods guidance.",
+            },
+          },
+        },
       },
       {
         id: "c6",

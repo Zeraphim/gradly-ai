@@ -2,20 +2,36 @@ import { useState } from "react";
 import { SceneMotion, m, useSceneMotion } from "./scene-motion.js";
 import {
   ChartNoAxesColumn,
+  FlaskConical,
   GitBranch,
+  Grid3x3,
+  History,
+  Layers,
   Network,
   PanelsTopLeft,
+  Ruler,
+  Shapes,
 } from "lucide-react";
-import { sceneSchema } from "@paperquest/contracts";
+import { sceneSchema, type SceneKind } from "@paperquest/contracts";
 import type { ResearchSession } from "../types.js";
-import { InvestigationScene, type SceneDraft } from "./InvestigationScene.js";
+import {
+  InvestigationScene,
+  investigationScene,
+  type SceneDraft,
+} from "./InvestigationScene.js";
 
 type Review = NonNullable<ResearchSession["review"]>[number];
-const icons = {
+const icons: Record<SceneKind, typeof GitBranch> = {
   flow: GitBranch,
   connections: Network,
   comparison: ChartNoAxesColumn,
   designs: PanelsTopLeft,
+  timeline: History,
+  association: Shapes,
+  estimate: Ruler,
+  tests: FlaskConical,
+  units: Layers,
+  matrix: Grid3x3,
 };
 
 export function SceneJourney({
@@ -84,11 +100,11 @@ export function SceneReview({
     prediction: null,
     revealed: true,
   });
-  const parsed = sceneSchema.safeParse(record.scene);
-  if (!parsed.success) return null;
+  const scene = investigationScene(record.scene);
+  if (!scene) return null;
   return (
     <InvestigationScene
-      scene={parsed.data}
+      scene={scene}
       options={record.options}
       multiple={record.type === "multiple"}
       selected={record.attempts.at(-1)?.selected ?? []}

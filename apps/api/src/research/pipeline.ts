@@ -7,6 +7,7 @@ import {
   generatedLessonSchema,
   MAX_GENERATED_CHALLENGES,
   refSchema,
+  sceneCoverageProblems,
   verifyLesson,
   type Job,
   type Audit,
@@ -183,6 +184,11 @@ export async function runStage(
       });
       j.lesson.id = j.id;
       j.lesson.source = "generated";
+      // A lesson without a usable scene fails here, where a retry redraws the
+      // lesson, rather than after two reviewer calls.
+      const coverage = sceneCoverageProblems(j.lesson);
+      if (coverage.length)
+        throw Error(`${coverage.join(" ")} Retry this stage.`);
       if (j.pages.some((p) => p.method === "ocr"))
         j.lesson.briefing +=
           " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";

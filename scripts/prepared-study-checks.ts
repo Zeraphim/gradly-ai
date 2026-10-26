@@ -1,32 +1,15 @@
 // Pure checks for prepared studies, shared by tests/research/prepared-studies.test.ts
 // and the dev-only generator (scripts/generate-prepared-studies.ts) as its per-study
 // gate. Each check returns problems; an empty list passes. Never import from apps/.
-import {
-  sceneProblems,
-  type Scene,
-  type SceneItem,
-} from "@paperquest/contracts";
+import { sceneProblems } from "@paperquest/contracts";
 import {
   journeyChallenges,
   tapTargets,
   visibleScene,
 } from "../apps/web/src/research/studies/journey.js";
-import type {
-  PreparedStudy,
-  StudyScene,
-} from "../apps/web/src/research/studies/types.js";
+import type { PreparedStudy } from "../apps/web/src/research/studies/types.js";
 
 export type PaperPage = { num: number; text: string };
-
-const baseKinds = ["flow", "connections", "comparison", "designs"];
-const elementIds = (scene: StudyScene) =>
-  scene.kind === "timeline"
-    ? scene.events.map((e) => e.id)
-    : scene.kind === "association"
-      ? scene.pairs.map((p) => p.id)
-      : scene.kind === "estimate"
-        ? scene.estimates.map((e) => e.id)
-        : [];
 
 /**
  * Named effects and research lines a learner could search to find the paper before
@@ -138,52 +121,17 @@ export function identityProblems(study: PreparedStudy) {
   return problems;
 }
 
-/** Scene validation and response mappings, including the proposed kinds. */
+/** Scene validation and response mappings, using the shared contract for every kind. */
 export function sceneCheckProblems(study: PreparedStudy) {
   const problems: string[] = [];
   for (const c of journeyChallenges(study, true)) {
     if (!c.scene) continue;
     const options = c.options.map((o) => o.id);
-    if (baseKinds.includes(c.scene.kind)) {
-      problems.push(
-        ...sceneProblems(c.scene as Scene, options, c.refs).map(
-          (issue) => `${c.id}: ${issue}`,
-        ),
-      );
-    } else {
-      const ids = new Set(elementIds(c.scene));
-      const mapped = new Set(c.scene.responses.map((r) => r.optionId));
-      if (
-        mapped.size !== options.length ||
-        options.some((id) => !mapped.has(id))
-      )
-        problems.push(`${c.id}: responses do not map every option once`);
-      for (const r of c.scene.responses)
-        if (!r.targetIds.every((id) => ids.has(id)))
-          problems.push(`${c.id}: response targets an unknown element`);
-      // Like the pipeline, every cited reference must belong to the challenge.
-      const scene = c.scene;
-      const items: SceneItem[] =
-        scene.kind === "timeline"
-          ? scene.events
-          : scene.kind === "association"
-            ? scene.pairs
-            : scene.kind === "estimate"
-              ? scene.estimates
-              : [];
-      for (const p of [scene.provenance, ...items.map((i) => i.provenance)])
-        if (!p.refs.every((r) => c.refs.includes(r)))
-          problems.push(
-            `${c.id}: scene cites a reference outside the challenge`,
-          );
-    }
-    if (c.scene.kind === "estimate")
-      for (const e of c.scene.estimates) {
-        if (!(e.lower <= e.value && e.value <= e.upper))
-          problems.push(`${c.id}: estimate outside its interval`);
-        if (!(e.lower >= c.scene.min && e.upper <= c.scene.max))
-          problems.push(`${c.id}: interval outside the scale`);
-      }
+    problems.push(
+      ...sceneProblems(c.scene, options, c.refs).map(
+        (issue) => `${c.id}: ${issue}`,
+      ),
+    );
     if (c.responseStyle === "tap" && !tapTargets(c.scene))
       problems.push(`${c.id}: tap response without one target per option`);
   }

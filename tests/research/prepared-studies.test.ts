@@ -105,7 +105,7 @@ describe("prepared-study catalog", () => {
     expect(cards.every((s) => !s.reviewed)).toBe(true);
   });
 
-  it("uses the proposed scene kinds where the design needs them", () => {
+  it("uses the timeline, association and estimate kinds where the design needs them", () => {
     const kinds = (slug: string) =>
       studies
         .find((s) => s.slug === slug)!

@@ -411,7 +411,66 @@ export const body: StudyBody = {
           "For the error data, however, the interaction term was significantly different from zero, B = .875, p = .038, suggesting the presence of the moderating influence of the ego‑depletion effect by willpower mindset, as was demonstrated by Job et al. [1].",
           "A close look at the data revealed, however, that this interaction effect did not qualify as a replication of Job et al.’s [1] finding because the directionality of the moderation effect was the opposite of what they would predict.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "tests",
+          title: "Two tests of the moderation",
+          instruction:
+            "Place each reported interaction against the .05 threshold, then judge what the pair shows.",
+          description:
+            "The willpower-mindset interaction in the replication block, tested once for reaction times and once for errors.",
+          provenance: {
+            kind: "reported",
+            refs: ["e17"],
+            note: "p-values as reported for the replication block.",
+          },
+          alpha: 0.05,
+          tests: [
+            {
+              id: "rt",
+              label: "Interaction · reaction times",
+              detail: "Log reaction times, B = .001.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e17"],
+                note: "Value as reported.",
+              },
+              p: 0.778,
+            },
+            {
+              id: "err",
+              label: "Interaction · errors",
+              detail: "Error proportion, B = .875.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e17"],
+                note: "Value as reported.",
+              },
+              p: 0.038,
+            },
+          ],
+          prediction: null,
+          responses: [
+            { optionId: "c1", label: "RT significant", targetIds: ["rt"] },
+            { optionId: "c2", label: "RT not significant", targetIds: ["rt"] },
+            { optionId: "c3", label: "Errors significant", targetIds: ["err"] },
+            { optionId: "c4", label: "Opposite direction", targetIds: ["err"] },
+          ],
+          resolution: {
+            id: "tests-resolution",
+            label: "One fragile crossing",
+            detail:
+              "Only the error interaction crossed .05, it ran opposite to the original prediction, and without one extreme outlier it fell to p = .162.",
+            at: "resolution",
+            provenance: {
+              kind: "source-summary",
+              refs: ["e17", "e19", "e21"],
+              note: "Summary of the reported moderation results.",
+            },
+          },
+        },
         options: [
           {
             id: "c1",
@@ -438,7 +497,7 @@ export const body: StudyBody = {
         },
         explanation:
           "RT: B = .001, p = .778 → non‑significant. Error: B = .875, p = .038 → significant but the simple effects showed the reverse pattern relative to Job et al.’s hypothesis.",
-        refs: ["e17", "e19"],
+        refs: ["e17", "e19", "e21"],
         writtenReasoning: false,
         reveal: "results",
       },

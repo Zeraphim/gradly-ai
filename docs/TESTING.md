@@ -103,8 +103,17 @@ The existing automatic Vercel preview was blocked by project access restrictions
 ## Fresh Adventure scene checks
 
 - `tests/research/scenes.test.ts`: scene validation, source/option mappings, gated
-  payloads, legacy/future fallback, invalid generation, numerical checks, and both
-  unrelated authored fixtures through the mocked generation/learning pipeline.
+  payloads, legacy/future fallback, invalid generation, numerical checks, and three
+  unrelated authored fixtures (water survey, station interviews, clinic field trial
+  with units, tests and matrix scenes and tap answers) through the mocked
+  generation/learning pipeline.
+- `tests/research/scene-library.test.ts`: every prepared scene parses against the
+  shared contract, each promoted or new kind appears in two design groups,
+  relationship checks and gating per kind, tap eligibility, the generated-lesson
+  scene requirement, reported-number matching, `responseStyle` reaching the
+  player, and rendering of the tests, units and matrix scenes.
+- `tests/research/pipeline.test.ts` also checks that a draft without a valid scene
+  fails at drafting with a retry message and passes after the retry redrafts.
 - `tests/research/scenes-service.test.ts`: real temporary local learning server,
   signed guest ownership, stale-version rejection, submission, retry and resume.
 - `tests/research/scenes-ui.test.ts`: component rendering for all nine featured

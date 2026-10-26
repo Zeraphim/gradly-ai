@@ -513,7 +513,7 @@ export const body: StudyBody = {
             ["ci", "meshing"],
           ),
         },
-        refs: ["ci", "anova", "groups"],
+        refs: ["ci", "anova", "groups", "meshing"],
         writtenReasoning: false,
         responseStyle: "cards",
       },

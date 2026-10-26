@@ -137,6 +137,7 @@ export function publicSession(s: LearningSession, l: Lesson) {
           c.options.map((o) => o.id),
           c.refs,
         ),
+        responseStyle: c.responseStyle ?? null,
         firstSelection: a[0]?.selected ?? [],
         references: c.refs
           .map((id) => l.evidence.find((r) => r.id === id))

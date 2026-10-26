@@ -209,10 +209,84 @@ export const body: StudyBody = {
         },
         explanation:
           "The ANCOVA reports a significant main effect with the stated statistics.",
-        refs: ["e2"],
+        refs: ["e2", "e6"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "tests",
+          title: "Three outcomes, one threshold",
+          instruction:
+            "Read where each outcome's test lands against the .05 threshold.",
+          description:
+            "The stereotype manipulation tested on three outcomes: task accuracy, how often participants checked the clock and how strategically they checked it.",
+          provenance: {
+            kind: "reported",
+            refs: ["e2", "e6"],
+            note: "p-values as reported for the main effect of the manipulation.",
+          },
+          alpha: 0.05,
+          tests: [
+            {
+              id: "accuracy",
+              label: "Task accuracy",
+              detail: "Proportion of correct prospective-memory responses.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e2"],
+                note: "Value as reported.",
+              },
+              p: 0.05,
+              bound: "<",
+            },
+            {
+              id: "checks",
+              label: "Clock checks",
+              detail: "How often participants checked the clock.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e6"],
+                note: "Value as reported.",
+              },
+              p: 0.29,
+            },
+            {
+              id: "strategy",
+              label: "Strategic clock checks",
+              detail: "Whether checks clustered near the target times.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e6"],
+                note: "Value as reported.",
+              },
+              p: 0.35,
+            },
+          ],
+          prediction: null,
+          responses: [
+            {
+              optionId: "opt1",
+              label: "Lower accuracy",
+              targetIds: ["accuracy"],
+            },
+            { optionId: "opt2", label: "No effect", targetIds: ["accuracy"] },
+          ],
+          resolution: {
+            id: "tests-resolution",
+            label: "One outcome of three crossed",
+            detail:
+              "Accuracy crossed .05 while both clock-checking measures did not. The headline effect is real for accuracy, but it is one result in a family of three.",
+            at: "resolution",
+            provenance: {
+              kind: "authored",
+              refs: ["e2", "e6"],
+              note: "Authored interpretation of the reported tests.",
+            },
+          },
+        },
       },
       {
         id: "c4",

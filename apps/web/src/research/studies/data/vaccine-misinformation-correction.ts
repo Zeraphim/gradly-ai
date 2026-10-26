@@ -233,7 +233,94 @@ export const body: StudyBody = {
         refs: ["e13", "e11"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "matrix",
+          title: "What each group saw",
+          instruction:
+            "Compare the two conditions stage by stage: what was held the same, and what changed?",
+          description:
+            "The two experimental conditions compared across the kindergarten dilemma, the mothers' post, the ministry correction and how people were placed.",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11", "e13"],
+            note: "Summary of the method description.",
+          },
+          conditions: [
+            { id: "common", label: "Condition 1" },
+            { id: "recommended", label: "Condition 2" },
+          ],
+          rows: [
+            {
+              id: "dilemma",
+              label: "Kindergarten dilemma",
+              detail: "The scenario every participant read first.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e11"],
+                note: "Paraphrase of the cited method.",
+              },
+              cells: ["Same dilemma", "Same dilemma"],
+            },
+            {
+              id: "post",
+              label: "Mothers' Facebook post",
+              detail: "The post voicing parents' concerns.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e11"],
+                note: "Paraphrase of the cited method.",
+              },
+              cells: ["Identical post", "Identical post"],
+            },
+            {
+              id: "correction",
+              label: "Ministry correction",
+              detail: "How the health ministry answered.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e11"],
+                note: "Paraphrase of the cited method.",
+              },
+              cells: ["Common correction", "Transparent, addresses concerns"],
+            },
+            {
+              id: "placement",
+              label: "Placement",
+              detail: "How participants ended up in a condition.",
+              at: "feedback",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e13"],
+                note: "Paraphrase of the cited method.",
+              },
+              cells: ["Random", "Random"],
+            },
+          ],
+          responses: [
+            { optionId: "o1", label: "Random", targetIds: ["placement"] },
+            {
+              optionId: "o2",
+              label: "By vaccination status",
+              targetIds: ["placement"],
+            },
+          ],
+          resolution: {
+            id: "matrix-resolution",
+            label: "One row differs, but it bundles several changes",
+            detail:
+              "Random placement and identical first stages make the correction the only planned difference. That correction changed transparency and how concerns were addressed together, so the study cannot say which part mattered.",
+            at: "resolution",
+            provenance: {
+              kind: "authored",
+              refs: ["e11", "e13"],
+              note: "Authored methods guidance.",
+            },
+          },
+        },
       },
       {
         id: "c2",

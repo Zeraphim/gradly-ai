@@ -19,6 +19,7 @@ import {
 } from "../../apps/api/src/research/engine.js";
 import { newJob, runStage } from "../../apps/api/src/research/pipeline.js";
 import {
+  fieldTrialSceneLesson,
   quantitativeSceneLesson,
   qualitativeSceneLesson,
   sceneFixturePages,
@@ -149,7 +150,11 @@ it("rejects unmapped options, fabricated numbers, invalid scales and unknown evi
   ).toBe(false);
 });
 
-for (const fixture of [quantitativeSceneLesson, qualitativeSceneLesson])
+for (const fixture of [
+  quantitativeSceneLesson,
+  qualitativeSceneLesson,
+  fieldTrialSceneLesson,
+])
   describe(fixture.id, () => {
     it("passes mocked generation, review and verification, then the existing learning loop", async () => {
       expect(verifyLesson(fixture, sceneFixturePages(fixture))).toEqual([]);
@@ -177,7 +182,7 @@ for (const fixture of [quantitativeSceneLesson, qualitativeSceneLesson])
           },
         });
       expect(job.status).toBe("ready");
-      expect(tasks[1]).toContain("Optionally supply scene");
+      expect(tasks[1]).toContain("Scenes are required.");
       expect(tasks[2]).toContain("Review all scene text");
       let s = transition(
         newSession(job.lesson!, "fixture"),

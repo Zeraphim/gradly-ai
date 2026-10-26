@@ -475,10 +475,72 @@ export const body: StudyBody = {
         },
         explanation:
           "The authors state that the disability benefit persists after adjusting for socio‑demographic and health factors, yet they highlight the need to explore psychological pathways and test whether the findings generalize beyond Japan.",
-        refs: ["e19", "e24", "e25", "e26"],
+        refs: ["e19", "e24", "e25", "e26", "e11", "e5"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          kind: "association",
+          title: "How strong is the link?",
+          instruction:
+            "Read the reported odds ratio, then decide what it can and cannot show.",
+          description:
+            "The adjusted odds of disability onset for current dog owners compared with never owners, in a cohort of 11,233 older adults.",
+          provenance: {
+            kind: "reported",
+            refs: ["e11", "e5"],
+            note: "Odds ratio and sample size as reported.",
+          },
+          pairs: [
+            {
+              id: "own-disability",
+              label: "Dog ownership and disability",
+              detail:
+                "Adjusted for socio-demographic and health measures at baseline. Owners chose to keep dogs; nobody was assigned one.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e11", "e5", "e19"],
+                note: "Value as reported; adjustment as described.",
+              },
+              x: "Current dog owner",
+              y: "Onset of disability",
+              statistic: "OR",
+              value: 0.54,
+              n: 11233,
+            },
+          ],
+          responses: [
+            {
+              optionId: "o1",
+              label: "Dogs cause less disability",
+              targetIds: ["own-disability"],
+            },
+            {
+              optionId: "o2",
+              label: "Confounding remains possible",
+              targetIds: ["own-disability"],
+            },
+            {
+              optionId: "o3",
+              label: "Exercise explains it all",
+              targetIds: [],
+            },
+            { optionId: "o4", label: "Mortality too", targetIds: [] },
+          ],
+          resolution: {
+            id: "association-resolution",
+            label: "A strong link is still a link",
+            detail:
+              "Owners had about half the odds of disability after adjustment, but people who can keep and walk a dog may already differ in health in ways the covariates miss.",
+            at: "resolution",
+            provenance: {
+              kind: "authored",
+              refs: ["e11", "e19"],
+              note: "Authored interpretation guidance.",
+            },
+          },
+        },
       },
     ],
     bonus: null,

@@ -14,6 +14,8 @@
 - **Harness settings, not product changes:** like the evaluation, `propertyNames` is stripped from request schemas (Nebius rejects it), the 20 s production timeout is replaced by 300 s, and a lesson rejected only for `paper.url` is re-read with `url: null`. Paper title, authors, journal and DOI are always set from [papers/README.md](papers/README.md).
 - **Not changed:** pipeline prompts, contracts and scene kinds (#8). Generated lessons use only the four contract scene kinds.
 
+**Scenes added after generation (scene library work).** Six generated lessons carry hand-authored scenes on existing challenges, citing existing verbatim excerpts. Where a scene cites an excerpt its challenge did not list, the id was added to that challenge's `refs`. Questions, answers and excerpts are unchanged. Regenerating these slugs drops the scenes, so re-add them afterwards: `bus-ridership-behavior` c5 (units), `stroop-task-performance` c4 (tests), `remembering-doctor-appointments` c3 (tests), `vaccine-misinformation-correction` c1 (matrix), `phone-use-while-driving` c1 (matrix), and `dog-ownership-among-seniors` c6 (association).
+
 Questions, answers, explanations and excerpts are model output and were not edited. Mechanical fixes are listed per study.
 
 ## Known limits
