@@ -155,6 +155,11 @@ export type Job = {
   };
   lesson?: Lesson;
   review?: { approved: boolean; issues: string[]; summary: string };
+  /** Reviewer issues the next stage-1 draft must resolve, and how many
+   *  automatic revisions this attempt has used. */
+  revision?: { count: number; role?: string; issues?: string[] };
+  /** Automatic re-asks of the current stage after an unreadable reply. */
+  reasks?: number;
   leaseUntil: number;
   error?: string;
   version: number;
