@@ -117,7 +117,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Who Sees the Survey?",
         type: "single",
         prompt:
@@ -130,29 +130,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Only people who already use social media can be reached, and the sample is skewed, so it describes users of social media rather than all adults.",
-          },
-          {
             id: "o2",
-            text: "It makes the sample random, which is a strength.",
+            text: "Recruitment randomly samples adults, since invitations span several social media platforms.",
           },
           {
             id: "o3",
-            text: "It only matters for the oldest age groups.",
+            text: "Recruitment biases only older adults, since platform use is otherwise uniform by age.",
+          },
+          {
+            id: "o1",
+            text: "Recruitment favours existing users and a skewed subgroup, limiting transfer to all adults.",
           },
           {
             id: "o4",
-            text: "It has no effect because the sample is large.",
+            text: "Recruitment bias is negligible here, since a large sample corrects its gender imbalance.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who cannot possibly answer a survey that is advertised only on social media?",
         misconceptions: {
-          o2: "Self-selection from a social media invitation is the opposite of random sampling.",
-          o3: "The skew covers who can be reached at all, not just age.",
-          o4: "A large self-selected sample is still self-selected.",
+          o2: "Open invitations and self-selection are not random population sampling.",
+          o3: "The study does not establish that only older people are subject to selection bias.",
+          o4: "A large sample can still be systematically unrepresentative.",
         },
         explanation:
           "The authors say the population should be described as users of social media, a subset of the general population, and that the sample is skewed in age, gender and education, limiting how far results transfer.",
@@ -162,7 +162,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Bands, Not Hours",
         type: "single",
         prompt:
@@ -174,29 +174,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "A one-step move up the bands, for example from 1–2 hours to 2–3 hours, not a rise of one hour.",
+            id: "o2",
+            text: "One extra hour per day, because every adjacent band spans the same length of time.",
           },
           {
-            id: "o2",
-            text: "One extra hour on social media each day.",
+            id: "o1",
+            text: "One step between usage bands, not a fixed one-hour increase in time.",
           },
           {
             id: "o3",
-            text: "One extra minute of daily use.",
+            text: "One extra minute per day, because the shortest band is expressed in minutes rather than hours.",
           },
           {
             id: "o4",
-            text: "A comparison between users and non-users.",
+            text: "Using social media versus avoiding it, because the model separates all users from all non-users.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Look at how the answer options were set out.",
         misconceptions: {
-          o2: "The measure was not hours; it was six bands of unequal width.",
-          o3: "Minutes were not recorded.",
-          o4: "Everyone in the sample used social media at least some of the time.",
+          o2: "The bands have unequal widths, so one category step is not one hour.",
+          o3: "Units of the labels do not define the model's category-step unit.",
+          o4: "The predictor is an ordered time category rather than a binary user comparison.",
         },
         explanation:
           "Each unit is one step on the six-band scale, and the bands are of unequal width. The result describes a step up in the bands, not a fixed number of hours.",
@@ -206,7 +206,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Adding Other Factors",
         type: "single",
         prompt:
@@ -334,28 +334,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "It shrank from 1.17 to 1.06 and its interval now includes 1, so the earlier link was probably carried by other factors, though a small effect is not ruled out.",
+            text: "The estimate shrank and became uncertain around 1; a small link remains possible.",
           },
           {
             id: "o2",
-            text: "It disappeared, which proves social media has no effect on sleep.",
+            text: "The estimate established no effect, because losing significance rules out any role in sleep problems.",
           },
           {
             id: "o3",
-            text: "It grew stronger once the other factors were added.",
+            text: "The estimate strengthened, with the adjusted interval now above 1.",
           },
           {
             id: "o4",
-            text: "Distress stopped mattering after adjustment.",
+            text: "The estimate remained clear while distress lost its link, showing that time was the independent predictor.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the two social media intervals with each other and with the line at 1.",
         misconceptions: {
-          o2: "The adjusted interval (0.96 to 1.16) still allows small effects in either direction.",
-          o3: "It shrank, from 1.17 to 1.06.",
-          o4: "Distress stayed clear of 1 after adjustment (1.20, 1.17 to 1.23).",
+          o2: "Non-significance does not prove a zero causal effect.",
+          o3: "It fell from 1.17 to 1.06 and the interval included 1.",
+          o4: "The reported pattern was the reverse: distress remained associated, time did not.",
         },
         explanation:
           "Unadjusted, social media time had an odds ratio of 1.17 (1.08 to 1.27). Adjusted, it was 1.06 (0.96 to 1.16). The authors say the earlier link was likely the result of confounding, such as gender and distress.",
@@ -365,7 +365,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Is Gender the Bigger Factor?",
         type: "single",
         prompt:
@@ -377,29 +377,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "They describe different kinds of difference: one compares two groups, the other is the change for a single step on a 36-step scale.",
-          },
-          {
             id: "o2",
-            text: "Odds ratios can never be compared with each other.",
+            text: "Odds ratios cannot be interpreted together, even if their predictors use comparable measurement units.",
           },
           {
             id: "o3",
-            text: "A larger number always means the factor matters less.",
+            text: "The smaller odds ratio identifies the more important predictor because its distance from 1 is smaller.",
           },
           {
             id: "o4",
-            text: "Distress was not significant, so it cannot be compared.",
+            text: "The distress ratio has no interpretation because that predictor failed the significance test after adjustment.",
+          },
+          {
+            id: "o1",
+            text: "They describe different kinds of difference: one compares two groups, the other is the change for a single step on a 36-step scale.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What does one unit of each predictor mean?",
         misconceptions: {
-          o2: "They can be, when the predictors are measured on comparable terms; these are not.",
-          o3: "A larger odds ratio means a bigger difference in odds for that comparison; the issue here is that the comparisons differ.",
-          o4: "Distress was clearly significant (p < 0.001).",
+          o2: "The issue is differing units; comparable contrasts can be assessed.",
+          o3: "Smaller distance from 1 does not establish greater importance.",
+          o4: "Distress remained statistically associated in the adjusted model.",
         },
         explanation:
           "An odds ratio of 1.20 for distress is per unit on a 0-to-36 score, so a many-point difference in distress produces a much larger change in odds than one step. Gender is a two-group comparison, so the two figures are not directly comparable.",
@@ -409,7 +409,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "“Unrelated”?",
         type: "single",
         prompt:
@@ -421,29 +421,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Not significantly associated after adjustment in this sample; a cross-sectional survey with rough measures cannot rule out a small effect or an effect of how social media is used.",
-          },
-          {
             id: "o2",
-            text: "Proven to be unrelated for everyone.",
+            text: "No relationship for any adult, since adjustment establishes that every form of social media is irrelevant.",
           },
           {
             id: "o3",
-            text: "Related, because the unadjusted link was significant.",
+            text: "The unadjusted link establishes harm despite the adjusted null.",
           },
           {
             id: "o4",
-            text: "Not measurable, because sleep problems were not recorded.",
+            text: "No measurable outcome, since the survey recorded time online but omitted questions about sleep problems.",
+          },
+          {
+            id: "o1",
+            text: "No clear adjusted link here; rough one-time measures leave smaller or specific effects open.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which limits would stop you from saying 'unrelated' for everyone?",
         misconceptions: {
-          o2: "A single non-significant result in a self-selected sample cannot prove no relation.",
-          o3: "The unadjusted link was likely confounded; after adjustment it was not significant.",
-          o4: "Sleep problems were recorded with a yes/no question, which is rough but usable.",
+          o2: "The study measured total time in one selected sample, not every form or population.",
+          o3: "The unadjusted link may reflect confounding and does not establish harm.",
+          o4: "Sleep problems were measured, though with a rough self-report question.",
         },
         explanation:
           "The authors report no significant association after adjustment, but list a cross-sectional design, a social-media-recruited sample, and no information about which platforms or when and why they were used. That supports a narrower statement than 'unrelated'.",
@@ -453,7 +453,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "A Better Follow-Up",
         type: "single",
         prompt:
@@ -465,29 +465,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Follow the same people over time, recording when in the day they use social media, what they do there and how stressful it is, alongside their sleep.",
+            id: "o2",
+            text: "Recruit more respondents for the same one-time time-use question, retaining the broad measure of sleep.",
           },
           {
-            id: "o2",
-            text: "Ask a larger group the same single time question.",
+            id: "o1",
+            text: "Track sleep and the timing, content and stress of social media use in the same people over time.",
           },
           {
             id: "o3",
-            text: "Remove psychological distress from the analysis.",
+            text: "Omit distress from the same one-time model, so the original association becomes significant again.",
           },
           {
             id: "o4",
-            text: "Survey only women, who reported more sleep problems.",
+            text: "Recruit only women for the same survey, so a higher rate of sleep problems establishes the causal direction.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which limits did the authors name, and which design would address them?",
         misconceptions: {
-          o2: "More people answering the same question cannot reveal timing, content or direction.",
-          o3: "Distress was strongly linked to sleep problems; removing it would reintroduce confounding.",
-          o4: "That narrows the sample further and does not address timing, content or order.",
+          o2: "Size alone does not add temporal order or the missing detail on use.",
+          o3: "Removing a possible confounder does not resolve causality or measurement limits.",
+          o4: "Restricting gender does not establish temporal or causal direction.",
         },
         explanation:
           "The authors say other aspects of social media use, such as time of day, content of interactions and associated stress, may matter more than total hours, and that this study cannot show cause and effect. A longitudinal study with those measures fits.",

@@ -112,7 +112,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Pairs of Lines",
         type: "single",
         prompt:
@@ -124,29 +124,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Pairing makes the compared lines similar, and distance keeps riders with a message holder off the comparison lines.",
-          },
-          {
             id: "o2",
-            text: "So that every passenger received both kinds of holder.",
+            text: "Expose riders to both holders, creating a within-person comparison of messages.",
           },
           {
             id: "o3",
-            text: "So the study could use fewer card holders.",
+            text: "Keep the line pairs apart so that card-holder delivery itself becomes the tested treatment.",
           },
           {
             id: "o4",
-            text: "Because the company only ran six lines.",
+            text: "Match routes after assignment, using successful routes to define the comparison pairs.",
+          },
+          {
+            id: "o1",
+            text: "Match comparable lines and reduce message spillover onto the comparison lines.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What could go wrong if a rider with a message holder often rode a control line?",
         misconceptions: {
-          o2: "Each line got one kind of holder; distance was meant to stop mixing, not create it.",
-          o3: "The design concerns comparability and separation, not supply.",
-          o4: "The team chose these six from sixteen candidate lines.",
+          o2: "Distant lines were intended to reduce crossover, not create within-person comparisons.",
+          o3: "Both conditions received holders; the message was the treatment difference.",
+          o4: "Pairing preceded random assignment; outcomes did not define the pairs.",
         },
         explanation:
           "The lines in each pair were similar and did not overlap geographically. Separation reduced the chance that riders with a message holder would ride a control line or the other way round.",
@@ -156,7 +156,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "A Plain Holder for Comparison",
         type: "single",
         prompt:
@@ -173,24 +173,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "It rules out everything except the social label.",
+            text: "It isolates the sustainable label from every other feature, including receiving any positive message.",
           },
           {
             id: "o3",
-            text: "It rules out nothing, since both groups got holders.",
+            text: "It removes the treatment difference because both groups received the same kind of physical holder.",
           },
           {
             id: "o4",
-            text: "It shows control riders were not interested in buses.",
+            text: "It tests whether free holders work, by comparing recipients with riders given no holder at all.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare what both groups received with what only one group received.",
         misconceptions: {
-          o2: "Without a control holder carrying a different positive message, the specific label cannot be separated.",
-          o3: "Giving both groups a holder does rule out the gift as the cause.",
-          o4: "The control holder was a design choice, not a measure of interest.",
+          o2: "There was no generic-positive-message condition.",
+          o3: "The holders differed in message, which is the comparison of interest.",
+          o4: "Control riders also received holders; there was no no-holder comparison.",
         },
         explanation:
           "Both groups got a free holder, so the difference is the message. The authors note they cannot tell whether a positive message without a social label would work too.",
@@ -200,7 +200,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "How Big Is 1.18 Rides?",
         type: "single",
         prompt:
@@ -212,29 +212,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Tiny in practical terms, about 0.06% more rides, though reliable; small reach is part of the reason.",
-          },
-          {
             id: "o2",
-            text: "Large, because it was statistically significant.",
+            text: "A large practical gain, because the test found a statistically reliable increase in daily rides.",
           },
           {
             id: "o3",
-            text: "About a 1.18% increase.",
+            text: "About 1.18% more daily rides, using the extra ride count as a percentage of the baseline.",
+          },
+          {
+            id: "o1",
+            text: "About 0.06% more daily rides: detectable, but a small practical change.",
           },
           {
             id: "o4",
-            text: "Zero, since the gain is less than two rides.",
+            text: "No practical change to count, because fractional daily averages cannot represent additional rides.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Divide the extra rides by the usual daily rides.",
         misconceptions: {
-          o2: "Significance concerns reliability, not size; 1.18 out of about 2,014 is very small.",
-          o3: "1.18 is the number of rides, not a percentage; as a share it is about 0.06%.",
-          o4: "The gain is small but reliably above zero.",
+          o2: "Statistical reliability does not establish practical size.",
+          o3: "Divide 1.18 by about 2,014 before converting to percent.",
+          o4: "Averages can be fractional even though individual rides are whole events.",
         },
         explanation:
           "1.18 extra rides on about 2,014 a day is an increase of about 0.059%. The authors explain that one short message on a holder, given to about a fifth of peak-hour riders for a week, is bound to have a small effect.",
@@ -244,7 +244,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Many Hours, Few Lines",
         type: "single",
         prompt:
@@ -310,14 +310,14 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Few lines assigned",
-              targetIds: ["lines"],
-            },
-            {
               optionId: "o2",
               label: "Too few counts",
               targetIds: ["hours"],
+            },
+            {
+              optionId: "o1",
+              label: "Few lines assigned",
+              targetIds: ["lines"],
             },
             {
               optionId: "o3",
@@ -334,29 +334,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "The message was assigned to only six lines, so something happening on one line could look like an effect; many hourly counts do not add more lines.",
+            id: "o2",
+            text: "The hourly counts provide over 91,000 independently assigned units.",
           },
           {
-            id: "o2",
-            text: "There were too few hourly counts.",
+            id: "o1",
+            text: "Only six lines were assigned; many counts do not create more independent lines.",
           },
           {
             id: "o3",
-            text: "Each count is one passenger, so passengers were counted twice.",
+            text: "The main limit is that each hourly count identifies the same passenger returning later that day.",
           },
           {
             id: "o4",
-            text: "There is no reason; p < .001 settles it.",
+            text: "The small p-value removes uncertainty about whether unrelated line events affected the estimate.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many separate units actually received the message?",
         misconceptions: {
-          o2: "There were over 91,000; the limit is the number of lines.",
-          o3: "Counts are rides per hour per line; rides could not be linked to passengers.",
-          o4: "A small p-value from many correlated hourly counts does not remove the concern about only six lines.",
+          o2: "Assignment was at the line level, not independently for each count.",
+          o3: "Counts are aggregate rides, not linked passenger records.",
+          o4: "A small p-value does not eliminate design or clustering concerns.",
         },
         explanation:
           "Rides could not be linked to passengers, so whole lines were assigned. With three lines per condition, the authors cannot rule out that external events not captured by the model explain the effect.",
@@ -366,7 +366,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Ruling Out a One-Off Event",
         type: "single",
         prompt:
@@ -379,28 +379,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "The effect was positive for almost every length of the post-intervention period, so a single event at one time is unlikely to explain it, unless it fell right after the intervention.",
+            text: "The positive estimate across many follow-up windows weakens a single-event explanation.",
           },
           {
             id: "o2",
-            text: "The large number of hourly counts.",
+            text: "The many hourly observations rule out roadworks by averaging away changes on individual routes.",
           },
           {
             id: "o3",
-            text: "The pre-test of the message with 303 people.",
+            text: "The separate message pre-test excludes changes caused by roadworks.",
           },
           {
             id: "o4",
-            text: "Nothing can make it less likely.",
+            text: "The matching of routes before treatment rules out any later disruption affecting only one route.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If a disruption happened at one moment, would the effect hold whatever window you chose?",
         misconceptions: {
-          o2: "More counts do not distinguish an intervention effect from a one-off event on a line.",
-          o3: "That checked how the message was understood, not what happened on the lines afterwards.",
-          o4: "The robustness check across period lengths does address this, with one exception the authors note.",
+          o2: "Repeated observations do not automatically remove a route-specific event.",
+          o3: "A message pre-test cannot test events on the bus routes.",
+          o4: "Matching baseline characteristics cannot prevent later roadworks.",
         },
         explanation:
           "The authors report the effect was significantly positive for almost every possible length of the period right after the intervention, which lowers the chance that a random event such as roadworks explains it, unless it happened right after the intervention.",
@@ -410,7 +410,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Will It Win Over Drivers?",
         type: "single",
         prompt:
@@ -422,29 +422,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Little: the riders were mostly regular bus users, and the study counted rides, not people switching from cars.",
-          },
-          {
             id: "o2",
-            text: "That it will work, because ridership rose.",
+            text: "The rise in ride counts estimates how many former drivers switched to taking the bus each day.",
           },
           {
             id: "o3",
-            text: "That it cannot work for drivers.",
+            text: "The small average increase shows that car drivers would be less responsive than existing riders.",
           },
           {
             id: "o4",
-            text: "That drivers saw the message too.",
+            text: "The distance between routes ensures that drivers encountered the label outside the bus system.",
+          },
+          {
+            id: "o1",
+            text: "Little: the riders were mostly regular bus users, and the study counted rides, not people switching from cars.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who received the holders, and what was counted?",
         misconceptions: {
-          o2: "The rise was tiny and among people already riding; switching from cars was not measured.",
-          o3: "The study did not test drivers, so it cannot say either way.",
-          o4: "Holders were handed out on buses, to bus passengers.",
+          o2: "Ride counts do not identify previous travel mode.",
+          o3: "The study did not compare those populations.",
+          o4: "Distance reduced spillover between lines; it does not establish exposure among drivers.",
         },
         explanation:
           "Most passengers were regular riders, which the authors say may have limited the effect, and they suggest testing people who ride less often. The study did not measure car use.",

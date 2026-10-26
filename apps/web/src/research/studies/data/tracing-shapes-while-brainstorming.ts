@@ -122,7 +122,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Matched Drawings",
         type: "single",
         prompt:
@@ -135,29 +135,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "So that curvature is the main thing that differs, and a difference in ideas is less likely to come from shape, size or the path traced.",
-          },
-          {
             id: "o2",
-            text: "So that participants cannot tell which group they are in.",
+            text: "To conceal which paths were curved or angular, making participants blind to their condition.",
           },
           {
             id: "o3",
-            text: "So that every participant produces the same number of ideas.",
+            text: "To hold idea counts constant by ensuring every participant generated the same number before measurement.",
           },
           {
             id: "o4",
-            text: "So that the study needs fewer participants.",
+            text: "To replace random assignment, since matching stimuli guarantees comparable people in the two conditions.",
+          },
+          {
+            id: "o1",
+            text: "To isolate curvature from other drawing features that might affect idea generation.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What else could differ between curved and angular drawings besides curvature?",
         misconceptions: {
-          o2: "The aim was to isolate curvature, not to hide the condition; participants were told the study was about hand-eye coordination.",
-          o3: "The point is to compare ideas between groups, which should be free to differ.",
-          o4: "Matching drawings does not change how many participants are needed.",
+          o2: "Participants could see and trace the drawings; matching was not blinding to curvature.",
+          o3: "Idea count was an outcome, not a feature fixed by matching drawings.",
+          o4: "Matching materials does not assign or balance participants.",
         },
         explanation:
           "Matching shape, size and starting point leaves curvature as the intended difference, so a difference in the ideas written afterwards is easier to attribute to fluid versus angular movement.",
@@ -167,7 +167,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "When Mood Was Asked",
         type: "single",
         prompt:
@@ -179,29 +179,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Somewhat: the rating may reflect how the task went, not the mood people were in while tracing.",
-          },
-          {
             id: "o2",
-            text: "Not at all: a mood rating always shows the mood during the earlier task.",
+            text: "The later rating recovers earlier mood exactly.",
           },
           {
             id: "o3",
-            text: "Completely: the check is worthless and the study should be discarded.",
+            text: "The timing invalidates the main comparison.",
+          },
+          {
+            id: "o1",
+            text: "The later rating may reflect the idea task rather than mood during tracing.",
           },
           {
             id: "o4",
-            text: "It strengthens the check, because later ratings are more accurate.",
+            text: "The timing strengthens the mechanism test.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Could doing well or badly on the idea task change how someone says they feel?",
         misconceptions: {
-          o2: "A rating given afterwards can be influenced by how the idea task felt.",
-          o3: "The check is imperfect, not worthless; mood also did not differ between groups.",
-          o4: "Ratings given later are not more accurate about an earlier state.",
+          o2: "Mood can change during or after the task.",
+          o3: "A weaker mechanism check does not automatically invalidate the experimental contrast.",
+          o4: "Later measurement may itself be influenced by task experience.",
         },
         explanation:
           "Mood, difficulty and newspaper use did not predict fluency or interact with condition, which is reassuring. But mood was asked after the task, so it may partly reflect the task, and the check is weaker than a measure taken before or between tasks.",
@@ -211,7 +211,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Fewer Uses Than Before",
         type: "single",
         prompt:
@@ -298,14 +298,14 @@ export const body: StudyBody = {
           resolution: null,
           responses: [
             {
-              optionId: "o1",
-              label: "Same direction, smaller gap, lower levels",
-              targetIds: ["new-f", "new-n", "old-f", "old-n"],
-            },
-            {
               optionId: "o2",
               label: "Exact replication",
               targetIds: ["new-f", "old-f"],
+            },
+            {
+              optionId: "o1",
+              label: "Same direction, smaller gap, lower levels",
+              targetIds: ["new-f", "new-n", "old-f", "old-n"],
             },
             {
               optionId: "o3",
@@ -322,29 +322,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
+            id: "o2",
+            text: "The effect replicated in size, because the same ordering of group means establishes the same magnitude.",
+          },
+          {
             id: "o1",
             text: "The direction replicated, but the gap was about half the original (roughly 0.8 uses against 1.6), and both groups wrote fewer uses overall.",
           },
           {
-            id: "o2",
-            text: "It was an exact replication, because the fluid group was higher in both studies.",
-          },
-          {
             id: "o3",
-            text: "The fluid advantage reversed in the new study.",
+            text: "The effect reversed, because lower overall idea counts mean the angular group now exceeded the fluid group.",
           },
           {
             id: "o4",
-            text: "There was no fluid advantage in the new study.",
+            text: "The advantage vanished, because a gap smaller than the original cannot count as a positive difference.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the size of the gap in each study, then the height of the bars across studies.",
         misconceptions: {
-          o2: "Same direction is not the same size; the effect was smaller (d = 0.60 against 1.04) and levels were lower.",
-          o3: "The fluid group still wrote more uses, 4.17 against 3.33.",
-          o4: "The difference was significant (p = 0.023).",
+          o2: "Matching direction does not imply matching size.",
+          o3: "Lower overall means do not imply a reversal between conditions.",
+          o4: "A smaller positive difference remains a positive difference.",
         },
         explanation:
           "The new fluid group averaged 4.17 uses against 3.33, a gap of about 0.8. The original study's approximate figures, 7.24 against 5.65, show a gap of about 1.6 at a higher level. So the effect replicated in direction but was smaller.",
@@ -354,7 +354,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "No Effect on Originality?",
         type: "single",
         prompt:
@@ -368,28 +368,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "No: with groups planned for a large effect, a small real effect, like the 0.30 seen here, could be missed, so the result is weak evidence of no effect.",
+            text: "No; power for a large effect can miss a smaller originality effect.",
           },
           {
             id: "o2",
-            text: "Yes: p above .05 proves there is no effect.",
+            text: "Yes; a p-value above .05 establishes that the originality effect is exactly zero in the population.",
           },
           {
             id: "o3",
-            text: "Yes: the originality ratings were unreliable.",
+            text: "Yes; the null identifies unreliable ratings as the sole reason originality differed from idea count.",
           },
           {
             id: "o4",
-            text: "No: the result was actually significant.",
+            text: "No; the originality comparison passed the significance threshold despite being described as non-significant.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How big an effect was the study designed to detect, and how big was the observed one?",
         misconceptions: {
-          o2: "A non-significant result cannot prove an effect is absent, particularly in small groups.",
-          o3: "The raters agreed well (ω = 0.916); unreliable ratings are not the issue.",
-          o4: "The originality difference was not significant.",
+          o2: "Non-significance leaves a range of effects compatible with the data.",
+          o3: "The null alone does not establish unreliable measurement.",
+          o4: "The originality comparison was not significant.",
         },
         explanation:
           "The team planned 29 participants per group to detect d = 0.87 with 90% power. An observed d of 0.30 is much smaller, so the study could easily miss a real effect of that size. The authors treat the originality result as a failure to find an effect, not proof of none.",
@@ -399,7 +399,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Which Group Is Missing?",
         type: "single",
         prompt:
@@ -411,29 +411,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "Add a more angular drawing, testing two degrees of angularity without a no-movement reference.",
+          },
+          {
+            id: "o3",
+            text: "Increase both existing groups, estimating their difference more precisely without adding a baseline.",
+          },
+          {
             id: "o1",
             text: "A baseline group that makes no tracing movements, compared with each of the two tracing groups.",
           },
           {
-            id: "o2",
-            text: "A third drawing with more corners.",
-          },
-          {
-            id: "o3",
-            text: "Twice as many participants in the same two groups.",
-          },
-          {
             id: "o4",
-            text: "A mood questionnaire before tracing.",
+            text: "Measure mood before tracing, replacing the comparison of idea counts with an earlier mood check.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "To say whether something goes up or down, you need a point of reference.",
         misconceptions: {
-          o2: "That adds another angular condition, but still no reference point without movement.",
-          o3: "More of the same two groups sharpens the gap but still cannot say which way it points relative to nothing.",
-          o4: "That would help control mood, but it does not provide a comparison with no movement.",
+          o2: "Another tracing condition alone does not locate either effect relative to no tracing.",
+          o3: "Precision does not distinguish benefit from harm relative to an absent baseline.",
+          o4: "Mood timing does not supply a no-tracing creativity baseline.",
         },
         explanation:
           "The authors note that, like the original study, they included no baseline condition. Without one, it is unclear whether fluid arm movements increase fluency or non-fluid movements decrease it.",
@@ -443,7 +443,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Is It Culture?",
         type: "single",
         prompt:
@@ -461,24 +461,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "The study proves culture explains it, since the samples differ.",
+            text: "Culture is established as the cause, since a difference between national samples isolates cultural influence.",
           },
           {
             id: "o3",
-            text: "Culture cannot matter, because creativity is the same everywhere.",
+            text: "Culture is ruled out, since the same creativity task must have identical effects in every population.",
           },
           {
             id: "o4",
-            text: "The effect was smaller only because mood differed between the groups.",
+            text: "Mood explains the difference, since the new study found a clear mood gap between tracing conditions.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many things differ between the original and the new study?",
         misconceptions: {
-          o2: "The samples differ in many ways at once; the study did not isolate culture.",
-          o3: "The authors say Eastern–Western differences are mixed, not absent.",
-          o4: "Mood was comparable between the two conditions in the new study.",
+          o2: "Other study and sampling differences remain mixed with culture.",
+          o3: "A common task does not establish identical effects across populations.",
+          o4: "The study did not establish that mood difference or mechanism.",
         },
         explanation:
           "The authors suggest that cultural differences could have affected divergent thinking, and that raters may judge originality differently across cultures. They also note the evidence on cultural differences is mixed. Culture was not tested, so it stays a possibility.",

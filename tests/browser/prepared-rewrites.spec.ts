@@ -1,5 +1,8 @@
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { body as beverage } from "../../apps/web/src/research/studies/data/selecting-a-beverage.js";
+import { body as exercise } from "../../apps/web/src/research/studies/data/exercise-focus.js";
+import { body as sleep } from "../../apps/web/src/research/studies/data/sleep-school.js";
 import { body as foodWarnings } from "../../apps/web/src/research/studies/data/food-warning-labels.js";
 import { body as handHygiene } from "../../apps/web/src/research/studies/data/hand-washing-in-restrooms.js";
 import { body as gratitude } from "../../apps/web/src/research/studies/data/daily-gratitude-and-well-being.js";
@@ -27,6 +30,9 @@ import { body as trust } from "../../apps/web/src/research/studies/data/judging-
 // Studies whose questions were rewritten as decisions for issue #31. Each is walked
 // from the first question to the reveal by choosing the accepted answer.
 const rewritten = [
+  ["selecting-a-beverage", beverage],
+  ["exercise-focus", exercise],
+  ["sleep-school", sleep],
   ["judging-statement-truthfulness", trust],
   ["being-a-later-born", laterBorn],
   ["hand-washing-in-restrooms", handHygiene],
@@ -57,14 +63,19 @@ for (const width of [375, 1366]) {
     test(`${slug} plays through at ${width}px without overflow or axe violations`, async ({
       page,
     }) => {
-      await page.setViewportSize({ width, height: 900 });
+      await page.setViewportSize({ width, height: width === 375 ? 812 : 768 });
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(`/#/research/studies/${slug}`);
       await page
         .getByRole("button", { name: /start|begin|continue/i })
         .first()
         .click();
-      for (const challenge of study.lesson.challenges) {
+      for (const challenge of [
+        ...study.lesson.challenges,
+        ...(study.lesson.bonus ? [study.lesson.bonus] : []),
+      ]) {
+        if (challenge === study.lesson.bonus)
+          await page.getByRole("button", { name: "Try the bonus" }).click();
         await expect(
           page.getByRole("heading", { name: challenge.prompt, exact: true }),
         ).toBeVisible();
@@ -73,15 +84,17 @@ for (const width of [375, 1366]) {
             () => document.documentElement.scrollWidth > innerWidth,
           ),
         ).toBe(false);
-        const right = challenge.options.find((o) =>
-          challenge.accepted.includes(o.id),
-        )!;
-        const choice = page
-          .locator(".study-choice, [role=radio]")
-          .filter({ hasText: right.text })
-          .first();
-        await choice.scrollIntoViewIfNeeded();
-        await choice.click();
+        // Numeric scenes ask for an optional prediction before revealing the
+        // reported values and the assessed response controls.
+        const reveal = page.getByRole("button", {
+          name: /^Reveal (reported results|the results|the estimate)$/,
+        });
+        if (await reveal.isVisible()) await reveal.click();
+        for (const id of challenge.accepted) {
+          const choice = page.locator(`[data-option="${id}"]`).first();
+          await choice.scrollIntoViewIfNeeded();
+          await choice.click();
+        }
         await page.getByRole("button", { name: "Check", exact: true }).click();
         await expect(page.locator(".journey-feedback h2")).toBeVisible();
         await expect(page.locator(".journey-feedback")).toContainText(
@@ -97,6 +110,12 @@ for (const width of [375, 1366]) {
           .getByRole("button", { name: "Continue", exact: true })
           .click();
       }
+      await expect(
+        page.getByRole("heading", {
+          name: study.lesson.paper.title,
+          exact: true,
+        }),
+      ).toBeVisible();
     });
   }
 }

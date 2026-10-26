@@ -116,7 +116,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1d",
-        stage: "design",
+        stage: "Read the design",
         title: "What Counts as a Case?",
         type: "single",
         prompt:
@@ -128,29 +128,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "A diagnosis made by a clinician who assessed the participant after reviewing the checklist.",
+          },
+          {
             id: "o1",
             text: "A screening score above a cut-off that usually, but not always, matches a clinical diagnosis; it is not a diagnosis itself.",
           },
           {
-            id: "o2",
-            text: "A diagnosis made by a doctor.",
-          },
-          {
             id: "o3",
-            text: "Someone currently receiving treatment.",
+            text: "A record of current treatment, with the checklist used only to confirm a prescription.",
           },
           {
             id: "o4",
-            text: "A guaranteed case of depression, since the cut-off is validated.",
+            text: "A definite disorder in every case, since a validated threshold eliminates false positives.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who decided whether each person was a case, and how?",
         misconceptions: {
-          o2: "No clinician assessed participants; the score comes from a self-completed checklist.",
-          o3: "Treatment was a separate question about help-seeking.",
-          o4: "The cut-off has good but imperfect accuracy, so some cases are missed and some are false alarms.",
+          o2: "The threshold was a screening definition, not a clinical assessment.",
+          o3: "Screening caseness and treatment receipt were separate measures.",
+          o4: "Validation does not make a screening cut-off perfectly accurate.",
         },
         explanation:
           "Caseness came from questionnaire cut-offs with adequate but imperfect sensitivity (.85) and specificity (.89). It identifies likely cases, not diagnoses.",
@@ -160,7 +160,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2r",
-        stage: "results",
+        stage: "Read the results",
         title: "A Dip at the Top",
         type: "single",
         prompt:
@@ -306,24 +306,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Once debt is completely unmanageable, it stops affecting anxiety.",
+            text: "Unmanageable debt becomes protective, since the lowest point in that group establishes a turning point.",
           },
           {
             id: "o3",
-            text: "The dip shows the whole rising pattern is not real.",
+            text: "The dip overturns the whole pattern, because one non-monotonic estimate rules out an association.",
           },
           {
             id: "o4",
-            text: "Easily manageable debt also raises anxiety clearly.",
+            text: "Easily manageable debt clearly raises anxiety, since every debt category must follow the same gradient.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many people stand behind the last estimate, and how wide is its interval?",
         misconceptions: {
-          o2: "One small group with a wide interval cannot show that; anxiety odds were still above those with no debt.",
-          o3: "The rise across the first four levels has fairly narrow intervals; one imprecise group does not erase it.",
-          o4: "Its interval (0.82 to 1.54) includes 1, so no clear difference from having no debt.",
+          o2: "The uncertain estimate does not establish a protective reversal.",
+          o3: "Sampling variation in a small group need not erase the broader pattern.",
+          o4: "The displayed estimates and intervals must be read separately for each group.",
         },
         explanation:
           "The authors suggest the lower odds in this group may be due to the small number of participants reducing power. They also offer other possibilities, such as depression being more common in this group.",
@@ -333,7 +333,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3r",
-        stage: "results",
+        stage: "Read the results",
         title: "After Adjustment",
         type: "single",
         prompt:
@@ -345,29 +345,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Part of the raw link reflects those background factors, such as income, but a sizeable link remains after taking them into account.",
-          },
-          {
             id: "o2",
-            text: "The background factors explain the whole link.",
+            text: "The background factors explain all of the link, since both adjusted odds ratios moved toward 1.",
           },
           {
             id: "o3",
-            text: "Adjustment made the link stronger.",
+            text: "The background factors strengthened the link, since adjustment moved both odds ratios further from 1.",
           },
           {
             id: "o4",
-            text: "Adjustment proves debt causes depression.",
+            text: "The adjusted estimates establish causation, since including income removes every alternative explanation.",
+          },
+          {
+            id: "o1",
+            text: "Measured background factors explain part of the link, but an adjusted association remains.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the size before and after adjustment, and check where the adjusted values sit relative to 1.",
         misconceptions: {
-          o2: "The adjusted odds ratios are still well above 1, so a link remains.",
-          o3: "The odds ratios got smaller after adjustment.",
-          o4: "Adjustment removes the influence of measured factors only; it cannot establish cause.",
+          o2: "Both adjusted estimates remained well above 1.",
+          o3: "Both moved toward, rather than away from, 1.",
+          o4: "Adjustment cannot guarantee removal of unmeasured confounding or reverse causation.",
         },
         explanation:
           "Adjusting roughly halved the odds ratios, showing some of the raw link ran through background factors like income and benefits. The remaining odds ratios of 2.80 and 6.56 still indicate a strong association.",
@@ -377,7 +377,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4i",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "A Graded Pattern",
         type: "single",
         prompt:
@@ -389,29 +389,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The graded pattern fits a causal role for debt, but with one survey the reverse is also possible: poor mental health could make debt harder to manage.",
-          },
-          {
             id: "o2",
-            text: "The graded pattern proves debt problems cause depression.",
+            text: "The gradient establishes debt as the cause, since increasing exposure cannot track a non-causal factor.",
           },
           {
             id: "o3",
-            text: "There is no relationship between debt and mental health.",
+            text: "The gradient rules out any link, since a cross-sectional design cannot describe an association.",
+          },
+          {
+            id: "o1",
+            text: "The gradient fits causation, but the one-time survey leaves reverse causation open.",
           },
           {
             id: "o4",
-            text: "The pattern proves poor mental health causes debt problems.",
+            text: "The gradient establishes mental illness as the cause, ruling out debt as the initiating factor.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "With one survey, can you tell which came first?",
         misconceptions: {
-          o2: "A graded pattern is one consideration in judging cause; it does not prove it, especially from a single survey.",
-          o3: "Strong associations were found at every level of debt problems.",
-          o4: "The data cannot establish direction either way.",
+          o2: "A graded association can arise through confounding or reverse causation.",
+          o3: "Cross-sectional data can show associations, though not settle causal direction.",
+          o4: "That direction is plausible but not established by this survey.",
         },
         explanation:
           "The authors call the graded pattern important for judging cause, but state that because the data are cross-sectional it is not possible to say whether debt concerns came before mental health difficulties or the other way round.",
@@ -421,7 +421,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5i",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Would It Hold Elsewhere?",
         type: "single",
         prompt:
@@ -433,29 +433,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Not necessarily: where treatment costs money, people with debt problems may be less able to get help, so the help-seeking link could be weaker or reversed.",
+            id: "o2",
+            text: "The link should transfer unchanged, since treatment need determines access regardless of cost.",
           },
           {
-            id: "o2",
-            text: "Yes, exactly the same, because debt affects everyone equally.",
+            id: "o1",
+            text: "Paid care could weaken or reverse the treatment link if debt limits access.",
           },
           {
             id: "o3",
-            text: "No link at all would appear anywhere else.",
+            text: "The link must vanish outside the UK, since treatment patterns cannot recur in a different system.",
           },
           {
             id: "o4",
-            text: "The help-seeking result is wrong because it was self-reported.",
+            text: "The UK treatment link is invalid, since self-reported receipt cannot describe any help-seeking pattern.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What made treatment easier to get for these participants?",
         misconceptions: {
-          o2: "Access to care differs between countries, which can change who receives treatment.",
-          o3: "The study cannot predict that; it can only say the UK result may not transfer.",
-          o4: "Self-report is a limitation, but the question here is about transfer to other health systems.",
+          o2: "Need and access are distinct; costs can prevent treatment despite need.",
+          o3: "Transfer is uncertain, not necessarily absent.",
+          o4: "Self-report is a limitation, not proof that the association is false.",
         },
         explanation:
           "The authors point out that free NHS access may make treatment more accessible for people in debt, whereas in other countries services must be paid for privately, making help-seeking less likely for those with financial problems.",

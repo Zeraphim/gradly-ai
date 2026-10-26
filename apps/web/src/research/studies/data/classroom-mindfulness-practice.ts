@@ -94,7 +94,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Drawing Classes From a Hat",
         type: "single",
         prompt:
@@ -106,29 +106,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The draw was fair, but with only five classes, chance differences between groups can be large, so they had to adjust for differences such as gender and grade.",
+            id: "o2",
+            text: "Random assignment balances gender and grade closely enough to remove the need for adjustment.",
           },
           {
-            id: "o2",
-            text: "Drawing from a hat guarantees the groups are identical.",
+            id: "o1",
+            text: "Random assignment helps, but five classes can still differ substantially by chance.",
           },
           {
             id: "o3",
-            text: "Each child had an equal, independent chance of each group.",
+            text: "Each child was independently assigned, balancing class differences.",
           },
           {
             id: "o4",
-            text: "It means teachers chose which classes started.",
+            text: "The teachers' preferences determined which classes started, making this a self-selected comparison.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many separate units were actually drawn?",
         misconceptions: {
-          o2: "Random assignment of a few classes can still leave big differences; here the groups differed in gender.",
-          o3: "Children were assigned as whole classes, so they were not assigned independently.",
-          o4: "The draw removed teacher choice.",
+          o2: "With only five classes, baseline imbalance can remain substantial.",
+          o3: "Whole classes, not individual children, were assigned.",
+          o4: "Classes were drawn from a hat rather than chosen by preference.",
         },
         explanation:
           "Classes were randomly allocated by a hat draw. With five classes, the groups ended up differing in gender (38% against 67% girls), so the analyses adjusted for gender and grade.",
@@ -138,7 +138,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "When the Waitlist Starts",
         type: "single",
         prompt:
@@ -150,29 +150,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The end of Term 3: after that, the waitlist group had the programme too.",
-          },
-          {
             id: "o2",
-            text: "The end of Term 4, because it is the latest.",
+            text: "End of Term 4: the later follow-up retains an untreated waitlist.",
           },
           {
             id: "o3",
-            text: "The start of Term 3, because nobody had the programme.",
+            text: "Start of Term 3: the baseline scores already compare programme effects with an untreated group.",
+          },
+          {
+            id: "o1",
+            text: "End of Term 3: one group had the programme and the waitlist had not started.",
           },
           {
             id: "o4",
-            text: "Any time point, since the groups were randomised.",
+            text: "Either term end: random assignment preserves an untreated group even after it starts the programme.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "At each time point, what had each group received?",
         misconceptions: {
-          o2: "By then both groups had the programme, the waitlist for one term.",
-          o3: "That is the baseline; it shows starting levels, not an effect.",
-          o4: "What the groups received changed in Term 4, so the time points answer different questions.",
+          o2: "The waitlist received the programme in Term 4.",
+          o3: "Neither group had yet received the programme at baseline.",
+          o4: "Randomisation does not preserve an untreated comparison after crossover.",
         },
         explanation:
           "The waitlist group joined the programme in Term 4, so the comparison of programme against no programme is only clean at the end of Term 3. Later differences compare two terms of programme with one.",
@@ -182,7 +182,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Card-Sort Scores Over Time",
         type: "single",
         prompt:
@@ -292,11 +292,6 @@ export const body: StudyBody = {
           resolution: null,
           responses: [
             {
-              optionId: "o1",
-              label: "Programme ahead in Term 3; both rise later",
-              targetIds: ["i2", "w2", "i3", "w3"],
-            },
-            {
               optionId: "o2",
               label: "Waitlist never improved",
               targetIds: ["w3"],
@@ -311,34 +306,39 @@ export const body: StudyBody = {
               label: "Same throughout",
               targetIds: ["i1", "w1"],
             },
+            {
+              optionId: "o1",
+              label: "Programme ahead in Term 3; both rise later",
+              targetIds: ["i2", "w2", "i3", "w3"],
+            },
           ],
         },
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "In Term 3 the programme group rose while the waitlist barely moved; once the waitlist had the programme, both groups rose.",
-          },
-          {
             id: "o2",
-            text: "The waitlist group never improved.",
+            text: "The programme group improved in both terms, while the waitlist scores stayed near baseline throughout.",
           },
           {
             id: "o3",
-            text: "The programme group scored lower at the end of Term 3.",
+            text: "The waitlist group led at the end of Term 3, before the programme group caught up in Term 4.",
           },
           {
             id: "o4",
-            text: "Both groups changed in exactly the same way.",
+            text: "The groups improved together in Term 3, then separated only when the waitlist started treatment.",
+          },
+          {
+            id: "o1",
+            text: "In Term 3 the programme group rose while the waitlist barely moved; once the waitlist had the programme, both groups rose.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the two groups' change during Term 3 only.",
         misconceptions: {
-          o2: "It rose from 99.44 to 107.58 in Term 4, when it had the programme.",
-          o3: "It scored higher, 103.76 against 99.44.",
-          o4: "The significant interaction shows they changed differently.",
+          o2: "The waitlist improved after gaining access in Term 4.",
+          o3: "The displayed trajectory does not show that reversal.",
+          o4: "The observed separation occurred before the waitlist began the programme.",
         },
         explanation:
           "During Term 3 the programme group rose from 95.49 to 103.76 while the waitlist moved from 98.61 to 99.44, and the programme group was significantly higher at the end of Term 3. After the waitlist started, both groups rose.",
@@ -348,7 +348,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "What the Effect Sizes Describe",
         type: "single",
         prompt:
@@ -365,24 +365,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "As proof the programme group ended far ahead of the waitlist.",
+            text: "The programme group's final advantage over the waitlist, after accounting for both groups' growth.",
           },
           {
             id: "o3",
-            text: "As a small effect, because it is below 2.",
+            text: "A small difference between groups, since an effect must exceed 2 to be considered substantial.",
           },
           {
             id: "o4",
-            text: "As the waitlist group's improvement.",
+            text: "The waitlist group's two-term change, which the abstract attributes to receiving the programme later.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which two scores does each d compare: two groups, or one group at two times?",
         misconceptions: {
-          o2: "At the end of Term 4 the groups were close: 108.79 against 107.58.",
-          o3: "By usual conventions 1.10 is a large change; the issue is what it compares.",
-          o4: "1.10 appears in the programme group's row.",
+          o2: "The table labels this as within-group change, not the between-group advantage.",
+          o3: "The value is not a between-group effect and 2 is not a threshold for meaningful size.",
+          o4: "The value occurs in the programme group's rows.",
         },
         explanation:
           "In the table, 0.48 and 1.10 are within-group changes for the programme group. The waitlist group also improved (d 0.66 from baseline to the end of Term 4). The authors note that only short-term benefits can be judged and that gains may partly be normal development.",
@@ -392,7 +392,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Where Bias Could Enter",
         type: "single",
         prompt:
@@ -404,29 +404,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The teacher ratings of behaviour most of all, since teachers knew which children had the programme and were keen on it; the computer tasks less so, though the tester was not blind either.",
+            id: "o2",
+            text: "Computer tasks are most exposed because software receives the same expectations as teachers do.",
           },
           {
-            id: "o2",
-            text: "None, because the classes were randomised.",
+            id: "o1",
+            text: "Teacher ratings are most exposed to expectations; the tester also knew the groups.",
           },
           {
             id: "o3",
-            text: "Only the computer tasks, because computers can be biased.",
+            text: "Neither outcome is exposed to expectations because class randomisation also blinds the assessors.",
           },
           {
             id: "o4",
-            text: "All results are equally unreliable.",
+            text: "Both outcomes have identical exposure because using a score makes all judgements equally subjective.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who knew which children had the programme, and who produced each score?",
         misconceptions: {
-          o2: "Randomisation does not stop people who know the group assignment from rating differently.",
-          o3: "The computer tasks are scored automatically; the bigger risk is in human ratings by people who knew the groups.",
-          o4: "Ratings by committed teachers who knew the groups are more exposed than automated task scores.",
+          o2: "Standardised tasks are less directly affected by teachers' subjective judgements.",
+          o3: "Randomisation does not blind teachers or the researcher.",
+          o4: "Teacher ratings and standardised computer tasks have different bias pathways.",
         },
         explanation:
           "Teachers could not be unaware of the groups and were keen on the programme, which raises concerns about their behaviour ratings. The researcher who collected the data also supported the teachers, so some bias in testing cannot be ruled out.",

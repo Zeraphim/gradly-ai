@@ -111,7 +111,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "q1",
-        stage: "design",
+        stage: "Read the design",
         title: "When Birth Order Was Recorded",
         type: "single",
         prompt:
@@ -124,28 +124,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Adults' current mood or memory shaping what they report about their place in the family.",
+            text: "It prevents adult mood or memory from changing the birth-order report.",
           },
           {
             id: "o2",
-            text: "Any difference between first-born and later-born children other than birth order.",
+            text: "It removes confounding by family income across birth-order groups.",
           },
           {
             id: "o3",
-            text: "Loss of participants between birth and age 42.",
+            text: "It prevents later-born children from being more likely to leave the cohort.",
           },
           {
             id: "o4",
-            text: "The need for any adjustment for confounders.",
+            text: "It prevents family size from needing adjustment in the adult analysis.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Think about when each fact was written down and who wrote it.",
         misconceptions: {
-          o2: "Recording the exposure early cannot remove other differences, such as family income, between birth-order groups.",
-          o3: "Participants were still lost over the decades; the paper reports about half missing at 42.",
-          o4: "Adjustment is still needed; the study runs five models for that reason.",
+          o2: "Recording early does not remove confounding by family circumstances.",
+          o3: "Early measurement does not prevent selective dropout.",
+          o4: "Timing of measurement does not remove the need to consider family size.",
         },
         explanation:
           "Because birth order was reported at birth, the outcome at age 42 cannot have coloured it. The design cannot remove other differences between families or the later loss of participants.",
@@ -155,7 +155,7 @@ export const body: StudyBody = {
       },
       {
         id: "q2",
-        stage: "design",
+        stage: "Read the design",
         title: "Men and Women Separately",
         type: "single",
         prompt:
@@ -167,29 +167,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "A birth-order pattern in one sex could be hidden or diluted if the two sexes were averaged together.",
+            id: "o2",
+            text: "Pooling would turn an observational comparison into an experimental one.",
           },
           {
-            id: "o2",
-            text: "Pooled analyses always produce biased estimates.",
+            id: "o1",
+            text: "Pooling could hide a birth-order pattern that differs between men and women.",
           },
           {
             id: "o3",
-            text: "Men and women have different WEMWBS scales.",
+            text: "Separate analyses put men's and women's scores onto a common wellbeing scale.",
           },
           {
             id: "o4",
-            text: "Separate analyses double the sample size.",
+            text: "Separate analyses make each estimate more precise by using a smaller group.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What could go wrong if opposite patterns in men and women were averaged?",
         misconceptions: {
-          o2: "Pooling is not always biased; it can bury differences, which is the specific concern here.",
-          o3: "Everyone answered the same scale; sex differences concern possible effects, not the instrument.",
-          o4: "Splitting the sample makes each analysis smaller, not larger.",
+          o2: "Pooling does not change how birth order was assigned or recorded.",
+          o3: "They already use the same scale; splitting is not a rescaling procedure.",
+          o4: "Splitting usually reduces precision rather than increasing it.",
         },
         explanation:
           "The authors treated gender as a possible effect modifier, meaning birth order might work differently for men and women. Separate models let each pattern show, at the cost of smaller samples.",
@@ -199,7 +199,7 @@ export const body: StudyBody = {
       },
       {
         id: "q3",
-        stage: "results",
+        stage: "Read the results",
         title: "Five Models, One Group",
         type: "single",
         prompt:
@@ -322,14 +322,14 @@ export const body: StudyBody = {
               targetIds: ["m1", "m5"],
             },
             {
-              optionId: "o2",
-              label: "Estimate stable, interval crosses zero",
-              targetIds: ["m1", "m5"],
-            },
-            {
               optionId: "o3",
               label: "Model 4 proves cause",
               targetIds: ["m4"],
+            },
+            {
+              optionId: "o2",
+              label: "Estimate stable, interval crosses zero",
+              targetIds: ["m1", "m5"],
             },
             {
               optionId: "o4",
@@ -342,19 +342,19 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "The gap shrank toward zero as adult circumstances were added.",
+            text: "The estimate moved closer to zero after adjustment; the gap itself became smaller.",
+          },
+          {
+            id: "o3",
+            text: "The estimate grew because childhood conduct problems were shown to cause the gap.",
           },
           {
             id: "o2",
             text: "The estimate stayed about the same or grew a little; what changed is that its interval now includes zero, so it no longer reaches significance.",
           },
           {
-            id: "o3",
-            text: "Model 4's −1.19 proves that conduct disorder in childhood lowers adult wellbeing.",
-          },
-          {
             id: "o4",
-            text: "Model 5 shows later-born men have exactly the same wellbeing as first-born men.",
+            text: "The estimate settled at zero, showing equal wellbeing in both birth-order groups.",
           },
         ],
         accepted: ["o2"],
@@ -362,8 +362,8 @@ export const body: StudyBody = {
         hint: "Compare the size of the estimate in Model 1 and Model 5 before looking at the intervals.",
         misconceptions: {
           o1: "The estimate went from −0.79 to −1.04, which is slightly larger, not smaller.",
-          o3: "A regression estimate for birth order says nothing about conduct disorder causing anything; it only shows how the birth-order estimate moved.",
-          o4: "An interval that includes zero also includes differences of about a point; it does not show equality.",
+          o3: "Adjustment estimates associations; it does not establish this causal explanation.",
+          o4: "A confidence interval containing zero does not establish equality.",
         },
         explanation:
           "The estimate moved from −0.79 to −1.04 points, so the gap did not shrink. In Model 5 the interval (−2.11 to 0.03) just includes zero. “Attenuated” describes lost significance, not a smaller difference.",
@@ -373,7 +373,7 @@ export const body: StudyBody = {
       },
       {
         id: "q4",
-        stage: "results",
+        stage: "Read the results",
         title: "Opposite Directions?",
         type: "single",
         prompt:
@@ -387,19 +387,19 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Yes: 1.10 and 0.75 point to opposite directions, so birth order affects the sexes differently.",
-          },
-          {
-            id: "o2",
-            text: "No: both intervals include 1 and overlap, so the data do not show a real difference, either within or between the sexes.",
+            text: "Yes: estimates on opposite sides of 1 establish different effects in men and women.",
           },
           {
             id: "o3",
-            text: "Yes, because 0.75 is further from 1 than 1.10 is.",
+            text: "Yes: the estimate further from 1 identifies the sex with the stronger birth-order effect.",
           },
           {
             id: "o4",
-            text: "No, because odds ratios cannot be compared across sexes.",
+            text: "No: odds ratios lose their interpretation when the same model is fitted separately by sex.",
+          },
+          {
+            id: "o2",
+            text: "No: these uncertain estimates do not establish a sex difference; test that directly.",
           },
         ],
         accepted: ["o2"],
@@ -407,8 +407,8 @@ export const body: StudyBody = {
         hint: "Check whether each interval includes 1, and whether the two intervals overlap.",
         misconceptions: {
           o1: "Both intervals include 1 and overlap heavily, so the data are compatible with no difference in either group and with no difference between groups.",
-          o3: "Distance from 1 only matters relative to the uncertainty, and the women's interval still includes 1.",
-          o4: "They can be compared; the problem is that both are uncertain around 1.",
+          o3: "Distances from 1 alone do not test the difference between sexes.",
+          o4: "Odds ratios remain interpretable; the issue is uncertainty and a direct comparison.",
         },
         explanation:
           "The point estimates differ, but both intervals span 1 and overlap (0.79 to 1.53 and 0.53 to 1.07). The authors summarise that there was little evidence of differences between men and women.",
@@ -418,7 +418,7 @@ export const body: StudyBody = {
       },
       {
         id: "q5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Half the Cohort Missing",
         type: "single",
         prompt:
@@ -432,19 +432,19 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "It only reduces the sample size and cannot affect the conclusion.",
-          },
-          {
-            id: "o2",
-            text: "The conclusion applies most safely to those who stayed; missing later-born, disadvantaged participants could hide or distort a pattern.",
+            text: "The loss affects precision, but cannot bias the birth-order estimate.",
           },
           {
             id: "o3",
-            text: "It proves birth order does matter, because the missing people must have lower wellbeing.",
+            text: "The missing later-born adults must have lower wellbeing, so the null hides a real effect.",
           },
           {
             id: "o4",
-            text: "It makes the study invalid, so the null result should be discarded.",
+            text: "Losing half the cohort makes even associations among the remaining adults uninterpretable.",
+          },
+          {
+            id: "o2",
+            text: "Selective dropout could distort the pattern, so the null needs caution.",
           },
         ],
         accepted: ["o2"],
@@ -452,8 +452,8 @@ export const body: StudyBody = {
         hint: "Ask who is most likely to be missing, and whether they are the people a birth-order effect would show up in.",
         misconceptions: {
           o1: "If the missing people differ in birth order and background, the remaining sample can distort the comparison, not just shrink it.",
-          o3: "Missing data do not show that; they only mean the observed pattern may differ from the full cohort.",
-          o4: "Half the cohort remains, and the paper cites earlier work that weights did not help. The point is caution, not discarding.",
+          o3: "Their missing outcomes are unknown; a possible bias is not proof of its direction.",
+          o4: "Attrition limits inference without making all observed data useless.",
         },
         explanation:
           "Attrition was greatest among later-born children and disadvantaged families, exactly the groups a birth-order effect might involve. The null result describes people who stayed, and it should be read with that caveat.",
@@ -463,7 +463,7 @@ export const body: StudyBody = {
       },
       {
         id: "q6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Would Another Era Differ?",
         type: "single",
         prompt:
@@ -475,29 +475,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Repeat the analysis in a cohort born in an era with larger families and higher child mortality, using the same outcome measures.",
-          },
-          {
             id: "o2",
-            text: "Re-run the same cohort with many more outcomes until one reaches significance.",
+            text: "Measure more outcomes in this cohort and select those with the clearest birth-order gaps.",
           },
           {
             id: "o3",
-            text: "Drop the adult variables so the estimate becomes significant again.",
+            text: "Remove adult adjustments and compare significance within this same cohort.",
+          },
+          {
+            id: "o1",
+            text: "Study a cohort from a different family-size and mortality era using the same measures.",
           },
           {
             id: "o4",
-            text: "Analyse only first-born children from the same cohort.",
+            text: "Compare first-born adults across eras while leaving later-born adults out of the analysis.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which comparison would change the one condition the authors say may matter?",
         misconceptions: {
-          o2: "Testing many outcomes until one is significant produces false positives; it does not test the era explanation.",
-          o3: "Choosing models to reach significance does not test the explanation.",
-          o4: "Without later-born comparison children, birth order cannot be studied at all.",
+          o2: "Selecting significant outcomes does not test whether historical context matters.",
+          o3: "This tests model choices, not a different historical era.",
+          o4: "Testing birth-order patterns requires comparing birth orders in each era.",
         },
         explanation:
           "The authors argue that resource depletion may matter more where families are large and child survival is uncertain. A cohort from such an era, with the same measures, would test that directly.",

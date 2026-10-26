@@ -135,7 +135,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Which Comparison?",
         type: "single",
         prompt:
@@ -249,11 +249,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Emoticons vs neutral screen",
-              targetIds: ["image", "message"],
-            },
-            {
               optionId: "o2",
               label: "Emoticons vs baseline weeks",
               targetIds: ["display", "change"],
@@ -268,33 +263,38 @@ export const body: StudyBody = {
               label: "Neutral screen vs picture",
               targetIds: ["display", "change"],
             },
+            {
+              optionId: "o1",
+              label: "Emoticons vs neutral screen",
+              targetIds: ["image", "message"],
+            },
           ],
         },
         options: [
           {
-            id: "o1",
-            text: "Screen-Emoticons against Screen-Neutral.",
-          },
-          {
             id: "o2",
-            text: "Screen-Emoticons against the same rooms in the baseline weeks.",
+            text: "Screen-Emoticons versus the same rooms before screens were installed.",
           },
           {
             id: "o3",
-            text: "Picture-Eyes against Picture-Neutral.",
+            text: "Picture-Eyes versus Picture-Neutral during the intervention phase.",
           },
           {
             id: "o4",
-            text: "Screen-Neutral against Picture-Neutral.",
+            text: "Screen-Neutral versus Picture-Neutral during the intervention phase.",
+          },
+          {
+            id: "o1",
+            text: "Screen-Emoticons versus Screen-Neutral in the intervention phase.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Find two conditions that match on everything except the message.",
         misconceptions: {
-          o2: "The baseline comparison also changes the screen, the time of year and traffic, so it cannot isolate the message.",
-          o3: "That tests the watching-eyes idea, not the approval message.",
-          o4: "That tests whether a changing screen helps, not whether the message matters.",
+          o2: "That also changes whether a screen is present and responsive.",
+          o3: "That tests static eyes, not approving or disapproving screen feedback.",
+          o4: "That tests the screen format without isolating the emoticon content.",
         },
         explanation:
           "Both screens react to dispenser use, so a difference between them points to the message. The authors read the smaller rise in Screen-Neutral as showing that attention from a changing screen cannot explain the whole emoticon effect.",
@@ -304,7 +304,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Random Rooms",
         type: "single",
         prompt:
@@ -321,24 +321,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "It guarantees that the four groups of rooms are identical.",
+            text: "It balances traffic and staffing exactly, leaving no baseline differences between conditions.",
           },
           {
             id: "o3",
-            text: "It means staff cannot tell which rooms have screens.",
+            text: "It conceals screen placement, so staff cannot respond to knowing which condition they are in.",
           },
           {
             id: "o4",
-            text: "It removes the need for a baseline phase.",
+            text: "It replaces baseline measurement, since randomisation alone shows how each room changed over time.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Think about what a manager's choice of rooms could bring along with it.",
         misconceptions: {
-          o2: "With two rooms per condition, chance differences remain. The team also compared the baseline weeks to check.",
-          o3: "Staff could see the screens; assignment does not hide them.",
-          o4: "The baseline phase is still needed to see how each room behaved before the screens.",
+          o2: "Randomisation reduces systematic imbalance but does not guarantee equality.",
+          o3: "Allocation does not blind staff to a visible screen.",
+          o4: "Baseline data remain useful for estimating changes and examining imbalance.",
         },
         explanation:
           "Random assignment spreads room differences across conditions by chance. With only two rooms per condition it cannot guarantee equality, so the authors also checked that baseline hand hygiene did not differ significantly between conditions.",
@@ -348,7 +348,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Reading the Interaction",
         type: "single",
         prompt:
@@ -361,29 +361,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The change across phases was not the same in every condition, but it does not say which conditions differ, so follow-up comparisons are needed.",
+            id: "o2",
+            text: "The emoticon condition exceeded every alternative, since any interaction identifies the strongest treatment.",
           },
           {
-            id: "o2",
-            text: "It proves that the emoticon condition beat all the others.",
+            id: "o1",
+            text: "Changes differed across conditions; follow-up tests identify which contrasts differ.",
           },
           {
             id: "o3",
-            text: "It shows that phase and condition work independently of each other.",
+            text: "Phase and condition had independent effects, so their combined influence can be read as two separate shifts.",
           },
           {
             id: "o4",
-            text: "It shows the conditions already differed before the screens were installed.",
+            text: "The conditions differed before installation, since an interaction is a test of baseline group differences.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "An interaction says the effect of one factor depends on the other. Does it say how?",
         misconceptions: {
-          o2: "An interaction says the pattern differs by condition. It does not identify which condition differs from which.",
-          o3: "That is the opposite of an interaction.",
-          o4: "A baseline difference would be tested within the baseline phase; the interaction concerns change across phases.",
+          o2: "An omnibus interaction does not establish every pairwise contrast.",
+          o3: "An interaction indicates that the phase effect depends on condition.",
+          o4: "The interaction concerns differing changes, not just baseline imbalance.",
         },
         explanation:
           "The interaction means the conditions did not change in the same way. The authors then ran three separate one-way analyses, one per phase, and post hoc tests to see where the differences lay.",
@@ -393,7 +393,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Which Claim Goes Too Far?",
         type: "single",
         prompt:
@@ -529,19 +529,19 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "In month 2 the emoticon rooms were still above their own baseline.",
+            text: "Emoticon-room use in month 2 remained above those rooms' baseline level.",
           },
           {
             id: "o2",
-            text: "Neutral screens also coincided with higher use than at baseline, so some of the rise may come from having a screen at all.",
+            text: "Neutral screens also rose above baseline, consistent with some benefit from a responsive screen.",
           },
           {
             id: "o3",
-            text: "The emoticon effect will keep shrinking until it disappears.",
+            text: "The emoticon decline will continue until dispenser use returns to the baseline level.",
           },
           {
             id: "o4",
-            text: "Dispenser use in the emoticon rooms fell from month 1 to month 2.",
+            text: "Emoticon-room use was lower in month 2 than in month 1, despite remaining above baseline.",
           },
         ],
         accepted: ["o3"],
@@ -560,7 +560,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Many Events, Few Rooms",
         type: "single",
         prompt:
@@ -572,29 +572,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The events are clustered in only two rooms per condition, so a quirk of one room could drive a condition's result. The authors call the sample small and the study a pilot.",
-          },
-          {
             id: "o2",
-            text: "Large event counts guarantee that results will replicate.",
+            text: "The event total guarantees a stable result, since every event is independently assigned.",
           },
           {
             id: "o3",
-            text: "Event counts are irrelevant because only hospital size matters.",
+            text: "The room count is unimportant, since only the hospital's total size determines statistical independence.",
+          },
+          {
+            id: "o1",
+            text: "Events are clustered in two rooms per condition; one room can strongly influence a result.",
           },
           {
             id: "o4",
-            text: "The events came from patients, so staff are not represented.",
+            text: "The counts describe patients alone, leaving staff dispenser use entirely unrepresented.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many separate rooms stand behind each condition?",
         misconceptions: {
-          o2: "Counting more events from the same rooms does not add rooms; replication depends on more independent units.",
-          o3: "Event counts matter for precision of each room's rate; they just do not replace more rooms.",
-          o4: "The study could not tell staff, patients and visitors apart.",
+          o2: "Treatment was assigned to rooms, not independently to events.",
+          o3: "Independence depends on the allocation and clustering, not hospital size alone.",
+          o4: "The sensors did not establish a patient-only sample.",
         },
         explanation:
           "Tens of thousands of events came from eight rooms. The authors state the sample was small and that more rooms are needed, while arguing the measured effects were strong enough to interpret.",
@@ -604,7 +604,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "What the Measure Shows",
         type: "single",
         prompt:
@@ -616,29 +616,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The measure shows more dispenser use per sensor activation, not compliance with guidelines or the quality of cleaning.",
-          },
-          {
             id: "o2",
-            text: "Correct: the ratio is the standard way to calculate compliance.",
+            text: "It is guideline compliance, since each sensor activation records one occasion requiring hand cleaning.",
           },
           {
             id: "o3",
-            text: "The measure is useless because it ignores patients.",
+            text: "It cannot measure dispenser use, since the sensors did not identify whether each user was a patient.",
           },
           {
             id: "o4",
-            text: "The ratio understates compliance because every entry is counted.",
+            text: "It necessarily underestimates compliance, since every sensor activation represents a missed cleaning event.",
+          },
+          {
+            id: "o1",
+            text: "The measure shows more dispenser use per sensor activation, not compliance with guidelines or the quality of cleaning.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Ask what is in the numerator and in the denominator.",
         misconceptions: {
-          o2: "The authors state it must not be mistaken for a compliance rate.",
-          o3: "The study included patients and visitors as well as staff; the problem lies in what the ratio counts.",
-          o4: "The ratio is not a compliance rate in either direction, so it cannot be said to under- or overstate one.",
+          o2: "A sensor activation is not a validated hand-hygiene opportunity.",
+          o3: "Identity limits interpretation but does not erase the use counts.",
+          o4: "Sensor activations are neither all missed cleanings nor all valid compliance opportunities.",
         },
         explanation:
           "The denominator includes every sensor activation, even trips between a bed and the bathroom, so it is not a count of hygiene opportunities. The authors warn the ratio must not be read as a compliance rate and cannot speak to cleaning quality.",

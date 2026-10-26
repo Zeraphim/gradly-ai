@@ -187,7 +187,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Identify the Study Design",
         type: "single",
         prompt:
@@ -233,7 +233,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Identify Independent Variables",
         type: "single",
         prompt:
@@ -277,7 +277,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Compare Recall Percentages",
         type: "single",
         prompt:
@@ -323,7 +323,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Effect Size Across Studies",
         type: "single",
         prompt:
@@ -368,7 +368,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Interpretation of Persistent Effect",
         type: "single",
         prompt:
@@ -403,7 +403,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Sample Composition Comparison",
         type: "single",
         prompt:

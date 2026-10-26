@@ -124,7 +124,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "No Control Group",
         type: "single",
         prompt:
@@ -136,29 +136,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "It can compare health and environmental warnings with each other, but it cannot show whether any warning beats having none.",
-          },
-          {
             id: "o2",
-            text: "It can show whether warnings reduce how much red meat people buy.",
+            text: "It compares actual purchases under health warnings with purchases under environmental warnings.",
           },
           {
             id: "o3",
-            text: "It can show whether any warning beats no warning.",
+            text: "It compares each warning against no warning, using the lower-rated type as an untreated control.",
+          },
+          {
+            id: "o1",
+            text: "It compares warning types, but cannot test warnings against having none.",
           },
           {
             id: "o4",
-            text: "It can show which individual people will change what they eat.",
+            text: "It identifies which individuals will change their diet, using their ratings as observed behaviour.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What would a no-warning group have given you to compare with?",
         misconceptions: {
-          o2: "Nobody's purchases were measured; ratings were collected.",
-          o3: "Without a no-warning group there is nothing to compare a warning against.",
-          o4: "The study asked for ratings and short-term intentions, not what people did.",
+          o2: "The outcome was perceived effectiveness, not actual purchases.",
+          o3: "A different warning is not an untreated control.",
+          o4: "Ratings do not establish later individual behaviour.",
         },
         explanation:
           "The authors left out a control group because the aim was to compare health and environmental messages with each other. That makes the comparison between message types fair, but it says nothing about whether warnings beat no warning.",
@@ -168,7 +168,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Why Rate Effectiveness?",
         type: "single",
         prompt:
@@ -180,29 +180,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Ratings let the team compare many messages quickly, but they are opinions about messages, not evidence of behaviour.",
-          },
-          {
             id: "o2",
-            text: "Ratings are exactly as strong as purchase data.",
+            text: "Ratings measure purchasing effects directly, so observed buying adds little at a later stage.",
           },
           {
             id: "o3",
-            text: "Ratings are used because purchase data cannot be collected online.",
+            text: "Ratings are required online because online participants cannot make observable buying choices.",
           },
           {
             id: "o4",
-            text: "Ratings remove the need for random assignment.",
+            text: "Ratings remove the need for random assignment, since each judgement supplies its own control.",
+          },
+          {
+            id: "o1",
+            text: "Ratings screen many messages quickly, but do not establish effects on purchases.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Think about how many messages had to be compared and what a rating can tell you.",
         misconceptions: {
-          o2: "A rating of a message is not a purchase; the authors list the lack of behaviour data as a limitation.",
-          o3: "The issue is stage and speed, not impossibility; future work is meant to test behaviour.",
-          o4: "Random assignment is still what makes the health-versus-environment comparison fair.",
+          o2: "Opinions about effectiveness are not behaviour.",
+          o3: "Online behavioural or purchasing tests are possible; this was an early screening choice.",
+          o4: "The type of outcome does not remove design and allocation concerns.",
         },
         explanation:
           "The goal was to find which messages hold the most promise for later tests of behaviour. Ratings are quick for many messages, but the authors state that more research is needed on actual purchasing and consumption.",
@@ -212,7 +212,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "How Big Is the Gap?",
         type: "single",
         prompt:
@@ -299,13 +299,13 @@ export const body: StudyBody = {
           resolution: null,
           responses: [
             {
-              optionId: "o1",
-              label: "Modest gap, both low",
+              optionId: "o2",
+              label: "Large gap",
               targetIds: ["hpme", "epme"],
             },
             {
-              optionId: "o2",
-              label: "Large gap",
+              optionId: "o1",
+              label: "Modest gap, both low",
               targetIds: ["hpme", "epme"],
             },
             {
@@ -323,29 +323,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "A reliable but modest gap of about 0.4 points, with both message types rated below the middle of the scale.",
+            id: "o2",
+            text: "A large practical gap, with the small p-value establishing a strong difference in effectiveness.",
           },
           {
-            id: "o2",
-            text: "A very large gap, because p is below 0.001.",
+            id: "o1",
+            text: "A modest 0.4-point gap; both means sit below the scale's midpoint.",
           },
           {
             id: "o3",
-            text: "Both types were rated as highly effective.",
+            text: "Both types were highly effective, with averages well into the effective half of the scale.",
           },
           {
             id: "o4",
-            text: "Environmental messages did better, because their lower average means fewer people were put off.",
+            text: "Environmental messages did better, since their lower mean represents stronger deterrence.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the gap with the spread, and each average with the middle of the scale.",
         misconceptions: {
-          o2: "A small p-value says the gap is unlikely to be chance, not that it is large. 0.4 points is modest next to a spread of about 1.2.",
-          o3: "Both averages are below 3, the middle of a 1-to-5 scale.",
-          o4: "A lower average means the messages were rated as less effective, not better.",
+          o2: "A small p-value does not establish a large effect.",
+          o3: "The relevant scale runs from 1 to 5; the means are below its midpoint.",
+          o4: "The scale measures perceived effectiveness in the opposite direction.",
         },
         explanation:
           "The 0.40-point gap is statistically reliable but small next to a standard deviation of about 1.2, and both averages sit below the scale midpoint of 3. A tiny p-value does not make a gap large.",
@@ -355,7 +355,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Does Wording Matter?",
         type: "single",
         prompt:
@@ -373,24 +373,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Among environmental messages: they spread more widely and many differed significantly.",
+            text: "Environmental messages varied more, with several clearly separated harms driving their average rating.",
           },
           {
             id: "o3",
-            text: "Equally in both: any harm gives the same rating.",
+            text: "Both types varied equally, so choosing the specific harm matters just as much in either category.",
           },
           {
             id: "o4",
-            text: "Neither: ratings of individual harms are meaningless.",
+            text: "Neither type needs harm-specific testing, since the category averages determine every message's rating.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the width of the two ranges, and note any message that stood out.",
         misconceptions: {
-          o2: "Environmental ratings spanned only 2.20 to 2.32, and only three pairs differed after adjustment.",
-          o3: "The ranges differ, and the diabetes message stood out among health harms.",
-          o4: "The authors report significant differences among health harms after correcting for multiple comparisons.",
+          o2: "The wider spread and clear low-rated message were among health messages.",
+          o3: "The displayed ranges do not show equal variation.",
+          o4: "Individual messages can differ within their category.",
         },
         explanation:
           "Health ratings ranged from 2.46 to 2.75 and the diabetes message was rated lower than every other health message. Environmental ratings spanned only 2.20 to 2.32. The authors conclude that many harms perform similarly, giving policymakers a wide choice.",
@@ -400,7 +400,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Those Who Had Already Cut Back",
         type: "single",
         prompt:
@@ -412,29 +412,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "People already moving away from red meat find the warnings more convincing; the data cannot show whether warnings move people who have not already changed.",
-          },
-          {
             id: "o2",
-            text: "The warnings caused these participants to cut back on red meat.",
+            text: "The warnings caused prior reductions, because people who cut back subsequently rated them more highly.",
           },
           {
             id: "o3",
-            text: "The warnings will work best on people who eat the most red meat.",
+            text: "High meat consumers will respond most, because the coefficients measure the effect of baseline consumption.",
+          },
+          {
+            id: "o1",
+            text: "Prior reducers rated warnings higher; effects on people yet to change remain untested.",
           },
           {
             id: "o4",
-            text: "The finding shows that warnings make no difference to behaviour.",
+            text: "Warnings cannot change purchases, because the observed association concerns people who already reduced meat.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which came first, the change in eating or the rating of the warning?",
         misconceptions: {
-          o2: "The cutback they reported came before they saw the warnings in this study, so the warnings cannot have caused it.",
-          o3: "Ratings were lower, not higher, in several heavier-eating groups, and the study measured no behaviour.",
-          o4: "The study did not measure behaviour at all, so it cannot say that.",
+          o2: "A current rating cannot establish the cause of earlier behaviour.",
+          o3: "These coefficients concern reported reduction, not causal effects in high consumers.",
+          o4: "The study did not test whether warnings alter future purchases.",
         },
         explanation:
           "The change in eating covered the previous 12 months and was reported after the ratings, so it cannot be an effect of these warnings. The association shows who finds the messages convincing, not who would be moved by them.",
@@ -444,7 +444,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "From Study to Policy",
         type: "single",
         prompt:
@@ -457,28 +457,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Treat it as a screen for promising wording: it supports testing health warnings on real purchases, not yet requiring them.",
+            text: "Use the ratings to choose messages for a behavioural trial before a mandate.",
           },
           {
             id: "o2",
-            text: "The p-values below 0.001 settle that warnings change what people buy.",
+            text: "Require health warnings now, since the small p-values establish a change in purchasing behaviour.",
           },
           {
             id: "o3",
-            text: "Nothing can be learned because the sample was not random.",
+            text: "Set the findings aside, since a non-random sample prevents even comparing ratings within the study.",
           },
           {
             id: "o4",
-            text: "Drop environmental warnings from all future research because they scored lower.",
+            text: "End environmental-warning trials, since their lower ratings establish that they cannot change purchases.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What would a regulator need to see that this study did not measure?",
         misconceptions: {
-          o2: "Statistical significance of ratings does not show that behaviour changes; none was measured.",
-          o3: "A convenience sample limits generality, but the study still shows which messages look most promising.",
-          o4: "The authors point out that environmental messages still offer an opportunity and that more research is needed.",
+          o2: "The p-values compare ratings rather than purchases.",
+          o3: "Sampling limits generalisation without erasing the measured rating differences.",
+          o4: "Lower perceived effectiveness does not establish failure to change behaviour.",
         },
         explanation:
           "The authors call the study exploratory, list the missing power calculation, the convenience sample and the absence of behaviour measures, and say future studies should measure behavioural impact. It narrows down what to test next.",

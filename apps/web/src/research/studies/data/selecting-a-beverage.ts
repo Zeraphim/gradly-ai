@@ -99,7 +99,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "decision1",
-        stage: "design",
+        stage: "Read the design",
         title: "Study Design",
         type: "single",
         prompt:
@@ -107,16 +107,16 @@ export const body: StudyBody = {
         evidence: ["Different visitors choose drinks in the two arrangements."],
         options: [
           {
+            id: "o2",
+            text: "Linear regression treating straw choice as an unrestricted measurement.",
+          },
+          {
             id: "o1",
             text: "Binomial logistic regression of straw choice on arrangement.",
           },
           {
-            id: "o2",
-            text: "Linear regression of an unrestricted continuous outcome.",
-          },
-          {
             id: "o3",
-            text: "A paired test treating the two groups as repeat visits by the same people.",
+            text: "A paired test treating the groups as repeat visits by the same people.",
           },
         ],
         accepted: ["o1"],
@@ -145,20 +145,21 @@ export const body: StudyBody = {
           },
           responses: [
             {
+              optionId: "o2",
+              label:
+                "Linear regression treating straw choice as an unrestricted measurement.",
+              targetIds: ["record", "scale"],
+            },
+            {
               optionId: "o1",
               label:
                 "Binomial logistic regression of straw choice on arrangement.",
               targetIds: ["record", "scale"],
             },
             {
-              optionId: "o2",
-              label: "Linear regression of an unrestricted continuous outcome.",
-              targetIds: ["record", "scale"],
-            },
-            {
               optionId: "o3",
               label:
-                "A paired test treating the two groups as repeat visits by the same people.",
+                "A paired test treating the groups as repeat visits by the same people.",
               targetIds: ["record", "scale"],
             },
           ],
@@ -203,7 +204,7 @@ export const body: StudyBody = {
       },
       {
         id: "decision2",
-        stage: "design",
+        stage: "Read the design",
         title: "Research Hypothesis",
         type: "single",
         prompt:
@@ -214,11 +215,11 @@ export const body: StudyBody = {
         options: [
           {
             id: "o5",
-            text: "The box makes straws impossible to obtain.",
+            text: "Visitors in the box condition have no access to straws at all.",
           },
           {
             id: "o6",
-            text: "Every visitor takes a straw in either arrangement.",
+            text: "Visitors choose straws equally often regardless of the serving arrangement.",
           },
           {
             id: "o4",
@@ -229,8 +230,8 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "Keep availability separate from the effort needed to choose.",
         misconceptions: {
-          o5: "The intervention leaves straws available; it does not ban them.",
-          o6: "An identical all-straw outcome would not support the predicted reduction.",
+          o5: "This changes access rather than testing an extra step with straws still available.",
+          o6: "That predicts no effect of the extra step rather than the proposed reduction.",
         },
         explanation:
           "The proposed default mechanism predicts a difference in the proportion choosing a straw, while leaving the option available. This is a prediction to test, not an observed result.",
@@ -251,12 +252,14 @@ export const body: StudyBody = {
           responses: [
             {
               optionId: "o5",
-              label: "The box makes straws impossible to obtain.",
+              label:
+                "Visitors in the box condition have no access to straws at all.",
               targetIds: ["cup", "box", "inside"],
             },
             {
               optionId: "o6",
-              label: "Every visitor takes a straw in either arrangement.",
+              label:
+                "Visitors choose straws equally often regardless of the serving arrangement.",
               targetIds: ["cup", "box", "inside"],
             },
             {
@@ -321,7 +324,7 @@ export const body: StudyBody = {
       },
       {
         id: "decision3",
-        stage: "results",
+        stage: "Read the results",
         title: "Interpreting the Odds Ratio",
         type: "single",
         prompt:
@@ -333,24 +336,24 @@ export const body: StudyBody = {
         ],
         options: [
           {
-            id: "o9",
-            text: "Read OR = 0.32 as a 32 percentage point reduction in consumption.",
+            id: "o7",
+            text: "Check the coding and script before assigning direction to the inconsistent odds ratio.",
           },
           {
-            id: "o7",
-            text: "Flag the mismatch and check the coding and analysis script; do not reverse the finding from the isolated OR.",
+            id: "o9",
+            text: "Read OR = 0.32 as a 32-point reduction, without consulting the coding or figure.",
           },
           {
             id: "o8",
-            text: "Conclude that separating straws increased consumption, without checking the figure or coding.",
+            text: "Read the isolated odds ratio as increased use, without checking the conflicting figure.",
           },
         ],
         accepted: ["o7"],
         alternatives: [],
         hint: "Check whether the coefficient, coding and plotted direction can all be true together.",
         misconceptions: {
-          o8: "That conclusion conflicts with Figure 1 and the paper’s description; the reporting mismatch needs checking.",
-          o9: "An odds ratio compares odds, not percentage points of probability.",
+          o8: "An isolated statistic does not resolve contradictory coding and reporting.",
+          o9: "An odds ratio is not a percentage-point difference, and the reported coding is inconsistent.",
         },
         explanation:
           "The paper reports lower consumption with separate straws, but the printed coding and positive coefficient do not align cleanly with OR = 0.32. An odds ratio is exp(B), so a positive coefficient cannot produce that printed ratio. Keep the authors’ stated finding separate from an unresolved reporting inconsistency; inspect the original analysis before interpreting the exact directional OR.",
@@ -371,21 +374,21 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o9",
+              optionId: "o7",
               label:
-                "Read OR = 0.32 as a 32 percentage point reduction in consumption.",
+                "Check the coding and script before assigning direction to the inconsistent odds ratio.",
               targetIds: ["or"],
             },
             {
-              optionId: "o7",
+              optionId: "o9",
               label:
-                "Flag the mismatch and check the coding and analysis script; do not reverse the finding from the isolated OR.",
+                "Read OR = 0.32 as a 32-point reduction, without consulting the coding or figure.",
               targetIds: ["or"],
             },
             {
               optionId: "o8",
               label:
-                "Conclude that separating straws increased consumption, without checking the figure or coding.",
+                "Read the isolated odds ratio as increased use, without checking the conflicting figure.",
               targetIds: ["or"],
             },
           ],
@@ -419,7 +422,7 @@ export const body: StudyBody = {
       },
       {
         id: "decision4",
-        stage: "results",
+        stage: "Read the results",
         title: "Effect Size",
         type: "single",
         prompt:
@@ -428,15 +431,15 @@ export const body: StudyBody = {
         options: [
           {
             id: "o11",
-            text: "That the number summarises a difference on a standardised scale.",
-          },
-          {
-            id: "o10",
-            text: "That this intervention will reduce straw use by the same amount in every café.",
+            text: "The estimate expresses a difference on a standardised scale, rather than in percentage points.",
           },
           {
             id: "o12",
-            text: "That the authors use a conventional size category for their estimate.",
+            text: "The authors describe their estimate using a conventional category for standardised effect size.",
+          },
+          {
+            id: "o10",
+            text: "The intervention will have the same effect size in every café, regardless of its setting.",
           },
         ],
         accepted: ["o10"],
@@ -455,7 +458,7 @@ export const body: StudyBody = {
       },
       {
         id: "decision5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Study Limitation",
         type: "single",
         prompt:
@@ -468,19 +471,19 @@ export const body: StudyBody = {
           },
           {
             id: "o15",
-            text: "Treat the number of cups as a measure of each visitor’s beliefs.",
+            text: "Use cup counts as a direct measure of each visitor's beliefs about straw consumption.",
           },
           {
             id: "o14",
-            text: "Remove the comparison arrangement and observe only the separate box.",
+            text: "Observe only the box arrangement, without comparing solitary choices with group choices.",
           },
         ],
         accepted: ["o13"],
         alternatives: [],
         hint: "Change the suspected source of social influence while preserving a fair comparison.",
         misconceptions: {
-          o14: "Removing the comparison makes it harder to separate the arrangement effect from other influences.",
-          o15: "Cup counts do not measure beliefs or social influence.",
+          o14: "Removing the relevant comparison does not isolate other people's influence.",
+          o15: "Cup counts do not measure beliefs or isolate social influence.",
         },
         explanation:
           "Varying whether peers are present could probe social influence while keeping the serving arrangement comparable. It is a proposed follow-up, not a result of this paper.",
@@ -508,13 +511,13 @@ export const body: StudyBody = {
             {
               optionId: "o15",
               label:
-                "Treat the number of cups as a measure of each visitor’s beliefs.",
+                "Use cup counts as a direct measure of each visitor's beliefs about straw consumption.",
               targetIds: ["setting"],
             },
             {
               optionId: "o14",
               label:
-                "Remove the comparison arrangement and observe only the separate box.",
+                "Observe only the box arrangement, without comparing solitary choices with group choices.",
               targetIds: ["setting"],
             },
           ],
@@ -537,7 +540,7 @@ export const body: StudyBody = {
       },
       {
         id: "decision6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Generalisability",
         type: "single",
         prompt:
@@ -549,23 +552,23 @@ export const body: StudyBody = {
         options: [
           {
             id: "o18",
-            text: "Ban straws and call that a replication of the default intervention.",
-          },
-          {
-            id: "o17",
-            text: "Assume the effect is identical because both drinks are liquids.",
+            text: "Ban straws completely and interpret the change as a replication of the separate-box default.",
           },
           {
             id: "o16",
-            text: "Run a comparable test with paid cocktails before assuming the same reduction.",
+            text: "Test the comparable arrangement with paid cocktails before transferring the estimate.",
+          },
+          {
+            id: "o17",
+            text: "Transfer the measured reduction directly, since free juice and paid cocktails are both drinks.",
           },
         ],
         accepted: ["o16"],
         alternatives: [],
         hint: "Which follow-up tests transfer while preserving the choice?",
         misconceptions: {
-          o17: "Drink type and the purpose of the straw could change behaviour.",
-          o18: "A ban removes the choice; a default leaves it available.",
+          o17: "Shared liquid form does not establish that context and straw function are irrelevant.",
+          o18: "A ban is a different intervention from changing the default while retaining access.",
         },
         explanation:
           "A replication in the target setting tests whether price, expectations and the functional use of a straw change the effect. A ban removes the choice and tests a different intervention.",
@@ -587,19 +590,19 @@ export const body: StudyBody = {
             {
               optionId: "o18",
               label:
-                "Ban straws and call that a replication of the default intervention.",
-              targetIds: ["free", "original-choice", "paid", "follow-choice"],
-            },
-            {
-              optionId: "o17",
-              label:
-                "Assume the effect is identical because both drinks are liquids.",
+                "Ban straws completely and interpret the change as a replication of the separate-box default.",
               targetIds: ["free", "original-choice", "paid", "follow-choice"],
             },
             {
               optionId: "o16",
               label:
-                "Run a comparable test with paid cocktails before assuming the same reduction.",
+                "Test the comparable arrangement with paid cocktails before transferring the estimate.",
+              targetIds: ["free", "original-choice", "paid", "follow-choice"],
+            },
+            {
+              optionId: "o17",
+              label:
+                "Transfer the measured reduction directly, since free juice and paid cocktails are both drinks.",
               targetIds: ["free", "original-choice", "paid", "follow-choice"],
             },
           ],

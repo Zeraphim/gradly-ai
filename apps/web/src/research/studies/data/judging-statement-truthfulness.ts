@@ -124,7 +124,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Two Sessions",
         type: "single",
         prompt:
@@ -136,29 +136,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Answering trust questions just before judging could push people to answer the statements in line with how they just described themselves.",
+            id: "o2",
+            text: "Two sessions isolate a causal effect of trust by randomly changing how trusting each person becomes.",
           },
           {
-            id: "o2",
-            text: "Two sessions let the researchers show that trust causes people to judge statements as true.",
+            id: "o1",
+            text: "Trust answers could prime people to judge statements consistently with that self-description.",
           },
           {
             id: "o3",
-            text: "Judging 37 statements takes too long to combine with any questionnaire.",
+            text: "The statement task is too long to combine with a questionnaire, even if priming is not a concern.",
           },
           {
             id: "o4",
-            text: "Trust scores change within minutes, so they must be measured again at the end.",
+            text: "Trust varies within minutes, so the second session is needed to replace an unreliable first score.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Think about what a person might do after they have just described themselves.",
         misconceptions: {
-          o2: "Splitting the sessions does not turn a measured trait into a manipulated cause. The design is still correlational.",
-          o3: "Length is a practical matter; the authors give a measurement reason for the split.",
-          o4: "The study treats trust as a stable trait and measures it only once.",
+          o2: "Separating sessions does not manipulate trust.",
+          o3: "The rationale is avoiding carryover, not an established time limit.",
+          o4: "The stated reason is separating tasks, not remeasuring rapid trait changes.",
         },
         explanation:
           "The authors separated the measures to avoid response bias: self-descriptions made moments earlier can shape later answers. Two sessions do not make the design causal, because trust was still only measured.",
@@ -168,7 +168,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Unclear Statements",
         type: "single",
         prompt:
@@ -180,29 +180,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Obvious facts would be judged the same by nearly everyone, leaving no difference for a trait such as trust to explain.",
-          },
-          {
             id: "o2",
-            text: "Clear facts would make participants suspicious that the study was a trick.",
+            text: "Obvious facts make the trust measure experimental, while ambiguous facts preserve its observational status.",
           },
           {
             id: "o3",
-            text: "Unclear statements guarantee that high-trust people will say “true”.",
+            text: "Ambiguous facts force trusting participants to answer true, ensuring the predicted link will appear.",
           },
           {
             id: "o4",
-            text: "Unclear statements are shorter, so more of them fit into one session.",
+            text: "Ambiguous facts take less time to read, allowing more statements in the same session.",
+          },
+          {
+            id: "o1",
+            text: "Obvious facts leave little variation in judgements for trust to explain.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "A trait can only explain differences between people. Where would those differences appear?",
         misconceptions: {
-          o2: "Nothing in the design suggests suspicion; the issue is variation in answers.",
-          o3: "That is the hypothesis being tested, not something the choice of statements can guarantee.",
-          o4: "The reason concerns what the answers can reveal, not length.",
+          o2: "Statement ambiguity does not determine whether trust is manipulated.",
+          o3: "Ambiguity allows variation; it does not guarantee the hypothesis.",
+          o4: "The benefit concerns uncertainty and variation in judgements, not reading length.",
         },
         explanation:
           "The statements were chosen for ambiguity (pretest ambiguity values of 0.40–0.60). Individual truth ratings per statement then ranged from 0.32 to 0.75, so people differed and a trait could in principle show up.",
@@ -212,7 +212,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Reading Three Intervals",
         type: "single",
         prompt:
@@ -307,14 +307,14 @@ export const body: StudyBody = {
               targetIds: ["s1", "s3"],
             },
             {
-              optionId: "o2",
-              label: "No sizeable effect",
-              targetIds: ["s1", "s2", "s3"],
-            },
-            {
               optionId: "o3",
               label: "Exactly zero",
               targetIds: ["s2"],
+            },
+            {
+              optionId: "o2",
+              label: "No sizeable effect",
+              targetIds: ["s1", "s2", "s3"],
             },
             {
               optionId: "o4",
@@ -327,28 +327,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Trust propensity slightly lowers “true” judgments, because two of the three estimates are below zero.",
-          },
-          {
-            id: "o2",
-            text: "Each interval includes zero and is narrow, so sizeable effects in either direction are unlikely, while very small ones cannot be excluded.",
+            text: "The negative estimates establish a small reduction in true judgements as trust increases.",
           },
           {
             id: "o3",
-            text: "Because every p-value is above .05, the true effect is exactly zero.",
+            text: "Non-significant p-values establish a precisely zero effect.",
+          },
+          {
+            id: "o2",
+            text: "Narrow intervals near zero argue against sizeable links while allowing very small ones.",
           },
           {
             id: "o4",
-            text: "The intervals are too wide to say anything about the relationship.",
+            text: "The intervals allow large effects in either direction.",
           },
         ],
         accepted: ["o2"],
         alternatives: [],
         hint: "Compare where each interval sits against zero, then ask how wide the range of plausible effects is.",
         misconceptions: {
-          o1: "The estimates differ in sign across studies and every interval includes zero, so the sign carries no message.",
-          o3: "A non-significant result does not prove an exact zero. The intervals still allow tiny effects.",
-          o4: "They span only a few hundredths of a log-odds unit, which is narrow on this scale.",
+          o1: "Point estimates on either side of zero do not establish that direction.",
+          o3: "A non-significant result does not establish an exactly zero effect.",
+          o4: "The displayed intervals are narrow rather than compatible with large effects.",
         },
         explanation:
           "All three intervals include zero and stretch only a few hundredths either way, so they rule out sizeable effects but not tiny ones. A p-value above .05 does not prove that the effect is exactly zero.",
@@ -358,7 +358,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "When the Prior Matters",
         type: "single",
         prompt:
@@ -371,29 +371,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "All three favour the null, so the question is settled.",
-          },
-          {
             id: "o2",
             text: "The evidence is strong for no effect under two priors but neutral under the most restrictive prior, so the verdict partly depends on the prior assumption.",
           },
           {
+            id: "o1",
+            text: "All three decisively support no effect, so changing the prior leaves the conclusion unchanged.",
+          },
+          {
             id: "o3",
-            text: "A value of 1.05 shows that social trust does predict truth judgments.",
+            text: "The factor of 1.05 supplies strong evidence for a positive link between social trust and judgement.",
           },
           {
             id: "o4",
-            text: "Bayes factors add nothing once the p-values are non-significant.",
+            text: "The factors cannot inform the result, because non-significant p-values make model comparisons redundant.",
           },
         ],
         accepted: ["o2"],
         alternatives: [],
         hint: "Look for the one value that does not point the same way as the other two.",
         misconceptions: {
-          o1: "One value is 1.05, which favours neither side. It does not settle the question.",
-          o3: "A value near 1 is no evidence for an effect; it means the data cannot separate the two models.",
-          o4: "The Bayesian analysis answers a different question, how strongly the data favour the null, which a p-value cannot do.",
+          o1: "A factor near 1 is not decisive support.",
+          o3: "A Bayes factor near 1 barely distinguishes the models.",
+          o4: "Bayes factors address relative support and dependence on prior assumptions.",
         },
         explanation:
           "The authors note that evidence for or against an effect of social trust depends on the prior assumptions. Under a restrictive prior the data show no clear preference, so “no effect” is supported strongly only for the other two priors.",
@@ -403,7 +403,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "How Far the Result Reaches",
         type: "single",
         prompt:
@@ -416,29 +416,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The studies tested ambiguous statements and mock testimonies with online adults, so they say little about believing real news from known outlets.",
+            id: "o2",
+            text: "Three null findings rule out a role for reader trust across headlines, outlets and social contexts.",
           },
           {
-            id: "o2",
-            text: "Three null results prove that trust never affects belief.",
+            id: "o1",
+            text: "These online tasks do not establish how trust affects belief in real news outlets.",
           },
           {
             id: "o3",
-            text: "Null results are never informative, so the editor's claim cannot be assessed.",
+            text: "Null findings cannot constrain any relationship, so the studies provide no evidence relevant to the claim.",
           },
           {
             id: "o4",
-            text: "The result holds only for the courtroom study, because the other two were not about social contexts.",
+            text: "Only the courtroom task applies, since statements outside court cannot involve social trust at all.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Ask what kinds of statements, sources and people were actually tested.",
         misconceptions: {
-          o2: "Null results here are specific to these tasks and samples; they cannot prove a universal claim.",
-          o3: "The authors' Bayesian analyses did support the null in these settings, so the results are informative within their scope.",
-          o4: "All three studies reported no relationship, in plain, social and courtroom framings.",
+          o2: "The scope of the tasks does not cover all those settings.",
+          o3: "Narrow estimates can be informative within the studied scope.",
+          o4: "The other tasks also tested trust-related predictions, within their own settings.",
         },
         explanation:
           "The null result is credible for the tasks and samples used. The studies did not test headlines from sources readers already know and trust, so extending the claim to real news goes beyond the evidence.",
@@ -448,7 +448,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Choosing a Follow-Up",
         type: "single",
         prompt:
@@ -461,29 +461,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Compare how strongly statement fluency, for example hard- versus easy-to-read text, and trust propensity each predict judgments in the same participants.",
-          },
-          {
             id: "o2",
-            text: "Repeat the same design with twice as many participants.",
+            text: "Repeat the same tasks with a larger sample, keeping readability constant throughout.",
           },
           {
             id: "o3",
-            text: "Replace the trust questionnaire with the expected-lying question, since it predicted judgments best.",
+            text: "Use expected lying in place of trust, since it was the strongest predictor of true judgements.",
+          },
+          {
+            id: "o1",
+            text: "Test reading fluency and trust together to compare their predictions in the same people.",
           },
           {
             id: "o4",
-            text: "Drop the statement task and only measure how much people say they trust each other.",
+            text: "Measure trust alone without statement judgements, to see whether trusting people report similar scores.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "The authors suggest that something other than a trait drives these judgments. Which option measures that something?",
         misconceptions: {
-          o2: "Strong Bayes factors already favour the null in this design; more of the same does not test a new explanation.",
-          o3: "Expected lying did not predict judgments either (p = 0.30 in Study 1).",
-          o4: "That removes the outcome the question is about.",
+          o2: "This improves precision but does not directly test the proposed fluency explanation.",
+          o3: "Expected lying did not predict judgements either.",
+          o4: "That removes the outcome needed to test the explanation.",
         },
         explanation:
           "The authors suggest that truth judgments depend more on cognitive mechanisms such as fluency and memory than on stable traits. A follow-up that varies fluency and compares its effect with trust tests that idea directly.",

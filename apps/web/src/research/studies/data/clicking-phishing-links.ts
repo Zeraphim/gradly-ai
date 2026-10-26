@@ -100,7 +100,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Randomise People or Teams?",
         type: "single",
         prompt:
@@ -112,29 +112,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Colleagues in different groups could talk, so someone in the control group could be warned by a trained neighbour and the groups would blur together.",
-          },
-          {
             id: "o2",
-            text: "Individual assignment would make the groups unequal in size.",
+            text: "Individual assignment would remove randomisation by allowing more employees into some groups.",
           },
           {
             id: "o3",
-            text: "Individual assignment is not allowed in field experiments.",
+            text: "Individual assignment would stop the team comparing employees who received different training.",
           },
           {
             id: "o4",
-            text: "Units were chosen so that managers could pick who gets trained.",
+            text: "Individual assignment would let managers choose which employees receive the strongest training.",
+          },
+          {
+            id: "o1",
+            text: "Colleagues in different groups could talk, so someone in the control group could be warned by a trained neighbour and the groups would blur together.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What happens when two people who sit together are in different groups?",
         misconceptions: {
-          o2: "Individual assignment would give equal groups easily; the problem is people affecting each other.",
-          o3: "It is allowed; it was avoided here for a specific reason.",
-          o4: "Units were randomised, not picked by managers.",
+          o2: "Random individual assignment remains random even if group sizes differ slightly.",
+          o3: "Individual randomisation permits that comparison; spillover is the concern.",
+          o4: "Random individual assignment does not give managers that choice.",
         },
         explanation:
           "With individual assignment, two people working together could end up in different groups and be affected by more than one treatment. Randomising whole units avoids that, and the analysis accounted for the clustering.",
@@ -144,7 +144,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Why a Fourth Group?",
         type: "single",
         prompt:
@@ -156,29 +156,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Whether combining the two adds anything beyond either one on its own, as many had suggested it would.",
+            id: "o2",
+            text: "Whether training beats no training, without needing any comparison with the single-method groups.",
           },
           {
-            id: "o2",
-            text: "Whether the training works at all compared with no training.",
+            id: "o1",
+            text: "Whether the combination adds benefit beyond either method used alone.",
           },
           {
             id: "o3",
-            text: "Whether information works better than experience.",
+            text: "Whether information beats experience, without needing either of those methods tested separately.",
           },
           {
             id: "o4",
-            text: "Whether people read their email.",
+            text: "Whether employees opened the training emails, regardless of their later responses to phishing.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Others had claimed the two approaches reinforce each other. Which group can test that claim?",
         misconceptions: {
-          o2: "That is what the control group is for; the combined group tests something more.",
-          o3: "That comparison is between the two single-treatment groups.",
-          o4: "The study could not check whether emails were opened.",
+          o2: "The combined arm specifically permits testing added value over the individual methods.",
+          o3: "That requires directly comparing the two single-method arms.",
+          o4: "The combined arm tests outcomes of combining methods, not email reading itself.",
         },
         explanation:
           "Crossing the two treatments in a 2×2 design gives a group with both, which tests the common suggestion that combining information and experience works best.",
@@ -188,7 +188,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "After the Click",
         type: "single",
         prompt:
@@ -201,29 +201,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Having been caught once made people more likely to stop at the fake website; the information emails mainly worked earlier, by reducing clicks.",
-          },
-          {
             id: "o2",
-            text: "The information emails worked best once people were on the website.",
+            text: "Information helped most after clicking; experience mainly reduced the number opening the fake link.",
           },
           {
             id: "o3",
-            text: "No group was any better than Control after clicking.",
+            text: "All groups had similar password-giving rates after clicking; differences arose only before the click.",
+          },
+          {
+            id: "o1",
+            text: "Experience helped people stop after clicking; information mainly reduced initial clicks.",
           },
           {
             id: "o4",
-            text: "Everyone who clicked gave their password.",
+            text: "The combined arm eliminated password entry; single methods only reduced it.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the groups that had a fake email before with the group that only had information.",
         misconceptions: {
-          o2: "Information gave the smallest drop after the click, and it was not significant.",
-          o3: "Experience and Both were significantly lower than Control.",
-          o4: "Between 54% and 68% did, depending on the group.",
+          o2: "This reverses where the training effects appeared.",
+          o3: "Conditional password-giving differed between groups.",
+          o4: "The combined arm did not eliminate password entry.",
         },
         explanation:
           "After clicking, password-giving fell from 68% to 58% and 54% in the two groups that had a fake email before, but only by 4 points (not significant) with information alone. Information helped by reducing clicks; experience also helped after the click.",
@@ -233,7 +233,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Does Combining Help?",
         type: "single",
         prompt:
@@ -349,24 +349,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Yes, clearly: 13% is lower than 14%.",
+            text: "A clear added benefit; any lower percentage demonstrates that the combination outperforms experience.",
           },
           {
             id: "o3",
-            text: "No, the combined group did worse than Control.",
+            text: "A harmful added effect; both combined methods performed worse than the untrained comparison group.",
           },
           {
             id: "o4",
-            text: "Information is useless, because it adds nothing to experience.",
+            text: "No useful role for information; failure to add benefit shows it cannot work when used on its own.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Is a one-point gap between two treatments the same as a reliable difference?",
         misconceptions: {
-          o2: "A one-point gap was not a significant difference between treatments.",
-          o3: "All three groups gave fewer passwords than Control's 22%.",
-          o4: "On its own, information cut password-giving from 22% to 16%.",
+          o2: "A numerical difference alone does not establish a reliable benefit.",
+          o3: "The reported comparison does not show that reversal.",
+          o4: "Lack of added benefit does not establish lack of standalone benefit.",
         },
         explanation:
           "All three interventions reduced password-giving compared with Control, but the combined group did not differ significantly from experience alone. The authors call this surprising, given claims that the two reinforce each other.",
@@ -376,7 +376,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "A Warning That Leaked",
         type: "single",
         prompt:
@@ -393,24 +393,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "It inflated the effects, because more people were warned.",
+            text: "Warning the control group could enlarge the contrast by making untrained staff easier to deceive.",
           },
           {
             id: "o3",
-            text: "It has no effect, because the division was small.",
+            text: "The warning cannot affect the contrast because no employees changed their assigned training group.",
           },
           {
             id: "o4",
-            text: "It means the whole experiment must be discarded.",
+            text: "The warning prevents any useful analysis, even one that compares results with and without that division.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If the comparison group also gets warned, does the gap between groups grow or shrink?",
         misconceptions: {
-          o2: "Warning the comparison groups makes them look more like the trained groups, which shrinks the differences.",
-          o3: "It was a large division, and the authors report the effects were stronger without it.",
-          o4: "Reporting with and without the division handles the problem.",
+          o2: "Alerting controls would more plausibly reduce their susceptibility.",
+          o3: "Contamination can change behaviour without changing assignment.",
+          o4: "Sensitivity analysis can assess the influence of the contaminated division.",
         },
         explanation:
           "The authors expected smaller treatment effects in that division and say including it gives more conservative estimates. Indeed, the effects were stronger after excluding it.",

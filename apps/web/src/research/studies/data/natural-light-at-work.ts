@@ -94,7 +94,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "One Survey, One Source",
         type: "single",
         prompt:
@@ -107,28 +107,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "A person's general outlook could colour both how they describe their workspace and how they rate their mood and job, making the links look stronger than they are.",
+            text: "A general positive outlook could raise both workspace and wellbeing ratings.",
           },
           {
             id: "o2",
-            text: "None, because questionnaires are always accurate.",
+            text: "Using the same questionnaire makes the two ratings independent.",
           },
           {
             id: "o3",
-            text: "It makes the links look weaker than they are, always.",
+            text: "Using self-reports can only weaken links, so any observed association must understate the true one.",
           },
           {
             id: "o4",
-            text: "It means plants were not actually present.",
+            text: "The association establishes that plants were absent, since perceptions cannot correspond to actual workspaces.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If someone feels good, might they also describe their surroundings more positively?",
         misconceptions: {
-          o2: "Self-reports from one source can share biases; the authors list this as a limitation.",
-          o3: "Shared biases usually inflate links between self-reported measures, not weaken them.",
-          o4: "The issue is how the ratings relate to each other, not whether plants existed.",
+          o2: "A common reporting tendency can influence both sets of answers.",
+          o3: "Shared reporting can inflate as well as attenuate associations.",
+          o4: "Subjective ratings do not establish absence of real features.",
         },
         explanation:
           "The authors note they used self-reported, single-source data, which can produce common method variance: shared response tendencies that inflate associations between measures.",
@@ -138,7 +138,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Two Countries, One Sample",
         type: "single",
         prompt:
@@ -150,29 +150,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "To make average scores equal before combining the samples, removing real national differences.",
+          },
+          {
             id: "o1",
             text: "So that a given score means roughly the same thing in both countries; otherwise merging would mix measures that are not comparable.",
           },
           {
-            id: "o2",
-            text: "To make the two countries' average scores identical.",
-          },
-          {
             id: "o3",
-            text: "To double the effect sizes.",
+            text: "To increase effect sizes by aligning answers with the country's more favourable outcome pattern.",
           },
           {
             id: "o4",
-            text: "To prove the results apply to every country.",
+            text: "To establish worldwide validity, since equivalence in two countries guarantees equivalence in all others.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Can you add up scores from two groups if the questions meant different things to each?",
         misconceptions: {
-          o2: "The check concerns how items relate to what they measure, not equal averages.",
-          o3: "Merging does not change effect sizes by design.",
-          o4: "Two countries cannot show that; the check only justifies combining these two.",
+          o2: "Measurement comparability does not require equal averages.",
+          o3: "Measurement invariance tests comparability, not deliberate effect inflation.",
+          o4: "Evidence from two settings does not cover every country.",
         },
         explanation:
           "Multi-group analyses showed the items related to their constructs with approximately the same strength in both samples, which the authors used to justify merging them.",
@@ -182,7 +182,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Which Outcomes Moved?",
         type: "single",
         prompt:
@@ -280,11 +280,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Not anxiety",
-              targetIds: ["dep", "anx", "sat", "com"],
-            },
-            {
               optionId: "o2",
               label: "All four",
               targetIds: ["dep", "anx", "sat", "com"],
@@ -293,6 +288,11 @@ export const body: StudyBody = {
               optionId: "o3",
               label: "Mood only",
               targetIds: ["dep", "anx"],
+            },
+            {
+              optionId: "o1",
+              label: "Not anxiety",
+              targetIds: ["dep", "anx", "sat", "com"],
             },
             {
               optionId: "o4",
@@ -304,29 +304,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
+            id: "o2",
+            text: "Higher satisfaction and commitment, alongside lower levels of both depressed mood and anxiety.",
+          },
+          {
+            id: "o3",
+            text: "Lower depressed mood and anxiety, but little relationship with satisfaction or commitment at work.",
+          },
+          {
             id: "o1",
             text: "Nature exposure went with higher job satisfaction and commitment and lower depressed mood, but not with anxiety.",
           },
           {
-            id: "o2",
-            text: "Nature exposure went with lower depressed mood and lower anxiety, and better job attitudes.",
-          },
-          {
-            id: "o3",
-            text: "Nature exposure only mattered for mood, not for job attitudes.",
-          },
-          {
             id: "o4",
-            text: "Nature exposure was unrelated to every outcome.",
+            text: "Similar levels on all four outcomes, with no evidence of any relationship to reported nature exposure.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Check which coefficient is close to zero.",
         misconceptions: {
-          o2: "The anxiety coefficient was −.03 and not significant.",
-          o3: "The largest coefficients were for job satisfaction (.37) and commitment (.30).",
-          o4: "Three of the four coefficients were significant.",
+          o2: "The nature-exposure coefficient did not show a clear anxiety association.",
+          o3: "The reported job-attitude links were present; the anxiety link was not.",
+          o4: "Several displayed coefficients show associations.",
         },
         explanation:
           "The coefficients were −.17 for depressed mood, .37 for job satisfaction and .30 for commitment, all significant, but −.03 for anxiety. The authors note that, contrary to their expectations, natural elements had no direct effect on anxiety.",
@@ -336,7 +336,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Sunlight and Anxiety",
         type: "single",
         prompt:
@@ -348,29 +348,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "It goes against the prediction: more direct sunlight went with more anxiety, and a one-time survey cannot say why.",
-          },
-          {
             id: "o2",
-            text: "It supports the prediction, since the result is significant.",
+            text: "The significant coefficient supports the prediction, regardless of whether it is positive or negative.",
           },
           {
             id: "o3",
-            text: "It shows that direct sunlight causes anxiety.",
+            text: "The positive coefficient establishes an anxiety effect of going outside.",
           },
           {
             id: "o4",
-            text: "It is too small to mean anything.",
+            text: "The coefficient is uninterpretable because every value below 1 must be treated as effectively zero.",
+          },
+          {
+            id: "o1",
+            text: "The positive coefficient opposes the prediction; the survey cannot establish why.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the sign of the coefficient with the direction the team predicted.",
         misconceptions: {
-          o2: "Significance is not direction; a positive coefficient means more anxiety, not less.",
-          o3: "A cross-sectional association cannot show cause; jobs that keep people outdoors might differ in other ways.",
-          o4: "It is significant and the largest predictor of anxiety among the three exposures.",
+          o2: "Direction matters: a positive anxiety coefficient is opposite to the prediction.",
+          o3: "A one-time observational association does not establish this causal effect.",
+          o4: "There is no such threshold for interpreting a regression coefficient.",
         },
         explanation:
           "The hypothesis was that sunlight would relate negatively to anxiety, but direct sunlight related positively (β = .21). The study design cannot tell whether sunlight, outdoor work or something else explains it.",
@@ -380,7 +380,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Plants for Everyone?",
         type: "single",
         prompt:
@@ -393,28 +393,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Weakly: the links were cross-sectional, self-reported and modest for mental health; an experiment adding plants would be needed to show improvement.",
+            text: "It motivates a trial; modest self-reported associations do not establish improvement.",
           },
           {
             id: "o2",
-            text: "Strongly: the study shows plants improve mental health.",
+            text: "It establishes an improvement, since workers who report more plants also report less depressed mood.",
           },
           {
             id: "o3",
-            text: "Not at all: the study found no link with depressed mood.",
+            text: "It offers no relevant lead, since nature exposure showed no association with depressed mood in the results.",
           },
           {
             id: "o4",
-            text: "Strongly, because the sample covered two countries.",
+            text: "It establishes improvement across settings, since a two-country sample replaces a causal trial.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the advice with the design and with how much of mood the exposures explained.",
         misconceptions: {
-          o2: "Cross-sectional data cannot show improvement; the authors list this limitation themselves.",
-          o3: "There was a link with depressed mood (β = −.17), but it was modest.",
-          o4: "Two countries widen the sample but do not turn associations into effects.",
+          o2: "Association does not demonstrate an effect of adding plants.",
+          o3: "There was a depressed-mood association, although causal inference is limited.",
+          o4: "Broader sampling does not supply randomised intervention evidence.",
         },
         explanation:
           "The authors acknowledge that the cross-sectional design precludes causal inference and that data were self-reported from one source. Exposures explained only 6% of depressed mood. The policy suggestion goes beyond what the design can show.",

@@ -112,7 +112,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Who Owns a Dog?",
         type: "single",
         prompt:
@@ -124,29 +124,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "Starting disability-free makes owners and non-owners comparable on all other health-related factors.",
+          },
+          {
+            id: "o3",
+            text: "The baseline differences establish that dog ownership changed owners' age and economic circumstances.",
+          },
+          {
             id: "o1",
             text: "Those differences could lower disability on their own; the team adjusted for many of them, but unmeasured differences between owners and non-owners can remain.",
           },
           {
-            id: "o2",
-            text: "It does not matter, because everyone was disability-free at the start.",
-          },
-          {
-            id: "o3",
-            text: "It proves dogs make people younger and wealthier.",
-          },
-          {
             id: "o4",
-            text: "It means the study cannot say anything.",
+            text: "Baseline imbalance prevents even an adjusted comparison from describing the observed association.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Could the same traits that make someone likely to keep a dog also protect them from disability?",
         misconceptions: {
-          o2: "Being disability-free at the start does not make owners and non-owners alike in other ways that affect the future.",
-          o3: "These differences were measured before follow-up; they describe who owns dogs, not effects of owning one.",
-          o4: "Adjustment helps; the point is that it cannot remove every difference.",
+          o2: "Absence of certified disability does not balance all baseline differences.",
+          o3: "Owners selecting themselves into pet ownership can already differ at baseline.",
+          o4: "Adjustment can inform an association while leaving residual confounding possible.",
         },
         explanation:
           "Current owners were younger, more often partnered, better educated, wealthier and less frail. The analysis adjusted for many such variables, but people who keep dogs may still differ in ways not measured.",
@@ -156,7 +156,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Starting Disability-Free",
         type: "single",
         prompt:
@@ -168,29 +168,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "The ordering establishes protection, since an outcome measured later cannot share an earlier cause with ownership.",
+          },
+          {
             id: "o1",
             text: "Disability recorded later cannot have caused the ownership answer, but people who already sensed their health declining might have avoided getting a dog.",
           },
           {
-            id: "o2",
-            text: "It proves that owning a dog caused less disability.",
-          },
-          {
             id: "o3",
-            text: "It means disability was self-reported.",
+            text: "The ordering makes later disability self-reported, since ownership and disability use the same survey response.",
           },
           {
             id: "o4",
-            text: "It protects against nothing, since ownership was self-reported.",
+            text: "The ordering adds no information, since self-reported ownership cannot precede a certified outcome reliably.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which came first, the answer about dogs or the disability? Could anything earlier shape both?",
         misconceptions: {
-          o2: "Correct time order is necessary for a causal claim, but not sufficient.",
-          o3: "Disability came from official certifications, not self-report.",
-          o4: "Self-reported ownership is fine here; the design still fixes the order of ownership and disability.",
+          o2: "Confounding and early decline can still explain a prospective association.",
+          o3: "Later disability came from certification rather than the ownership report.",
+          o4: "The timing is informative even though ownership itself was self-reported.",
         },
         explanation:
           "Participants were physically and cognitively independent at the start, and disability was defined as new certification over about 3.5 years. That fixes the time order, but early unrecorded decline could still influence who keeps a dog.",
@@ -200,7 +200,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Dogs, Cats and Adjustment",
         type: "single",
         prompt:
@@ -303,11 +303,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Current dogs only",
-              targetIds: ["dog1", "dog2", "pastdog", "cat"],
-            },
-            {
               optionId: "o2",
               label: "Any pet",
               targetIds: ["cat"],
@@ -322,34 +317,39 @@ export const body: StudyBody = {
               label: "Past dogs best",
               targetIds: ["pastdog"],
             },
+            {
+              optionId: "o1",
+              label: "Current dogs only",
+              targetIds: ["dog1", "dog2", "pastdog", "cat"],
+            },
           ],
         },
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Current dog owners had lower odds, unchanged when baseline health was added; past dog owners and cat owners showed no clear difference.",
-          },
-          {
             id: "o2",
-            text: "Owning any pet lowered the odds of disability.",
+            text: "Every pet-ownership category showed lower adjusted disability odds.",
           },
           {
             id: "o3",
-            text: "Adding baseline health explained away the dog result.",
+            text: "Baseline health adjustment removed the current-dog association, leaving only the past-owner association.",
           },
           {
             id: "o4",
-            text: "Past dog owners did best.",
+            text: "Past dog ownership had the lowest odds after adjustment, with current owners closer to never-owners.",
+          },
+          {
+            id: "o1",
+            text: "Current dog ownership had lower odds after adjustment; past dogs and cats had no clear link.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which intervals stay clear of 1, and did adjusting for health change the dog estimate?",
         misconceptions: {
-          o2: "Cat ownership's interval (0.75 to 1.54) includes 1.",
-          o3: "The odds ratio stayed at 0.54 in both models.",
-          o4: "Their interval (0.68 to 1.03) includes 1.",
+          o2: "The clear association was specific to current dog ownership.",
+          o3: "The current-dog estimate remained similar after that adjustment.",
+          o4: "The displayed estimates show the lower odds for current dog owners.",
         },
         explanation:
           "Current dog owners had an odds ratio of 0.54 in both models, so measured health differences did not explain the link. Past dog owners and current cat owners did not differ clearly from never-owners.",
@@ -359,7 +359,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Half the Risk?",
         type: "single",
         prompt:
@@ -372,28 +372,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Not quite: 0.54 is a ratio of odds, and when an outcome is this common, odds ratios exaggerate how much risk falls; the raw rates differ by about a quarter, not half.",
+            text: "Not quite: it is lower odds, which overstate the risk reduction for this common outcome.",
           },
           {
             id: "o2",
-            text: "Yes, an odds ratio of 0.54 always means half the risk.",
+            text: "It is approximately half the risk, because odds and probability ratios are interchangeable at any event rate.",
           },
           {
             id: "o3",
-            text: "No, dog owners had higher risk.",
+            text: "It indicates higher risk, because odds below 1 imply that disability became more likely among owners.",
           },
           {
             id: "o4",
-            text: "No, because the result was not significant.",
+            text: "It cannot describe a reduction, because the confidence interval crosses the no-difference value of 1.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the raw rates directly: 13.1 against 17.7.",
         misconceptions: {
-          o2: "Odds and risk are close only when the outcome is rare; at about 17% they diverge.",
-          o3: "Both the odds ratio and the raw rates point to lower disability among current dog owners.",
-          o4: "It was significant, with an interval of 0.37 to 0.78.",
+          o2: "Odds ratios approximate risk ratios only when outcomes are sufficiently rare.",
+          o3: "An odds ratio below 1 indicates lower, not higher, odds.",
+          o4: "The displayed interval for current dog ownership excludes 1.",
         },
         explanation:
           "13.1% against 17.7% is roughly a quarter lower in raw terms. An adjusted odds ratio of 0.54 means roughly half the odds, not half the risk, because odds ratios overstate risk changes for common outcomes.",
@@ -403,7 +403,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Why Dogs and Not Cats?",
         type: "single",
         prompt:
@@ -415,29 +415,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "Cat care raises disability risk, because its estimate did not show the lower odds seen for current dog owners.",
+          },
+          {
             id: "o1",
             text: "Daily walking and outdoor activity that come with dog care may matter, which cats do not require; the study suggests this but did not measure walking directly.",
           },
           {
-            id: "o2",
-            text: "Cats cause disability.",
-          },
-          {
             id: "o3",
-            text: "Dogs prevent disability through companionship alone, proven by the cat result.",
+            text: "Companionship explains the whole benefit, because the dog-versus-cat contrast directly isolates that mechanism.",
           },
           {
             id: "o4",
-            text: "Exercise has nothing to do with it.",
+            text: "Exercise cannot contribute, because the lowest odds occurred in dog owners who also exercised regularly.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What do dog owners do every day that cat owners usually don't?",
         misconceptions: {
-          o2: "Cat ownership showed no clear association either way.",
-          o3: "The study did not test companionship separately, and the cat result does not prove it.",
-          o4: "Dog owners who exercised had the lowest odds, and the authors point to dog walking.",
+          o2: "A null cat association does not establish harmful effects.",
+          o3: "The observational comparison does not isolate companionship from activity or selection.",
+          o4: "That pattern is compatible with an activity explanation, not evidence against it.",
         },
         explanation:
           "The authors note that most dog owners walk their dogs and are far more likely to meet activity guidelines. The dog–cat contrast and the low odds for exercising dog owners fit an activity explanation, but walking itself was not measured.",
@@ -447,7 +447,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "“Evidence That Dogs Protect”",
         type: "single",
         prompt:
@@ -464,24 +464,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "It is proven, because the sample was large.",
+            text: "Protection is established, because a large adjusted sample has the same causal strength as random assignment.",
           },
           {
             id: "o3",
-            text: "It is worthless, because it is observational.",
+            text: "The association is uninformative, because an observational follow-up cannot describe later disability patterns.",
           },
           {
             id: "o4",
-            text: "It proves dogs also lower mortality.",
+            text: "Protection extends to mortality, because a lower disability estimate establishes the same effect on survival.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Did anyone assign dogs to people at random?",
         misconceptions: {
-          o2: "A large sample makes the estimate precise; it does not remove self-selection into dog ownership.",
-          o3: "Observational evidence with a clear time order and many controls is informative, though not decisive.",
-          o4: "The study found no significant link with mortality.",
+          o2: "Size and adjustment do not remove all unmeasured confounding.",
+          o3: "It can describe prospective associations without proving protection.",
+          o4: "Disability and mortality are separate outcomes; one does not establish the other.",
         },
         explanation:
           "The authors' own summary says dog ownership may well be protective, and they call for replication in other countries. Because people chose whether to keep dogs, the evidence is suggestive rather than proof.",

@@ -119,7 +119,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "A Story for Both Groups",
         type: "single",
         prompt:
@@ -131,29 +131,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "So both groups did the same reading activity and differed only in whether the story was about ageing and dementia.",
+            id: "o2",
+            text: "To give both groups the same memory threat, isolating differences in the stories' writing styles.",
           },
           {
-            id: "o2",
-            text: "So the comparison group would also feel anxious about memory.",
+            id: "o1",
+            text: "To match the reading activity while changing the story's ageing-related content.",
           },
           {
             id: "o3",
-            text: "To make the comparison group's task harder on purpose.",
+            text: "To make the comparison task harder, ensuring its later memory score would supply a lower benchmark.",
           },
           {
             id: "o4",
-            text: "Because reading improves memory, so both groups needed it.",
+            text: "To give both groups memory training through a shared reading exercise.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What would differ between groups if one group read something and the other did nothing?",
         misconceptions: {
-          o2: "The comparison story was chosen to avoid ageing themes, not to create anxiety.",
-          o3: "The aim was to match the activity; the difficulty difference that appeared was unintended.",
-          o4: "The purpose is to equalise the activity, not to train memory.",
+          o2: "The comparison story did not provide the same ageing stereotype threat.",
+          o3: "A fair comparison does not deliberately lower the control outcome.",
+          o4: "The story comparison was not a memory-training intervention.",
         },
         explanation:
           "Giving both groups a story and the same comprehension questions keeps the activity equal, so the comparison isolates the content about dementia.",
@@ -163,7 +163,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "An Uneven Quiz",
         type: "single",
         prompt:
@@ -175,29 +175,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "If the groups differed in reading skill, that could affect the memory task, so the team adjusted for quiz scores in the analysis.",
-          },
-          {
             id: "o2",
-            text: "It shows the dementia story worked better.",
+            text: "The higher quiz score establishes that the dementia story induced more stereotype threat than the comparison.",
           },
           {
             id: "o3",
-            text: "It makes no difference, since the quiz was only a check.",
+            text: "The quiz cannot affect interpretation, since a comprehension check is separate from memory.",
           },
           {
             id: "o4",
-            text: "It means the study must be discarded.",
+            text: "The imbalance invalidates the comparison, even if adjustment leaves the memory result unchanged.",
+          },
+          {
+            id: "o1",
+            text: "Reading-related differences could affect memory too, motivating adjustment for quiz scores.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Does the main task depend on reading?",
         misconceptions: {
-          o2: "The quiz checks understanding of the story; a higher score does not show the manipulation worked better.",
-          o3: "A group difference on a reading measure could affect a reading-based task, so it needed handling.",
-          o4: "Adjusting for the scores is a standard way to handle such a difference.",
+          o2: "Comprehension is not a direct measure of stereotype threat.",
+          o3: "A reading-related imbalance can matter for a later memory task.",
+          o4: "It warrants investigation and caution rather than automatic rejection.",
         },
         explanation:
           "Because reading comprehension is needed in the word task, which may affect memory performance, the authors controlled for quiz scores in later analyses.",
@@ -207,7 +207,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Changing the Scoring Window",
         type: "single",
         prompt:
@@ -224,24 +224,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "The lenient window is always correct for older adults, so nothing changes.",
+            text: "The wider window needs no sensitivity check, since older samples require that exact scoring rule by default.",
           },
           {
             id: "o3",
-            text: "The standard window proves there was no effect.",
+            text: "The standard window establishes no effect, since floor scores measure memory differences without loss of sensitivity.",
           },
           {
             id: "o4",
-            text: "Changing windows doubled the sample size.",
+            text: "The wider window adds independent observations, increasing the sample size enough to resolve the floor effect.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "When was the scoring rule chosen, relative to seeing the results?",
         misconceptions: {
-          o2: "The reason is plausible, but choosing a rule after seeing the data adds flexibility a reader should note.",
-          o3: "Floor-level scores make differences hard to detect; they do not prove there is none.",
-          o4: "The window changes how responses are scored, not how many people took part.",
+          o2: "The choice was made after observing floor scores, not established as a universal rule.",
+          o3: "Floor effects can conceal differences by reducing measurement sensitivity.",
+          o4: "Changing the scoring window does not add participants.",
         },
         explanation:
           "The authors explain that the standard window produced a floor effect and that older participants are slower, so they used a ±15-second window. The reasoning is plausible, but the significant result depends on that choice.",
@@ -251,7 +251,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Only the Oldest?",
         type: "single",
         prompt:
@@ -338,11 +338,6 @@ export const body: StudyBody = {
           resolution: null,
           responses: [
             {
-              optionId: "o1",
-              label: "Exploratory, small groups",
-              targetIds: ["o-s", "o-n"],
-            },
-            {
               optionId: "o2",
               label: "Proven for over-70s",
               targetIds: ["o-s", "o-n"],
@@ -351,6 +346,11 @@ export const body: StudyBody = {
               optionId: "o3",
               label: "No effect under 70",
               targetIds: ["y-s", "y-n"],
+            },
+            {
+              optionId: "o1",
+              label: "Exploratory, small groups",
+              targetIds: ["o-s", "o-n"],
             },
             {
               optionId: "o4",
@@ -362,29 +362,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Treat it as exploratory: it was an added analysis in only 23 people, so it needs confirming in a larger study.",
-          },
-          {
             id: "o2",
-            text: "It proves the effect only exists after age 70.",
+            text: "A demonstrated threshold at 70, since significance in one age group locates where the effect begins.",
           },
           {
             id: "o3",
-            text: "It proves there is no effect at all under 70.",
+            text: "Evidence of zero effect below 70, since the younger subgroup did not pass the significance threshold.",
+          },
+          {
+            id: "o1",
+            text: "An exploratory result in 23 people needs confirmation before an age-specific claim.",
           },
           {
             id: "o4",
-            text: "The younger group showed the larger gap.",
+            text: "Evidence of a larger gap in the younger subgroup, since its non-significance implies greater uncertainty.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many people are in the oldest group, and was this split planned from the start?",
         misconceptions: {
-          o2: "A significant result in 23 people from an added analysis cannot establish that.",
-          o3: "A non-significant gap in 50 people is not proof of no effect.",
-          o4: "The younger gap was 0.06; the older gap was 0.25.",
+          o2: "Significance within one subgroup does not establish a threshold or subgroup difference.",
+          o3: "A non-significant subgroup result is not proof of no effect.",
+          o4: "Uncertainty does not establish a larger estimate; that is not the observed pattern.",
         },
         explanation:
           "The split was described as an additional analysis, and the oldest subgroup had 13 and 10 people. The gap was large (0.66 against 0.91), but a result from such small groups needs confirmation.",
@@ -394,7 +394,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Specific to Older Adults?",
         type: "single",
         prompt:
@@ -406,29 +406,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "No: no younger adults were tested, so the study cannot compare older people with younger ones.",
-          },
-          {
             id: "o2",
-            text: "Yes: the effect appeared in the 70–80 group but not the 60–69 group.",
+            text: "Yes; significance at 70–80 but not 60–69 establishes that young adults would be unaffected.",
           },
           {
             id: "o3",
-            text: "Yes: dementia stories cannot affect young people.",
+            text: "Yes; stories about dementia cannot affect young adults because the stereotype only names older people.",
           },
           {
             id: "o4",
-            text: "No: the study found no effect at all.",
+            text: "No; neither older subgroup showed any difference, so no memory effect needs an age comparison.",
+          },
+          {
+            id: "o1",
+            text: "No young adults were tested, so an older-versus-younger comparison is missing.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who was in the sample?",
         misconceptions: {
-          o2: "Comparing two older age bands is not the same as comparing older and younger adults.",
-          o3: "The study did not test young people, and the authors note such stories might affect them too.",
-          o4: "There was a significant effect overall under lenient scoring.",
+          o2: "Both tested groups were older adults; significance differences do not establish a young-adult null.",
+          o3: "That mechanism is assumed rather than tested here.",
+          o4: "The study did report a difference; the limitation is the missing young-adult comparison.",
         },
         explanation:
           "The authors note that because no younger participants were included, it is difficult to say whether the effect is exclusive to older adults, and they recommend a design that crosses age group with condition.",
@@ -438,7 +438,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "From Lab to Daily Life",
         type: "single",
         prompt:
@@ -455,24 +455,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Strongly: the study shows news about dementia makes people miss appointments.",
+            text: "Strongly; the timing task directly counted missed medical appointments after everyday dementia reporting.",
           },
           {
             id: "o3",
-            text: "Not at all: the study found no effect.",
+            text: "Not at all; the study detected no difference in any memory outcome after reading the story.",
           },
           {
             id: "o4",
-            text: "Strongly, because participants were randomly assigned.",
+            text: "Strongly; random assignment makes the lab task directly representative of residents' daily appointments.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How similar is the lab task to remembering a doctor's appointment?",
         misconceptions: {
-          o2: "No appointments were measured; the outcome was pressing a key on time in a short lab task.",
-          o3: "It found an effect, under lenient scoring.",
-          o4: "Random assignment supports the comparison within the study, not its transfer to daily life.",
+          o2: "The outcome was a short prospective-memory task, not actual appointment attendance.",
+          o3: "The study reported a difference, although its interpretation and transfer need caution.",
+          o4: "Random assignment does not establish ecological validity or transfer to a care home.",
         },
         explanation:
           "The study tested a blatant activation of age stereotypes in one session with a lab task in a convenience sample. That is a long way from everyday news and real appointments.",

@@ -113,7 +113,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Three Waves, Both Scales",
         type: "single",
         prompt:
@@ -125,29 +125,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Measuring both at each wave lets each be tested as a predictor and as an outcome, so both directions can be examined.",
+            id: "o2",
+            text: "To randomise gratitude, turning the repeated survey into an experiment.",
           },
           {
-            id: "o2",
-            text: "It makes the design experimental, so cause can be proved.",
+            id: "o1",
+            text: "To test both directions, with each measure acting as predictor and outcome.",
           },
           {
             id: "o3",
-            text: "It lets the team average the three waves into one score.",
+            text: "To average all waves into one score, removing the need to distinguish earlier and later values.",
           },
           {
             id: "o4",
-            text: "It guarantees that no participants will drop out.",
+            text: "To prevent dropout by requiring each participant to complete every wave before joining the study.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "The question is about a relationship in both directions. What would you need to measure at each point?",
         misconceptions: {
-          o2: "Nobody was assigned to a condition. Measuring more often does not turn a survey into an experiment.",
-          o3: "The point of repeated waves is to look at change and order, not to average them away.",
-          o4: "Dropout was large; about 22% of those who started completed all three waves.",
+          o2: "Repeated observation does not assign an intervention.",
+          o3: "The design uses the temporal order to estimate lagged paths.",
+          o4: "Repeated measures do not guarantee retention.",
         },
         explanation:
           "The model treats each construct as both an antecedent and a consequence of the other, which needs both measured at every wave. Prospective links are a requirement for causality but do not test it directly.",
@@ -157,7 +157,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Why Include Stability?",
         type: "single",
         prompt:
@@ -169,29 +169,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Without them, a link between earlier gratitude and later satisfaction could simply reflect that both are stable traits, not a real lagged effect.",
-          },
-          {
             id: "o2",
-            text: "Stability links are needed because gratitude and satisfaction are the same construct.",
+            text: "To combine gratitude and satisfaction into one construct before estimating their later association.",
           },
           {
             id: "o3",
-            text: "They make the cross-lagged links larger, which strengthens the hypothesis.",
+            text: "To increase the cross-lagged coefficients by leaving earlier levels out of the prediction model.",
           },
           {
             id: "o4",
-            text: "They are only included to improve the model's appearance.",
+            text: "To remove every shared cause of gratitude and satisfaction.",
+          },
+          {
+            id: "o1",
+            text: "To separate a cross-lagged link from each measure's own stability over time.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What else could connect Wave 1 gratitude to Wave 2 satisfaction, other than gratitude doing something?",
         misconceptions: {
-          o2: "Factor analyses showed they are two different constructs.",
-          o3: "Controlling for stability usually makes cross-lagged links smaller, which is the point of a stricter test.",
-          o4: "They change what the cross-lagged links mean by holding earlier levels constant.",
+          o2: "Stability paths connect each construct with itself, rather than merge them.",
+          o3: "Stability paths adjust for earlier levels rather than omit them.",
+          o4: "Adjusting prior scores does not eliminate all confounding.",
         },
         explanation:
           "Cross-lagged panel models include autoregressive paths so that each cross-lagged effect shows what one construct adds beyond the other's own earlier level. They describe the model as controlling for stability effects.",
@@ -201,7 +201,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Small Links, Big Stability",
         type: "single",
         prompt:
@@ -303,11 +303,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Small beyond stability",
-              targetIds: ["g-ls", "ls-g", "ls-ls", "g-g"],
-            },
-            {
               optionId: "o2",
               label: "Large effects",
               targetIds: ["g-ls", "ls-g"],
@@ -316,6 +311,11 @@ export const body: StudyBody = {
               optionId: "o3",
               label: "Gratitude stronger",
               targetIds: ["g-ls"],
+            },
+            {
+              optionId: "o1",
+              label: "Small beyond stability",
+              targetIds: ["g-ls", "ls-g", "ls-ls", "g-g"],
             },
             {
               optionId: "o4",
@@ -327,29 +327,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Each cross-lagged link is small (about 0.1) next to the stability links (about 0.77): earlier gratitude or satisfaction adds only a little beyond a person's own earlier score.",
-          },
-          {
             id: "o2",
-            text: "The cross-lagged links are large, because both are significant.",
+            text: "The significant cross-lagged paths explain more change than stability.",
           },
           {
             id: "o3",
-            text: "Gratitude drives satisfaction more than the reverse, because its path is listed first.",
+            text: "Gratitude has the stronger path because the diagram lists it before the satisfaction-to-gratitude path.",
+          },
+          {
+            id: "o1",
+            text: "The small cross-lagged paths add little beside the much larger stability paths.",
           },
           {
             id: "o4",
-            text: "Stability does not matter, because the cross-lagged links are the hypotheses.",
+            text: "The stability paths can be ignored because only the cross-lagged paths were the research hypotheses.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the size of the two cross-lagged paths with the two stability paths.",
         misconceptions: {
-          o2: "Significance does not mean large. At about 0.1, each link is small next to stability.",
-          o3: "The two paths are 0.10 and 0.11, and the authors found they were not significantly different.",
-          o4: "Stability is what the cross-lagged links are measured beyond; it explains most of the later scores.",
+          o2: "Statistical significance does not make the smaller paths larger.",
+          o3: "Diagram order carries no evidence of effect strength.",
+          o4: "Stability is essential context for the size of the added prediction.",
         },
         explanation:
           "The cross-lagged paths are 0.10 and 0.11, while the stability paths are 0.76 and 0.78. The links are reliable but small once each score's own earlier level is taken into account.",
@@ -359,7 +359,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Which Direction Is Stronger?",
         type: "single",
         prompt:
@@ -372,28 +372,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "There is no evidence that one direction is stronger; the two links are about equal in this sample.",
+            text: "The data do not distinguish the two path strengths; exact equality is unproven.",
           },
           {
             id: "o2",
-            text: "It proves the two true effects are exactly identical.",
+            text: "The true effects are identical, since the equality constraint was not rejected.",
           },
           {
             id: "o3",
-            text: "It shows gratitude causes satisfaction but not the reverse.",
+            text: "Only gratitude predicts satisfaction, since the reverse path disappeared under the constraint.",
           },
           {
             id: "o4",
-            text: "It shows the model is wrong, since it fit worse.",
+            text: "The constrained model should be rejected, since any numerical fit loss is decisive.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "A non-significant difference means the data cannot separate the two. Does that prove they are identical?",
         misconceptions: {
-          o2: "Failing to find a difference does not prove there is none; it only means the data do not show one.",
-          o3: "The test found the two paths not different, which cuts against a one-way story.",
-          o4: "The equal-paths model did not fit significantly worse.",
+          o2: "Failure to reject an equality constraint is not proof of exact equality.",
+          o3: "The reported comparison does not establish a one-way relationship.",
+          o4: "The fit difference was not statistically distinguishable.",
         },
         explanation:
           "The constrained model was not significantly different from the free one, so the authors conclude the two links are not significantly different in strength. This is an absence of a detected difference, not proof of equality.",
@@ -403,7 +403,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Who Stayed In?",
         type: "single",
         prompt:
@@ -456,11 +456,6 @@ export const body: StudyBody = {
           resolution: null,
           responses: [
             {
-              optionId: "o1",
-              label: "Fits stayers best",
-              targetIds: ["t1", "t3"],
-            },
-            {
               optionId: "o2",
               label: "Dropout irrelevant",
               targetIds: ["t1"],
@@ -475,34 +470,39 @@ export const body: StudyBody = {
               label: "Both studies invalid",
               targetIds: ["t1", "t3"],
             },
+            {
+              optionId: "o1",
+              label: "Fits stayers best",
+              targetIds: ["t1", "t3"],
+            },
           ],
         },
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "The results may fit the people who stayed in better than everyone who started, especially in Study 2, where dropouts differed on the very variables studied.",
-          },
-          {
             id: "o2",
-            text: "It does not matter, because thousands of people started.",
+            text: "The large starting sample prevents dropout from biasing results, even when dropouts differ on the outcomes.",
           },
           {
             id: "o3",
-            text: "Dropout shows that low gratitude causes people to quit surveys.",
+            text: "Lower gratitude caused dropout, as shown by earlier scores among leavers.",
           },
           {
             id: "o4",
-            text: "Both studies are invalid and should be ignored.",
+            text: "The low completion rate makes all observed within-sample relationships impossible to interpret.",
+          },
+          {
+            id: "o1",
+            text: "Selective retention may limit how well the estimates describe those who left.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Were the people who left like the people who stayed?",
         misconceptions: {
-          o2: "A large first wave does not help if the people who left differ from those who stayed.",
-          o3: "Dropout was related to lower scores, but that does not show gratitude caused it, and it is not the paper's question.",
-          o4: "The authors used a method for handling missing data and the findings still matter; the point is caution, not dismissal.",
+          o2: "Initial size does not remove selective attrition.",
+          o3: "The association with dropout does not prove its cause.",
+          o4: "Attrition warrants caution rather than automatic rejection of every association.",
         },
         explanation:
           "Younger respondents and those with lower gratitude and life satisfaction were more likely to drop out of Study 2, and missing data there were not completely random. The estimates are therefore more secure for those who stayed.",
@@ -512,7 +512,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "A Workplace Programme?",
         type: "single",
         prompt:
@@ -524,29 +524,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Earlier gratitude predicted later satisfaction slightly, but the design cannot prove it causes it; trials that assign gratitude practice are stronger evidence.",
-          },
-          {
             id: "o2",
-            text: "The study proves gratitude raises life satisfaction, so the programme will work.",
+            text: "The prospective link establishes that the programme will raise satisfaction when offered to staff.",
           },
           {
             id: "o3",
-            text: "The study shows gratitude only works in Western countries.",
+            text: "The finding supports programmes only in Western workplaces.",
+          },
+          {
+            id: "o1",
+            text: "The small prospective link is a lead; assigned gratitude practice needs its own trial.",
           },
           {
             id: "o4",
-            text: "The study is useless because it was not an experiment.",
+            text: "The observational design provides no useful lead for deciding whether an intervention merits a trial.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Did anyone assign people to practise gratitude? What would a third variable do to the link?",
         misconceptions: {
-          o2: "The authors state the results are not conclusive evidence for causality and a third variable may be involved.",
-          o3: "The link appeared in Chile, a non-Western country; the study does not say it fails elsewhere.",
-          o4: "Prospective links are a key requirement for causality even though they do not test it directly.",
+          o2: "Temporal prediction alone does not establish an intervention effect.",
+          o3: "These data do not establish such a geographic restriction.",
+          o4: "An association can motivate a trial without proving that it will succeed.",
         },
         explanation:
           "The authors say that prospective designs do not test causality directly, that their results do not provide conclusive evidence for it, and that experiments are the strongest evidence. They also warn about generalising beyond Chile.",

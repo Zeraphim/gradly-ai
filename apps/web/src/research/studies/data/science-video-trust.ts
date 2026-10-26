@@ -105,7 +105,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "q1",
-        stage: "design",
+        stage: "Read the design",
         title: "What Else Changed?",
         type: "single",
         prompt:
@@ -118,29 +118,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The scientist version also showed the title “Dr.” on screen, so a title effect is mixed in with the change in perspective.",
-          },
-          {
             id: "o2",
-            text: "The two versions used different presenters.",
+            text: "Different presenters appeared in the two versions, mixing personal likeability with narrative perspective.",
           },
           {
             id: "o3",
-            text: "The two versions told different stories.",
+            text: "Different research stories appeared in the two versions, mixing topic interest with narrative perspective.",
           },
           {
             id: "o4",
-            text: "Nothing else changed, so the comparison is perfectly clean.",
+            text: "No other feature differed between the versions, leaving narrative perspective isolated from title cues.",
+          },
+          {
+            id: "o1",
+            text: "The scientist version also showed the title “Dr.” on screen, so a title effect is mixed in with the change in perspective.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Read what the on-screen text said in each version.",
         misconceptions: {
-          o2: "Each presenter recorded both versions, so the people were the same.",
-          o3: "The story, footage and script were the same apart from the wording changes.",
-          o4: "The title “Dr.” appeared only in the scientist versions.",
+          o2: "Both presenters recorded both versions.",
+          o3: "The story was held constant across versions.",
+          o4: "The on-screen title also changed.",
         },
         explanation:
           "Besides the “I” and “my” wording, the scientist versions identified the presenter as “Dr.” on screen. The authors note that the trust difference could also be due to that title.",
@@ -150,7 +150,7 @@ export const body: StudyBody = {
       },
       {
         id: "q2",
-        stage: "design",
+        stage: "Read the design",
         title: "Same People, Both Roles",
         type: "single",
         prompt:
@@ -163,28 +163,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "A difference between scientist and third-party versions cannot come from one presenter being more likeable, since the same people appear in both.",
+            text: "It keeps presenter identity from being exclusive to either storytelling role.",
           },
           {
             id: "o2",
-            text: "It lets the team compare men and women fairly.",
+            text: "It independently tests a gender effect with enough different presenters to represent men and women generally.",
           },
           {
             id: "o3",
-            text: "It makes the results apply to all scientists.",
+            text: "It makes the two roles representative of scientists across research topics.",
           },
           {
             id: "o4",
-            text: "It doubles the number of participants.",
+            text: "It doubles the analysed audience, since each presenter contributes an independent participant sample twice.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If one presenter only played the scientist and another only the third party, what would be mixed together?",
         misconceptions: {
-          o2: "The authors say gender could not be compared, because the presenters also differed in age, background and performance.",
-          o3: "Two people cannot represent all scientists; the authors note this.",
-          o4: "It adds versions, not participants.",
+          o2: "One presenter per gender does not isolate a general gender effect from individual differences.",
+          o3: "Two presenters on one topic do not establish that generality.",
+          o4: "Reusing presenters in two roles does not itself double the sample.",
         },
         explanation:
           "Using the same two presenters in both roles helps control for idiosyncratic effects of an individual presenter. It does not allow comparison of presenter gender, which was confounded with other differences.",
@@ -194,7 +194,7 @@ export const body: StudyBody = {
       },
       {
         id: "q3",
-        stage: "results",
+        stage: "Read the results",
         title: "Scientist Against Third Party",
         type: "single",
         prompt:
@@ -284,11 +284,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Not reliably",
-              targetIds: ["sci", "third"],
-            },
-            {
               optionId: "o2",
               label: "Yes, clearly",
               targetIds: ["sci", "third"],
@@ -297,6 +292,11 @@ export const body: StudyBody = {
               optionId: "o3",
               label: "Third party lowest",
               targetIds: ["third"],
+            },
+            {
+              optionId: "o1",
+              label: "Not reliably",
+              targetIds: ["sci", "third"],
             },
             {
               optionId: "o4",
@@ -308,29 +308,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Not reliably: the scientist–third-party difference was not significant (P = 0.20); only the gap with the no-presenter video was.",
-          },
-          {
             id: "o2",
-            text: "Yes, because the scientist had the highest average.",
+            text: "Established: the highest mean is reliably above every lower-rated condition.",
           },
           {
             id: "o3",
-            text: "No, the third party was rated lowest.",
+            text: "Not established: the third-party version had the lowest mean, below the no-presenter version.",
+          },
+          {
+            id: "o1",
+            text: "Not established: the direct pairwise gap was non-significant at P = 0.20.",
           },
           {
             id: "o4",
-            text: "All three were rated the same.",
+            text: "Established equality: the pairwise result shows both versions have exactly the same trustworthiness.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Look at the pairwise test for the two presenter versions.",
         misconceptions: {
-          o2: "The highest average is not a reliable difference; the pairwise test gave P = 0.20.",
-          o3: "The no-presenter video was rated lowest.",
-          o4: "The scientist was rated higher than the no-presenter video (P = 0.006).",
+          o2: "A mean ranking alone does not establish each pairwise difference.",
+          o3: "That is not the reported ordering of means.",
+          o4: "Non-significance does not prove equality.",
         },
         explanation:
           "The scientist was rated 5.81, the third party 5.61 and the no-presenter video 5.40. Only scientist against no presenter was significant. Scientist against third party was not (P = 0.20).",
@@ -340,7 +340,7 @@ export const body: StudyBody = {
       },
       {
         id: "q4",
-        stage: "results",
+        stage: "Read the results",
         title: "Many Outcomes, One Adjustment",
         type: "single",
         prompt:
@@ -352,29 +352,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Testing many outcomes raises the chance of a false positive; after adjustment the trust effect sits right at the threshold, so it is weak evidence, while expertise holds up better.",
+            id: "o2",
+            text: "Adjustment confirms the trust finding, since a corrected value at .05 establishes a true effect.",
           },
           {
-            id: "o2",
-            text: "The adjustment proves the trust effect is real.",
+            id: "o1",
+            text: "Multiple testing weakens the trust evidence; expertise survives adjustment more clearly.",
           },
           {
             id: "o3",
-            text: "Adjusted p-values are always larger, so they can be ignored.",
+            text: "Adjustment can be ignored, since a smaller unadjusted p-value always provides the most reliable inference.",
           },
           {
             id: "o4",
-            text: "The adjustment shows trust mattered more than expertise.",
+            text: "Adjustment makes trust the stronger finding, since expertise no longer meets the threshold.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Why would someone testing eight outcomes adjust their p-values?",
         misconceptions: {
-          o2: "An adjusted P of 0.05 is borderline, not proof.",
-          o3: "They are larger for a reason: they correct for the number of tests.",
-          o4: "Expertise had the smaller adjusted P (0.03) and larger effect.",
+          o2: "Adjustment does not establish truth, particularly for a borderline result.",
+          o3: "Selecting the smaller value ignores the multiple-testing problem.",
+          o4: "Expertise held up better than trust under the reported adjustment.",
         },
         explanation:
           "Adjusted P values account for false discovery rates across the outcomes. Expertise (adjusted 0.03) holds up better than trust (adjusted 0.05), which is at the edge.",
@@ -384,7 +384,7 @@ export const body: StudyBody = {
       },
       {
         id: "q5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Enjoyment and Funding",
         type: "single",
         prompt:
@@ -401,24 +401,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Scientist-presented videos raise funding support.",
+            text: "Scientist presenters increase support, since viewers rated them as more expert than the other presenters.",
           },
           {
             id: "o3",
-            text: "Making videos more enjoyable will raise funding support.",
+            text: "Increasing enjoyment will increase support, since the positive correlation identifies the causal direction.",
           },
           {
             id: "o4",
-            text: "Videos have no relation to funding views at all.",
+            text: "Videos cannot relate to funding views, since the presenter-type comparison did not detect a difference.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which variable was randomly assigned, and which was only measured?",
         misconceptions: {
-          o2: "Funding support did not differ significantly between video types.",
-          o3: "The enjoyment link was a correlation among viewers; enjoyment was not manipulated.",
-          o4: "Viewers who enjoyed the video more did support funding more.",
+          o2: "An expertise rating does not establish an effect on funding support.",
+          o3: "The correlation does not establish that changing enjoyment changes support.",
+          o4: "A null experimental contrast does not erase the enjoyment association.",
         },
         explanation:
           "Video type was randomised and had no significant effect on funding attitudes. Enjoyment was only measured, so its correlation with funding support may reflect that people who like the topic both enjoy the video and support funding.",
@@ -428,7 +428,7 @@ export const body: StudyBody = {
       },
       {
         id: "q6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "How Far Does It Reach?",
         type: "single",
         prompt:
@@ -440,29 +440,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The evidence comes from two presenters, one script and one topic with volunteer viewers, and the gain was mainly in perceived expertise; other scientists and topics may differ.",
+            id: "o2",
+            text: "No caution is needed, since a randomised comparison of two presenters establishes a rule for all scientists.",
           },
           {
-            id: "o2",
-            text: "None needed; the study proves scientists should always present.",
+            id: "o1",
+            text: "Two presenters and one topic limit transfer; the clearest gain concerned expertise.",
           },
           {
             id: "o3",
-            text: "The study shows scientists should never present.",
+            text: "Scientists should avoid presenting, since the pairwise trust result establishes a disadvantage to doing so.",
           },
           {
             id: "o4",
-            text: "The only issue is that the story was fictional.",
+            text: "Only fiction limits transfer, since the videos were based on an invented story rather than real research.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many presenters, scripts and topics stand behind the result?",
         misconceptions: {
-          o2: "Two presenters and one topic cannot support “always”.",
-          o3: "Scientists were rated higher on expertise; the caution is about how far that generalises.",
-          o4: "The fictional story is one limit among several, including the sample and the two presenters.",
+          o2: "Randomisation within this experiment does not establish universal transfer.",
+          o3: "The non-significant contrast does not establish a disadvantage.",
+          o4: "The research story was real; presenter and topic coverage are the relevant limits.",
         },
         explanation:
           "The authors note an opt-in volunteer panel, that two scientists are not representative of scientists, and a single script with the same ant visuals. Those limit how far the result generalises.",

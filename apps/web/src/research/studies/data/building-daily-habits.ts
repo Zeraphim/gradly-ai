@@ -117,7 +117,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Enough Points for a Curve?",
         type: "single",
         prompt:
@@ -208,28 +208,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Many more habit-strength measurements per person, for example several a week, so each person's curve has enough points.",
+            text: "More frequent measurements per person, to trace the rise and flattening of each curve.",
           },
           {
             id: "o2",
-            text: "More participants, so that more individual curves can be fitted.",
+            text: "More people at the existing time points, to fit individual curves.",
           },
           {
             id: "o3",
-            text: "Fewer kinds of habit to choose from.",
+            text: "One common habit for everyone, to supply the missing observations along each person's curve.",
           },
           {
             id: "o4",
-            text: "A shorter questionnaire for habit strength.",
+            text: "A shorter habit-strength scale, to recover each person's curve from the same few observations.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many points do you need to see a curve rise and then flatten?",
         misconceptions: {
-          o2: "Adding people does not add points to any one person's curve.",
-          o3: "The choice of habit does not change how many points each person contributes.",
-          o4: "A shorter questionnaire would not add measurement points.",
+          o2: "More people do not add observations within an individual.",
+          o3: "Standardising the habit does not add time points.",
+          o4: "A shorter questionnaire does not supply the missing measurements.",
         },
         explanation:
           "Each person gave 2 to 9 habit measurements, and individual patterns fluctuated too much; a curve could be fitted for only 4.11% of participants. The authors suspect the two-week spacing was too infrequent, so they analysed the group instead.",
@@ -239,7 +239,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Earlier Habit Strength",
         type: "single",
         prompt:
@@ -251,29 +251,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Habit strength is stable from one measurement to the next, so the other predictors have to explain change beyond where each person already was.",
-          },
-          {
             id: "o2",
-            text: "Because earlier habit strength is the outcome the study wants to explain.",
+            text: "To treat the earlier score as the outcome and later scores as explanations of that outcome.",
           },
           {
             id: "o3",
-            text: "To make self-control look more important.",
+            text: "To remove all self-control differences before modelling habit growth.",
+          },
+          {
+            id: "o1",
+            text: "To ask whether predictors explain change beyond each person's earlier habit strength.",
           },
           {
             id: "o4",
-            text: "Because habit strength cannot be measured more than once.",
+            text: "To combine repeated scores into a single measure with no information about their order.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If someone already had a strong habit two weeks ago, what would you expect now?",
         misconceptions: {
-          o2: "The outcome is current habit strength; the earlier level is a control.",
-          o3: "Controlling for earlier habit strength makes the test stricter, not easier.",
-          o4: "It was measured every two weeks.",
+          o2: "The model predicts the later score, adjusting for the earlier one.",
+          o3: "Adjusting earlier habit strength does not remove every self-control difference.",
+          o4: "The lagged predictor preserves temporal order rather than averaging it away.",
         },
         explanation:
           "Habit strength was rather stable and strongly predicted by its previous value, so entering it means the other predictors are judged on what they add to that change.",
@@ -283,7 +283,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Advice for a Coach",
         type: "single",
         prompt:
@@ -296,29 +296,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Focus on carrying out the behaviour consistently, since consistency went with habit gains while trait self-control did not.",
+            id: "o2",
+            text: "Select clients with high self-control, since it best predicted habit growth.",
           },
           {
-            id: "o2",
-            text: "Only work with clients who score high on self-control.",
+            id: "o1",
+            text: "Support consistent practice; it tracked habit gains while trait self-control did not.",
           },
           {
             id: "o3",
-            text: "Expect a 47% increase in habit strength from doing the behaviour every day.",
+            text: "Promise 47% stronger habits with daily practice, treating the coefficient as a percentage gain.",
           },
           {
             id: "o4",
-            text: "Train self-control first, because it drives habit formation.",
+            text: "Train self-control first, since stronger trait scores explained later habit growth.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which predictor added something after earlier habit strength was taken into account?",
         misconceptions: {
-          o2: "Self-control did not predict habit growth in this study.",
-          o3: "0.47 is a regression coefficient on a 1-to-7 scale, not a percentage increase.",
-          o4: "This study found no support for self-control as a predictor.",
+          o2: "Trait self-control did not predict growth here.",
+          o3: "A model coefficient cannot be read as that percentage increase.",
+          o4: "The analysis does not establish that sequence or mechanism.",
         },
         explanation:
           "Participants who carried out the chosen behaviour more consistently showed stronger increases in habit strength, while lagged self-control did not predict habit strength. Consistency is associated with growth; this is not an experiment on coaching.",
@@ -328,7 +328,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Reading the Shape",
         type: "single",
         prompt:
@@ -340,29 +340,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Habit strength rose quickly at first and then slowed down, levelling off.",
-          },
-          {
             id: "o2",
-            text: "Habit strength rose at a steady rate the whole time.",
+            text: "Habit strength increases by a constant amount at each time point.",
           },
           {
             id: "o3",
-            text: "Habit strength rose more and more quickly over time.",
+            text: "Habit strength rises, with larger gains at later measurements than at the start.",
           },
           {
             id: "o4",
-            text: "Habit strength fell over time.",
+            text: "Habit strength declines, with the largest drops occurring near the end of the study.",
+          },
+          {
+            id: "o1",
+            text: "Habit strength rises, with the rate of increase slowing over the study.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "A negative squared term bends a rising line downward.",
         misconceptions: {
-          o2: "A significant quadratic term means the rate changed.",
-          o3: "A negative quadratic term means the rise slowed, not sped up.",
-          o4: "The linear trend was positive; habit strength increased by about 0.8 SD.",
+          o2: "A negative quadratic term describes curvature, not constant growth.",
+          o3: "The negative quadratic term indicates deceleration rather than acceleration.",
+          o4: "The positive linear term describes an initial rise, not a decline.",
         },
         explanation:
           "Habit strength increased by about 0.8 SD over 110 days, with a stronger increase at the start and levelling off at the end, which is what a positive linear and a negative quadratic term describe.",
@@ -372,7 +372,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Is Self-Control Irrelevant?",
         type: "single",
         prompt:
@@ -384,29 +384,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "No: the study measured self-control as a general trait, and choosing a set context may have reduced the need for it, so a role in other situations is not ruled out.",
-          },
-          {
             id: "o2",
-            text: "Yes: a null result in 146 people proves it.",
+            text: "Yes; the null estimate rules out an important role for self-control in other habit settings.",
           },
           {
             id: "o3",
-            text: "No: the study actually found a strong effect of self-control.",
+            text: "No; a strong self-control effect was hidden only because the model omitted earlier habit strength.",
           },
           {
             id: "o4",
-            text: "Yes: because habit strength grew without it.",
+            text: "Yes; improvement in habit strength shows that participants did not use self-control to practise.",
+          },
+          {
+            id: "o1",
+            text: "No; a trait measure in a chosen context leaves other roles for self-control open.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What kind of self-control was measured, and when might it matter most?",
         misconceptions: {
-          o2: "One null result cannot prove absence, and the authors give specific reasons it may have been missed.",
-          o3: "It did not; the coefficient was 0.01 and not significant.",
-          o4: "Growth alongside a null predictor does not show that predictor can never matter.",
+          o2: "This setting and measure do not test every role of self-control.",
+          o3: "The model included earlier habit strength and found no growth prediction by self-control.",
+          o4: "Growth without a trait association does not show absence of momentary self-control.",
         },
         explanation:
           "The authors suggest self-control may not have mattered because they measured trait rather than state self-control, and because tying the behaviour to a specific context may have made it easier. They do not conclude self-control is irrelevant.",
@@ -416,7 +416,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Habits for Every Employee?",
         type: "single",
         prompt:
@@ -430,28 +430,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "These were motivated volunteers who picked their own habit and logged it daily, which may itself have helped; assigned habits in less committed people may form differently.",
+            text: "Motivated volunteers choosing and logging habits may differ from staff assigned one.",
           },
           {
             id: "o2",
-            text: "There is no caution needed, because the increase was large.",
+            text: "The average increase supplies a reliable deadline for forming any habit in the workplace.",
           },
           {
             id: "o3",
-            text: "The study shows habits never form in less than three months.",
+            text: "The follow-up duration identifies the minimum time any employee needs to develop a habit.",
           },
           {
             id: "o4",
-            text: "The results only apply to women.",
+            text: "The voluntary sample limits transfer mainly to men, since all participants were women.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who took part, how did they choose their habit, and what did they do every day?",
         misconceptions: {
-          o2: "A large increase in one motivated sample does not transfer automatically to everyone.",
-          o3: "The study tracked about three months; it does not set a minimum time.",
-          o4: "Most participants were women, which limits generality, but the study does not show the result applies only to women.",
+          o2: "An average trend in volunteers does not establish an individual deadline.",
+          o3: "Study duration is not a lower bound on formation time.",
+          o4: "The sample was not women only, and motivation and self-selection also matter.",
         },
         explanation:
           "Participants chose a personally relevant, feasible behaviour and registered it daily in the app; the authors note that this monitoring may have helped behaviour and hence habit formation. Assigned habits in less committed people were not tested.",

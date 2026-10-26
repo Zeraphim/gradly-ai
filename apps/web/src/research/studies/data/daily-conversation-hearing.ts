@@ -130,7 +130,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Two Hearing Measures",
         type: "single",
         prompt:
@@ -143,28 +143,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "High-frequency loss, which appears earlier, might matter for understanding tonal speech in a way the speech-frequency average would miss.",
+            text: "High-frequency loss might affect tonal speech in ways the usual average misses.",
           },
           {
             id: "o2",
-            text: "High-frequency thresholds are easier to measure than speech frequencies.",
+            text: "High-frequency thresholds can replace speech-frequency tests because they measure the same range.",
           },
           {
             id: "o3",
-            text: "Mandarin speakers have no hearing loss at speech frequencies.",
+            text: "Mandarin speakers should show no loss at speech frequencies.",
           },
           {
             id: "o4",
-            text: "A second measure doubles the sample size.",
+            text: "Two averages double the independent sample, improving precision without recruiting anyone.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Ask what is different about the speech these listeners must decode.",
         misconceptions: {
-          o2: "Ease of measurement was not the reason; the argument concerns what the frequencies do for tonal speech.",
-          o3: "The sample included many people with mild to profound speech-frequency loss.",
-          o4: "Adding a second measure on the same people does not add participants.",
+          o2: "These measures cover different frequency ranges and need not capture the same loss.",
+          o3: "The rationale does not establish absence of speech-frequency loss.",
+          o4: "Repeated measures on the same people do not double the sample.",
         },
         explanation:
           "The authors note that tonal languages rely on pitch changes and that the perception of tone depends on hearing ability, while high frequencies decline a decade earlier. They therefore compared a speech-frequency average (4FA) with a high-frequency average (3HFA).",
@@ -174,7 +174,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Two Kinds of Loneliness",
         type: "single",
         prompt:
@@ -186,29 +186,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "Each subscore must be more reliable than the total because it contains fewer, more focused items.",
+          },
+          {
             id: "o1",
             text: "Different outcomes might relate to different kinds of loneliness, and a total score could blur that.",
           },
           {
-            id: "o2",
-            text: "Subscores are always more reliable than a total.",
-          },
-          {
             id: "o3",
-            text: "The total score cannot be calculated for older adults.",
+            text: "The total cannot be used for older adults because combining dimensions changes the age of the sample.",
           },
           {
             id: "o4",
-            text: "Separate subscores prove which kind of loneliness causes distress.",
+            text: "Separate subscores identify which kind of loneliness causes distress when both are measured together.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What could be hidden if two different patterns were averaged into one number?",
         misconceptions: {
-          o2: "Fewer items per score usually make a score less, not more, reliable.",
-          o3: "A total was calculated and analysed.",
-          o4: "Subscores describe associations in one dataset; they do not establish cause.",
+          o2: "A narrower measure is not automatically more reliable.",
+          o3: "Combining scores does not make the total unusable for that age group.",
+          o4: "Splitting dimensions does not establish causal direction.",
         },
         explanation:
           "The results show why this mattered: hearing loss tracked with social loneliness, while emotional loneliness tracked with depression, anxiety and stress. A single total would have mixed the two patterns.",
@@ -218,7 +218,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Two Separate Links",
         type: "single",
         prompt:
@@ -304,11 +304,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Two separate links",
-              targetIds: ["hear-social", "emo-dep", "emo-stress"],
-            },
-            {
               optionId: "o2",
               label: "Hearing leads to distress",
               targetIds: ["hear-social", "emo-dep"],
@@ -323,34 +318,39 @@ export const body: StudyBody = {
               label: "No links",
               targetIds: [],
             },
+            {
+              optionId: "o1",
+              label: "Two separate links",
+              targetIds: ["hear-social", "emo-dep", "emo-stress"],
+            },
           ],
         },
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Hearing loss was linked to social loneliness, and emotional loneliness to depression, anxiety and stress; the two links are separate.",
-          },
-          {
             id: "o2",
-            text: "Hearing loss raises depression and stress by way of loneliness.",
+            text: "Hearing loss caused mood symptoms through the loneliness pathway.",
           },
           {
             id: "o3",
-            text: "Social loneliness was the strongest predictor of depression and stress.",
+            text: "Social loneliness was the strongest mood predictor, explaining the hearing-loss association with distress.",
           },
           {
             id: "o4",
-            text: "Hearing loss was unrelated to every loneliness measure.",
+            text: "Neither hearing measure related to loneliness, although emotional loneliness tracked mood symptoms.",
+          },
+          {
+            id: "o1",
+            text: "Hearing loss tracked social loneliness; emotional loneliness tracked mood symptoms.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Check which loneliness measure each outcome was tied to, and whether hearing appears next to any mood score.",
         misconceptions: {
-          o2: "Hearing loss was not itself linked to depression, anxiety or stress, and no mediation test or time order was available.",
-          o3: "Social loneliness was not a significant predictor of depression, anxiety or stress; emotional loneliness was.",
-          o4: "Hearing loss was a significant predictor of social loneliness (β = 0.149).",
+          o2: "The separate associations do not establish a mediation pathway or causation.",
+          o3: "Emotional loneliness, not social loneliness, tracked those mood scores.",
+          o4: "Speech-frequency hearing loss did relate to social loneliness.",
         },
         explanation:
           "The coefficients show two separate links. Hearing loss was a significant predictor of social loneliness, and emotional loneliness predicted depression, anxiety and stress. Nothing shows hearing loss leading to distress through loneliness.",
@@ -360,7 +360,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Speech Versus High Frequencies",
         type: "single",
         prompt:
@@ -372,29 +372,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The data show only that 4FA, not 3HFA, entered the loneliness models. Why is open; the authors offer that speech frequencies carry daily conversation as a possible explanation.",
-          },
-          {
             id: "o2",
-            text: "High-frequency hearing has no role in understanding speech.",
+            text: "High-frequency loss has no role in speech understanding because 3HFA did not enter these models.",
           },
           {
             id: "o3",
-            text: "The study proves that speech frequencies cause loneliness.",
+            text: "Speech-frequency loss causes loneliness because its measure was retained after the others were dropped.",
+          },
+          {
+            id: "o1",
+            text: "Only 4FA entered the models; the daily-conversation explanation remains a hypothesis.",
           },
           {
             id: "o4",
-            text: "The high-frequency measure must have been faulty.",
+            text: "The high-frequency measure must be invalid, since the final model did not retain it.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Separate what the models show from why the authors think it happened.",
         misconceptions: {
-          o2: "The authors themselves say high-frequency loss has an impact on speech perception and that an association could be expected.",
-          o3: "A cross-sectional association cannot show cause.",
-          o4: "Nothing in the report suggests that; the authors say they cannot explain the result.",
+          o2: "A model-selection result cannot rule out every role in speech.",
+          o3: "Retention in a cross-sectional model does not establish causation.",
+          o4: "Non-selection does not establish a faulty measurement.",
         },
         explanation:
           "The authors write that it is difficult to explain why high frequencies were not associated, and suggest that only speech frequencies substantially affect daily conversation. That is a possible explanation, not a tested result.",
@@ -404,7 +404,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Treat Loneliness First?",
         type: "single",
         prompt:
@@ -417,28 +417,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "All measures were taken at one time, so the order is unknown; loneliness may follow distress as easily as it precedes it.",
+            text: "One-time measurements leave open whether loneliness precedes or follows distress.",
           },
           {
             id: "o2",
-            text: "The sample included people who had worn hearing aids.",
+            text: "Current hearing-aid users were mixed with non-users, so treatment explains the mood link.",
           },
           {
             id: "o3",
-            text: "Emotional loneliness was measured with only one question.",
+            text: "The emotional subscore had only one item, so it could not separate types of loneliness.",
           },
           {
             id: "o4",
-            text: "The regression coefficients were negative.",
+            text: "Negative coefficients imply that less loneliness predicted more distress, reversing the clinic's claim.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which came first, the loneliness or the distress? Could the study tell?",
         misconceptions: {
-          o2: "People who had worn hearing aids were excluded.",
-          o3: "The scale used three emotional-loneliness items.",
-          o4: "The reported coefficients for emotional loneliness were positive.",
+          o2: "The study excluded hearing-aid experience; that is not the stated design limitation.",
+          o3: "Emotional loneliness was not measured by a single item.",
+          o4: "The reported links were not negative in that sense.",
         },
         explanation:
           "The authors state that their results come from cross-sectional analyses rather than longitudinal assessments, so time order cannot be established. They also cite work in which stress leads to loneliness, so the direction could run the other way.",
@@ -448,7 +448,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "How Far Does It Reach?",
         type: "single",
         prompt:
@@ -460,29 +460,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "The non-significant mood tests support the claim across older adults, including those with severe loss.",
+          },
+          {
+            id: "o3",
+            text: "The social-loneliness association directly proves that hearing loss worsens depression and stress.",
+          },
+          {
             id: "o1",
             text: "The sample was small, healthy and had few people with severe loss, so mild to moderate losses showed no link here but severe loss was barely tested.",
           },
           {
-            id: "o2",
-            text: "The claim is right, because p-values for mood were above 0.05.",
-          },
-          {
-            id: "o3",
-            text: "The claim is wrong because loneliness rose with hearing loss.",
-          },
-          {
             id: "o4",
-            text: "The study cannot say anything because it was cross-sectional.",
+            text: "The cross-sectional design prevents interpreting even the measured associations in this sample.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who was in the sample, and who was barely in it?",
         misconceptions: {
-          o2: "Not finding a link in this sample is weaker than showing there is none, especially with few severe cases.",
-          o3: "Loneliness did rise with hearing loss, but the claim concerns depression, anxiety and stress, which showed no link.",
-          o4: "A cross-sectional study can report associations and their absence; it just cannot show cause or time order.",
+          o2: "A null in this selected sample does not establish absence of harm across severity levels.",
+          o3: "Social loneliness and mood symptoms were separate outcomes with different associations.",
+          o4: "It limits causal claims without erasing descriptive associations.",
         },
         explanation:
           "The mean better-ear threshold was 36.94 dB HL, and the authors say it needs to be explored whether more severe loss matters for mood. They also list the small sample, the gender imbalance and the few participants with severe-to-profound loss.",

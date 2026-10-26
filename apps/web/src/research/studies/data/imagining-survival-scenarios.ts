@@ -54,7 +54,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Identify the independent variable(s)",
         type: "single",
         prompt:
@@ -98,7 +98,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Identify the dependent variable(s)",
         type: "single",
         prompt: "Which memory outcomes were measured as dependent variables?",
@@ -142,7 +142,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Interpret the marginal main effect on item memory",
         type: "single",
         prompt:
@@ -186,7 +186,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title:
           "Interpret the condition × plausibility interaction for color context",
         type: "single",
@@ -230,7 +230,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Scope of the survival processing advantage",
         type: "single",
         prompt:
@@ -273,7 +273,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Mechanistic explanation of the survival effect",
         type: "single",
         prompt:

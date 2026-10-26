@@ -113,7 +113,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "A Shaky Measure",
         type: "single",
         prompt:
@@ -125,29 +125,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "A noisy measure tends to hide links, so belief in God's role may be understated; they repeated the study with a fuller religiosity scale.",
-          },
-          {
             id: "o2",
-            text: "A noisy measure makes every link look stronger, so Study 1 should be ignored.",
+            text: "Noise inflates every link; Study 2 therefore removes any need to interpret the first study.",
           },
           {
             id: "o3",
-            text: "Low reliability has no effect once the sample is large enough.",
+            text: "A large sample corrects low reliability, so Study 1's scale cannot understate an association.",
           },
           {
             id: "o4",
-            text: "They kept the same scale because reliability does not matter.",
+            text: "The second study kept the same brief scale, because alpha measures sample size rather than reliability.",
+          },
+          {
+            id: "o1",
+            text: "A noisy measure tends to hide links, so belief in God's role may be understated; they repeated the study with a fuller religiosity scale.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What happens to a link between two things when one of them is measured with a lot of noise?",
         misconceptions: {
-          o2: "Measurement noise usually weakens observed links; it does not inflate them.",
-          o3: "A large sample does not repair a noisy measure.",
-          o4: "They replaced it in Study 2 with a 15-item measure because the first was suboptimal.",
+          o2: "Measurement error often attenuates links, rather than uniformly inflating them.",
+          o3: "Sample size does not eliminate measurement error.",
+          o4: "They used a fuller measure; alpha concerns scale consistency, not sample size.",
         },
         explanation:
           "The authors called the 3-item scale suboptimal and, in Study 2, used a comprehensive 15-item measure of religiosity to replicate and extend the findings.",
@@ -157,7 +157,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Dropping Smaller Groups",
         type: "single",
         prompt:
@@ -170,29 +170,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "It reduces noise from tiny groups of other faiths, but it narrows what the results can be said to cover.",
-          },
-          {
             id: "o2",
-            text: "It increases the sample size and makes the findings apply to every religion.",
+            text: "It enlarges the analysed sample and makes the estimates representative of all religious traditions.",
           },
           {
             id: "o3",
-            text: "It has no effect on the results, since the dropped group was only 6%.",
+            text: "Dropping a small subgroup leaves the findings equally applicable to all faiths.",
+          },
+          {
+            id: "o1",
+            text: "It avoids tiny faith subgroups but narrows the population covered by the analysis.",
           },
           {
             id: "o4",
-            text: "It was needed because other religions cannot be measured on the scale.",
+            text: "It establishes that other faith groups cannot be studied with any common religiosity measure.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What do you gain by removing very small groups, and what do you lose?",
         misconceptions: {
-          o2: "Dropping people cannot increase the sample, and it narrows rather than widens coverage.",
-          o3: "Even a small group can matter for what the results cover, and the authors made this choice deliberately to reduce confounding.",
-          o4: "The reason given was confounding from a small proportion of other believers, not the scale.",
+          o2: "Exclusion reduced sample size and narrowed coverage.",
+          o3: "Excluding faith groups changes the scope even if their share is small.",
+          o4: "Small subgroups here do not establish a universal measurement impossibility.",
         },
         explanation:
           "The authors ran the mediation analysis on Catholics and non-believers to reduce confounding from a small share of other believers. The cost is that the findings say little about people of other faiths.",
@@ -202,7 +202,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Who Carries the Effect?",
         type: "single",
         prompt:
@@ -305,14 +305,14 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Conscientiousness carries more; all small",
-              targetIds: ["s1-total", "s1-god", "s1-con", "s2-total"],
-            },
-            {
               optionId: "o2",
               label: "Belief in God carries it",
               targetIds: ["s1-god"],
+            },
+            {
+              optionId: "o1",
+              label: "Conscientiousness carries more; all small",
+              targetIds: ["s1-total", "s1-god", "s1-con", "s2-total"],
             },
             {
               optionId: "o3",
@@ -329,29 +329,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Conscientiousness carries most of Study 1's indirect effect while belief in God adds little and its interval touches zero; all the effects are small.",
+            id: "o2",
+            text: "Belief carries most of the link; conscientiousness adds little.",
           },
           {
-            id: "o2",
-            text: "Belief in God carries most of the indirect effect.",
+            id: "o1",
+            text: "Conscientiousness carries more of the small indirect link; belief's interval touches zero.",
           },
           {
             id: "o3",
-            text: "The indirect effects are large, because the intervals exclude zero.",
+            text: "The indirect links are large, since intervals excluding zero establish practical importance.",
           },
           {
             id: "o4",
-            text: "Belief in God plays no role, since its interval reaches zero.",
+            text: "Belief has exactly zero contribution, because touching zero rules out every nonzero indirect effect.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare each interval with zero and with the others, and note the size of the numbers.",
         misconceptions: {
-          o2: "Belief in God's share was .01 against .04 for conscientiousness.",
-          o3: "Excluding zero shows the effect is unlikely to be nil, not that it is large. These are values of .01 to .05.",
-          o4: "The interval only touches zero at its lower edge, and the authors report it as a significant mediator; its contribution is small.",
+          o2: "The displayed estimates show the reverse pattern.",
+          o3: "Statistical distinction from zero does not establish a large effect.",
+          o4: "An interval touching zero allows uncertainty rather than proving zero.",
         },
         explanation:
           "In Study 1 conscientiousness (.04) carries most of the total indirect effect (.05), and belief in God (.01) adds a little with an interval that just reaches zero. In Study 2 the total is only .01.",
@@ -361,7 +361,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "What Is Left Over?",
         type: "single",
         prompt:
@@ -374,28 +374,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Most of the link, roughly two-thirds or more, is not explained by these two mediators, so other factors, such as social support, may matter.",
+            text: "Most of the association remains unexplained by these two proposed mediators.",
           },
           {
             id: "o2",
-            text: "The two mediators explain nearly all of the link.",
+            text: "The two mediators explain almost the whole association.",
           },
           {
             id: "o3",
-            text: "The leftover share shows that the morningness link is not real.",
+            text: "The unexplained share cancels the association.",
           },
           {
             id: "o4",
-            text: "The leftover share must be due to age and gender, since they were controlled.",
+            text: "The remaining share belongs to age and gender.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If a third is explained, how much is not?",
         misconceptions: {
-          o2: "A third or less is far from nearly all.",
-          o3: "A share left unexplained does not show the link is absent.",
-          o4: "Controlling for them removes their influence; it does not explain what is left.",
+          o2: "About 28–33% leaves roughly two-thirds or more unexplained.",
+          o3: "Partial explanation does not erase the overall association.",
+          o4: "Adjusted factors cannot simply be assigned the remaining mediation share.",
         },
         explanation:
           "About two-thirds or more of the link remains unexplained. The authors suggest other mechanisms may be involved, such as perceived social support, and call for tests of alternative models.",
@@ -405,7 +405,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Do the Arrows Show Cause?",
         type: "single",
         prompt:
@@ -417,29 +417,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "The mediation coefficients reveal the chronological order in which the measured traits developed.",
+          },
+          {
             id: "o1",
             text: "Nothing in the data: the order is assumed from earlier research and theory, so the results fit the model without proving it.",
           },
           {
-            id: "o2",
-            text: "The mediation statistics, which show the order in which the traits developed.",
-          },
-          {
             id: "o3",
-            text: "The large sample, because large samples reveal direction.",
+            text: "The sample size reveals direction by making the larger correlations point toward their causes.",
           },
           {
             id: "o4",
-            text: "The significance of the paths, which proves causation.",
+            text: "Significant paths establish the direction by ruling out reverse links between the same variables.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Everything was measured once. What could that tell you about order?",
         misconceptions: {
-          o2: "Mediation statistics describe a pattern in the data; they cannot show which came first.",
-          o3: "Sample size sharpens estimates but cannot reveal direction.",
-          o4: "Significant paths show association within the model, not cause.",
+          o2: "Cross-sectional coefficients do not establish temporal ordering.",
+          o3: "Precision does not identify causal direction.",
+          o4: "Significance does not rule out reverse causation.",
         },
         explanation:
           "The authors state that both studies were cross-sectional, so inferences about the direction of causality remain speculative or rest on earlier research, and they call for longitudinal studies and tests of alternative models.",
@@ -449,7 +449,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Would It Hold Elsewhere?",
         type: "single",
         prompt:
@@ -461,29 +461,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Not established: both samples were Polish adults, and in Study 2 the pattern held only among Catholic believers; the authors call for replication in other cultures.",
-          },
-          {
             id: "o2",
-            text: "Yes, since the sample sizes were large.",
+            text: "Established across cultures, because the large sample makes religious context irrelevant to the link.",
           },
           {
             id: "o3",
-            text: "Yes, because the link between morningness and life satisfaction is biological.",
+            text: "Established for non-believers, because the mediation model showed the same pattern in every subgroup.",
           },
           {
             id: "o4",
-            text: "No, because the study found no link.",
+            text: "Ruled out elsewhere, because a context-specific finding implies the link cannot occur in another country.",
+          },
+          {
+            id: "o1",
+            text: "Not established; the Polish samples and believer-specific pattern limit transfer.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who was in the samples, and what did the authors say about other cultures?",
         misconceptions: {
-          o2: "Large samples do not extend findings to other cultures.",
-          o3: "The study did not test a biological claim; the authors note religiosity has a strong cultural basis.",
-          o4: "The study did find links; the point is that they may not generalise.",
+          o2: "More participants in one context do not establish transfer to another.",
+          o3: "Study 2 did not show the same pattern in both subgroups.",
+          o4: "A limited finding leaves transfer untested rather than impossible.",
         },
         explanation:
           "All participants were from Poland, most were Catholic, and in Study 2 the results remained significant only in the group of Roman Catholic believers. The authors say the findings should be replicated with participants of other cultural backgrounds.",

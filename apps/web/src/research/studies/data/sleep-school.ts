@@ -35,16 +35,16 @@ const challenges: StudyChallenge[] = [
       "Parents reported children's sleep problems at two ages, and teachers rated school performance at the second age. Nobody changed anything about the children's sleep. Which question can this design address?",
     options: [
       {
-        id: "A",
-        text: "Are children whose parents report sleep problems more likely to receive a low teacher rating later on?",
+        id: "B",
+        text: "Does assigning treatment for sleep problems improve children's later school performance?",
       },
       {
-        id: "B",
-        text: "Does treating children's sleep problems raise their school performance?",
+        id: "A",
+        text: "Do earlier parent-reported sleep problems predict a later low teacher rating?",
       },
       {
         id: "C",
-        text: "How many hours of sleep does a child need to do well at school?",
+        text: "What nightly sleep duration guarantees a good teacher rating at the later school assessment?",
       },
     ],
     accepted: ["A"],
@@ -53,8 +53,8 @@ const challenges: StudyChallenge[] = [
     explanation:
       "The researchers observed children and recorded parent reports and teacher ratings. They gave no treatment, so they cannot test whether fixing sleep helps. They recorded whether a child had trouble falling or staying asleep, not how long the child slept. The design can ask whether the two things go together over time.",
     misconceptions: {
-      B: "No sleep treatment was given. Testing whether treatment helps needs an intervention, ideally randomised.",
-      C: "Sleep was recorded as a yes-or-no problem with falling or staying asleep. Sleep duration was not measured.",
+      B: "No sleep treatment was assigned, so the study cannot estimate that intervention effect.",
+      C: "The study does not identify a guaranteed duration or experimentally vary sleep.",
     },
     reveal: "design",
     evidence: [
@@ -73,11 +73,17 @@ const challenges: StudyChallenge[] = [
     prompt:
       "A cohort study can only analyse children it still has data for. Tap the step where the most children were lost.",
     options: [
-      { id: "A", text: "Between the invitation and wave 1 consent" },
-      { id: "B", text: "Between wave 1 and taking part in both waves" },
+      {
+        id: "A",
+        text: "From the initial invitation to giving consent for wave 1",
+      },
+      {
+        id: "B",
+        text: "From taking part in wave 1 to taking part in both waves",
+      },
       {
         id: "C",
-        text: "Between taking part in both waves and the final analysis",
+        text: "From taking part in both waves to the final analysed sample",
       },
     ],
     accepted: ["B"],
@@ -157,8 +163,16 @@ const challenges: StudyChallenge[] = [
         },
       ],
       responses: [
-        { optionId: "A", label: "Invited → wave 1", targetIds: ["wave1"] },
-        { optionId: "B", label: "Wave 1 → both waves", targetIds: ["both"] },
+        {
+          optionId: "A",
+          label: "Invited → wave 1",
+          targetIds: ["wave1"],
+        },
+        {
+          optionId: "B",
+          label: "Wave 1 → both waves",
+          targetIds: ["both"],
+        },
         {
           optionId: "C",
           label: "Both waves → analysis",
@@ -186,9 +200,18 @@ const challenges: StudyChallenge[] = [
     prompt:
       "Teachers rated performance only at wave 2. In which group were sleep problems reported only at the same time as that rating, so they cannot be shown to come first?",
     options: [
-      { id: "A", text: "Transitory" },
-      { id: "B", text: "Concurrent" },
-      { id: "C", text: "Persistent" },
+      {
+        id: "B",
+        text: "Concurrent: problems at the later wave only",
+      },
+      {
+        id: "A",
+        text: "Transitory: problems at the earlier wave only",
+      },
+      {
+        id: "C",
+        text: "Persistent: problems reported at both waves",
+      },
     ],
     accepted: ["B"],
     alternatives: [],
@@ -300,9 +323,21 @@ const challenges: StudyChallenge[] = [
         },
       ],
       responses: [
-        { optionId: "A", label: "Transitory", targetIds: ["transitory"] },
-        { optionId: "B", label: "Concurrent", targetIds: ["concurrent"] },
-        { optionId: "C", label: "Persistent", targetIds: ["persistent"] },
+        {
+          optionId: "B",
+          label: "Concurrent: problems at the later wave only",
+          targetIds: ["concurrent"],
+        },
+        {
+          optionId: "A",
+          label: "Transitory: problems at the earlier wave only",
+          targetIds: ["transitory"],
+        },
+        {
+          optionId: "C",
+          label: "Persistent: problems reported at both waves",
+          targetIds: ["persistent"],
+        },
       ],
       resolution: {
         id: "order",
@@ -323,20 +358,20 @@ const challenges: StudyChallenge[] = [
       "These odds ratios compare the persistent group with children who had no sleep problems. Each row adds more factors to the model. What is the best reading?",
     options: [
       {
-        id: "A",
-        text: "The estimate shrinks as factors are added, so part of the first link is shared with those factors, but it stays above 1.",
-      },
-      {
         id: "B",
-        text: "The fully adjusted 1.87 is the true causal effect of sleep problems, because adjustment removed everything else.",
+        text: "Adjustment identifies the true causal effect, since including measured factors removes every confounder.",
       },
       {
         id: "C",
-        text: "Because the estimate changes between models, the analysis is unreliable and shows nothing.",
+        text: "Changes between models invalidate the analysis, since a credible estimate must be identical after adjustment.",
+      },
+      {
+        id: "A",
+        text: "Adjustment reduces the estimate, but an association above 1 remains.",
       },
       {
         id: "D",
-        text: "The fully adjusted interval includes 1, so no association remains.",
+        text: "Full adjustment removes the association, since the final interval spans the no-difference value of 1.",
       },
     ],
     accepted: ["A"],
@@ -345,9 +380,9 @@ const challenges: StudyChallenge[] = [
     explanation:
       "The odds ratio falls from 3.15 to 1.87 as gender, puberty, family economy and mental health are added. Part of the crude link travelled with those factors. The fully adjusted interval, 1.19 to 2.95, stays above 1, so an association remains. Adjustment only handles factors that were measured. Mental health was measured at wave 2, the same time as the rating, so it could be a shared cause or a step between sleep and grades. The drop does not split cleanly into confounding.",
     misconceptions: {
-      B: "Adjustment removes only the measured factors. Unmeasured ones, such as chronic or neurological conditions, can still contribute.",
-      C: "A shrinking estimate is what adjustment is designed to reveal. It tells you how much of the link was shared with the added factors.",
-      D: "The fully adjusted interval runs from 1.19 to 2.95. It sits entirely above 1.",
+      B: "Unmeasured confounding and missing earlier performance remain possible.",
+      C: "Changes can reveal the influence of measured confounders rather than invalidate the analysis.",
+      D: "The displayed fully adjusted interval remains above 1.",
     },
     reveal: "results",
     evidence: [
@@ -426,17 +461,25 @@ const challenges: StudyChallenge[] = [
       },
       responses: [
         {
-          optionId: "A",
-          label: "Shrinks, stays above 1",
-          targetIds: ["modelA", "full"],
+          optionId: "B",
+          label: "Final value is causal",
+          targetIds: ["full"],
         },
-        { optionId: "B", label: "Final value is causal", targetIds: ["full"] },
         {
           optionId: "C",
           label: "Changes mean unreliable",
           targetIds: ["modelA", "modelD", "modelE", "full"],
         },
-        { optionId: "D", label: "Interval includes 1", targetIds: ["full"] },
+        {
+          optionId: "A",
+          label: "Shrinks, stays above 1",
+          targetIds: ["modelA", "full"],
+        },
+        {
+          optionId: "D",
+          label: "Interval includes 1",
+          targetIds: ["full"],
+        },
       ],
       resolution: {
         id: "shrink",
@@ -457,20 +500,20 @@ const challenges: StudyChallenge[] = [
       "The fully adjusted odds ratio for persistent sleep problems is 1.87. About one child in ten was rated as a poor performer overall. Which sentence describes 1.87 correctly?",
     options: [
       {
-        id: "A",
-        text: "Children with persistent sleep problems were 87% more likely to be rated as poor performers.",
+        id: "B",
+        text: "After adjustment, the persistent group's odds of a low rating are 1.87 times the comparison odds.",
       },
       {
-        id: "B",
-        text: "After adjustment, the odds of a low rating were about 1.87 times the odds for children without sleep problems.",
+        id: "A",
+        text: "After adjustment, the probability of a low rating is exactly 87% higher for the persistent group.",
       },
       {
         id: "C",
-        text: "1.87% of children with persistent sleep problems received a low rating.",
+        text: "After adjustment, exactly 1.87% of the persistent group is predicted to receive a low rating.",
       },
       {
         id: "D",
-        text: "87% of children with persistent sleep problems received a low rating.",
+        text: "After adjustment, exactly 87% of the persistent group is predicted to receive a low rating.",
       },
     ],
     accepted: ["B"],
@@ -479,9 +522,9 @@ const challenges: StudyChallenge[] = [
     explanation:
       "Odds are the chance of an outcome divided by the chance of not having it. An odds ratio of 1.87 compares those odds between groups. It equals the risk ratio only when the outcome is rare. With about one child in ten rated as a poor performer, and more in the persistent group, the risk ratio is closer to 1 than the odds ratio. Reading 1.87 as '87% more likely' overstates the gap. The paper itself describes these results as increased risk, so watch for this slip in the source too.",
     misconceptions: {
-      A: "That is a risk-ratio reading. When the outcome is not rare, an odds ratio sits further from 1 than the risk ratio.",
-      C: "An odds ratio is a comparison between groups, not the percentage of a group with the outcome.",
-      D: "An odds ratio does not tell you what share of the group had the outcome.",
+      A: "An odds ratio is not exactly a relative risk.",
+      C: "The odds ratio does not give the group's absolute event percentage.",
+      D: "A relative odds increase is not an absolute probability.",
     },
     reveal: "results",
     evidence: [
@@ -505,27 +548,27 @@ const challenges: StudyChallenge[] = [
       },
       responses: [
         {
-          optionId: "A",
+          optionId: "B",
           label:
-            "Children with persistent sleep problems were 87% more likely to be rated as poor performers.",
+            "After adjustment, the persistent group's odds of a low rating are 1.87 times the comparison odds.",
           targetIds: ["sleep-poor"],
         },
         {
-          optionId: "B",
+          optionId: "A",
           label:
-            "After adjustment, the odds of a low rating were about 1.87 times the odds for children without sleep problems.",
+            "After adjustment, the probability of a low rating is exactly 87% higher for the persistent group.",
           targetIds: ["sleep-poor"],
         },
         {
           optionId: "C",
           label:
-            "1.87% of children with persistent sleep problems received a low rating.",
+            "After adjustment, exactly 1.87% of the persistent group is predicted to receive a low rating.",
           targetIds: ["sleep-poor"],
         },
         {
           optionId: "D",
           label:
-            "87% of children with persistent sleep problems received a low rating.",
+            "After adjustment, exactly 87% of the persistent group is predicted to receive a low rating.",
           targetIds: ["sleep-poor"],
         },
       ],
@@ -559,19 +602,19 @@ const challenges: StudyChallenge[] = [
     options: [
       {
         id: "A",
-        text: "Unmeasured conditions, such as neurological or chronic disorders, could lead to both sleep problems and low ratings.",
-      },
-      {
-        id: "B",
-        text: "School performance was not measured at wave 1, so some children may already have been struggling before the sleep reports.",
+        text: "Unmeasured conditions could influence both sleep problems and school performance.",
       },
       {
         id: "C",
-        text: "The adjusted estimate stays above 1, which rules out other explanations.",
+        text: "The adjusted estimate stays above 1, removing the possibility of shared underlying causes.",
+      },
+      {
+        id: "B",
+        text: "Without earlier performance ratings, school difficulties could predate the sleep reports.",
       },
       {
         id: "D",
-        text: "Teachers, not parents, rated performance, which makes the link causal.",
+        text: "Teacher ratings remove all confounding because a different person reported sleep problems.",
       },
     ],
     accepted: ["A", "B"],
@@ -582,8 +625,8 @@ const challenges: StudyChallenge[] = [
     misconceptions: {
       A: "Correct, but a second reason is also in the design.",
       B: "Correct, but a second reason is also in the limitations.",
-      C: "Adjustment handles measured factors only. An estimate above 1 cannot rule out unmeasured ones.",
-      D: "Separate reporters reduce one kind of bias. They do not turn an observed association into a causal effect.",
+      C: "Adjustment does not rule out unmeasured common causes.",
+      D: "Different reporters can reduce shared reporting bias without proving causality.",
     },
     reveal: "interpretation",
     evidence: [
@@ -676,14 +719,14 @@ const challenges: StudyChallenge[] = [
           targetIds: ["unmeasured", "sleep", "low"],
         },
         {
-          optionId: "B",
-          label: "No starting point",
-          targetIds: ["earlier", "low"],
-        },
-        {
           optionId: "C",
           label: "Above 1 rules out others",
           targetIds: ["sleep", "low"],
+        },
+        {
+          optionId: "B",
+          label: "No starting point",
+          targetIds: ["earlier", "low"],
         },
         {
           optionId: "D",
@@ -713,15 +756,15 @@ const bonus: StudyChallenge = {
   options: [
     {
       id: "A",
-      text: "Sleep problems at age 11–13 have no link with school performance.",
+      text: "Adjustment establishes no association, because the later-wave-only estimate is not significant.",
     },
     {
       id: "B",
-      text: "After adjustment, the data fit anything from slightly lower to clearly higher odds, so this study cannot settle the question for this group.",
+      text: "The adjusted interval allows lower or higher odds, leaving this group's link uncertain.",
     },
     {
       id: "C",
-      text: "The crude 2.12 is the true effect, and adjustment hid it.",
+      text: "The crude estimate identifies the true effect, since adjusting other factors hides rather than clarifies it.",
     },
   ],
   accepted: ["B"],
@@ -730,8 +773,8 @@ const bonus: StudyChallenge = {
   explanation:
     "An interval from 0.82 to 1.73 includes 1 but also includes odds 73% higher. Not significant is not the same as no link. The adjustment also included mental health measured at the same time as the rating. If sleep problems affect performance partly through mental health, adjusting for it removes part of a real pathway. The authors' mediation analysis treats mental health this way.",
   misconceptions: {
-    A: "Crossing 1 means the study could not distinguish a link from no link. It does not show the link is absent.",
-    C: "The crude estimate includes the influence of factors that adjustment accounts for. It is not automatically the true effect either.",
+    A: "The interval includes both lower and higher odds; it does not establish no link.",
+    C: "The crude estimate may reflect shared causes; it is not automatically the true effect.",
   },
   reveal: "bonus",
   evidence: [
@@ -781,9 +824,21 @@ const bonus: StudyChallenge = {
     ],
     prediction: null,
     responses: [
-      { optionId: "A", label: "No link", targetIds: ["adjusted"] },
-      { optionId: "B", label: "Cannot settle it", targetIds: ["adjusted"] },
-      { optionId: "C", label: "Crude is true", targetIds: ["crude"] },
+      {
+        optionId: "A",
+        label: "No link",
+        targetIds: ["adjusted"],
+      },
+      {
+        optionId: "B",
+        label: "Cannot settle it",
+        targetIds: ["adjusted"],
+      },
+      {
+        optionId: "C",
+        label: "Crude is true",
+        targetIds: ["crude"],
+      },
     ],
     resolution: {
       id: "crosses",

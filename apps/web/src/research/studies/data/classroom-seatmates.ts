@@ -94,7 +94,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Why Randomise Seats?",
         type: "single",
         prompt:
@@ -107,28 +107,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Children who end up sitting together by choice may already be friends; random seating makes deskmates differ only by chance, so friendships that follow can be credited to proximity.",
+            text: "Random seating separates proximity from children choosing to sit with existing friends.",
           },
           {
             id: "o2",
-            text: "Random seating makes every child sit next to every other child.",
+            text: "Random seating exposes each child to every partner during the semester.",
           },
           {
             id: "o3",
-            text: "Random seating guarantees every child makes a friend.",
+            text: "Random seating balances the final number of friendships by assigning a friend to each child.",
           },
           {
             id: "o4",
-            text: "Teachers asked for random seating to reduce noise.",
+            text: "Random seating identifies the quietest classrooms by letting teachers select compatible pairs.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If children choose where to sit, what might already be true about those who sit together?",
         misconceptions: {
-          o2: "Each child sits next to only a few others; randomness decides which.",
-          o3: "It makes the comparison fair; it does not guarantee friendships.",
-          o4: "The randomisation was part of the experiment's design to identify a causal effect.",
+          o2: "Random assignment does not mean every pair sits together.",
+          o3: "Assignment determines seats, not friendships.",
+          o4: "Random charts remove teachers' pair selection rather than formalise it.",
         },
         explanation:
           "Randomising seating removes the self-selection that makes ordinary seating patterns uninformative, so differences in later friendships between deskmates and non-deskmates reflect being seated together.",
@@ -138,7 +138,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Counting a Friendship",
         type: "single",
         prompt:
@@ -150,29 +150,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Mutual naming is a stricter sign of friendship than one-sided naming, and asking after the semester tests whether proximity built friendships that outlast sitting together.",
+            id: "o2",
+            text: "Mutual naming is easier to satisfy; later measurement raises the chance that any nomination counts.",
           },
           {
-            id: "o2",
-            text: "Mutual naming is easier to get than one-sided naming.",
+            id: "o1",
+            text: "Mutual naming is stricter; later measurement tests whether friendship outlasts the seats.",
           },
           {
             id: "o3",
-            text: "Asking after the semester was needed because teachers forbade surveys earlier.",
+            text: "Mutual naming confirms a pre-existing tie, making the survey's timing unimportant.",
           },
           {
             id: "o4",
-            text: "One-sided naming cannot be measured.",
+            text: "Mutual naming measures proximity directly; later measurement records where children still sit.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which is more convincing: one child naming another, or both naming each other?",
         misconceptions: {
-          o2: "It is harder: both children must name each other.",
-          o3: "The timing serves the research question, whether friendships last beyond the seating.",
-          o4: "It can; the authors used it as a robustness check.",
+          o2: "Requiring both nominations is stricter than accepting one.",
+          o3: "Reciprocation does not show when a friendship began.",
+          o4: "The outcome is friendship, not current seating distance.",
         },
         explanation:
           "The main outcome was reciprocated best-friend nominations, coded only when both named each other, measured after the seating semester.",
@@ -182,7 +182,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "From 15% to 22%",
         type: "single",
         prompt:
@@ -194,29 +194,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "About 7% relative growth, because subtracting 15 from 22 gives the percentage increase.",
+          },
+          {
+            id: "o3",
+            text: "About 22% relative growth, because the final probability is the size of the treatment effect.",
+          },
+          {
             id: "o1",
             text: "7 percentage points, which is nearly half as much again as the starting chance, with an interval well above zero.",
           },
           {
-            id: "o2",
-            text: "A 7% increase in friendships.",
-          },
-          {
-            id: "o3",
-            text: "A 22% increase.",
-          },
-          {
             id: "o4",
-            text: "Too small to matter, because 22% is still low.",
+            text: "About 15 percentage points, because the starting probability defines the treatment effect.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Distinguish percentage points from a percent change.",
         misconceptions: {
-          o2: "7 percentage points is not 7%; relative to 15%, it is a rise of nearly half.",
-          o3: "22% is the new level, not the size of the increase.",
-          o4: "A rise from 15% to 22% is substantial; the authors call it a large positive effect.",
+          o2: "Subtraction gives percentage points; relative growth divides by the starting chance.",
+          o3: "The final level is not the change from baseline.",
+          o4: "The effect is the difference between the two probabilities.",
         },
         explanation:
           "The probability rose 7.0 percentage points (4.6 to 9.4), from 15.3% to 22.3%, which is roughly a 46% relative increase.",
@@ -226,7 +226,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Boys, Girls and Mixed Pairs",
         type: "single",
         prompt:
@@ -315,11 +315,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Both true",
-              targetIds: ["mixed"],
-            },
-            {
               optionId: "o2",
               label: "Contradiction",
               targetIds: ["mixed"],
@@ -334,34 +329,39 @@ export const body: StudyBody = {
               label: "No effect for mixed",
               targetIds: ["mixed"],
             },
+            {
+              optionId: "o1",
+              label: "Both true",
+              targetIds: ["mixed"],
+            },
           ],
         },
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Yes: from under 2% to about 4% is a small gain in points but doubles the chance, because the starting level was so low.",
-          },
-          {
             id: "o2",
-            text: "No, the two statements contradict each other.",
+            text: "No; doubling a probability requires a rise of 100 percentage points regardless of its starting level.",
           },
           {
             id: "o3",
-            text: "Mixed pairs gained the most.",
+            text: "Yes; doubling means mixed pairs had the largest percentage-point gain.",
           },
           {
             id: "o4",
-            text: "Mixed pairs showed no gain.",
+            text: "No; a gain under 3 percentage points is too small to represent a change in friendship probability.",
+          },
+          {
+            id: "o1",
+            text: "Yes; a small point gain can double a probability that starts near 2%.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What happens to a small number when it gains 2 points?",
         misconceptions: {
-          o2: "Points and relative change measure different things; both can hold.",
-          o3: "Mixed pairs gained least in points: 2.3 against 9.3 and 13.1.",
-          o4: "Their interval, 1.0 to 3.9, is above zero.",
+          o2: "Doubling is a relative change, not a fixed point increase.",
+          o3: "A larger relative increase can coexist with a smaller point gain.",
+          o4: "Small absolute gains can still be real changes in probability.",
         },
         explanation:
           "Mixed-gender pairs gained 2.3 points (1.0 to 3.9), which took them from under 2% to 4%, doubling their chance. Same-gender pairs started higher and gained more points.",
@@ -371,7 +371,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Same Push, Different Points",
         type: "single",
         prompt:
@@ -383,29 +383,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The same push on the underlying scale moves a probability further when it starts near the middle than when it starts near zero, so pairs that start higher gain more points.",
+            id: "o2",
+            text: "Equal changes on the model scale must produce equal point gains.",
           },
           {
-            id: "o2",
-            text: "One of the two results must be a mistake.",
+            id: "o1",
+            text: "Equal changes on a nonlinear scale translate to different point gains at different baselines.",
           },
           {
             id: "o3",
-            text: "Similar pairs must have sat closer together.",
+            text: "Similar pairs received a stronger seating treatment, so model-scale effects must also be larger.",
           },
           {
             id: "o4",
-            text: "It shows proximity only works for same-gender pairs.",
+            text: "The point differences show proximity affected only similar pairs, despite the common model-scale shift.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Is it easier to move 2% by a few points, or 20%?",
         misconceptions: {
-          o2: "The authors explain this is scale dependence, common in such models.",
-          o3: "Seating was random; the difference comes from starting probabilities.",
-          o4: "Mixed pairs also gained, and on the underlying scale the push was similar.",
+          o2: "The conversion from the underlying scale to probability is nonlinear.",
+          o3: "The finding describes similar model-scale effects, not stronger assignment for similar pairs.",
+          o4: "Smaller point gains for dissimilar pairs do not imply no effect.",
         },
         explanation:
           "The authors found no evidence that similarity changed the effect on the underlying friendship tendency, but differences in percentage points, which they describe as scale dependent, as is common in such models.",
@@ -415,7 +415,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Would It Work Elsewhere?",
         type: "single",
         prompt:
@@ -427,29 +427,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "It is a promising lead, but the children already knew each other and lived in one rural region; effects among strangers or elsewhere were not tested.",
-          },
-          {
             id: "o2",
-            text: "It will work exactly the same, because the study was large.",
+            text: "Directly applicable, since random assignment makes prior acquaintance irrelevant to generalisation.",
           },
           {
             id: "o3",
-            text: "It cannot work with strangers.",
+            text: "Unpromising, since an effect among classmates implies no effect among students who have never met.",
           },
           {
             id: "o4",
-            text: "It only works in Hungary.",
+            text: "Directly applicable wherever seating is random, since a large sample removes regional differences.",
+          },
+          {
+            id: "o1",
+            text: "It is a promising lead, but the children already knew each other and lived in one rural region; effects among strangers or elsewhere were not tested.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How do the new students differ from the children in the study?",
         misconceptions: {
-          o2: "Size does not settle whether the setting transfers.",
-          o3: "The study did not test strangers, so it cannot say that either.",
-          o4: "The study cannot show it only works there; it simply did not test elsewhere.",
+          o2: "Randomisation supports the comparison within this sample, not transfer to strangers.",
+          o3: "An untested population is not evidence of no effect there.",
+          o4: "Sample size does not establish transfer across settings.",
         },
         explanation:
           "The authors say whether the findings generalise to other settings and countries remains open. Their sample was in less prosperous rural schools, among children who already knew each other well.",

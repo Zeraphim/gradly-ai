@@ -204,7 +204,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Identify the Experimental Conditions",
         type: "single",
         prompt:
@@ -248,7 +248,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Primary Dependent Variable",
         type: "single",
         prompt:
@@ -292,7 +292,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "design",
+        stage: "Read the design",
         title: "Manipulation Check for Feeling Observed",
         type: "single",
         prompt:
@@ -336,7 +336,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Feeling Observed: Public vs. No‑eyes",
         type: "single",
         prompt:
@@ -380,7 +380,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "results",
+        stage: "Read the results",
         title: "SVO Predicting Dictator Game Allocations",
         type: "single",
         prompt:
@@ -423,7 +423,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Implication for Prosocial Disposition and Reputational Cues",
         type: "single",
         prompt:

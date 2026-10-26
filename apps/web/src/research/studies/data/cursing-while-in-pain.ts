@@ -89,7 +89,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "A Neutral Word to Compare",
         type: "single",
         prompt:
@@ -101,29 +101,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "So that speaking at the same rhythm is held constant and only the kind of word differs between conditions.",
-          },
-          {
             id: "o2",
-            text: "Because silence would make the ice water colder.",
+            text: "To match the emotional meaning of the words while leaving speech frequency free to vary.",
           },
           {
             id: "o3",
-            text: "To make the neutral condition more painful on purpose.",
+            text: "To measure pain without distraction while letting only the swear-word trial involve speaking.",
+          },
+          {
+            id: "o1",
+            text: "To hold speaking and rhythm constant while changing the kind of word.",
           },
           {
             id: "o4",
-            text: "So that participants would not notice they were swearing.",
+            text: "To keep participants unaware of which word condition they were experiencing during each trial.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If the comparison was silence, what else besides the word would differ?",
         misconceptions: {
-          o2: "Water temperature was kept the same; the issue is what else differs between conditions.",
-          o3: "The aim is a fair comparison, not to make one condition worse.",
-          o4: "Participants said the words aloud and knew what they were saying.",
+          o2: "The neutral word was not emotionally matched, and repetition pace was held constant.",
+          o3: "All conditions involved speaking, including the neutral comparison.",
+          o4: "Participants spoke the words themselves and knew which they were saying.",
         },
         explanation:
           "All conditions involved repeating a word at the same steady pace, so differences in pain responses can be linked to the word itself rather than to the act of speaking.",
@@ -133,7 +133,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Four Words, Random Order",
         type: "single",
         prompt:
@@ -145,29 +145,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "So that practice, tiredness or getting used to the cold do not systematically favour whichever word came last or first.",
-          },
-          {
             id: "o2",
-            text: "So that participants could not guess the words.",
+            text: "To conceal which word each participant was saying during a trial.",
           },
           {
             id: "o3",
-            text: "To make the study shorter.",
+            text: "To shorten the task by giving different participants different subsets of the four word conditions.",
           },
           {
             id: "o4",
-            text: "Because the swear word must always come first.",
+            text: "To make each participant begin with their most effective word before moving to the weaker ones.",
+          },
+          {
+            id: "o1",
+            text: "To spread practice and fatigue across words rather than confound them with order.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Could someone handle the ice water differently on their fourth try than on their first?",
         misconceptions: {
-          o2: "Participants knew which word they were saying on each trial.",
-          o3: "Order does not change the length.",
-          o4: "Random order means no word always comes first.",
+          o2: "Random order does not conceal the word a participant says aloud.",
+          o3: "Each participant completed every condition; order randomisation did not shorten the set.",
+          o4: "Randomisation does not sort conditions by their effects.",
         },
         explanation:
           "Condition order was randomised to counter order effects, so that changes across trials are spread evenly across the four words.",
@@ -177,7 +177,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "How Long Hands Stayed In",
         type: "single",
         prompt:
@@ -263,14 +263,14 @@ export const body: StudyBody = {
           resolution: null,
           responses: [
             {
-              optionId: "o1",
-              label: "Only the real swear word",
-              targetIds: ["fuck", "neutral"],
-            },
-            {
               optionId: "o2",
               label: "All three words",
               targetIds: ["fuck", "fouch", "twiz"],
+            },
+            {
+              optionId: "o1",
+              label: "Only the real swear word",
+              targetIds: ["fuck", "neutral"],
             },
             {
               optionId: "o3",
@@ -287,29 +287,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
+            id: "o2",
+            text: "All non-neutral words raised tolerance similarly, fitting a general novelty benefit.",
+          },
+          {
             id: "o1",
             text: "Only the real swear word lengthened tolerance; the made-up words stayed close to the neutral word.",
           },
           {
-            id: "o2",
-            text: "All three non-neutral words lengthened tolerance.",
-          },
-          {
             id: "o3",
-            text: "The made-up words worked better than the swear word.",
+            text: "The made-up words raised tolerance more than swearing, though all three exceeded neutral speech.",
           },
           {
             id: "o4",
-            text: "No word made any difference.",
+            text: "The word conditions had similar mean tolerance, with differences appearing only in emotion ratings.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare each bar with the neutral word.",
         misconceptions: {
-          o2: "The made-up words did not differ significantly from the neutral word.",
-          o3: "They were close to neutral; the swear word was clearly longer.",
-          o4: "The swear word was about 18 seconds longer than the neutral word, a significant difference.",
+          o2: "The made-up words did not show the real swear word's increase.",
+          o3: "Their means were close to neutral rather than above the real swear word.",
+          o4: "Mean pain tolerance was higher for the real swear word.",
         },
         explanation:
           "With the swear word, tolerance averaged 74.28 seconds against 55.87 for the neutral word, a 33% increase. The made-up words did not differ from the neutral word.",
@@ -319,7 +319,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "Emotional, But No Relief",
         type: "single",
         prompt:
@@ -336,24 +336,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "It proves emotion is how swearing reduces pain.",
+            text: "Higher emotion ratings established mediation, even though the made-up words did not alter tolerance.",
           },
           {
             id: "o3",
-            text: "It shows the made-up words were not rated at all.",
+            text: "The made-up words failed because they did not raise emotion or humour ratings above neutral speech.",
           },
           {
             id: "o4",
-            text: "It shows swearing does not reduce pain.",
+            text: "The emotional ratings invalidate the tolerance difference, leaving no evidence that swearing helped.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If emotion were the key, what should the made-up words have done?",
         misconceptions: {
-          o2: "Emotion ratings did not predict tolerance, and the made-up words raised emotion without relief.",
-          o3: "They were rated, and rated higher than the neutral word.",
-          o4: "The real swear word did lengthen tolerance.",
+          o2: "The mediation analysis did not establish emotion as the explanation.",
+          o3: "They did raise those ratings, without the tolerance effect.",
+          o4: "The tolerance finding remains; its mechanism is the uncertain part.",
         },
         explanation:
           "The made-up words raised emotion and humour ratings without reducing pain, and in the exploratory mediation analysis emotion ratings did not predict tolerance. Emotion remains a possibility, but these data do not show it.",
@@ -363,7 +363,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Do Made-Up Words Do Nothing?",
         type: "single",
         prompt:
@@ -376,28 +376,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Effects larger than that are unlikely for these words in this task, but smaller effects are not ruled out, and the tests were exploratory.",
+            text: "The exploratory tests argue against effects beyond the bounds, not all smaller effects.",
           },
           {
             id: "o2",
-            text: "The words have exactly zero effect.",
+            text: "The tests establish zero effect by placing estimates inside the bounds.",
           },
           {
             id: "o3",
-            text: "The words definitely work, since some estimates were above zero.",
+            text: "The positive point estimates establish a benefit, even when the estimates lie inside the equivalence bounds.",
           },
           {
             id: "o4",
-            text: "Nothing can be said, since the tests were not planned.",
+            text: "The exploratory status leaves the effect wholly unknown, so the bounds provide no information at all.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What does an equivalence bound rule out, and what does it leave?",
         misconceptions: {
-          o2: "Equivalence tests rule out effects beyond a bound; they do not prove zero.",
-          o3: "Small estimates near zero within the bounds do not show a benefit.",
-          o4: "Unplanned tests are weaker evidence, but they still inform.",
+          o2: "Equivalence bounds allow nonzero effects smaller than the chosen threshold.",
+          o3: "A positive estimate alone does not demonstrate a useful benefit.",
+          o4: "Exploratory tests can inform judgement while requiring caution.",
         },
         explanation:
           "The equivalence tests, not pre-registered and therefore exploratory, indicated that most made-up-word effects were within ±0.3. That makes large effects unlikely, not zero effects certain.",
@@ -407,7 +407,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "A Three-Minute Cap",
         type: "single",
         prompt:
@@ -419,29 +419,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "It cuts off the longest times, so differences among people who could have gone longer are hidden, which tends to understate true differences.",
-          },
-          {
             id: "o2",
-            text: "It inflates the swear-word effect.",
+            text: "It increases the observed contrast by assigning especially long times to participants in the swear trial.",
           },
           {
             id: "o3",
-            text: "It makes no difference, since few people hit the cap.",
+            text: "It preserves the full contrast because everyone who hits the limit must have the same true tolerance.",
+          },
+          {
+            id: "o1",
+            text: "It hides differences above three minutes and may compress the observed contrast.",
           },
           {
             id: "o4",
-            text: "It means the swear word had no effect.",
+            text: "It removes the swear-word effect because capped observations cannot contribute to a group comparison.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If someone could have lasted four minutes, what does a three-minute stop record?",
         misconceptions: {
-          o2: "Capping shortens the longest times, which compresses differences rather than inflating them.",
-          o3: "Twenty participants hit it at least once; for them, real differences could be hidden.",
-          o4: "The swear word still produced a significant increase.",
+          o2: "The cap truncates long times rather than extending them.",
+          o3: "Recorded equality at a cap does not imply equal uncapped tolerance.",
+          o4: "The comparison still uses the observations; the limit reduces information above the cap.",
         },
         explanation:
           "Participants who reached three minutes are recorded at the cap whatever word they used, so the test cannot see differences above it. The effect is to compress differences rather than create them.",

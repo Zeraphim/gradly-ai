@@ -117,7 +117,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Isolating Posture",
         type: "single",
         prompt:
@@ -129,29 +129,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "To remove appearance differences that make the postures harder to recognise accurately.",
+          },
+          {
             id: "o1",
             text: "So that ratings reflect posture, not faces or clothing that could suggest status or leadership.",
           },
           {
-            id: "o2",
-            text: "To keep the models' identities private.",
-          },
-          {
             id: "o3",
-            text: "To make the photos load faster online.",
+            text: "To standardise the images so participants could infer each model's professional role.",
           },
           {
             id: "o4",
-            text: "So that participants could not tell men from women.",
+            text: "To ensure the only remaining difference between photos was the poser's gender.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What else in a photo could make someone look more or less capable?",
         misconceptions: {
-          o2: "Privacy may be a side benefit, but the stated aim is to avoid confounding cues.",
-          o3: "Blurring and clothing do not concern loading speed.",
-          o4: "The gender of the poser was meant to be visible; it was one of the factors.",
+          o2: "The aim concerns judgements of the poser, not a posture-recognition task.",
+          o3: "The clothes and blurred faces reduce such status cues rather than supplying them.",
+          o4: "Posture also varied; gender was not the sole remaining difference.",
         },
         explanation:
           "Faces were blurred to avoid confounding effects such as inferring leadership quality from facial features, and clothing was kept plain, so that posture is the main cue that differs.",
@@ -161,7 +161,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "One Condition Each",
         type: "single",
         prompt:
@@ -173,29 +173,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "It avoids direct comparisons that could reveal the hypothesis, but it may also hide contrast effects that appear when people compare candidates side by side.",
-          },
-          {
             id: "o2",
-            text: "It makes the study within-subjects.",
+            text: "It reduces hypothesis-guessing while preserving the same contrasts as side-by-side viewing.",
           },
           {
             id: "o3",
-            text: "It guarantees the same result as real job interviews.",
+            text: "It tests changes within each rater by showing that rater every gender and posture combination.",
           },
           {
             id: "o4",
-            text: "It reduces the sample needed.",
+            text: "It reproduces candidate comparison in interviews by keeping each photo on a separate page.",
+          },
+          {
+            id: "o1",
+            text: "It avoids direct comparisons that could reveal the hypothesis, but it may also hide contrast effects that appear when people compare candidates side by side.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "What happens when you judge two people side by side rather than one after another?",
         misconceptions: {
-          o2: "Each participant saw one condition, which is between-subjects.",
-          o3: "Real situations often involve comparing people; that is exactly what this design avoided.",
-          o4: "Between-subjects designs usually need more participants, not fewer.",
+          o2: "Seeing only one category removes the direct comparisons that side-by-side viewing allows.",
+          o3: "Each participant saw one poser gender and one posture category.",
+          o4: "A brief isolated photo judgement is not an interview or a direct candidate comparison.",
         },
         explanation:
           "The authors note that posers were assessed one after the other without instructions to compare them, which could have prevented a contrast effect such as women being judged colder when they look more competent.",
@@ -205,7 +205,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Posture Against Gender",
         type: "single",
         prompt:
@@ -292,11 +292,6 @@ export const body: StudyBody = {
           resolution: null,
           responses: [
             {
-              optionId: "o1",
-              label: "Posture far larger",
-              targetIds: ["high", "low", "female", "male"],
-            },
-            {
               optionId: "o2",
               label: "Equal",
               targetIds: ["high", "low", "female", "male"],
@@ -305,6 +300,11 @@ export const body: StudyBody = {
               optionId: "o3",
               label: "Gender larger",
               targetIds: ["female", "male"],
+            },
+            {
+              optionId: "o1",
+              label: "Posture far larger",
+              targetIds: ["high", "low", "female", "male"],
             },
             {
               optionId: "o4",
@@ -316,29 +316,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Posture, by far: almost a point against about a tenth of a point. With 2,473 participants, even a tiny gender difference reaches significance.",
-          },
-          {
             id: "o2",
-            text: "They matter equally, since both are significant.",
+            text: "The gaps matter equally because each passes the same statistical significance threshold.",
           },
           {
             id: "o3",
-            text: "Gender matters more, since women were rated higher.",
+            text: "Gender matters more because women received higher competence ratings.",
+          },
+          {
+            id: "o1",
+            text: "Posture has the larger gap; the large sample can detect even the small gender gap.",
           },
           {
             id: "o4",
-            text: "Neither matters, since the scale is only 1 to 6.",
+            text: "The gaps are too small to detect because ratings use only six possible scale points.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the size of the two gaps, then ask what a very large sample does to small gaps.",
         misconceptions: {
-          o2: "Significance does not show size; posture's effect size was 0.290 against 0.008.",
-          o3: "The gender gap was 0.11 points; the posture gap was 0.93.",
-          o4: "A gap of almost a point on a 6-point scale is large.",
+          o2: "Significance does not measure the size of a difference.",
+          o3: "Which group is higher does not establish which gap is larger.",
+          o4: "The reported tests detected both gaps; scale width does not prevent detection.",
         },
         explanation:
           "High-power posers were rated 4.01 against 3.08 (ηp² = 0.290), while women were rated only slightly higher than men (3.59 against 3.48, ηp² = 0.008). In a sample this large, small effects become significant, so size matters more than the p-value.",
@@ -348,7 +348,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "A Backlash for Women?",
         type: "single",
         prompt:
@@ -361,28 +361,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "No backlash: posture did not change warmth ratings, for women or for men.",
+            text: "Neither gender showed a clear warmth penalty from the powerful posture here.",
           },
           {
             id: "o2",
-            text: "A backlash: powerful-posing women were rated much colder.",
+            text: "Women showed a warmth penalty from powerful poses, while men's warmth stayed stable.",
           },
           {
             id: "o3",
-            text: "Powerful postures made everyone warmer.",
+            text: "Both genders gained warmth from powerful poses, alongside the competence advantage.",
           },
           {
             id: "o4",
-            text: "The result proves a backlash can never happen.",
+            text: "Neither gender can face a warmth penalty from posture in other social settings.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which test speaks to “women differently from men”?",
         misconceptions: {
-          o2: "The interaction was not significant (p = .24), so there was no sign of that pattern.",
-          o3: "Posture had no significant effect on warmth (p = .39).",
-          o4: "A non-significant interaction in one design, which avoided comparisons, cannot rule it out everywhere.",
+          o2: "The warmth tests did not establish the predicted backlash for women.",
+          o3: "The competence effect does not imply a warmth effect.",
+          o4: "These null results do not rule out backlash in other settings.",
         },
         explanation:
           "There was no main effect of posture on warmth and no posture × gender interaction, so the predicted backlash did not appear in this design.",
@@ -392,7 +392,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "More Contempt",
         type: "single",
         prompt:
@@ -405,28 +405,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "A real but modest shift that stayed in the “unlikely” range of the scale; worth knowing, not alarming.",
+            text: "A modest shift within the unlikely range; consider it alongside the other ratings.",
           },
           {
             id: "o2",
-            text: "Power posing makes most people feel contempt.",
+            text: "A shift large enough to move the average judgement into the likely-contempt range.",
           },
           {
             id: "o3",
-            text: "The result can be ignored because it was unexpected.",
+            text: "An uninformative shift because an unexpected finding cannot count as evidence.",
           },
           {
             id: "o4",
-            text: "It shows power posing has no benefits.",
+            text: "A shift that cancels the competence benefit because both use comparable rating scales.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Where on the 1-to-7 scale do both averages fall?",
         misconceptions: {
-          o2: "Both averages sit below the scale midpoint, in the unlikely range.",
-          o3: "Unexpected results still count; the authors report it and suggest it deserves follow-up.",
-          o4: "Powerful posers were also rated more competent and more admired.",
+          o2: "Both means remain in the unlikely range of the scale.",
+          o3: "Unexpected findings deserve caution, not automatic dismissal.",
+          o4: "The two outcomes are distinct and cannot simply be subtracted to find a net benefit.",
         },
         explanation:
           "Contrary to predictions, high-power posers drew higher contempt ratings, but the authors note the ratings were predominantly in the unlikely range, so contempt may not be a major concern.",
@@ -436,7 +436,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "From Photos to Interviews",
         type: "single",
         prompt:
@@ -448,29 +448,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "The study used brief, blurred photos judged one at a time; real interviews involve faces, speech and comparison between candidates, where results could differ.",
-          },
-          {
             id: "o2",
-            text: "None: 2,473 participants make the result certain for interviews.",
+            text: "The large sample makes photo judgements a direct estimate of interview hiring outcomes.",
           },
           {
             id: "o3",
-            text: "The study shows posture has no effect on impressions.",
+            text: "The competence effect is too uncertain to interpret because the models' faces were blurred.",
           },
           {
             id: "o4",
-            text: "The caution is only that the models were men.",
+            text: "The main concern is gender coverage, since only male models appeared in the photographs.",
+          },
+          {
+            id: "o1",
+            text: "Brief blurred photos omit the faces, speech and candidate comparisons present in interviews.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How similar is a 15-second blurred photo to sitting in a real interview?",
         misconceptions: {
-          o2: "A large sample makes estimates precise for this task, not for a different setting.",
-          o3: "Posture strongly affected competence ratings in the photos.",
-          o4: "There were three men and three women.",
+          o2: "More raters do not turn the measured outcome into a different one.",
+          o3: "Blurring reduces facial cues; it does not erase the observed posture association.",
+          o4: "The study included male and female posers.",
         },
         explanation:
           "Ratings came from first impressions of blurred photographs shown for 15 seconds, without comparison between posers. Interviews add faces, speech and direct comparison, which could change the effects.",

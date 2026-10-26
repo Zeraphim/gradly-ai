@@ -100,7 +100,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "How Many Is Enough?",
         type: "single",
         prompt:
@@ -112,29 +112,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "Larger groups ensure significance, even when the prime has no effect on the measured outcome.",
+          },
+          {
+            id: "o3",
+            text: "Larger groups reproduce the original sampling uncertainty, keeping the new estimate equally variable.",
+          },
+          {
             id: "o1",
             text: "A result from small groups can overstate the true effect, so a fair test needs enough people to detect a smaller effect and to estimate it precisely.",
           },
           {
-            id: "o2",
-            text: "More people always make a result significant.",
-          },
-          {
-            id: "o3",
-            text: "The original authors required it.",
-          },
-          {
             id: "o4",
-            text: "To make it easier to hide a failed replication.",
+            text: "Larger groups make publication selection irrelevant, since a large study cannot yield a null finding.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How wide was the original interval, and what does that say about how precisely the effect was known?",
         misconceptions: {
-          o2: "More people give a clearer answer, not a significant one; if there is no effect, a bigger sample shows that.",
-          o3: "The target was set by the replicators based on the original sample sizes and a published recommendation.",
-          o4: "A larger, pre-registered sample makes a replication more informative, not easier to explain away.",
+          o2: "Size improves power and precision without guaranteeing a positive result.",
+          o3: "Larger groups generally reduce sampling uncertainty.",
+          o4: "Large studies can yield null findings, and size does not eliminate reporting bias.",
         },
         explanation:
           "The original interval (−1.12 to −0.06) ran from huge to nearly zero. The team aimed for at least 2.5 times the largest original sample so they could estimate the effect precisely, including a smaller one.",
@@ -144,7 +144,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "A Task With a Known Effect",
         type: "single",
         prompt:
@@ -156,29 +156,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "If the known effect shows up, the procedure and participants can detect a real effect, so a null on religious belief is less likely to be due to sloppy data collection.",
+            id: "o2",
+            text: "The control effect establishes that analytic thinking cannot change belief.",
           },
           {
-            id: "o2",
-            text: "It shows that analytic thinking does not affect religious belief.",
+            id: "o1",
+            text: "A detected control effect checks that the procedure can reveal a known phenomenon.",
           },
           {
             id: "o3",
-            text: "It increases the chance of finding an effect on religious belief.",
+            text: "Adding the control task increases the target effect by making participants more responsive to the prime.",
           },
           {
             id: "o4",
-            text: "It lets the team pick the best-looking result across tasks.",
+            text: "Adding the control task permits choosing whichever result looks strongest as the target replication.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If a null result could come from careless data, what would you want to check?",
         misconceptions: {
-          o2: "The control says nothing about religious belief; it checks the quality of the data.",
-          o3: "An unrelated task cannot raise the chance of an effect on belief.",
-          o4: "A pre-registered, planned control is not a menu for picking results.",
+          o2: "Success on another task does not establish a null on the target construct.",
+          o3: "A positive control checks sensitivity; it does not guarantee amplification of another effect.",
+          o4: "The tasks have separate purposes, not interchangeable success criteria.",
         },
         explanation:
           "The team ran a task with a well-defined effect to show the quality of the replication. The known effect was found (F(1,963) = 21.2, p < .001), so poor data quality is an unlikely explanation for the null.",
@@ -188,7 +188,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Original Against Four Sites",
         type: "single",
         prompt:
@@ -319,11 +319,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "Near zero, not the original",
-              targetIds: ["orig", "all"],
-            },
-            {
               optionId: "o2",
               label: "Confirms the original",
               targetIds: ["orig", "all"],
@@ -338,34 +333,39 @@ export const body: StudyBody = {
               label: "Exactly zero",
               targetIds: ["all"],
             },
+            {
+              optionId: "o1",
+              label: "Near zero, not the original",
+              targetIds: ["orig", "all"],
+            },
           ],
         },
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "The combined interval is centred near zero and far from the original estimate; one site went the other way.",
-          },
-          {
             id: "o2",
-            text: "The replication confirms the original, since the overall estimate is not significantly different from zero.",
+            text: "The replication confirms the original because a non-significant overall estimate matches any prior effect.",
           },
           {
             id: "o3",
-            text: "The Lutheran site shows that The Thinker raises religious belief.",
+            text: "The Lutheran site establishes an increase in belief that should replace the combined estimate.",
           },
           {
             id: "o4",
-            text: "The combined interval proves the true effect is exactly zero.",
+            text: "The combined interval fixes the true effect at zero because its centre is close to no difference.",
+          },
+          {
+            id: "o1",
+            text: "The combined interval is near zero, far from the original; one site points the other way.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Look at where the combined interval sits relative to zero and to the first interval.",
         misconceptions: {
-          o2: "The original reported a moderate-to-large negative effect; a combined estimate near zero is a different result.",
-          o3: "That is one of four sites and it is not supported across the others; the authors treat it as likely sampling variability.",
-          o4: "The interval is compatible with tiny effects in either direction, not exactly zero.",
+          o2: "The interval is inconsistent with the original large estimate.",
+          o3: "One site does not outweigh the combined evidence or establish a general reversal.",
+          o4: "The interval still allows a range of small effects.",
         },
         explanation:
           "The combined d is 0.07 with an interval of −0.12 to 0.25, far from the original −0.59. The authors say the interval is consistent with no more than a very small effect in the expected direction.",
@@ -375,7 +375,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "One Site Went the Other Way",
         type: "single",
         prompt:
@@ -393,24 +393,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "As proof that The Thinker increases belief.",
+            text: "Treat it as a general reversal, since one significant site establishes that the prime increases belief.",
           },
           {
             id: "o3",
-            text: "As a reason to drop that site and report only the others.",
+            text: "Exclude it from the replication, since a result opposite to the hypothesis indicates an invalid site.",
           },
           {
             id: "o4",
-            text: "As evidence the original was right but only for religious students.",
+            text: "Treat it as confirmation of the original, since religious students are the group the effect should fit.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "How many sites were tested, and did the sites differ from each other beyond chance?",
         misconceptions: {
-          o2: "One site out of four, in the opposite direction to the original, cannot establish a new effect.",
-          o3: "Dropping the one inconvenient site would bias the result; all sites are reported and combined.",
-          o4: "The other sites, including a Catholic one, showed nothing, and belief level was not a significant predictor.",
+          o2: "One isolated result does not establish a general effect.",
+          o3: "Unexpected direction is not a valid reason to drop a site.",
+          o4: "Its direction was opposite, and subgroup explanations were not established.",
         },
         explanation:
           "The authors note the largest effect was at the highest-belief site and could be normal sampling variability. The heterogeneity test was not significant (p = 0.13), and average control-group belief did not significantly predict effect size (p = 0.08).",
@@ -420,7 +420,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "What the Null Does Not Show",
         type: "single",
         prompt:
@@ -437,24 +437,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "The result proves analytic thinking has no effect on belief anywhere.",
+            text: "The null rules out a belief effect of analytic thinking, regardless of how analytic thinking is induced.",
           },
           {
             id: "o3",
-            text: "The result shows the original authors falsified their data.",
+            text: "The null establishes fabrication in the original study, since a genuine effect must replicate at every site.",
           },
           {
             id: "o4",
-            text: "The result shows religious belief cannot be measured.",
+            text: "The null establishes an invalid belief scale, since a valid outcome must respond to every attempted prime.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Ask what was actually manipulated, and whether it did what it was supposed to do.",
         misconceptions: {
-          o2: "This tested one prime and one outcome; it cannot rule out every possible link.",
-          o3: "Nothing here suggests that; a smaller true effect in a small study is a simpler explanation.",
-          o4: "The measure worked as intended, and the positive control showed the procedure could detect a real effect.",
+          o2: "One prime does not test all ways of changing analytic thinking.",
+          o3: "Non-replication alone does not establish misconduct.",
+          o4: "An ineffective manipulation need not change a valid measure.",
         },
         explanation:
           "The authors conclude that the original experiments do not provide strong evidence that analytic thinking causes a reduction in religious belief, and note that the picture prime may not change analytic thinking. That is narrower than saying the link can never exist.",
@@ -464,7 +464,7 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Did the Exclusions Matter?",
         type: "single",
         prompt:
@@ -476,29 +476,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Unlikely: the rules were pre-registered, and the authors report essentially identical results without the exclusions.",
-          },
-          {
             id: "o2",
-            text: "Yes: excluding 16% of people always creates a null result.",
+            text: "Likely; excluding about one-sixth of a sample necessarily removes the effect the analysis seeks to detect.",
           },
           {
             id: "o3",
-            text: "No, because no one was excluded.",
+            text: "Unlikely; all 491 participants were included, so no quality-related exclusion could influence the estimate.",
+          },
+          {
+            id: "o1",
+            text: "Unlikely; the rules were pre-registered and results were similar with everyone included.",
           },
           {
             id: "o4",
-            text: "Yes, because the exclusions were chosen after seeing the data.",
+            text: "Likely; the team chose the rules after seeing which participants showed the predicted effect.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "When were the rules decided, and what happens when they are not applied?",
         misconceptions: {
-          o2: "Exclusions do not automatically create a null; the check here is that results are the same with and without them.",
-          o3: "80 online participants were excluded.",
-          o4: "They were pre-registered before the data were seen.",
+          o2: "The fraction excluded alone does not show bias toward a null.",
+          o3: "Only 411 were in the analysed online sample.",
+          o4: "The additional quality rules were pre-registered.",
         },
         explanation:
           "The additional online exclusions were pre-registered, and the authors state that essentially identical results are obtained without them. That makes it unlikely the exclusions drive the null.",

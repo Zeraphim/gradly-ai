@@ -152,11 +152,17 @@ export const body: StudyBody = {
         type: "single",
         options: [
           {
-            id: "A",
-            text: "Correct items in 60 seconds on a colour-word test where the word and its ink clash, taken before and after each session.",
+            id: "B",
+            text: "Average heart rate during each session, comparing the activity with seated rest.",
           },
-          { id: "B", text: "Average heart rate during each session." },
-          { id: "C", text: "How many badminton points each student won." },
+          {
+            id: "A",
+            text: "Correct clashing-ink items on a colour-word test before and after each session.",
+          },
+          {
+            id: "C",
+            text: "Badminton points won during each session, compared with the student's usual score.",
+          },
         ],
         accepted: ["A"],
         alternatives: [],
@@ -164,8 +170,8 @@ export const body: StudyBody = {
         explanation:
           "A colour-word test with clashing ink (the Stroop test) forces people to suppress the automatic urge to read the word. Measuring it before and after each session lets the team see whether the session changed that skill.",
         misconceptions: {
-          B: "Heart rate tells you how hard the body worked, not how well the mind resists distraction.",
-          C: "Points describe game skill, not a thinking skill. The team also never kept score.",
+          B: "Heart rate measures physical exertion rather than resistance to distracting words.",
+          C: "Game points measure sport performance; no score was kept in this session.",
         },
         reveal: "design",
         evidence: [
@@ -185,11 +191,17 @@ export const body: StudyBody = {
         type: "single",
         options: [
           {
+            id: "B",
+            text: "Separate groups, each assigned one of the sessions",
+          },
+          {
+            id: "C",
+            text: "Same students, session order fixed across students",
+          },
+          {
             id: "A",
             text: "Same students, session order rotated across students",
           },
-          { id: "B", text: "Separate groups, one session each" },
-          { id: "C", text: "Same students, same fixed order for everyone" },
         ],
         accepted: ["A"],
         alternatives: [],
@@ -219,26 +231,8 @@ export const body: StudyBody = {
           ),
           panels: [
             {
-              id: "rotated",
-              label: "Plan 1",
-              steps: [
-                step(
-                  "rotated-who",
-                  "The same students do all three",
-                  "Each student completes badminton, running and seated rest on different days.",
-                  summary(["sample", "design"]),
-                ),
-                step(
-                  "rotated-order",
-                  "Order rotated across students",
-                  "Different students meet the sessions in different orders.",
-                  summary(["design"]),
-                ),
-              ],
-            },
-            {
               id: "separate",
-              label: "Plan 2",
+              label: "Plan 1",
               steps: [
                 step(
                   "separate-who",
@@ -260,7 +254,7 @@ export const body: StudyBody = {
             },
             {
               id: "fixed",
-              label: "Plan 3",
+              label: "Plan 2",
               steps: [
                 step(
                   "fixed-who",
@@ -280,11 +274,41 @@ export const body: StudyBody = {
                 ),
               ],
             },
+            {
+              id: "rotated",
+              label: "Plan 3",
+              steps: [
+                step(
+                  "rotated-who",
+                  "The same students do all three",
+                  "Each student completes badminton, running and seated rest on different days.",
+                  summary(["sample", "design"]),
+                ),
+                step(
+                  "rotated-order",
+                  "Order rotated across students",
+                  "Different students meet the sessions in different orders.",
+                  summary(["design"]),
+                ),
+              ],
+            },
           ],
           responses: [
-            { optionId: "A", label: "Plan 1", targetIds: ["rotated-who"] },
-            { optionId: "B", label: "Plan 2", targetIds: ["separate-who"] },
-            { optionId: "C", label: "Plan 3", targetIds: ["fixed-who"] },
+            {
+              optionId: "B",
+              label: "Plan 1",
+              targetIds: ["separate-who"],
+            },
+            {
+              optionId: "C",
+              label: "Plan 2",
+              targetIds: ["fixed-who"],
+            },
+            {
+              optionId: "A",
+              label: "Plan 3",
+              targetIds: ["rotated-who"],
+            },
           ],
           resolution: resolution(
             "Same people, rotated order",
@@ -301,24 +325,30 @@ export const body: StudyBody = {
         stage: "Read the design",
         title: "The Two-Minute Walk",
         prompt:
-          "In the badminton session, students walked 2 minutes from the lab to the court. In the running and rest sessions, they walked on a treadmill for 2 minutes instead. Why add that treadmill walk?",
+          "The badminton session included a two-minute walk to the court; the running and rest sessions included a two-minute treadmill walk. A follow-up removes only the treadmill walk. What becomes harder to interpret?",
         type: "single",
         options: [
           {
             id: "A",
-            text: "To match the walk to the court, so the sessions differ mainly in the 10-minute activity itself.",
+            text: "Whether a score difference comes from the activity or the extra walking.",
           },
-          { id: "B", text: "To warm students up so running would be safe." },
-          { id: "C", text: "To measure each student's fitness." },
+          {
+            id: "B",
+            text: "Whether running was safe, since the rest session is the only one that needs a warm-up.",
+          },
+          {
+            id: "C",
+            text: "Whether baseline fitness differs, since the walk is the only fitness assessment.",
+          },
         ],
         accepted: ["A"],
         alternatives: [],
-        hint: "Look at what happens just before the activity in each branch of the session.",
+        hint: "Which session would now contain an extra activity before the main ten-minute comparison?",
         explanation:
           "A fair comparison keeps everything the same except the thing being tested. Without the treadmill walk, badminton sessions would include 2 extra minutes of walking, and any difference in test scores could come from that walk rather than from the game.",
         misconceptions: {
-          B: "The rest session also had the walk, and rest needs no warm-up. The walk is about matching sessions.",
-          C: "Fitness was measured with a separate exercise test on the first visit, not during these walks.",
+          B: "The extra walking would be confounded with session type. A rest session does not need a running warm-up.",
+          C: "Fitness was assessed separately; removing this walk changes what activities precede the test.",
         },
         reveal: "design",
         evidence: [
@@ -393,7 +423,7 @@ export const body: StudyBody = {
           responses: [
             {
               optionId: "A",
-              label: "Match the sessions",
+              label: "Activity versus incidental walking",
               targetIds: ["court", "treadmill"],
             },
             {
@@ -425,9 +455,18 @@ export const body: StudyBody = {
           "These are the average correct items on the clashing-ink test before and after each session. Which session gained the most?",
         type: "single",
         options: [
-          { id: "A", text: "Badminton" },
-          { id: "B", text: "Running" },
-          { id: "C", text: "Seated rest" },
+          {
+            id: "B",
+            text: "Running",
+          },
+          {
+            id: "A",
+            text: "Badminton",
+          },
+          {
+            id: "C",
+            text: "Seated rest",
+          },
         ],
         accepted: ["A"],
         alternatives: [],
@@ -509,14 +548,14 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "A",
-              label: "Badminton",
-              targetIds: ["bad-pre", "bad-post"],
-            },
-            {
               optionId: "B",
               label: "Running",
               targetIds: ["run-pre", "run-post"],
+            },
+            {
+              optionId: "A",
+              label: "Badminton",
+              targetIds: ["bad-pre", "bad-post"],
             },
             {
               optionId: "C",
@@ -543,16 +582,16 @@ export const body: StudyBody = {
         type: "single",
         options: [
           {
-            id: "A",
-            text: "Badminton's gain was significantly larger than rest's. Running's gain was not.",
-          },
-          {
             id: "B",
-            text: "Both exercises beat rest, because both gained more items than rest did.",
+            text: "Both beat rest on the corrected tests, since both average gains exceeded the rest gain.",
           },
           {
             id: "C",
-            text: "Running made performance significantly worse than rest.",
+            text: "Running performed worse than rest on the corrected test, despite a larger average gain.",
+          },
+          {
+            id: "A",
+            text: "Badminton beat rest on the corrected test; running did not show a clear advantage.",
           },
         ],
         accepted: ["A"],
@@ -561,8 +600,8 @@ export const body: StudyBody = {
         explanation:
           "Badminton versus rest gave p = .002, below .008. Running versus rest gave p = .207, well above it. Running's larger raw gain could easily come from chance variation with 20 students, so it does not count as a demonstrated improvement over rest.",
         misconceptions: {
-          B: "A bigger average gain is not enough. Running versus rest gave p = .207, far above the .008 bar.",
-          C: "Running gained more than rest on average. A non-significant result means no clear difference, not a harmful one.",
+          B: "A larger mean gain alone is not enough; running's p-value did not meet the threshold.",
+          C: "Running's non-significant contrast does not establish worse performance.",
         },
         reveal: "results",
         evidence: [
@@ -583,20 +622,21 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "A",
-              label:
-                "Badminton's gain was significantly larger than rest's. Running's gain was not.",
-              targetIds: ["badminton", "running"],
-            },
-            {
               optionId: "B",
               label:
-                "Both exercises beat rest, because both gained more items than rest did.",
+                "Both beat rest on the corrected tests, since both average gains exceeded the rest gain.",
               targetIds: ["badminton", "running"],
             },
             {
               optionId: "C",
-              label: "Running made performance significantly worse than rest.",
+              label:
+                "Running performed worse than rest on the corrected test, despite a larger average gain.",
+              targetIds: ["badminton", "running"],
+            },
+            {
+              optionId: "A",
+              label:
+                "Badminton beat rest on the corrected test; running did not show a clear advantage.",
               targetIds: ["badminton", "running"],
             },
           ],
@@ -643,18 +683,21 @@ export const body: StudyBody = {
         type: "single",
         options: [
           {
-            id: "A",
-            text: "Yes. Badminton beat rest and running did not, so badminton beat running.",
+            id: "B",
+            text: "Not established; the direct badminton-versus-running contrast was non-significant.",
           },
           {
-            id: "B",
-            text: "Not shown. The direct badminton-versus-running test was not significant, so the two exercises were not shown to differ.",
+            id: "A",
+            text: "Yes; significance against rest for badminton alone establishes an advantage over running.",
           },
           {
             id: "C",
-            text: "Yes. An effect size of 0.44 proves badminton is better.",
+            text: "Yes; the direct effect-size estimate establishes an advantage despite the uncertain paired test.",
           },
-          { id: "D", text: "It shows running has no effect on focus at all." },
+          {
+            id: "D",
+            text: "No; the non-significant running-versus-rest test establishes that running has zero effect.",
+          },
         ],
         accepted: ["B"],
         alternatives: [],
@@ -662,9 +705,9 @@ export const body: StudyBody = {
         explanation:
           "One result crossing a line while another does not is not itself a test of the gap between them. A difference in significance is not a significant difference. Only the direct comparison answers the question, and it gave p = .082, not significant even at .05. The effect size of 0.44 hints at a possible moderate advantage that 20 students could not confirm. The paper's own conclusion leans toward badminton, but its direct test does not support that step.",
         misconceptions: {
-          A: "This compares each exercise with rest, not with each other. Running's gain sat between rest and badminton, and the direct test was not significant.",
-          C: "An effect size estimates how big a difference might be. With p = .082 it is too uncertain to prove anything.",
-          D: "A non-significant test against rest means the effect was not demonstrated, not that it is zero.",
+          A: "Two separate significance decisions do not test the gap between the exercises.",
+          C: "An effect-size point estimate does not remove its uncertainty.",
+          D: "Non-significance does not prove a zero effect.",
         },
         reveal: "interpretation",
         evidence: [
@@ -706,12 +749,20 @@ export const body: StudyBody = {
           ],
           responses: [
             {
+              optionId: "B",
+              label: "The direct test",
+              targetIds: ["bad-run"],
+            },
+            {
               optionId: "A",
               label: "Two tests against rest",
               targetIds: ["bad-rest", "run-rest"],
             },
-            { optionId: "B", label: "The direct test", targetIds: ["bad-run"] },
-            { optionId: "C", label: "The effect size", targetIds: ["bad-run"] },
+            {
+              optionId: "C",
+              label: "The effect size",
+              targetIds: ["bad-run"],
+            },
             {
               optionId: "D",
               label: "Running vs rest",
@@ -739,15 +790,15 @@ export const body: StudyBody = {
       options: [
         {
           id: "A",
-          text: "A significant direct badminton-versus-running comparison, with enough students planned for that specific test.",
+          text: "A clear direct badminton-versus-running difference in a study powered for that comparison.",
         },
         {
           id: "B",
-          text: "An even smaller p-value for badminton versus rest.",
+          text: "A stronger badminton-versus-rest result, with no direct comparison between the two exercise conditions.",
         },
         {
           id: "C",
-          text: "Running failing to beat rest again.",
+          text: "Another non-significant running-versus-rest result, even if badminton and running remain indistinguishable.",
         },
       ],
       accepted: ["A"],
@@ -756,8 +807,8 @@ export const body: StudyBody = {
       explanation:
         "A claim about two exercises needs a test of those two exercises. Strengthening the comparisons with rest cannot show the gap between them. With an observed d of 0.44, a follow-up would need a sample planned to detect a difference of about that size.",
       misconceptions: {
-        B: "A stronger badminton-versus-rest result still says nothing direct about running.",
-        C: "Repeating a non-significant running-versus-rest result does not test badminton against running.",
+        B: "A comparison with rest does not directly test the exercise-to-exercise claim.",
+        C: "Failure to beat rest does not establish a difference between exercises.",
       },
       reveal: "bonus",
       evidence: ["Badminton vs running: t(19) = 1.8, p = .082, d = 0.44."],

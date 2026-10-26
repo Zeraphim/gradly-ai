@@ -128,7 +128,7 @@ export const body: StudyBody = {
     challenges: [
       {
         id: "c1",
-        stage: "design",
+        stage: "Read the design",
         title: "Keeping the Experimenter Blind",
         type: "single",
         prompt:
@@ -140,29 +140,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "So the experimenter could not know who saw achievement words, and so could not, even unintentionally, treat the groups differently.",
-          },
-          {
             id: "o2",
-            text: "So participants would not know they were in a study.",
+            text: "To conceal study participation from the volunteers while keeping the experimenter aware of each condition.",
           },
           {
             id: "o3",
-            text: "To make the puzzles harder.",
+            text: "To increase puzzle difficulty by assigning achievement words only to the hardest numbered puzzles.",
           },
           {
             id: "o4",
-            text: "To save time between sessions.",
+            text: "To give the experimenter time to adapt instructions to whichever word condition each person received.",
+          },
+          {
+            id: "o1",
+            text: "So the experimenter could not know who saw achievement words, and so could not, even unintentionally, treat the groups differently.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Who might affect the result if they knew which group each person was in?",
         misconceptions: {
-          o2: "Participants knew they were in a study; the procedure hides the condition from the experimenter.",
-          o3: "Sealing a puzzle does not change its difficulty.",
-          o4: "The steps add time; their purpose is to keep the experimenter blind.",
+          o2: "Participants knew they were in a study; condition concealment targeted the experimenter.",
+          o3: "The allocation was not intended to confound condition with difficulty.",
+          o4: "Blinding prevents, rather than encourages, condition-specific treatment.",
         },
         explanation:
           "Careful steps kept the experimenter blind to condition, so expectancy effects could not produce an artificial priming effect in the replication.",
@@ -172,7 +172,7 @@ export const body: StudyBody = {
       },
       {
         id: "c2",
-        stage: "design",
+        stage: "Read the design",
         title: "Five Versions of Each Puzzle",
         type: "single",
         prompt:
@@ -189,24 +189,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Participants copying from each other.",
+            text: "To stop participants copying answers, since everyone in the original condition completed a puzzle together.",
           },
           {
             id: "o3",
-            text: "Running out of puzzles.",
+            text: "To avoid reusing physical sheets, since a previously solved puzzle cannot be printed again.",
           },
           {
             id: "o4",
-            text: "Making the effect larger.",
+            text: "To increase the priming dose, since each participant completed all five arrangements before the test.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If each group always gets the same single puzzle, what else besides the words differs between groups?",
         misconceptions: {
-          o2: "Participants worked alone in separate rooms.",
-          o3: "The point is not supply but avoiding a confound tied to one puzzle.",
-          o4: "Varying layouts is meant to remove a confound, not to enlarge an effect.",
+          o2: "Multiple arrangements address stimulus-specific effects, not a stated group-copying problem.",
+          o3: "The concern is variation in stimuli, not an inability to reproduce sheets.",
+          o4: "The versions varied the stimulus; participants did not receive five doses.",
         },
         explanation:
           "With one puzzle per condition, positive transfer from one layout could be mistaken for priming. Several arrangements per condition make sure neither condition is easier by accident.",
@@ -216,7 +216,7 @@ export const body: StudyBody = {
       },
       {
         id: "c3",
-        stage: "results",
+        stage: "Read the results",
         title: "Two Replications",
         type: "single",
         prompt:
@@ -296,11 +296,6 @@ export const body: StudyBody = {
           },
           responses: [
             {
-              optionId: "o1",
-              label: "No advantage; far from 0.70",
-              targetIds: ["r1", "r2"],
-            },
-            {
               optionId: "o2",
               label: "Confirms original",
               targetIds: ["r1", "r2"],
@@ -309,6 +304,11 @@ export const body: StudyBody = {
               optionId: "o3",
               label: "Words hurt performance",
               targetIds: ["r1"],
+            },
+            {
+              optionId: "o1",
+              label: "No advantage; far from 0.70",
+              targetIds: ["r1", "r2"],
             },
             {
               optionId: "o4",
@@ -320,29 +320,29 @@ export const body: StudyBody = {
         responseStyle: "pills",
         options: [
           {
-            id: "o1",
-            text: "Neither replication found an advantage; both intervals include zero and stop well short of the original 0.70.",
-          },
-          {
             id: "o2",
-            text: "They confirm the original, since replication 2 points slightly the right way.",
+            text: "The second confirms the original, since its small positive estimate is enough to reproduce d = 0.70.",
           },
           {
             id: "o3",
-            text: "They show achievement words make people worse.",
+            text: "Both establish harm, since estimates below the original imply worse performance.",
+          },
+          {
+            id: "o1",
+            text: "Neither showed the advantage; both intervals fall well short of the original estimate.",
           },
           {
             id: "o4",
-            text: "The 5-minute delay made the effect appear.",
+            text: "The delayed condition reproduces the original advantage, while the immediate condition reverses it.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Check each interval against zero and against 0.70.",
         misconceptions: {
-          o2: "Replication 2 is −0.03, essentially zero, and its interval excludes 0.70.",
-          o3: "Replication 1 leaned that way, but its interval includes zero.",
-          o4: "With the delay, the effect was −0.03, essentially zero.",
+          o2: "Matching direction does not reproduce the original magnitude or its evidence.",
+          o3: "Estimates near zero do not establish a negative effect.",
+          o4: "Neither replication showed the original advantage.",
         },
         explanation:
           "Replication 1 found d = −0.24 (−0.64 to 0.15) and replication 2 d = −0.03 (−0.52 to 0.45). Both include zero and both exclude the original estimate of 0.70.",
@@ -352,7 +352,7 @@ export const body: StudyBody = {
       },
       {
         id: "c4",
-        stage: "results",
+        stage: "Read the results",
         title: "PEA Inside PEACH",
         type: "single",
         prompt:
@@ -364,29 +364,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
+            id: "o2",
+            text: "To choose the rule producing the smallest p-value and present that result as the primary finding.",
+          },
+          {
             id: "o1",
             text: "To show that the null result does not depend on a scoring choice the original paper never specified.",
           },
           {
-            id: "o2",
-            text: "To pick whichever scoring gives a significant effect.",
-          },
-          {
             id: "o3",
-            text: "Because strict scoring is always wrong.",
+            text: "To replace strict scoring, since counting only complete target words is invalid for word-search tasks.",
           },
           {
             id: "o4",
-            text: "To double the sample size.",
+            text: "To create a second independent sample by treating two scores from each participant as separate people.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "If the original never said how these words were counted, what should a careful replication do?",
         misconceptions: {
-          o2: "Reporting both, with the same conclusion, is the opposite of choosing a favourable one.",
-          o3: "Neither is wrong; the point is that results should not hinge on the choice.",
-          o4: "Scoring the same answers twice does not add participants.",
+          o2: "Sensitivity analysis tests robustness, not selective reporting.",
+          o3: "Neither rule is automatically invalid; the original did not specify the choice.",
+          o4: "Two scoring rules do not double the number of participants.",
         },
         explanation:
           "The original did not say how overlapping words were handled. Under lenient scoring there was again no effect of priming, and the means were not in the predicted direction, so the conclusion does not depend on the rule.",
@@ -396,7 +396,7 @@ export const body: StudyBody = {
       },
       {
         id: "c5",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Just Bad Luck?",
         type: "single",
         prompt:
@@ -408,29 +408,29 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "Unlikely if the effect were as large as originally reported, but quite possible if the true effect is much smaller.",
-          },
-          {
             id: "o2",
-            text: "Yes, very likely, whatever the effect size.",
+            text: "Likely for an effect of any size, since replication power is unrelated to the original effect estimate.",
           },
           {
             id: "o3",
-            text: "No, the replications prove there is no effect at all.",
+            text: "Impossible for any nonzero effect, since two null results establish that the true effect is exactly zero.",
           },
           {
             id: "o4",
-            text: "Power does not matter for replications.",
+            text: "Equally likely for small and large effects, since the two replications used the same outcome measure.",
+          },
+          {
+            id: "o1",
+            text: "Unlikely if the effect were as large as originally reported, but quite possible if the true effect is much smaller.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Power depends on the size of the effect you are looking for.",
         misconceptions: {
-          o2: "With power of .93 and .80 for d = .70, missing an effect that size twice would be unlikely.",
-          o3: "They had low power for small effects, so a small real effect is not ruled out.",
-          o4: "Power is central to judging what a null result means.",
+          o2: "Power depends on effect size and design.",
+          o3: "Null results do not exclude every small effect.",
+          o4: "A common measure does not make power independent of magnitude.",
         },
         explanation:
           "If the effect were as large as reported in the original Experiment 1, both replications would very likely have found it. A much smaller effect, such as d = 0.20, would usually be missed.",
@@ -440,11 +440,11 @@ export const body: StudyBody = {
       },
       {
         id: "c6",
-        stage: "interpretation",
+        stage: "Draw a conclusion",
         title: "Which Explanation Is Least Likely?",
         type: "single",
         prompt:
-          "Several explanations could account for the different results. Which one does the replication's own procedure make least likely?",
+          "The replication blinded the experimenter to each participant’s puzzle condition. Which explanation of its own result does that safeguard make less likely?",
         evidence: [
           "The replication kept experimenters blind to condition.",
           "In the replication, the experimenter waited outside the room during the tasks.",
@@ -452,32 +452,32 @@ export const body: StudyBody = {
         scene: null,
         options: [
           {
-            id: "o1",
-            text: "That the experimenter's expectations created the original result, since the replication's blinding removed that route.",
+            id: "o2",
+            text: "That the original advantage arose from chance and was larger than the effect a new sample would show.",
           },
           {
-            id: "o2",
-            text: "That the original result was a false positive.",
+            id: "o1",
+            text: "That the replication's null arose from the experimenter treating primed participants differently.",
           },
           {
             id: "o3",
-            text: "That the experimenter's absence from the room matters.",
+            text: "That the experimenter's absence during the task changed how strongly participants pursued the puzzles.",
           },
           {
             id: "o4",
-            text: "That failed replications tend to go unpublished.",
+            text: "That unpublished null studies made the published literature look more positive than the complete evidence.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Which explanation does the blinding procedure speak to?",
+        hint: "Distinguish a safeguard against bias within this replication from an explanation of differences between studies.",
         misconceptions: {
-          o2: "The replication cannot rule that out; the authors raise it as a possibility.",
-          o3: "That difference is untested here; the authors note it as a possibility.",
-          o4: "That is a feature of the literature, not something this procedure tests.",
+          o2: "Blinding does not rule out a chance original result.",
+          o3: "Blinding alone does not test the effect of the experimenter's presence.",
+          o4: "This procedure does not rule out publication bias in the wider literature.",
         },
         explanation:
-          "Because the replication kept experimenters blind, the authors think expectancy effects in the original are unlikely to explain the difference. A false positive, publication bias and the experimenter's presence remain possibilities.",
+          "Blinding makes it less likely that the replication’s experimenter treated people differently according to their priming condition. It does not settle why the original and replication differed: chance, experimenter presence and publication bias remain possible explanations.",
         refs: ["e15", "e16", "e17"],
         writtenReasoning: false,
         reveal: "interpretation",

@@ -40,6 +40,18 @@ The retired standalone paper-case implementation and its dedicated tests are rem
 The proof-set content checks require scenes on a majority of required challenges;
 semantic question quality still needs source-based review.
 
+`tests/research/prepared-choice-quality.test.ts` guards the 26 studies revised in
+PR #33 against fixed-position and shortest/longest-answer shortcuts, disproportionate
+choice lengths, scene response ordering drift and one-word stage labels. Its scope
+is listed in `tests/fixtures/rewritten-studies.ts`; `scripts/audit-prepared-choices.ts`
+prints reproducible required-question counts, including ties. These checks do not
+verify that distractors are plausible or that teaching claims are correct.
+
+`tests/browser/prepared-rewrites.spec.ts` walks all 26 revised studies at 375×812 and
+1366×768 through the paper reveal, including optional bonuses and multiple-answer
+selection. It exercises numeric-result disclosure before assessment, scene taps,
+answer feedback, horizontal overflow and axe for each checked question.
+
 `tests/browser/choice-focus.spec.ts` checks mouse and touch selection of prepared
 cards, pills, multi-answer checkboxes, interval predictions and diagram answers,
 plus shared research-activity responses. Pointer selections and restored drafts
