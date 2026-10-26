@@ -9,6 +9,10 @@ import { body as morning } from "../../apps/web/src/research/studies/data/mornin
 import { body as tracing } from "../../apps/web/src/research/studies/data/tracing-shapes-while-brainstorming.js";
 import { body as reasoning } from "../../apps/web/src/research/studies/data/reasoning-and-belief-study.js";
 import { body as socialSleep } from "../../apps/web/src/research/studies/data/social-media-and-sleep.js";
+import { body as habits } from "../../apps/web/src/research/studies/data/building-daily-habits.js";
+import { body as phishing } from "../../apps/web/src/research/studies/data/clicking-phishing-links.js";
+import { body as debt } from "../../apps/web/src/research/studies/data/managing-personal-debt.js";
+import { body as nature } from "../../apps/web/src/research/studies/data/natural-light-at-work.js";
 import { body as trust } from "../../apps/web/src/research/studies/data/judging-statement-truthfulness.js";
 
 // Studies whose questions were rewritten as decisions for issue #31. Each is walked
@@ -24,6 +28,10 @@ const rewritten = [
   ["morning-people-and-life-satisfaction", morning],
   ["reasoning-and-belief-study", reasoning],
   ["social-media-and-sleep", socialSleep],
+  ["building-daily-habits", habits],
+  ["clicking-phishing-links", phishing],
+  ["managing-personal-debt", debt],
+  ["natural-light-at-work", nature],
 ] as const;
 
 for (const width of [375, 1366]) {

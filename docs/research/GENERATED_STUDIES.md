@@ -135,9 +135,9 @@ The proof set already had scenes on most required questions before this work:
 association, not a risk ratio. No new scene kind or shared-player behavior was
 introduced. Across the library, the current count is **255/313 without scenes**.
 
-### Second batch: ten more studies (26 October)
+### Further rewrites: 14 more studies (26–27 October)
 
-Ten more generated studies had every question rewritten as a decision, keeping ids and
+14 more generated studies had every question rewritten as a decision, keeping ids and
 card challenge lists unchanged. Each kept fact was compared with the stored PDF, and
 every new excerpt is verbatim on its cited page. The full per-study status, open
 defects and unverified leads are in the
@@ -162,7 +162,7 @@ questions across 31 studies were replaced from each question's reveal stage.
 
 ### Outstanding scope and agreement
 
-- Agent: continue the source-based question review across the remaining 34 drafts
+- Agent: continue the source-based question review across the remaining 30 drafts
   (see the [review register](PREPARED_STUDY_REVIEW.md) for order and open defects),
   including the existing television lesson correctness warning above.
   The original texting sample is separate. No full-library semantic audit is claimed.

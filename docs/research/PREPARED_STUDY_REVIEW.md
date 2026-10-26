@@ -22,10 +22,10 @@ stored PDF. It is not approval by the content-review owner.
 
 | Measure                                                                         | Before (`main`) | Now       |
 | ------------------------------------------------------------------------------- | --------------- | --------- |
-| Studies rewritten and checked against the PDF                                   | 0               | 11        |
-| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 39 of 305 |
-| Questions with a scene                                                          | 43              | 59        |
-| Studies with no limitations recorded                                            | 30              | 20        |
+| Studies rewritten and checked against the PDF                                   | 0               | 15        |
+| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 31 of 305 |
+| Questions with a scene                                                          | 43              | 63        |
+| Studies with no limitations recorded                                            | 30              | 18        |
 | Questions with a garbled step label (for example "2 of 6 · , ")                 | 181             | 0         |
 
 The detector misses paraphrased giveaways, so the flagged counts understate the problem.
@@ -50,6 +50,16 @@ Verified against the stored PDF or the data file, not inferred.
 | body-posture-judgments, walking-speed-test                                                                                     | A bare number not found in the paper is the accepted answer (body-posture c3); an evidence line contains "F(1,119) = ?" (walking-speed c3).                         | **Open**                                                        |
 | 31 studies                                                                                                                     | Step labels were punctuation fragments (181 questions). Replaced by "Read the design", "Read the results" or "Draw a conclusion" from each question's reveal stage. | Fixed                                                           |
 
+## Found while rewriting
+
+Facts checked against the stored PDF during the rewrites. Some are errors in the old lesson text; others are inconsistencies inside the paper itself, which the rewrites work around.
+
+| Study                  | Finding                                                                                                                                                                                                                                            | State                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| managing-personal-debt | old c5i evidence line quoted odds ratios (2.36, 2.51) from a different study cited in the discussion as if they were this study's                                                                                                                  | Fixed (study rewritten)                                            |
+| managing-personal-debt | paper prints 16.21 (abstract) and 16.22 (Table 2) for the same odds ratio                                                                                                                                                                          | paper's own inconsistency                                          |
+| natural-light-at-work  | the paper's abstract says sunlight related negatively to anxiety and that natural elements buffered stressors' link with depressed mood, but its results report direct sunlight positively related to anxiety and no moderation for depressed mood | paper's own inconsistency; the rewrite follows the results section |
+
 ## Audit leads checked and not confirmed
 
 A cheaper model audited all studies read-only. Its output is a set of leads, not findings.
@@ -73,7 +83,6 @@ Each needs a person to read the paper. None is a finding yet.
 | clinton-voter-activism              | c3/c4 recall; one misconception note appears garbled                                                         |
 | holding-a-warm-drink                | c5 states a result no shown excerpt supports                                                                 |
 | music-and-mood-perception           | c2 and c3 evidence not in the excerpt list                                                                   |
-| natural-light-at-work               | c5 cites an unrelated excerpt; c2 direction of a moderation effect                                           |
 | online-charity-giving               | c5 evidence bullets enumerate the accepted options                                                           |
 | parents-viewing-vaccine-safety-info | an excerpt is garbled and contradicts a later one                                                            |
 | puzzle-solving-after-motivation     | the alternatives field lists distractors, not extra accepted answers                                         |
@@ -96,7 +105,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | texting-lecture                       | featured  | Hand-authored proof set; no independent content review            | n/a        | n/a               | not checked automatically (special format)                                                                     |
 | exercise-focus                        | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 6 | n/a               | —                                                                                                              |
 | conformity-replication                | featured  | Hand-authored proof set; no independent content review            | 1 → 1 of 6 | n/a               | —                                                                                                              |
-| natural-light-at-work                 | generated | Draft: not reviewed                                               | 2 → 2 of 5 | 3 of 8            | no limitations recorded                                                                                        |
+| natural-light-at-work                 | generated | Rewritten and checked against the PDF                             | 2 → 0 of 5 | 10 of 10          | —                                                                                                              |
 | dog-ownership-among-seniors           | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 6 of 13           | —                                                                                                              |
 | hand-washing-in-restrooms             | generated | Rewritten and checked against the PDF                             | 0 → 0 of 6 | 13 of 13          | —                                                                                                              |
 | memory-training                       | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 1 of 11           | no limitations recorded                                                                                        |
@@ -105,7 +114,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | television-viewing-habits             | generated | Draft: not reviewed                                               | 1 → 1 of 5 | 8 of 16           | —                                                                                                              |
 | teen-social-media-use                 | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 4 of 11           | no limitations recorded                                                                                        |
 | kids-eating-when-not-hungry           | generated | Draft: not reviewed                                               | 0 → 0 of 5 | 8 of 11           | —                                                                                                              |
-| clicking-phishing-links               | generated | Draft: not reviewed                                               | 2 → 2 of 5 | 8 of 9            | no limitations recorded                                                                                        |
+| clicking-phishing-links               | generated | Rewritten and checked against the PDF                             | 2 → 0 of 5 | 11 of 11          | —                                                                                                              |
 | music-and-mood-perception             | generated | Draft: not reviewed                                               | 0 → 0 of 7 | 6 of 7            | no limitations recorded                                                                                        |
 | food-warning-labels                   | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 13 of 13          | —                                                                                                              |
 | imagining-survival-scenarios          | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 7 of 10           | c1 asks for "factor(s)" but accepts one while its own evidence names two (confirmed)                           |
@@ -117,7 +126,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | parents-viewing-vaccine-safety-info   | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 10 of 12          | —                                                                                                              |
 | reading-words-aloud                   | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 6 of 8            | no limitations recorded                                                                                        |
 | holding-a-warm-drink                  | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 3 of 7            | —                                                                                                              |
-| managing-personal-debt                | generated | Draft: not reviewed                                               | 2 → 2 of 5 | 4 of 8            | —                                                                                                              |
+| managing-personal-debt                | generated | Rewritten and checked against the PDF                             | 2 → 0 of 5 | 10 of 10          | —                                                                                                              |
 | clinton-voter-activism                | generated | Draft: not reviewed                                               | 0 → 0 of 5 | 4 of 9            | no limitations recorded                                                                                        |
 | selecting-a-beverage                  | generated | Rewritten 26 Oct (earlier pass); excerpts checked against the PDF | 4 → 1 of 6 | 9 of 9            | —                                                                                                              |
 | body-posture-judgments                | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 11 of 12          | no limitations recorded; takeaway says none; c3 accepted answer "0.93" is a bare number not found in the paper |
@@ -125,7 +134,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | phone-use-while-driving               | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 2 of 6            | —                                                                                                              |
 | tracing-shapes-while-brainstorming    | generated | Rewritten and checked against the PDF                             | 4 → 0 of 6 | 15 of 15          | —                                                                                                              |
 | daily-conversation-hearing            | generated | Rewritten and checked against the PDF                             | 3 → 0 of 6 | 12 of 12          | —                                                                                                              |
-| building-daily-habits                 | generated | Draft: not reviewed                                               | 2 → 2 of 6 | 9 of 14           | —                                                                                                              |
+| building-daily-habits                 | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 14 of 14          | —                                                                                                              |
 | judging-statement-truthfulness        | generated | Rewritten and checked against the PDF                             | 3 → 1 of 6 | 16 of 16          | —                                                                                                              |
 | remembering-doctor-appointments       | generated | Draft: not reviewed                                               | 2 → 2 of 6 | 1 of 8            | —                                                                                                              |
 | music-and-attention                   | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 4 of 6            | no limitations recorded                                                                                        |
@@ -166,6 +175,6 @@ the same way as `tests/research/papers-setup.ts`.
 ## Next steps
 
 1. A reader with the paper open works through the "Open" rows and the leads table.
-2. Rewrite the remaining 34 drafts in order of
+2. Rewrite the remaining 30 drafts in order of
    flagged count, checking every kept fact against the PDF, as the rewritten studies were.
 3. Set `reviewed: true` only after the content-review owner approves a study.
