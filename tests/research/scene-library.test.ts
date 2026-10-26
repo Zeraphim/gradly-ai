@@ -101,7 +101,7 @@ describe("one scene library for prepared and generated lessons", () => {
 
 describe("new and promoted scene kinds", () => {
   it("validates relationships for each kind", () => {
-    const problems = (scene: Scene, options = ["bounded", "broad"]) =>
+    const problems = (scene: Scene, options = ["bounded", "broad", "other"]) =>
       sceneProblems(scene, options, ["trial", "outcomes"]);
     expect(problems(units)).toEqual([]);
     expect(problems(tests)).toEqual([]);
@@ -165,18 +165,24 @@ describe("new and promoted scene kinds", () => {
     });
     gated.responses[0]!.targetIds = ["staff"];
     const setup = projectScene(gated, false, false) as SceneOf<"matrix">;
-    expect(setup.rows.map((r) => r.id)).toEqual(["message", "weekend"]);
+    expect(setup.rows.map((r) => r.id)).toEqual([
+      "message",
+      "weekend",
+      "outcome",
+    ]);
     expect(setup.resolution).toBeNull();
     expect(setup.responses[0]!.targetIds).toEqual([]);
     const after = projectScene(gated, true, false) as SceneOf<"matrix">;
     expect(after.rows.map((r) => r.id)).toEqual([
       "message",
       "weekend",
+      "outcome",
       "staff",
     ]);
     // Too few setup rows makes the scene unsafe, so it falls back to choices.
     const thin = structuredClone(gated);
     thin.rows[1]!.at = "feedback";
+    thin.rows[2]!.at = "feedback";
     expect(projectScene(thin, false, false)).toBeNull();
     expect(after.resolution).toBeNull();
     expect(projectScene(gated, true, true)!.resolution?.id).toBe(
@@ -190,7 +196,7 @@ describe("new and promoted scene kinds", () => {
   });
 
   it("allows tap answers only when each option is one distinct visible element", () => {
-    expect(tapTargets(units)?.size).toBe(2);
+    expect(tapTargets(units)?.size).toBe(3);
     expect(
       tapTargets({
         ...units,
@@ -310,7 +316,7 @@ describe("scene rendering", () => {
   it("draws nested units with counts and a derived ratio after an attempt", () => {
     const { rerender } = render(h(Harness, { scene: units }));
     expect(screen.getByText("2,400")).toBeTruthy();
-    expect(screen.getByText("Assigned")).toBeTruthy();
+    expect(screen.getAllByText("Assigned")).toHaveLength(2);
     expect(
       screen.getByText(/Each dot stands for about 60 records/),
     ).toBeTruthy();

@@ -88,6 +88,7 @@ const base = (title: string, ref: string, targets: string[]) => ({
       targetIds: targets,
     },
     { optionId: "broad", label: "Broader interpretation", targetIds: targets },
+    { optionId: "other", label: "Other reading", targetIds: targets },
   ],
   resolution: null,
 });
@@ -97,7 +98,7 @@ const challenge = (
   ref: string,
   reveal: Challenge["reveal"],
   prompt: string,
-  texts: [string, string],
+  texts: [string, string, string],
 ): Challenge => ({
   id,
   title: scene.title,
@@ -107,12 +108,14 @@ const challenge = (
   options: [
     { id: "bounded", text: texts[0] },
     { id: "broad", text: texts[1] },
+    { id: "other", text: texts[2] },
   ],
   accepted: ["bounded"],
   alternatives: [],
   hint: "Match the claim to the available evidence.",
   misconceptions: {
     broad: "The supplied evidence does not support that broader claim.",
+    other: "The supplied evidence does not support that reading.",
   },
   explanation: texts[0],
   refs: [ref],
@@ -233,6 +236,7 @@ export const quantitativeSceneLesson = lesson(
       [
         "Observe existing records by district.",
         "Randomly assign households to districts.",
+        "Interview residents about their water habits.",
       ],
     ),
     challenge(
@@ -244,6 +248,7 @@ export const quantitativeSceneLesson = lesson(
       [
         "The averages differ across observed districts.",
         "Every household in the south uses more than every household in the north.",
+        "The districts use the same amount of water.",
       ],
     ),
     challenge(
@@ -255,6 +260,7 @@ export const quantitativeSceneLesson = lesson(
       [
         "Further evidence is needed for that causal claim.",
         "A larger average automatically proves the cause.",
+        "Yes, because the records cover three districts.",
       ],
     ),
   ],
@@ -335,6 +341,7 @@ export const qualitativeSceneLesson = lesson(
       [
         "Explore commuter accounts through interviews.",
         "Estimate the proportion of all commuters who need help.",
+        "Test a new signage design against the old one.",
       ],
     ),
     challenge(
@@ -346,6 +353,7 @@ export const qualitativeSceneLesson = lesson(
       [
         "Some accounts connect sign uncertainty and help-seeking.",
         "Most commuters everywhere need staff assistance.",
+        "Staff caused the uncertainty about signs.",
       ],
     ),
     challenge(
@@ -360,6 +368,7 @@ export const qualitativeSceneLesson = lesson(
       [
         "They motivate further investigation, not a tested intervention effect.",
         "The theme proves new signs will improve navigation.",
+        "The accounts show signs make no difference.",
       ],
     ),
   ],
@@ -370,6 +379,7 @@ const trialUnits: Scene = {
   responses: [
     { optionId: "bounded", label: "Clinics", targetIds: ["clinics"] },
     { optionId: "broad", label: "Records", targetIds: ["records"] },
+    { optionId: "other", label: "Conditions", targetIds: ["conditions"] },
   ],
   kind: "units",
   levels: [
@@ -397,6 +407,17 @@ const trialUnits: Scene = {
       unit: "records",
       role: "analysed",
     },
+    {
+      ...n(
+        "conditions",
+        "Conditions compared",
+        "A text reminder or no reminder.",
+        "trial",
+      ),
+      count: 2,
+      unit: "conditions",
+      role: "assigned",
+    },
   ],
 };
 const trialTests: Scene = {
@@ -412,6 +433,7 @@ const trialTests: Scene = {
       label: "All outcomes",
       targetIds: ["attendance", "punctuality", "rebooking"],
     },
+    { optionId: "other", label: "None", targetIds: [] },
   ],
   kind: "tests",
   alpha: 0.05,
@@ -442,6 +464,7 @@ const trialMatrix: Scene = {
   responses: [
     { optionId: "bounded", label: "Weekend opening", targetIds: ["weekend"] },
     { optionId: "broad", label: "The reminder", targetIds: ["message"] },
+    { optionId: "other", label: "The outcome", targetIds: ["outcome"] },
   ],
   kind: "matrix",
   conditions: [
@@ -456,6 +479,10 @@ const trialMatrix: Scene = {
     {
       ...n("weekend", "Weekend opening", "Opening hours.", "trial"),
       cells: ["Yes", "No"],
+    },
+    {
+      ...n("outcome", "Outcome counted", "What each clinic recorded.", "trial"),
+      cells: ["Attendance", "Attendance"],
     },
   ],
   resolution: {
@@ -480,6 +507,7 @@ export const fieldTrialSceneLesson = lesson(
         [
           "The 4 clinics that received a condition.",
           "The 2,400 records analysed.",
+          "The 2 reminder conditions compared.",
         ],
       ),
       responseStyle: "tap",
@@ -493,6 +521,7 @@ export const fieldTrialSceneLesson = lesson(
       [
         "One of three outcomes crossed .05.",
         "The reminder improved every outcome.",
+        "No outcome crossed .05.",
       ],
     ),
     {
@@ -505,6 +534,7 @@ export const fieldTrialSceneLesson = lesson(
         [
           "Reminder clinics also opened on weekends.",
           "The reminder was the only difference.",
+          "The clinics counted different outcomes.",
         ],
       ),
       responseStyle: "tap",
