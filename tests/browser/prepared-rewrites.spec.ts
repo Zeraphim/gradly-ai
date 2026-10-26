@@ -7,6 +7,8 @@ import { body as hearing } from "../../apps/web/src/research/studies/data/daily-
 import { body as laterBorn } from "../../apps/web/src/research/studies/data/being-a-later-born.js";
 import { body as morning } from "../../apps/web/src/research/studies/data/morning-people-and-life-satisfaction.js";
 import { body as tracing } from "../../apps/web/src/research/studies/data/tracing-shapes-while-brainstorming.js";
+import { body as reasoning } from "../../apps/web/src/research/studies/data/reasoning-and-belief-study.js";
+import { body as socialSleep } from "../../apps/web/src/research/studies/data/social-media-and-sleep.js";
 import { body as trust } from "../../apps/web/src/research/studies/data/judging-statement-truthfulness.js";
 
 // Studies whose questions were rewritten as decisions for issue #31. Each is walked
@@ -20,6 +22,8 @@ const rewritten = [
   ["daily-gratitude-and-well-being", gratitude],
   ["tracing-shapes-while-brainstorming", tracing],
   ["morning-people-and-life-satisfaction", morning],
+  ["reasoning-and-belief-study", reasoning],
+  ["social-media-and-sleep", socialSleep],
 ] as const;
 
 for (const width of [375, 1366]) {

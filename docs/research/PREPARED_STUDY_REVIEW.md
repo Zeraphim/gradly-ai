@@ -22,10 +22,10 @@ stored PDF. It is not approval by the content-review owner.
 
 | Measure                                                                         | Before (`main`) | Now       |
 | ------------------------------------------------------------------------------- | --------------- | --------- |
-| Studies rewritten and checked against the PDF                                   | 0               | 9         |
-| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 43 of 305 |
-| Questions with a scene                                                          | 43              | 57        |
-| Studies with no limitations recorded                                            | 30              | 22        |
+| Studies rewritten and checked against the PDF                                   | 0               | 11        |
+| Questions flagged as answerable from their own evidence (detector, lower bound) | 67 of 305       | 39 of 305 |
+| Questions with a scene                                                          | 43              | 59        |
+| Studies with no limitations recorded                                            | 30              | 20        |
 | Questions with a garbled step label (for example "2 of 6 · , ")                 | 181             | 0         |
 
 The detector misses paraphrased giveaways, so the flagged counts understate the problem.
@@ -79,7 +79,6 @@ Each needs a person to read the paper. None is a finding yet.
 | puzzle-solving-after-motivation     | the alternatives field lists distractors, not extra accepted answers                                         |
 | science-video-trust                 | several excerpts too thin to support the questions that cite them                                            |
 | sleep-school                        | the N printed in a table differs from the N in the analysis (likely the paper's own typo)                    |
-| social-media-and-sleep              | c2 asserts a recruitment method no excerpt states                                                            |
 | stroop-task-performance             | c5 may cite the wrong excerpt for the power limitation                                                       |
 | teen-social-media-use               | c1 "cross-sectional" versus an evidence line calling it the first wave of a longitudinal project (ambiguous) |
 | understanding-how-pumps-work        | c2 answer format not in the excerpts; malformed stage text (now fixed)                                       |
@@ -131,7 +130,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | remembering-doctor-appointments       | generated | Draft: not reviewed                                               | 2 → 2 of 6 | 1 of 8            | —                                                                                                              |
 | music-and-attention                   | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 4 of 6            | no limitations recorded                                                                                        |
 | sharing-money-in-public               | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 5 of 6            | no limitations recorded                                                                                        |
-| social-media-and-sleep                | generated | Draft: not reviewed                                               | 3 → 3 of 6 | 4 of 8            | no limitations recorded                                                                                        |
+| social-media-and-sleep                | generated | Rewritten and checked against the PDF                             | 3 → 1 of 6 | 13 of 13          | —                                                                                                              |
 | being-a-later-born                    | generated | Rewritten and checked against the PDF                             | 4 → 0 of 6 | 14 of 14          | —                                                                                                              |
 | online-charity-giving                 | generated | Draft: not reviewed                                               | 1 → 1 of 6 | 16 of 19          | no limitations recorded                                                                                        |
 | vaccine-misinformation-correction     | generated | Draft: not reviewed                                               | 1 → 1 of 5 | 7 of 8            | no limitations recorded                                                                                        |
@@ -139,7 +138,7 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | walking-speed-test                    | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 10 of 10          | no limitations recorded; takeaway says none; c3 evidence line contains "F(1,119) = ?"                          |
 | using-scented-air-while-brainstorming | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 6 of 10           | —                                                                                                              |
 | puzzle-solving-after-motivation       | generated | Draft: not reviewed                                               | 2 → 2 of 6 | 4 of 11           | no limitations recorded                                                                                        |
-| reasoning-and-belief-study            | generated | Draft: not reviewed                                               | 3 → 3 of 6 | 5 of 10           | no limitations recorded                                                                                        |
+| reasoning-and-belief-study            | generated | Rewritten and checked against the PDF                             | 3 → 1 of 6 | 13 of 13          | —                                                                                                              |
 | understanding-how-pumps-work          | generated | Draft: not reviewed                                               | 0 → 0 of 6 | 8 of 9            | no limitations recorded                                                                                        |
 | breakfast-grades                      | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 6 | n/a               | —                                                                                                              |
 | sleep-school                          | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 6 | n/a               | —                                                                                                              |
@@ -167,6 +166,6 @@ the same way as `tests/research/papers-setup.ts`.
 ## Next steps
 
 1. A reader with the paper open works through the "Open" rows and the leads table.
-2. Rewrite the remaining 36 drafts in order of
+2. Rewrite the remaining 34 drafts in order of
    flagged count, checking every kept fact against the PDF, as the rewritten studies were.
 3. Set `reviewed: true` only after the content-review owner approves a study.
