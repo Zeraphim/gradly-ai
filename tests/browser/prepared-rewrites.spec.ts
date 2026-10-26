@@ -16,6 +16,9 @@ import { body as nature } from "../../apps/web/src/research/studies/data/natural
 import { body as puzzle } from "../../apps/web/src/research/studies/data/puzzle-solving-after-motivation.js";
 import { body as appointments } from "../../apps/web/src/research/studies/data/remembering-doctor-appointments.js";
 import { body as video } from "../../apps/web/src/research/studies/data/science-video-trust.js";
+import { body as posture } from "../../apps/web/src/research/studies/data/body-posture-judgments.js";
+import { body as bus } from "../../apps/web/src/research/studies/data/bus-ridership-behavior.js";
+import { body as mindful } from "../../apps/web/src/research/studies/data/classroom-mindfulness-practice.js";
 import { body as trust } from "../../apps/web/src/research/studies/data/judging-statement-truthfulness.js";
 
 // Studies whose questions were rewritten as decisions for issue #31. Each is walked
@@ -38,6 +41,9 @@ const rewritten = [
   ["puzzle-solving-after-motivation", puzzle],
   ["remembering-doctor-appointments", appointments],
   ["science-video-trust", video],
+  ["body-posture-judgments", posture],
+  ["bus-ridership-behavior", bus],
+  ["classroom-mindfulness-practice", mindful],
 ] as const;
 
 for (const width of [375, 1366]) {
