@@ -95,7 +95,7 @@ After configuring the intended environment with [RESEARCH_INTEGRATION.md](RESEAR
 
 1. Verify remote libSQL persistence and signed guest isolation across function invocations.
 2. Upload searchable and scanned English papers; inspect transcription and packaged OCR behavior.
-3. Confirm consent, run generation with actual Nebius responses, inspect evidence and rejected reviews, and complete an approved lesson.
+3. Confirm consent, run generation with actual Nebius responses, inspect evidence and any advisory review notes, and complete the lesson.
 4. Verify explanation feedback, provider-failure recovery, history, deletion and retention cleanup.
 
 The existing automatic Vercel preview was blocked by project access restrictions. A successful hosted deployment, new live generation quality and learning benefit are not established by local test results. Earlier dated feedback evidence in README refers to the original curated service.

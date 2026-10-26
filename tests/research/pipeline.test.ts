@@ -321,67 +321,20 @@ it("persists a typed errorCode when a stage hits the output limit", async () => 
   });
   expect(otherFailure.audits[0]?.errorCode).toBeUndefined();
 });
-it("redrafts once against a reviewer's issues, then stops for review", async () => {
+it("records reviewer rejections as advisory notes and still makes the lesson ready", async () => {
   let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);
-  const reject = {
-    approved: false,
-    issues: ["Unsupported conclusion"],
-    summary: "Needs review",
-  };
-  const outputs: unknown[] = [
-    { paperSummary: "Evidence", refs, missing: [] },
-    draft,
-    reject,
-    draft,
-    reject,
-  ];
-  const calls: { task: string; input: unknown }[] = [];
-  const p: ModelProvider = {
-    async generate<T>(_role: string, task: string, input: unknown) {
-      calls.push({ task, input });
-      return outputs.shift() as T;
-    },
-  };
-  for (let n = 0; n < 3; n++) j = await runStage(j, p);
-  expect(j.status).toBe("pending");
-  expect(j.stage).toBe(1);
-  expect(j.lesson).toBeUndefined();
-  expect(j.error).toBeUndefined();
-  expect(j.audits[2]!.status).toBe("Pending");
-  expect(j.audits[1]!.summary).toContain("Unsupported conclusion");
-  j = await runStage(j, p);
-  expect(calls[1]!.task).not.toContain("revision.issues");
-  expect(calls[3]!.task).toContain("resolves every issue in revision.issues");
-  expect(calls[3]!.input).toMatchObject({
-    revision: {
-      reviewer: "Research Methods Reviewer",
-      issues: ["Unsupported conclusion"],
-    },
-  });
-  expect(j.audits[1]!.summary).toContain(
-    "Revised for the Research Methods Reviewer's issues.",
-  );
-  j = await runStage(j, p);
-  expect(j.status).toBe("review");
-  expect(j.stage).toBe(2);
-  expect(j.audits[2]!.status).toBe("Needs Review");
-  expect(j.error).toBe("Unsupported conclusion");
-});
-it("makes a lesson ready when both reviewers approve the redraft", async () => {
-  let j = newJob("job", "paper.pdf", [{ page: 1, text: page }]);
-  const approve = { approved: true, issues: [], summary: "Fits evidence" };
   const p = provider([
     { paperSummary: "Evidence", refs, missing: [] },
     draft,
-    approve,
-    { approved: false, issues: ["Hint gives the answer"], summary: "" },
-    draft,
-    approve,
-    approve,
+    { approved: false, issues: ["Unsupported conclusion"], summary: "Needs review" },
+    { approved: false, issues: [], summary: "Hints give away the answer." },
   ]);
-  for (let n = 0; n < 8; n++) j = await runStage(j, p);
+  for (let n = 0; n < 5; n++) j = await runStage(j, p);
   expect(j.status).toBe("ready");
-  expect(j.revision).toEqual({ count: 1 });
+  expect(j.audits.every((a) => a.status === "Completed")).toBe(true);
+  expect(j.audits[2]!.summary).toBe("Advisory notes: Unsupported conclusion");
+  expect(j.audits[3]!.summary).toBe("Advisory notes: Hints give away the answer.");
+  expect(j.review?.approved).toBe(false);
 });
 
 // Synthetic contract fixture. These accounts do not describe a published study.
@@ -659,54 +612,35 @@ it("fails stage 0 with a retry when fewer than three excerpts verify", async () 
   expect(thin.error).toContain("Retry this stage");
 });
 
-it("asks a reviewer again after an unreadable reply and reads issues only from words", async () => {
-  const base = newJob("coach", "paper.pdf", [{ page: 1, text: page }]);
-  const toCoach = async (...coach: unknown[]) => {
-    let j = base;
-    const p = provider([
+it("ignores unreadable reviewer text and continues when a review call fails", async () => {
+  const toCoach = async (coach: () => unknown) => {
+    let j = newJob("coach", "paper.pdf", [{ page: 1, text: page }]);
+    const outputs: unknown[] = [
       { paperSummary: "Study evidence located", refs, missing: [] },
       draft,
       { approved: true, issues: [], summary: "Methods fit evidence" },
-      ...coach,
-    ]);
-    for (let n = 0; n < 3 + coach.length; n++) j = await runStage(j, p);
+    ];
+    const p: ModelProvider = {
+      async generate<T>() {
+        return (outputs.length ? outputs.shift() : coach()) as T;
+      },
+    };
+    for (let n = 0; n < 5; n++) j = await runStage(j, p);
     return j;
   };
-  const garbled = { approved: false, issues: [":{"], summary: " " };
-  const once = await toCoach(garbled);
-  expect(once.status).toBe("pending");
-  expect(once.stage).toBe(3);
-  expect(once.reasks).toBe(1);
-  expect(once.audits[3]?.summary).toBe(
-    "The Learning Coach's reply was unreadable. Asking again.",
+  const garbled = await toCoach(() => ({ approved: false, issues: [":{"], summary: " " }));
+  expect(garbled.status).toBe("ready");
+  expect(garbled.audits[3]?.summary).toBe("Advisory notes: No reason given.");
+  const approved = await toCoach(() => ({ approved: true, issues: [":{"], summary: "Fine" }));
+  expect(approved.audits[3]?.summary).toBe("Fine");
+  const failed = await toCoach(() => {
+    throw new ProviderError("timeout", "The AI request timed out. Retry this stage.");
+  });
+  expect(failed.status).toBe("ready");
+  expect(failed.audits[3]?.status).toBe("Completed");
+  expect(failed.audits[3]?.summary).toBe(
+    "Review unavailable, so the lesson continued without it. The AI request timed out.",
   );
-  const recovered = await toCoach(garbled, {
-    approved: true,
-    issues: [],
-    summary: "Guidance supports revision",
-  });
-  expect(recovered.stage).toBe(4);
-  expect(recovered.reasks).toBeUndefined();
-  const twice = await toCoach(garbled, { approved: false, issues: [], summary: "" });
-  expect(twice.status).toBe("failed");
-  expect(twice.error).toBe(
-    "The Learning Coach returned an unreadable reply twice. Retry this stage.",
-  );
-  // A degenerate issue next to an approval does not block the lesson.
-  const approved = await toCoach({ approved: true, issues: [":{"], summary: "Fine" });
-  expect(approved.stage).toBe(4);
-  // A rejection with only a readable summary is revised against that summary.
-  const summarized = await toCoach({
-    approved: false,
-    issues: [":{"],
-    summary: "Hints give away the answer.",
-  });
-  expect(summarized.stage).toBe(1);
-  expect(summarized.revision).toEqual({
-    count: 1,
-    role: "Learning Coach",
-    issues: ["Hints give away the answer."],
-  });
 });
 
 it("asks stage 0 for a paper summary field that no evidence aspect shares", async () => {

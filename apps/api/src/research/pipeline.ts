@@ -36,19 +36,12 @@ const roles: [string, string][] = [
     "Learning Coach",
     "Check that feedback supports revision and teaches reasoning.",
   ],
-  [
-    "Evidence Verification",
-    "Validate schema, excerpts, answer guides, and reviewer decisions.",
-  ],
+  ["Evidence Verification", "Validate schema, excerpts, and answer guides."],
 ];
 /** Fewest verified stage-0 excerpts that can ground a lesson. */
 export const MIN_VERIFIED_EXCERPTS = 3;
 /** Most excerpts a drafted challenge may add beyond the stage-0 evidence. */
 export const MAX_ADDED_EXCERPTS = 3;
-/** Automatic redrafts after a reviewer rejection, before the lesson stops. */
-export const MAX_REVISIONS = 1;
-/** Automatic re-asks of a reviewer whose reply has no readable reason. */
-export const MAX_REASKS = 1;
 /** True when text has at least one word. Rejects degenerate replies like ":{". */
 const readable = (s: string) => /\p{L}{3,}/u.test(s);
 /** Stage-1 output: references are limited to verified stage-0 ids and the
@@ -171,7 +164,7 @@ export function newJob(id: string, name: string, pages: Job["pages"]): Job {
     })),
   };
 }
-/** Server log for a stopped or redirected stage. No page text or learner
+/** Server log for a stopped stage or a review the lesson continued past. No page text or learner
  *  identifiers. */
 function logStop(j: Job, detail: string, outcome = "stopped") {
   console.warn(
@@ -251,26 +244,15 @@ export async function runStage(
       audit.summary = j.evidence.findings;
       audit.refs = j.evidence.refs.map((r) => r.id);
     } else if (j.stage === 1) {
-      const revision = j.revision?.issues?.length
-        ? " A reviewer rejected the previous draft of this lesson. Write a new draft that resolves every issue in revision.issues."
-        : "";
       const draftSchema = lessonDraftSchema(j.evidence!.refs.map((r) => r.id));
       const draft = await provider.generate(
         audit.role,
-        `${audit.task}${revision} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
+        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
           evidenceRule:
             "Cite evidence by the ids in evidence.refs. The server attaches those verified excerpts to the lesson, so do not copy them. Put only other excerpts in addedExcerpts.",
           pages: j.pages,
-          ...(revision
-            ? {
-                revision: {
-                  reviewer: j.revision!.role,
-                  issues: j.revision!.issues,
-                },
-              }
-            : {}),
           schemaExample: JSON.parse(
             JSON.stringify({ id: j.id, source: "generated" }),
           ),
@@ -342,88 +324,56 @@ export async function runStage(
         j.lesson.briefing +=
           " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
       const added = evidence.length - j.evidence!.refs.length;
-      audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${removed ? ` Removed ${removed} scene${removed === 1 ? "" : "s"} that failed checks.` : ""}${built ? " Added a server-built scene." : ""}${revision ? ` Revised for the ${j.revision!.role}'s issues.` : ""}`;
-      if (j.revision) j.revision = { count: j.revision.count };
+      audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${removed ? ` Removed ${removed} scene${removed === 1 ? "" : "s"} that failed checks.` : ""}${built ? " Added a server-built scene." : ""}`;
       audit.refs = j.lesson.evidence.map((r) => r.id);
     } else if (j.stage === 2 || j.stage === 3) {
+      // Reviews are advisory. Their notes are shown on the stage and logged,
+      // but neither a rejection nor a failed review call stops the lesson.
       // The coach read "feedback" as a learner answer to grade and rejected
       // drafts for having none, so it is told what it reviews.
       const coachBrief =
         j.stage === 3
           ? " You review the lesson draft before any learner sees it; there is no learner response to grade. Judge each challenge's hint, misconception notes and explanation: they should help a learner who chose a wrong option revise their reasoning. A hint shows before the first attempt and a misconception note after a wrong first attempt, before the learner's one retry, so neither may give the answer away. The explanation and accepted options show only after a correct answer or the second attempt, so the explanation may state the answer. If you return approved=false, list every concrete problem in issues."
           : "";
-      const assessment = await provider.generate(
-        audit.role,
-        `${audit.task}${coachBrief} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Review all scene text, values, edges, response labels and reveal gates too. Reject unsupported visual relationships, findings or answer leakage in setup metadata, invented numerical data, misleading provenance, or diagrams that imply unavailable observations. Return approved=false when uncertain.`,
-        { lesson: j.lesson, pages: j.pages },
-        z.object({
-          approved: z.boolean(),
-          issues: z.array(z.string()),
-          summary: z.string(),
-        }),
-        pipelineModel,
-        { tier: "pipeline" },
-      );
-      audit.summary = assessment.summary;
       audit.refs = j.lesson!.evidence.map((r) => r.id);
-      const issues = assessment.issues.filter(readable);
-      const summary = assessment.summary.trim();
-      const rejected = !assessment.approved || issues.length > 0;
-      // A reply like ":{" gives no reason to act on, so the reviewer is asked
-      // again. The client re-runs a pending job, each run with its own lease.
-      if (rejected && !issues.length && !readable(summary)) {
-        if ((j.reasks ?? 0) >= MAX_REASKS)
-          throw Error(
-            `The ${audit.role} returned an unreadable reply twice. Retry this stage.`,
-          );
-        j.reasks = (j.reasks ?? 0) + 1;
-        audit.status = "Pending";
-        audit.summary = `The ${audit.role}'s reply was unreadable. Asking again.`;
-        j.status = "pending";
-        j.leaseUntil = 0;
-        delete j.error;
-        logStop(j, JSON.stringify(assessment), "re-asking");
-        return j;
-      }
-      if (rejected) {
-        const reasons = issues.length ? issues : [summary];
-        const count = j.revision?.count ?? 0;
-        // The writer redrafts against the reviewer's issues before the lesson
-        // stops for review. Both reviewers then check the new draft.
-        if (count < MAX_REVISIONS) {
-          logStop(j, reasons.join("; "), "sent back for revision");
-          j.revision = { count: count + 1, role: audit.role, issues: reasons };
-          j.stage = 1;
-          j.lesson = undefined;
-          j.review = undefined;
-          for (let i = 1; i < j.audits.length; i++)
-            j.audits[i] = {
-              ...j.audits[i]!,
-              status: "Pending",
-              summary: "Waiting for revision.",
-            };
-          j.audits[1]!.summary =
-            `Revising the draft for the ${audit.role}: ${reasons.join("; ")}`.slice(
-              0,
-              600,
-            );
-          j.status = "pending";
-          j.leaseUntil = 0;
-          delete j.error;
-          delete j.reasks;
-          return j;
+      try {
+        const assessment = await provider.generate(
+          audit.role,
+          `${audit.task}${coachBrief} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Review all scene text, values, edges, response labels and reveal gates too. Reject unsupported visual relationships, findings or answer leakage in setup metadata, invented numerical data, misleading provenance, or diagrams that imply unavailable observations. Return approved=false when uncertain.`,
+          { lesson: j.lesson, pages: j.pages },
+          z.object({
+            approved: z.boolean(),
+            issues: z.array(z.string()),
+            summary: z.string(),
+          }),
+          pipelineModel,
+          { tier: "pipeline" },
+        );
+        // Degenerate text such as ":{" is not a note.
+        const issues = assessment.issues.filter(readable);
+        const summary = readable(assessment.summary)
+          ? assessment.summary.trim()
+          : "";
+        if (j.stage === 2) j.review = assessment;
+        if (assessment.approved && !issues.length)
+          audit.summary = summary || "Approved.";
+        else {
+          const notes = issues.join("; ") || summary || "No reason given.";
+          audit.summary = `Advisory notes: ${notes}`;
+          logStop(j, notes, "continued past review notes");
         }
-        j.review = assessment;
-        j.status = "review";
-        audit.status = "Needs Review";
-        j.error =
-          issues.join("; ") ||
-          `The ${audit.role} did not approve this lesson: ${summary} Regenerate to draft and review it again.`;
-        j.leaseUntil = 0;
-        logStop(j, j.error);
-        return j;
+      } catch (e) {
+        // The stage continues, so a provider's retry advice does not apply.
+        const reason = (
+          e instanceof Error ? e.message : "The review did not complete."
+        ).replace(/\s*Retry this stage\.$/, "");
+        audit.summary = `Review unavailable, so the lesson continued without it. ${reason}`;
+        logStop(
+          j,
+          `${e instanceof ProviderError ? `${e.code}: ` : ""}${reason}`,
+          "continued without review",
+        );
       }
-      if (j.stage === 2) j.review = assessment;
     } else {
       // The paper link is reveal-only metadata, so an unsupported one is
       // dropped instead of blocking the lesson.
@@ -433,9 +383,6 @@ export async function runStage(
       )
         j.lesson!.paper.url = null;
       const problems = verifyLesson(j.lesson!, j.pages);
-      if (!j.review?.approved)
-        problems.push("Research methods review is missing.");
-
       if (problems.length) {
         j.status = "review";
         audit.status = "Needs Review";
@@ -447,7 +394,7 @@ export async function runStage(
       }
       audit.model = "Deterministic validator";
       audit.summary =
-        "Schema, exact page excerpts, evidence identifiers, answer keys, and reviewer approvals checked.";
+        "Schema, exact page excerpts, evidence identifiers, and answer keys checked.";
       audit.refs = j.lesson!.evidence.map((r) => r.id);
       j.status = "ready";
     }
@@ -458,7 +405,6 @@ export async function runStage(
     j.status = j.stage === 5 ? "ready" : "pending";
     j.leaseUntil = 0;
     delete j.error;
-    delete j.reasks;
     return j;
   } catch (e) {
     audit.status = "Failed";

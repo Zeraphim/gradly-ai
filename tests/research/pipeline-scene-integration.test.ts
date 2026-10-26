@@ -179,7 +179,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     expect(sceneSchema.safeParse(comparisonChallenge!.scene).success).toBe(true);
   });
 
-  it("handles Methods Reviewer rejection by setting status to review and prevents lesson playability", async () => {
+  it("continues past a Methods Reviewer rejection and records its notes", async () => {
     const jobId = "reject-" + Math.random().toString(36).slice(2);
     const pages = sceneFixturePages(qualitativeSceneLesson);
     const job = newJob(jobId, "qualitative.pdf", pages);
@@ -241,8 +241,9 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       ),
     );
 
-    // Stage 2 rejects once, sending the lesson back for one redraft at stage 1.
-    for (let s = 0; s < 2; s++)
+    // Stages 2–4: the rejection is advisory, and the coach call that fails
+    // here does not stop the lesson either.
+    for (let s = 0; s < 3; s++)
       await withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
@@ -257,31 +258,16 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
         ),
       );
 
-    // Stage 2: Methods Reviewer rejects the redraft too
-    const resReview = await withGuest(testGuest, () =>
-      jobsPost(
-        new Request("http://localhost/api/research/jobs", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Origin: "http://localhost",
-          },
-          body: JSON.stringify({ id: job.id }),
-        }),
-        mockProvider,
-      ),
-    );
-    expect(resReview.status).toBe(200);
-
     const reviewedJob = await withGuest(testGuest, () =>
       read<Job>(testGuest, "job", job.id),
     );
-    expect(reviewedJob.status).toBe("review");
-    expect(reviewedJob.stage).toBe(2);
-    expect(reviewedJob.audits[2]!.status).toBe("Needs Review");
-    expect(reviewedJob.error).toContain("Association cannot be framed as causal");
+    expect(reviewedJob.status).toBe("ready");
+    expect(reviewedJob.audits[2]!.status).toBe("Completed");
+    expect(reviewedJob.audits[2]!.summary).toContain(
+      "Advisory notes: Association cannot be framed as causal",
+    );
+    expect(reviewedJob.audits[3]!.summary).toContain("Review unavailable");
 
-    // Attempting to start a session on a lesson in review MUST be rejected
     const startReq = new Request("http://localhost/api/research/learning", {
       method: "POST",
       headers: {
@@ -291,9 +277,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       body: JSON.stringify({ action: "start", lessonId: job.id }),
     });
     const startRes = await withGuest(testGuest, () => learningPost(startReq));
-    expect(startRes.status).toBe(400);
-    const errData = await startRes.json();
-    expect(errData.error).toContain("This lesson has not passed verification");
+    expect(startRes.status).toBe(200);
   });
 
   it("retry mechanism resets to stage 1 upon review rejection without switching live mode to demo", async () => {
@@ -413,7 +397,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     expect(scene.resolution).toBeNull();
   });
 
-  it("handles Learning Coach rejection by setting status to review", async () => {
+  it("continues past a Learning Coach rejection and records its notes", async () => {
     const jobId = "coach-rej-" + Math.random().toString(36).slice(2);
     const pages = sceneFixturePages(quantitativeSceneLesson);
     const job = newJob(jobId, "quantitative.pdf", pages);
@@ -452,8 +436,8 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       },
     };
 
-    // Run stages 0, 1, 2, 3, then the one redraft through stages 1, 2, 3
-    for (let s = 0; s < 7; s++) {
+    // Run stages 0–4
+    for (let s = 0; s < 5; s++) {
       await withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
@@ -472,10 +456,11 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const reviewedJob = await withGuest(testGuest, () =>
       read<Job>(testGuest, "job", job.id),
     );
-    expect(reviewedJob.status).toBe("review");
-    expect(reviewedJob.stage).toBe(3);
-    expect(reviewedJob.audits[3]!.status).toBe("Needs Review");
-    expect(reviewedJob.error).toContain("Hint reveals the correct answer");
+    expect(reviewedJob.status).toBe("ready");
+    expect(reviewedJob.audits[3]!.status).toBe("Completed");
+    expect(reviewedJob.audits[3]!.summary).toContain(
+      "Hint reveals the correct answer",
+    );
   });
 
   it("fails explicitly when model outputs malformed scene schema", async () => {
