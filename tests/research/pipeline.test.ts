@@ -3,6 +3,7 @@ import { it, expect } from "vitest";
 import {
   AUTO_RETRIES,
   autoRecover,
+  lessonDraftSchema,
   newJob,
   publicJob,
   runStage,
@@ -385,19 +386,21 @@ const qualitativeLesson: Lesson = {
       options: [
         { id: "A", text: "Open-ended interviews with thematic interpretation" },
         { id: "B", text: "A statistical test of mean quiz scores" },
+        { id: "C", text: "A survey estimating how many commuters get lost" },
       ],
       accepted: ["A"],
       alternatives: [],
       hint: "Consider the type of evidence the question seeks.",
       misconceptions: {
         B: "There is no numerical quiz outcome in this study.",
+        C: "Exploring accounts does not estimate how common an experience is.",
       },
       explanation:
         "Open-ended interviews can explore how participants describe experiences; a numerical comparison addresses a different question.",
       refs: ["approach"],
       writtenReasoning: true,
       reveal: "design",
-      scene: anchorScene([{ id: "A" }, { id: "B" }], "approach"),
+      scene: anchorScene([{ id: "A" }, { id: "B" }, { id: "C" }], "approach"),
     },
     {
       id: "theme-boundary",
@@ -415,12 +418,14 @@ const qualitativeLesson: Lesson = {
           id: "B",
           text: "Most commuters everywhere cannot read platform signs.",
         },
+        { id: "C", text: "Station staff caused the sign uncertainty." },
       ],
       accepted: ["A"],
       alternatives: [],
       hint: "Distinguish a theme in accounts from a population estimate.",
       misconceptions: {
         B: "The study does not provide a population estimate.",
+        C: "The accounts do not identify a cause of the uncertainty.",
       },
       explanation:
         "The theme describes a pattern in the interview accounts. Purposive interviews alone cannot establish how common that experience is in a population.",
@@ -442,12 +447,14 @@ const qualitativeLesson: Lesson = {
           id: "B",
           text: "Yes; a reported theme establishes the causal effect.",
         },
+        { id: "C", text: "No; the accounts show signs make no difference." },
       ],
       accepted: ["A"],
       alternatives: [],
       hint: "Which intervention and comparison were observed?",
       misconceptions: {
         B: "A theme alone does not identify an intervention effect.",
+        C: "The accounts did not test whether signs make a difference.",
       },
       explanation:
         "The accounts can motivate a design hypothesis. They do not test a signage intervention, so its effect remains uncertain.",
@@ -775,7 +782,8 @@ it("derives answer keys from option flags and removes challenges without one", a
     challenges: featured.challenges.slice(0, 4).map((c, i) => ({
       ...draft.challenges[i % 3]!,
       id: `c${i}`,
-      type: "single" as const,
+      // The server derives type from the correct flags, not from the draft.
+      type: "multiple" as const,
       options: c.options,
       accepted: c.accepted,
     })),
@@ -804,6 +812,9 @@ it("derives answer keys from option flags and removes challenges without one", a
   expect(wire.properties.challenges.items.properties).not.toHaveProperty(
     "accepted",
   );
+  expect(wire.properties.challenges.items.properties).not.toHaveProperty(
+    "type",
+  );
   // Two of four challenges have a usable key, and a lesson needs three.
   expect(failed.status).toBe("failed");
   expect(failed.error).toBe(
@@ -814,6 +825,8 @@ it("derives answer keys from option flags and removes challenges without one", a
   const j = await runStage(failed, provider([five]));
   expect(j.status).toBe("pending");
   expect(j.lesson!.challenges.map((c) => c.id)).toEqual(["c0", "c1", "c4"]);
+  // One correct option is single even though the draft said multiple.
+  expect(j.lesson!.challenges[0]!.type).toBe("single");
   const two = j.lesson!.challenges[1]!;
   expect(two.type).toBe("multiple");
   expect(two.accepted).toEqual(two.options.slice(0, 2).map((o) => o.id));
@@ -822,6 +835,21 @@ it("derives answer keys from option flags and removes challenges without one", a
     "Removed 2 challenges without a usable answer.",
   );
   expect((await finish(j)).status).toBe("ready");
+});
+
+it("requires at least three options on every drafted challenge", () => {
+  const schema = lessonDraftSchema(["source1"]);
+  const wire = z.toJSONSchema(schema) as unknown as {
+    properties: {
+      challenges: { items: { properties: { options: { minItems: number } } } };
+    };
+  };
+  expect(wire.properties.challenges.items.properties.options.minItems).toBe(3);
+  const valid = asDraft(draft);
+  expect(schema.safeParse(valid).success).toBe(true);
+  const two = structuredClone(valid);
+  two.challenges[0]!.options = two.challenges[0]!.options.slice(0, 2);
+  expect(schema.safeParse(two).success).toBe(false);
 });
 
 it("attaches verified added excerpts to a challenge and drops unverifiable ones", async () => {

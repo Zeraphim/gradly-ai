@@ -54,8 +54,10 @@ export function lessonDraftSchema(evidenceIds: string[]) {
   // "opt_opt_a", so each option carries its own correct flag instead.
   // No `evidence`: drafts wrote ref ids such as "limitations_2" there, which
   // learners saw as evidence. The server shows the cited excerpts instead.
+  // No `type`: drafts chose "multiple" for one correct option, so the server
+  // derives it from the correct flags.
   const challenge = challengeSchema
-    .omit({ alternatives: true, accepted: true, evidence: true })
+    .omit({ alternatives: true, accepted: true, evidence: true, type: true })
     .extend({
       options: z
         .array(
@@ -65,7 +67,8 @@ export function lessonDraftSchema(evidenceIds: string[]) {
             correct: z.boolean(),
           }),
         )
-        .min(2)
+        // Stored lessons may have two options; a drafted decision needs three.
+        .min(3)
         .max(6),
       refs: z.array(z.enum(ids)).min(1),
       // Last, so it covers the details the teaching text above it uses.
@@ -122,8 +125,8 @@ function attachAddedExcerpts(
   const accepted = options.filter((o) => o.correct).map((o) => o.id);
   return {
     ...c,
-    // A draft marking two options correct is a multiple-response question.
-    type: accepted.length > 1 ? "multiple" : c.type,
+    // One correct option is a single-response question, more are multiple.
+    type: accepted.length > 1 ? "multiple" : "single",
     options: options.map(({ id, text }) => ({ id, text })),
     accepted,
     refs,
@@ -272,7 +275,7 @@ export async function runStage(
       const draftSchema = lessonDraftSchema(j.evidence!.refs.map((r) => r.id));
       const draft = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Include single/multiple responses, optional reasoning, correct=true on each accepted option and false on every other option, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Write briefing as a concise, plain-language orientation before any quiz: explain the topic and why it matters, the setting and participants or source material where supported, and unfamiliar terms needed to read the paper. Use short paragraphs separated by newlines, aiming for 150–220 words when source evidence supports it. Do not reveal findings, conclusions, correct choices, statistical test selections, or details the learner must decide in the challenges. Omit unavailable context instead of inventing it. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
+        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. The learner has read only the briefing, so frame each question as a decision made from the briefing and the challenge's evidence, such as which design, measure or interpretation fits and why. Never ask the learner to identify or restate the paper's research question, aim, design, sample or a number. State every fact the decision needs in the prompt, so a learner who has not read the paper can answer from the prompt, briefing and evidence, and ask which choice fits best, such as which design would rule out a named alternative explanation. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Give every challenge at least three options, optional reasoning, correct=true on each accepted option and false on every other option, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Write briefing as a concise, plain-language orientation before any quiz: explain the topic and why it matters, the setting and participants or source material where supported, and unfamiliar terms needed to read the paper. Use short paragraphs separated by newlines, aiming for 150–220 words when source evidence supports it. Do not reveal findings, conclusions, correct choices, statistical test selections, or details the learner must decide in the challenges. Omit unavailable context instead of inventing it. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
         {
           evidence: j.evidence,
           evidenceRule:
