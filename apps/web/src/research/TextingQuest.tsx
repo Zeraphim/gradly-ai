@@ -128,6 +128,19 @@ function Quest({
       textingQuest[index]?.id === "variation" &&
       (resumed.phase === "correct" || resumed.phase === "explained"),
   );
+  // Keep unfinished answers and feedback when visiting an earlier screen.
+  const visits = useRef<
+    Record<
+      string,
+      {
+        selected: string[];
+        phase: Phase;
+        message: string;
+        hint: boolean;
+        variation: boolean;
+      }
+    >
+  >({});
   const screen = textingQuest[index]!;
   const predicting =
     screen.id === "results" &&
@@ -158,14 +171,37 @@ function Quest({
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
   }, [screen.id, heading]);
-  const goTo = (next: number) => {
+  const goTo = (next: number, reset = false) => {
     refocus.current = false;
+    if (reset) visits.current = {};
+    else
+      visits.current[screen.id] = { selected, phase, message, hint, variation };
+    const target = textingQuest[next]!;
+    const visited = visits.current[target.id];
+    const done =
+      !reset && target.kind === "choice" ? records[target.id] : undefined;
+    const resolved = done && (done.firstCorrect || done.revised);
     setProgress((p) => ({ ...p, index: next }));
-    setSelected([]);
-    setPhase("answering");
-    setMessage("");
-    setHint(false);
-    setVariation(false);
+    setSelected(
+      visited?.selected ??
+        (resolved && target.kind === "choice" ? target.correct : []),
+    );
+    setPhase(
+      visited?.phase ??
+        (resolved
+          ? done.firstCorrect || done.solved
+            ? "correct"
+            : "explained"
+          : "answering"),
+    );
+    setMessage(
+      visited?.message ??
+        (resolved && target.kind === "choice" ? target.feedback.correct : ""),
+    );
+    setHint(visited?.hint ?? false);
+    setVariation(
+      visited?.variation ?? (target.id === "variation" && !!resolved),
+    );
     window.scrollTo({ top: 0, behavior: "instant" });
   };
   const advance = () => goTo(Math.min(index + 1, textingQuest.length - 1));
@@ -362,7 +398,7 @@ function Quest({
             heading={heading}
             onRestart={() => {
               setProgress({ index: 0, records: {} });
-              goTo(0);
+              goTo(0, true);
             }}
           />
         ) : null}
@@ -418,6 +454,14 @@ function Quest({
               </p>
             )}
             <div className="journey-actions-buttons">
+              {index > 0 ? (
+                <button
+                  className="j-btn is-quiet"
+                  onClick={() => goTo(index - 1)}
+                >
+                  <Icon name="back" size={18} /> Back
+                </button>
+              ) : null}
               {screen.kind === "story" ? (
                 <>
                   {screen.skip ? (
@@ -506,6 +550,9 @@ function Story({
     <div className={`quest-story ${screen.visual ? "has-visual" : ""}`}>
       <div>
         <Title heading={heading}>{screen.heading}</Title>
+        {screen.source ? (
+          <p className="quest-briefing-source">{screen.source}</p>
+        ) : null}
         {screen.paragraphs.map((p, i) => (
           <m.p
             key={i}

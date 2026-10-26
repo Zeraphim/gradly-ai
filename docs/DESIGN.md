@@ -104,6 +104,12 @@ reduced motion must settle active movement without remounting controls, moving f
 or losing state. Information stays usable without animation. Give transforms one
 owner so global press rules, arrival effects and Motion do not multiply each other.
 
+Authored quest choices use a borderless soft blue fill and deeper blue text when
+selected, with a filled letter badge and a small badge emphasis. The existing
+shared hover/press gesture supplies tactile feedback; selection never implies
+correctness before checking. Pointer selection has no extra outline, keyboard
+focus stays visible, and reduced motion removes the badge transition.
+
 The current Motion implementation and its style selectors are research-scoped.
 Adopting it on another screen requires checking feature-provider ownership, styling
 scope and projection-reset assumptions. Share the smallest appropriate primitive

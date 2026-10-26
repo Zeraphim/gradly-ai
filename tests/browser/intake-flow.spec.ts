@@ -108,7 +108,10 @@ test("a rejected file explains the limit and offers prepared studies or another 
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   }
   await page.getByRole("link", { name: "View prepared studies" }).click();
-  await expect(page).toHaveURL(/#\/research\/learn$/);
+  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
+  await expect(page.locator("h1.quest-heading")).toHaveText(
+    "Can students text and still keep up?",
+  );
 });
 
 test("an interrupted check keeps the file and retries it", async ({ page }) => {
@@ -143,15 +146,13 @@ test("an interrupted check keeps the file and retries it", async ({ page }) => {
   expect(retried).toBe(true);
 });
 
-test("home sample entry opens the prepared-study library", async ({ page }) => {
+test("home sample entry opens the quest directly", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /Try a sample paper/ }).click();
-  await expect(page).toHaveURL(/#\/research\/learn$/);
-  await expect(
-    page
-      .getByRole("navigation", { name: "Main navigation" })
-      .getByRole("link", { name: "Prepared studies" }),
-  ).toHaveAttribute("aria-current", "page");
+  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
+  await expect(page.locator("h1.quest-heading")).toHaveText(
+    "Can students text and still keep up?",
+  );
 });
 
 test("play responds to letter keys, names linked study parts and colours the checked answer", async ({

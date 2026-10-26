@@ -1624,8 +1624,11 @@
   outline: none;
 }
 .research-lab .studies .journey-intro-body > p {
-  margin: 0;
+  margin: 0 0 12px;
   color: var(--s-body);
+}
+.research-lab .studies .journey-intro-body > p:last-child {
+  margin-bottom: 0;
 }
 .research-lab .studies .journey-intro-facts {
   display: flex;

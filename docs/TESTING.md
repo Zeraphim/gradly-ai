@@ -39,6 +39,15 @@ Format changed files with Prettier and run `git diff --check`. Browser traces ar
 
 ## Authored quest and activity checks
 
+`tests/browser/quest-navigation.spec.ts` checks Back with unfinished and completed
+answers, unchanged first-attempt records after reload, the opening screen’s
+provenance line, pointer versus keyboard selection outlines, and accessibility
+at phone and desktop widths. Its generated-paper case uses a mocked session with
+a distinct commuter-study briefing shown as paragraphs before questions; it
+verifies the UI handoff, not live generation or provider quality.
+`intake-flow.spec.ts` checks direct quest entry from home samples and
+rejected-upload recovery.
+
 Run one browser suite with `npx playwright test tests/browser/<name>.spec.ts`.
 Suites that cover the challenge player open it through
 `tests/browser/journey-helpers.ts`, which sends the same `start` request as the

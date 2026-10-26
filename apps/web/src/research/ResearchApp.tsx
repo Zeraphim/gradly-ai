@@ -791,11 +791,20 @@ function GradlyWorkspace({
                   </h1>
                   <div className="card">
                     <h2>Your investigation briefing</h2>
-                    <p>
-                      {session.source === "generated"
-                        ? session.briefing
-                        : "Make eight research decisions about this study. You’ll choose an analysis before comparing it with the published findings."}
-                    </p>
+                    {session.source === "generated" ? (
+                      session.briefing
+                        .split(/\n+/)
+                        .filter(Boolean)
+                        .map((paragraph, index) => (
+                          <p key={index}>{paragraph}</p>
+                        ))
+                    ) : (
+                      <p>
+                        Make eight research decisions about this study. You’ll
+                        choose an analysis before comparing it with the
+                        published findings.
+                      </p>
+                    )}
                     <details className="briefing-session-details">
                       <summary>
                         Attempts, reasoning and the optional bonus
