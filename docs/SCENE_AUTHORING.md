@@ -36,8 +36,8 @@ including one design-stage challenge, wherever the evidence supports one.
 `sceneCoverageProblems` in `apps/api/src/research/contracts.ts` enforces at least
 one valid scene. Right after drafting, the pipeline removes drafted scenes that
 fail validation. If none remains, it builds a `connections` scene for one
-challenge from that challenge's evidence text, or else its cited excerpts, and
-keeps it only if it passes the same checks. Only when no scene can be built does
+challenge from that challenge's evidence, which the server sets to its cited
+excerpts, and keeps it only if it passes the same checks. Only when no scene can be built does
 the stage fail with "Retry this stage", so the existing retry redrafts the lesson
 before any reviewer call. `verifyLesson` repeats the check for generated lessons. Demo and
 featured lessons are exempt. `connections` fits any paper with evidence, so a
