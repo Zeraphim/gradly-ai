@@ -64,10 +64,13 @@ export async function POST(
       throw Error("Nebius API key is not configured.");
     await rateLimit("__research_global_ai_budget__", "ai", 120);
     await rateLimit(who, "ai-stage", 40);
+    if (retry) delete j.reasks;
     if (retry && j.status === "review") {
       j.stage = 1;
       j.lesson = undefined;
       j.review = undefined;
+      // A regenerate starts a new attempt with its own automatic revision.
+      j.revision = undefined;
       for (let i = 1; i < j.audits.length; i++)
         j.audits[i] = {
           ...j.audits[i]!,

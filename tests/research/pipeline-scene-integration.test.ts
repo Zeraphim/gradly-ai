@@ -241,7 +241,23 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       ),
     );
 
-    // Stage 2: Methods Reviewer (Rejects)
+    // Stage 2 rejects once, sending the lesson back for one redraft at stage 1.
+    for (let s = 0; s < 2; s++)
+      await withGuest(testGuest, () =>
+        jobsPost(
+          new Request("http://localhost/api/research/jobs", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Origin: "http://localhost",
+            },
+            body: JSON.stringify({ id: job.id }),
+          }),
+          mockProvider,
+        ),
+      );
+
+    // Stage 2: Methods Reviewer rejects the redraft too
     const resReview = await withGuest(testGuest, () =>
       jobsPost(
         new Request("http://localhost/api/research/jobs", {
@@ -436,8 +452,8 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       },
     };
 
-    // Run stages 0, 1, 2, 3
-    for (let s = 0; s < 4; s++) {
+    // Run stages 0, 1, 2, 3, then the one redraft through stages 1, 2, 3
+    for (let s = 0; s < 7; s++) {
       await withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
