@@ -235,7 +235,8 @@ describe("uploaded journey", () => {
     first.terms = [
       {
         term,
-        definition: "In this study, the wording the question uses for its focus.",
+        definition:
+          "In this study, the wording the question uses for its focus.",
         refs: [ref.id],
         source: "paper",
       },
