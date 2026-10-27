@@ -207,7 +207,12 @@
   padding: 10px 36px 10px 14px;
   border: 1px solid var(--s-line-strong);
   border-radius: 12px;
+  appearance: none;
+  -webkit-appearance: none;
   background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23556370' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
   color: var(--s-ink);
   font: inherit;
   font-size: 15px;
@@ -237,10 +242,31 @@
   font-weight: 700;
   cursor: pointer;
 }
-.research-lab .studies .library-filter-field select:focus-visible,
+/* Native selects can match :focus-visible after a pointer interaction too.
+   Keep focus inside the control's existing bounds for every input method. */
+.research-lab .studies .library-filter-field select:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--s-blue-ink);
+  background-color: #f0f7fb;
+}
 .research-lab .studies .library-filter-reset:focus-visible {
-  outline: 3px solid var(--s-blue);
-  outline-offset: 3px;
+  outline: none;
+  box-shadow: none;
+  background-color: #eaf3f9;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (forced-colors: active) {
+  .research-lab .studies .library-filter-field select {
+    appearance: auto;
+    background-image: none;
+  }
+  .research-lab .studies .library-filter-field select:focus,
+  .research-lab .studies .library-filter-reset:focus-visible {
+    outline: 1px solid Highlight;
+    outline-offset: -2px;
+  }
 }
 @media (max-width: 740px) {
   .research-lab .studies .library-filters {

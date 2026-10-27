@@ -85,3 +85,61 @@ for (const width of [320, 390, 768, 1366]) {
     });
   });
 }
+
+for (const touch of [false, true]) {
+  test(`dropdown focus stays inside its border with ${touch ? "touch" : "mouse"} and keyboard`, async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({
+      hasTouch: touch,
+      viewport: { width: touch ? 390 : 1366, height: 900 },
+    });
+    const page = await context.newPage();
+    await page.goto("http://127.0.0.1:5173/#/research/learn");
+    const topic = page.getByLabel("Topic", { exact: true });
+    const design = page.getByLabel("Study design", { exact: true });
+    const unfocused = await topic.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return { border: style.borderColor, fill: style.backgroundColor };
+    });
+    for (const control of [topic, design]) {
+      if (touch) await control.tap();
+      else await control.click();
+      await page.keyboard.press("Escape");
+      await expect(control).toBeFocused();
+      const focused = await control.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          outline: style.outlineStyle,
+          shadow: style.boxShadow,
+          border: style.borderColor,
+          fill: style.backgroundColor,
+          appearance: style.appearance,
+        };
+      });
+      expect(focused).toMatchObject({
+        outline: "none",
+        shadow: "none",
+        appearance: "none",
+      });
+      expect(focused.border).not.toBe(unfocused.border);
+      expect(focused.fill).not.toBe(unfocused.fill);
+    }
+    await topic.focus();
+    await page.keyboard.press("Tab");
+    await expect(design).toBeFocused();
+    await expect(design).toHaveCSS("outline-style", "none");
+    await expect(design).toHaveCSS("box-shadow", "none");
+    await expect(design).not.toHaveCSS("border-color", unfocused.border);
+    await design.selectOption("longitudinal");
+    await page.getByRole("button", { name: "Reset filters" }).click();
+    await expect(topic).toBeFocused();
+    await expect(topic).toHaveCSS("outline-style", "none");
+    await expect(topic).toHaveCSS("box-shadow", "none");
+    await page.emulateMedia({ forcedColors: "active" });
+    await expect(topic).toHaveCSS("appearance", "auto");
+    await expect(topic).toHaveCSS("outline-width", "1px");
+    await expect(topic).toHaveCSS("outline-offset", "-2px");
+    await context.close();
+  });
+}

@@ -553,7 +553,11 @@ and Study design selects, a single live result count and conditional Reset filte
 Desktop uses one quiet toolbar; narrow screens stack the fields. Both filters
 still combine, every existing category remains available, and an empty result has
 the same visible Reset action. Native selects provide keyboard and touch behavior;
-existing filtered-card motion and inert exiting cards remain.
+existing filtered-card motion and inert exiting cards remain. Dropdown focus uses
+a darker existing border and a pale fill, with no outer ring or shadow for mouse,
+touch or keyboard. A single decorative chevron replaces platform arrow styling;
+the control remains a native select. Forced-colour mode restores platform arrows
+and an inset system focus indicator.
 
 ## OpenCode upload-guide integration — 28 October 2026
 
@@ -565,4 +569,5 @@ motion selects the existing static guiding pose; hidden documents also release
 the animated image. Both variants keep the same box dimensions. The integration
 is a narrow edit to the current Welcome component, preserving the newer upload,
 Learn, header and recovery behavior rather than copying an older Welcome file.
-The original checkout's separate pipeline rebase conflict is not resolved here.
+The original checkout's interrupted rebase was subsequently backed up and aborted;
+the recovered branch preserves its original head and uses the verified current main base.
