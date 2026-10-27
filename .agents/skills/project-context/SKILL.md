@@ -19,6 +19,11 @@ anywhere; it does not depend on a parent context repository or personal skill pa
 - `apps/web`: React 19, Vite 8, self-hosted Plus Jakarta Sans, Lucide icons, supplied
   blue Gradly artwork. `src/App.tsx` selects hash routes; `LegacyApp.tsx` retains
   upload-first entry and the curated journey; `src/research/` owns research views.
+- Prepared-study browser saves are bound to the card’s question revision. Bump
+  `StudyCard.revision` when question or answer meaning changes; copy-only edits
+  keep it. Legacy saves are revision 1. The intro explains a required restart,
+  and other study saves and server-backed uploaded sessions remain separate.
+  See `docs/TESTING.md` for revision and restore coverage.
 - `apps/api`: Express 5. `src/app.ts` composes the curated service and research
   router. `src/research/` owns document extraction, bounded English OCR, schemas,
   sequential generation/review stages, ownership, storage, and learning state.
