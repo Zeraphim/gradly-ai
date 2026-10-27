@@ -73,3 +73,10 @@ Refresh project-context for layout/command/service changes and vercel-delivery f
 build/hosting changes. Keep identifiers and paths portable. Do not add task trackers,
 CI gates, personal rules, private planning material, or new dependencies merely to
 maintain this scaffold. Record actual validation separately from historical reports.
+
+
+Prepared-study question revisions are part of content maintenance. When question or
+answer meaning changes, bump `StudyCard.revision`; copy-only edits keep it. Legacy
+browser saves are revision 1. Preserve the explicit restart notice, current-revision
+restore, unrelated study saves and server-owned uploaded progress. See
+`docs/TESTING.md` for the revision and restore regressions.
