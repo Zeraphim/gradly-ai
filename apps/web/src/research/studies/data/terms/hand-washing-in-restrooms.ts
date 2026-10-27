@@ -3,14 +3,13 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c6": [
+  c6: [
     {
-      "term": "compliance rate",
-      "definition": "A true compliance rate would divide hand‑hygiene events by the number of hygiene opportunities; the study’s ratio uses all sensor activations as the denominator, so it cannot be interpreted as a compliance rate.",
-      "refs": [
-        "e18"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "compliance rate",
+      definition:
+        "A true compliance rate would divide hand‑hygiene events by the number of hygiene opportunities; the study’s ratio uses all sensor activations as the denominator, so it cannot be interpreted as a compliance rate.",
+      refs: ["e18"],
+      source: "paper",
+    },
+  ],
 };

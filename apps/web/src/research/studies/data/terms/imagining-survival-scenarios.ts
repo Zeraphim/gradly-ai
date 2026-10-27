@@ -3,76 +3,70 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "Item relevance ratings",
-      "definition": "Participants rated how relevant each word was to the survival scenario on a scale from very relevant to irrelevant.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "Item relevance ratings",
+      definition:
+        "Participants rated how relevant each word was to the survival scenario on a scale from very relevant to irrelevant.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "p-value",
-      "definition": "The p-value indicates the probability of obtaining an F as large as observed if there were truly no condition effect on item memory.",
-      "refs": [
-        "e2"
-      ],
-      "source": "paper"
-    }
+      term: "p-value",
+      definition:
+        "The p-value indicates the probability of obtaining an F as large as observed if there were truly no condition effect on item memory.",
+      refs: ["e2"],
+      source: "paper",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "Plausibility",
-      "definition": "In this study, plausibility refers to whether the color assigned to an item is typical or possible for that object (e.g., red for an apple).",
-      "refs": [
-        "e1"
-      ],
-      "source": "paper"
+      term: "Plausibility",
+      definition:
+        "In this study, plausibility refers to whether the color assigned to an item is typical or possible for that object (e.g., red for an apple).",
+      refs: ["e1"],
+      source: "paper",
     },
     {
-      "term": "Condition",
-      "definition": "Here, condition indicates whether participants encoded items under the survival scenario or the moving scenario.",
-      "refs": [
-        "e1"
-      ],
-      "source": "paper"
-    }
+      term: "Condition",
+      definition:
+        "Here, condition indicates whether participants encoded items under the survival scenario or the moving scenario.",
+      refs: ["e1"],
+      source: "paper",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "Source context memory",
-      "definition": "This assesses whether participants could remember which experimental condition (survival or moving) each word was encoded under.",
-      "refs": [
-        "e1"
-      ],
-      "source": "paper"
+      term: "Source context memory",
+      definition:
+        "This assesses whether participants could remember which experimental condition (survival or moving) each word was encoded under.",
+      refs: ["e1"],
+      source: "paper",
     },
     {
-      "term": "Survival processing advantage",
-      "definition": "This describes the benefit in memory performance for information processed under the survival scenario compared to the moving scenario.",
-      "refs": [
-        "e1"
-      ],
-      "source": "paper"
-    }
+      term: "Survival processing advantage",
+      definition:
+        "This describes the benefit in memory performance for information processed under the survival scenario compared to the moving scenario.",
+      refs: ["e1"],
+      source: "paper",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "Known memory mechanisms",
-      "definition": "These are established cognitive processes (such as item‑specific or relational encoding) that are thought to influence memory performance.",
-      "refs": [
-        "e3"
-      ],
-      "source": "paper"
+      term: "Known memory mechanisms",
+      definition:
+        "These are established cognitive processes (such as item‑specific or relational encoding) that are thought to influence memory performance.",
+      refs: ["e3"],
+      source: "paper",
     },
     {
-      "term": "Survival processing advantage",
-      "definition": "This describes the benefit in memory performance for information processed under the survival scenario compared to the moving scenario.",
-      "refs": [
-        "e3"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "Survival processing advantage",
+      definition:
+        "This describes the benefit in memory performance for information processed under the survival scenario compared to the moving scenario.",
+      refs: ["e3"],
+      source: "paper",
+    },
+  ],
 };

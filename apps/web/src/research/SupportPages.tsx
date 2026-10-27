@@ -5,7 +5,6 @@ import { Speech } from "./learning-ui.js";
 import type { ResearchConfig } from "./types.js";
 import { glossary } from "./terms/glossary.js";
 
-
 export type SupportPagesProps = {
   route: string;
   heading: RefObject<HTMLHeadingElement | null>;

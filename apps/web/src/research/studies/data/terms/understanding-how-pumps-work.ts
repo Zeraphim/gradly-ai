@@ -3,43 +3,36 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c3": [
+  c3: [
     {
-      "term": "interaction",
-      "definition": "An interaction indicates that the effect of explanation type on learning differs across levels of spatial ability.",
-      "refs": [
-        "e2"
-      ],
-      "source": "paper"
-    }
+      term: "interaction",
+      definition:
+        "An interaction indicates that the effect of explanation type on learning differs across levels of spatial ability.",
+      refs: ["e2"],
+      source: "paper",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "completeness",
-      "definition": "Completeness means including all necessary parts of the system in the explanation.",
-      "refs": [
-        "e20",
-        "e22"
-      ],
-      "source": "paper"
+      term: "completeness",
+      definition:
+        "Completeness means including all necessary parts of the system in the explanation.",
+      refs: ["e20", "e22"],
+      source: "paper",
     },
     {
-      "term": "coherence",
-      "definition": "Coherence refers to the logical and causal connections made between those parts.",
-      "refs": [
-        "e20",
-        "e22"
-      ],
-      "source": "paper"
+      term: "coherence",
+      definition:
+        "Coherence refers to the logical and causal connections made between those parts.",
+      refs: ["e20", "e22"],
+      source: "paper",
     },
     {
-      "term": "inference",
-      "definition": "Inference involves using the depicted structure to deduce how the system functions or behaves.",
-      "refs": [
-        "e20",
-        "e22"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "inference",
+      definition:
+        "Inference involves using the depicted structure to deduce how the system functions or behaves.",
+      refs: ["e20", "e22"],
+      source: "paper",
+    },
+  ],
 };

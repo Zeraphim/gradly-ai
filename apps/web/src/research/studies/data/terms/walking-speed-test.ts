@@ -3,82 +3,86 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "independent variable",
-      "definition": "In this study, the independent variable is the factor that the researchers manipulated to create different groups in Experiment 1.",
-      "refs": [],
-      "source": "model"
+      term: "independent variable",
+      definition:
+        "In this study, the independent variable is the factor that the researchers manipulated to create different groups in Experiment 1.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "participant awareness",
-      "definition": "In this study, participant awareness refers to whether participants could consciously detect that they had been exposed to the prime.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "participant awareness",
+      definition:
+        "In this study, participant awareness refers to whether participants could consciously detect that they had been exposed to the prime.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c2": [
+  c2: [
     {
-      "term": "measurement device",
-      "definition": "In this study, the measurement device is the tool used to record how long participants took to walk the hallway (e.g., stopwatch or infrared sensor).",
-      "refs": [],
-      "source": "model"
-    }
+      term: "measurement device",
+      definition:
+        "In this study, the measurement device is the tool used to record how long participants took to walk the hallway (e.g., stopwatch or infrared sensor).",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "walking‑speed analysis",
-      "definition": "In Experiment 1, the walking‑speed analysis is the statistical test that compared how long Prime and No‑Prime participants took to walk the hallway.",
-      "refs": [
-        "e7"
-      ],
-      "source": "paper"
+      term: "walking‑speed analysis",
+      definition:
+        "In Experiment 1, the walking‑speed analysis is the statistical test that compared how long Prime and No‑Prime participants took to walk the hallway.",
+      refs: ["e7"],
+      source: "paper",
     },
     {
-      "term": "statistically significant difference",
-      "definition": "Here, a statistically significant difference would mean the observed difference in walking speed is unlikely to have arisen by chance alone.",
-      "refs": [],
-      "source": "model"
+      term: "statistically significant difference",
+      definition:
+        "Here, a statistically significant difference would mean the observed difference in walking speed is unlikely to have arisen by chance alone.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "effect size",
-      "definition": "In this study, effect size quantifies the magnitude of the walking‑speed difference between groups relative to variability.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "effect size",
+      definition:
+        "In this study, effect size quantifies the magnitude of the walking‑speed difference between groups relative to variability.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "condition",
-      "definition": "In this study, a condition is a specific combination of experimental manipulations (e.g., prime type and experimenter expectation) that defines a group of participants.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "condition",
+      definition:
+        "In this study, a condition is a specific combination of experimental manipulations (e.g., prime type and experimenter expectation) that defines a group of participants.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "failure to replicate",
-      "definition": "In this context, failure to replicate means that Experiment 1 did not produce a statistically significant walking‑speed difference similar to the earlier study.",
-      "refs": [
-        "e2"
-      ],
-      "source": "paper"
-    }
+      term: "failure to replicate",
+      definition:
+        "In this context, failure to replicate means that Experiment 1 did not produce a statistically significant walking‑speed difference similar to the earlier study.",
+      refs: ["e2"],
+      source: "paper",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "confound",
-      "definition": "Here, a confound is an unintended variable that varies with the experimental manipulation and could produce the observed effect.",
-      "refs": [],
-      "source": "model"
+      term: "confound",
+      definition:
+        "Here, a confound is an unintended variable that varies with the experimental manipulation and could produce the observed effect.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "participant mimicry",
-      "definition": "In this study, participant mimicry refers to the tendency of participants to imitate the experimenter’s behavior without conscious intent.",
-      "refs": [
-        "e9"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "participant mimicry",
+      definition:
+        "In this study, participant mimicry refers to the tendency of participants to imitate the experimenter’s behavior without conscious intent.",
+      refs: ["e9"],
+      source: "paper",
+    },
+  ],
 };

@@ -25,7 +25,11 @@
   cursor: help;
   text-decoration-line: underline;
   text-decoration-style: dotted;
-  text-decoration-color: color-mix(in srgb, var(--term-accent) 62%, transparent);
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--term-accent) 62%,
+    transparent
+  );
   text-decoration-thickness: 2px;
   text-underline-offset: 0.24em;
   text-decoration-skip-ink: none;

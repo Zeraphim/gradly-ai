@@ -3,88 +3,100 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "habit curve",
-      "definition": "In this study, a habit curve is the expected trajectory of an individual's habit strength over time, rising quickly then flattening as the behavior becomes automatic.",
-      "refs": [],
-      "source": "model"
+      term: "habit curve",
+      definition:
+        "In this study, a habit curve is the expected trajectory of an individual's habit strength over time, rising quickly then flattening as the behavior becomes automatic.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "habit‑strength scale",
-      "definition": "In this study, the habit‑strength scale is the questionnaire used to quantify how automatic the chosen behavior feels, with higher numbers indicating a stronger habit.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "habit‑strength scale",
+      definition:
+        "In this study, the habit‑strength scale is the questionnaire used to quantify how automatic the chosen behavior feels, with higher numbers indicating a stronger habit.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c2": [
+  c2: [
     {
-      "term": "self‑control differences",
-      "definition": "In this study, self‑control differences refer to variations among participants in their trait self‑control scores, which the model considered as a potential factor influencing habit growth.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "self‑control differences",
+      definition:
+        "In this study, self‑control differences refer to variations among participants in their trait self‑control scores, which the model considered as a potential factor influencing habit growth.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "consistent practice",
-      "definition": "In this study, consistent practice refers to the proportion of days participants actually performed the chosen behavior, measured as the share of days the behavior was carried out.",
-      "refs": [],
-      "source": "model"
+      term: "consistent practice",
+      definition:
+        "In this study, consistent practice refers to the proportion of days participants actually performed the chosen behavior, measured as the share of days the behavior was carried out.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "daily practice",
-      "definition": "Here, daily practice means performing the selected behavior each day, which the study treated as the ideal level of consistency for habit formation.",
-      "refs": [],
-      "source": "model"
+      term: "daily practice",
+      definition:
+        "Here, daily practice means performing the selected behavior each day, which the study treated as the ideal level of consistency for habit formation.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "self‑control",
-      "definition": "In this study, self‑control is the trait measure of participants’ general ability to regulate impulses, assessed once at baseline.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "self‑control",
+      definition:
+        "In this study, self‑control is the trait measure of participants’ general ability to regulate impulses, assessed once at baseline.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "linear term",
-      "definition": "In this study, the linear term represents the steady increase in habit strength associated with each additional day of the study period.",
-      "refs": [],
-      "source": "model"
+      term: "linear term",
+      definition:
+        "In this study, the linear term represents the steady increase in habit strength associated with each additional day of the study period.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "time trend",
-      "definition": "In this study, the time trend is the overall pattern of habit‑strength change across the 110‑day observation window, modeled by both linear and quadratic components.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "time trend",
+      definition:
+        "In this study, the time trend is the overall pattern of habit‑strength change across the 110‑day observation window, modeled by both linear and quadratic components.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "state self‑control",
-      "definition": "Here, state self‑control would be the moment‑to‑moment ability to regulate behavior in specific situations, which was not assessed in this research.",
-      "refs": [],
-      "source": "model"
+      term: "state self‑control",
+      definition:
+        "Here, state self‑control would be the moment‑to‑moment ability to regulate behavior in specific situations, which was not assessed in this research.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "habit growth",
-      "definition": "In this study, habit growth is the increase in habit‑strength scores over time, reflecting how automatic the chosen behavior becomes.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "habit growth",
+      definition:
+        "In this study, habit growth is the increase in habit‑strength scores over time, reflecting how automatic the chosen behavior becomes.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "average increase",
-      "definition": "Here, the average increase refers to the mean rise in habit‑strength scores observed across all participants over the 110‑day period.",
-      "refs": [],
-      "source": "model"
+      term: "average increase",
+      definition:
+        "Here, the average increase refers to the mean rise in habit‑strength scores observed across all participants over the 110‑day period.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "follow‑up duration",
-      "definition": "In this study, the follow‑up duration is the length of time (110 days) during which habit strength was measured after the initial baseline.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "follow‑up duration",
+      definition:
+        "In this study, the follow‑up duration is the length of time (110 days) during which habit strength was measured after the initial baseline.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

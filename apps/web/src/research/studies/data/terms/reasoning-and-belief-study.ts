@@ -3,112 +3,128 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "sampling uncertainty",
-      "definition": "In this study, sampling uncertainty refers to how much the estimated effect could vary due to the limited number of participants in the original small groups.",
-      "refs": [],
-      "source": "model"
+      term: "sampling uncertainty",
+      definition:
+        "In this study, sampling uncertainty refers to how much the estimated effect could vary due to the limited number of participants in the original small groups.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "interval",
-      "definition": "Here, the interval is the range (−1.12 to −0.06) that shows how precisely the original effect was known.",
-      "refs": [],
-      "source": "model"
+      term: "interval",
+      definition:
+        "Here, the interval is the range (−1.12 to −0.06) that shows how precisely the original effect was known.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "significance",
-      "definition": "Here, significance means the statistical test indicating whether the observed effect is unlikely to be due to chance.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "significance",
+      definition:
+        "Here, significance means the statistical test indicating whether the observed effect is unlikely to be due to chance.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c2": [
+  c2: [
     {
-      "term": "target effect",
-      "definition": "In this study, the target effect is the change in belief after viewing The Thinker that the researchers aim to measure.",
-      "refs": [],
-      "source": "model"
+      term: "target effect",
+      definition:
+        "In this study, the target effect is the change in belief after viewing The Thinker that the researchers aim to measure.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "null result",
-      "definition": "Here, a null result means no statistically significant difference in belief between the prime and control conditions.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "null result",
+      definition:
+        "Here, a null result means no statistically significant difference in belief between the prime and control conditions.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "non-significant overall estimate",
-      "definition": "In this study, the overall estimate from all replication sites is called non-significant because its confidence interval includes zero.",
-      "refs": [],
-      "source": "model"
+      term: "non-significant overall estimate",
+      definition:
+        "In this study, the overall estimate from all replication sites is called non-significant because its confidence interval includes zero.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "true effect",
-      "definition": "In this study, the true effect refers to the actual change in belief that would be found with an infinitely large sample.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "true effect",
+      definition:
+        "In this study, the true effect refers to the actual change in belief that would be found with an infinitely large sample.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "p < .05",
-      "definition": "In this study, p < .05 means the Lutheran site’s difference in belief is unlikely to be due to random chance alone.",
-      "refs": [],
-      "source": "model"
+      term: "p < .05",
+      definition:
+        "In this study, p < .05 means the Lutheran site’s difference in belief is unlikely to be due to random chance alone.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "general reversal",
-      "definition": "This phrase would mean interpreting the Lutheran site’s opposite result as evidence that the prime generally increases belief across contexts.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "general reversal",
+      definition:
+        "This phrase would mean interpreting the Lutheran site’s opposite result as evidence that the prime generally increases belief across contexts.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "null",
-      "definition": "In this study, the null refers to the absence of a statistically significant difference in belief between the prime and control conditions.",
-      "refs": [],
-      "source": "model"
+      term: "null",
+      definition:
+        "In this study, the null refers to the absence of a statistically significant difference in belief between the prime and control conditions.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "belief effect",
-      "definition": "Here, the belief effect is the change in religious belief that would be attributed to analytic thinking if it existed.",
-      "refs": [],
-      "source": "model"
+      term: "belief effect",
+      definition:
+        "Here, the belief effect is the change in religious belief that would be attributed to analytic thinking if it existed.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "analytic thinking",
-      "definition": "In this study, analytic thinking is the cognitive process presumed to be activated by viewing the Thinker picture.",
-      "refs": [],
-      "source": "model"
+      term: "analytic thinking",
+      definition:
+        "In this study, analytic thinking is the cognitive process presumed to be activated by viewing the Thinker picture.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "fabrication",
-      "definition": "This term would mean the intentional creation of false data in the original study, which the null result alone does not prove.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "fabrication",
+      definition:
+        "This term would mean the intentional creation of false data in the original study, which the null result alone does not prove.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "quality reasons",
-      "definition": "In this study, quality reasons refer to the criteria used to remove participants who failed attention or compliance checks.",
-      "refs": [],
-      "source": "model"
+      term: "quality reasons",
+      definition:
+        "In this study, quality reasons refer to the criteria used to remove participants who failed attention or compliance checks.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "quality-related exclusion",
-      "definition": "Here, a quality-related exclusion is the removal of a participant based on those pre‑set quality criteria.",
-      "refs": [],
-      "source": "model"
+      term: "quality-related exclusion",
+      definition:
+        "Here, a quality-related exclusion is the removal of a participant based on those pre‑set quality criteria.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "predicted effect",
-      "definition": "This phrase denotes the expected change in belief after viewing The Thinker that the researchers hoped to observe.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "predicted effect",
+      definition:
+        "This phrase denotes the expected change in belief after viewing The Thinker that the researchers hoped to observe.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

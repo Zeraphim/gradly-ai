@@ -3,46 +3,45 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "q1": [
+  q1: [
     {
-      "term": "preferred mode",
-      "definition": "Here, the way a child likes to receive information—either reading or listening—that the study treats as the child's learning style.",
-      "refs": [],
-      "source": "model"
+      term: "preferred mode",
+      definition:
+        "Here, the way a child likes to receive information—either reading or listening—that the study treats as the child's learning style.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "match",
-      "definition": "In this study, a match occurs when a child receives instruction in the mode they prefer (reading for visual‑preferring children, listening for auditory‑preferring children).",
-      "refs": [],
-      "source": "model"
-    }
+      term: "match",
+      definition:
+        "In this study, a match occurs when a child receives instruction in the mode they prefer (reading for visual‑preferring children, listening for auditory‑preferring children).",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q3": [
+  q3: [
     {
-      "term": "power plan",
-      "definition": "In this study, it is the a‑priori calculation that determined at least 76 students are needed to have an 80% chance of detecting a moderate matching effect.",
-      "refs": [
-        "power"
-      ],
-      "source": "paper"
+      term: "power plan",
+      definition:
+        "In this study, it is the a‑priori calculation that determined at least 76 students are needed to have an 80% chance of detecting a moderate matching effect.",
+      refs: ["power"],
+      source: "paper",
     },
     {
-      "term": "clear‑preference",
-      "definition": "Here, it refers to students whose learning‑style survey shows a strong visual or strong auditory preference, excluding those with mixed or neutral scores.",
-      "refs": [
-        "groups"
-      ],
-      "source": "paper"
-    }
+      term: "clear‑preference",
+      definition:
+        "Here, it refers to students whose learning‑style survey shows a strong visual or strong auditory preference, excluding those with mixed or neutral scores.",
+      refs: ["groups"],
+      source: "paper",
+    },
   ],
-  "q5": [
+  q5: [
     {
-      "term": "significant difference",
-      "definition": "Here, it means the average score of visual‑preference students is statistically higher than that of auditory‑preference students across both reading and listening conditions.",
-      "refs": [
-        "anova"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "significant difference",
+      definition:
+        "Here, it means the average score of visual‑preference students is statistically higher than that of auditory‑preference students across both reading and listening conditions.",
+      refs: ["anova"],
+      source: "paper",
+    },
+  ],
 };

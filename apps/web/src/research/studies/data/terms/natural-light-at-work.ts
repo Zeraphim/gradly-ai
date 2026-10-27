@@ -3,48 +3,54 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "survey",
-      "definition": "Here, the workers completed a single survey that asked about workspace plants, nature pictures, mood and job satisfaction.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "survey",
+      definition:
+        "Here, the workers completed a single survey that asked about workspace plants, nature pictures, mood and job satisfaction.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c2": [
+  c2: [
     {
-      "term": "effect sizes",
-      "definition": "Effect sizes refer to the magnitude of differences or relationships, such as how much scores differ between groups or how strongly a predictor relates to an outcome.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "effect sizes",
+      definition:
+        "Effect sizes refer to the magnitude of differences or relationships, such as how much scores differ between groups or how strongly a predictor relates to an outcome.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "coefficient",
-      "definition": "The coefficient is the numerical estimate (.21) from a regression model that quantifies the link between direct sunlight and anxiety.",
-      "refs": [],
-      "source": "model"
+      term: "coefficient",
+      definition:
+        "The coefficient is the numerical estimate (.21) from a regression model that quantifies the link between direct sunlight and anxiety.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "sign",
-      "definition": "The sign indicates whether the coefficient is positive (+) or negative (−), showing the direction of the association in this study.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "sign",
+      definition:
+        "The sign indicates whether the coefficient is positive (+) or negative (−), showing the direction of the association in this study.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "cross-sectional design",
-      "definition": "A cross‑sectional design collects data at one point in time, as the authors did when measuring plants and mood simultaneously.",
-      "refs": [],
-      "source": "model"
+      term: "cross-sectional design",
+      definition:
+        "A cross‑sectional design collects data at one point in time, as the authors did when measuring plants and mood simultaneously.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "self-reported",
-      "definition": "Self‑reported data are gathered by asking participants to describe their own experiences, such as rating how many plants they have and their mood.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "self-reported",
+      definition:
+        "Self‑reported data are gathered by asking participants to describe their own experiences, such as rating how many plants they have and their mood.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

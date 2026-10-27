@@ -3,32 +3,29 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c3": [
+  c3: [
     {
-      "term": "Bayes factor",
-      "definition": "A Bayes factor compares the evidence for the null hypothesis versus the alternative; values above three were taken as substantive support for the null in this study.",
-      "refs": [
-        "e13"
-      ],
-      "source": "paper"
-    }
+      term: "Bayes factor",
+      definition:
+        "A Bayes factor compares the evidence for the null hypothesis versus the alternative; values above three were taken as substantive support for the null in this study.",
+      refs: ["e13"],
+      source: "paper",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "Bayes factor",
-      "definition": "A Bayes factor quantifies relative evidence for null versus alternative hypotheses; values exceeding three indicate substantive support for the null.",
-      "refs": [
-        "e13"
-      ],
-      "source": "paper"
+      term: "Bayes factor",
+      definition:
+        "A Bayes factor quantifies relative evidence for null versus alternative hypotheses; values exceeding three indicate substantive support for the null.",
+      refs: ["e13"],
+      source: "paper",
     },
     {
-      "term": "null hypothesis",
-      "definition": "Here the null hypothesis claims that anxiety does not produce a conservative shift or ideological intensification in attitudes.",
-      "refs": [
-        "e13"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "null hypothesis",
+      definition:
+        "Here the null hypothesis claims that anxiety does not produce a conservative shift or ideological intensification in attitudes.",
+      refs: ["e13"],
+      source: "paper",
+    },
+  ],
 };

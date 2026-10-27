@@ -3,72 +3,82 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c2": [
+  c2: [
     {
-      "term": "prevalence",
-      "definition": "In this study, prevalence refers to the proportion of participants who gave at least one incorrect answer on the death‑penalty measure.",
-      "refs": [],
-      "source": "model"
+      term: "prevalence",
+      definition:
+        "In this study, prevalence refers to the proportion of participants who gave at least one incorrect answer on the death‑penalty measure.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "direct question",
-      "definition": "In this study, the direct question asks participants a single, open‑ended query about whether Austria currently has the death penalty.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "direct question",
+      definition:
+        "In this study, the direct question asks participants a single, open‑ended query about whether Austria currently has the death penalty.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "weekly television viewing",
-      "definition": "In this study, weekly television viewing is the self‑reported number of hours participants spend watching TV each week.",
-      "refs": [],
-      "source": "model"
+      term: "weekly television viewing",
+      definition:
+        "In this study, weekly television viewing is the self‑reported number of hours participants spend watching TV each week.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "logistic regression",
-      "definition": "Here, logistic regression is the statistical model used to estimate the odds of giving an incorrect answer while adjusting for other variables.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "logistic regression",
+      definition:
+        "Here, logistic regression is the statistical model used to estimate the odds of giving an incorrect answer while adjusting for other variables.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "prevalence",
-      "definition": "In this study, prevalence denotes the proportion of participants who answered incorrectly on a given measure.",
-      "refs": [],
-      "source": "model"
+      term: "prevalence",
+      definition:
+        "In this study, prevalence denotes the proportion of participants who answered incorrectly on a given measure.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "5‑item questionnaire",
-      "definition": "Here, the 5‑item questionnaire is the indirect set of five death‑penalty‑related questions used to assess false beliefs.",
-      "refs": [],
-      "source": "model"
+      term: "5‑item questionnaire",
+      definition:
+        "Here, the 5‑item questionnaire is the indirect set of five death‑penalty‑related questions used to assess false beliefs.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "direct question",
-      "definition": "In this study, the direct question asks participants a single, open‑ended query about whether Austria currently has the death penalty.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "direct question",
+      definition:
+        "In this study, the direct question asks participants a single, open‑ended query about whether Austria currently has the death penalty.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "intercorrelation matrix",
-      "definition": "In this study, the intercorrelation matrix displays the pairwise correlations among all measured variables such as age, education, TV viewing, suggestibility, and questionnaire scores.",
-      "refs": [],
-      "source": "model"
+      term: "intercorrelation matrix",
+      definition:
+        "In this study, the intercorrelation matrix displays the pairwise correlations among all measured variables such as age, education, TV viewing, suggestibility, and questionnaire scores.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "predictor",
-      "definition": "Here, a predictor is a variable examined to see whether it forecasts participants’ performance on the death‑penalty questionnaire.",
-      "refs": [],
-      "source": "model"
+      term: "predictor",
+      definition:
+        "Here, a predictor is a variable examined to see whether it forecasts participants’ performance on the death‑penalty questionnaire.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "generalizability",
-      "definition": "In this context, generalizability concerns the extent to which the findings from this sample can be applied to broader populations.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "generalizability",
+      definition:
+        "In this context, generalizability concerns the extent to which the findings from this sample can be applied to broader populations.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

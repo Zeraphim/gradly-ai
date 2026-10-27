@@ -3,56 +3,63 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "condition",
-      "definition": "In this study, the condition indicates whether a participant received a puzzle with achievement‑related words or a neutral puzzle.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "condition",
+      definition:
+        "In this study, the condition indicates whether a participant received a puzzle with achievement‑related words or a neutral puzzle.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c2": [
+  c2: [
     {
-      "term": "condition",
-      "definition": "In this study, the condition refers to whether participants worked on puzzles primed with achievement words or on neutral puzzles.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "condition",
+      definition:
+        "In this study, the condition refers to whether participants worked on puzzles primed with achievement words or on neutral puzzles.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "estimate",
-      "definition": "In this study, the estimate is the observed effect size (d) that quantifies the difference in word‑search performance between achievement‑word and neutral conditions.",
-      "refs": [],
-      "source": "model"
+      term: "estimate",
+      definition:
+        "In this study, the estimate is the observed effect size (d) that quantifies the difference in word‑search performance between achievement‑word and neutral conditions.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "interval",
-      "definition": "Here, the interval is the 95 % confidence interval around the estimate, showing the range of plausible effect sizes given the sample data.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "interval",
+      definition:
+        "Here, the interval is the 95 % confidence interval around the estimate, showing the range of plausible effect sizes given the sample data.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "scoring choice",
-      "definition": "In this study, the scoring choice refers to the rule used to count words—whether only whole target words are counted or also shorter hidden words are included.",
-      "refs": [],
-      "source": "model"
+      term: "scoring choice",
+      definition:
+        "In this study, the scoring choice refers to the rule used to count words—whether only whole target words are counted or also shorter hidden words are included.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "strict scoring",
-      "definition": "Here, strict scoring means counting only complete target words (e.g., PEACH) and ignoring any shorter words that happen to be embedded within them.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "strict scoring",
+      definition:
+        "Here, strict scoring means counting only complete target words (e.g., PEACH) and ignoring any shorter words that happen to be embedded within them.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "power",
-      "definition": "In this study, power is the probability that the replication would detect a true effect of a given size, based on its sample size and design.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "power",
+      definition:
+        "In this study, power is the probability that the replication would detect a true effect of a given size, based on its sample size and design.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

@@ -3,90 +3,86 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "q2": [
+  q2: [
     {
-      "term": "within-subjects design",
-      "definition": "In this study, each student completes all three sessions (badminton, running, rest) so their own performance across conditions serves as the comparison.",
-      "refs": [
-        "design"
-      ],
-      "source": "paper"
-    }
+      term: "within-subjects design",
+      definition:
+        "In this study, each student completes all three sessions (badminton, running, rest) so their own performance across conditions serves as the comparison.",
+      refs: ["design"],
+      source: "paper",
+    },
   ],
-  "q3": [
+  q3: [
     {
-      "term": "walk",
-      "definition": "In this study, the walk is the two‑minute period participants spend moving to the badminton court or walking on a treadmill before the ten‑minute intervention.",
-      "refs": [
-        "walk"
-      ],
-      "source": "paper"
-    }
+      term: "walk",
+      definition:
+        "In this study, the walk is the two‑minute period participants spend moving to the badminton court or walking on a treadmill before the ten‑minute intervention.",
+      refs: ["walk"],
+      source: "paper",
+    },
   ],
-  "q4": [
+  q4: [
     {
-      "term": "gain",
-      "definition": "In this study, gain is the difference between the after‑score and the before‑score on the colour‑word test for each session.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "gain",
+      definition:
+        "In this study, gain is the difference between the after‑score and the before‑score on the colour‑word test for each session.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q5": [
+  q5: [
     {
-      "term": "paired t tests",
-      "definition": "In this study, paired t tests compare each exercise’s gain with the rest gain using the same students’ before‑and‑after scores.",
-      "refs": [
-        "vsrest"
-      ],
-      "source": "paper"
+      term: "paired t tests",
+      definition:
+        "In this study, paired t tests compare each exercise’s gain with the rest gain using the same students’ before‑and‑after scores.",
+      refs: ["vsrest"],
+      source: "paper",
     },
     {
-      "term": "p‑value",
-      "definition": "In this study, the p‑value indicates the probability that the observed gain difference could arise by chance; a value below .008 is required for significance after correction.",
-      "refs": [
-        "alpha"
-      ],
-      "source": "paper"
+      term: "p‑value",
+      definition:
+        "In this study, the p‑value indicates the probability that the observed gain difference could arise by chance; a value below .008 is required for significance after correction.",
+      refs: ["alpha"],
+      source: "paper",
     },
     {
-      "term": "corrected tests",
-      "definition": "In this study, corrected tests refer to the pairwise comparisons whose significance threshold has been lowered to .008 to account for conducting multiple tests.",
-      "refs": [
-        "alpha"
-      ],
-      "source": "paper"
-    }
+      term: "corrected tests",
+      definition:
+        "In this study, corrected tests refer to the pairwise comparisons whose significance threshold has been lowered to .008 to account for conducting multiple tests.",
+      refs: ["alpha"],
+      source: "paper",
+    },
   ],
-  "q6": [
+  q6: [
     {
-      "term": "direct comparison",
-      "definition": "In this study, a direct comparison pits the badminton condition against the running condition using the same participants’ scores to test whether one improves focus more than the other.",
-      "refs": [
-        "direct"
-      ],
-      "source": "paper"
+      term: "direct comparison",
+      definition:
+        "In this study, a direct comparison pits the badminton condition against the running condition using the same participants’ scores to test whether one improves focus more than the other.",
+      refs: ["direct"],
+      source: "paper",
     },
     {
-      "term": "difference in significance",
-      "definition": "In this study, a difference in significance occurs when one condition shows a statistically significant gain versus rest while the other does not; this does not itself test the gap between the two conditions.",
-      "refs": [],
-      "source": "model"
+      term: "difference in significance",
+      definition:
+        "In this study, a difference in significance occurs when one condition shows a statistically significant gain versus rest while the other does not; this does not itself test the gap between the two conditions.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "effect size",
-      "definition": "In this study, effect size quantifies the magnitude of the difference between badminton and running (e.g., Cohen’s d = 0.44) independent of sample size.",
-      "refs": [
-        "direct"
-      ],
-      "source": "paper"
-    }
+      term: "effect size",
+      definition:
+        "In this study, effect size quantifies the magnitude of the difference between badminton and running (e.g., Cohen’s d = 0.44) independent of sample size.",
+      refs: ["direct"],
+      source: "paper",
+    },
   ],
-  "bonus": [
+  bonus: [
     {
-      "term": "powered",
-      "definition": "In this study, a powered study is one whose sample size is planned large enough to detect a prespecified effect (e.g., d ≈ 0.44) with adequate probability, usually 80%.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "powered",
+      definition:
+        "In this study, a powered study is one whose sample size is planned large enough to detect a prespecified effect (e.g., d ≈ 0.44) with adequate probability, usually 80%.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

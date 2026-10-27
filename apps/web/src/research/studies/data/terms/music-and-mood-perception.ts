@@ -3,80 +3,91 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c2": [
+  c2: [
     {
-      "term": "pre‑registered hypotheses",
-      "definition": "In this study, pre‑registered hypotheses are the specific predictions about musical features that the researchers declared before collecting data.",
-      "refs": [],
-      "source": "model"
+      term: "pre‑registered hypotheses",
+      definition:
+        "In this study, pre‑registered hypotheses are the specific predictions about musical features that the researchers declared before collecting data.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "mean pitch",
-      "definition": "In this study, mean pitch is the average frequency of the notes in a musical stimulus, such as a cadence or melody.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "mean pitch",
+      definition:
+        "In this study, mean pitch is the average frequency of the notes in a musical stimulus, such as a cadence or melody.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "Sydney groups",
-      "definition": "In this study, the Sydney groups are the musician and non‑musician cohorts tested in Sydney.",
-      "refs": [],
-      "source": "model"
+      term: "Sydney groups",
+      definition:
+        "In this study, the Sydney groups are the musician and non‑musician cohorts tested in Sydney.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "minimal exposure group",
-      "definition": "In this study, the minimal exposure group is the PNG community with little or no experience of Western‑like music.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "minimal exposure group",
+      definition:
+        "In this study, the minimal exposure group is the PNG community with little or no experience of Western‑like music.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "PNG communities",
-      "definition": "In this study, PNG communities are the three remote villages in Papua New Guinea where participants were recruited.",
-      "refs": [],
-      "source": "model"
+      term: "PNG communities",
+      definition:
+        "In this study, PNG communities are the three remote villages in Papua New Guinea where participants were recruited.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "Sydney groups",
-      "definition": "In this study, the Sydney groups are the musician and non‑musician cohorts tested in Sydney.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "Sydney groups",
+      definition:
+        "In this study, the Sydney groups are the musician and non‑musician cohorts tested in Sydney.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "effect sizes",
-      "definition": "In this study, effect sizes quantify the magnitude of the happiness difference between major and minor stimuli for each participant group.",
-      "refs": [],
-      "source": "model"
+      term: "effect sizes",
+      definition:
+        "In this study, effect sizes quantify the magnitude of the happiness difference between major and minor stimuli for each participant group.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "musical background",
-      "definition": "In this study, musical background refers to each participant's prior exposure to Western‑like music, ranging from minimal to extensive.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "musical background",
+      definition:
+        "In this study, musical background refers to each participant's prior exposure to Western‑like music, ranging from minimal to extensive.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c7": [
+  c7: [
     {
-      "term": "Bayesian analysis",
-      "definition": "In this study, Bayesian analysis is the statistical method used to estimate effect sizes and their uncertainty from the data.",
-      "refs": [],
-      "source": "model"
+      term: "Bayesian analysis",
+      definition:
+        "In this study, Bayesian analysis is the statistical method used to estimate effect sizes and their uncertainty from the data.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "credible interval",
-      "definition": "In this study, a credible interval is the range of values that likely contains the true effect size according to the Bayesian model.",
-      "refs": [],
-      "source": "model"
+      term: "credible interval",
+      definition:
+        "In this study, a credible interval is the range of values that likely contains the true effect size according to the Bayesian model.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "universal effect",
-      "definition": "In this study, a universal effect would be a consistent influence of major versus minor music on happiness across all cultures and exposure levels.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "universal effect",
+      definition:
+        "In this study, a universal effect would be a consistent influence of major versus minor music on happiness across all cultures and exposure levels.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

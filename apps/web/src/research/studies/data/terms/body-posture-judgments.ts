@@ -3,24 +3,22 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c4": [
+  c4: [
     {
-      "term": "main effect",
-      "definition": "A main effect is the influence of a single factor averaged across levels of other factors; here there was no main effect of posture on warmth ratings.",
-      "refs": [
-        "e10"
-      ],
-      "source": "paper"
-    }
+      term: "main effect",
+      definition:
+        "A main effect is the influence of a single factor averaged across levels of other factors; here there was no main effect of posture on warmth ratings.",
+      refs: ["e10"],
+      source: "paper",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "likelihood scale",
-      "definition": "A likelihood scale asks respondents to rate how probable an outcome is; here a 1‑to‑7 scale (1 = extremely unlikely, 7 = extremely likely) was used for contempt.",
-      "refs": [
-        "e14"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "likelihood scale",
+      definition:
+        "A likelihood scale asks respondents to rate how probable an outcome is; here a 1‑to‑7 scale (1 = extremely unlikely, 7 = extremely likely) was used for contempt.",
+      refs: ["e14"],
+      source: "paper",
+    },
+  ],
 };

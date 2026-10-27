@@ -3,68 +3,63 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c2": [
+  c2: [
     {
-      "term": "mean",
-      "definition": "The mean is the average rating parents gave to the statement about vaccine safety as a government priority.",
-      "refs": [
-        "e12"
-      ],
-      "source": "paper"
+      term: "mean",
+      definition:
+        "The mean is the average rating parents gave to the statement about vaccine safety as a government priority.",
+      refs: ["e12"],
+      source: "paper",
     },
     {
-      "term": "p-value",
-      "definition": "The p‑value indicates the probability of observing the difference in means if there were no real effect; smaller values suggest stronger evidence against the null.",
-      "refs": [
-        "e12"
-      ],
-      "source": "paper"
-    }
+      term: "p-value",
+      definition:
+        "The p‑value indicates the probability of observing the difference in means if there were no real effect; smaller values suggest stronger evidence against the null.",
+      refs: ["e12"],
+      source: "paper",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "mean",
-      "definition": "Here, the mean reflects the average score parents assigned to the variable (e.g., trust or information receipt) for each framing condition.",
-      "refs": [
-        "e4"
-      ],
-      "source": "paper"
-    }
+      term: "mean",
+      definition:
+        "Here, the mean reflects the average score parents assigned to the variable (e.g., trust or information receipt) for each framing condition.",
+      refs: ["e4"],
+      source: "paper",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "government‑priority involvement",
-      "definition": "This construct measures how strongly parents believe vaccine safety should be a high priority for the government.",
-      "refs": [
-        "e12"
-      ],
-      "source": "paper"
+      term: "government‑priority involvement",
+      definition:
+        "This construct measures how strongly parents believe vaccine safety should be a high priority for the government.",
+      refs: ["e12"],
+      source: "paper",
     },
     {
-      "term": "mean score",
-      "definition": "The mean score is the average rating parents gave on the scale assessing government‑priority involvement.",
-      "refs": [
-        "e12"
-      ],
-      "source": "paper"
-    }
+      term: "mean score",
+      definition:
+        "The mean score is the average rating parents gave on the scale assessing government‑priority involvement.",
+      refs: ["e12"],
+      source: "paper",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "external validity",
-      "definition": "External validity refers to whether the findings can be generalized to other parents outside the studied sample.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "external validity",
+      definition:
+        "External validity refers to whether the findings can be generalized to other parents outside the studied sample.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "MANCOVA",
-      "definition": "MANCOVA (multivariate analysis of covariance) tests multiple outcome variables simultaneously while adjusting for the covariates.",
-      "refs": [
-        "e8"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "MANCOVA",
+      definition:
+        "MANCOVA (multivariate analysis of covariance) tests multiple outcome variables simultaneously while adjusting for the covariates.",
+      refs: ["e8"],
+      source: "paper",
+    },
+  ],
 };

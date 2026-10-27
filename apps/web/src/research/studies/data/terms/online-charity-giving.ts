@@ -3,53 +3,52 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "paired‑samples crossover",
-      "definition": "Here, a paired‑samples crossover would have participants experience each condition in sequence, allowing within‑person comparisons.",
-      "refs": [],
-      "source": "model"
+      term: "paired‑samples crossover",
+      definition:
+        "Here, a paired‑samples crossover would have participants experience each condition in sequence, allowing within‑person comparisons.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "correlational survey",
-      "definition": "In this study, a correlational survey would measure variables like donation amount and participation without manipulating any condition.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "correlational survey",
+      definition:
+        "In this study, a correlational survey would measure variables like donation amount and participation without manipulating any condition.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "leverage",
-      "definition": "Here, leverage refers to the perceived value or motivational force of the $5 donation incentive in influencing the decision to participate.",
-      "refs": [
-        "e8",
-        "e21"
-      ],
-      "source": "paper"
+      term: "leverage",
+      definition:
+        "Here, leverage refers to the perceived value or motivational force of the $5 donation incentive in influencing the decision to participate.",
+      refs: ["e8", "e21"],
+      source: "paper",
     },
     {
-      "term": "thematic differences",
-      "definition": "Here, thematic differences describe how distinct the earmarked causes (e.g., preprinting platform vs travel funds) are from one another, affecting the perceived meaningfulness of the choice.",
-      "refs": [
-        "e27"
-      ],
-      "source": "paper"
+      term: "thematic differences",
+      definition:
+        "Here, thematic differences describe how distinct the earmarked causes (e.g., preprinting platform vs travel funds) are from one another, affecting the perceived meaningfulness of the choice.",
+      refs: ["e27"],
+      source: "paper",
     },
     {
-      "term": "subtlety",
-      "definition": "Here, subtlety captures how noticeable the earmarking manipulation is; a subtle cue may be overlooked by participants.",
-      "refs": [
-        "e29"
-      ],
-      "source": "paper"
-    }
+      term: "subtlety",
+      definition:
+        "Here, subtlety captures how noticeable the earmarking manipulation is; a subtle cue may be overlooked by participants.",
+      refs: ["e29"],
+      source: "paper",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "manipulation check",
-      "definition": "Here, a manipulation check is an additional question or measure used to verify that participants actually noticed and processed the earmarking cue.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "manipulation check",
+      definition:
+        "Here, a manipulation check is an additional question or measure used to verify that participants actually noticed and processed the earmarking cue.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

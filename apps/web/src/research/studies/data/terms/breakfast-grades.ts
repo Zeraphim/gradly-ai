@@ -3,28 +3,31 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "q1": [
+  q1: [
     {
-      "term": "longitudinal",
-      "definition": "A longitudinal design would follow the same teenagers over multiple occasions to see how breakfast habits relate to later scores.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "longitudinal",
+      definition:
+        "A longitudinal design would follow the same teenagers over multiple occasions to see how breakfast habits relate to later scores.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q4": [
+  q4: [
     {
-      "term": "variance explained",
-      "definition": "Variance explained is the proportion of variability in science scores that can be attributed to breakfast, calculated as r squared.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "variance explained",
+      definition:
+        "Variance explained is the proportion of variability in science scores that can be attributed to breakfast, calculated as r squared.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q5": [
+  q5: [
     {
-      "term": "family circumstances",
-      "definition": "In this study, family circumstances such as income, parental education, and home routines could affect both whether a teen eats breakfast and their academic performance.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "family circumstances",
+      definition:
+        "In this study, family circumstances such as income, parental education, and home routines could affect both whether a teen eats breakfast and their academic performance.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

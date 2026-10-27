@@ -3,120 +3,137 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "q1": [
+  q1: [
     {
-      "term": "line-matching task",
-      "definition": "In this study, the line‑matching task asks participants to judge which of three comparison lines matches a reference line in length.",
-      "refs": [],
-      "source": "model"
+      term: "line-matching task",
+      definition:
+        "In this study, the line‑matching task asks participants to judge which of three comparison lines matches a reference line in length.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "personality type",
-      "definition": "Personality type here refers to a characteristic (e.g., conformity tendency) that might influence whether someone follows the group’s wrong answer.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "personality type",
+      definition:
+        "Personality type here refers to a characteristic (e.g., conformity tendency) that might influence whether someone follows the group’s wrong answer.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q2": [
+  q2: [
     {
-      "term": "planted group members",
-      "definition": "Planted group members are the confederates who secretly work with the researchers and give predetermined answers during the task.",
-      "refs": [],
-      "source": "model"
+      term: "planted group members",
+      definition:
+        "Planted group members are the confederates who secretly work with the researchers and give predetermined answers during the task.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "line-matching task",
-      "definition": "In this study, the line‑matching task asks participants to judge which of three comparison lines matches a reference line in length.",
-      "refs": [],
-      "source": "model"
+      term: "line-matching task",
+      definition:
+        "In this study, the line‑matching task asks participants to judge which of three comparison lines matches a reference line in length.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "planted members",
-      "definition": "Planted members are the same confederates who provide the scripted wrong answers on selected trials.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "planted members",
+      definition:
+        "Planted members are the same confederates who provide the scripted wrong answers on selected trials.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q3": [
+  q3: [
     {
-      "term": "share of wrong answers",
-      "definition": "Share of wrong answers is the proportion of a participant’s responses that are incorrect on a given set of trials.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "share of wrong answers",
+      definition:
+        "Share of wrong answers is the proportion of a participant’s responses that are incorrect on a given set of trials.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q4": [
+  q4: [
     {
-      "term": "critical trials",
-      "definition": "Critical trials are the line‑matching trials in which the confederates deliberately give a wrong answer, allowing measurement of conformity.",
-      "refs": [],
-      "source": "model"
+      term: "critical trials",
+      definition:
+        "Critical trials are the line‑matching trials in which the confederates deliberately give a wrong answer, allowing measurement of conformity.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "payment",
-      "definition": "In this study, payment means receiving money for each correct answer, which is manipulated to test its effect on conformity.",
-      "refs": [],
-      "source": "model"
+      term: "payment",
+      definition:
+        "In this study, payment means receiving money for each correct answer, which is manipulated to test its effect on conformity.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "wrong answers",
-      "definition": "Wrong answers are responses that do not match the correct line length in the line‑matching task.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "wrong answers",
+      definition:
+        "Wrong answers are responses that do not match the correct line length in the line‑matching task.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q5": [
+  q5: [
     {
-      "term": "two-sided t-test",
-      "definition": "A two‑sided t‑test compares the means of two groups and checks for any difference in either direction.",
-      "refs": [],
-      "source": "model"
+      term: "two-sided t-test",
+      definition:
+        "A two‑sided t‑test compares the means of two groups and checks for any difference in either direction.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "p-value",
-      "definition": "The p‑value indicates how likely the observed difference (or a larger one) would be if the true means were actually equal.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "p-value",
+      definition:
+        "The p‑value indicates how likely the observed difference (or a larger one) would be if the true means were actually equal.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q6": [
+  q6: [
     {
-      "term": "smallest gap that would matter",
-      "definition": "The smallest gap that would matter is the largest difference that would still be considered trivial or inconsequential for the research question.",
-      "refs": [],
-      "source": "model"
+      term: "smallest gap that would matter",
+      definition:
+        "The smallest gap that would matter is the largest difference that would still be considered trivial or inconsequential for the research question.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "interval for the gap",
-      "definition": "An interval for the gap is a confidence interval that estimates where the true difference between the two rates likely falls.",
-      "refs": [],
-      "source": "model"
+      term: "interval for the gap",
+      definition:
+        "An interval for the gap is a confidence interval that estimates where the true difference between the two rates likely falls.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "p-value",
-      "definition": "The p‑value indicates how likely the observed difference (or a larger one) would be if the true means were actually equal.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "p-value",
+      definition:
+        "The p‑value indicates how likely the observed difference (or a larger one) would be if the true means were actually equal.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "bonus": [
+  bonus: [
     {
-      "term": "randomly assigned",
-      "definition": "Randomly assigned means participants were allocated to the paid or unpaid groups by chance, ensuring the groups differ only in the payment manipulation.",
-      "refs": [],
-      "source": "model"
+      term: "randomly assigned",
+      definition:
+        "Randomly assigned means participants were allocated to the paid or unpaid groups by chance, ensuring the groups differ only in the payment manipulation.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "paid participants",
-      "definition": "Paid participants are those who received money for each correct answer they gave in the line‑matching task.",
-      "refs": [],
-      "source": "model"
+      term: "paid participants",
+      definition:
+        "Paid participants are those who received money for each correct answer they gave in the line‑matching task.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "critical trials",
-      "definition": "Critical trials are the line‑matching trials in which the confederates deliberately give a wrong answer, allowing measurement of conformity.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "critical trials",
+      definition:
+        "Critical trials are the line‑matching trials in which the confederates deliberately give a wrong answer, allowing measurement of conformity.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

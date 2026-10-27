@@ -3,69 +3,63 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "q1": [
+  q1: [
     {
-      "term": "narrative perspective",
-      "definition": "In this study, narrative perspective is whether the script uses first‑person pronouns (“I/my”) versus third‑person references (“scientists/researchers”).",
-      "refs": [
-        "e1",
-        "e2"
-      ],
-      "source": "paper"
+      term: "narrative perspective",
+      definition:
+        "In this study, narrative perspective is whether the script uses first‑person pronouns (“I/my”) versus third‑person references (“scientists/researchers”).",
+      refs: ["e1", "e2"],
+      source: "paper",
     },
     {
-      "term": "personal likeability",
-      "definition": "Personal likeability denotes how appealing or sympathetic the presenter seems, which could vary with who appears on screen and affect trust.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "personal likeability",
+      definition:
+        "Personal likeability denotes how appealing or sympathetic the presenter seems, which could vary with who appears on screen and affect trust.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q2": [
+  q2: [
     {
-      "term": "gender effect",
-      "definition": "Gender effect would be any difference attributable to presenter gender; with only one man and one woman, it cannot be separated from individual presenter differences.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "gender effect",
+      definition:
+        "Gender effect would be any difference attributable to presenter gender; with only one man and one woman, it cannot be separated from individual presenter differences.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "q3": [
+  q3: [
     {
-      "term": "pairwise gap",
-      "definition": "Pairwise gap is the difference in average trustworthiness scores between two specific video versions, here scientist versus third‑party.",
-      "refs": [
-        "e5",
-        "e6"
-      ],
-      "source": "paper"
-    }
+      term: "pairwise gap",
+      definition:
+        "Pairwise gap is the difference in average trustworthiness scores between two specific video versions, here scientist versus third‑party.",
+      refs: ["e5", "e6"],
+      source: "paper",
+    },
   ],
-  "q4": [
+  q4: [
     {
-      "term": "multiple testing",
-      "definition": "Multiple testing refers to conducting several statistical tests in the same study, which raises the likelihood of false‑positive results.",
-      "refs": [
-        "e7",
-        "e8"
-      ],
-      "source": "paper"
-    }
+      term: "multiple testing",
+      definition:
+        "Multiple testing refers to conducting several statistical tests in the same study, which raises the likelihood of false‑positive results.",
+      refs: ["e7", "e8"],
+      source: "paper",
+    },
   ],
-  "q6": [
+  q6: [
     {
-      "term": "opt‑in volunteer panel",
-      "definition": "Opt‑in volunteer panel describes participants who chose to join the survey, potentially differing from the general public in interest or motivation.",
-      "refs": [
-        "e11"
-      ],
-      "source": "paper"
+      term: "opt‑in volunteer panel",
+      definition:
+        "Opt‑in volunteer panel describes participants who chose to join the survey, potentially differing from the general public in interest or motivation.",
+      refs: ["e11"],
+      source: "paper",
     },
     {
-      "term": "representative",
-      "definition": "Representative indicates how well the sample (here two scientists) mirrors the larger group of interest (all scientists); with only two, generalizability is limited.",
-      "refs": [
-        "e12"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "representative",
+      definition:
+        "Representative indicates how well the sample (here two scientists) mirrors the larger group of interest (all scientists); with only two, generalizability is limited.",
+      refs: ["e12"],
+      source: "paper",
+    },
+  ],
 };

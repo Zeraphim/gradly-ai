@@ -3,99 +3,87 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "prior vaccination status",
-      "definition": "This refers to whether participants had previously received a vaccination, which could influence group assignment if allocation were non‑random.",
-      "refs": [],
-      "source": "model"
+      term: "prior vaccination status",
+      definition:
+        "This refers to whether participants had previously received a vaccination, which could influence group assignment if allocation were non‑random.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "conditions",
-      "definition": "The two experimental groups are the common information correction condition and the recommended information correction condition.",
-      "refs": [
-        "e13",
-        "e11"
-      ],
-      "source": "paper"
-    }
+      term: "conditions",
+      definition:
+        "The two experimental groups are the common information correction condition and the recommended information correction condition.",
+      refs: ["e13", "e11"],
+      source: "paper",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "reliability scores",
-      "definition": "Participants’ ratings of how reliable they perceived the Health Ministry’s response to be.",
-      "refs": [
-        "e6"
-      ],
-      "source": "paper"
+      term: "reliability scores",
+      definition:
+        "Participants’ ratings of how reliable they perceived the Health Ministry’s response to be.",
+      refs: ["e6"],
+      source: "paper",
     },
     {
-      "term": "Condition 1",
-      "definition": "The group that received the common information correction.",
-      "refs": [
-        "e6"
-      ],
-      "source": "paper"
+      term: "Condition 1",
+      definition: "The group that received the common information correction.",
+      refs: ["e6"],
+      source: "paper",
     },
     {
-      "term": "Condition 2",
-      "definition": "The group that received the recommended (theory‑based) information correction.",
-      "refs": [
-        "e6"
-      ],
-      "source": "paper"
-    }
+      term: "Condition 2",
+      definition:
+        "The group that received the recommended (theory‑based) information correction.",
+      refs: ["e6"],
+      source: "paper",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "satisfaction scores",
-      "definition": "Participants’ ratings of how satisfied they were with the Health Ministry’s response.",
-      "refs": [
-        "e7"
-      ],
-      "source": "paper"
+      term: "satisfaction scores",
+      definition:
+        "Participants’ ratings of how satisfied they were with the Health Ministry’s response.",
+      refs: ["e7"],
+      source: "paper",
     },
     {
-      "term": "Condition 1",
-      "definition": "The group that received the common information correction.",
-      "refs": [
-        "e7"
-      ],
-      "source": "paper"
+      term: "Condition 1",
+      definition: "The group that received the common information correction.",
+      refs: ["e7"],
+      source: "paper",
     },
     {
-      "term": "Condition 2",
-      "definition": "The group that received the recommended information correction.",
-      "refs": [
-        "e7"
-      ],
-      "source": "paper"
-    }
+      term: "Condition 2",
+      definition:
+        "The group that received the recommended information correction.",
+      refs: ["e7"],
+      source: "paper",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "hypothesis",
-      "definition": "The prediction that the recommended information correction would yield the highest satisfaction among all groups.",
-      "refs": [
-        "e19"
-      ],
-      "source": "paper"
+      term: "hypothesis",
+      definition:
+        "The prediction that the recommended information correction would yield the highest satisfaction among all groups.",
+      refs: ["e19"],
+      source: "paper",
     },
     {
-      "term": "recommended correction",
-      "definition": "The theory‑based information correction presented in Condition 2.",
-      "refs": [
-        "e19"
-      ],
-      "source": "paper"
+      term: "recommended correction",
+      definition:
+        "The theory‑based information correction presented in Condition 2.",
+      refs: ["e19"],
+      source: "paper",
     },
     {
-      "term": "sample representativeness",
-      "definition": "The limitation that the participants are not a representative sample of the broader pro‑vaccination and hesitant publics.",
-      "refs": [
-        "e23"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "sample representativeness",
+      definition:
+        "The limitation that the participants are not a representative sample of the broader pro‑vaccination and hesitant publics.",
+      refs: ["e23"],
+      source: "paper",
+    },
+  ],
 };

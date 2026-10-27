@@ -3,26 +3,29 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "cross‑sectional comparison",
-      "definition": "If they had used a cross‑sectional comparison, they would have compared different children’s self‑regulation and EAH measured at the same single point in time.",
-      "refs": [],
-      "source": "model"
+      term: "cross‑sectional comparison",
+      definition:
+        "If they had used a cross‑sectional comparison, they would have compared different children’s self‑regulation and EAH measured at the same single point in time.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "experimental manipulation",
-      "definition": "If they had experimentally manipulated self‑regulation, they would have assigned children to different regulation conditions rather than measuring it as a trait.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "experimental manipulation",
+      definition:
+        "If they had experimentally manipulated self‑regulation, they would have assigned children to different regulation conditions rather than measuring it as a trait.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "alternative explanation",
-      "definition": "Conditional: If an alternative explanation existed, some unmeasured factor could account for part of the observed link between delay of gratification and lower EAH.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "alternative explanation",
+      definition:
+        "Conditional: If an alternative explanation existed, some unmeasured factor could account for part of the observed link between delay of gratification and lower EAH.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

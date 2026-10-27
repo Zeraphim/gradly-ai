@@ -3,44 +3,50 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c3": [
+  c3: [
     {
-      "term": "Cohen’s D",
-      "definition": "In this study, Cohen’s D quantifies the standardized magnitude of the OB score difference between the placebo and control groups.",
-      "refs": [],
-      "source": "model"
+      term: "Cohen’s D",
+      definition:
+        "In this study, Cohen’s D quantifies the standardized magnitude of the OB score difference between the placebo and control groups.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "effect size",
-      "definition": "Here, the effect size refers to the reported Cohen’s D value indicating how large the OB difference is relative to variability.",
-      "refs": [],
-      "source": "model"
+      term: "effect size",
+      definition:
+        "Here, the effect size refers to the reported Cohen’s D value indicating how large the OB difference is relative to variability.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "OB difference",
-      "definition": "In this study, the OB difference is the contrast in out‑of‑the‑boxness scores between participants who received the verbal suggestion (placebo) and those who did not (control).",
-      "refs": [],
-      "source": "model"
-    }
+      term: "OB difference",
+      definition:
+        "In this study, the OB difference is the contrast in out‑of‑the‑boxness scores between participants who received the verbal suggestion (placebo) and those who did not (control).",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "originality",
-      "definition": "In this study, originality refers to the novelty or uniqueness of responses generated on the creativity tests.",
-      "refs": [],
-      "source": "model"
+      term: "originality",
+      definition:
+        "In this study, originality refers to the novelty or uniqueness of responses generated on the creativity tests.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "significant increase",
-      "definition": "Here, a significant increase indicates that the placebo group’s originality scores were statistically higher than the control group’s (p < 0.05).",
-      "refs": [],
-      "source": "model"
+      term: "significant increase",
+      definition:
+        "Here, a significant increase indicates that the placebo group’s originality scores were statistically higher than the control group’s (p < 0.05).",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "placebo group",
-      "definition": "In this study, the placebo group consists of participants who received the verbal suggestion that the odorant boosts creativity.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "placebo group",
+      definition:
+        "In this study, the placebo group consists of participants who received the verbal suggestion that the odorant boosts creativity.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };

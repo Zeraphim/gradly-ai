@@ -3,47 +3,45 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c2": [
+  c2: [
     {
-      "term": "random assignment",
-      "definition": "Participants were allocated to view health or environmental warnings by chance, which helps ensure the two groups are comparable on other traits.",
-      "refs": [],
-      "source": "model"
+      term: "random assignment",
+      definition:
+        "Participants were allocated to view health or environmental warnings by chance, which helps ensure the two groups are comparable on other traits.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "control",
-      "definition": "A control condition would have shown no warning, providing a baseline to judge whether any warning changes perceptions; the study lacked this condition.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "control",
+      definition:
+        "A control condition would have shown no warning, providing a baseline to judge whether any warning changes perceptions; the study lacked this condition.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "standard deviation",
-      "definition": "With an SD of about 1.2, the ratings typically vary ±1.2 points around each mean, showing the spread of individual responses.",
-      "refs": [
-        "e5",
-        "e6"
-      ],
-      "source": "paper"
-    }
+      term: "standard deviation",
+      definition:
+        "With an SD of about 1.2, the ratings typically vary ±1.2 points around each mean, showing the spread of individual responses.",
+      refs: ["e5", "e6"],
+      source: "paper",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "convenience sample",
-      "definition": "The participants were recruited via a national online convenience sample, meaning they volunteered rather than being randomly selected from the population.",
-      "refs": [
-        "e14"
-      ],
-      "source": "paper"
+      term: "convenience sample",
+      definition:
+        "The participants were recruited via a national online convenience sample, meaning they volunteered rather than being randomly selected from the population.",
+      refs: ["e14"],
+      source: "paper",
     },
     {
-      "term": "power calculation",
-      "definition": "No a priori power calculation was performed, so the study was not designed to guarantee a sufficient sample size to detect a prespecified effect size.",
-      "refs": [
-        "e13"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "power calculation",
+      definition:
+        "No a priori power calculation was performed, so the study was not designed to guarantee a sufficient sample size to detect a prespecified effect size.",
+      refs: ["e13"],
+      source: "paper",
+    },
+  ],
 };

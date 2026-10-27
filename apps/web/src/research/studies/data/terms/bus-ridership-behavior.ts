@@ -3,62 +3,56 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "within-person comparison",
-      "definition": "In this study, a within-person comparison would require the same rider to experience both the message holder and the plain holder on different trips.",
-      "refs": [],
-      "source": "model"
+      term: "within-person comparison",
+      definition:
+        "In this study, a within-person comparison would require the same rider to experience both the message holder and the plain holder on different trips.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "card-holder delivery",
-      "definition": "Here, card-holder delivery means giving passengers a free transit-card holder that they attach to their card, with or without a printed message.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "card-holder delivery",
+      definition:
+        "Here, card-holder delivery means giving passengers a free transit-card holder that they attach to their card, with or without a printed message.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "extra rides",
-      "definition": "Extra rides refer to the estimated increase of 1.18 boardings per day on lines that received the message holder versus control lines.",
-      "refs": [
-        "e5",
-        "e6",
-        "e7"
-      ],
-      "source": "paper"
-    }
+      term: "extra rides",
+      definition:
+        "Extra rides refer to the estimated increase of 1.18 boardings per day on lines that received the message holder versus control lines.",
+      refs: ["e5", "e6", "e7"],
+      source: "paper",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "hourly counts",
-      "definition": "Hourly counts are the number of boardings recorded for each bus line in each one‑hour interval, forming the unit of analysis.",
-      "refs": [
-        "e8",
-        "e9"
-      ],
-      "source": "paper"
-    }
+      term: "hourly counts",
+      definition:
+        "Hourly counts are the number of boardings recorded for each bus line in each one‑hour interval, forming the unit of analysis.",
+      refs: ["e8", "e9"],
+      source: "paper",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "follow-up windows",
-      "definition": "Follow-up windows are the various lengths of time after the intervention (e.g., 1 hour, 2 hours, …) over which the effect was examined.",
-      "refs": [
-        "e11"
-      ],
-      "source": "paper"
-    }
+      term: "follow-up windows",
+      definition:
+        "Follow-up windows are the various lengths of time after the intervention (e.g., 1 hour, 2 hours, …) over which the effect was examined.",
+      refs: ["e11"],
+      source: "paper",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "regular bus users",
-      "definition": "Regular bus users are passengers who reported riding the bus five or more times per week (or one‑to‑four times per week) prior to the intervention.",
-      "refs": [
-        "e12",
-        "e13"
-      ],
-      "source": "paper"
-    }
-  ]
+      term: "regular bus users",
+      definition:
+        "Regular bus users are passengers who reported riding the bus five or more times per week (or one‑to‑four times per week) prior to the intervention.",
+      refs: ["e12", "e13"],
+      source: "paper",
+    },
+  ],
 };

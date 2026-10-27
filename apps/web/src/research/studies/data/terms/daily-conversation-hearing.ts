@@ -3,106 +3,121 @@
 import type { Term } from "@paperquest/contracts";
 
 export const terms: Record<string, Term[]> = {
-  "c1": [
+  c1: [
     {
-      "term": "hearing thresholds",
-      "definition": "In this study, hearing thresholds refer to the quietest sound level (in dB HL) that Mandarin‑speaking participants could detect at each tested frequency.",
-      "refs": [],
-      "source": "model"
+      term: "hearing thresholds",
+      definition:
+        "In this study, hearing thresholds refer to the quietest sound level (in dB HL) that Mandarin‑speaking participants could detect at each tested frequency.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "speech-frequency tests",
-      "definition": "In this study, speech-frequency tests are assessments of hearing sensitivity at 0.5, 1, 2, and 4 kHz, the range used to calculate the four‑frequency average.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "speech-frequency tests",
+      definition:
+        "In this study, speech-frequency tests are assessments of hearing sensitivity at 0.5, 1, 2, and 4 kHz, the range used to calculate the four‑frequency average.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c2": [
+  c2: [
     {
-      "term": "total score",
-      "definition": "Total score: the sum of all responses on the six‑item loneliness questionnaire administered to participants here.",
-      "refs": [],
-      "source": "model"
+      term: "total score",
+      definition:
+        "Total score: the sum of all responses on the six‑item loneliness questionnaire administered to participants here.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "emotional score",
-      "definition": "Emotional score: the portion of the loneliness scale derived from the three statements about emotional loneliness in this study.",
-      "refs": [],
-      "source": "model"
+      term: "emotional score",
+      definition:
+        "Emotional score: the portion of the loneliness scale derived from the three statements about emotional loneliness in this study.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "social score",
-      "definition": "Social score: the portion derived from the three statements about social loneliness in this questionnaire.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "social score",
+      definition:
+        "Social score: the portion derived from the three statements about social loneliness in this questionnaire.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c3": [
+  c3: [
     {
-      "term": "coefficients",
-      "definition": "Coefficients: the beta values reported from the regression models linking variables in this study.",
-      "refs": [],
-      "source": "model"
+      term: "coefficients",
+      definition:
+        "Coefficients: the beta values reported from the regression models linking variables in this study.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "predictor",
-      "definition": "Predictor: a variable (e.g., hearing loss or loneliness) that is used to forecast variation in another variable in the analyses here.",
-      "refs": [],
-      "source": "model"
+      term: "predictor",
+      definition:
+        "Predictor: a variable (e.g., hearing loss or loneliness) that is used to forecast variation in another variable in the analyses here.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "outcome",
-      "definition": "Outcome: the dependent variable being predicted, such as the social loneliness scale or DASS depression/stress scores in this work.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "outcome",
+      definition:
+        "Outcome: the dependent variable being predicted, such as the social loneliness scale or DASS depression/stress scores in this work.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c4": [
+  c4: [
     {
-      "term": "speech-frequency average",
-      "definition": "Speech-frequency average: the four‑frequency average of thresholds at 0.5, 1, 2, 4 kHz (4FA) used as a predictor in the loneliness analyses here.",
-      "refs": [],
-      "source": "model"
+      term: "speech-frequency average",
+      definition:
+        "Speech-frequency average: the four‑frequency average of thresholds at 0.5, 1, 2, 4 kHz (4FA) used as a predictor in the loneliness analyses here.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "loneliness models",
-      "definition": "Loneliness models: the statistical models predicting social loneliness scores from hearing‑loss variables in this study.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "loneliness models",
+      definition:
+        "Loneliness models: the statistical models predicting social loneliness scores from hearing‑loss variables in this study.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c5": [
+  c5: [
     {
-      "term": "emotional loneliness",
-      "definition": "Emotional loneliness: the subscale score derived from the three statements about feelings of isolation or lack of attachment in this six‑item loneliness questionnaire.",
-      "refs": [],
-      "source": "model"
+      term: "emotional loneliness",
+      definition:
+        "Emotional loneliness: the subscale score derived from the three statements about feelings of isolation or lack of attachment in this six‑item loneliness questionnaire.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "depression",
-      "definition": "Depression: the DASS depression score reflecting participants’ self‑reported depressive symptoms in this study.",
-      "refs": [],
-      "source": "model"
+      term: "depression",
+      definition:
+        "Depression: the DASS depression score reflecting participants’ self‑reported depressive symptoms in this study.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "anxiety",
-      "definition": "Anxiety: the DASS anxiety score measuring self‑reported nervousness and arousal among the participants.",
-      "refs": [],
-      "source": "model"
+      term: "anxiety",
+      definition:
+        "Anxiety: the DASS anxiety score measuring self‑reported nervousness and arousal among the participants.",
+      refs: [],
+      source: "model",
     },
     {
-      "term": "stress",
-      "definition": "Stress: the DASS stress score indicating perceived tension and irritability in the sample.",
-      "refs": [],
-      "source": "model"
-    }
+      term: "stress",
+      definition:
+        "Stress: the DASS stress score indicating perceived tension and irritability in the sample.",
+      refs: [],
+      source: "model",
+    },
   ],
-  "c6": [
+  c6: [
     {
-      "term": "hearing loss",
-      "definition": "Hearing loss: reduced auditory sensitivity measured as the four‑frequency average threshold (in dB HL) of participants in this study.",
-      "refs": [],
-      "source": "model"
-    }
-  ]
+      term: "hearing loss",
+      definition:
+        "Hearing loss: reduced auditory sensitivity measured as the four‑frequency average threshold (in dB HL) of participants in this study.",
+      refs: [],
+      source: "model",
+    },
+  ],
 };
