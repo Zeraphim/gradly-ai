@@ -271,8 +271,12 @@ Question IDs, types and accepted option IDs remain stable. Choice order varies
 within each study, and scene response labels/order follow it. Existing numerical
 scenes and source links are retained; survival’s scene now identifies its
 supplementary analysis and the activism timeline places identification before
-the election. This changes content, not player, scoring, excerpt timing or
-provider configuration. Added excerpts are verbatim on their cited PDF pages. Saved definitions that no
+the election. Scoring rules, excerpt timing and provider configuration are unchanged.
+The follow-up integration audit gives these 21 cards question revision 2: old
+browser attempts cannot answer the revised questions. The intro explains the
+restart, old saves remain until Begin, and other studies and uploaded sessions
+are preserved. Current-revision drafts and answers still restore on refresh.
+Added excerpts are verbatim on their cited PDF pages. Saved definitions that no
 longer match the revised question wording or its permitted citations are removed;
 surviving definitions retain their original provenance. Five otherwise-empty
 studies receive a neutral, source-derived operational definition for the new
@@ -330,3 +334,19 @@ presenting that inconsistent pair as a newly verified statistic.
    outside the 45-generated-study revision work.
 3. The shared-player summary/quotation-label decision remains separate; these
    content changes do not alter excerpt timing.
+
+
+### Follow-up source spot checks
+
+Rendered PDFs confirm that Liu p. 4 actually prints `B = −64` next to SE = 0.50
+and t = −1.290; the excerpt is retained verbatim, and the final limitations flag
+that reporting inconsistency without inventing a corrected coefficient. Doyen
+p. 3 renders `F(1,119) < 1`; the stored extractor text reads `,1`, while the
+learner-facing explanation uses the verified inequality. Gesser-Edelsburg p. 13
+itself omits the digit after “Condition” in the 81% sentence; its Table 3 labels
+the conditions. No invented digit is inserted into the verbatim excerpt.
+The current Tan question cites the female subgroup trust table on p. 8 and
+separates it from overall outcomes; the older page-9/page-11 explanation is gone.
+All challenge reference IDs already have an existence guard. Follow-up tests also
+check scene-label/answer-text alignment for this batch and orphaned saved-term
+question keys across the library.

@@ -20,6 +20,7 @@ export const body: StudyBody = {
       limitations: [
         "Fifty young adult volunteers were selected by extreme TIS scores rather than randomly assigned to mindsets (p. 3).",
         "Only a one-hour training protocol was tested; actual expectancy of intelligence improvement was not examined (p. 7).",
+        "The printed pretest RAPM coefficient is B = −64 alongside SE = 0.50 and t = −1.290 (p. 4). That apparent reporting inconsistency prevents a reliable interpretation of the exact coefficient.",
       ],
     },
     evidence: [

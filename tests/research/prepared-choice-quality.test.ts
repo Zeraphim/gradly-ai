@@ -136,6 +136,20 @@ describe("rewritten prepared-study choices", () => {
     }
   });
 
+  it("keeps revised scene labels identical to their answer choices", () => {
+    for (const [slug, body] of remainingStudies) {
+      for (const c of [
+        ...body.lesson.challenges,
+        ...(body.lesson.bonus ? [body.lesson.bonus] : []),
+      ]) {
+        for (const response of c.scene?.responses ?? [])
+          expect(response.label, `${slug}/${c.id}/${response.optionId}`).toBe(
+            c.options.find((option) => option.id === response.optionId)?.text,
+          );
+      }
+    }
+  });
+
   it("uses phrase-style stages across the entire library", async () => {
     for (const card of cards) {
       const study = (await loadStudy(card.slug))!;

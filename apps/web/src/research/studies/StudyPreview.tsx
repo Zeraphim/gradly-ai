@@ -6,7 +6,11 @@ import { ResearchLink as Link } from "../navigation.js";
 import { SceneMotion } from "../scenes/scene-motion.js";
 import { findCard, loadStudy } from "./catalog.js";
 import { JourneyPlayer } from "./JourneyPlayer.js";
-import { freshProgress, useAllProgress } from "./progress.js";
+import {
+  freshProgress,
+  useAllProgress,
+  useOutdatedProgress,
+} from "./progress.js";
 import { StudyLibrary } from "./StudyLibrary.js";
 import type { PreparedStudy } from "./types.js";
 import "./studies.css";
@@ -26,6 +30,7 @@ export function StudyPreview({
   const slug = /^\/studies\/([a-z0-9-]+)\/?$/.exec(path)?.[1] ?? null;
   const card = slug ? findCard(slug) : null;
   const all = useAllProgress();
+  const outdated = useOutdatedProgress(slug);
   // A missing body shows the recovery screen.
   const [loaded, setLoaded] = useState<{
     slug: string;
@@ -74,6 +79,11 @@ export function StudyPreview({
         ) : study ? (
           <JourneyPlayer
             study={study}
+            progressNotice={
+              outdated
+                ? "These questions have changed. Begin again to answer the updated study; your other saved studies are unchanged."
+                : undefined
+            }
             progress={all[study.slug] ?? freshProgress()}
           />
         ) : slug ? (

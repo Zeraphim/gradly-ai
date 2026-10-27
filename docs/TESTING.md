@@ -68,6 +68,17 @@ player; it does not independently approve its accuracy or learning benefit.
 `rewritten-studies.ts` includes this batch in the answer-position, length-cue and
 scene-order regression checks alongside the earlier 26 revised studies.
 
+Prepared-study browser saves retain a per-card question revision (legacy saves are
+revision 1). Bump the card revision when question or answer meaning changes; keep it
+for copy-only edits. Old attempts do not count toward revised questions. The intro
+explains that a fresh attempt is needed; the old save remains stored until Begin,
+and other studies are preserved. Uploaded sessions retain their server-owned version
+and are unaffected. `study-player.test.ts` covers revision restore, explicit restart,
+unrelated saves and damaged cached attempts. `study-revisions.spec.ts` exercises
+that restart at 375×812, 1024×600 and 1366×768. Desktop intro compaction is
+covered separately by the UI branch’s `learn-flow.spec.ts`; this saved-answer
+regression also runs on the content branch alone. The final 21-study batch uses revision 2.
+
 `tests/browser/prepared-rewrites.spec.ts` walks all 26 revised studies at 375×812 and
 1366×768 through the paper reveal, including optional bonuses and multiple-answer
 selection. It exercises numeric-result disclosure before assessment, scene taps,

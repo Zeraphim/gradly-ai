@@ -244,6 +244,30 @@ describe("prepared-study terms", () => {
     }
   });
 
+  it("does not leave saved definitions attached to removed question IDs", () => {
+    const files = import.meta.glob<{ terms: Record<string, unknown[]> }>(
+      "../../apps/web/src/research/studies/data/terms/*.ts",
+      { eager: true },
+    );
+    for (const study of studies) {
+      const ids = new Set(
+        [
+          ...study.lesson.challenges,
+          ...(study.lesson.bonus ? [study.lesson.bonus] : []),
+        ].map((c) => c.id),
+      );
+      const { terms } =
+        files[
+          `../../apps/web/src/research/studies/data/terms/${study.slug}.ts`
+        ]!;
+      for (const id of Object.keys(terms))
+        expect(
+          ids.has(id),
+          `${study.slug}/${id}: orphaned saved vocabulary`,
+        ).toBe(true);
+    }
+  });
+
   it("keeps definitions removed for answer leaks out of the saved files", () => {
     for (const study of studies)
       for (const c of [
