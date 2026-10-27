@@ -15,7 +15,9 @@
     },
     "architecture": {
       "description": "Why the system is shaped this way",
-      "sources": ["Accepted records under docs/adr/; none currently accepted"]
+      "sources": [
+        "Accepted records under docs/adr/; none currently accepted"
+      ]
     },
     "visual-intent": {
       "description": "Approved interface direction",
@@ -25,7 +27,10 @@
     },
     "runtime": {
       "description": "What currently executes",
-      "sources": ["Current code", "Passing tests"]
+      "sources": [
+        "Current code",
+        "Passing tests"
+      ]
     },
     "delivery-status": {
       "description": "What work is active or complete",
@@ -35,7 +40,10 @@
     },
     "operating-procedure": {
       "description": "How contributors and agents work",
-      "sources": ["AGENTS.md", "Project-local skills"]
+      "sources": [
+        "AGENTS.md",
+        "Project-local skills"
+      ]
     }
   },
   "scopes": [
@@ -52,7 +60,9 @@
     {
       "path": "apps/web",
       "agents": "apps/web/AGENTS.md",
-      "skills": ["gradly-motion"]
+      "skills": [
+        "gradly-motion"
+      ]
     },
     {
       "path": "apps/api",
@@ -67,7 +77,9 @@
       "title": "Repository agent instructions",
       "path": "AGENTS.md",
       "status": "Active",
-      "authorityDomains": ["operating-procedure"],
+      "authorityDomains": [
+        "operating-procedure"
+      ],
       "owners": [],
       "appliesTo": [
         "AGENTS.md",
@@ -131,9 +143,13 @@
       "title": "Learner interface instructions",
       "path": "apps/web/AGENTS.md",
       "status": "Active",
-      "authorityDomains": ["operating-procedure"],
+      "authorityDomains": [
+        "operating-procedure"
+      ],
       "owners": [],
-      "appliesTo": ["apps/web/**"],
+      "appliesTo": [
+        "apps/web/**"
+      ],
       "relationships": [
         {
           "type": "depends-on",
@@ -142,8 +158,8 @@
       ],
       "implementationRefs": [],
       "review": {
-        "commit": "c7d252a1f97edc9279cbf7f29fb060d192574f0f",
-        "at": "2026-10-27T20:27:31Z",
+        "commit": "7c6c25419b24039e5016cbed65eb8d822be12b47",
+        "at": "2026-10-27T21:51:02Z",
         "by": "marcxxv"
       }
     },
@@ -153,9 +169,14 @@
       "title": "Application server instructions",
       "path": "apps/api/AGENTS.md",
       "status": "Active",
-      "authorityDomains": ["operating-procedure"],
+      "authorityDomains": [
+        "operating-procedure"
+      ],
       "owners": [],
-      "appliesTo": ["apps/api/**", "packages/contracts/**"],
+      "appliesTo": [
+        "apps/api/**",
+        "packages/contracts/**"
+      ],
       "relationships": [],
       "implementationRefs": [],
       "review": {
@@ -170,7 +191,9 @@
       "title": "Stack, layout, commands, and configuration",
       "path": ".agents/skills/project-context/SKILL.md",
       "status": "Active",
-      "authorityDomains": ["runtime"],
+      "authorityDomains": [
+        "runtime"
+      ],
       "owners": [],
       "appliesTo": [
         "package.json",
@@ -220,7 +243,9 @@
       "title": "Documentation and context lifecycle",
       "path": ".agents/skills/documentation-maintenance/SKILL.md",
       "status": "Active",
-      "authorityDomains": ["operating-procedure"],
+      "authorityDomains": [
+        "operating-procedure"
+      ],
       "owners": [],
       "appliesTo": [
         ".agents/context-manifest.json",
@@ -253,7 +278,9 @@
       "title": "Vercel packaging and delivery checks",
       "path": ".agents/skills/vercel-delivery/SKILL.md",
       "status": "Active",
-      "authorityDomains": ["operating-procedure"],
+      "authorityDomains": [
+        "operating-procedure"
+      ],
       "owners": [],
       "appliesTo": [
         "vercel.json",
@@ -330,7 +357,12 @@
       "status": "Active",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": ["docs/**", ".agents/**", "AGENTS.md", "apps/**/AGENTS.md"],
+      "appliesTo": [
+        "docs/**",
+        ".agents/**",
+        "AGENTS.md",
+        "apps/**/AGENTS.md"
+      ],
       "relationships": [],
       "implementationRefs": [],
       "review": {
@@ -377,18 +409,24 @@
       "title": "Product requirements and acceptance",
       "path": "docs/REQUIREMENTS.md",
       "status": "Documented",
-      "authorityDomains": ["product-intent"],
+      "authorityDomains": [
+        "product-intent"
+      ],
       "owners": [],
-      "appliesTo": ["apps/**", "packages/**", "tests/**"],
+      "appliesTo": [
+        "apps/**",
+        "packages/**",
+        "tests/**"
+      ],
       "relationships": [],
       "implementationRefs": [
         "apps/web/src/App.tsx",
         "apps/api/src/research/contracts.ts"
       ],
       "review": {
-        "commit": null,
-        "at": null,
-        "by": null
+        "commit": "7c6c25419b24039e5016cbed65eb8d822be12b47",
+        "at": "2026-10-27T21:51:02Z",
+        "by": "marcxxv"
       }
     },
     {
@@ -399,7 +437,10 @@
       "status": "Reference",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": ["apps/web/src/App.tsx", "apps/api/src/research/engine.ts"],
+      "appliesTo": [
+        "apps/web/src/App.tsx",
+        "apps/api/src/research/engine.ts"
+      ],
       "relationships": [
         {
           "type": "related",
@@ -419,9 +460,13 @@
       "title": "Interface conventions and retained historical design sections",
       "path": "docs/DESIGN.md",
       "status": "Proposed",
-      "authorityDomains": ["visual-intent"],
+      "authorityDomains": [
+        "visual-intent"
+      ],
       "owners": [],
-      "appliesTo": ["apps/web/**"],
+      "appliesTo": [
+        "apps/web/**"
+      ],
       "relationships": [
         {
           "type": "related",
@@ -433,9 +478,9 @@
         "apps/web/src/research/styles.css"
       ],
       "review": {
-        "commit": null,
-        "at": null,
-        "by": null
+        "commit": "7c6c25419b24039e5016cbed65eb8d822be12b47",
+        "at": "2026-10-27T21:51:02Z",
+        "by": "marcxxv"
       }
     },
     {
@@ -446,7 +491,9 @@
       "status": "Reference",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": ["apps/web/src/research/**"],
+      "appliesTo": [
+        "apps/web/src/research/**"
+      ],
       "relationships": [],
       "implementationRefs": [],
       "review": {
@@ -475,7 +522,9 @@
           "target": "requirements"
         }
       ],
-      "implementationRefs": ["apps/web/src/research/ReasoningPreview.tsx"],
+      "implementationRefs": [
+        "apps/web/src/research/ReasoningPreview.tsx"
+      ],
       "review": {
         "commit": null,
         "at": null,
@@ -538,7 +587,9 @@
       "status": "Reference",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": ["docs/research/**"],
+      "appliesTo": [
+        "docs/research/**"
+      ],
       "relationships": [
         {
           "type": "related",
@@ -719,7 +770,10 @@
       "status": "Historical report",
       "authorityDomains": [],
       "owners": [],
-      "appliesTo": ["apps/web/**", "tests/browser/**"],
+      "appliesTo": [
+        "apps/web/**",
+        "tests/browser/**"
+      ],
       "relationships": [],
       "implementationRefs": [],
       "review": {
@@ -751,9 +805,14 @@
       "title": "Proposed architecture decision record process",
       "path": "docs/adr/ADR-0001-we-use-adrs.md",
       "status": "Proposed",
-      "authorityDomains": ["architecture"],
+      "authorityDomains": [
+        "architecture"
+      ],
       "owners": [],
-      "appliesTo": ["docs/adr/**", ".agents/context-manifest.json"],
+      "appliesTo": [
+        "docs/adr/**",
+        ".agents/context-manifest.json"
+      ],
       "relationships": [
         {
           "type": "related",
