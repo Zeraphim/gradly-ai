@@ -214,7 +214,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "What random allocation supports",
         type: "single",
         prompt: "What does random allocation strengthen in this experiment?",
         evidence: [
@@ -232,7 +232,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Separate the condition contrast among participants from how the wider public was sampled.",
         misconceptions: {
           o2: "Assignment to conditions does not establish representative population sampling.",
         },
@@ -345,7 +345,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Transfer from a selected sample",
         type: "single",
         prompt:
           "Why is the health-related graduate-student sample important when applying the results to community parents?",
@@ -364,7 +364,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Compare the participants’ experience and recruitment with the target population.",
         misconceptions: {
           o2: "Limited generalizability is uncertainty about transfer, not proof of no transfer.",
         },
@@ -378,7 +378,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Perception versus verification",
         type: "single",
         prompt:
           "Reliability ratings averaged 5.68 versus 4.64. Does this establish that the recommended response was objectively more accurate?",
@@ -397,7 +397,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Identify what participants rated, rather than relabelling it as a different outcome.",
         misconceptions: {
           o2: "A perception measure and verification of factual accuracy are different outcomes.",
         },
@@ -474,7 +474,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Disentangle a treatment package",
         type: "single",
         prompt:
           "Satisfaction was higher under the recommended response. Can that identify which component of the response caused the difference?",
@@ -493,7 +493,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "When several components change together, what contrast would identify just one of them?",
         misconceptions: {
           o2: "Bundled components require additional contrasts to identify separate effects.",
         },
@@ -507,7 +507,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Population and persistence",
         type: "single",
         prompt:
           "What would most directly address the gap between immediate satisfaction and durable effects in the public?",
@@ -526,7 +526,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which follow-up changes the recruitment population and adds later observations?",
         misconceptions: {
           o2: "The same sample and immediate measure do not address either population transfer or persistence.",
         },

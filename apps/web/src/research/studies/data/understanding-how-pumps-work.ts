@@ -219,7 +219,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Measured ability, assigned format",
         type: "single",
         prompt:
           "Were high and low spatial ability experimentally created by the explanation assignment?",
@@ -238,7 +238,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Track which classification came from an existing test score and which condition was assigned.",
         misconceptions: {
           o2: "The spatial classification came from the earlier MRT score, not the explanation treatment.",
         },
@@ -252,7 +252,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Identify the pump outcome",
         type: "single",
         prompt:
           "Which outcome directly measures understanding in the bicycle-pump experiment?",
@@ -271,12 +271,12 @@ export const body: StudyBody = {
         ],
         accepted: ["o3"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Distinguish coded explanation content from answers on the pump understanding test.",
         misconceptions: {
           o4: "Explanation content and tested understanding are different measures.",
         },
         explanation:
-          "The original evidence mixed a pump post-test with a pre-to-post chemical-bonding result from Experiment 2. The pump outcome is its own 16-item post-test, not evidence of a pump pretest gain.",
+          "The pump experiment assessed understanding with its 16-item post-test. It did not establish a pump pre-to-post gain; the separate chemical-bonding experiment used different measurements.",
         refs: ["r1"],
         writtenReasoning: false,
         reveal: "design",
@@ -285,7 +285,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Interpret the moderator",
         type: "single",
         prompt:
           "A reported explanation-format-by-spatial-ability interaction favours visual explanations more at low ability. What follows?",
@@ -304,7 +304,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o5"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask whether the reported format advantage is constant across the measured ability groups.",
         misconceptions: {
           o6: "That constant-effect interpretation does not describe the reported interaction.",
         },
@@ -318,7 +318,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Keep outcome units straight",
         type: "single",
         prompt:
           "Visual explanations contain 6.05 versus 4.27 structural components. What does the mean gap establish?",
@@ -337,7 +337,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o7"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Subtract the coded component counts without relabelling them as test-score units.",
         misconceptions: {
           o8: "Those are different operational measures; the arithmetic cannot relabel the outcome.",
         },
@@ -414,7 +414,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Test a proposed mechanism",
         type: "single",
         prompt:
           "Does finding more complete visual explanations prove that completeness is the unique cause of the learning advantage?",
@@ -433,7 +433,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o9"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A relation between content and learning does not by itself identify a unique mediator.",
         misconceptions: {
           o10: "Correlated content and outcomes can reflect multiple processes and do not isolate a unique mediator.",
         },
@@ -526,7 +526,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "What the design leaves open",
         type: "single",
         prompt:
           "High-spatial groups performed similarly across explanation formats. What remains uncertain?",
@@ -545,7 +545,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o11"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check what was known about participants before assigning the explanation formats.",
         misconceptions: {
           o12: "The reported interaction instead describes a selective low-spatial benefit.",
         },

@@ -70,7 +70,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Purpose of blinding",
         type: "single",
         prompt:
           "Why keep the participant-facing experimenter unaware of the mug temperature?",
@@ -97,7 +97,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which route for condition-linked cues is reduced when the person giving instructions lacks that information?",
         misconceptions: {
           o2: "Experimenter blinding does not remove participants’ sensory experience.",
           o3: "The preparer knew the temperature; the second experimenter was blind.",
@@ -113,7 +113,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Purpose of assignment",
         type: "single",
         prompt:
           "Why does random temperature assignment matter for interpreting a warm–cold contrast?",
@@ -140,7 +140,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o5"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Randomization concerns pre-existing group differences, not the range of settings to which results transfer.",
         misconceptions: {
           o6: "Random assignment balances in expectation, not with guaranteed exact equality.",
           o7: "Random assignment does not establish transfer to other warmth manipulations.",
@@ -156,7 +156,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "What a null check leaves open",
         type: "single",
         prompt:
           "Cup-attractiveness comparisons had all p > .33. Does that prove attractiveness played no role?",
@@ -183,14 +183,14 @@ export const body: StudyBody = {
         ],
         accepted: ["o9"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Distinguish an undetected contrast from a test of equivalence or a causal mediator.",
         misconceptions: {
           o10: "Nonsignificance does not establish equivalence.",
           o11: "A group contrast is not a complete causal mediation analysis.",
           o12: "Values above .33 are not below the .05 threshold.",
         },
         explanation:
-          "The garbled extracted statistic is p > .33 in the rendered paper. That result should not be turned into proof that attractiveness can have no causal role.",
+          "The attractiveness comparisons did not detect a difference (all p > .33). That does not establish equivalence or rule out every possible role of attractiveness in a causal pathway.",
         refs: ["r1"],
         writtenReasoning: false,
         reveal: "results",
@@ -199,7 +199,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Disclose the exclusions",
         type: "single",
         prompt:
           "Why should the report disclose that 17 of 145 recruits were excluded?",
@@ -226,7 +226,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o13"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask what readers need to assess about the analysed population and how it was selected.",
         misconceptions: {
           o14: "Exclusions need scrutiny, but their presence alone does not establish misconduct.",
           o15: "Exclusions and a final sample count do not create representative recruitment.",
@@ -242,7 +242,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Goal versus observed result",
         type: "single",
         prompt:
           "What supports the claimed replication beyond the fact that the researchers intended to replicate it?",
@@ -269,14 +269,14 @@ export const body: StudyBody = {
         ],
         accepted: ["o17"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Identify the empirical contrast rather than treating a stated research aim as its own confirmation.",
         misconceptions: {
           o18: "An aim is not an empirical result.",
           o19: "The outcome and induction do not cover every behaviour or warmth experience.",
           o20: "No neutral condition was present to identify that component.",
         },
         explanation:
-          "The old question cited the research aim as though it were a finding. The actual results report the predicted directional contrast, with scope restricted to this task and warm–cold comparison.",
+          "The actual results report a higher relational-focus score after warm than cold cups. This supports the directional prediction in that task, while the missing neutral cup leaves the components of the contrast unresolved.",
         refs: ["r2"],
         writtenReasoning: false,
         reveal: "interpretation",
@@ -285,7 +285,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Add a neutral reference",
         type: "single",
         prompt:
           "Which extra comparison would separate a warm-cup increase from a cold-cup decrease?",
@@ -312,7 +312,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o21"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which additional condition would locate both tested temperatures relative to the same baseline?",
         misconceptions: {
           o22: "More precision in the same contrast does not identify either temperature’s change from neutral.",
           o23: "A mean of treated groups is not an independently observed neutral condition.",

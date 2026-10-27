@@ -143,7 +143,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Time order and causality",
         type: "single",
         prompt:
           "Does measuring self-regulation a year before eating establish that improving it would reduce later eating?",
@@ -226,7 +226,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Following children over time establishes an order of measurement; ask what it does not assign.",
         misconceptions: {
           o2: "Following children over time does not assign their self-regulation levels.",
           o3: "The separate visits establish that the self-regulation measure preceded this outcome.",
@@ -240,7 +240,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Apply a slope",
         type: "single",
         prompt:
           "With b = −12.46 kcal per delay-score unit, what is the fitted difference for a two-unit higher score?",
@@ -264,21 +264,21 @@ export const body: StudyBody = {
         ],
         accepted: ["o4"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Multiply a per-unit coefficient by the score difference, and keep a fitted average distinct from an individual guarantee.",
         misconceptions: {
           o5: "The slope is per unit and describes an average fitted association, not a guaranteed individual difference.",
           o6: "A higher score multiplied by a negative slope predicts fewer calories, not more.",
         },
         explanation:
           "Two times −12.46 is −24.92 kcal. This is a model-implied average comparison, not evidence that changing a child’s score causes that change.",
-        refs: ["e3"],
+        refs: ["e3", "e8"],
         writtenReasoning: true,
         reveal: "results",
       },
       {
         id: "c3",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Interpret moderation",
         type: "single",
         prompt:
           "The delay-score association differs by inhibitory control. Which analysis respects that interaction?",
@@ -302,7 +302,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o7"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "If an association depends on a second variable, examine it at more than one level of that variable.",
         misconceptions: {
           o8: "An interaction means the association depends on the other variable.",
           o9: "Both self-regulation measures were observed, not randomly assigned treatments.",
@@ -316,7 +316,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Transfer to another population",
         type: "single",
         prompt:
           "A school wants to apply these results to children from populations barely represented in the sample. Which concern is most direct?",
@@ -340,7 +340,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o10"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Compare the sampled children with the population where the findings would be used.",
         misconceptions: {
           o11: "Limited precision or representation does not prove the sign is wrong.",
           o12: "They are repeated observations of the same children, not a new independent sample.",
@@ -354,7 +354,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Check joint adjustment",
         type: "single",
         prompt:
           "What would test whether the association is robust to jointly accounting for other self-regulation domains?",
@@ -439,7 +439,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o13"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A result from one model does not automatically include adjustment made only in a different model.",
         misconceptions: {
           o14: "An interval for one model does not include adjustment that was never fitted.",
           o15: "A nonsignificant separate test is not proof a variable is irrelevant in a joint model.",

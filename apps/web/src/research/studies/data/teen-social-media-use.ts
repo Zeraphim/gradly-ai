@@ -81,7 +81,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Classify this analysis",
         type: "single",
         prompt:
           "The survey belongs to a longitudinal project, but this analysis uses only its first wave. Which design describes this analysis?",
@@ -105,7 +105,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_correct"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Use the observations actually analysed here, rather than the long-term name of the parent project.",
         misconceptions: {
           opt_distractor1:
             "A project label does not add repeated observations to this particular analysis.",
@@ -121,7 +121,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "What adjustment does",
         type: "single",
         prompt:
           "Why include self-esteem, ill-being and other covariates in the social-media regression?",
@@ -145,7 +145,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_correct"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Distinguish variables recorded in the model from other differences that were never measured.",
         misconceptions: {
           opt_distractor1:
             "Regression adjustment does not change how exposure was assigned.",
@@ -161,7 +161,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Handle the correction boundary",
         type: "single",
         prompt:
           "The corrected threshold is p < .003. Which interpretation handles the reported p-values carefully?",
@@ -185,14 +185,14 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_correct"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Compare the displayed value with the strict inequality, and remember that reported values are rounded.",
         misconceptions: {
           opt_distractor1:
             "Equality at the displayed precision is not strictly below the threshold.",
           opt_distractor2: "The corrected threshold is .003, not zero.",
         },
         explanation:
-          "The paper describes inspiration for others as partially predictive. Its displayed p = .003 is on the stated p < .003 boundary; the old wording overstated all four as unambiguously meeting the correction.",
+          "The paper describes inspiration for others as partially predictive. Its displayed p = .003 is on the stated p < .003 boundary, so the rounded value does not unambiguously fall below that strict threshold.",
         refs: ["r3"],
         writtenReasoning: false,
         reveal: "results",
@@ -200,7 +200,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Interpret full-model R²",
         type: "single",
         prompt:
           "Can R² = .553 be described as the share of flourishing explained by social media alone?",
@@ -224,7 +224,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_correct"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check which predictors are included before assigning the model’s explained variation to one subset.",
         misconceptions: {
           opt_distractor1:
             "The same explained variance cannot be uniquely credited to each included predictor.",
@@ -240,7 +240,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Association after adjustment",
         type: "single",
         prompt:
           "What does the positive adjusted association with positive online experiences leave unresolved?",
@@ -359,7 +359,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_correct"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask whether observing all variables at one wave identifies which one changed first.",
         misconceptions: {
           opt_distractor1:
             "An adjusted association is not an intervention effect.",
@@ -375,7 +375,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Improve temporal evidence",
         type: "single",
         prompt:
           "Which follow-up would best address the direction-of-change gap in this survey?",
@@ -484,7 +484,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_correct"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which proposal adds information about ordering rather than simply more same-wave observations?",
         misconceptions: {
           opt_distractor1:
             "More cross-sectional observations do not establish what changed first.",

@@ -188,7 +188,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Identify what differed",
         type: "single",
         prompt:
           "Because both groups received the odorant, what contrast does the suggestion manipulation test?",
@@ -215,7 +215,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check whether odor exposure changed between groups or was common to both.",
         misconceptions: {
           o2: "The procedures included the odorant in both groups.",
           o3: "Test order was not the manipulated group difference.",
@@ -306,7 +306,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Define a task score",
         type: "single",
         prompt:
           "Why does the definition of out-of-the-boxness depend on a reference set of shapes?",
@@ -333,7 +333,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask what the reference set contributes to the operational meaning of the score.",
         misconceptions: {
           o2: "It is a task-specific shape score, not a rate of individual real-world improvement.",
           o3: "Different tasks can operationalize creativity differently.",
@@ -349,7 +349,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Interpret standardized D",
         type: "single",
         prompt:
           "The game score contrast has D = .6 and p = .008. Which interpretation avoids confusing effect size and probability?",
@@ -376,7 +376,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o4"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Keep standard-deviation units separate from raw points or the proportion of people improving.",
         misconceptions: {
           o1: "A standardized difference is not a proportion of participants.",
           o2: "A p-value is not the posterior probability of a hypothesis.",
@@ -392,7 +392,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Tests showing increased originality",
+        title: "Compare the reported tests",
         type: "multiple",
         prompt:
           "Select the tests whose reported originality contrasts meet the .05 threshold.",
@@ -419,7 +419,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1", "o2"],
         alternatives: [],
-        hint: "Distinguish tests that were reported from a composite that was not.",
+        hint: "Check each test’s reported threshold result without inventing an unreported composite.",
         misconceptions: {
           o3: "The text explicitly says the placebo effect was *not* significant in TTCT.",
           o4: "The combined Z‑score was used for correlation, not for testing originality differences.",
@@ -434,7 +434,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Pattern versus explanation",
         type: "single",
         prompt:
           "Do low AUT–TTCT correlations establish why TTCT did not show the same originality result?",
@@ -461,14 +461,14 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Low score correlations and differing test results do not uniquely establish a process account.",
         misconceptions: {
           o1: "The paper does not establish that specific mechanism or sensitivity claim.",
           o3: "CFG is also nonverbal; this proposed verbal-only explanation does not fit the tests.",
           o4: "Relations among test scores do not erase the reported between-group contrasts.",
         },
         explanation:
-          "The original choice invented a specific visual-spatial inhibition account. The paper says the reason is unclear and proposes multiple facets tentatively.",
+          "The paper explicitly says the reason for the task difference is unclear. Different measured facets are a possibility, while a TTCT-specific inhibition mechanism was not isolated.",
         refs: ["r5"],
         writtenReasoning: false,
         reveal: "interpretation",
@@ -477,7 +477,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Between people versus within a person",
         type: "single",
         prompt:
           "Could the reported group difference establish how much each participant improved from their own baseline?",
@@ -504,7 +504,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which observations would be needed to estimate each individual’s own change?",
         misconceptions: {
           o2: "A group mean cannot supply each person’s missing individual baseline.",
           o3: "Between-group experiments can assign conditions randomly.",

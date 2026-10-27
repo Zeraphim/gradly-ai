@@ -201,7 +201,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Locate the repeated measures",
         type: "single",
         prompt:
           "In Study 4, why would treating every observation as coming from a different person misdescribe the design?",
@@ -307,7 +307,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c1-opt1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Track which conditions the same person completes and which instructions differ between people.",
         misconceptions: {
           "c1-opt2": "The same people performed all three encoding tasks.",
           "c1-opt3":
@@ -324,7 +324,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Identify the factors",
         type: "single",
         prompt: "Which pair of factors was varied in Study 4?",
         evidence: [
@@ -351,7 +351,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c2-opt1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "An experimental factor has alternative levels set before the outcome is measured.",
         misconceptions: {
           "c2-opt2":
             "The procedure sequence is not the pair of experimental factors described here.",
@@ -361,7 +361,7 @@ export const body: StudyBody = {
             "Those describe measured outcomes, not the manipulated encoding and instruction factors.",
         },
         explanation:
-          "The earlier question asked for manipulated variables but offered only task orders. The corrected factors are encoding level and recall paradigm.",
+          "Study 4 varied encoding level and recall paradigm. The sequence of encoding, filler and recall is a procedure, not that pair of experimental factors.",
         refs: ["r1"],
         writtenReasoning: false,
         reveal: "design",
@@ -369,7 +369,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Calculate the recall gap",
         type: "single",
         prompt:
           "Study 4 reports 43.83% for self encoding and 29.94% for meaning encoding. How should the gap be expressed?",
@@ -397,7 +397,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c3-opt1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Subtract the percentages first; a relative increase would need a separate denominator.",
         misconceptions: {
           "c3-opt2":
             "Subtracting percentages gives percentage points; a relative increase needs division by the comparison value.",
@@ -415,7 +415,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Report analysis choices",
         type: "single",
         prompt:
           "The four-study summary gives d = .63, or .45 in conservative analyses. Which reporting choice avoids overstating the result?",
@@ -430,7 +430,7 @@ export const body: StudyBody = {
           },
           {
             id: "c4-opt2",
-            text: "Report only .63 and describe it as the identical estimate from every study.",
+            text: "Report .63 as if every study had that same effect.",
           },
           {
             id: "c4-opt3",
@@ -443,7 +443,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c4-opt1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask what changes between the two analyses before choosing one number to report.",
         misconceptions: {
           "c4-opt2":
             "A pooled estimate is not the result of every individual study or every analysis.",
@@ -461,7 +461,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Test the proposed mechanism",
         type: "single",
         prompt:
           "The authors suggest that instructions against rehearsal explain a difference from earlier laboratory findings. Is that mechanism established?",
@@ -481,7 +481,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c5-opt1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A difference between settings can have several explanations unless a proposed pathway is isolated.",
         misconceptions: {
           "c5-opt2":
             "Several setting and procedure differences can separate studies; the rehearsal explanation was explicitly speculative.",
@@ -495,7 +495,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Check population coverage",
         type: "single",
         prompt:
           "Does a larger, more diverse online sample make the findings representative of everyone?",
@@ -578,7 +578,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c6-opt1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Sample size addresses a different issue from how volunteers enter the sample.",
         misconceptions: {
           "c6-opt2":
             "Increasing size improves precision without automatically eliminating how volunteers were selected.",

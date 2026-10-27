@@ -118,7 +118,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Unbundle threat and content",
         type: "single",
         prompt:
           "Why use threat of electric shock without political content when testing the anxiety explanation?",
@@ -145,7 +145,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c1-opt-a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask what a politically neutral induction holds apart that political threats may combine.",
         misconceptions: {
           "c1-opt-b":
             "One induction does not establish equivalence across all kinds of threat.",
@@ -164,7 +164,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Compare measurement methods",
         type: "single",
         prompt:
           "Why measure both explicit self-placement and implicit associations?",
@@ -191,7 +191,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c2-opt-c"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Think about what direct ratings and response-association tasks each operationalize.",
         misconceptions: {
           "c2-opt-a":
             "Different operational measures need not be interchangeable or error-free.",
@@ -210,7 +210,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Interpret model evidence",
         type: "single",
         prompt:
           "What question can a Bayes factor address that a nonsignificant p-value alone cannot settle?",
@@ -237,7 +237,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c3-opt-b"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Keep relative support for specified models distinct from certainty that a hypothesis is universally true.",
         misconceptions: {
           "c3-opt-a":
             "Relative model evidence does not establish universal certainty.",
@@ -346,7 +346,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Successful induction, null outcome",
         type: "single",
         prompt:
           "What is the narrow conclusion from no significant threat–safety attitude differences here?",
@@ -373,7 +373,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c4-opt-b"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A manipulation check and its proposed downstream consequence test different links in the account.",
         misconceptions: {
           "c4-opt-a":
             "A successful manipulation check and a null outcome can coexist.",
@@ -392,7 +392,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Orient the Bayes factor",
         type: "single",
         prompt:
           "BF01 exceeds 3 for six of eight measures in the main comparison. What is the careful interpretation?",
@@ -419,7 +419,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c5-opt-a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check which model is in the numerator and which participants the comparison includes.",
         misconceptions: {
           "c5-opt-b":
             "Aggregate relative evidence does not establish a universal zero effect.",
@@ -438,7 +438,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Test a context boundary",
         type: "single",
         prompt:
           "Does this experiment establish that anxiety affects attitudes only when a political threat is present?",
@@ -465,7 +465,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c6-opt-b"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A claim that one context is necessary needs a comparison involving that context.",
         misconceptions: {
           "c6-opt-a":
             "A null in one setting does not establish necessity in all settings.",
@@ -475,7 +475,7 @@ export const body: StudyBody = {
             "Absence of a condition difference is not identity among participants.",
         },
         explanation:
-          "The old accepted answer changed the authors’ suggestion into a necessary-condition claim. The experiment did not test a political-threat condition, so that proposed boundary condition remains unestablished.",
+          "The experiment did not include a political-threat condition. Political context is a proposed boundary condition, not a necessary condition established by the nonpolitical result.",
         refs: ["e6", "e14"],
         writtenReasoning: false,
         reveal: "interpretation",

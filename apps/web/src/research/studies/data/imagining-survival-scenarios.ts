@@ -82,7 +82,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Identify both factors",
         type: "single",
         prompt:
           "Which pair describes the factors varied within participants during encoding?",
@@ -109,7 +109,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c1a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Separate the encoding conditions set by the researcher from the responses measured afterward.",
         misconceptions: {
           c1b: "Gender was not an object-level experimental factor.",
           c1c: "Ratings and response times were recorded responses, not the manipulated factor pair.",
@@ -125,7 +125,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Separate memory outcomes",
         type: "single",
         prompt:
           "A participant remembers that an apple was shown but cannot recall its colour or study task. How should these responses be separated?",
@@ -152,7 +152,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c2d"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Remembering an object’s identity need not include remembering the context in which it appeared.",
         misconceptions: {
           c2a: "Item recognition does not establish that the contextual details were remembered.",
           c2b: "Source memory concerns the encoding condition, not the identity of the object.",
@@ -168,7 +168,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Keep analyses distinct",
         type: "single",
         prompt:
           "A supplementary relevance-rating analysis gives p = .06 for item memory. Which interpretation is warranted?",
@@ -195,14 +195,14 @@ export const body: StudyBody = {
         ],
         accepted: ["c3b"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check what this supplementary test conditions on before treating it as the whole experiment.",
         misconceptions: {
           c3a: "A nonsignificant result is not proof of a zero population difference.",
           c3c: "A difference in means does not by itself meet the stated statistical threshold.",
           c3d: "The paper also reports primary corrected-memory results; those should not be conflated.",
         },
         explanation:
-          "The .06 value comes from the analysis conditioning on relevance-rating categories. The previous lesson wrongly treated it as the sole primary item-memory result; a claim about the whole study must distinguish these analyses.",
+          "The .06 value comes from the supplementary analysis conditioning on relevance-rating categories. The primary corrected-memory analysis reports a significant item-memory effect. The two analyses answer different questions and should be reported separately.",
         refs: ["e2"],
         writtenReasoning: false,
         reveal: "results",
@@ -287,7 +287,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Read an interaction",
         type: "single",
         prompt: "What does the colour-memory interaction compare?",
         evidence: [
@@ -313,14 +313,14 @@ export const body: StudyBody = {
         ],
         accepted: ["c4a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "An interaction compares differences across levels of another factor, rather than one overall average.",
         misconceptions: {
           c4b: "An interaction is a contrast of differences, not a requirement for two main effects.",
           c4c: "The interaction concerns condition and plausibility within colour memory.",
           c4d: "The reported interaction alone does not establish that specific simple-effect claim.",
         },
         explanation:
-          "The paper describes a plausibility advantage in both conditions that is larger in survival. That does not license the previous claim that there is necessarily no difference at all for implausible items.",
+          "The paper describes a plausibility advantage in both conditions that is larger in survival. This difference in gaps does not itself establish a zero encoding-condition difference for implausible items.",
         refs: ["r3"],
         writtenReasoning: false,
         reveal: "results",
@@ -329,7 +329,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Limit a memory claim",
         type: "single",
         prompt:
           "Can the colour finding be advertised as a benefit for every contextual detail?",
@@ -356,7 +356,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c5b"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Compare the outcomes that showed a pattern with those that did not; avoid extending beyond both.",
         misconceptions: {
           c5a: "The result is specific to tested measures and conditions.",
           c5c: "A null contrast does not establish perfect performance or a ceiling effect.",
@@ -372,7 +372,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Investigate a memory mechanism",
         type: "single",
         prompt:
           "The authors propose item-specific and relational processing as possible explanations. What would distinguish a mechanism test from this pattern alone?",
@@ -399,7 +399,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c6b"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which proposal directly examines a process rather than simply renaming the outcome?",
         misconceptions: {
           c6a: "Labelling a pattern does not identify the mechanism producing it.",
           c6c: "This task does not isolate the evolutionary origin of the observed effect.",

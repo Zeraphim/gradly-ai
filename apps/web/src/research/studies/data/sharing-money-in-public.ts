@@ -214,7 +214,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Compare observation cues",
         type: "single",
         prompt:
           "What is the purpose of comparing an eye image with both a public decision and a no-eyes decision?",
@@ -241,7 +241,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "An image of eyes and an actual audience need not create the same experience.",
         misconceptions: {
           opt_b:
             "The manipulation check instead assesses whether observation feelings differ.",
@@ -260,7 +260,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Operationalize giving",
         type: "single",
         prompt:
           "What can the amount allocated in a $10 dictator game establish most directly?",
@@ -287,7 +287,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Keep this allocation decision separate from a claim about all real-world generosity.",
         misconceptions: {
           opt_b:
             "One operational behaviour cannot establish every aspect of character or prosociality.",
@@ -397,7 +397,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Interpret a manipulation check",
         type: "single",
         prompt:
           "Why collect the observation-feeling questionnaire after the allocation?",
@@ -424,7 +424,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check the order of measurement and whether a self-report establishes a causal pathway.",
         misconceptions: {
           opt_b: "These remain self-reports of experience.",
           opt_c:
@@ -442,7 +442,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Check versus consequence",
         type: "single",
         prompt:
           "People felt more observed in public, yet public giving did not clearly increase. What does this combination show?",
@@ -469,7 +469,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "An experienced manipulation does not guarantee its predicted behavioural outcome.",
         misconceptions: {
           opt_b:
             "The check and outcome address different steps in the proposed account.",
@@ -488,7 +488,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Measured disposition versus treatment",
         type: "single",
         prompt:
           "Prosocial-classified participants gave 4.33 dollars and egoist-classified participants 3.29. What cannot be inferred from this contrast?",
@@ -515,7 +515,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Does classifying a disposition show what would happen if it were experimentally changed?",
         misconceptions: {
           opt_b:
             "That arithmetic describes the reported means; it is not the causal overclaim requested.",
@@ -609,7 +609,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Follow an exploratory lead",
         type: "single",
         prompt:
           "How should the exploratory SVO-by-observation pattern guide the next study?",
@@ -636,7 +636,7 @@ export const body: StudyBody = {
         ],
         accepted: ["opt_a"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Consider sensitivity and missing matching data before treating a moderation pattern as definitive.",
         misconceptions: {
           opt_b:
             "The authors explicitly warn that the interaction evidence is underpowered.",

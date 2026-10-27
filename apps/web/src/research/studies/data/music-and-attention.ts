@@ -196,7 +196,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Existing and repeated factors",
         type: "single",
         prompt:
           "Why is age group a different kind of comparison from the music and congruency conditions?",
@@ -311,7 +311,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c1-optC"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Track which conditions one person repeats and which group membership is already present.",
         misconceptions: {
           "c1-optA":
             "Age was an existing group characteristic; auditory conditions were repeated.",
@@ -329,7 +329,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Check a speed–accuracy trade-off",
         type: "single",
         prompt:
           "Why would reaction time alone be insufficient if participants could trade accuracy for speed?",
@@ -357,7 +357,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c2-optC"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Would a faster response mean better performance if mistakes rose at the same time?",
         misconceptions: {
           "c2-optA": "Related outcomes can show different patterns.",
           "c2-optB":
@@ -374,7 +374,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Interpret the interference cost",
         type: "single",
         prompt:
           "The RT flanker gap is larger under relaxing music than under stimulating music or silence. What does that imply here?",
@@ -402,7 +402,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c3-optA"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "The gap compares incongruent with congruent trials; consider what a larger cost means.",
         misconceptions: {
           "c3-optB":
             "Pleasantness does not override the observed larger interference cost.",
@@ -420,7 +420,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Bound an age interaction null",
         type: "single",
         prompt:
           "No age moderation of the music-related gap was detected. Which conclusion avoids overstating equality?",
@@ -448,7 +448,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c4-optC"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Failure to detect moderation is different from proving age irrelevant to every outcome.",
         misconceptions: {
           "c4-optA":
             "One task and an interaction test do not establish a universal absence of age effects.",
@@ -466,7 +466,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Unbundle musical properties",
         type: "single",
         prompt:
           "Can this experiment isolate arousal as the cause of its relaxing-versus-stimulating difference?",
@@ -494,7 +494,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c5-optB"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask whether the chosen pieces vary only the proposed explanatory feature.",
         misconceptions: {
           "c5-optA": "A condition name is not an isolated mechanism test.",
           "c5-optC":
@@ -511,7 +511,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Consider the outcome range",
         type: "single",
         prompt:
           "Most responses were correct, exceeding 95% success. Why is that relevant to small error-rate contrasts?",
@@ -630,7 +630,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c6-optB"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "How much room remains to improve an already near-perfect score?",
         misconceptions: {
           "c6-optA":
             "Accuracy and response time capture different aspects of performance.",

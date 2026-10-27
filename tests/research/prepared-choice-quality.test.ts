@@ -4,6 +4,7 @@ import {
   studies as cards,
 } from "../../apps/web/src/research/studies/catalog.js";
 import { rewrittenStudySlugs } from "../fixtures/rewritten-studies.js";
+import { remainingStudies } from "../fixtures/remaining-studies.js";
 
 const rewritten = await Promise.all(
   rewrittenStudySlugs.map(async (slug) => (await loadStudy(slug))!),
@@ -15,6 +16,31 @@ const singles = rewritten.flatMap((s) =>
 // Content-review guardrails for the specific PR #33 regressions. These catch
 // superficial answer strategies, not factual accuracy or learning benefit.
 describe("rewritten prepared-study choices", () => {
+  const remainingSingles = remainingStudies.flatMap(([, study]) =>
+    study.lesson.challenges.filter((challenge) => challenge.type === "single"),
+  );
+  it("keeps fixed-position shortcuts weak within the final review batch itself", () => {
+    for (let position = 0; position < 4; position++) {
+      const hits = remainingSingles.filter((challenge) =>
+        challenge.accepted.includes(challenge.options[position]?.id ?? ""),
+      ).length;
+      expect(hits / remainingSingles.length).toBeLessThanOrEqual(0.4);
+    }
+  });
+  it("does not hide a new length cue behind the earlier review batch", () => {
+    for (const extreme of [Math.min, Math.max]) {
+      const hits = remainingSingles.filter((challenge) => {
+        const right = challenge.options.find((option) =>
+          challenge.accepted.includes(option.id),
+        )!;
+        return (
+          right.text.length ===
+          extreme(...challenge.options.map((option) => option.text.length))
+        );
+      }).length;
+      expect(hits / remainingSingles.length).toBeLessThanOrEqual(0.45);
+    }
+  });
   it("does not reward a fixed answer position across or within studies", () => {
     for (let position = 0; position < 4; position++) {
       const hits = singles.filter((c) =>

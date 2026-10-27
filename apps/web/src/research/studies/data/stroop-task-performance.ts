@@ -216,7 +216,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Replicate a directional claim",
         type: "single",
         prompt:
           "Why would a statistically significant interaction alone be insufficient to replicate the original mindset claim?",
@@ -317,7 +317,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A predicted interaction has a direction as well as a significance threshold.",
         misconceptions: {
           o2: "A reversal conflicts with the directional prediction rather than confirming it.",
           o3: "Sample-size identity is not the criterion for reproducing a directional result.",
@@ -331,7 +331,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Power for smaller effects",
         type: "single",
         prompt:
           "The study has 80% power for a main effect around d = .412. What follows for a substantially smaller true effect?",
@@ -434,7 +434,7 @@ export const body: StudyBody = {
         ],
         accepted: ["a1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "The detectable-effect calculation assumes an effect size; consider what happens when that assumed size changes.",
         misconceptions: {
           a2: "Power depends on effect size as well as sample size and the test.",
           a3: "A detectable-effect threshold is not an estimate of the population effect.",
@@ -449,7 +449,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Interpret an uncertain estimate",
         type: "single",
         prompt:
           "The error contrast has p = .107 and a confidence interval crossing zero. Which statement avoids a null-result overclaim?",
@@ -473,7 +473,7 @@ export const body: StudyBody = {
         ],
         accepted: ["b2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Read the interval along with the p-value; including zero does not itself establish equivalence.",
         misconceptions: {
           b1: "Including zero is not proof of exact equality.",
           b3: "The sign of a point estimate is not a significance test.",
@@ -487,7 +487,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Moderation Effect Result",
+        title: "Separate significance and direction",
         type: "multiple",
         prompt: "Select all statements warranted by the two interaction tests.",
         evidence: [
@@ -593,7 +593,7 @@ export const body: StudyBody = {
         ],
         accepted: ["c2", "c3", "c4"],
         alternatives: [],
-        hint: "Check significance separately from the direction the hypothesis predicts.",
+        hint: "Evaluate each outcome’s test, then compare the observed pattern with the target prediction.",
         misconceptions: {
           c1: "The reported RT p = .778 is not below .05.",
         },
@@ -606,7 +606,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Assess the power concern",
         type: "single",
         prompt:
           "Why does having more than three times the original sample not settle the power concern?",
@@ -630,13 +630,13 @@ export const body: StudyBody = {
         ],
         accepted: ["d2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Being larger than another study does not specify power for every possible effect size.",
         misconceptions: {
           d1: "Power depends on the target effect and design, not just the ratio to an earlier sample.",
           d3: "Limited detection ability cannot itself establish a zero effect or disprove an earlier result.",
         },
         explanation:
-          "The paper explicitly distinguishes its larger sample from sensitivity to smaller effects. The earlier limitation cited the wrong source excerpt; the sensitivity section directly supports it.",
+          "The larger sample still had limited sensitivity for smaller main and moderation effects. Power depends on the target effect and design, not only on the size ratio to an earlier study.",
         refs: ["r2"],
         writtenReasoning: false,
         reveal: "interpretation",

@@ -203,7 +203,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Why repeat the measure?",
         type: "single",
         prompt:
           "What can repeating the original questionnaire add that the conceptual extension alone cannot?",
@@ -230,7 +230,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o3"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Distinguish repeating an earlier measurement from proving that the measurement captures the intended belief.",
         misconceptions: {
           o1: "Repeating an observational questionnaire does not randomly assign television viewing.",
           o2: "Replication can repeat a measurement problem rather than validate the instrument.",
@@ -337,7 +337,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Compare question formats",
         type: "single",
         prompt:
           "The five-item measure gives roughly 10% incorrect responses, but a direct question gives 0.3%. What should a researcher check first?",
@@ -364,7 +364,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "The two formats ask about related ideas; consider whether a wrong response means the same thing in each.",
         misconceptions: {
           o2: "The survey changed measurement format, not the country’s legal system.",
           o3: "That is the disputed assumption; the format difference calls it into question.",
@@ -380,7 +380,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Bound a regression result",
         type: "single",
         prompt:
           "The adjusted replication model did not detect a television association. Which conclusion stays within that result?",
@@ -407,7 +407,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Keep the tested model and outcome separate from a claim about every possible belief.",
         misconceptions: {
           o1: "A null observational result for one outcome cannot rule out every effect.",
           o3: "Adjusting recorded covariates does not establish the absence of unmeasured confounding.",
@@ -423,7 +423,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Test the questionnaire account",
         type: "single",
         prompt:
           "How could the proposed questionnaire-artifact explanation be tested more directly?",
@@ -433,7 +433,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Treat agreement between indirect items as proof that they measure a genuine false belief.",
+            text: "Treat consistent answers as proof of genuine false beliefs.",
           },
           {
             id: "o1",
@@ -441,16 +441,16 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Drop the direct question because it conflicts with the earlier questionnaire result.",
+            text: "Drop the direct question because its result differs.",
           },
           {
             id: "o4",
-            text: "Infer deliberate deception from the discrepancy without changing or testing either format.",
+            text: "Assume deception explains the difference without testing either format.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which proposed design would change the feature suspected of producing the artifact?",
         misconceptions: {
           o2: "Internal consistency alone does not establish that a scale measures the intended construct.",
           o3: "Discarding conflicting measurement evidence does not test the proposed artifact.",
@@ -466,7 +466,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Assess sampling direction",
         type: "single",
         prompt:
           "Would this young, highly educated sample necessarily underestimate errors in the wider population?",
@@ -493,14 +493,14 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Consider the age pattern and the education concern separately before combining their implications.",
         misconceptions: {
           o2: "The observed age pattern runs the other way: older respondents made fewer errors.",
           o3: "A younger sample could inflate errors relative to an older sample; population adjustment needs more information.",
           o4: "Online recruitment alone does not make the demographic distribution representative.",
         },
         explanation:
-          "The original accepted option conflated two potential sampling effects. The authors note that older samples might show fewer errors, while lower education might increase them; neither guarantees the net population difference.",
+          "The authors note that older samples might show fewer errors, while lower education might increase them. Those sampling differences do not guarantee a single net direction for the population estimate.",
         refs: ["r1"],
         writtenReasoning: false,
         reveal: "interpretation",

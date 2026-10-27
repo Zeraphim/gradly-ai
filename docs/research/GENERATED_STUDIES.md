@@ -16,7 +16,7 @@
 
 **Scenes added after generation (scene library work).** Six generated lessons carry hand-authored scenes on existing challenges, citing existing verbatim excerpts. Where a scene cites an excerpt its challenge did not list, the id was added to that challenge's `refs`. Questions, answers and excerpts are unchanged. Regenerating these slugs drops the scenes, so re-add them afterwards: `bus-ridership-behavior` c5 (units), `stroop-task-performance` c4 (tests), `remembering-doctor-appointments` c3 (tests), `vaccine-misinformation-correction` c1 (matrix), `phone-use-while-driving` c1 (matrix), and `dog-ownership-among-seniors` c6 (association).
 
-Questions, answers and explanations were originally unedited model output. The beverage lesson now has a manual revision described below; its source excerpts remain verbatim. Mechanical generation fixes are listed per study.
+Questions, answers and explanations were originally unedited model output. The later source-check passes below revise all 45 generated studies; source excerpts remain verbatim and agent revision is not content-owner approval. Mechanical generation fixes are listed per study.
 
 ## Known limits
 
@@ -135,13 +135,13 @@ The proof set already had scenes on most required questions before this work:
 association, not a risk ratio. No new scene kind or shared-player behavior was
 introduced. Across the library, the current count is **255/313 without scenes**.
 
-### Further rewrites: 14 more studies (26–27 October)
+### Further rewrites: 23 more studies (26–27 October)
 
 23 more generated studies had every question rewritten as a decision, keeping ids and
 card challenge lists unchanged. Each kept fact was compared with the stored PDF, and
 every new excerpt is verbatim on its cited page. The full per-study status, open
 defects and unverified leads are in the
-[review register](PREPARED_STUDY_REVIEW.md). All five remain `reviewed: false`.
+[review register](PREPARED_STUDY_REVIEW.md). These studies remain `reviewed: false`.
 
 | Study                                | Before (all lookups of the shown evidence)                                                                                                              | After (decisions)                                                                                                                                                                                                         |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -162,10 +162,12 @@ questions across 31 studies were replaced from each question's reveal stage.
 
 ### Outstanding scope and agreement
 
-- Agent: continue the source-based question review across the remaining 21 drafts
-  (see the [review register](PREPARED_STUDY_REVIEW.md) for order and open defects),
-  including the existing television lesson correctness warning above.
-  The original texting sample is separate. No full-library semantic audit is claimed.
+- The 28 October agent pass completed the remaining **21 generated studies / 122
+  required questions**, including the television lesson’s sampling-direction error.
+  All 45 generated studies now have an agent source-check/revision; the
+  [review register](PREPARED_STUDY_REVIEW.md#remaining-study-question-review--28-october-2026)
+  records the scope and corrections. Final content-owner approval is still pending,
+  and six other featured studies remain outside these question-revision batches.
 - Agent: add suitable scenes beyond this first batch; do not manufacture plots or
   pad every question with a restatement of its text.
 - Marc/JC: review the shared-player proposal in
@@ -178,3 +180,19 @@ questions across 31 studies were replaced from each question's reveal stage.
   this content pass does not close that older issue.
 
 Verification and browser findings are recorded in the prepared-study UI notes.
+
+### Remaining-question pass (28 October 2026)
+
+The final generated batch replaces copying prompts with evidence interpretation,
+corrects factor/outcome mismatches, separates supplementary and primary analyses,
+and adds explicit limitations and question-specific hints. Existing IDs, accepted
+keys and source-backed scenes are retained; response labels and option order are
+kept aligned. Obsolete saved definitions were pruned against the revised text and
+permitted citations, with neutral source-derived operational terms retained.
+No regeneration or live provider run was used for these revisions.
+
+The new batch has 119 single-answer and three multiple-answer questions. Choice
+cue checks cover this batch separately as well as the earlier revisions. Source,
+walkthrough and approval limits are recorded in the review register and TESTING.md.
+Historical scene counts above describe earlier passes; the later visual pass is
+recorded in [PREPARED_VISUAL_COVERAGE.md](PREPARED_VISUAL_COVERAGE.md).

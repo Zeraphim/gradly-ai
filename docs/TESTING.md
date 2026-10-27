@@ -198,3 +198,14 @@ Do not treat previous Chromium reports as verification of these new scene layout
 Browser layout, animation smoothness, mobile touch and assistive-technology review
 remain unverified unless separately performed and reported. No live model or
 production deployment is required or established by the authored fixtures.
+
+`tests/browser/remaining-question-review.spec.ts` walks the final 21 generated
+studies (122 required questions) at 375×812 and 1366×768. It selects the accepted
+responses, opens reported-value scenes where required, checks feedback and final
+paper reveal, and checks horizontal overflow and axe after every response. Each
+phone case also misses its first question once and verifies the question-specific
+hint after retry. The walkthrough waits for the supplied font before layout checks. The
+fixture is `tests/fixtures/remaining-studies.ts`. This exercises the content in the
+player; it does not independently approve its accuracy or learning benefit.
+`rewritten-studies.ts` includes this batch in the answer-position, length-cue and
+scene-order regression checks alongside the earlier 26 revised studies.

@@ -100,7 +100,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Stimulus versus listener history",
         type: "single",
         prompt:
           "Why should differences between the listening-history groups be treated differently from differences between the musical stimuli?",
@@ -127,7 +127,7 @@ export const body: StudyBody = {
         ],
         accepted: ["optA"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask which features the experiment could vary and which participants brought with them.",
         misconceptions: {
           optB: "The researchers did not randomly assign lifetime musical exposure.",
           optC: "Participants explicitly made paired musical judgements.",
@@ -143,7 +143,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Separate musical features",
         type: "single",
         prompt:
           "Why distinguish the cadence major/minor hypothesis from a mean-pitch hypothesis?",
@@ -170,7 +170,7 @@ export const body: StudyBody = {
         ],
         accepted: ["optD"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Two properties can covary even when researchers want to explain their effects separately.",
         misconceptions: {
           optA: "The hypotheses and stimulus construction distinguish mode from mean pitch.",
           optB: "Stimulus contrasts cannot randomize participants’ prior histories.",
@@ -186,7 +186,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Avoid a stimulus confound",
         type: "single",
         prompt:
           "What problem would arise if all major cadences were higher-pitched than all minor cadences?",
@@ -213,7 +213,7 @@ export const body: StudyBody = {
         ],
         accepted: ["optB"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Would trial order or a larger sample break a fixed pairing of mode and pitch?",
         misconceptions: {
           optA: "Order randomization does not undo a fixed relation between stimulus features.",
           optC: "More observations do not repair a confounded stimulus design.",
@@ -229,7 +229,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Assess a universal claim",
         type: "single",
         prompt:
           "Strong major-cadence evidence appears in most groups but not the minimally exposed group. Which claim is too strong?",
@@ -256,7 +256,7 @@ export const body: StudyBody = {
         ],
         accepted: ["optB"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check whether the claim goes beyond the sampled groups and their uncertain estimates.",
         misconceptions: {
           optA: "That is a cautious description of the reported pattern, rather than the overclaim requested.",
           optC: "An uncertain result should be considered with its interval and prior evidence.",
@@ -272,7 +272,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Compare group effects",
         type: "single",
         prompt:
           "Would finding a melody-pitch effect in one PNG group but not the others establish a difference between those groups?",
@@ -299,7 +299,7 @@ export const body: StudyBody = {
         ],
         accepted: ["optB"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Evidence for an effect within one group is a different question from the contrast between two effects.",
         misconceptions: {
           optA: "Different evidence labels are not a direct test of the difference between effects.",
           optC: "Group estimates are not deterministic claims about every community member.",
@@ -315,7 +315,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Pattern versus mechanism",
         type: "single",
         prompt:
           "Which interpretation of the exposure gradient best separates observation from explanation?",
@@ -342,7 +342,7 @@ export const body: StudyBody = {
         ],
         accepted: ["optB"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Consider other differences that might travel with an existing group’s listening history.",
         misconceptions: {
           optA: "Lifetime exposure was not randomly assigned and could covary with other group differences.",
           optC: "The paper explicitly says the estimates cannot rule out a universal effect.",
@@ -450,7 +450,7 @@ export const body: StudyBody = {
       {
         id: "c7",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "What would establish smallness?",
         type: "single",
         prompt:
           "What additional evidence would most strengthen a claim that the minimally exposed population has a negligible effect?",
@@ -477,7 +477,7 @@ export const body: StudyBody = {
         ],
         accepted: ["optB"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Think about both precision and what effect sizes would count as practically negligible.",
         misconceptions: {
           optA: "Failure to reject a point null does not establish negligibility or equivalence.",
           optC: "An estimate from another group does not identify the uncertain group’s effect.",

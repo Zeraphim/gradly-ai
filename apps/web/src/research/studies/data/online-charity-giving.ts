@@ -209,7 +209,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Define the experimental contrast",
         type: "single",
         prompt:
           "What is the main causal contrast created by assigning invitation recipients to these conditions?",
@@ -232,7 +232,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Identify what the assigned invitation changes and what remains fixed across conditions.",
         misconceptions: {
           o2: "The study used one donation amount and a selected academic population.",
           o3: "Assignment changes the offer format, not an isolated latent motivation.",
@@ -328,7 +328,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Superiority and equivalence",
         type: "single",
         prompt:
           "Why predefine both a directional superiority test and a 2-percentage-point equivalence bound?",
@@ -351,7 +351,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A test for a predicted increase differs from a test against a stated minimum effect size.",
         misconceptions: {
           o1: "Equivalence needs its own bound and analysis; it does not follow from nonsignificance alone.",
           o3: "A percentage-point difference is not a constant relative percentage change.",
@@ -366,7 +366,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Distinguish starting and finishing",
         type: "single",
         prompt:
           "The starting rates are 7.2% and 7.5%. Why keep completion as a separate outcome?",
@@ -389,7 +389,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check the denominators and whether entering a survey guarantees completing it.",
         misconceptions: {
           o2: "The reported rates use invited recipients; excluding nonfinishers would change the estimand.",
           o3: "The observed completion gap is smaller; one outcome cannot substitute for the other.",
@@ -404,7 +404,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Interpret bounded equivalence",
         type: "single",
         prompt:
           "What can the significant equivalence tests add to the nonsignificant superiority tests?",
@@ -427,7 +427,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "The chosen bound defines which sizes are being ruled out in this particular setting.",
         misconceptions: {
           o1: "Bounded equivalence in one setting does not establish exact or universal zero.",
           o3: "The directional superiority comparisons did not detect the predicted increase.",
@@ -442,7 +442,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Interpretation of the null finding",
+        title: "Test proposed boundaries",
         type: "multiple",
         prompt:
           "Select all follow-ups that test proposed boundary conditions rather than assume an explanation for the null.",
@@ -473,7 +473,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1", "o2", "o4", "o5"],
         alternatives: [],
-        hint: "A test changes or measures a candidate factor; it does not declare that factor proven.",
+        hint: "A follow-up should vary or measure a candidate factor rather than declare an unmeasured cause.",
         misconceptions: {
           o3: "The study did not measure trust, so that causal explanation is not established.",
         },
@@ -487,7 +487,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Isolate donation leverage",
         type: "single",
         prompt:
           "Which follow-up most directly tests the proposed low-donation-leverage explanation?",
@@ -514,14 +514,14 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which proposed design actually varies the amount, rather than another feature of the invitation?",
         misconceptions: {
           o2: "That probes a different explanation without manipulating the amount.",
           o3: "That tests cause differentiation rather than donation leverage.",
           o4: "That tests cue salience rather than the donation-amount explanation.",
         },
         explanation:
-          "The old question asked which remedy was most likely to work without evidence ranking the possibilities. A direct amount manipulation tests the specific low-leverage proposal.",
+          "Varying donation amount directly tests the low-leverage proposal. The other suggested boundary conditions require different comparisons; the study does not establish which remedy would be most effective.",
         refs: ["e9", "e21"],
         writtenReasoning: false,
         reveal: "interpretation",

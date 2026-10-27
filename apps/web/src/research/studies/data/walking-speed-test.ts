@@ -110,7 +110,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Measurement versus treatment",
         type: "single",
         prompt:
           "What does automated timing change about the first priming comparison?",
@@ -133,7 +133,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A timing device records an outcome; ask what was assigned to create the prime comparison.",
         misconceptions: {
           o2: "Automating timing does not remove all possible experimenter–participant interactions.",
           o3: "Timing is measurement; the prime contrast concerns the sentence task.",
@@ -148,7 +148,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Test expectancy dependence",
         type: "single",
         prompt:
           "Why separately manipulate the experimenter’s expectation of slower or faster walking?",
@@ -171,7 +171,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Identify whose expectations were changed and which contrast that manipulation makes possible.",
         misconceptions: {
           o2: "The manipulation concerns experimenters’ expectations, not participant self-assignment.",
           o3: "Expectation dependence does not uniquely identify how cues reached participants.",
@@ -258,7 +258,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Read time and uncertainty",
         type: "single",
         prompt:
           "Experiment 1 reports mean walking times 6.270 and 6.390 seconds, with F < 1. Which reading is justified?",
@@ -281,13 +281,13 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A smaller time means faster travel; a nonsignificant comparison is not proof of equivalence.",
         misconceptions: {
           o2: "Its point mean is actually lower, and the contrast was not significant.",
           o3: "Nonsignificance alone does not establish equivalence.",
         },
         explanation:
-          "The paper prints F(1,119) < 1 and η² = .01, not a missing F statistic. A lower time would mean faster, not slower, walking; this contrast did not detect a reliable difference.",
+          "The reported F(1,119) < 1 and small η² do not establish a clear difference. A lower walking time would mean faster, not slower, travel; the point contrast is not an equivalence result.",
         refs: ["r1"],
         writtenReasoning: false,
         reveal: "results",
@@ -296,7 +296,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Check context independence",
         type: "single",
         prompt:
           "An effect appeared under slower-walking expectations but not universally across expectations. What does that challenge?",
@@ -319,7 +319,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Would a result conditional on testing context justify a claim that context never matters?",
         misconceptions: {
           o2: "The result does not establish conscious motives in each participant.",
           o3: "Timing safeguards remain useful even when the effect depends on context.",
@@ -334,7 +334,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Respond to a failed replication",
         type: "single",
         prompt:
           "What would be a reasonable response to the failed first replication?",
@@ -357,7 +357,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Keep this protocol’s evidence separate from a universal claim about all priming effects.",
         misconceptions: {
           o2: "One study cannot disprove every effect in a broader research class.",
           o3: "Ignoring contrary evidence prevents a fair assessment of robustness.",
@@ -457,7 +457,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Test an interpersonal mechanism",
         type: "single",
         prompt:
           "Does the expectation-dependent result identify unconscious mimicry as the unique mechanism?",
@@ -480,7 +480,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Dependence on expectations does not uniquely identify how they reached participants.",
         misconceptions: {
           o2: "Dependence on expectations does not uniquely identify the mediating process.",
           o3: "The debriefing raised awareness concerns rather than eliminating them.",

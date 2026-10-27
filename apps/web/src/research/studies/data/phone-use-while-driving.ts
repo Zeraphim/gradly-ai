@@ -231,7 +231,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Separate task factors",
         type: "single",
         prompt:
           "What does crossing image/text tasks with self/experimenter pacing help separate?",
@@ -254,7 +254,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Identify the two planned contrasts without assuming four tasks represent every smartphone activity.",
         misconceptions: {
           o2: "Four selected tasks do not cover all apps or perfectly isolate every platform feature.",
           o3: "Age is not a manipulated factor in this design.",
@@ -370,7 +370,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Keep performance measures distinct",
         type: "single",
         prompt:
           "A driver has a slow braking response but stable headway. Why retain both measures?",
@@ -393,7 +393,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Think about responding to a lead-car event versus stability of following over time.",
         misconceptions: {
           o2: "One unaffected measure does not establish safety on all other outcomes.",
           o3: "Shared setting does not make distinct operational measures interchangeable.",
@@ -408,7 +408,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Compute the time contrast",
         type: "single",
         prompt:
           "How much longer was mean braking response for text tasks than image tasks?",
@@ -431,7 +431,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Subtract the image-task mean from the text-task mean, keeping the units as seconds.",
         misconceptions: {
           o2: "A ratio is dimensionless; subtraction gives the time difference.",
           o3: "That is a different contrast from the text-versus-image question.",
@@ -527,7 +527,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Scope a pacing null",
         type: "single",
         prompt:
           "No significant pacing contrast was detected. Does that establish that self-pacing is always equally safe?",
@@ -550,7 +550,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A limited null comparison is not an equivalence test across all tasks and road settings.",
         misconceptions: {
           o2: "Nonsignificance is not proof of equivalence across settings.",
           o3: "The experiment neither establishes zero risk nor verifies that behaviour in real traffic.",
@@ -565,7 +565,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Test the proposed account",
         type: "single",
         prompt:
           "Does the proposed picture-superiority account establish why image tasks had shorter braking responses?",
@@ -588,7 +588,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which memory processes were directly isolated, rather than offered in discussion?",
         misconceptions: {
           o2: "Several task differences can produce the contrast; the mechanism was not directly isolated.",
           o3: "A proposed mechanism and one nonsignificant contrast do not establish safety.",
@@ -603,7 +603,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Improve generalizability",
         type: "single",
         prompt:
           "Which follow-up would best test whether the null pacing result generalizes?",
@@ -626,7 +626,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which follow-up adds relevant people and tasks while keeping direct driving outcomes?",
         misconceptions: {
           o2: "A limited null finding does not resolve variation across settings and tasks.",
           o3: "Popularity does not measure braking or following-distance performance.",

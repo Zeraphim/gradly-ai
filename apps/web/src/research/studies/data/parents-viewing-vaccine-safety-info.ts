@@ -135,7 +135,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Assignment versus sampling",
         type: "single",
         prompt:
           "Why can random assignment strengthen the frame comparison without making the sample nationally representative?",
@@ -162,7 +162,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Who enters a study and which condition they receive are separate design decisions.",
         misconceptions: {
           o2: "Random assignment to conditions and random sampling from a population are different processes.",
           o3: "A nonrepresentative sample can still support a valid within-sample randomized contrast.",
@@ -256,7 +256,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Significance versus magnitude",
         type: "single",
         prompt:
           "The priority-rating means are 3.38 and 3.30 with p = .002. Does the p-value establish a large practical effect?",
@@ -283,7 +283,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Read the raw gap and effect-size estimate instead of using the p-value as a size measure.",
         misconceptions: {
           o2: "Statistical significance does not specify the magnitude or importance of a change.",
           o3: "A p-value is not the fraction of individuals who changed.",
@@ -299,7 +299,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Keep the subgroup label",
         type: "single",
         prompt:
           "Table 3 reports trust means 4.09 versus 4.02 for women (p = .038). Which report preserves its scope?",
@@ -326,15 +326,15 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Identify both the table’s outcome and its subgroup before generalizing the contrast.",
         misconceptions: {
           o2: "This is a female-subgroup trust outcome, not an overall information-receipt measure.",
           o3: "Trust ratings are not recorded vaccination behaviour.",
           o4: "A subgroup result does not establish the corresponding whole-sample result.",
         },
         explanation:
-          "The previous lesson mislabelled these values as an unspecified overall information-receipt outcome. The table identifies the outcome as trust among female respondents.",
-        refs: ["r2"],
+          "Table 3 identifies this outcome as trust among female respondents. Its subgroup means cannot be reported as an overall information-receipt outcome or a demonstrated change in vaccination behaviour.",
+        refs: ["r2", "e14"],
         writtenReasoning: false,
         reveal: "results",
         scene: null,
@@ -342,7 +342,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Match the claimed outcome",
         type: "single",
         prompt:
           "Could a government-priority rating difference establish that more children actually got vaccinated?",
@@ -369,7 +369,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A rating and a later recorded action require different observations.",
         misconceptions: {
           o2: "The outcome is a rating, not uptake recorded after the study.",
           o3: "Randomization does not establish effects on outcomes that were not observed.",
@@ -385,7 +385,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Improve population coverage",
         type: "single",
         prompt:
           "What would most directly improve confidence that the findings apply to the wider parent population?",
@@ -412,7 +412,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Which proposal changes who is recruited rather than only precision or condition allocation?",
         misconceptions: {
           o2: "More observations from the same recruitment process do not guarantee broader coverage.",
           o3: "Condition assignment does not determine who was sampled.",
@@ -428,7 +428,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Interpret adjusted comparisons",
         type: "single",
         prompt:
           "What does adding demographic measures and baseline vaccine mood to the model do?",
@@ -455,7 +455,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Check which differences were measured and included before assuming every alternative was addressed.",
         misconceptions: {
           o2: "Adjustment covers specified measures, not every possible bias.",
           o3: "Model covariates do not change the recruitment procedure.",

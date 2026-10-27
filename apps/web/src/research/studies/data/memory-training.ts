@@ -118,7 +118,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "How groups were formed",
         type: "single",
         prompt:
           "A coach calls the mindset comparison a randomized experiment. What is the problem with that description?",
@@ -141,7 +141,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask whether participants’ beliefs were changed by assignment or measured before grouping.",
         misconceptions: {
           o1: "Receiving the same training does not randomly assign a pre-existing belief.",
           o3: "Balance on two measured features does not remove every other group difference.",
@@ -265,7 +265,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Compare changes",
         type: "single",
         prompt:
           "Which analysis most directly asks whether the two mindset groups improved by different amounts?",
@@ -275,7 +275,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "Compare each group with itself and call one significant result a group difference.",
+            text: "Test change separately and infer a group difference.",
           },
           {
             id: "o2",
@@ -283,12 +283,12 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Compare only posttest scores and ignore how the groups performed before training.",
+            text: "Compare the groups only at the posttest.",
           },
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A difference in improvement requires comparing the changes, not just two separate significance labels.",
         misconceptions: {
           o1: "A significant change in one group and a nonsignificant change in the other is not itself a test of their difference.",
           o3: "A posttest comparison alone does not directly test differential change.",
@@ -303,7 +303,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Interpret the null contrasts",
         type: "single",
         prompt:
           "The two RAPM group comparisons have p = .203 and p = .762. Which conclusion is justified?",
@@ -326,7 +326,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o3"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Separate failing to detect a difference from establishing that the populations are equivalent.",
         misconceptions: {
           o1: "Nonsignificant tests do not establish exact equality or equivalence.",
           o2: "Different p-values are not a test of a change in the group difference.",
@@ -409,7 +409,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Limit the conclusion",
         type: "single",
         prompt:
           "Would this result justify advertising that mindset never matters for any cognitive training?",
@@ -432,7 +432,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "List the training duration, population and outcomes that this experiment actually tested.",
         misconceptions: {
           o1: "A limited protocol cannot establish a universal absence of effects.",
           o3: "Extreme-score selection narrows the sampled comparison; it does not make it universal.",
@@ -447,7 +447,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Test the expectancy account",
         type: "single",
         prompt:
           "Which follow-up would best test the proposed explanation that one hour did not seem credible to participants?",
@@ -470,7 +470,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "What would need to be observed to check whether the recruitment message created expectations?",
         misconceptions: {
           o1: "General beliefs about intelligence do not directly measure expected benefit from this specific hour.",
           o3: "More outcome measurements alone do not test the proposed expectation pathway.",
@@ -485,7 +485,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Isolate the recruitment message",
         type: "single",
         prompt:
           "Both groups received overt recruitment. What comparison is missing if we want to isolate the effect of the recruitment message?",
@@ -495,7 +495,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o1",
-            text: "A third overtly recruited group with the same improvement message.",
+            text: "Add another group using the same improvement claim.",
           },
           {
             id: "o3",
@@ -508,7 +508,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "To isolate a factor, the comparison needs variation in that factor.",
         misconceptions: {
           o1: "Repeating the same exposure does not introduce the missing message comparison.",
           o3: "A larger sample cannot replace a contrast that the design never included.",

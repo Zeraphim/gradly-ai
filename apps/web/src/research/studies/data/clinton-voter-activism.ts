@@ -206,7 +206,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Interpret the interaction hypothesis",
         type: "single",
         prompt:
           "What distinguishes the identification-by-activism hypothesis from a claim that activism benefits every voter equally?",
@@ -233,7 +233,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o2"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Does the hypothesis predict one activism association everywhere or one that varies with identification?",
         misconceptions: {
           o1: "A uniform effect is different from the hypothesized interaction.",
           o3: "The reported activism and identification measures were observed, not assigned.",
@@ -249,7 +249,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Use the timeline carefully",
         type: "single",
         prompt:
           "What does measuring activism before later well-being add, and what does it not establish?",
@@ -276,14 +276,14 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Earlier measurement provides ordering, while selection into activism remains a separate question.",
         misconceptions: {
           o2: "Longitudinal observation does not randomly assign activism.",
           o3: "Repeated invitations do not ensure repeated participation.",
           o4: "The election does not erase the recorded order of the measurements.",
         },
         explanation:
-          "Earlier measurement improves temporal ordering. The original wording implied change more strongly than the cited summaries warranted; prediction of a later outcome is not automatically a causal change estimate.",
+          "Earlier measurement supports temporal ordering of prediction. Observing activism before a later outcome does not remove all selection or confounding, or automatically establish a causal change estimate.",
         refs: ["e12", "e10", "e8", "e4"],
         writtenReasoning: false,
         reveal: "design",
@@ -369,7 +369,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Main and conditional effects",
         type: "single",
         prompt:
           "Can a nonsignificant activism main effect coexist with an identification-by-activism interaction?",
@@ -396,7 +396,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o3"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "An overall model term and a slope at a particular moderator level need not give the same result.",
         misconceptions: {
           o1: "Interaction and main-effect tests ask different questions.",
           o2: "An interaction indicates dependence on the other variable, not a uniform benefit.",
@@ -412,7 +412,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Association versus intervention",
         type: "single",
         prompt:
           "Would advising every highly identified voter to become more active be a demonstrated treatment effect from these data?",
@@ -439,7 +439,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o3"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask whether the researchers assigned extra activism or observed participants’ existing activity.",
         misconceptions: {
           o1: "An observational conditional slope is not a randomized intervention effect.",
           o2: "The relevant predictors were measured, not randomized.",
@@ -455,7 +455,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Interpret selective follow-up",
         type: "single",
         prompt:
           "Women completed follow-ups more often than men. What does this tell us about missing outcomes?",
@@ -482,7 +482,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Retention rates identify who is missing, but do they reveal those missing outcomes?",
         misconceptions: {
           o2: "Retention rates do not reveal the missing participants’ outcomes.",
           o3: "Adjustment for gender does not ensure missingness is ignorable on other variables.",

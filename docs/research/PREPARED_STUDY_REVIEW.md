@@ -38,7 +38,7 @@ Scope: **26 studies** — the **24 rewritten generated studies** listed below pl
 revised featured studies `exercise-focus` and `sleep-school`. They contain **152
 required questions**: **151 single-answer** and one multiple-answer question. The
 remaining **21 generated drafts** and six other featured studies are outside this
-review-fix pass. Both issues remain open; this is not a claim that all 53 studies
+review-fix pass. At that review point both issues remained open; this was not a claim that all 53 studies
 are fixed or approved.
 
 ### F1: answer-position and length shortcuts
@@ -272,7 +272,18 @@ within each study, and scene response labels/order follow it. Existing numerical
 scenes and source links are retained; survival’s scene now identifies its
 supplementary analysis and the activism timeline places identification before
 the election. This changes content, not player, scoring, excerpt timing or
-provider configuration. Added excerpts are verbatim on their cited PDF pages.
+provider configuration. Added excerpts are verbatim on their cited PDF pages. Saved definitions that no
+longer match the revised question wording or its permitted citations are removed;
+surviving definitions retain their original provenance. Five otherwise-empty
+studies receive a neutral, source-derived operational definition for the new
+wording. General glossary fallback remains available; no term generation was run.
+
+The 119 single-answer questions in this batch have correct positions of
+36 / 37 / 29 / 17 across slots 1–4 (some questions have fewer options).
+Counting ties as wins, always choosing a shortest option succeeds on 52/119
+(43.7%) and a longest option on 38/119 (31.9%). The three multiple-answer questions
+are excluded. These are cue checks, not factual-accuracy or learning scores;
+regressions protect this batch separately so earlier work cannot mask a new cue.
 
 Historical detector and word-match counts above have **not** been rerun on the
 new questions. `not rerun` replaces obsolete counts for these 21 rows; no automatic

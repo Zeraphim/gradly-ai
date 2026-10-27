@@ -70,7 +70,7 @@ export const body: StudyBody = {
       {
         id: "c1",
         stage: "Read the design",
-        title: "Compare the design",
+        title: "Track people across conditions",
         type: "single",
         prompt:
           "Why is the 20/50/80% comparison between participants but aloud versus silent learning within participants?",
@@ -93,7 +93,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Separate the list proportion assigned to a person from the learning modes used within that list.",
         misconceptions: {
           o2: "The allocation and learning-mode structure are the reverse of that description.",
           o3: "Repeated words or trials remain clustered within the same learner.",
@@ -189,7 +189,7 @@ export const body: StudyBody = {
       {
         id: "c2",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Calculate a percentage-point gap",
         type: "single",
         prompt:
           "Recall is 27% aloud versus 19% silent in the balanced group. Which quantity describes the raw gap?",
@@ -210,7 +210,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "A subtraction of two percentages and a relative change answer different numerical questions.",
         misconceptions: {
           o2: "A relative change uses the silent baseline as a denominator.",
           o3: "Adding rates does not measure the contrast between them.",
@@ -225,7 +225,7 @@ export const body: StudyBody = {
       {
         id: "c3",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Compare outcome effects",
         type: "single",
         prompt:
           "Recognition is 69.2% versus 54.2%. Does its smaller p-value prove that its advantage exceeds the recall advantage?",
@@ -248,7 +248,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ordering p-values is not a direct test of the difference between two effects.",
         misconceptions: {
           o2: "P-values depend on variability and design as well as effect size.",
           o3: "Outcome contrasts can be compared with an appropriate direct analysis, not by p-value ordering.",
@@ -263,7 +263,7 @@ export const body: StudyBody = {
       {
         id: "c4",
         stage: "Read the results",
-        title: "Interpret the result",
+        title: "Scope the recognition result",
         type: "single",
         prompt:
           "Recognition in the 80%-aloud group is 65.3% aloud versus 63.1% silent (p > .3). Which conclusion stays within that test?",
@@ -286,7 +286,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o3"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Keep recognition separate from recall, and nonsignificance separate from equivalence.",
         misconceptions: {
           o1: "Nonsignificance is not an equivalence result.",
           o2: "The aloud mean is slightly higher and the contrast is not significant.",
@@ -409,7 +409,7 @@ export const body: StudyBody = {
       {
         id: "c5",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Interpret the interaction",
         type: "single",
         prompt:
           "What does an interaction between list proportion and learning mode add beyond an overall aloud advantage?",
@@ -432,7 +432,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Ask whether a single learning-mode gap can describe all the list-proportion conditions.",
         misconceptions: {
           o2: "The interaction specifically contradicts a constant-gap interpretation.",
           o3: "The pattern can support a theoretical account without uniquely isolating a mental process.",
@@ -447,7 +447,7 @@ export const body: StudyBody = {
       {
         id: "c6",
         stage: "Draw a conclusion",
-        title: "Bound the conclusion",
+        title: "Check the item sample",
         type: "single",
         prompt:
           "Why replicate the recall reversal in the mostly-aloud condition before making a broad rule?",
@@ -470,7 +470,7 @@ export const body: StudyBody = {
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate what was measured from the conclusion the question asks you to draw.",
+        hint: "Consider how much evidence a small set of items gives for a broad memory rule.",
         misconceptions: {
           o2: "A limited item subset cannot establish a universal memory rule.",
           o3: "A limitation of one result does not invalidate every different condition and outcome.",
