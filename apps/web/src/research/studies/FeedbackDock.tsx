@@ -8,6 +8,7 @@ import {
   useSceneMotion,
 } from "../scenes/scene-motion.js";
 import type { ChallengeStatus } from "./journey.js";
+import { TermText } from "../terms/Terms.js";
 
 export type DockFeedback = {
   status: ChallengeStatus;
@@ -115,10 +116,13 @@ export const FeedbackDock = forwardRef<
                       </m.span>
                     ) : null}
                   </h2>
-                  <p>{feedback.body}</p>
+                  <p>
+                    <TermText text={feedback.body} />
+                  </p>
                   {feedback.hint ? (
                     <p className="journey-hint">
-                      <Lightbulb size={15} aria-hidden="true" /> {feedback.hint}
+                      <Lightbulb size={15} aria-hidden="true" />{" "}
+                      <TermText text={feedback.hint} />
                     </p>
                   ) : null}
                 </div>

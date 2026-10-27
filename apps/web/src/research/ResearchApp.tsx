@@ -43,6 +43,8 @@ import {
 } from "./client-state.js";
 import { Mascot, Speech, Progress, ErrorMessage } from "./learning-ui.js";
 import { paperContext } from "./paper-context.js";
+import { TermProvider, TermText } from "./terms/Terms.js";
+import { termEntries } from "./terms/term-logic.js";
 
 import {
   lazy,
@@ -853,7 +855,11 @@ function GradlyWorkspace({
                 </>
               ) : null}
               {c && !reviewMode ? (
-                <>
+                <TermProvider
+                  entries={termEntries(c.terms, c.termSources)}
+                  scope={session.lessonId}
+                  resetKey={`${c.id}:${c.attempts}:${session.retrying}`}
+                >
                   <div className="play-top">
                     <div
                       className="play-progress"
@@ -973,7 +979,9 @@ function GradlyWorkspace({
                       </p>
                     </section>
                   ) : null}
-                  <p className="question">{c.prompt}</p>
+                  <p className="question">
+                    <TermText text={c.prompt} />
+                  </p>
                   {scene ? (
                     <InvestigationScene
                       key={`${session.id}:${c.id}:${session.retrying}`}
@@ -1024,7 +1032,9 @@ function GradlyWorkspace({
                             }}
                           />
                           <span className="keycap">{o.id}</span>
-                          <span>{o.text}</span>
+                          <span>
+                            <TermText text={o.text} passive />
+                          </span>
                           <span aria-hidden="true" className="selection-mark">
                             {selected.includes(o.id) ? (
                               <Icon name="check" size={19} />
@@ -1062,7 +1072,9 @@ function GradlyWorkspace({
                         className="support"
                         title="Hint"
                       >
-                        <p>{c.hint}</p>
+                        <p>
+                          <TermText text={c.hint} />
+                        </p>
                       </SceneDisclosure>
                     </div>
                     {c.writtenReasoning ? (
@@ -1135,9 +1147,13 @@ function GradlyWorkspace({
                                 ? "Let’s reconsider."
                                 : "Here’s the reference explanation."}
                           </h2>
-                          <p>{c.feedback.message}</p>
+                          <p>
+                            <TermText text={c.feedback.message} />
+                          </p>
                           {c.feedback.explanation && !c.feedback.correct ? (
-                            <p>{c.feedback.explanation}</p>
+                            <p>
+                              <TermText text={c.feedback.explanation} />
+                            </p>
                           ) : null}
                         </SceneFeedback>
                         <details className="agent-panel">
@@ -1323,7 +1339,7 @@ function GradlyWorkspace({
                       </>
                     ) : null}
                   </SceneFollowing>
-                </>
+                </TermProvider>
               ) : null}
               {session.phase === "bonus-choice" ? (
                 <div className="center bonus-offer">

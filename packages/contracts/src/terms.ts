@@ -28,9 +28,20 @@ export type TermText = {
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-/** Whole-word, case-insensitive pattern for a term. */
+const dashes = "-\u2010-\u2015\u2212";
+
+/** Whole-word, case-insensitive pattern for a term. Dash and apostrophe
+ *  variants match each other, since models often write typographic ones. */
 export function termPattern(term: string, flags = "iu") {
-  const words = term.trim().split(/\s+/).map(escape).join("\\s+");
+  const words = term
+    .trim()
+    .split(/\s+/)
+    .map((word) =>
+      escape(word)
+        .replace(new RegExp(`[${dashes}]`, "gu"), `[${dashes}]`)
+        .replace(/['\u2018\u2019]/gu, "['\u2018\u2019]"),
+    )
+    .join("\\s+");
   return new RegExp(`(?<![\\p{L}\\p{N}])${words}(?![\\p{L}\\p{N}])`, flags);
 }
 

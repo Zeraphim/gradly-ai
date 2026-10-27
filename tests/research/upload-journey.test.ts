@@ -217,9 +217,13 @@ function serve(l: Lesson = lesson, s0 = newSession(l, "s1")) {
 }
 
 const pause = () => new Promise((resolve) => setTimeout(resolve, 300));
+// Option text may be split by term marks, so match the whole option text.
 const choose = (text: string) =>
   userEvent.click(
-    screen.getAllByText(text, { exact: true }).at(-1)!.closest("label")!,
+    [...document.querySelectorAll(".study-choice-text")]
+      .filter((el) => el.textContent === text)
+      .at(-1)!
+      .closest("label")!,
   );
 
 describe("uploaded journey", () => {

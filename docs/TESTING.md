@@ -62,6 +62,8 @@ verify that distractors are plausible or that teaching claims are correct.
 selection. It exercises numeric-result disclosure before assessment, scene taps,
 answer feedback, horizontal overflow and axe for each checked question.
 
+`tests/research/terms.test.ts` covers the term checks (caps, term in challenge text, source and reference rules, design-stage results references, quoted accepted answers), the explanation gate, the Terms Guide stage order, the answer-leak removal, reviewer rejection and the upgrade of five-stage jobs. `tests/research/terms-ui.test.ts` covers segmentation, popover placement and the popover's click, chip, Escape and reset behaviour. `prepared-studies.test.ts` requires a saved terms file for every prepared study and runs every saved definition through the same checks. `tests/browser/terms.spec.ts` exercises hover, click, keyboard focus and Escape, tapping on a phone, presses through an open popover and closing on Check. It runs axe with the popover open in light and dark colour preferences and saves screenshots to `test-results/terms/`. The saved definitions come from `npm run define:terms`, a billed dev-only run of the production terms stage and Research Methods Reviewer; unit tests do not establish their quality.
+
 `tests/browser/choice-focus.spec.ts` checks mouse and touch selection of prepared
 cards, pills, multi-answer checkboxes, interval predictions and diagram answers,
 plus shared research-activity responses. Pointer selections and restored drafts

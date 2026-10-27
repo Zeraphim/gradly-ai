@@ -26,6 +26,8 @@ import {
   sceneRepeatProblems,
 } from "../../scripts/prepared-study-checks.js";
 import type {} from "./papers-setup.js";
+import { termProblems } from "@paperquest/contracts";
+import { isRemoved, removedTerms } from "../../scripts/prepared-term-review.js";
 
 const studies = await Promise.all(
   cards.map(async (card) => (await loadStudy(card.slug))!),
@@ -221,4 +223,53 @@ describe("evidence excerpts", () => {
       expect(excerptProblems(study, paperPages[file!]!)).toEqual([]);
     },
   );
+});
+
+describe("prepared-study terms", () => {
+  const termDir = fileURLToPath(
+    new URL("../../apps/web/src/research/studies/data/terms", import.meta.url),
+  );
+
+  it("ships saved term definitions for every prepared study", () => {
+    const saved = readdirSync(termDir)
+      .filter((f) => f.endsWith(".ts"))
+      .map((f) => f.replace(/\.ts$/, ""));
+    expect(saved.sort()).toEqual(cards.map((c) => c.slug).sort());
+    for (const slug of proofSet) {
+      const study = studies.find((s) => s.slug === slug)!;
+      expect(
+        study.lesson.challenges.some((c) => c.terms?.length),
+        slug,
+      ).toBe(true);
+    }
+  });
+
+  it("keeps definitions removed for answer leaks out of the saved files", () => {
+    for (const study of studies)
+      for (const c of [
+        ...study.lesson.challenges,
+        ...(study.lesson.bonus ? [study.lesson.bonus] : []),
+      ])
+        for (const t of c.terms ?? [])
+          expect(
+            isRemoved(study.slug, c.id, t.term),
+            `${study.slug} ${c.id} ${t.term}`,
+          ).toBe(false);
+    for (const r of removedTerms)
+      expect(
+        cards.some((card) => card.slug === r.slug),
+        r.slug,
+      ).toBe(true);
+  });
+
+  it("passes every saved definition through the deterministic term checks", () => {
+    for (const study of studies) {
+      const ids = study.lesson.evidence.map((r) => r.id);
+      for (const c of [
+        ...study.lesson.challenges,
+        ...(study.lesson.bonus ? [study.lesson.bonus] : []),
+      ])
+        expect(termProblems(c, ids), `${study.slug} ${c.id}`).toEqual([]);
+    }
+  });
 });

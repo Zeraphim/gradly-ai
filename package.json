@@ -24,6 +24,7 @@
     "eval:nemotron": "node --env-file-if-exists=.env --import tsx scripts/eval-nemotron.ts",
     "pregenerate:studies": "npm run build --workspace @paperquest/contracts",
     "generate:studies": "node --env-file-if-exists=.env --import tsx scripts/generate-prepared-studies.ts",
+    "define:terms": "node --env-file-if-exists=.env --import tsx scripts/define-prepared-terms.ts",
     "test:issue5": "node --import tsx scripts/verify-issue-5.ts",
     "test:issue6": "node --import tsx scripts/verify-issue-6.ts",
     "test:flow": "node --env-file-if-exists=.env --import tsx scripts/run-live-flow.ts",

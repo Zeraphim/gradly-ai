@@ -15,6 +15,7 @@ import {
   reviewLesson,
   runStage,
   STAGES,
+  termsSummary,
   upgradeJob,
 } from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
@@ -52,7 +53,9 @@ const participants: Term = {
 
 describe("term checks", () => {
   it("matches whole words regardless of case", () => {
-    expect(termIn("Random assignment", "Uses random  ASSIGNMENT here")).toBe(true);
+    expect(termIn("Random assignment", "Uses random  ASSIGNMENT here")).toBe(
+      true,
+    );
     expect(termIn("ANOVA", "One-way between-groups ANOVA.")).toBe(true);
     expect(termIn("test", "a t-test")).toBe(true);
     expect(termIn("test", "the attestation")).toBe(false);
@@ -69,8 +72,13 @@ describe("term checks", () => {
     expect(termProblems({ ...q2(), terms: many }, evidenceIds)[0]).toMatch(
       /at most 4/,
     );
-    const long = { ...participants, definition: "x".repeat(MAX_DEFINITION_LENGTH + 1) };
-    expect(termProblems({ ...q2(), terms: [long] }, evidenceIds)).toHaveLength(1);
+    const long = {
+      ...participants,
+      definition: "x".repeat(MAX_DEFINITION_LENGTH + 1),
+    };
+    expect(termProblems({ ...q2(), terms: [long] }, evidenceIds)).toHaveLength(
+      1,
+    );
   });
 
   it("requires the term to appear in the challenge text", () => {
@@ -81,7 +89,8 @@ describe("term checks", () => {
   });
 
   it("requires paper terms to cite their challenge's evidence and model terms to cite none", () => {
-    const check = (t: Term) => termProblems({ ...q2(), terms: [t] }, evidenceIds);
+    const check = (t: Term) =>
+      termProblems({ ...q2(), terms: [t] }, evidenceIds);
     expect(check({ ...assignment, refs: [] })).toEqual([
       'q2: paper term "randomly assigned" needs an evidence ref.',
     ]);
@@ -99,7 +108,10 @@ describe("term checks", () => {
   it("rejects duplicate terms", () => {
     expect(
       termProblems(
-        { ...q2(), terms: [participants, { ...participants, term: "Participant" }] },
+        {
+          ...q2(),
+          terms: [participants, { ...participants, term: "Participant" }],
+        },
         evidenceIds,
       ),
     ).toEqual(['q2: duplicate term "Participant".']);
@@ -109,16 +121,19 @@ describe("term checks", () => {
     const leaky = { ...assignment, refs: ["findings_1"] };
     const cited = { ...q2(), refs: ["method", "findings_1"] };
     expect(
-      termProblems({ ...cited, terms: [leaky] }, [...evidenceIds, "findings_1"]),
+      termProblems({ ...cited, terms: [leaky] }, [
+        ...evidenceIds,
+        "findings_1",
+      ]),
     ).toEqual([
       'q2: design-stage term "randomly assigned" cites results-side evidence.',
     ]);
     // The same citation is allowed once the challenge is past the design stage.
     expect(
-      termProblems(
-        { ...cited, reveal: "results", terms: [leaky] },
-        [...evidenceIds, "findings_1"],
-      ),
+      termProblems({ ...cited, reveal: "results", terms: [leaky] }, [
+        ...evidenceIds,
+        "findings_1",
+      ]),
     ).toEqual([]);
   });
 
@@ -136,21 +151,26 @@ describe("term checks", () => {
   it("keeps the valid terms when one fails", () => {
     const absent = { ...participants, term: "placebo" };
     expect(
-      validTerms({ ...q2(), terms: [absent, assignment, participants] }, evidenceIds),
+      validTerms(
+        { ...q2(), terms: [absent, assignment, participants] },
+        evidenceIds,
+      ),
     ).toEqual([assignment, participants]);
   });
 
   it("flags invalid terms in the deterministic validator", () => {
     const lesson = structuredClone(featured);
     lesson.challenges[1]!.terms = [{ ...participants, refs: ["method"] }];
-    const pages = [...new Set(lesson.evidence.map((r) => r.page))].map((page) => ({
-      page,
-      text:
-        lesson.evidence
-          .filter((r) => r.page === page)
-          .map((r) => r.excerpt)
-          .join("\n") + `\n${lesson.paper.url}`,
-    }));
+    const pages = [...new Set(lesson.evidence.map((r) => r.page))].map(
+      (page) => ({
+        page,
+        text:
+          lesson.evidence
+            .filter((r) => r.page === page)
+            .map((r) => r.excerpt)
+            .join("\n") + `\n${lesson.paper.url}`,
+      }),
+    );
     expect(verifyLesson(lesson, pages)).toContain(
       'q2: model term "participant" must not cite evidence.',
     );
@@ -167,8 +187,16 @@ describe("reveal gating", () => {
   };
 
   it("withholds terms found only in the explanation until it is shown", () => {
-    const c = { ...q2(), explanation: "Random assignment makes this a between-participants experiment.", options: q2().options.map((o) => ({ ...o, text: "An option" })), terms: [assignment, explanationOnly] };
-    expect(visibleTerms(c, false).map((t) => t.term)).toEqual(["randomly assigned"]);
+    const c = {
+      ...q2(),
+      explanation:
+        "Random assignment makes this a between-participants experiment.",
+      options: q2().options.map((o) => ({ ...o, text: "An option" })),
+      terms: [assignment, explanationOnly],
+    };
+    expect(visibleTerms(c, false).map((t) => t.term)).toEqual([
+      "randomly assigned",
+    ]);
     expect(visibleTerms(c, true).map((t) => t.term)).toEqual([
       "randomly assigned",
       "between-participants experiment",
@@ -234,17 +262,63 @@ describe("terms stage", () => {
     const p = provider([
       {
         challenges: [
-          { id: "q2", terms: [assignment, { ...participants, term: "placebo" }] },
+          {
+            id: "q2",
+            terms: [assignment, { ...participants, term: "placebo" }],
+          },
         ],
+      },
+      { flagged: [] },
+    ]);
+    const result = await draftTerms(featured, p, "model");
+    expect(p.roles).toEqual(["Terms Guide", "Answer Leak Check"]);
+    expect(result.lesson.challenges[1]!.terms).toEqual([assignment]);
+    expect(result.lesson.challenges[0]!.terms).toBeUndefined();
+    expect(result).toMatchObject({
+      defined: 1,
+      challenges: 1,
+      removed: 1,
+      leaks: 0,
+    });
+    // The input lesson is not changed.
+    expect(featured.challenges[1]!.terms).toBeUndefined();
+  });
+
+  it("removes definitions the leak check flags", async () => {
+    const p = provider([
+      { challenges: [{ id: "q2", terms: [assignment, participants] }] },
+      {
+        flagged: [{ id: "q2#1", reason: "Implies option B." }],
       },
     ]);
     const result = await draftTerms(featured, p, "model");
+    expect(result.lesson.challenges[1]!.terms).toEqual([participants]);
+    expect(result).toMatchObject({ defined: 1, removed: 1, leaks: 1 });
+    expect(termsSummary(result)).toBe(
+      "Defined 1 term across 1 challenge. Removed 1 that failed checks, 1 for giving an answer away.",
+    );
+  });
+
+  it("does not ask the leak check about explanation-only terms", async () => {
+    const lesson = structuredClone(featured);
+    const studyHabits: Term = {
+      term: "semester study habits",
+      definition:
+        "How much students studied across the whole term, which this lecture study did not record.",
+      refs: [],
+      source: "model",
+    };
+    const p = provider([{ challenges: [{ id: "q1", terms: [studyHabits] }] }]);
+    const result = await draftTerms(lesson, p, "model");
     expect(p.roles).toEqual(["Terms Guide"]);
-    expect(result.lesson.challenges[1]!.terms).toEqual([assignment]);
-    expect(result.lesson.challenges[0]!.terms).toBeUndefined();
-    expect(result).toMatchObject({ defined: 1, challenges: 1, removed: 1 });
-    // The input lesson is not changed.
-    expect(featured.challenges[1]!.terms).toBeUndefined();
+    expect(result.lesson.challenges[0]!.terms).toEqual([studyHabits]);
+  });
+
+  it("matches terms written with typographic dashes", () => {
+    expect(
+      termIn("between\u2011participants", "a between-participants design"),
+    ).toBe(true);
+    expect(termIn("participant’s", "each participant's score")).toBe(true);
   });
 
   it("continues without terms when the terms call fails", async () => {
@@ -274,7 +348,11 @@ describe("terms stage", () => {
           issues: ["A definition leaks the design answer."],
           summary: "Needs changes",
           rejectedTerms: [
-            { challenge: "q2", term: "Randomly assigned", reason: "Leaks the answer." },
+            {
+              challenge: "q2",
+              term: "Randomly assigned",
+              reason: "Leaks the answer.",
+            },
           ],
         },
       ]),
