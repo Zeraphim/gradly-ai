@@ -518,7 +518,7 @@ export const body: StudyBody = {
           unit: "participants",
           min: 0,
           max: 200,
-          decimals: 2,
+          decimals: 0,
           values: [
             {
               id: "online",

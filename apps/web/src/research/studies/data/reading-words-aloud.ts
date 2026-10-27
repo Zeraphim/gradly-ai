@@ -343,7 +343,7 @@ export const body: StudyBody = {
           unit: "%",
           min: 0,
           max: 100,
-          decimals: 2,
+          decimals: 1,
           values: [
             {
               id: "half-aloud",

@@ -367,7 +367,7 @@ export const body: StudyBody = {
           unit: "d",
           min: 0,
           max: 0.6,
-          decimals: 2,
+          decimals: 3,
           values: [
             {
               id: "main",

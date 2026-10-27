@@ -86,12 +86,6 @@ export const preparedVisualAdditions = [
   },
   {
     slug: "music-and-mood-perception",
-    id: "c1",
-    kind: "matrix",
-    refs: ["e2"],
-  },
-  {
-    slug: "music-and-mood-perception",
     id: "c6",
     kind: "flow",
     refs: ["e8"],

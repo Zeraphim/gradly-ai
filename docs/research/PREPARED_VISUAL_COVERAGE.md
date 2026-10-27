@@ -9,7 +9,7 @@ Future changes still require a fresh conflict check.
 ## Scope and counts
 
 The library has **53 studies and 313 required questions**. Optional bonuses are not
-included in these counts. Forty source-backed scenes were added to the other 21
+included in these counts. Thirty-nine source-backed scenes were added to the other 21
 generated studies, reusing seven existing scene families and their existing controls.
 No player, renderer, motion code, schema, pipeline prompt, provider or billing setting
 was changed. Existing scene data and study text are preserved; source references are
@@ -17,8 +17,8 @@ only appended where a visual needs another already-stored excerpt.
 
 | Measure                                 | Before (`a112873`) | After |
 | --------------------------------------- | ------------------ | ----- |
-| Required questions with a scene         | 77                 | 117   |
-| Required questions without a scene      | 236                | 196   |
+| Required questions with a scene         | 77                 | 116   |
+| Required questions without a scene      | 236                | 197   |
 | Studies with no required-question scene | 18                 | 0     |
 
 These are coverage counts, not learning-benefit scores. A diagram is not mandatory
@@ -65,7 +65,7 @@ The executable inventory is `tests/fixtures/prepared-visuals.ts`.
 | kids-eating-when-not-hungry           | 0/5    | 2/5   | c1 (`timeline`), c5 (`estimate`)   |
 | memory-training                       | 0/6    | 2/6   | c1 (`flow`), c3 (`tests`)          |
 | music-and-attention                   | 0/6    | 2/6   | c1 (`matrix`), c6 (`flow`)         |
-| music-and-mood-perception             | 0/7    | 2/7   | c1 (`matrix`), c6 (`flow`)         |
+| music-and-mood-perception             | 0/7    | 1/7   | c6 (`flow`)                        |
 | online-charity-giving                 | 0/6    | 2/6   | c1 (`matrix`), c6 (`flow`)         |
 | parents-viewing-vaccine-safety-info   | 0/6    | 2/6   | c1 (`matrix`), c6 (`flow`)         |
 | phone-use-while-driving               | 1/6    | 2/6   | c3 (`comparison`)                  |
