@@ -166,6 +166,8 @@ async function main() {
     if (challenge.scene) {
       console.log(`   Interactive Scene (${challenge.scene.kind}): Validated & projected via projectScene().`);
     }
+    for (const t of challenge.terms ?? [])
+      console.log(`   Term [${t.source}${t.refs.length ? ` ${t.refs.join(",")}` : ""}] ${t.term}: ${t.definition}`);
 
     // 7. Submit answer with written reasoning
     const firstOption = challenge.options[0]!.id;
