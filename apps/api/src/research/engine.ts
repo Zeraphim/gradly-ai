@@ -1,5 +1,5 @@
 import { type Lesson, type LearningSession } from "./contracts.js";
-import { projectScene } from "@paperquest/contracts";
+import { projectScene, visibleTerms } from "@paperquest/contracts";
 import { lessonStudyCard, lessonTakeaway } from "./study-card.js";
 /** Practice credit, once per solved challenge in this adventure. */
 export function learningPoints(session: LearningSession): number {
@@ -117,6 +117,12 @@ export function transition(
 const LEGACY_OCR_NOTE =
   " Some source pages were read with OCR. Verify quotations and numerical transcriptions against your original PDF; automated source matching checks extracted text, not the original pixels.";
 
+/** The cited excerpts behind a set of term definitions, once each. */
+function termSources(terms: { refs: string[] }[], l: Lesson) {
+  const ids = new Set(terms.flatMap((t) => t.refs));
+  return l.evidence.filter((r) => ids.has(r.id));
+}
+
 export function publicSession(s: LearningSession, l: Lesson) {
   const c = ["challenge", "bonus"].includes(s.phase)
     ? currentChallenge(s, l)
@@ -124,6 +130,8 @@ export function publicSession(s: LearningSession, l: Lesson) {
   const a = c ? (s.answers[c.id] ?? []) : [];
   const last = a.at(-1);
   const showFeedback = !!last && !s.retrying;
+  const explanationShown = showFeedback && (!!last?.correct || a.length >= 2);
+  const terms = c ? visibleTerms(c, explanationShown) : [];
   const challenge = c
     ? {
         id: c.id,
@@ -149,6 +157,11 @@ export function publicSession(s: LearningSession, l: Lesson) {
           .map((r) => ({ id: r!.id, page: r!.page })),
         writtenReasoning: c.writtenReasoning,
         reveal: c.reveal,
+        // Terms found only in the explanation follow the explanation's gate.
+        terms,
+        // Excerpts the shown paper terms cite. They are already among this
+        // challenge's refs, so no new evidence is exposed.
+        termSources: termSources(terms, l),
         feedback: showFeedback
           ? {
               correct: last.correct,
@@ -178,6 +191,8 @@ export function publicSession(s: LearningSession, l: Lesson) {
         attempts: s.answers[c.id] ?? [],
         accepted: c.accepted,
         explanation: c.explanation,
+        terms: c.terms ?? [],
+        termSources: termSources(c.terms ?? [], l),
         scene: projectScene(
           c.scene,
           true,

@@ -217,12 +217,42 @@ function serve(l: Lesson = lesson, s0 = newSession(l, "s1")) {
 }
 
 const pause = () => new Promise((resolve) => setTimeout(resolve, 300));
+// Option text may be split by term marks, so match the whole option text.
 const choose = (text: string) =>
   userEvent.click(
-    screen.getAllByText(text, { exact: true }).at(-1)!.closest("label")!,
+    [...document.querySelectorAll(".study-choice-text")]
+      .filter((el) => el.textContent === text)
+      .at(-1)!
+      .closest("label")!,
   );
 
 describe("uploaded journey", () => {
+  it("shows the server's term definitions with their cited page", async () => {
+    const l = lessonFixture();
+    const first = l.challenges[0]!;
+    const term = first.prompt.split(" ").slice(1, 3).join(" ");
+    const ref = l.evidence.find((r) => r.id === first.refs[0])!;
+    first.terms = [
+      {
+        term,
+        definition:
+          "In this study, the wording the question uses for its focus.",
+        refs: [ref.id],
+        source: "paper",
+      },
+    ];
+    serve(l, transition(newSession(l, "s1"), l, "begin"));
+    render(h(UploadedJourney, { sessionId: "s1" }));
+    await screen.findByRole("heading", { level: 1, name: first.prompt });
+    await userEvent.click(screen.getByRole("button", { name: term }));
+    expect(
+      screen.getByRole("group", { name: `${term}: definition` }).textContent,
+    ).toContain("the wording the question uses");
+    expect(
+      screen.getByRole("button", { name: `From the paper, p. ${ref.page}` }),
+    ).toBeTruthy();
+  });
+
   it("plays through Marc's player with server scoring, retry and AI feedback", async () => {
     const { sessions, calls } = serve();
     const first = lesson.challenges[0]!;

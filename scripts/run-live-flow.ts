@@ -6,7 +6,11 @@ import { db } from "../apps/api/src/research/store.js";
 import { nebiusConfig } from "../apps/api/src/nebius-config.js";
 import { NebiusProvider } from "../apps/api/src/research/provider.js";
 import { extractPdf } from "../apps/api/src/research/pdf.js";
-import { newJob, runStage } from "../apps/api/src/research/pipeline.js";
+import {
+  newJob,
+  READY_STAGE,
+  runStage,
+} from "../apps/api/src/research/pipeline.js";
 import { type Job, type LearningSession } from "../apps/api/src/research/contracts.js";
 import { projectScene } from "@paperquest/contracts";
 import { createHmac, randomUUID } from "node:crypto";
@@ -61,9 +65,9 @@ async function main() {
   job.mode = "live";
   console.log(`   ✅ Created Job [${jobId}] with consent=true, mode=live.\n`);
 
-  // 3. Execute 5-Stage Multi-Agent Pipeline (pipeline-tier model and budget)
-  console.log(`2. Executing 5-Stage Multi-Agent Pipeline with ${config.pipelineModelId}...`);
-  for (let s = 0; s < 5; s++) {
+  // 3. Execute the multi-agent pipeline (pipeline-tier model and budget)
+  console.log(`2. Executing ${READY_STAGE}-Stage Multi-Agent Pipeline with ${config.pipelineModelId}...`);
+  for (let s = 0; s < READY_STAGE; s++) {
     const role = job.audits[s]!.role;
     console.log(`   ▶ Stage ${s}: ${role}...`);
     const stageStart = performance.now();
@@ -162,6 +166,8 @@ async function main() {
     if (challenge.scene) {
       console.log(`   Interactive Scene (${challenge.scene.kind}): Validated & projected via projectScene().`);
     }
+    for (const t of challenge.terms ?? [])
+      console.log(`   Term [${t.source}${t.refs.length ? ` ${t.refs.join(",")}` : ""}] ${t.term}: ${t.definition}`);
 
     // 7. Submit answer with written reasoning
     const firstOption = challenge.options[0]!.id;

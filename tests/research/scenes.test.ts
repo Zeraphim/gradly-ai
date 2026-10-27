@@ -166,6 +166,7 @@ for (const fixture of [
           missing: [],
         },
         fixture,
+        { challenges: [] },
         { approved: true, issues: [], summary: "Mocked methods review" },
         { approved: true, issues: [], summary: "Mocked learning review" },
       ];
@@ -175,7 +176,7 @@ for (const fixture of [
         "authored-fixture.pdf",
         sceneFixturePages(fixture),
       );
-      for (let i = 0; i < 5; i++)
+      for (let i = 0; i < 6; i++)
         job = await runStage(job, {
           async generate(_role, task, _input, schema) {
             tasks.push(task);
@@ -184,7 +185,7 @@ for (const fixture of [
         });
       expect(job.status).toBe("ready");
       expect(tasks[1]).toContain("Scenes are required.");
-      expect(tasks[2]).toContain("Review all scene text");
+      expect(tasks[3]).toContain("Review all scene text");
       let s = transition(
         newSession(job.lesson!, "fixture"),
         job.lesson!,

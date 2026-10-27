@@ -67,6 +67,8 @@ export function toStudyChallenge(c: PublicChallenge): StudyChallenge {
     refs: c.references.map((r) => r.id),
     writtenReasoning: c.writtenReasoning,
     reveal: c.reveal,
+    // The server already withheld terms found only in an unshown explanation.
+    terms: c.terms,
   };
 }
 
@@ -82,6 +84,7 @@ function reviewChallenge(
     options: r.options,
     accepted: r.accepted,
     explanation: r.explanation,
+    terms: r.terms,
   };
 }
 
@@ -160,11 +163,23 @@ export function toPreparedStudy(
         url: null,
         limitations: [],
       },
-      evidence: [],
+      // Only the excerpts the shown term definitions cite.
+      evidence: termEvidence(s),
       challenges,
       bonus,
     },
   };
+}
+
+/** Cited excerpts for the current challenge's and reviewed challenges' terms, once each. */
+function termEvidence(s: ResearchSession) {
+  const sources = [
+    ...(s.challenge?.termSources ?? []),
+    ...(s.review ?? []).flatMap((r) => r.termSources),
+  ];
+  return sources.filter(
+    (r, i) => sources.findIndex((other) => other.id === r.id) === i,
+  );
 }
 
 const phases: Record<ResearchSession["phase"], StudyProgress["phase"]> = {

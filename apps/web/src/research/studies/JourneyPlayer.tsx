@@ -10,7 +10,10 @@ import {
   emptySceneDraft,
   type SceneDraft,
 } from "../scenes/InvestigationScene.js";
+import { visibleTerms } from "@paperquest/contracts";
 import { SceneTransition, m, useSceneMotion } from "../scenes/scene-motion.js";
+import { TermChips, TermProvider, TermText } from "../terms/Terms.js";
+import { termEntries } from "../terms/term-logic.js";
 import { FeedbackDock, type DockFeedback } from "./FeedbackDock.js";
 import { JourneyChrome } from "./JourneyChrome.js";
 import {
@@ -254,6 +257,13 @@ function ChallengeScreen({
     [challenge, status],
   );
   const multiple = challenge.type === "multiple";
+  // Terms found only in the explanation wait until the explanation shows.
+  const explained = status === "solved" || status === "explained";
+  const terms = useMemo(
+    () =>
+      termEntries(visibleTerms(challenge, explained), study.lesson.evidence),
+    [challenge, explained, study.lesson.evidence],
+  );
   const writeDraft = (next: { selected?: string[]; scene?: SceneDraft }) =>
     save((p) => ({
       ...p,
@@ -457,7 +467,11 @@ function ChallengeScreen({
           : null;
   const total = study.lesson.challenges.length;
   return (
-    <>
+    <TermProvider
+      entries={terms}
+      scope={study.slug}
+      resetKey={`${challenge.id}:${status}`}
+    >
       <main className="journey-main">
         <SceneTransition identity={challenge.id}>
           <div className={`journey-challenge status-${status}`}>
@@ -484,8 +498,15 @@ function ChallengeScreen({
                 : `${position + 1} of ${total}`}{" "}
               · {challenge.stage}
             </p>
-            <h1 ref={heading} tabIndex={-1} className="journey-title">
-              {challenge.prompt}
+            {/* The label keeps the heading's name to the prompt itself: term
+                buttons would otherwise add spaces around their text. */}
+            <h1
+              ref={heading}
+              tabIndex={-1}
+              className="journey-title"
+              aria-label={challenge.prompt}
+            >
+              <TermText text={challenge.prompt} />
             </h1>
             {challenge.evidence.length ? (
               <ul
@@ -508,7 +529,7 @@ function ChallengeScreen({
                 transition={motion.copy}
               >
                 <Lightbulb size={16} aria-hidden="true" />
-                {challenge.hint}
+                <TermText text={challenge.hint} />
               </m.p>
             ) : null}
             {multiple && answering ? (
@@ -534,6 +555,15 @@ function ChallengeScreen({
                 marks={marks}
                 pills={challenge.responseStyle === "pills"}
                 onChange={setSelected}
+              />
+            ) : null}
+            {!tap && sceneGatesChoices(scene, sceneDraft, answering) ? (
+              <TermChips
+                texts={challenge.options.map((o) => o.text)}
+                covered={[
+                  challenge.prompt,
+                  status === "retrying" ? challenge.hint : "",
+                ]}
               />
             ) : null}
             {driver?.renderExtra?.(challenge, status)}
@@ -567,7 +597,7 @@ function ChallengeScreen({
         }
         onAction={act}
       />
-    </>
+    </TermProvider>
   );
 }
 
