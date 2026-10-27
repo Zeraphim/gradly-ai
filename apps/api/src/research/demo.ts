@@ -1,5 +1,6 @@
 import { featured } from "./featured.js";
 import { verifyLesson, type Job } from "./contracts.js";
+import { READY_STAGE, STAGES } from "./pipeline.js";
 
 // Explicit local opt-in. A missing/failed live provider never falls back here.
 export function demoAvailable() {
@@ -21,18 +22,19 @@ export function runDemoStage(job: Job): Job {
   const summaries = [
     `Your ${j.pages.length}-page upload was extracted, but is not analyzed in this preview. Loaded separate evidence from the reference study.`,
     "Loaded the authored eight-challenge sample, including hints, retries and optional bonus. These questions are not generated from your upload.",
+    "Kept the sample's authored wording. No term definitions were generated, and no AI call was made.",
     "Using the reference study’s authored answer guide and statistical explanations. No AI reviewer was called.",
     "Loaded reference feedback and revision prompts. Written reasoning is saved without claiming an AI assessment.",
     "Validated the sample’s exact excerpts, references and answer guide. This checks sample integrity, not the uploaded paper or a live model.",
   ];
-  if (j.stage === 0)
+  if (j.stage === STAGES.evidence)
     j.evidence = {
       findings:
         "Sample reference evidence; unrelated to the uploaded document.",
       refs: structuredClone(featured.evidence),
       missing: [],
     };
-  if (j.stage === 1)
+  if (j.stage === STAGES.lesson)
     j.lesson = {
       ...structuredClone(featured),
       id: j.id,
@@ -42,7 +44,7 @@ export function runDemoStage(job: Job): Job {
         "This is a separate sample investigation. Your uploaded document was checked, but these challenges and findings do not describe it. " +
         featured.briefing,
     };
-  if (j.stage === 4) {
+  if (j.stage === STAGES.verify) {
     if (!j.lesson || j.lesson.source !== "demo")
       throw Error("Sample lesson is missing.");
     const pages = [...new Set(featured.evidence.map((r) => r.page))].map(
@@ -68,7 +70,7 @@ export function runDemoStage(job: Job): Job {
   delete audit.error;
   delete audit.errorCode;
   j.stage++;
-  j.status = j.stage === 5 ? "ready" : "pending";
+  j.status = j.stage === READY_STAGE ? "ready" : "pending";
   j.leaseUntil = 0;
   delete j.error;
   return j;

@@ -57,6 +57,7 @@
 | `fresh-adventure-ui` | ui | Proposed | Fresh Adventure visual scenes and verification limits | `docs/ui/FRESH_ADVENTURE.md` |  |
 | `intake-processing-ui` | ui | Proposed | Intake, review, preparation and player handoff (issue 12) | `docs/ui/INTAKE_PROCESSING.md` |  |
 | `prepared-studies-ui` | ui | Proposed | Prepared-study library and journey player | `docs/ui/PREPARED_STUDIES.md` |  |
+| `prepared-visual-coverage` | validation | Local verification and bounded production observation | Prepared-study scene coverage and production probe | `docs/research/PREPARED_VISUAL_COVERAGE.md` |  |
 | `ui-polish-review` | validation | Historical report | Historical source and browser polish review | `docs/UI_POLISH_REVIEW.md` |  |
 
 ## Context Commands

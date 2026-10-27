@@ -89,13 +89,15 @@ for (const width of [320, 390, 768, 1366]) {
 for (const touch of [false, true]) {
   test(`dropdown focus stays inside its border with ${touch ? "touch" : "mouse"} and keyboard`, async ({
     browser,
+    baseURL,
   }) => {
     const context = await browser.newContext({
+      baseURL,
       hasTouch: touch,
       viewport: { width: touch ? 390 : 1366, height: 900 },
     });
     const page = await context.newPage();
-    await page.goto("http://127.0.0.1:5173/#/research/learn");
+    await page.goto("/#/research/learn");
     const topic = page.getByLabel("Topic", { exact: true });
     const design = page.getByLabel("Study design", { exact: true });
     const unfocused = await topic.evaluate((el) => {

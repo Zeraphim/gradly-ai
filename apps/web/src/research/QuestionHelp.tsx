@@ -1,55 +1,11 @@
-import { Fragment, useState } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { CircleHelp } from "lucide-react";
 import { Dialog } from "../components/Dialog.js";
 import {
   researchTerms,
   termExamples,
   relevantTerms,
-  termMatches,
 } from "./research-terms.js";
-
-/** Only annotate visible prose, leaving answer choices and hidden results alone. */
-export function ResearchTermText({ text }: { text: string }) {
-  const [open, setOpen] = useState<string | null>(null);
-  const matches = termMatches(text);
-  let end = 0;
-  const parts = matches.map((match) => {
-    const before = text.slice(end, match.start);
-    end = match.end;
-    return (
-      <Fragment key={match.start}>
-        {before}
-        <button
-          type="button"
-          className="research-term"
-          aria-haspopup="dialog"
-          title="Explain this term"
-          onClick={() => setOpen(match.term)}
-        >
-          {match.text}
-        </button>
-      </Fragment>
-    );
-  });
-  return (
-    <>
-      {parts}
-      {text.slice(end)}
-      {open
-        ? createPortal(
-            <Dialog title={open} onClose={() => setOpen(null)}>
-              <p>{researchTerms[open]}</p>
-              <p>
-                <strong>Illustrative example:</strong> {termExamples[open]}
-              </p>
-            </Dialog>,
-            document.querySelector(".research-lab") ?? document.body,
-          )
-        : null}
-    </>
-  );
-}
 
 export function QuestionHelp({
   text,

@@ -328,7 +328,78 @@ export const body: StudyBody = {
         evidence: [
           "With the current sample size, the effect size for the main effect of ego depletion that we could detect with 80 % power was d = .412.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Detectable effects at 80% power",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Detectable effects at 80% power",
+          provenance: {
+            kind: "reported",
+            refs: ["e2"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "a1",
+              label: "d = .412",
+              targetIds: ["main", "moderation"],
+            },
+            {
+              optionId: "a2",
+              label: "d = .239",
+              targetIds: ["main", "moderation"],
+            },
+            {
+              optionId: "a3",
+              label: "d = .053",
+              targetIds: ["main", "moderation"],
+            },
+            {
+              optionId: "a4",
+              label: "d = .100",
+              targetIds: ["main", "moderation"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Cohen’s d corresponding to the stated power",
+          unit: "d",
+          min: 0,
+          max: 0.6,
+          decimals: 3,
+          values: [
+            {
+              id: "main",
+              label: "Main depletion effect",
+              detail: "Cohen’s d corresponding to the stated power",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e2"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 0.412,
+            },
+            {
+              id: "moderation",
+              label: "Moderation effect",
+              detail: "Cohen’s d corresponding to the stated power",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e2"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 0.41,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
         options: [
           {
             id: "a1",

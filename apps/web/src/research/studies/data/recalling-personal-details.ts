@@ -195,7 +195,82 @@ export const body: StudyBody = {
         evidence: [
           "The study used a mixed design with encoding level as a within-subjects factor and recall paradigm as a between‑subjects factor.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Encoding tasks and recall instructions",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Encoding tasks and recall instructions",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e14"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "c1-opt1",
+              label:
+                "Mixed design (within‑subjects encoding, between‑subjects recall)",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c1-opt2",
+              label: "Purely between‑subjects design",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c1-opt3",
+              label: "Purely within‑subjects design",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "c1-opt4",
+              label: "Correlational design",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Incidental recall",
+            },
+            {
+              id: "condition1",
+              label: "Informed recall",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Encoding tasks",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e14"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Self, meaning and structure",
+                "Self, meaning and structure",
+              ],
+            },
+            {
+              id: "row1",
+              label: "Recall expectation",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e14"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Not informed beforehand", "Informed beforehand"],
+            },
+          ],
+        },
         options: [
           {
             id: "c1-opt1",
@@ -412,7 +487,70 @@ export const body: StudyBody = {
           "The average data sample size for these four studies was 165 participants as opposed to an average of 39 for the 126 studies included in Symons and Johnson’s (1997) meta‑analysis.",
           "Of those same 126 studies, 82% were drawn from undergraduate populations. In contrast, the 658 participants recruited for these four online studies had a much more diverse profile.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Average sample sizes in two research settings",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Average sample sizes in two research settings",
+          provenance: {
+            kind: "reported",
+            refs: ["e15", "e17"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "c6-opt1",
+              label:
+                "The online sample is larger and more diverse than typical lab samples.",
+              targetIds: ["online", "earlier"],
+            },
+            {
+              optionId: "c6-opt2",
+              label:
+                "The online sample is smaller and less diverse than typical lab samples.",
+              targetIds: ["online", "earlier"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Average participants per study",
+          unit: "participants",
+          min: 0,
+          max: 200,
+          decimals: 0,
+          values: [
+            {
+              id: "online",
+              label: "Four online studies",
+              detail: "Average participants per study",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e15", "e17"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 165,
+            },
+            {
+              id: "earlier",
+              label: "Earlier meta-analysis",
+              detail: "Average participants per study",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e15", "e17"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 39,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
         options: [
           {
             id: "c6-opt1",

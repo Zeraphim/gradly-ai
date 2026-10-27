@@ -305,10 +305,82 @@ export const body: StudyBody = {
         },
         explanation:
           "Without a room‑temperature (neutral) mug, the study cannot tell whether the observed difference stems from the warm mug, the cold mug, or both.",
-        refs: ["e5"],
+        refs: ["e5", "e2", "e3"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "The temperature comparison",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "The temperature comparison",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2", "e3", "e5"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o21",
+              label:
+                "The lack of a neutral condition makes it impossible to separate warmth versus cold effects.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o22",
+              label: "The sample size was too small to detect an effect.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o23",
+              label: "The perceptual focus task was not valid.",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o24",
+              label: "Experimenter bias was not controlled.",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Warm cup",
+            },
+            {
+              id: "condition1",
+              label: "Cold cup",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Exposure",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3", "e5"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Hold without drinking", "Hold without drinking"],
+            },
+            {
+              id: "row1",
+              label: "Later task",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3", "e5"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Perceptual focus", "Perceptual focus"],
+            },
+          ],
+        },
       },
     ],
     bonus: null,

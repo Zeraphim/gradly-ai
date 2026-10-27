@@ -11,7 +11,8 @@ and the relevant checks in [TESTING.md](../../docs/TESTING.md).
   shared primitives; keep the implementation scoped to the requested screen.
 - `src/App.tsx` owns hash-route selection. Preserve upload-first entry, retired-link
   recovery, the single Learn study library, and the separately labeled reasoning preview.
-  The public classic quest and intermediate path picker are retired. Preserve
+  The public classic quest, its LegacyApp and bespoke TextingQuest, and the
+  intermediate PathPicker are removed. The prepared texting study stays available. Preserve
   individual study links and uploaded-session progress; do not restore the old
   home Resume quest or route sample actions through a second picker.
 - Reuse the supplied Gradly artwork, self-hosted Plus Jakarta Sans, blue palette,

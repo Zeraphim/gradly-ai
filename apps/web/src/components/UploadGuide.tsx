@@ -25,7 +25,7 @@ function still() {
   );
 }
 
-/** OpenCode's guide animation is owned only by the upload-first introduction. */
+/** The Gradly guide animation is owned only by the upload-first introduction. */
 export function UploadGuide() {
   const reduced = useSyncExternalStore(subscribe, still, () => true);
   return reduced ? (

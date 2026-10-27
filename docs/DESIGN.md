@@ -187,7 +187,7 @@ Window sizes and verification limits are recorded in [TESTING.md](TESTING.md).
 
 Research controls use the same Lucide SVG family as the original application, including actions, agent roles, selection marks and page navigation. Icons remain decorative beside descriptive text; icon-only controls retain accessible labels.
 
-Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops are introduced. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
+Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. The upload-home Gradly guide has one 4.8-second introductory flourish and then settles; it does not loop continuously. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
 
 OS reduced-motion preferences and the saved interface setting disable entrances, spinners and hover/press movement. Text labels and progress values remain available when motion is disabled.
 
@@ -458,7 +458,7 @@ quality. The next evaluation is independent content review and observed learner 
 
 ## Upload waiting and uploaded-study player
 
-Preparing a live upload takes several minutes: five model calls; in the recorded Super runs a
+Preparing a live upload takes several minutes: six stages, most of them model calls; in the recorded Super runs a
 stage took from about 20 seconds to over two minutes. The waiting screen now gives
 the learner honest progress, a small win at each real milestone and something
 useful to do. A ready lesson then plays in the prepared-study player (#14)
@@ -473,7 +473,7 @@ code or timing was copied. Each is a Gradly design choice built on the shared
 
 | Code | Reference pattern                                                                | Gradly adaptation                                                                                                                                                                                                                             |
 | ---- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| U1   | Segmented lesson progress (both)                                                 | The five-agent rail moves only when the saved job's `stage` changes. No percentage, countdown or simulated clock.                                                                                                                             |
+| U1   | Segmented lesson progress (both)                                                 | The six-stage rail moves only when the saved job's `stage` changes. No percentage, countdown or simulated clock.                                                                                                                              |
 | U2   | A small win per completed part (Duolingo's per-exercise check)                   | When a stage finishes while the page is open, its stop pops once and a short "Lesson Architect finished" chip appears and is announced. Restored progress never celebrates.                                                                   |
 | U3   | A preview of what is coming (Brilliant's lesson outline, Duolingo's lesson card) | "Your study so far" chips show only counts from the saved job: evidence passages, challenges drafted, bonus, reasoning prompts, methods checked, quotes matched. The next pending item breathes; finished items pop in only on a live change. |
 | U4   | Practice while you wait (Brilliant's short warm-up problems)                     | Four authored research-habit cards (association or cause, fair comparison, who was asked, reading "no difference") with instant feedback. Labelled "Warm-up · not scored", unrelated to the uploaded paper, and resumable after a reload.     |
@@ -521,7 +521,9 @@ studies under `/studies` keep their browser-only behaviour.
 The upload sample action and Prepared studies navigation open the library at
 `#/research/learn`. The old `/studies` index and classic/lab/meet entry points
 recover there, while individual study URLs remain. The upload home no longer
-mounts `LegacyApp` or offers its saved Resume quest. A sample-mode upload's ready
+offers the classic saved Resume quest. The classic UI, separate path picker and
+standalone bespoke texting quest are retired; the texting paper remains in the
+prepared shared-player library. A sample-mode upload's ready
 action opens the prepared texting study directly in the shared player.
 
 Library, reasoning preview and prepared/uploaded intros use `SiteHeader`, with no preview-only header
@@ -531,17 +533,18 @@ on desktop, stacking on narrow screens. Short desktop windows use tighter spacin
 text, targets and source disclosures remain readable. Prepared intros use a wider
 text column and smaller artwork on short screens. Expanded details and zoom keep
 normal scrolling. Earlier classic/path-picker descriptions above are historical,
-not current routes. The retired bespoke-quest browser assertions are replaced by
-shared-player, choice-focus, study and route/viewport coverage; service/interface
-compatibility tests still exercise the retained original implementation in isolation.
+not current routes. The retired bespoke-quest browser assertions and classic UI test are replaced by
+shared-player, choice-focus, study and route/viewport coverage; curated API and
+lesson-state tests remain separate from the retired UI.
 
 ## Contextual help and calmer library filters — 28 October 2026
 
 Primary navigation is Upload a paper, Learn and My quests. Research terms are a
 reference reached through Help; the existing `/research/glossary` URL remains
-valid. The same authored definitions and clearly illustrative examples appear
-there and in question-level help. Recognised terms in a question or its visible
-evidence open a native dialog without leaving the question. Matching never reads
+valid. One general glossary supplies the reference and question-level help, with
+clearly illustrative examples. Definitions describe terms without supplying
+study-specific answer reasoning; random assignment defines allocation by chance. The shared term popover handles marked question/evidence and answer terms;
+the separate Help dialog retains general wording help and the gated hint. Matching never reads
 answer choices, accepted keys, hidden excerpts, scene resolutions or takeaways.
 The existing hint becomes available in help only during first-miss feedback and
 retry; opening help itself does not submit, score, call a model or change drafts.
@@ -559,15 +562,33 @@ touch or keyboard. A single decorative chevron replaces platform arrow styling;
 the control remains a native select. Forced-colour mode restores platform arrows
 and an inset system focus indicator.
 
-## OpenCode upload-guide integration — 28 October 2026
+## Gradly upload-guide integration — 28 October 2026
 
-The existing OpenCode `mascot-guiding-animated.svg` is reused unchanged through
+The existing Gradly `mascot-guiding-animated.svg` is reused through
 `UploadGuide.tsx`, mounted only in the upload-first home's introduction. The
 header wordmark and guides on other pages stay static. The animation uses the
-SVG's CSS transforms, with no JavaScript frame loop. System or saved reduced
+SVG's CSS transforms for one 4.8-second cycle, with no JavaScript frame loop. System or saved reduced
 motion selects the existing static guiding pose; hidden documents also release
 the animated image. Both variants keep the same box dimensions. The integration
 is a narrow edit to the current Welcome component, preserving the newer upload,
 Learn, header and recovery behavior rather than copying an older Welcome file.
-The original checkout's interrupted rebase was subsequently backed up and aborted;
-the recovered branch preserves its original head and uses the verified current main base.
+
+## Term definitions in questions and answers
+
+Research terms in a challenge's prompt, answer options, hint, explanation and feedback carry a dotted underline. Hovering with a mouse, tapping, or reaching a term with the keyboard opens one popover that says what the term means in this study (#39). Lesson definitions come from the pipeline's Terms Guide stage for uploads and from saved files for prepared studies. Terms the lesson does not define fall back to the general glossary, and a lesson definition always wins.
+
+- **Marks.** The underline draws in once the question settles. On hover it thickens and takes the sky tint, and an open term keeps that tint. Terms already viewed in the study keep a quieter slate underline. Inside an answer's label a mark is not a button, because the label is the answer control. Pressing the mark selects the answer as usual, so a term never blocks an answer. A touch press also shows the definition, which a mouse already shows on hover. A "Terms in the answers" chip row gives keyboard access to the same definitions.
+- **Popover.**
+  - It opens after a 120 ms hover delay, or at once on focus or tap.
+  - It enters with a short spring of fade and scale from its arrow.
+  - It sits above the term when there is room, so the answers below stay uncovered, flips below otherwise, and stays inside the viewport.
+  - Moving to another term glides the popover and its arrow and cross-fades the text without replaying the entrance.
+- **Source line.**
+  - A paper definition shows "From the paper, p. N". Pressing it opens the cited excerpt, and a highlight sweeps across the term within it.
+  - A model definition reads "In this study's context".
+  - A glossary definition reads "General research term".
+- **Pressing through the popover.** The popover never takes a press. Only a pinned popover's source chip is pressable, so an answer under it can always be chosen.
+- **Closing.** Escape closes the popover and keeps focus on the term. So do a press elsewhere, a submitted answer and a new challenge.
+- **Reduced motion.** With reduced motion (system or saved setting), the popover only fades and the marks change colour without animating.
+
+The application has no dark theme, so under a dark colour preference the popover keeps the light tokens, matching the page.

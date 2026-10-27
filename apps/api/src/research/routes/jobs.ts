@@ -2,7 +2,13 @@ import { demoAvailable, runDemoStage } from "../demo.js";
 import { owner, sameOrigin, safeError } from "../auth.js";
 import { read, write, rateLimit, ConflictError } from "../store.js";
 import { type Job } from "../contracts.js";
-import { autoRecover, redraft, runStage, publicJob } from "../pipeline.js";
+import {
+  autoRecover,
+  redraft,
+  runStage,
+  publicJob,
+  upgradeJob,
+} from "../pipeline.js";
 import { NebiusProvider, type ModelProvider } from "../provider.js";
 export const runtime = "nodejs";
 export const maxDuration = 240;
@@ -10,7 +16,9 @@ export async function GET(request: Request) {
   try {
     const id = new URL(request.url).searchParams.get("id");
     if (!id) throw Error("Document identifier required.");
-    return Response.json(publicJob(await read<Job>(await owner(), "job", id)));
+    return Response.json(
+      publicJob(upgradeJob(await read<Job>(await owner(), "job", id))),
+    );
   } catch (e) {
     return Response.json({ error: safeError(e) }, { status: 400 });
   }
@@ -24,7 +32,8 @@ export async function POST(
     const who = await owner();
     const { id, retry, consent, mode } = await request.json();
     if (typeof id !== "string") throw Error("Document identifier required.");
-    let j = await read<Job>(who, "job", id);
+    // Jobs saved before the terms stage get its audit before any stage runs.
+    let j = upgradeJob(await read<Job>(who, "job", id));
     if (mode !== undefined && !["demo", "live"].includes(mode))
       throw Error("Choose a supported processing mode.");
     if (j.mode && mode && j.mode !== mode)

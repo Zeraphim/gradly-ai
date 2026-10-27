@@ -107,10 +107,11 @@ it("delivers a scene through the real learning route, submits mapped answers, re
         missing: [],
       },
       quantitativeSceneLesson,
+      { challenges: [] },
       { approved: true, issues: [], summary: "Mocked methods review" },
       { approved: true, issues: [], summary: "Mocked teaching review" },
     ];
-    for (let i = 0; i < 5; i++)
+    for (let i = 0; i < 6; i++)
       job = await runStage(job, {
         async generate(_role, _task, _input, schema) {
           return schema.parse(asDraft(outputs.shift()));

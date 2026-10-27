@@ -9,6 +9,8 @@ import {
   sceneSchema,
   tapKinds,
   tapTargets,
+  termProblems,
+  termsSchema,
 } from "@paperquest/contracts";
 export const refSchema = z.object({
   id: z.string().min(1),
@@ -45,6 +47,8 @@ export const challengeSchema = z.object({
     "interpretation",
     "bonus",
   ]),
+  // Context-specific definitions, written by the pipeline's terms stage.
+  terms: termsSchema.optional(),
 });
 const paperUrl = z
   .string()
@@ -253,6 +257,7 @@ export function verifyLesson(lesson: Lesson, pages: PageText[]): string[] {
     if (c.refs.some((r) => !refs.has(r)))
       problems.push(`${c.id}: unknown evidence reference.`);
     if (c.scene) problems.push(...sceneFaults(c, lesson.evidence));
+    problems.push(...termProblems(c, refs));
     problems.push(...responseStyleProblems(c));
     if (c.reveal === "bonus" && lesson.challenges.includes(c))
       problems.push(`${c.id}: bonus in required sequence.`);

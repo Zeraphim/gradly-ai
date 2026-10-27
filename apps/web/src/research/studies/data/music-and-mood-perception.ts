@@ -338,7 +338,99 @@ export const body: StudyBody = {
         refs: ["e8"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Interpreting a pattern across communities",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Interpreting a pattern across communities",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e8"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "optA",
+              label:
+                "The effect is likely innate and universal, unaffected by culture",
+              targetIds: ["experience", "ratings", "inference"],
+            },
+            {
+              optionId: "optB",
+              label:
+                "The effect appears to be strengthened by familiarity and associative conditioning with Western music",
+              targetIds: ["experience", "ratings", "inference"],
+            },
+            {
+              optionId: "optC",
+              label:
+                "The effect is solely due to differences in timbre perception",
+              targetIds: ["experience", "ratings", "inference"],
+            },
+            {
+              optionId: "optD",
+              label:
+                "The effect is reversed in participants with minimal exposure",
+              targetIds: ["experience", "ratings", "inference"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "experience",
+              label: "Different listening histories",
+              detail: "Groups differ in exposure to Western-like music.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "ratings",
+              label: "Happiness judgements",
+              detail: "Reported effects vary across groups.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "inference",
+              label: "Compare explanations",
+              detail:
+                "A cross-community pattern does not randomly assign culture.",
+              at: "resolution",
+              provenance: {
+                kind: "authored",
+                refs: ["e8"],
+                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "experience",
+              to: "ratings",
+              label: "compare across groups",
+              at: "setup",
+            },
+            {
+              from: "ratings",
+              to: "inference",
+              label: "interpret cautiously",
+              at: "resolution",
+            },
+          ],
+        },
       },
       {
         id: "c7",

@@ -169,6 +169,11 @@ for (const [width, height] of [
       .locator(".orient .study-choice")
       .filter({ hasText: "Never, it stays hidden" })
       .click();
+    expect(
+      (await page
+        .getByRole("button", { name: "Check", exact: true })
+        .boundingBox())!.height,
+    ).toBeGreaterThanOrEqual(44);
     await page.getByRole("button", { name: "Check", exact: true }).click();
     await expect(
       page.getByText("Not quite. You have one retry."),
@@ -234,3 +239,15 @@ for (const [width, height] of [
     }
   });
 }
+
+test("unavailable-study skip link focuses its main landmark", async ({
+  page,
+}) => {
+  await page.goto("/#/research/studies/no-such-study");
+  await expect(
+    page.getByRole("heading", { name: "This study isn’t available" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Skip to content" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main#main")).toBeFocused();
+});

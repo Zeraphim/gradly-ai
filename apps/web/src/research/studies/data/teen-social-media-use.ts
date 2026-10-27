@@ -225,7 +225,101 @@ export const body: StudyBody = {
           "After applying Bonferroni’s correction … positive social media experiences (β=0.112, p<0.001) … were positively associated with flourishing.",
           "This positive association was present over and above control variables such as self‑esteem, ill‑being, and personality.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Adjusted links with flourishing",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Adjusted links with flourishing",
+          provenance: {
+            kind: "reported",
+            refs: ["e1", "e3"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "opt_correct",
+              label:
+                "Positive social media experiences predict higher flourishing independent of self‑esteem, ill‑being, personality, and other covariates.",
+              targetIds: ["positive", "negative", "from", "for"],
+            },
+            {
+              optionId: "opt_distractor1",
+              label: "The association is entirely explained by self‑esteem.",
+              targetIds: ["positive", "negative", "from", "for"],
+            },
+            {
+              optionId: "opt_distractor2",
+              label:
+                "Negative social media experiences have no relationship with flourishing.",
+              targetIds: ["positive", "negative", "from", "for"],
+            },
+          ],
+          resolution: null,
+          kind: "association",
+          pairs: [
+            {
+              id: "positive",
+              label: "Positive experiences / Flourishing",
+              detail: "Adjusted association, not a demonstrated causal effect.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e1", "e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              x: "Positive experiences",
+              y: "Flourishing",
+              statistic: "beta",
+              value: 0.112,
+            },
+            {
+              id: "negative",
+              label: "Negative experiences / Flourishing",
+              detail: "Adjusted association, not a demonstrated causal effect.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e1", "e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              x: "Negative experiences",
+              y: "Flourishing",
+              statistic: "beta",
+              value: -0.076,
+            },
+            {
+              id: "from",
+              label: "Inspiration from others / Flourishing",
+              detail: "Adjusted association, not a demonstrated causal effect.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e1", "e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              x: "Inspiration from others",
+              y: "Flourishing",
+              statistic: "beta",
+              value: 0.072,
+            },
+            {
+              id: "for",
+              label: "Inspiration for others / Flourishing",
+              detail: "Adjusted association, not a demonstrated causal effect.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e1", "e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              x: "Inspiration for others",
+              y: "Flourishing",
+              statistic: "beta",
+              value: 0.06,
+            },
+          ],
+        },
         options: [
           {
             id: "opt_correct",
@@ -264,7 +358,92 @@ export const body: StudyBody = {
           "Due to the cross‑sectional design of our study, we cannot draw any conclusions on the causes and effects of flourishing.",
           "Indeed, it is somewhat possible that flourishing causes productive and positive uses of social media.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "A regression is not a time sequence",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "A regression is not a time sequence",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1", "e3"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "opt_correct",
+              label:
+                "The cross‑sectional design prevents conclusions about whether social media use causes changes in flourishing (reverse causation is possible).",
+              targetIds: ["experience", "flourishing", "covariates"],
+            },
+            {
+              optionId: "opt_distractor1",
+              label:
+                "The study proves that social media use improves flourishing.",
+              targetIds: ["experience", "flourishing", "covariates"],
+            },
+            {
+              optionId: "opt_distractor2",
+              label:
+                "Longitudinal data were collected, allowing causal inference.",
+              targetIds: ["experience", "flourishing", "covariates"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "experience",
+              label: "Social-media experiences",
+              detail: "Reported characteristics of use.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "flourishing",
+              label: "Flourishing",
+              detail: "Outcome measured in the study.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+            {
+              id: "covariates",
+              label: "Measured covariates",
+              detail: "Included in the adjusted statistical model.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 2,
+            },
+          ],
+          edges: [
+            {
+              from: "experience",
+              to: "flourishing",
+              label: "modelled association",
+              at: "setup",
+            },
+            {
+              from: "covariates",
+              to: "flourishing",
+              label: "adjustment",
+              at: "setup",
+            },
+          ],
+        },
         options: [
           {
             id: "opt_correct",
@@ -288,7 +467,7 @@ export const body: StudyBody = {
         },
         explanation:
           "The authors explicitly state that the cross‑sectional design blocks causal conclusions and raises the possibility of reverse causation.",
-        refs: ["e6"],
+        refs: ["e6", "e1", "e3"],
         writtenReasoning: false,
         reveal: "interpretation",
       },

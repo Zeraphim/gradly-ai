@@ -182,7 +182,81 @@ export const body: StudyBody = {
         refs: ["e2"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Item memory in the two processing conditions",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Item memory in the two processing conditions",
+          provenance: {
+            kind: "reported",
+            refs: ["e2"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "c3a",
+              label:
+                "Statistically significant advantage (p < .05) for survival items",
+              targetIds: ["survival", "moving"],
+            },
+            {
+              optionId: "c3b",
+              label:
+                "Non‑significant trend suggesting better memory for survival items with a medium effect size (η² ≈ .17)",
+              targetIds: ["survival", "moving"],
+            },
+            {
+              optionId: "c3c",
+              label:
+                "Large, reliable effect proving a strong survival advantage",
+              targetIds: ["survival", "moving"],
+            },
+            {
+              optionId: "c3d",
+              label: "No effect whatsoever; the means are identical",
+              targetIds: ["survival", "moving"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Mean item-memory score",
+          unit: "proportion",
+          min: 0,
+          max: 1,
+          decimals: 2,
+          values: [
+            {
+              id: "survival",
+              label: "Survival processing",
+              detail: "Mean item-memory score",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e2"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 0.91,
+            },
+            {
+              id: "moving",
+              label: "Moving scenario",
+              detail: "Mean item-memory score",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e2"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 0.87,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
       },
       {
         id: "c4",
@@ -312,7 +386,100 @@ export const body: StudyBody = {
         refs: ["e3"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "From an observed pattern to a mechanism",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "From an observed pattern to a mechanism",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "c6a",
+              label:
+                "The authors conclude that enhanced item‑specific and relational processing definitively caused the advantage",
+              targetIds: ["pattern", "candidate", "test"],
+            },
+            {
+              optionId: "c6b",
+              label:
+                "The authors acknowledge that it remains uncertain whether known memory mechanisms account for the observed effects",
+              targetIds: ["pattern", "candidate", "test"],
+            },
+            {
+              optionId: "c6c",
+              label:
+                "The authors rule out any role of memory mechanisms in the survival advantage",
+              targetIds: ["pattern", "candidate", "test"],
+            },
+            {
+              optionId: "c6d",
+              label:
+                "The authors argue that memory mechanisms are irrelevant to the survival effect",
+              targetIds: ["pattern", "candidate", "test"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "pattern",
+              label: "Observed memory pattern",
+              detail:
+                "The experiment reports a difference under its conditions.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "candidate",
+              label: "Candidate memory processes",
+              detail:
+                "Known memory mechanisms are a question for further work.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "test",
+              label: "A mechanism test",
+              detail: "Teaching proposal: directly test a candidate process.",
+              at: "resolution",
+              provenance: {
+                kind: "authored",
+                refs: ["e3"],
+                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "pattern",
+              to: "candidate",
+              label: "raises a question",
+              at: "setup",
+            },
+            {
+              from: "candidate",
+              to: "test",
+              label: "requires further evidence",
+              at: "resolution",
+            },
+          ],
+        },
       },
     ],
     bonus: null,

@@ -2488,29 +2488,9 @@ html[data-reduced-motion="true"] .research-lab button.path-card {
 }
 
 /* Contextual vocabulary help stays on the current question. */
-.research-lab .research-term {
-  display: inline;
-  padding: 0;
-  border: 0;
-  border-bottom: 1px dotted currentColor;
-  border-radius: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
-  line-height: inherit;
-  cursor: help;
-}
-.research-lab .research-term:focus-visible,
 .research-lab .question-help-trigger:focus-visible {
   outline: 3px solid var(--blue-ink);
   outline-offset: 3px;
-}
-.research-lab .journey-stage-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
 }
 .research-lab .question-help-trigger {
   display: inline-flex;

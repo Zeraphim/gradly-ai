@@ -42,6 +42,8 @@ import {
 } from "./client-state.js";
 import { Mascot, Speech, Progress, ErrorMessage } from "./learning-ui.js";
 import { paperContext } from "./paper-context.js";
+import { TermProvider, TermText } from "./terms/Terms.js";
+import { termEntries } from "./terms/term-logic.js";
 
 import {
   lazy,
@@ -376,7 +378,6 @@ function GradlyWorkspace({
       privacy: "Privacy & AI processing",
       processing: "Read the paper",
       adventure: "Your quest",
-      meet: "Texting study quest",
     };
     document.title = `${titles[route] ?? "Find your quest"} · Gradly`;
     return () => {
@@ -560,7 +561,7 @@ function GradlyWorkspace({
     (route === "adventure" && session?.phase === "challenge") ||
     (route === "adventure" && session?.phase === "bonus");
   const reviewMode = showReview && !!session?.review;
-  // The paper journey (review → prepare → meet → play) runs in focus mode:
+  // The paper journey (review → prepare → play) runs in focus mode:
   // a slim bar with the stepper replaces the site header and footer.
   const focusStep: JourneyStep | null =
     route === "upload" && uploadDraft.file
@@ -569,13 +570,12 @@ function GradlyWorkspace({
         ? job && !job.consented
           ? 0
           : 1
-        : route === "meet" || route === "adventure"
+        : route === "adventure"
           ? 2
           : null;
   // A prepared study chosen from the library skips upload and preparation.
   const libraryJourney =
-    (route === "meet" && id === "featured") ||
-    (route === "adventure" && session?.source === "featured");
+    route === "adventure" && session?.source === "featured";
   const focus = focusStep !== null;
   const lastAdventure = readLastAdventure();
   const resumeHref =
@@ -612,7 +612,7 @@ function GradlyWorkspace({
         <FocusBar
           step={libraryJourney ? 1 : focusStep}
           steps={libraryJourney ? libraryJourneySteps : undefined}
-          sample={demo || route === "meet"}
+          sample={demo}
           onExit={
             route === "adventure" ? () => router.push("/history") : onExit
           }
@@ -835,7 +835,11 @@ function GradlyWorkspace({
                 </>
               ) : null}
               {c && !reviewMode ? (
-                <>
+                <TermProvider
+                  entries={termEntries(c.terms, c.termSources)}
+                  scope={session.lessonId}
+                  resetKey={`${c.id}:${c.attempts}:${session.retrying}`}
+                >
                   <div className="play-top">
                     <div
                       className="play-progress"
@@ -955,7 +959,9 @@ function GradlyWorkspace({
                       </p>
                     </section>
                   ) : null}
-                  <p className="question">{c.prompt}</p>
+                  <p className="question">
+                    <TermText text={c.prompt} />
+                  </p>
                   {scene ? (
                     <InvestigationScene
                       key={`${session.id}:${c.id}:${session.retrying}`}
@@ -1006,7 +1012,9 @@ function GradlyWorkspace({
                             }}
                           />
                           <span className="keycap">{o.id}</span>
-                          <span>{o.text}</span>
+                          <span>
+                            <TermText text={o.text} passive />
+                          </span>
                           <span aria-hidden="true" className="selection-mark">
                             {selected.includes(o.id) ? (
                               <Icon name="check" size={19} />
@@ -1044,7 +1052,9 @@ function GradlyWorkspace({
                         className="support"
                         title="Hint"
                       >
-                        <p>{c.hint}</p>
+                        <p>
+                          <TermText text={c.hint} />
+                        </p>
                       </SceneDisclosure>
                     </div>
                     {c.writtenReasoning ? (
@@ -1117,9 +1127,13 @@ function GradlyWorkspace({
                                 ? "Let’s reconsider."
                                 : "Here’s the reference explanation."}
                           </h2>
-                          <p>{c.feedback.message}</p>
+                          <p>
+                            <TermText text={c.feedback.message} />
+                          </p>
                           {c.feedback.explanation && !c.feedback.correct ? (
-                            <p>{c.feedback.explanation}</p>
+                            <p>
+                              <TermText text={c.feedback.explanation} />
+                            </p>
                           ) : null}
                         </SceneFeedback>
                         <details className="agent-panel">
@@ -1305,7 +1319,7 @@ function GradlyWorkspace({
                       </>
                     ) : null}
                   </SceneFollowing>
-                </>
+                </TermProvider>
               ) : null}
               {session.phase === "bonus-choice" ? (
                 <div className="center bonus-offer">
@@ -1668,7 +1682,6 @@ function GradlyWorkspace({
           "help",
           "settings",
           "privacy",
-          "meet",
         ].includes(route) ? (
           <div className="center">
             <h1>Let’s get you back on track.</h1>

@@ -7,6 +7,11 @@ import {
 } from "../../apps/web/src/research/research-terms.js";
 
 describe("research term lookup", () => {
+  it("defines assignment without supplying its causal-inference benefit", () => {
+    expect(researchTerms["Random assignment"]).toBe(
+      "A chance process determines which study condition each participant receives.",
+    );
+  });
   it("keeps the original text and matches complete terms, longest first", () => {
     const text =
       "Random assignment differs from random sampling; CONFOUNDING is another idea.";

@@ -101,7 +101,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     expect(consentedJob.mode).toBe("live");
   });
 
-  it("advances sequentially through all 5 stages to produce a ready lesson with interactive scenes", async () => {
+  it("advances sequentially through all 6 stages to produce a ready lesson with interactive scenes", async () => {
     const jobId = "full-" + Math.random().toString(36).slice(2);
     const pages = sceneFixturePages(quantitativeSceneLesson);
     const job = newJob(jobId, "quantitative-paper.pdf", pages);
@@ -119,19 +119,21 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       },
       // Stage 1: Lesson Architect
       { ...quantitativeSceneLesson, id: jobId },
-      // Stage 2: Methods Reviewer
+      // Stage 2: Terms Guide
+      { challenges: [] },
+      // Stage 3: Methods Reviewer
       {
         approved: true,
         issues: [],
         summary: "Methodological design and statistical assumptions verified.",
       },
-      // Stage 3: Learning Coach
+      // Stage 4: Learning Coach
       {
         approved: true,
         issues: [],
         summary: "Hints and guided feedback promote critical reasoning.",
       },
-      // Stage 4: Deterministic validator runs locally without provider call
+      // Stage 5: Deterministic validator runs locally without provider call
     ];
 
     const mockProvider: ModelProvider = {
@@ -141,8 +143,8 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       },
     };
 
-    // Execute each of the 5 stages sequentially via route
-    for (let s = 0; s < 5; s++) {
+    // Execute each of the 6 stages sequentially via route
+    for (let s = 0; s < 6; s++) {
       const req = new Request("http://localhost/api/research/jobs", {
         method: "POST",
         headers: {
@@ -154,7 +156,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       const res = await withGuest(testGuest, () => jobsPost(req, mockProvider));
       expect(res.status).toBe(200);
       const payload = await res.json();
-      if (s < 4) {
+      if (s < 5) {
         expect(payload.stage).toBe(s + 1);
       }
     }
@@ -164,13 +166,13 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       read<Job>(testGuest, "job", job.id),
     );
     expect(finalJob.status).toBe("ready");
-    expect(finalJob.stage).toBe(5);
+    expect(finalJob.stage).toBe(6);
     expect(finalJob.lesson).toBeDefined();
     expect(finalJob.lesson?.title).toBe(quantitativeSceneLesson.title);
 
     // Verify all audits are completed and reflect honest models
     expect(finalJob.audits.every((a) => a.status === "Completed")).toBe(true);
-    expect(finalJob.audits[4]!.model).toBe("Deterministic validator");
+    expect(finalJob.audits[5]!.model).toBe("Deterministic validator");
 
     // Verify that the generated scene stores cleanly and is valid
     const comparisonChallenge = finalJob.lesson!.challenges.find(
@@ -242,9 +244,9 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       ),
     );
 
-    // Stages 2–4: the rejection is advisory, and the coach call that fails
-    // here does not stop the lesson either.
-    for (let s = 0; s < 3; s++)
+    // Stages 2–5: the terms call and coach call that fail here and the
+    // advisory rejection do not stop the lesson.
+    for (let s = 0; s < 4; s++)
       await withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
@@ -263,11 +265,14 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       read<Job>(testGuest, "job", job.id),
     );
     expect(reviewedJob.status).toBe("ready");
-    expect(reviewedJob.audits[2]!.status).toBe("Completed");
-    expect(reviewedJob.audits[2]!.summary).toContain(
+    expect(reviewedJob.audits[3]!.status).toBe("Completed");
+    expect(reviewedJob.audits[3]!.summary).toContain(
       "Advisory notes: Association cannot be framed as causal",
     );
-    expect(reviewedJob.audits[3]!.summary).toContain("Review unavailable");
+    expect(reviewedJob.audits[2]!.summary).toContain(
+      "Term definitions unavailable",
+    );
+    expect(reviewedJob.audits[4]!.summary).toContain("Review unavailable");
 
     const startReq = new Request("http://localhost/api/research/learning", {
       method: "POST",
@@ -341,7 +346,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const job = newJob(jobId, "quantitative.pdf", pages);
     job.consented = true;
     job.status = "ready";
-    job.stage = 5;
+    job.stage = 6;
     job.lesson = { ...quantitativeSceneLesson, id: jobId };
     await withGuest(testGuest, () => insert(testGuest, "job", job.id, job));
 
@@ -437,8 +442,8 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       },
     };
 
-    // Run stages 0–4
-    for (let s = 0; s < 5; s++) {
+    // Run stages 0–5
+    for (let s = 0; s < 6; s++) {
       await withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
@@ -458,8 +463,8 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       read<Job>(testGuest, "job", job.id),
     );
     expect(reviewedJob.status).toBe("ready");
-    expect(reviewedJob.audits[3]!.status).toBe("Completed");
-    expect(reviewedJob.audits[3]!.summary).toContain(
+    expect(reviewedJob.audits[4]!.status).toBe("Completed");
+    expect(reviewedJob.audits[4]!.summary).toContain(
       "Hint reveals the correct answer",
     );
   });

@@ -283,10 +283,84 @@ export const body: StudyBody = {
         },
         explanation:
           "By measuring activism before the election and well‑being two months later, the design tests whether earlier activism predicts later outcomes.",
-        refs: ["e12", "e10"],
+        refs: ["e12", "e10", "e8", "e4"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Measures around the election",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Measures around the election",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e8", "e4"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "It allows testing whether activism predicts changes in well‑being over time.",
+              targetIds: ["before", "election", "after"],
+            },
+            {
+              optionId: "o2",
+              label: "It enables measuring activism at a single point in time.",
+              targetIds: ["before", "election", "after"],
+            },
+            {
+              optionId: "o3",
+              label: "It reduces participant attrition.",
+              targetIds: ["before", "election", "after"],
+            },
+            {
+              optionId: "o4",
+              label: "It eliminates the need for control variables.",
+              targetIds: ["before", "election", "after"],
+            },
+          ],
+          resolution: null,
+          kind: "timeline",
+          events: [
+            {
+              id: "before",
+              label: "Political activism",
+              detail: "Reported before the outcome.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8", "e4"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              when: "Before the election",
+            },
+            {
+              id: "election",
+              label: "Identification with the candidate",
+              detail: "Identity measure used in the interaction.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8", "e4"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              when: "At the election",
+            },
+            {
+              id: "after",
+              label: "Wellbeing outcomes",
+              detail: "Depressive symptoms and sleep disturbance.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e8", "e4"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              when: "Two months later",
+            },
+          ],
+        },
       },
       {
         id: "c3",
@@ -419,7 +493,105 @@ export const body: StudyBody = {
         refs: ["e3"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Who returned for follow-up?",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Who returned for follow-up?",
+          provenance: {
+            kind: "reported",
+            refs: ["e3"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "The sample may overrepresent women, potentially biasing results toward their experiences.",
+              targetIds: ["wt2", "mt2", "wt3", "mt3"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "Gender had no effect on the main findings because it was controlled for.",
+              targetIds: ["wt2", "mt2", "wt3", "mt3"],
+            },
+            {
+              optionId: "o3",
+              label: "Men were more activist than women.",
+              targetIds: ["wt2", "mt2", "wt3", "mt3"],
+            },
+            {
+              optionId: "o4",
+              label:
+                "The study lacked sufficient power to detect gender differences.",
+              targetIds: ["wt2", "mt2", "wt3", "mt3"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Share completing each follow-up",
+          unit: "%",
+          min: 0,
+          max: 100,
+          decimals: 2,
+          values: [
+            {
+              id: "wt2",
+              label: "Women · T2",
+              detail: "Share completing each follow-up",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 52,
+            },
+            {
+              id: "mt2",
+              label: "Men · T2",
+              detail: "Share completing each follow-up",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 33.3,
+            },
+            {
+              id: "wt3",
+              label: "Women · T3",
+              detail: "Share completing each follow-up",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 52.9,
+            },
+            {
+              id: "mt3",
+              label: "Men · T3",
+              detail: "Share completing each follow-up",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 36.1,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
       },
     ],
     bonus: null,

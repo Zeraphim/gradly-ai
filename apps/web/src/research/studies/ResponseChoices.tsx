@@ -1,5 +1,6 @@
 import { Check, RotateCcw } from "lucide-react";
 import { AnimatePresence, m, useSceneMotion } from "../scenes/scene-motion.js";
+import { TermText } from "../terms/Terms.js";
 
 export type ChoiceMark = "best" | "missed" | "tried" | undefined;
 
@@ -80,7 +81,12 @@ export function ResponseChoices({
                 </m.span>
               </AnimatePresence>
             </span>
-            <span className="study-choice-text">{option.text}</span>
+            <span className="study-choice-text">
+              {/* One inline run, so term marks flow within the grid cell. */}
+              <span>
+                <TermText text={option.text} passive />
+              </span>
+            </span>
             {mark === "best" ? (
               <span className="study-tag best">
                 <Check size={13} strokeWidth={3} aria-hidden="true" /> Best

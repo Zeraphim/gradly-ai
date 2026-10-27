@@ -21,18 +21,18 @@ See [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for a complete integration example.
 
 ## Modules
 
-| Module                                              | Responsibility                                                                           |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `apps/web/src/App.tsx`                              | Upload-first entry and hash compatibility routing (entry app eager, research views lazy) |
-| `apps/web/src/LegacyApp.tsx`, `components/`         | Retired curated implementation (isolated compatibility tests only), shared UI components                      |
-| `packages/contracts`, `packages/lesson-state`       | Original lesson API contracts and curated progress                                       |
-| `apps/api/src/feedback.ts`                          | Guarded curated reasoning assessment with authored teaching text                         |
-| `apps/web/src/research/`                            | Lazy-loaded research views, hash navigation and scoped design                            |
-| `apps/api/src/research/pdf.ts`, `ocr.ts`            | PDF validation, physical page extraction and bounded English OCR                         |
-| `research/provider.ts`, `pipeline.ts`               | Nebius adapter and persisted sequential role workflow                                    |
-| `research/contracts.ts`, `engine.ts`, `featured.ts` | Lesson schemas, source checks, learning transitions and eight-challenge reference        |
-| `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                              |
-| `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance                    |
+| Module                                              | Responsibility                                                                                                       |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `apps/web/src/App.tsx`                              | Upload-first entry and hash compatibility routing (entry app eager, research views lazy)                             |
+| `apps/web/src/components/`                          | Shared upload-home, site chrome and UI components; the classic app and standalone picker/texting screens are retired |
+| `packages/contracts`, `packages/lesson-state`       | Original lesson API contracts and curated progress                                                                   |
+| `apps/api/src/feedback.ts`                          | Guarded curated reasoning assessment with authored teaching text                                                     |
+| `apps/web/src/research/`                            | Lazy-loaded research views, hash navigation and scoped design                                                        |
+| `apps/api/src/research/pdf.ts`, `ocr.ts`            | PDF validation, physical page extraction and bounded English OCR                                                     |
+| `research/provider.ts`, `pipeline.ts`               | Nebius adapter and persisted sequential role workflow                                                                |
+| `research/contracts.ts`, `engine.ts`, `featured.ts` | Lesson schemas, source checks, learning transitions and eight-challenge reference                                    |
+| `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                                                          |
+| `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance                                                |
 
 The research workspace composes `StudyPreview`/`StudyLibrary`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `App` owns the shared public configuration read and passes loading/error/retry state to `ResearchApp`. A standalone `ResearchApp` retains a `useResearchConfig` fallback, disabled when configuration is provided. Shared display types live in `research/types.ts`; confirmation dialogs reuse `Dialog`. Browsing and study intros share `SiteHeader`. Active play and paper preparation retain their focused progress bars.
 
@@ -50,7 +50,7 @@ The provider interface supports distinct role prompts using a configured server-
 
 Jobs persist role, task, status, evidence references, concise summary, error and a stable typed error code. A versioned lease prevents overlapping stage requests; an expired lease permits recovery. The browser dispatches stages and polls saved state. There is no background worker or fabricated time-based completion. The help view describes the sequential architecture and does not claim a parallel Mixture of Agents implementation.
 
-Exact excerpt/page matching, valid answer guides and known reference identifiers gate generated lessons. Live lesson drafts hold 3–8 challenges, cite the verified stage-0 evidence identifiers, and receive those excerpts server-side instead of re-emitting them. A challenge may add up to three excerpts for details its references do not state; only verbatim ones are attached and cited. Drafts carry no alternative answers, every challenge needs a hint, and a scene that fails validation is removed before review. When no drafted scene remains, the server builds one from a challenge's evidence. A `paper.url` without a usable host is stored as unavailable (`null`). Reasoning feedback is rejected if it names the paper. Model reviews assess semantic support; deterministic checks alone cannot prove that every inference is correct. The Methods Reviewer and Learning Coach are advisory: their notes are shown on the preparation stage and logged, and neither a rejection nor a failed review call blocks play. Missing evidence or a failed deterministic check blocks play. Statistical results and paper metadata remain hidden in research session responses until permitted by the learning engine. The preserved curated entry independently exposes its original study metadata.
+Exact excerpt/page matching, valid answer guides and known reference identifiers gate generated lessons. Live lesson drafts hold 3–8 challenges, cite the verified stage-0 evidence identifiers, and receive those excerpts server-side instead of re-emitting them. A challenge may add up to three excerpts for details its references do not state; only verbatim ones are attached and cited. Drafts carry no alternative answers, every challenge needs a hint, and a scene that fails validation is removed before review. When no drafted scene remains, the server builds one from a challenge's evidence. A `paper.url` without a usable host is stored as unavailable (`null`). Reasoning feedback is rejected if it names the paper. Model reviews assess semantic support; deterministic checks alone cannot prove that every inference is correct. A Terms Guide stage runs after drafting and before review. It reads the lesson and its excerpts and returns only context-specific term definitions (at most four per challenge, 240 characters each). A `paper` definition cites excerpts its challenge already cites; a `model` definition cites none. Definitions that fail a deterministic check (term not in the challenge text, unknown or uncited ref, wrong source, a design-stage results ref, or a quoted accepted option) are dropped, and a failed terms call leaves the lesson without terms. The session sends a challenge's terms with the challenge, and terms found only in the explanation follow the explanation's gate. The Methods Reviewer and Learning Coach are advisory: their notes are shown on the preparation stage and logged, and neither a rejection nor a failed review call blocks play. Reviewers also list term definitions that leak an answer or finding, overreach the evidence or carry the wrong source, and those definitions are removed. Jobs saved with five stages gain the terms stage on read, recorded as not run when the lesson was already drafted. Missing evidence or a failed deterministic check blocks play. Statistical results and paper metadata remain hidden in research session responses until permitted by the learning engine. The preserved curated entry independently exposes its original study metadata.
 
 ## Explicit local sample mode
 
@@ -77,8 +77,7 @@ preparation. It uses shared motion and has no assessment or provider calls.
 
 `components/SiteChrome.tsx` is the header and footer for the upload-first home,
 library, history and support routes; its styles load globally from `main.tsx`.
-The paper journey (review, preparation, the authored texting quest
-`TextingQuest.tsx` at `/meet/:id`, and the player) runs in focus mode instead:
+The paper journey (review, preparation and the shared study player) runs in focus mode instead:
 `FocusBar.tsx` with the journey stepper, styled by `journey.css`, `quest.css` and
 `play.css`. From the
 home page in sample mode, a PDF or any link (made into a "link note" document by

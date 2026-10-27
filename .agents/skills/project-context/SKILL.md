@@ -22,8 +22,9 @@ anywhere; it does not depend on a parent context repository or personal skill pa
   `/research/learn` is the prepared-study library; the old `/research/studies`
   index, classic, lab and meet entry points recover there. Individual
   `/research/studies/<slug>` links and uploaded `/research/play/<id>` remain.
-  `LegacyApp.tsx` is retained only for isolated compatibility tests, not mounted
-  by the public application. Never restore the old picker or home Resume quest.
+  The classic app, separate picker and bespoke texting screen have been removed.
+  The texting study remains in the prepared shared player. Never restore the old
+  picker or home Resume quest; retained curated API/state tests are separate.
 - `apps/api`: Express 5. `src/app.ts` composes the curated service and research
   router. `src/research/` owns document extraction, bounded English OCR, schemas,
   sequential generation/review stages, ownership, storage, and learning state.

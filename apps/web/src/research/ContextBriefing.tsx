@@ -94,11 +94,13 @@ function ContextBriefingContent({
         <details>
           <summary>
             How the sample was prepared
-            <small>{job.stage} of 5 steps</small>
+            <small>
+              {job.stage} of {job.audits.length} steps
+            </small>
           </summary>
           <p>
-            Five saved stages. These summaries are authored, not a live model’s
-            reasoning.
+            {job.audits.length} saved stages. These summaries are authored, not
+            a live model’s reasoning.
           </p>
           <div className="briefing-trace-rows">
             {job.audits.map((audit) => (

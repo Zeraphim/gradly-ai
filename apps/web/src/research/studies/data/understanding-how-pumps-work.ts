@@ -332,7 +332,68 @@ export const body: StudyBody = {
         refs: ["e7"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Components included in explanations",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Components included in explanations",
+          provenance: {
+            kind: "reported",
+            refs: ["e7"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o7",
+              label: "About 1.78 more components.",
+              targetIds: ["visual", "verbal"],
+            },
+            {
+              optionId: "o8",
+              label: "About 0.78 more components.",
+              targetIds: ["visual", "verbal"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Mean structural components",
+          unit: "components",
+          min: 0,
+          max: 8,
+          decimals: 2,
+          values: [
+            {
+              id: "visual",
+              label: "Visual explanations",
+              detail: "Mean structural components",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e7"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 6.05,
+            },
+            {
+              id: "verbal",
+              label: "Verbal explanations",
+              detail: "Mean structural components",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e7"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 4.27,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
       },
       {
         id: "c5",
@@ -366,7 +427,86 @@ export const body: StudyBody = {
         refs: ["e20", "e22"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "What a visual-spatial explanation can support",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "What a visual-spatial explanation can support",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e22"],
+            note: "The authors’ proposed explanation; not a measured causal pathway.",
+          },
+          responses: [
+            {
+              optionId: "o9",
+              label:
+                "They force learners to organize parts spatially, which aids completeness, coherence, and inference.",
+              targetIds: ["parts", "check", "inference"],
+            },
+            {
+              optionId: "o10",
+              label:
+                "They are easier to produce because they require less linguistic skill.",
+              targetIds: ["parts", "check", "inference"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "parts",
+              label: "Parts and locations",
+              detail: "Represent components in space.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e22"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "check",
+              label: "Completeness and coherence",
+              detail: "Check how those components fit together.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e22"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "inference",
+              label: "Further inferences",
+              detail: "Use the representation to reason about the system.",
+              at: "resolution",
+              provenance: {
+                kind: "authored",
+                refs: ["e22"],
+                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "parts",
+              to: "check",
+              label: "supports checking",
+              at: "setup",
+            },
+            {
+              from: "check",
+              to: "inference",
+              label: "supports reasoning",
+              at: "resolution",
+            },
+          ],
+        },
       },
       {
         id: "c6",

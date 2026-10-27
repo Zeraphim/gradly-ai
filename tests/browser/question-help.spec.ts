@@ -39,9 +39,7 @@ async function question(page: Page) {
     await route.fulfill({ json: publicSession(s, lesson) });
   });
   await page.goto("/#/research/play/question-help");
-  await expect(
-    page.getByRole("heading", { level: 1, name: c.prompt }),
-  ).toBeVisible();
+  await expect(page.locator("h1.journey-title")).toBeVisible();
   return { posts };
 }
 
@@ -54,12 +52,14 @@ for (const width of [390, 1024, 1366]) {
     const { posts } = await question(page);
     const term = page.getByRole("button", { name: "confounding", exact: true });
     await term.focus();
-    await page.keyboard.press("Enter");
-    const modal = page.getByRole("dialog");
-    await expect(
-      modal.getByRole("heading", { name: "Confounding", exact: true }),
-    ).toBeVisible();
-    await expect(modal).toContainText("Illustrative example:");
+    // Heading text must expose its nested term control to accessibility APIs.
+    await expect(page.locator("h1.journey-title")).not.toHaveAttribute(
+      "aria-label",
+    );
+    const popover = page.getByRole("group", {
+      name: /confounding: definition/i,
+    });
+    await expect(popover).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(term).toBeFocused();
     const help = page.getByRole("button", {
@@ -67,6 +67,7 @@ for (const width of [390, 1024, 1366]) {
       exact: true,
     });
     await help.click();
+    const modal = page.getByRole("dialog");
     await expect(modal.locator("dt")).toHaveText(["Confounding"]);
     await expect(modal).not.toContainText("p-value");
     await expect(modal).not.toContainText("HINT_UNLOCKED_AFTER_MISS");

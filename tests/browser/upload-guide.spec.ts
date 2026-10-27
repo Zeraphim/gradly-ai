@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("the recovered OpenCode guide animates only on Upload a paper", async ({
+test("the Gradly guide animates once only on Upload a paper", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -10,6 +10,19 @@ test("the recovered OpenCode guide animates only on Upload a paper", async ({
   await expect
     .poll(() => guide.evaluate((e) => (e as HTMLImageElement).naturalWidth))
     .toBeGreaterThan(0);
+  const first = await guide.screenshot();
+  await page.waitForTimeout(350);
+  const moving = await guide.screenshot();
+  expect(first.equals(moving), "the guide must actually change frames").toBe(
+    false,
+  );
+  await page.waitForTimeout(5000);
+  const settled = await guide.screenshot();
+  await page.waitForTimeout(350);
+  expect(
+    settled.equals(await guide.screenshot()),
+    "the guide settles after one cycle",
+  ).toBe(true);
   await expect(page.locator(".gr-brand .brand-logo")).toHaveCSS(
     "animation-name",
     "none",

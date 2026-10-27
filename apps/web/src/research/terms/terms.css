@@ -1,0 +1,300 @@
+/* Context-specific term marks, answer chips and the definition popover. */
+.research-lab {
+  --term-accent: #006b93;
+  --term-accent-strong: #004566;
+  --term-tint: #e5f5ff;
+  --term-visited: #94a3b3;
+  --term-line: #dfe5ec;
+  --term-model: #8a4000;
+  --term-highlight: #ffe9a8;
+  --term-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ---------- Inline marks ---------- */
+.research-lab .term-mark {
+  display: inline;
+  margin: 0 -2px;
+  padding: 0 2px;
+  border: 0;
+  border-radius: 5px;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  cursor: help;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--term-accent) 62%,
+    transparent
+  );
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.24em;
+  text-decoration-skip-ink: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    text-decoration-color 160ms var(--term-ease),
+    text-decoration-thickness 160ms var(--term-ease),
+    background-color 160ms var(--term-ease),
+    color 160ms var(--term-ease);
+  /* The underline draws in after the question settles. */
+  animation: term-mark-in 560ms var(--term-ease) 280ms backwards;
+}
+.research-lab .term-mark.is-visited {
+  text-decoration-color: var(--term-visited);
+}
+@media (hover: hover) and (pointer: fine) {
+  .research-lab .term-mark:hover {
+    background-color: color-mix(in srgb, var(--term-tint) 80%, transparent);
+    text-decoration-color: var(--term-accent);
+    text-decoration-thickness: 3px;
+  }
+}
+.research-lab .term-mark.is-open {
+  background-color: var(--term-tint);
+  color: var(--term-accent-strong);
+  text-decoration-color: var(--term-accent);
+  text-decoration-thickness: 3px;
+}
+.research-lab .term-mark:focus-visible {
+  outline: 2px solid var(--term-accent);
+  outline-offset: 2px;
+}
+@keyframes term-mark-in {
+  from {
+    text-decoration-color: transparent;
+  }
+}
+
+/* ---------- Answer chips ---------- */
+.research-lab .term-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-top: 14px;
+}
+.research-lab .term-chips-label {
+  margin-right: 2px;
+  color: #5a6876;
+  font-size: 13px;
+  font-weight: 700;
+}
+.research-lab .term-chip {
+  min-height: 32px;
+  padding: 3px 12px;
+  border: 1.5px dashed color-mix(in srgb, var(--term-accent) 45%, transparent);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--term-accent-strong);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  cursor: help;
+  transition:
+    background-color 160ms var(--term-ease),
+    border-color 160ms var(--term-ease),
+    color 160ms var(--term-ease),
+    transform 120ms var(--term-ease);
+}
+.research-lab .term-chip.is-visited {
+  border-color: var(--term-visited);
+}
+@media (hover: hover) and (pointer: fine) {
+  .research-lab .term-chip:hover {
+    border-style: solid;
+    border-color: var(--term-accent);
+    background: var(--term-tint);
+    transform: translateY(-1px);
+  }
+}
+.research-lab .term-chip:active {
+  transform: scale(0.97);
+}
+.research-lab .term-chip.is-open {
+  border-style: solid;
+  border-color: var(--term-accent);
+  background: var(--term-accent);
+  color: #fff;
+}
+.research-lab .term-chip:focus-visible {
+  outline-offset: 3px;
+}
+
+/* ---------- Popover ---------- */
+.research-lab.term-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  min-height: 0;
+  background: transparent;
+  pointer-events: none;
+}
+.term-layer .term-popover-frame {
+  position: fixed;
+  width: min(320px, calc(100vw - 24px));
+  /* The popover never takes a press meant for an answer underneath it; only
+     a pinned popover's source control is pressable. */
+  pointer-events: none;
+}
+.term-layer .is-pinned .term-source-chip {
+  pointer-events: auto;
+}
+.term-layer .term-popover-frame.is-settled:not(.is-still) {
+  transition:
+    top 280ms var(--term-ease),
+    left 280ms var(--term-ease);
+}
+.term-layer .term-popover {
+  position: relative;
+  padding: 14px 16px 13px;
+  border: 1px solid var(--term-line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgb(16 42 67 / 6%),
+    0 14px 34px -10px rgb(16 42 67 / 26%);
+  color: var(--ink);
+  font-size: 14.5px;
+  line-height: 1.5;
+  text-align: left;
+}
+.term-layer .term-popover-arrow {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--term-line);
+  background: #fff;
+  transform: translateX(-50%) rotate(45deg);
+}
+.term-layer .side-top .term-popover-arrow {
+  bottom: -8px;
+  border-top: 0;
+  border-left: 0;
+  border-bottom-right-radius: 3px;
+}
+.term-layer .side-bottom .term-popover-arrow {
+  top: -8px;
+  border-right: 0;
+  border-bottom: 0;
+  border-top-left-radius: 3px;
+}
+.term-layer .is-settled:not(.is-still) .term-popover-arrow {
+  transition: left 280ms var(--term-ease);
+}
+.term-layer .term-popover-content {
+  position: relative;
+}
+.term-layer .term-popover-term {
+  margin: 0 0 3px;
+  color: var(--term-accent-strong);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.term-layer .term-popover-definition {
+  margin: 0;
+  color: #3f4f5c;
+}
+.term-layer .term-origin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  color: #5a6876;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.term-layer .term-origin.origin-model {
+  color: var(--term-model);
+}
+.term-layer .term-source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 5px 11px;
+  border: 1px solid color-mix(in srgb, var(--term-accent) 30%, transparent);
+  border-radius: 999px;
+  background: var(--term-tint);
+  color: var(--term-accent-strong);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  transition:
+    background-color 160ms var(--term-ease),
+    border-color 160ms var(--term-ease),
+    color 160ms var(--term-ease),
+    transform 120ms var(--term-ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .term-layer .term-source-chip:hover {
+    border-color: var(--term-accent);
+    transform: translateY(-1px);
+  }
+}
+.term-layer .term-source-chip:active {
+  transform: scale(0.97);
+}
+.term-layer .term-source-chip.is-active {
+  border-color: var(--term-accent);
+  background: var(--term-accent);
+  color: #fff;
+}
+.term-layer .term-source-chip:focus-visible {
+  outline-offset: 2px;
+}
+.term-layer .term-excerpt {
+  overflow: hidden;
+  margin: 0;
+  border-left: 3px solid var(--term-accent);
+  border-radius: 0 10px 10px 0;
+  background: #f5f8fb;
+  color: #3f4f5c;
+  font-size: 13.5px;
+}
+.term-layer .term-excerpt p {
+  margin: 0;
+  padding: 9px 12px;
+}
+.term-layer .term-excerpt mark {
+  padding: 0 1px;
+  border-radius: 3px;
+  background: linear-gradient(var(--term-highlight), var(--term-highlight))
+    no-repeat 0 88% / 0% 52%;
+  color: inherit;
+  animation: term-highlight 520ms var(--term-ease) 160ms forwards;
+}
+.term-layer .is-still .term-excerpt mark {
+  background-size: 100% 52%;
+  animation: none;
+}
+@keyframes term-highlight {
+  to {
+    background-size: 100% 52%;
+  }
+}
+
+/* ---------- Reduced motion: colour and opacity changes only ---------- */
+.research-lab [data-scene-reduced="true"] .term-mark,
+.research-lab [data-scene-reduced="true"] .term-chip {
+  animation: none;
+  transition: none;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .research-lab .term-mark,
+  .research-lab .term-chip,
+  .term-layer .term-source-chip {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+  .term-layer .term-excerpt mark {
+    background-size: 100% 52%;
+    animation: none;
+  }
+}

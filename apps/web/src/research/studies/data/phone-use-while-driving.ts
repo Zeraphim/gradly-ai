@@ -396,10 +396,90 @@ export const body: StudyBody = {
         },
         explanation:
           "The text‑based conditions yielded a mean BRT of 1.16 s, which exceeds both the image‑based mean (0.92 s) and the baseline mean (0.88 s) (see e1).",
-        refs: [],
+        refs: ["e1", "e30"],
         writtenReasoning: false,
         reveal: "results",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Braking while doing different kinds of task",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Braking while doing different kinds of task",
+          provenance: {
+            kind: "reported",
+            refs: ["e1", "e30"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "The text‑based conditions (texting and Facebook) had the longest BRTs.",
+              targetIds: ["text", "image", "baseline"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "The image‑based conditions (Instagram and Snapchat) had the longest BRTs.",
+              targetIds: ["text", "image", "baseline"],
+            },
+            {
+              optionId: "o3",
+              label: "The baseline driving condition had the longest BRTs.",
+              targetIds: ["text", "image", "baseline"],
+            },
+          ],
+          resolution: null,
+          kind: "comparison",
+          measure: "Mean brake reaction time",
+          unit: "seconds",
+          min: 0,
+          max: 1.4,
+          decimals: 2,
+          values: [
+            {
+              id: "text",
+              label: "Text-based tasks",
+              detail: "Mean brake reaction time",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e1", "e30"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 1.16,
+            },
+            {
+              id: "image",
+              label: "Image-based tasks",
+              detail: "Mean brake reaction time",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e1", "e30"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 0.92,
+            },
+            {
+              id: "baseline",
+              label: "Driving baseline",
+              detail: "Mean brake reaction time",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e1", "e30"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: 0.88,
+            },
+          ],
+          difference: null,
+          prediction: {
+            label: "Before inspecting the values, what pattern do you expect?",
+            options: ["Similar values", "Different values", "Not sure"],
+          },
+        },
       },
       {
         id: "c4",

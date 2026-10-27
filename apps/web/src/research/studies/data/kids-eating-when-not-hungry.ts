@@ -140,7 +140,63 @@ export const body: StudyBody = {
           "Children completed self‑regulation tasks at Session 1 and returned roughly one year later for Session 2 to complete the EAH taste test.",
           "Session 2 occurred on average 364 days after Session 1 (SD = 56.29 days).",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "The two laboratory visits",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "The two laboratory visits",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2", "e3"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label: "Longitudinal follow‑up after ~1 year",
+              targetIds: ["s1", "s2"],
+            },
+            {
+              optionId: "o2",
+              label: "Cross‑sectional comparison of groups",
+              targetIds: ["s1", "s2"],
+            },
+            {
+              optionId: "o3",
+              label: "Experimental manipulation of self‑regulation",
+              targetIds: ["s1", "s2"],
+            },
+          ],
+          resolution: null,
+          kind: "timeline",
+          events: [
+            {
+              id: "s1",
+              label: "Earlier self-regulation measures",
+              detail: "Measured before the later eating session.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              when: "Session 1",
+            },
+            {
+              id: "s2",
+              label: "Eating session",
+              detail: "Lunch-time laboratory visit with the parent and child.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              when: "Roughly one year later",
+            },
+          ],
+        },
         options: [
           {
             id: "o1",
@@ -164,7 +220,7 @@ export const body: StudyBody = {
         },
         explanation:
           "The study followed the same children from Session 1 to Session 2, making it a longitudinal design.",
-        refs: ["e2"],
+        refs: ["e2", "e3"],
         writtenReasoning: true,
         reveal: "design",
       },
@@ -297,7 +353,68 @@ export const body: StudyBody = {
           "Delay of gratification at Session 1 was negatively associated with total calories consumed during the EAH paradigm one year later (b = −12.46, 95% CI [−23.95, −0.97]).",
           "Measures of inhibitory and attentional control did not significantly predict EAH.",
         ],
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Delay score and later eating",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Delay score and later eating",
+          provenance: {
+            kind: "reported",
+            refs: ["e3"],
+            note: "Values as printed in the cited excerpt; not individual participant records.",
+          },
+          responses: [
+            {
+              optionId: "o13",
+              label:
+                "Children who are better at delaying gratification may also have more structured home food environments.",
+              targetIds: ["estimate"],
+            },
+            {
+              optionId: "o14",
+              label:
+                "Delay of gratification directly causes reduced caloric intake in the EAH test.",
+              targetIds: ["estimate"],
+            },
+            {
+              optionId: "o15",
+              label:
+                "The effect is due to random measurement error in the EAH test.",
+              targetIds: ["estimate"],
+            },
+          ],
+          resolution: null,
+          kind: "estimate",
+          measure: "EAH calories per unit of delay score",
+          min: -30,
+          max: 5,
+          reference: {
+            value: 0,
+            label: "No difference",
+          },
+          band: null,
+          estimates: [
+            {
+              id: "estimate",
+              label: "EAH calories per unit of delay score",
+              detail: "Reported estimate and confidence interval.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e3"],
+                note: "Values as printed in the cited excerpt; not individual participant records.",
+              },
+              value: -12.46,
+              lower: -23.95,
+              upper: -0.97,
+            },
+          ],
+          prediction: {
+            label: "Before reading the interval, where might the estimate lie?",
+            options: ["Below zero", "Near zero", "Above zero"],
+          },
+        },
         options: [
           {
             id: "o13",

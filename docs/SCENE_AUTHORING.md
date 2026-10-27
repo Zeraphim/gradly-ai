@@ -62,7 +62,7 @@ between unit levels.
 
 ## Authored sample results interaction
 
-`TextingQuest.tsx` retains the sample's reported mean/SD chart and adds an ungraded
+The historical bespoke `TextingQuest.tsx` (now removed) retained the sample's reported mean/SD chart and adds an ungraded
 prediction before explicit reveal. Its session-bound `exploration` stores only the
 prediction and reveal state, independently of assessed answer records. The existing
 feedback still gates the worked difference. Compare means is a local geometric

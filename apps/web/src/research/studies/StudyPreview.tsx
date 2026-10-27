@@ -74,7 +74,7 @@ export function StudyPreview({
             progress={all[study.slug] ?? freshProgress()}
           />
         ) : slug ? (
-          <main className="library">
+          <main id="main" className="library" tabIndex={-1}>
             <div className="library-empty">
               <h1 tabIndex={-1}>This study isn’t available</h1>
               <p>The link may be out of date.</p>

@@ -372,9 +372,9 @@
         99.17% { transform: scaleY(1.000); }
         100% { transform: scaleY(1.000); }
       }
-      #gradly-body { animation: gradly-float 4.8s linear infinite; transform-origin: 169.5px 320px; }
-      #gradly-tassel { animation: gradly-tassel 4.8s linear infinite; transform-origin: 30px 104px; }
-      .gradly-eye { animation: gradly-blink 4.8s linear infinite; }
+      #gradly-body { animation: gradly-float 4.8s linear 1; transform-origin: 169.5px 320px; }
+      #gradly-tassel { animation: gradly-tassel 4.8s linear 1; transform-origin: 30px 104px; }
+      .gradly-eye { animation: gradly-blink 4.8s linear 1; }
       @media (prefers-reduced-motion: reduce) {
         #gradly-body, #gradly-tassel, .gradly-eye { animation: none; }
       }
