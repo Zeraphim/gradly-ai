@@ -1617,8 +1617,9 @@
 }
 .research-lab .studies .journey-intro-body h1 {
   margin: 0;
-  font-size: clamp(26px, 4.4vw, 38px);
+  font-size: clamp(26px, 3.2vw, 36px);
   line-height: 1.15;
+  text-wrap: balance;
   letter-spacing: -0.03em;
 }
 .research-lab .studies .journey-intro-body h1:focus {
@@ -1692,6 +1693,26 @@
   }
   .research-lab .studies .journey-intro-body {
     padding: 34px 34px 36px;
+  }
+}
+/* Laptop-height windows keep the start button on the first screen. */
+@media (min-width: 860px) and (max-height: 860px) {
+  .research-lab .studies .journey-intro-body {
+    gap: 10px;
+    padding: 24px 30px 26px;
+  }
+  .research-lab .studies .journey-intro-body h1 {
+    font-size: clamp(26px, 2.6vw, 32px);
+  }
+  .research-lab .studies .journey-intro-speech .mascot,
+  .research-lab .studies .journey-intro-speech svg {
+    width: 56px;
+    height: 56px;
+  }
+}
+@media (min-width: 1600px) {
+  .research-lab .studies .journey-intro {
+    max-width: 1120px;
   }
 }
 
@@ -2305,7 +2326,35 @@
     display: none;
   }
   .research-lab .studies .study-matrix.many .study-matrix-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .research-lab .studies .study-matrix.many .study-matrix-cell {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    place-items: center start;
+    gap: 10px;
+    min-height: 0;
+    padding: 8px 10px;
+    text-align: left;
+    hyphens: manual;
+  }
+}
+
+/* ---------- Large screens ---------- */
+/* Full-screen and large windows use the extra room instead of a narrow strip. */
+@media (min-width: 1600px) {
+  .research-lab .studies .journey-main,
+  .research-lab .studies .journey-dock-inner {
+    max-width: 980px;
+  }
+  .research-lab .studies .journey-chrome {
+    max-width: 1060px;
+  }
+  .research-lab .studies .journey-title {
+    font-size: 30px;
+  }
+  .research-lab .studies .journey-evidence li {
+    font-size: 15.5px;
   }
 }
 
