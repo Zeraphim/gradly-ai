@@ -55,7 +55,8 @@ const lessonTerms: Term[] = [
   },
   {
     term: "comprehension quiz",
-    definition: "The short test on the lecture's content that every student took.",
+    definition:
+      "The short test on the lecture's content that every student took.",
     refs: [],
     source: "model",
   },
@@ -69,8 +70,12 @@ describe("term logic", () => {
       origin: "paper",
       sources: evidence,
     });
-    expect(entries.filter((e) => e.key === "random assignment")).toHaveLength(1);
-    expect(entries.some((e) => e.origin === "glossary" && e.term === "p-value")).toBe(true);
+    expect(entries.filter((e) => e.key === "random assignment")).toHaveLength(
+      1,
+    );
+    expect(
+      entries.some((e) => e.origin === "glossary" && e.term === "p-value"),
+    ).toBe(true);
     // Too general to underline in every question.
     expect(entries.some((e) => e.term === "Evidence")).toBe(false);
     expect(termEntries(lessonTerms, evidence, false)).toHaveLength(2);
@@ -142,7 +147,11 @@ function Harness() {
   const [round, setRound] = useState(0);
   const entries = termEntries(lessonTerms, evidence, false);
   const content = [
-    h("p", { key: "q" }, h(TermText, { text: "Why use random assignment here?" })),
+    h(
+      "p",
+      { key: "q" },
+      h(TermText, { text: "Why use random assignment here?" }),
+    ),
     h(
       "label",
       { key: "a" },
@@ -181,7 +190,9 @@ describe("term popover", () => {
   it("opens a paper definition on click and shows its source chip", () => {
     render(h(Harness));
     fireEvent.click(screen.getByRole("button", { name: "random assignment" }));
-    const popover = screen.getByRole("group", { name: "random assignment: definition" });
+    const popover = screen.getByRole("group", {
+      name: "random assignment: definition",
+    });
     expect(popover.textContent).toContain("chance alone decided");
     const chip = screen.getByRole("button", { name: "From the paper, p. 3" });
     fireEvent.click(chip);
@@ -193,13 +204,18 @@ describe("term popover", () => {
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
   });
 
-  it("does not select an answer when its term is tapped", () => {
+  it("selects the answer when its term is pressed, and a tap also shows the definition", () => {
     render(h(Harness));
     const mark = document.querySelector<HTMLElement>("label .term-mark")!;
+    fireEvent.pointerDown(mark, { pointerType: "mouse" });
     fireEvent.click(mark);
-    expect(screen.getByText("none")).toBeTruthy();
+    expect(screen.getByText("a")).toBeTruthy();
+    expect(screen.queryByRole("group", { name: /definition/ })).toBeNull();
+    fireEvent.pointerDown(mark, { pointerType: "touch" });
+    fireEvent.click(mark);
     expect(
-      screen.getByRole("group", { name: "comprehension quiz: definition" }).textContent,
+      screen.getByRole("group", { name: "comprehension quiz: definition" })
+        .textContent,
     ).toContain("In this study's context");
   });
 

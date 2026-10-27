@@ -498,7 +498,14 @@ function ChallengeScreen({
                 : `${position + 1} of ${total}`}{" "}
               · {challenge.stage}
             </p>
-            <h1 ref={heading} tabIndex={-1} className="journey-title">
+            {/* The label keeps the heading's name to the prompt itself: term
+                buttons would otherwise add spaces around their text. */}
+            <h1
+              ref={heading}
+              tabIndex={-1}
+              className="journey-title"
+              aria-label={challenge.prompt}
+            >
               <TermText text={challenge.prompt} />
             </h1>
             {challenge.evidence.length ? (

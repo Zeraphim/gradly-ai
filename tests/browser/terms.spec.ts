@@ -177,7 +177,7 @@ test.describe("term definitions on a phone", () => {
     isMobile: true,
   });
 
-  test("tap toggles a definition without selecting the answer", async ({
+  test("tap toggles a definition, and a tapped answer term still selects the answer", async ({
     page,
   }) => {
     await begin(page);
@@ -192,9 +192,10 @@ test.describe("term definitions on a phone", () => {
     await expect(popover(page)).toHaveCount(0);
     const optionMark = page.locator("label .term-mark").first();
     if (await optionMark.count()) {
+      // A tap on an answer's term selects that answer and shows the term.
       await optionMark.tap();
       await expect(popover(page)).toBeVisible();
-      await expect(page.locator(".study-choice.selected")).toHaveCount(0);
+      await expect(page.locator(".study-choice.selected")).toHaveCount(1);
       // A tap elsewhere closes it.
       await page.locator(".journey-stage").tap();
       await expect(popover(page)).toHaveCount(0);

@@ -520,7 +520,7 @@ studies under `/studies` keep their browser-only behaviour.
 
 Research terms in a challenge's prompt, answer options, hint, explanation and feedback carry a dotted underline. Hovering with a mouse, tapping, or reaching a term with the keyboard opens one popover that says what the term means in this study (#39). Lesson definitions come from the pipeline's Terms Guide stage for uploads and from saved files for prepared studies. Terms the lesson does not define fall back to the general glossary, and a lesson definition always wins.
 
-- **Marks.** The underline draws in once the question settles. On hover it thickens and takes the sky tint, and an open term keeps that tint. Terms already viewed in the study keep a quieter slate underline. Inside an answer's label a mark is not a button, because the label is the answer control. Pressing the mark opens the definition without selecting the answer, and a "Terms in the answers" chip row gives keyboard access to the same definitions.
+- **Marks.** The underline draws in once the question settles. On hover it thickens and takes the sky tint, and an open term keeps that tint. Terms already viewed in the study keep a quieter slate underline. Inside an answer's label a mark is not a button, because the label is the answer control. Pressing the mark selects the answer as usual, so a term never blocks an answer. A touch press also shows the definition, which a mouse already shows on hover. A "Terms in the answers" chip row gives keyboard access to the same definitions.
 - **Popover.**
   - It opens after a 120 ms hover delay, or at once on focus or tap.
   - It enters with a short spring of fade and scale from its arrow.

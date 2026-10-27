@@ -229,9 +229,9 @@ export const useTerms = () => useContext(TermsContext);
 
 /**
  * Text with its terms marked. Marks are buttons, except inside an answer's
- * label, where a button would be part of the answer control: there they are
- * plain marks that open on hover or tap, and the answer's chips row gives
- * keyboard access to the same definitions.
+ * label, where a button would be part of the answer control: there a press
+ * selects the answer as usual, hover or a touch press also shows the
+ * definition, and the answer's chips row gives keyboard access to it.
  */
 export function TermText({
   text,
@@ -273,6 +273,7 @@ function TermMark({
   children: ReactNode;
 }) {
   const terms = useTerms()!;
+  const touch = useRef(false);
   const isOpen = terms.open?.key === entryKey;
   const className = [
     chip ? "term-chip" : "term-mark",
@@ -293,12 +294,13 @@ function TermMark({
         className={className}
         data-term={entryKey}
         {...pointer}
-        // Keep the answer's press feedback and selection for the answer itself.
-        onPointerDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => {
+          touch.current = e.pointerType !== "mouse";
+        }}
+        // A press still selects the answer. A touch press also shows the
+        // definition, which a mouse already shows on hover.
         onClick={(e: MouseEvent<HTMLSpanElement>) => {
-          e.preventDefault();
-          e.stopPropagation();
-          terms.toggle(entryKey, e.currentTarget);
+          if (touch.current) terms.toggle(entryKey, e.currentTarget);
         }}
       >
         {children}
