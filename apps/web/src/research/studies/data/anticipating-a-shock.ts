@@ -247,7 +247,96 @@ export const body: StudyBody = {
         refs: ["e13"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Two questions after a non-significant result",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Two questions after a non-significant result",
+          provenance: {
+            kind: "authored",
+            refs: ["e13"],
+            note: "Authored guide to two interpretations of a non-significant test.",
+          },
+          responses: [
+            {
+              optionId: "c3-opt-a",
+              label: "To test whether the anxiety induction was successful.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+            {
+              optionId: "c3-opt-b",
+              label:
+                "To determine whether null results reflected true absence of an effect or merely low sensitivity due to the small sample.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+            {
+              optionId: "c3-opt-c",
+              label: "To replace missing data with imputed values.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+            {
+              optionId: "c3-opt-d",
+              label:
+                "To compare left‑leaning and right‑leaning subgroups directly.",
+              targetIds: ["observed", "small", "uncertain"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "observed",
+              label: "No clear difference",
+              detail: "The classical test does not reject its null.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e13"],
+                note: "Authored guide to two interpretations of a non-significant test.",
+              },
+              column: 0,
+            },
+            {
+              id: "small",
+              label: "Effect close to zero?",
+              detail: "One possibility to evaluate.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e13"],
+                note: "Authored guide to two interpretations of a non-significant test.",
+              },
+              column: 1,
+            },
+            {
+              id: "uncertain",
+              label: "Too uncertain to tell?",
+              detail: "Another possibility to evaluate.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: ["e13"],
+                note: "Authored guide to two interpretations of a non-significant test.",
+              },
+              column: 1,
+            },
+          ],
+          edges: [
+            {
+              from: "observed",
+              to: "small",
+              label: "possible interpretation",
+              at: "setup",
+            },
+            {
+              from: "observed",
+              to: "uncertain",
+              label: "possible interpretation",
+              at: "setup",
+            },
+          ],
+        },
       },
       {
         id: "c4",

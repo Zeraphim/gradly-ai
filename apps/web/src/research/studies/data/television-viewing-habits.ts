@@ -238,7 +238,94 @@ export const body: StudyBody = {
         refs: ["e1", "e2", "e24", "e25", "e27", "e28"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Three parts of the research programme",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Three parts of the research programme",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1", "e24"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label: "Close replication only",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+            {
+              optionId: "o2",
+              label: "Close replication + conceptual extension",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+            {
+              optionId: "o3",
+              label: "Close replication + conceptual extension + meta‑analysis",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+            {
+              optionId: "o4",
+              label: "Meta‑analysis only",
+              targetIds: ["replicate", "extend", "synthesise"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "replicate",
+              label: "Close replication",
+              detail: "Re-test the earlier television-viewing relationship.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e24"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "extend",
+              label: "Conceptual extension",
+              detail: "Add streaming and other potential explanations.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e24"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 1,
+            },
+            {
+              id: "synthesise",
+              label: "Meta-analysis",
+              detail: "Combine this estimate with earlier studies.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e1", "e24"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 2,
+            },
+          ],
+          edges: [
+            {
+              from: "replicate",
+              to: "extend",
+              label: "broaden the inquiry",
+              at: "setup",
+            },
+            {
+              from: "replicate",
+              to: "synthesise",
+              label: "contributes an estimate",
+              at: "setup",
+            },
+          ],
+        },
       },
       {
         id: "c2",

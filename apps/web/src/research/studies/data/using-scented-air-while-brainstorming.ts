@@ -194,10 +194,82 @@ export const body: StudyBody = {
         },
         explanation:
           "The only systematic difference was the verbal suggestion about the odorant’s creativity‑enhancing effect.",
-        refs: [],
+        refs: ["e6", "e7"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "What differs between the two groups?",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "What differs between the two groups?",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e6", "e7"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Receiving the verbal suggestion that the odorant boosts creativity (placebo) vs. receiving no suggestion (control)",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o2",
+              label: "Exposure to different concentrations of the odorant",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o3",
+              label: "Order in which the creativity tests were administered",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o4",
+              label: "Amount of monetary compensation",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Suggestion group",
+            },
+            {
+              id: "condition1",
+              label: "Comparison group",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Odour exposure",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6", "e7"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Odour present", "Odour present"],
+            },
+            {
+              id: "row1",
+              label: "Message",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6", "e7"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Creativity suggestion", "No creativity suggestion"],
+            },
+          ],
+        },
       },
       {
         id: "c2",

@@ -173,7 +173,79 @@ export const body: StudyBody = {
         refs: ["e6", "e10"],
         writtenReasoning: false,
         reveal: "design",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Experimenters receive different expectations",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Experimenters receive different expectations",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e6"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "Experimenter expectation about the direction of the priming effect (slow vs. fast).",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o2",
+              label:
+                "Type of prime presented to participants (old‑age vs. neutral).",
+              targetIds: ["row0", "row1"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "Measurement device used for walking speed (stopwatch vs. infrared).",
+              targetIds: ["row0", "row1"],
+            },
+          ],
+          resolution: null,
+          kind: "matrix",
+          conditions: [
+            {
+              id: "condition0",
+              label: "Expect slower walking",
+            },
+            {
+              id: "condition1",
+              label: "Expect faster walking",
+            },
+          ],
+          rows: [
+            {
+              id: "row0",
+              label: "Instruction",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: [
+                "Primed participants may slow down",
+                "Primed participants may speed up",
+              ],
+            },
+            {
+              id: "row1",
+              label: "Outcome",
+              detail: "Reported features of each condition.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e6"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              cells: ["Walking performance", "Walking performance"],
+            },
+          ],
+        },
       },
       {
         id: "c3",
@@ -285,10 +357,94 @@ export const body: StudyBody = {
         },
         explanation:
           "The null result raises doubts about the reliability of the original effect when potential confounds are reduced.",
-        refs: ["e2", "e3"],
+        refs: ["e2", "e3", "e4"],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: null,
+        scene: {
+          version: 1,
+          title: "Two changes in the replication",
+          instruction:
+            "Inspect the visual, then choose the interpretation supported by the study.",
+          description: "Two changes in the replication",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2", "e4"],
+            note: "Study information paraphrased from the cited source.",
+          },
+          responses: [
+            {
+              optionId: "o1",
+              label:
+                "The original effect may not be robust under stricter methodological controls.",
+              targetIds: ["earlier", "replication", "inference"],
+            },
+            {
+              optionId: "o2",
+              label: "Unconscious priming never influences behavior.",
+              targetIds: ["earlier", "replication", "inference"],
+            },
+            {
+              optionId: "o3",
+              label:
+                "Participants were fully aware of the prime, eliminating unconscious influence.",
+              targetIds: ["earlier", "replication", "inference"],
+            },
+          ],
+          resolution: null,
+          kind: "flow",
+          nodes: [
+            {
+              id: "earlier",
+              label: "Earlier experiments",
+              detail: "Smaller combined sample and manual timing.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e4"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "replication",
+              label: "Replication safeguards",
+              detail: "Larger sample and automated timing.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e4"],
+                note: "Study information paraphrased from the cited source.",
+              },
+              column: 0,
+            },
+            {
+              id: "inference",
+              label: "Interpreting a difference",
+              detail: "Both sampling variation and methods need consideration.",
+              at: "resolution",
+              provenance: {
+                kind: "authored",
+                refs: ["e2", "e4"],
+                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+              },
+              column: 0,
+            },
+          ],
+          edges: [
+            {
+              from: "earlier",
+              to: "replication",
+              label: "compare methods",
+              at: "setup",
+            },
+            {
+              from: "replication",
+              to: "inference",
+              label: "weigh the evidence",
+              at: "resolution",
+            },
+          ],
+        },
       },
       {
         id: "c6",

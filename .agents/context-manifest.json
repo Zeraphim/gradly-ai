@@ -579,6 +579,41 @@
       }
     },
     {
+      "id": "prepared-visual-coverage",
+      "kind": "validation",
+      "title": "Prepared-study scene coverage and production probe",
+      "path": "docs/research/PREPARED_VISUAL_COVERAGE.md",
+      "status": "Local verification and bounded production observation",
+      "authorityDomains": [],
+      "owners": [],
+      "appliesTo": [
+        "apps/web/src/research/studies/data/**",
+        "tests/fixtures/prepared-visuals.ts",
+        "tests/research/prepared-visuals.test.ts",
+        "tests/browser/prepared-visuals.spec.ts"
+      ],
+      "relationships": [
+        {
+          "type": "related",
+          "target": "prepared-studies-ui"
+        },
+        {
+          "type": "related",
+          "target": "scene-authoring"
+        }
+      ],
+      "implementationRefs": [
+        "tests/fixtures/prepared-visuals.ts",
+        "tests/research/prepared-visuals.test.ts",
+        "tests/browser/prepared-visuals.spec.ts"
+      ],
+      "review": {
+        "commit": null,
+        "at": null,
+        "by": null
+      }
+    },
+    {
       "id": "generated-studies",
       "kind": "other",
       "title": "Nemotron-generated prepared studies record",
