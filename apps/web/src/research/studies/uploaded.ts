@@ -67,6 +67,8 @@ export function toStudyChallenge(c: PublicChallenge): StudyChallenge {
     refs: c.references.map((r) => r.id),
     writtenReasoning: c.writtenReasoning,
     reveal: c.reveal,
+    // The server already withheld terms found only in an unshown explanation.
+    terms: c.terms,
   };
 }
 
@@ -82,6 +84,7 @@ function reviewChallenge(
     options: r.options,
     accepted: r.accepted,
     explanation: r.explanation,
+    terms: r.terms,
   };
 }
 

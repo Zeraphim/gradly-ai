@@ -7,6 +7,7 @@ import {
   newJob,
   publicJob,
   runStage,
+  STAGES,
 } from "../../apps/api/src/research/pipeline.js";
 import { featured } from "../../apps/api/src/research/featured.js";
 import { ProviderError, type ModelProvider } from "../../apps/api/src/research/provider.js";
@@ -91,10 +92,11 @@ it("completes actual stage orchestration against an explicitly mocked provider",
   const p = provider([
     { paperSummary: "Study evidence located", refs, missing: [] },
     draft,
+    { challenges: [] },
     { approved: true, issues: [], summary: "Methods fit evidence" },
     { approved: true, issues: [], summary: "Guidance supports revision" },
   ]);
-  for (let n = 0; n < 5; n++) j = await runStage(j, p);
+  for (let n = 0; n < 6; n++) j = await runStage(j, p);
   expect(j.status).toBe("ready");
   expect(j.audits.every((a) => a.status === "Completed")).toBe(true);
   expect(j.lesson?.challenges).toHaveLength(3);
@@ -338,14 +340,15 @@ it("records reviewer rejections as advisory notes and still makes the lesson rea
   const p = provider([
     { paperSummary: "Evidence", refs, missing: [] },
     draft,
+    { challenges: [] },
     { approved: false, issues: ["Unsupported conclusion"], summary: "Needs review" },
     { approved: false, issues: [], summary: "Hints give away the answer." },
   ]);
-  for (let n = 0; n < 5; n++) j = await runStage(j, p);
+  for (let n = 0; n < 6; n++) j = await runStage(j, p);
   expect(j.status).toBe("ready");
   expect(j.audits.every((a) => a.status === "Completed")).toBe(true);
-  expect(j.audits[2]!.summary).toBe("Advisory notes: Unsupported conclusion");
-  expect(j.audits[3]!.summary).toBe("Advisory notes: Hints give away the answer.");
+  expect(j.audits[STAGES.methods]!.summary).toBe("Advisory notes: Unsupported conclusion");
+  expect(j.audits[STAGES.coach]!.summary).toBe("Advisory notes: Hints give away the answer.");
   expect(j.review?.approved).toBe(false);
 });
 
@@ -478,6 +481,7 @@ it("supports a nonnumeric qualitative investigation through verification and the
       missing: [],
     },
     qualitativeLesson,
+    { challenges: [] },
     {
       approved: true,
       issues: [],
@@ -497,7 +501,7 @@ it("supports a nonnumeric qualitative investigation through verification and the
     },
   };
   let job = newJob("qualitative-job", "interview-study.pdf", pages);
-  for (let stage = 0; stage < 5; stage++) job = await runStage(job, mocked);
+  for (let stage = 0; stage < 6; stage++) job = await runStage(job, mocked);
   expect(job.status).toBe("ready");
   expect(job.lesson?.challenges.at(-1)?.reveal).toBe("interpretation");
   expect(job.lesson?.paper.url).toBeNull();
@@ -508,7 +512,11 @@ it("supports a nonnumeric qualitative investigation through verification and the
   expect(requests[1]?.task).toContain(
     "do not turn qualitative themes into prevalence estimates",
   );
-  expect(requests[2]?.role).toBe("Research Methods Reviewer");
+  expect(requests[STAGES.terms]?.role).toBe("Terms Guide");
+  expect(requests[STAGES.methods]?.role).toBe("Research Methods Reviewer");
+  expect(requests[STAGES.methods]?.task).toContain(
+    "Review every challenge's term definitions",
+  );
 
   const lesson = job.lesson!;
   let session = transition(
@@ -604,10 +612,11 @@ it("drops an unsupported paper link at verification instead of blocking the less
       ...draft,
       paper: { ...draft.paper, url: "https://doi.org/10.9999/not-in-this-paper" },
     },
+    { challenges: [] },
     { approved: true, issues: [], summary: "Methods fit evidence" },
     { approved: true, issues: [], summary: "Guidance supports revision" },
   ]);
-  for (let n = 0; n < 5; n++) j = await runStage(j, p);
+  for (let n = 0; n < 6; n++) j = await runStage(j, p);
   expect(j.status).toBe("ready");
   expect(j.lesson?.paper.url).toBeNull();
 });
@@ -636,6 +645,7 @@ it("ignores unreadable reviewer text and continues when a review call fails", as
     const outputs: unknown[] = [
       { paperSummary: "Study evidence located", refs, missing: [] },
       draft,
+      { challenges: [] },
       { approved: true, issues: [], summary: "Methods fit evidence" },
     ];
     const p: ModelProvider = {
@@ -643,20 +653,20 @@ it("ignores unreadable reviewer text and continues when a review call fails", as
         return asDraft(outputs.length ? outputs.shift() : coach()) as T;
       },
     };
-    for (let n = 0; n < 5; n++) j = await runStage(j, p);
+    for (let n = 0; n < 6; n++) j = await runStage(j, p);
     return j;
   };
   const garbled = await toCoach(() => ({ approved: false, issues: [":{"], summary: " " }));
   expect(garbled.status).toBe("ready");
-  expect(garbled.audits[3]?.summary).toBe("Advisory notes: No reason given.");
+  expect(garbled.audits[STAGES.coach]?.summary).toBe("Advisory notes: No reason given.");
   const approved = await toCoach(() => ({ approved: true, issues: [":{"], summary: "Fine" }));
-  expect(approved.audits[3]?.summary).toBe("Fine");
+  expect(approved.audits[STAGES.coach]?.summary).toBe("Fine");
   const failed = await toCoach(() => {
     throw new ProviderError("timeout", "The AI request timed out. Retry this stage.");
   });
   expect(failed.status).toBe("ready");
-  expect(failed.audits[3]?.status).toBe("Completed");
-  expect(failed.audits[3]?.summary).toBe(
+  expect(failed.audits[STAGES.coach]?.status).toBe("Completed");
+  expect(failed.audits[STAGES.coach]?.summary).toBe(
     "Review unavailable, so the lesson continued without it. The AI request timed out.",
   );
 });
@@ -741,10 +751,11 @@ async function evidenceFor(pages: { page: number; text: string }[]) {
 }
 async function finish(j: Awaited<ReturnType<typeof runStage>>) {
   const p = provider([
+    { challenges: [] },
     { approved: true, issues: [], summary: "Methods fit evidence" },
     { approved: true, issues: [], summary: "Guidance supports revision" },
   ]);
-  for (let n = 0; n < 3; n++) j = await runStage(j, p);
+  for (let n = 0; n < 4; n++) j = await runStage(j, p);
   return j;
 }
 
@@ -1043,13 +1054,13 @@ it("queues a failed stage again up to three times, but not a timeout or bad key"
 
 it("redrafts once from the Lesson Architect when the final check rejects a lesson", () => {
   const before = newJob("redraft", "paper.pdf", [{ page: 1, text: page }]);
-  before.stage = 4;
+  before.stage = STAGES.verify;
   before.autoRetries = 2;
   before.lesson = structuredClone(featured);
   const after = structuredClone(before);
   after.status = "review";
   after.error = "cq1: invalid answer guide.";
-  after.audits[4] = { ...after.audits[4]!, status: "Needs Review", summary: after.error };
+  after.audits[STAGES.verify] = { ...after.audits[STAGES.verify]!, status: "Needs Review", summary: after.error };
   const j = autoRecover(before, after);
   expect(j).toMatchObject({ stage: 1, status: "pending", autoRedrafts: 1, lesson: undefined });
   expect(j.error).toBeUndefined();
@@ -1058,13 +1069,13 @@ it("redrafts once from the Lesson Architect when the final check rejects a lesso
     status: "Retrying",
     summary: "Redrafting automatically after the final check found: cq1: invalid answer guide.",
   });
-  expect(j.audits[4]!.status).toBe("Pending");
-  expect(j.audits[4]!.errorCode).toBeUndefined();
+  expect(j.audits[STAGES.verify]!.status).toBe("Pending");
+  expect(j.audits[STAGES.verify]!.errorCode).toBeUndefined();
   const again = structuredClone(after);
   again.autoRedrafts = 1;
   const stopped = autoRecover(before, again);
   expect(stopped.status).toBe("review");
-  expect(publicJob(stopped).audits[4]?.errorCode).toBe("not_applicable");
+  expect(publicJob(stopped).audits[STAGES.verify]?.errorCode).toBe("not_applicable");
 });
 
 it("reports missing stage-0 evidence as not applicable without retrying", async () => {

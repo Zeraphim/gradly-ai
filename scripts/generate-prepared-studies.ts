@@ -34,7 +34,12 @@ import {
   type PageText,
 } from "../apps/api/src/research/contracts.js";
 import { extractPdf } from "../apps/api/src/research/pdf.js";
-import { newJob, runStage } from "../apps/api/src/research/pipeline.js";
+import {
+  newJob,
+  READY_STAGE,
+  runStage,
+  STAGES,
+} from "../apps/api/src/research/pipeline.js";
 import {
   NebiusProvider,
   type ModelProvider,
@@ -726,7 +731,7 @@ async function attempt(
     job = {
       ...job,
       lesson: { ...repaired, id, source: "generated" },
-      stage: 2,
+      stage: STAGES.terms,
       status: "pending",
       error: undefined,
     };
@@ -745,8 +750,8 @@ async function attempt(
   fixes.push("paper title, authors, journal and DOI set from papers/README.md");
   job.lesson = repairReferences(job.lesson, refs, lessonPages, fixes);
 
-  // Stages 2–4: methods review, learning coach, deterministic verification.
-  while (job.stage < 5 && job.status === "pending")
+  // Terms, methods review, learning coach, deterministic verification.
+  while (job.stage < READY_STAGE && job.status === "pending")
     job = await runStage(job, provider);
   if (job.status !== "ready") {
     failures.push(`${job.audits[job.stage]?.role ?? "pipeline"}: ${job.error}`);
