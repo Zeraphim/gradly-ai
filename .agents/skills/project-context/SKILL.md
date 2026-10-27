@@ -17,8 +17,13 @@ anywhere; it does not depend on a parent context repository or personal skill pa
 - Node 22.18+ within version 22, npm lockfile/workspaces, TypeScript with strict
   NodeNext server resolution and `.js` import specifiers in server TypeScript.
 - `apps/web`: React 19, Vite 8, self-hosted Plus Jakarta Sans, Lucide icons, supplied
-  blue Gradly artwork. `src/App.tsx` selects hash routes; `LegacyApp.tsx` retains
-  upload-first entry and the curated journey; `src/research/` owns research views.
+  blue Gradly artwork. `src/App.tsx` owns upload-first entry, shared configuration,
+  motion preference and retired-route recovery; `src/research/` owns research views.
+  `/research/learn` is the prepared-study library; the old `/research/studies`
+  index, classic, lab and meet entry points recover there. Individual
+  `/research/studies/<slug>` links and uploaded `/research/play/<id>` remain.
+  `LegacyApp.tsx` is retained only for isolated compatibility tests, not mounted
+  by the public application. Never restore the old picker or home Resume quest.
 - `apps/api`: Express 5. `src/app.ts` composes the curated service and research
   router. `src/research/` owns document extraction, bounded English OCR, schemas,
   sequential generation/review stages, ownership, storage, and learning state.

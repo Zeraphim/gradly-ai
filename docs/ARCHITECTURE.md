@@ -15,7 +15,7 @@ See [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for a complete integration example.
 
 ## Current public experience
 
-`App.tsx` is a small hash router. Root and `#/research/lab` render the upload-first `LegacyApp` entry, which retains the real PDF/processing/learning service. Retired `#/research/lab/{caseId}` URLs also return to the upload home. Research workspace routes keep their original extraction, ownership, consent and saved-state boundaries.
+`App.tsx` owns the upload-first home and hash-route entry. It shares `useResearchConfig` with `ResearchApp` and synchronizes the saved motion preference without repeated attribute writes. It does not load the retired classic lesson or offer its saved Resume quest. The canonical study library is `#/research/learn`; the old studies index, classic, lab, home, featured and meet entries recover there using history replacement. Individual `#/research/studies/<slug>` and uploaded `#/research/play/<sessionId>` links remain supported. Research routes retain extraction, ownership, consent and saved-state boundaries.
 
 `npm run dev:preview` starts frontend and local API with preview/sample flags and local SQLite, while forcing an empty provider credential. Research points derive from each saved challenge’s successful attempts, once per challenge ID per adventure; session and history responses expose only that computed total. The home sums saved adventure points and existing curated-session points. No new reward ledger or database migration is required.
 
@@ -24,7 +24,7 @@ See [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for a complete integration example.
 | Module                                              | Responsibility                                                                           |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `apps/web/src/App.tsx`                              | Upload-first entry and hash compatibility routing (entry app eager, research views lazy) |
-| `apps/web/src/LegacyApp.tsx`, `components/`         | Preserved original hero, curated flow and API-backed research entry                      |
+| `apps/web/src/LegacyApp.tsx`, `components/`         | Retired curated implementation (isolated compatibility tests only), shared UI components                      |
 | `packages/contracts`, `packages/lesson-state`       | Original lesson API contracts and curated progress                                       |
 | `apps/api/src/feedback.ts`                          | Guarded curated reasoning assessment with authored teaching text                         |
 | `apps/web/src/research/`                            | Lazy-loaded research views, hash navigation and scoped design                            |
@@ -34,7 +34,7 @@ See [SCENE_AUTHORING.md](SCENE_AUTHORING.md) for a complete integration example.
 | `research/store.ts`, `auth.ts`, `router.ts`         | Persistence, guest ownership and Express request adaptation                              |
 | `research/routes/`                                  | Config, documents, jobs, learning, feedback and retention maintenance                    |
 
-The research workspace composes `PathPicker`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `LegacyApp` owns the shared public configuration read and passes its loading/error/retry state to `ResearchApp`; direct research entry defers the inactive classic lesson. A standalone `ResearchApp` uses its own `useResearchConfig` fallback, disabled when the parent supplies configuration. Navigation reuses the result without a second configuration request. Shared display types live in `research/types.ts`. Confirmation dialogs reuse the original native `Dialog` component.
+The research workspace composes `StudyPreview`/`StudyLibrary`, `UploadPage`, `ProcessingPage`, `HistoryPage` and `SupportPages`. `useDocumentUpload` owns browser-file validation, blob previews, upload cancellation and callback cleanup. `App` owns the shared public configuration read and passes loading/error/retry state to `ResearchApp`. A standalone `ResearchApp` retains a `useResearchConfig` fallback, disabled when configuration is provided. Shared display types live in `research/types.ts`; confirmation dialogs reuse `Dialog`. Browsing and study intros share `SiteHeader`. Active play and paper preparation retain their focused progress bars.
 
 `ReasoningPreview` handles `#/research/reasoning` outside that configuration dependency. `reasoning-preview.ts` is a pure authored-fixture adapter: only an exact method and normalized authored explanation receive a prepared review. Custom text stays unassessed. `reasoning-preview-state.ts` validates draft inputs; verdicts are recomputed rather than trusted from storage. The showcase has no provider, session mutation or scoring calls. It preserves before/after attempts in separate tab storage, with a memory fallback for denied or failed writes. See `REASONING_PREVIEW.md` for the proposed live-review contract; stable attempt/revision binding and full evidence prompting are future backend work.
 
@@ -117,8 +117,9 @@ screen renders generated briefings as paragraphs. The authored quest’s Back
 action caches unfinished screen state for the current visit and reuses resolved
 answer records; refresh still restores resolved progress from session storage.
 Its opening screen carries a data-driven provenance line under the heading.
-Home sample and upload-recovery actions link directly to `/meet/featured`, while
-`/learn` remains the separately accessible path chooser. No provider configuration
+Home sample and upload-recovery actions open the prepared-study library at
+`/learn`. Sample-mode preparation opens `/studies/texting-lecture` in the shared
+player, without the retired meet quest or path chooser. No provider configuration
 or OCR confidence threshold is changed by this navigation work.
 
 ## Authored multi-paper scene pilot

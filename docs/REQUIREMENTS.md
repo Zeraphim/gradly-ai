@@ -53,7 +53,7 @@ Do not imply this sample interaction automatically supports arbitrary research p
 
 For the authored quest's desktop question layout, the full answer choices must
 be visible above the pinned action bar without scrolling at the supported
-viewport sizes in `tests/browser/quest-motion.spec.ts`. An illustration or an
+viewport sizes covered by the shared study-player and `learn-flow.spec.ts` checks. An illustration or an
 always-expanded duplicate data table must not displace those controls. Keep long
 answer text readable and complete; preserve natural scrolling on narrow screens,
 enlarged text and deliberately expanded source material.
@@ -121,3 +121,20 @@ pilot follows the quest's rhythm: check, feedback, then the next paper, ending
 in a short summary.
 This pilot is evidence of authored rendering reuse, not automatic generation from
 arbitrary papers, proven learning benefit or production delivery.
+
+## Learn and intake consistency — issue #36
+
+Learn is the actual prepared-study library, not a picker before that library.
+Home's “Try a sample paper”, header navigation and upload recovery lead there.
+The old library index and retired classic/lab/meet entries recover using history
+replacement; individual prepared-study links remain valid. The upload home must
+not load the retired curated lesson or display its Resume quest from saved state.
+Browsing headers use the same logo, navigation, active-section behavior and tools.
+Preparation and active play can use the focused progress chrome.
+
+Uploaded orientation must keep Next/Begin visible on the tested desktop windows,
+including expanded route details and practice feedback. All prepared-study intros
+must keep Begin visible at 1366×768 and 1024×600 with background disclosures closed.
+Content stays readable, keyboard accessible and in normal flow: narrow screens,
+zoom, long predictions and deliberately expanded briefing/source content can scroll.
+Do not hide overflow or shrink the entire interface to claim that a layout fits.

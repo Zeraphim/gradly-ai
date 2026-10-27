@@ -23,7 +23,14 @@ export function ResearchLink({
   ...props
 }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
-    <a {...props} href={href?.startsWith("/") ? "#/research" + href : href}>
+    <a
+      {...props}
+      href={
+        href?.startsWith("/")
+          ? "#/research" + (href === "/studies" ? "/learn" : href)
+          : href
+      }
+    >
       {children}
     </a>
   );

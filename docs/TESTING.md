@@ -20,15 +20,14 @@ npm run build:vercel
 | `tests/research/stored-papers.test.ts`    | Stored `papers/` PDFs carry the DOI and title, and have an entry, matching `papers/README.md`                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `tests/browser/upload-home.spec.ts`       | PDF/DOI entry, retired-link recovery, responsive/axe checks, upload → review → sample lesson → persisted points                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `tests/browser/viewport-layout.spec.ts`   | Shared viewport shell across home, preparation, curated lessons, research and reasoning preview; narrow-screen controls and expanded/error content                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `tests/browser/research.spec.ts`          | Full research journey, uploads/OCR, consent, ownership, history, deletion, responsive views and classic compatibility                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `tests/browser/research.spec.ts`          | Full research journey, uploads/OCR, consent, ownership, history, deletion, responsive views and saved-session compatibility                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `tests/browser/final-polish.spec.ts`      | Draft recovery, failed requests, late navigation, dialogs, configuration reuse and accurate support copy                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `tests/browser/reasoning-preview.spec.ts` | API-free reasoning/revision flow, custom-text abstention, storage failure, keyboard, responsive and axe checks                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `tests/browser/quest-motion.spec.ts`      | Shared bootstrap configuration, classic deferral, quest heading focus, direct slider response, persistent design/reveal state, rapid reversal, reduced motion, touch, resumption and stable chart labels                                                                                                                                                                                                                                                                                                                                                          |
 | `tests/browser/intake-flow.spec.ts`       | Home PDF straight to preparation and the sample quest, pasted links labelled as not fetched, rejected and interrupted checks, home sample entry, Play letter keys, keyboard-only quest with retry/resume/completion and axe, and the phone check that every quest question shows its first answer above the action bar                                                                                                                                                                                                                                            |
 | `tests/browser/preparation.spec.ts`       | Preparation waits for saved state, stops on failure, retries and resumes without fake progress, reduced motion, axe at 375/768/1366, and history keeping a failed job with its reason                                                                                                                                                                                                                                                                                                                                                                             |
 | `tests/browser/activity-pilot.spec.ts`    | Three-paper `/activities` pilot: shared scene renderer, separate drafts and notes, no assessment requests, desktop fit of choices and Check, narrow screens, reduced motion, and a keyboard run to the summary                                                                                                                                                                                                                                                                                                                                                    |
 | `tests/research/activity-pilot.test.ts`   | Pilot data keeps three-decimal means and gates the derived difference, uses no fabricated outcome values, and bounds restored drafts to their own paper                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `tests/browser/studies.spec.ts`           | Learn-page library link by keyboard with axe; every study opens and checks its first challenge with axe at 375; prepared-study library and player: axe and overflow at 375/768/1366, refresh/back restore, double-click, reduced motion                                                                                                                                                                                                                                                                                                                           |
+| `tests/browser/studies.spec.ts`           | Direct Learn library and keyboard entry with axe; every study opens and checks its first challenge with axe at 375; prepared-study library and player: axe and overflow at 375/768/1366, refresh/back restore, double-click, reduced motion                                                                                                                                                                                                                                                                                                                           |
 | `tests/browser/upload-journey.spec.ts`    | Mocked live preparation: every waiting state at 375 and 1366 without overflow (screenshots to `.data/screenshots/upload-journey/`, or `UPLOAD_JOURNEY_SHOTS`), stage-driven progress and live celebration, resume after reload and from home, `errorCode` recovery copy with axe, reduced motion, and an uploaded lesson played in the study player against the real engine with retry, written reasoning, AI coach and reveal, the intro's hunch, route and practice steps, and a long one-block generated briefing that stays folded with Skip to study in view |
 | `tests/research/briefing.test.ts`         | Study-intro briefing split: every prepared briefing shown whole, a long one-block briefing folded behind a lead of whole sentences up to 60 words with no text lost                                                                                                                                                                                                                                                                                                                                                                                               |
 | `tests/research/upload-journey.test.ts`   | Session-to-study adapter (no keys before a check, scene-less challenges, phases), the upload player with server scoring, draft restore and a stale-tab conflict, outline counts, slow-step copy, warm-up and prediction storage, ready hand-off and resume storage                                                                                                                                                                                                                                                                                                |
@@ -69,22 +68,24 @@ provenance line, pointer versus keyboard selection outlines, and accessibility
 at phone and desktop widths. Its generated-paper case uses a mocked session with
 a distinct commuter-study briefing shown as paragraphs before questions; it
 verifies the UI handoff, not live generation or provider quality.
-`intake-flow.spec.ts` checks direct quest entry from home samples and
-rejected-upload recovery.
+`intake-flow.spec.ts` checks direct library entry from home samples, prepared
+sample handoff after upload, and rejected-upload recovery.
 
 Run one browser suite with `npx playwright test tests/browser/<name>.spec.ts`.
 Suites that cover the challenge player open it through
 `tests/browser/journey-helpers.ts`, which sends the same `start` request as the
 app, rather than through the library button.
 
-- The desktop layout sweep in `quest-motion.spec.ts` derives every choice step
-  from the authored `textingQuest` script, so new questions are checked
-  automatically. It runs under reduced motion at 1366×768, 1440×900, 1920×1080,
-  1280×720, 1024×768, 1280×640, 1000×640 and portrait 1024×1366, with Help
-  closed and open, and checks no page scrolling, no horizontal overflow,
-  complete label rectangles above the action bar, 44px minimum targets and
-  pointer coverage. It also covers
-  revealed result choices, Compare means and the optional result table.
+- `learn-flow.spec.ts` checks direct sample entry, alias recovery with history
+  replacement, unchanged individual links, header geometry/active state, no legacy
+  lesson requests, eleven uploaded-intro window sizes, expanded route details,
+  practice feedback, source disclosure, prediction restore and accessibility.
+  It sweeps all 53 prepared intros at 1366×768 and 1024×600, checking complete
+  Begin-button geometry and no horizontal overflow. These checks detect the
+  reported viewport regression; they do not prove every possible content/zoom fits.
+- The retired classic and bespoke meet-quest browser cases have been removed.
+  Active prepared-player restoration, reveal and motion stay covered by `studies`,
+  `prepared-rewrites`, `choice-focus`, scene suites and `upload-journey`.
 - The results cases check that a prediction creates no answer record, numerical
   marks stay hidden until an explicit reveal, the worked difference waits for
   feedback, and SD markers match mean ± SD.
@@ -187,3 +188,17 @@ Do not treat previous Chromium reports as verification of these new scene layout
 Browser layout, animation smoothness, mobile touch and assistive-technology review
 remain unverified unless separately performed and reported. No live model or
 production deployment is required or established by the authored fixtures.
+
+- `question-help.spec.ts` covers keyboard and phone term dialogs, focus return,
+  preserved answer selection, no help-triggered requests, options-only terms not
+  influencing definitions, first-miss hint gating, and Research terms under Help.
+- `research-terms.test.ts` checks complete-term matching, original text ranges,
+  repeated terms, untrusted text, and example coverage for the reference.
+- `library-filters.spec.ts` checks all design/topic options, combined filtering,
+  empty results and Reset, result counts, keyboard order, overflow and axe at
+  320/390/768/1366px. It retains screenshots of the quieter toolbar.
+
+- `upload-guide.spec.ts` checks actual changing animation frames, upload-home-only
+  mounting, a static header logo, live system preference and persisted user reduced
+  motion, plus unchanged guide dimensions. The source SVG remains the OpenCode
+  artwork; no regeneration or additional animation library is involved.

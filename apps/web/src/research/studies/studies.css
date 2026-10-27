@@ -185,65 +185,80 @@
 
 .research-lab .studies .library-filters {
   display: grid;
-  gap: 10px;
-  margin-bottom: 22px;
+  grid-template-columns: minmax(180px, 260px) minmax(180px, 300px) 1fr;
+  align-items: end;
+  gap: 20px;
+  margin: 28px 0 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--s-line);
 }
-.research-lab .studies .library-chips {
+.research-lab .studies .library-filter-field {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  color: var(--s-body);
+  font-size: 13px;
+  font-weight: 700;
+}
+.research-lab .studies .library-filter-field select {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 36px 10px 14px;
+  border: 1px solid var(--s-line-strong);
+  border-radius: 12px;
+  background-color: white;
+  color: var(--s-ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+}
+.research-lab .studies .library-filter-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-}
-.research-lab .studies .library-chip {
-  position: relative;
-  min-height: 44px;
-  padding: 0 16px;
-  border: 2px solid var(--s-line);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--s-ink);
-  font-weight: 800;
-  font-size: 14px;
-  isolation: isolate;
-}
-.research-lab .studies .library-chips.small .library-chip {
-  min-height: 36px;
-  font-size: 13px;
-  padding: 0 13px;
-}
-.research-lab .studies .library-chip.active {
-  border-color: var(--s-blue);
-  color: #fff;
-}
-.research-lab .studies .library-chip-bg {
-  position: absolute;
-  inset: -2px;
-  z-index: -1;
-  background: var(--s-blue);
-}
-.research-lab .studies .library-chip-label {
-  display: inline-flex;
+  justify-content: flex-end;
   align-items: center;
-  gap: 8px;
+  gap: 8px 16px;
+  min-height: 48px;
+  color: var(--s-muted);
+  font-size: 14px;
 }
-.research-lab .studies .library-chip small {
-  display: inline-grid;
-  place-items: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  border-radius: 999px;
-  background: var(--s-slate-soft);
-  color: var(--s-slate);
-  font-size: 12px;
+.research-lab .studies .library-filter-summary p {
+  margin: 0;
 }
-.research-lab .studies .library-chip.active small {
-  background: rgb(255 255 255 / 0.22);
-  color: #fff;
+.research-lab .studies .library-filter-reset {
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--s-blue-ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
-@media (hover: hover) and (pointer: fine) {
-  .research-lab .studies .library-chip:not(.active):hover {
-    border-color: var(--s-line-strong);
-    background: #f6f9fb;
+.research-lab .studies .library-filter-field select:focus-visible,
+.research-lab .studies .library-filter-reset:focus-visible {
+  outline: 3px solid var(--s-blue);
+  outline-offset: 3px;
+}
+@media (max-width: 740px) {
+  .research-lab .studies .library-filters {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+    padding-bottom: 16px;
+  }
+  .research-lab .studies .library-filter-summary {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    min-height: 28px;
+  }
+}
+@media (max-width: 440px) {
+  .research-lab .studies .library-filters {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 
@@ -2634,5 +2649,189 @@
 @media (prefers-reduced-motion: reduce) {
   .research-lab .studies .study-art-motif {
     transition: none;
+  }
+}
+
+/* Uploaded orientation is a workspace, not a tall illustrated poster. Content
+   remains in normal flow: zoom, long predictions and disclosures can scroll. */
+.research-lab .studies .has-orientation {
+  max-width: 1120px;
+  padding-bottom: 20px;
+}
+.research-lab .studies .has-orientation .journey-intro-card {
+  display: block;
+}
+.research-lab .studies .has-orientation .journey-intro-body {
+  gap: 12px;
+  padding: 20px;
+}
+.research-lab .studies .has-orientation .journey-intro-body h1 {
+  font-size: clamp(26px, 3vw, 34px);
+}
+.research-lab .studies .has-orientation .orient {
+  gap: 10px;
+  padding: 14px;
+  align-content: start;
+}
+.research-lab .studies .has-orientation .orient-step {
+  gap: 10px;
+}
+.research-lab .studies .has-orientation .orient .study-choices {
+  gap: 8px;
+}
+.research-lab .studies .has-orientation .orient .study-choice {
+  min-height: 44px;
+}
+@media (min-width: 860px) {
+  .research-lab .studies .has-orientation .journey-intro-body {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-rows: auto auto auto 1fr;
+    gap: 14px 24px;
+    align-items: start;
+    padding: 24px;
+  }
+  .research-lab .studies .has-orientation .journey-intro-body > :not(.orient) {
+    grid-column: 1;
+  }
+  .research-lab .studies .has-orientation .orient {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+  }
+}
+@media (max-width: 859px) {
+  .research-lab .studies .has-orientation .journey-intro-body {
+    padding: 16px;
+  }
+  .research-lab .studies .has-orientation .journey-intro-briefing {
+    order: 1;
+  }
+}
+/* Compact illustration and spacing on short prepared-study intros as well. */
+@media (max-height: 800px) {
+  .research-lab .studies .journey-intro {
+    padding-top: 8px;
+    padding-bottom: 20px;
+  }
+  .research-lab .studies .journey-intro-body {
+    padding: 20px;
+    gap: 10px;
+  }
+  .research-lab .studies .journey-intro-body h1 {
+    font-size: 28px;
+  }
+}
+@media (max-width: 859px) and (max-height: 900px) {
+  .research-lab .studies .journey-intro-art {
+    max-height: 100px;
+    aspect-ratio: auto;
+  }
+}
+
+@media (min-width: 560px) {
+  .research-lab .studies .has-orientation .orient .study-choices.as-pills {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 860px) and (max-height: 700px) {
+  .research-lab .studies .has-orientation .journey-intro-body {
+    padding: 16px;
+    gap: 10px 20px;
+  }
+  .research-lab .studies .has-orientation .orient {
+    padding: 10px;
+    gap: 6px;
+  }
+  .research-lab .studies .has-orientation .orient-step {
+    gap: 6px;
+  }
+  .research-lab .studies .has-orientation .orient-step h2 {
+    font-size: 17px;
+  }
+  .research-lab .studies .has-orientation .orient-stage {
+    min-height: 44px;
+  }
+  .research-lab .studies .has-orientation .orient .study-choice {
+    padding: 6px 10px;
+  }
+  .research-lab .studies .has-orientation .orient-feedback p {
+    padding: 6px 10px;
+  }
+  .research-lab .studies .has-orientation .orient-check {
+    min-height: 36px;
+  }
+  .research-lab .studies .has-orientation .orient-nav .journey-begin {
+    min-height: 44px;
+  }
+}
+@media (min-width: 860px) and (max-height: 800px) {
+  .research-lab
+    .studies
+    .journey-intro:not(.has-orientation)
+    .journey-intro-card {
+    grid-template-columns: 0.55fr 1.45fr;
+  }
+}
+@media (min-width: 860px) and (max-height: 700px) {
+  .research-lab
+    .studies
+    .journey-intro:not(.has-orientation)
+    .journey-intro-card {
+    grid-template-columns: 0.4fr 1.6fr;
+  }
+  .research-lab
+    .studies
+    .journey-intro:not(.has-orientation)
+    .journey-intro-body {
+    padding: 16px;
+    gap: 8px;
+  }
+  .research-lab
+    .studies
+    .journey-intro:not(.has-orientation)
+    .journey-intro-body
+    > p {
+    margin: 0;
+  }
+}
+
+@media (max-width: 859px) and (max-height: 900px) {
+  .research-lab .studies .has-orientation {
+    padding-top: 8px;
+  }
+  .research-lab .studies .has-orientation .journey-intro-body {
+    padding: 12px;
+    gap: 8px;
+  }
+  .research-lab .studies .has-orientation .orient {
+    padding: 12px;
+    gap: 8px;
+  }
+  .research-lab .studies .has-orientation .orient-step {
+    gap: 8px;
+  }
+  .research-lab .studies .has-orientation .orient-step h2 {
+    font-size: 18px;
+  }
+  .research-lab .studies .has-orientation .orient .study-choice {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+  .research-lab .studies .has-orientation .orient .study-choice-key {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+@media (max-width: 859px) and (max-height: 900px) {
+  .research-lab .studies .has-orientation .orient-stages {
+    gap: 6px;
+  }
+  .research-lab .studies .has-orientation .orient-stage {
+    min-height: 44px;
+    padding: 6px 10px;
+  }
+  .research-lab .studies .has-orientation .orient-nav .journey-begin {
+    min-height: 44px;
   }
 }

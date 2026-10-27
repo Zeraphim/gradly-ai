@@ -34,18 +34,12 @@ test("a PDF from home goes straight to preparation and the sample quest", async 
   await page.reload();
   await expect(start).toBeVisible();
   await start.click();
-  await page.waitForURL(/#\/research\/meet\//);
-  await expect(steps.locator('[aria-current="step"]')).toContainText(
-    "Investigate",
-  );
-  await expect(page.getByLabel("Sample preview mode")).toContainText(
-    "no AI calls",
-  );
+  await expect(page).toHaveURL(/#\/research\/studies\/texting-lecture$/);
   await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "Can students text and still keep up?",
-    }),
+    page.getByRole("button", { name: "Begin study", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Main navigation" }),
   ).toBeVisible();
   // Results and the authors' conclusion stay locked at the start.
   await expect(page.locator("main")).not.toContainText(
@@ -108,10 +102,10 @@ test("a rejected file explains the limit and offers prepared studies or another 
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   }
   await page.getByRole("link", { name: "View prepared studies" }).click();
-  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
-  await expect(page.locator("h1.quest-heading")).toHaveText(
-    "Can students text and still keep up?",
-  );
+  await expect(page).toHaveURL(/#\/research\/learn$/);
+  await expect(
+    page.getByRole("heading", { name: "Pick a study. Make the calls." }),
+  ).toBeVisible();
 });
 
 test("an interrupted check keeps the file and retries it", async ({ page }) => {
@@ -146,13 +140,15 @@ test("an interrupted check keeps the file and retries it", async ({ page }) => {
   expect(retried).toBe(true);
 });
 
-test("home sample entry opens the quest directly", async ({ page }) => {
+test("home sample entry opens the prepared library directly", async ({
+  page,
+}) => {
   await page.goto("/");
   await page.getByRole("button", { name: /Try a sample paper/ }).click();
-  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
-  await expect(page.locator("h1.quest-heading")).toHaveText(
-    "Can students text and still keep up?",
-  );
+  await expect(page).toHaveURL(/#\/research\/learn$/);
+  await expect(
+    page.getByRole("heading", { name: "Pick a study. Make the calls." }),
+  ).toBeVisible();
 });
 
 test("play responds to letter keys, names linked study parts and colours the checked answer", async ({
@@ -178,148 +174,4 @@ test("play responds to letter keys, names linked study parts and colours the che
       () => getComputedStyle(document.documentElement).overscrollBehaviorY,
     ),
   ).toBe("none");
-});
-
-test("the texting quest plays by keyboard, retries once, resumes and completes", async ({
-  page,
-}) => {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/#/research/learn");
-  await page.getByRole("button", { name: "Start quest" }).click();
-  await page.waitForURL(/#\/research\/meet\/featured$/);
-  const steps = page.getByRole("list", { name: "Paper to investigation" });
-  await expect(steps).toContainText("Choose a study");
-  await expect(steps.locator('[aria-current="step"]')).toContainText(
-    "Investigate",
-  );
-  const heading = page.locator("h1.quest-heading");
-  await expect(heading).toHaveText("Can students text and still keep up?");
-  // Enter moves through story screens.
-  await page.keyboard.press("Enter");
-  await expect(heading).toHaveText("Why investigate texting during lectures?");
-  await page.keyboard.press("Enter");
-  await expect(heading).toHaveText(
-    "Which question best captures what we want to investigate?",
-  );
-  const options = page.locator(".quest-screen").getByRole("radio");
-  const check = page.getByRole("button", { name: "Check" });
-  await expect(check).toBeDisabled();
-  // A wrong answer offers one retry with a hint, not the answer.
-  await page.keyboard.press("A");
-  await expect(options.nth(0)).toBeChecked();
-  await page.keyboard.press("Enter");
-  await expect(page.getByText("Take another look.")).toBeVisible();
-  await page.keyboard.press("Enter");
-  await expect(check).toBeDisabled();
-  await page.keyboard.press("2");
-  await expect(options.nth(1)).toBeChecked();
-  await page.keyboard.press("Enter");
-  await expect(page.getByText("Nicely reasoned!")).toBeVisible();
-  // Progress survives a refresh within the session.
-  await page.reload();
-  await expect(heading).toHaveText(
-    "Which question best captures what we want to investigate?",
-  );
-  await expect(page.locator(".quest-feedback")).toBeVisible();
-  await expect(options.nth(1)).toBeChecked();
-  await page.keyboard.press("Enter");
-  await expect(heading).not.toHaveText(
-    "Which question best captures what we want to investigate?",
-  );
-  // Work through the remaining screens, opening the explanation after a miss.
-  for (let guard = 0; guard < 40; guard++) {
-    const finish = page.getByRole("button", { name: "Finish quest" });
-    if (await finish.isVisible()) {
-      await finish.click();
-      break;
-    }
-    const revealMeans = page.getByRole("button", {
-      name: "Reveal reported means",
-    });
-    if (await revealMeans.isVisible()) {
-      await page
-        .getByRole("radio", { name: "Text lower", exact: true })
-        .check();
-      await revealMeans.click();
-      continue;
-    }
-    if (await check.isVisible()) {
-      await page.keyboard.press("A");
-      await page.keyboard.press("Enter");
-      await expect(page.locator(".quest-feedback")).toBeVisible();
-      const explain = page.getByRole("button", { name: "Show explanation" });
-      if (await explain.isVisible()) await explain.click();
-      await page.locator(".quest-bar .j-btn.is-go").click();
-    } else {
-      await page.locator(".quest-bar .j-btn:not(.is-quiet)").click();
-    }
-  }
-  await expect(heading).toHaveText("You investigated the distracted student.");
-  await expect(
-    page.getByRole("list", { name: "Your decisions in order" }),
-  ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Play again" })).toBeVisible();
-  for (const width of [375, 768, 1366]) {
-    await page.setViewportSize({ width, height: 900 });
-    await page.waitForFunction(() =>
-      document.getAnimations().every((a) => a.playState !== "running"),
-    );
-    expect(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth,
-      ),
-    ).toBe(true);
-    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-  }
-  expect(errors).toEqual([]);
-});
-
-test("on a phone every quest question shows its first answer above the action bar", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 375, height: 812 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/#/research/learn");
-  await page.evaluate(() => sessionStorage.clear());
-  await page.goto("/#/research/meet/featured");
-  const heading = page.locator("h1.quest-heading");
-  const check = page.getByRole("button", { name: "Check" });
-  const reveal = page.getByRole("button", { name: "Reveal reported means" });
-  let questions = 0;
-  for (let guard = 0; guard < 40; guard++) {
-    await expect(heading).toBeVisible();
-    if (/You investigated/.test(await heading.innerText())) break;
-    const finish = page.getByRole("button", { name: "Finish quest" });
-    if (await finish.isVisible()) {
-      await finish.click();
-      continue;
-    }
-    if ((await check.isVisible()) || (await reveal.isVisible())) {
-      const option = await page
-        .locator(".quest-screen .quest-option")
-        .first()
-        .boundingBox();
-      const bar = await page.locator(".quest-bar").boundingBox();
-      expect(
-        option!.y,
-        `first answer hidden on "${await heading.innerText()}"`,
-      ).toBeLessThan(bar!.y);
-      questions++;
-      if (await reveal.isVisible()) {
-        await page.keyboard.press("A");
-        await reveal.click();
-        continue;
-      }
-      await page.keyboard.press("A");
-      await page.keyboard.press("Enter");
-      await expect(page.locator(".quest-feedback")).toBeVisible();
-      const explain = page.getByRole("button", { name: "Show explanation" });
-      if (await explain.isVisible()) await explain.click();
-      await page.locator(".quest-bar .j-btn.is-go").click();
-    } else {
-      await page.locator(".quest-bar .j-btn:not(.is-quiet)").click();
-    }
-  }
-  expect(questions).toBeGreaterThanOrEqual(10);
 });

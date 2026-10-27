@@ -30,31 +30,22 @@ async function noOverflow(page: Page) {
 }
 
 for (const width of [375, 768, 1366]) {
-  test(`the learn page links to the library by keyboard at ${width}px`, async ({
+  test(`Learn is the library and supports keyboard entry at ${width}px`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/#/research/learn");
-    const practice = page.getByRole("navigation", { name: "More practice" });
-    const link = practice.getByRole("link", {
-      name: "Browse prepared studies",
+    await expect(page.locator(".library-card")).toHaveCount(studyCards.length);
+    const link = page.getByRole("link", {
+      name: "Restless nights and grades",
+      exact: true,
     });
-    await expect(link).toBeVisible();
-    await expect(link).toHaveAttribute("href", "#/research/studies");
-    await noOverflow(page);
-    await page.waitForFunction(() =>
-      document.getAnimations().every((a) => a.playState !== "running"),
-    );
-    const axe = await new AxeBuilder({ page })
-      .include('[aria-label="More practice"]')
-      .analyze();
-    expect(axe.violations.map((v) => v.id)).toEqual([]);
     await link.focus();
     await page.keyboard.press("Enter");
     await expect(
-      page.getByRole("heading", { name: /Pick a study/ }),
+      page.getByRole("button", { name: /Begin study/ }),
     ).toBeVisible();
-    await expect(page.locator(".library-card")).toHaveCount(studyCards.length);
+    await noOverflow(page);
     await noViolations(page);
   });
 

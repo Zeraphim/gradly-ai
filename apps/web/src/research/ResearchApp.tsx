@@ -21,7 +21,6 @@ import {
 } from "./navigation.js";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome.js";
 import { FocusBar, libraryJourneySteps, type JourneyStep } from "./FocusBar.js";
-import { TextingQuest } from "./TextingQuest.js";
 import "./journey.css";
 import "./play.css";
 import { AppLoading } from "../components/AppLoading.js";
@@ -61,7 +60,6 @@ import type {
   DocumentRecord as Doc,
   UploadDraft,
 } from "./types.js";
-import { PathPicker } from "./PathPicker.js";
 import { UploadPage } from "./UploadPage.js";
 import { ProcessingPage } from "./ProcessingPage.js";
 import {
@@ -114,7 +112,7 @@ export function ResearchApp({
         ".research-lab main h1",
       );
       title?.setAttribute("tabindex", "-1");
-      title?.focus();
+      title?.focus({ preventScroll: true });
     }
     if (/^\/(?:upload|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(path))
       setReturnPath(path);
@@ -138,7 +136,7 @@ export function ResearchApp({
             <PaperActivityPilot onExit={onExit} />
           </Suspense>
         </ChunkBoundary>
-      ) : /^\/studies(?:\/[a-z0-9-]+)?\/?$/.test(path) ? (
+      ) : /^\/(?:learn\/?|studies(?:\/[a-z0-9-]+)?\/?)$/.test(path) ? (
         <ChunkBoundary label="Prepared studies">
           <Suspense fallback={<AppLoading label="Opening prepared studies…" />}>
             <StudyPreview path={path} onExit={onExit} />
@@ -372,7 +370,7 @@ function GradlyWorkspace({
       featured: "Featured quest",
       upload: "Upload your paper",
       history: "Your quests",
-      glossary: "Research glossary",
+      glossary: "Research terms",
       help: "How Gradly works",
       settings: "Learning settings",
       privacy: "Privacy & AI processing",
@@ -714,14 +712,6 @@ function GradlyWorkspace({
             </Link>
           </aside>
         ) : null}
-        {config?.storage && ["home", "learn", "featured"].includes(route) ? (
-          <PathPicker
-            config={config}
-            busy={busy}
-            heading={heading}
-            onStart={() => router.push("/meet/featured")}
-          />
-        ) : null}
         {route === "upload" ? (
           <UploadPage
             reduced={reduced}
@@ -730,15 +720,7 @@ function GradlyWorkspace({
             onDraftChange={setUploadDraft}
             busy={busy}
             heading={heading}
-            onStart={() => router.push("/meet/featured")}
-          />
-        ) : null}
-        {route === "meet" && id ? (
-          <TextingQuest
-            key={id}
-            sessionKey={id}
-            reduced={reduced}
-            heading={heading}
+            onStart={() => router.push("/learn")}
           />
         ) : null}
         {route === "processing" && id ? (
@@ -1544,7 +1526,7 @@ function GradlyWorkspace({
                           >
                             Restart quest
                           </button>
-                          <Link className="btn outline" href="/">
+                          <Link className="btn outline" href="#/">
                             Return Home
                           </Link>
                         </div>
@@ -1690,7 +1672,7 @@ function GradlyWorkspace({
         ].includes(route) ? (
           <div className="center">
             <h1>Let’s get you back on track.</h1>
-            <Link className="btn primary" href="/">
+            <Link className="btn primary" href="#/">
               Return Home
             </Link>
           </div>

@@ -515,3 +515,54 @@ coach" requests the saved live feedback, labelled as AI output that can be wrong
 The reveal adds the learner's prediction and replaces the library actions with
 "Try a prepared study", "Back to your quests" and "Replay this study". Prepared
 studies under `/studies` keep their browser-only behaviour.
+
+## Learn and intro consistency — 27 October 2026, issue #36
+
+The upload sample action and Prepared studies navigation open the library at
+`#/research/learn`. The old `/studies` index and classic/lab/meet entry points
+recover there, while individual study URLs remain. The upload home no longer
+mounts `LegacyApp` or offers its saved Resume quest. A sample-mode upload's ready
+action opens the prepared texting study directly in the shared player.
+
+Library, reasoning preview and prepared/uploaded intros use `SiteHeader`, with no preview-only header
+or technical mode badges. Active play retains focused progress chrome. Uploaded
+orientation replaces the tall illustration with side-by-side context and tap steps
+on desktop, stacking on narrow screens. Short desktop windows use tighter spacing;
+text, targets and source disclosures remain readable. Prepared intros use a wider
+text column and smaller artwork on short screens. Expanded details and zoom keep
+normal scrolling. Earlier classic/path-picker descriptions above are historical,
+not current routes. The retired bespoke-quest browser assertions are replaced by
+shared-player, choice-focus, study and route/viewport coverage; service/interface
+compatibility tests still exercise the retained original implementation in isolation.
+
+## Contextual help and calmer library filters — 28 October 2026
+
+Primary navigation is Upload a paper, Learn and My quests. Research terms are a
+reference reached through Help; the existing `/research/glossary` URL remains
+valid. The same authored definitions and clearly illustrative examples appear
+there and in question-level help. Recognised terms in a question or its visible
+evidence open a native dialog without leaving the question. Matching never reads
+answer choices, accepted keys, hidden excerpts, scene resolutions or takeaways.
+The existing hint becomes available in help only during first-miss feedback and
+retry; opening help itself does not submit, score, call a model or change drafts.
+Escape/Close returns focus to the trigger. The help target fits into the existing
+stage row without increasing its height.
+
+The study library replaces the wrapped design/topic chip wall with labelled Topic
+and Study design selects, a single live result count and conditional Reset filters.
+Desktop uses one quiet toolbar; narrow screens stack the fields. Both filters
+still combine, every existing category remains available, and an empty result has
+the same visible Reset action. Native selects provide keyboard and touch behavior;
+existing filtered-card motion and inert exiting cards remain.
+
+## OpenCode upload-guide integration — 28 October 2026
+
+The existing OpenCode `mascot-guiding-animated.svg` is reused unchanged through
+`UploadGuide.tsx`, mounted only in the upload-first home's introduction. The
+header wordmark and guides on other pages stay static. The animation uses the
+SVG's CSS transforms, with no JavaScript frame loop. System or saved reduced
+motion selects the existing static guiding pose; hidden documents also release
+the animated image. Both variants keep the same box dimensions. The integration
+is a narrow edit to the current Welcome component, preserving the newer upload,
+Learn, header and recovery behavior rather than copying an older Welcome file.
+The original checkout's separate pipeline rebase conflict is not resolved here.

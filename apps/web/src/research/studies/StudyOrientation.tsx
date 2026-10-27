@@ -73,7 +73,7 @@ const groupOf = (stage: string): Group =>
       : "design";
 
 const practice = {
-  prompt: "When will you find out which paper this is?",
+  prompt: "When is the paper revealed?",
   options: [
     { id: "before", text: "Before the first decision" },
     { id: "after", text: "After your last decision" },
@@ -242,7 +242,7 @@ function Hunch({
               animate={{ opacity: 1, y: 0 }}
               transition={motion.copy}
             >
-              Saved. You’ll compare it with the paper at the end.
+              Saved for the paper reveal.
             </m.span>
           ) : null}
         </AnimatePresence>
@@ -423,8 +423,8 @@ function Practice({ heading }: StepProps) {
           </p>
         ) : explained ? (
           <p className="is-explained">
-            The paper is revealed after your last decision. In the study, I
-            explain the answer whenever you miss twice.
+            The paper opens after your last decision. Miss twice and I’ll
+            explain.
           </p>
         ) : null}
       </div>

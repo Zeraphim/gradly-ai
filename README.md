@@ -10,7 +10,7 @@ The separate paper-case prototype has been removed to keep one primary workflow.
 
 ## Learning workspaces
 
-The six-quest curated adventure remains at `/#/classic`, the eight-challenge/upload workspace at `/#/research/learn`, and the authored explanation showcase at `/#/research/reasoning`. Existing saved links keep working when their API is available. The root sample action uses the familiar curated journey. The [earlier curated production demo](https://nebius-hackathon-submission.vercel.app) predates this research integration.
+The prepared-study library is `/#/research/learn`; the old `/#/research/studies` index redirects there. Individual `/#/research/studies/<slug>` links still open their study. The home sample action opens this library directly. Classic, lab and meet entry points recover to Learn instead of mounting an older quest or another picker. Uploaded studies retain their server-backed player at `/#/research/play/<sessionId>`, and the authored explanation showcase remains at `/#/research/reasoning`.
 
 The research API retains PDF extraction/OCR, guest history and reviewed generation. Its prompts now adapt to a paper’s research approach without requiring statistical tests for qualitative or conceptual material. This orchestration is tested with synthetic fixtures; new live generation remains unverified. See [RESEARCH_INTEGRATION.md](docs/RESEARCH_INTEGRATION.md) for configuration and [REASONING_PREVIEW.md](docs/REASONING_PREVIEW.md) for future live-review guardrails.
 

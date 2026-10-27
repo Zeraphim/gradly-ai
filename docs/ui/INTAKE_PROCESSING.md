@@ -12,7 +12,8 @@ Proposed
 
 - Upload-first home (`#/`), source review (`#/research/upload`), preparation
   (`#/research/processing/:id`), failure recovery, and the handoff into the
-  existing player (`#/research/adventure/:id`).
+  shared player (`#/research/play/:id`); existing `/adventure/:id` sessions retain
+  compatibility.
 - Shared site header and footer on the home page and every research screen.
 
 ## Problem and Constraints
@@ -364,3 +365,19 @@ and 1366 pixels were reviewed locally and are not stored in the repository.
 
 - Supersedes: None
 - Superseded by: None
+
+## Issue #36 navigation follow-up — 27 October 2026
+
+The upload-first home no longer mounts the classic quest, fetches `/api/lesson`
+or offers its saved Resume quest. A genuinely pending paper preparation still
+has its Return to your paper link. Try a sample paper and upload-failure recovery
+open the actual prepared library at `/research/learn`, without an intermediate
+path picker. The old studies index and classic/lab/meet entries recover there;
+individual study links and uploaded sessions remain valid.
+
+A ready sample-mode upload opens `/research/studies/texting-lecture` directly in
+the shared prepared player. It remains explicitly an authored sample, not an
+analysis of the upload. Live generated uploads retain their server-backed `/play`
+flow. Browsing headers match upload, library, history, glossary and reasoning;
+preparation and active play keep focused progress bars. The intro layout and
+regression coverage are recorded in [PREPARED_STUDIES.md](PREPARED_STUDIES.md#issue-36--27-october-2026).

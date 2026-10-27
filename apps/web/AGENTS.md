@@ -10,7 +10,10 @@ and the relevant checks in [TESTING.md](../../docs/TESTING.md).
   interruption, immediate input, focus and live reduced-motion behavior. Reuse
   shared primitives; keep the implementation scoped to the requested screen.
 - `src/App.tsx` owns hash-route selection. Preserve upload-first entry, retired-link
-  recovery, curated compatibility, and the separately labeled reasoning preview.
+  recovery, the single Learn study library, and the separately labeled reasoning preview.
+  The public classic quest and intermediate path picker are retired. Preserve
+  individual study links and uploaded-session progress; do not restore the old
+  home Resume quest or route sample actions through a second picker.
 - Reuse the supplied Gradly artwork, self-hosted Plus Jakarta Sans, blue palette,
   native controls, and existing icon family. Keep research styles scoped and retain
   keyboard focus, reduced motion, loading, empty, error, and retry states.

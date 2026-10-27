@@ -1,41 +1,9 @@
+import { researchTerms, termExamples } from "./research-terms.js";
 import type { RefObject } from "react";
 import { ResearchLink as Link } from "./navigation.js";
 import { ActionLabel, Icon } from "./icon.js";
 import { Speech } from "./learning-ui.js";
 import type { ResearchConfig } from "./types.js";
-
-const glossary: Record<string, string> = {
-  Evidence:
-    "Information that bears on a research question. Its relevance, source, collection, and limits matter when deciding what a claim can support.",
-  "Qualitative theme":
-    "A pattern of meaning developed through interpretation of material such as interview accounts. A theme does not by itself estimate how common an experience is in a population.",
-  "Causal claim":
-    "A claim that one factor changes another. The research design and competing explanations determine how well the evidence supports that claim; an association alone does not establish it.",
-  Confounding:
-    "Another factor provides an alternative explanation for an apparent relationship. Consider whether the design or analysis addresses that explanation before making a causal claim.",
-  Transfer:
-    "Applying a reasoning principle to a new setting while checking whether its conditions and limits still fit. Completing one example does not establish mastery in other settings.",
-  "Between-participants design":
-    "Different participants contribute observations in each condition.",
-  "Random assignment":
-    "A chance process assigns participants to conditions. It supports causal comparisons by reducing systematic differences between groups before the study begins.",
-  "Random sampling":
-    "A chance process selects people from a population. It concerns how well a sample represents that population. It differs from random assignment to study conditions.",
-  "Independent-samples t-test":
-    "Compares the means of two independent groups. The pooled version assumes equal population variances. Welch’s version does not require that assumption.",
-  "One-way ANOVA":
-    "Analysis of variance tests group mean differences for one factor. With two groups, the usual equal-variance ANOVA and pooled t-test are equivalent: F = t².",
-  "Paired-samples t-test":
-    "Tests the mean difference between linked observations, such as repeated measurements of the same people.",
-  "Percentage points":
-    "The arithmetic difference between two percentages. For example, 80% minus 70% is 10 percentage points. A relative percentage change instead divides the difference by a baseline.",
-  "p-value":
-    "Under a specified null model and test assumptions, the probability of a result at least as extreme as the one observed.",
-  "Standard deviation":
-    "Describes how much observations vary around a mean, in the same units as the outcome.",
-  Generalizability:
-    "Whether findings apply to people, contexts, and outcomes beyond those studied.",
-};
 
 export type SupportPagesProps = {
   route: string;
@@ -64,19 +32,22 @@ export function SupportPages({
     return (
       <>
         <h1 ref={heading} tabIndex={-1}>
-          Research glossary
+          Research terms
         </h1>
         <p>
           From interpreting an interview to comparing group scores, keep these
           ideas beside your investigation. Use the terms that fit your paper.
         </p>
-        {Object.entries(glossary).map(([term, definition]) => (
+        {Object.entries(researchTerms).map(([term, definition]) => (
           <details className="card glossary" key={term}>
             <summary className="icon-summary">
               {term}
               <Icon name="chevron" size={17} className="disclosure-chevron" />
             </summary>
             <p>{definition}</p>
+            <p>
+              <strong>Illustrative example:</strong> {termExamples[term]}
+            </p>
           </details>
         ))}
         <Link className="btn primary" href={resumeHref}>
@@ -95,6 +66,16 @@ export function SupportPages({
         <h1 ref={heading} tabIndex={-1}>
           How Gradly works
         </h1>
+        <div className="card">
+          <h2>Need a research term explained?</h2>
+          <p>
+            Open definitions while answering a question, or browse the full
+            reference here.
+          </p>
+          <Link className="btn outline" href="/glossary">
+            Research terms
+          </Link>
+        </div>
         <ol className="how-list">
           <li>
             <h2>Add your paper</h2>

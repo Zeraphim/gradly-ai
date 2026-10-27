@@ -1,3 +1,4 @@
+import { QuestionHelp, ResearchTermText } from "../QuestionHelp.js";
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from "react";
 import {
   FileSearch,
@@ -478,14 +479,30 @@ function ChallengeScreen({
                 {cue.label}
               </m.p>
             ) : null}
-            <p className="journey-stage">
-              {challenge.reveal === "bonus"
-                ? "Bonus"
-                : `${position + 1} of ${total}`}{" "}
-              · {challenge.stage}
-            </p>
-            <h1 ref={heading} tabIndex={-1} className="journey-title">
-              {challenge.prompt}
+            <div className="journey-stage-row">
+              <p className="journey-stage">
+                {challenge.reveal === "bonus"
+                  ? "Bonus"
+                  : `${position + 1} of ${total}`}{" "}
+                · {challenge.stage}
+              </p>
+              <QuestionHelp
+                key={challenge.id}
+                text={[challenge.prompt, ...challenge.evidence].join(" ")}
+                hint={
+                  status === "retry-feedback" || status === "retrying"
+                    ? challenge.hint
+                    : null
+                }
+              />
+            </div>
+            <h1
+              ref={heading}
+              tabIndex={-1}
+              className="journey-title"
+              aria-label={challenge.prompt}
+            >
+              <ResearchTermText key={challenge.id} text={challenge.prompt} />
             </h1>
             {challenge.evidence.length ? (
               <ul
@@ -495,7 +512,7 @@ function ChallengeScreen({
                 {challenge.evidence.map((line) => (
                   <li key={line}>
                     <FileSearch size={15} aria-hidden="true" />
-                    {line}
+                    <ResearchTermText text={line} />
                   </li>
                 ))}
               </ul>

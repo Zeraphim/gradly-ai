@@ -17,6 +17,7 @@ import {
   Clock3,
 } from "lucide-react";
 import { Mascot } from "./Mascot.js";
+import { UploadGuide } from "./UploadGuide.js";
 import { readActivePreparation } from "../research/client-state.js";
 import type { Session } from "@paperquest/lesson-state";
 const PAPER_DIGEST =
@@ -31,8 +32,8 @@ export function Welcome({
   uploadFirst = false,
 }: {
   onStart: (label: string) => void;
-  session: Session;
-  onResume: () => void;
+  session?: Session;
+  onResume?: () => void;
   onResearchFile?: (file: File) => void;
   /** Upload-first home: any pasted link starts the sample journey. */
   onResearchLink?: (link: string) => void;
@@ -151,7 +152,7 @@ export function Welcome({
           className="welcome-intro home-guide"
           aria-label="Your research guide"
         >
-          <Mascot pose="guiding" />
+          <UploadGuide />
           <div className="speech">
             <p>
               Big paper? Small steps.
@@ -289,7 +290,7 @@ export function Welcome({
           </form>
           <p className="scope-note">
             {uploadFirst
-              ? "Sample preview: links aren’t fetched yet. Any link opens the prepared texting study."
+              ? "Links aren’t fetched yet. Upload the PDF, or choose a prepared study."
               : onResearchFile
                 ? "Use a PDF for a new quest, or the curated paper’s DOI below for the eight-decision quest."
                 : "A focused pilot with one curated paper. General paper extraction is not enabled on this host."}
@@ -318,7 +319,7 @@ export function Welcome({
       </section>
       {uploadFirst ? (
         <div
-          className={`home-secondary-actions ${session.started || preparing ? "has-resume" : ""}`}
+          className={`home-secondary-actions ${preparing ? "has-resume" : ""}`}
         >
           <button
             className="home-sample-action"
@@ -341,15 +342,10 @@ export function Welcome({
               Return to your paper
               <ArrowRight size={18} />
             </a>
-          ) : session.started ? (
-            <button className="home-resume-action" onClick={onResume}>
-              {complete ? "Review quest" : "Resume quest"}
-              <ArrowRight size={18} />
-            </button>
           ) : null}
         </div>
       ) : null}
-      {session.started && !uploadFirst ? (
+      {session?.started && !uploadFirst ? (
         <div className="resume-card">
           <div>
             <strong>

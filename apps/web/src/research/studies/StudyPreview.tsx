@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AppLoading } from "../../components/AppLoading.js";
-import { BrandLogo } from "../../components/BrandLogo.js";
+import { SiteHeader, SiteFooter } from "../../components/SiteChrome.js";
 import { readReducedMotion } from "../client-state.js";
 import { ResearchLink as Link } from "../navigation.js";
 import { SceneMotion } from "../scenes/scene-motion.js";
@@ -12,9 +12,9 @@ import type { PreparedStudy } from "./types.js";
 import "./studies.css";
 
 /**
- * Browser-only prepared-study preview: `/studies` lists studies and
- * `/studies/<slug>` plays one. Answers are checked against authored keys in this
- * tab; the server-assessed path arrives when uploaded papers share this player.
+ * The Learn library and `/studies/<slug>` prepared player. Prepared answers
+ * are checked against authored keys in this tab; uploaded sessions use the
+ * separate server-backed UploadedJourney driver.
  */
 export function StudyPreview({
   path,
@@ -52,22 +52,19 @@ export function StudyPreview({
     <SceneMotion reduced={readReducedMotion()}>
       <div className={`studies ${playing ? "is-playing" : ""}`}>
         {playing ? null : (
-          <header className="header">
-            <div className="nav preview-nav">
-              <a
-                className="brand"
-                href="#"
-                onClick={(event) => {
-                  event.preventDefault();
-                  onExit();
-                }}
-              >
-                <BrandLogo />
-              </a>
-              <Link href="/studies">All studies</Link>
-              <span className="mode-pill">Frontend preview</span>
-            </div>
-          </header>
+          <>
+            <a
+              className="skip"
+              href="#main"
+              onClick={(event) => {
+                event.preventDefault();
+                document.querySelector<HTMLElement>(".studies main")?.focus();
+              }}
+            >
+              Skip to content
+            </a>
+            <SiteHeader current="studies" onHome={onExit} />
+          </>
         )}
         {loading ? (
           <AppLoading label="Opening study…" />
@@ -89,6 +86,7 @@ export function StudyPreview({
         ) : (
           <StudyLibrary />
         )}
+        {!slug ? <SiteFooter /> : null}
       </div>
     </SceneMotion>
   );
