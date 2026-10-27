@@ -512,7 +512,7 @@ export const body: StudyBody = {
             {
               id: "background",
               label: "Measured covariates",
-              detail: "Gender, education, income, child age and baseline mood.",
+              detail: "Background characteristics added to the analysis.",
               at: "setup",
               provenance: {
                 kind: "source-summary",

@@ -2,12 +2,6 @@
 export const preparedVisualAdditions = [
   {
     slug: "anticipating-a-shock",
-    id: "c4",
-    kind: "matrix",
-    refs: ["e2", "e10"],
-  },
-  {
-    slug: "anticipating-a-shock",
     id: "c3",
     kind: "flow",
     refs: ["e13"],
@@ -22,12 +16,6 @@ export const preparedVisualAdditions = [
     slug: "clinton-voter-activism",
     id: "c5",
     kind: "comparison",
-    refs: ["e3"],
-  },
-  {
-    slug: "holding-a-warm-drink",
-    id: "c1",
-    kind: "flow",
     refs: ["e3"],
   },
   {
@@ -181,12 +169,6 @@ export const preparedVisualAdditions = [
     refs: ["e1", "e24"],
   },
   {
-    slug: "television-viewing-habits",
-    id: "c3",
-    kind: "estimate",
-    refs: ["e13", "e20"],
-  },
-  {
     slug: "understanding-how-pumps-work",
     id: "c4",
     kind: "comparison",
@@ -203,12 +185,6 @@ export const preparedVisualAdditions = [
     id: "c1",
     kind: "matrix",
     refs: ["e6", "e7"],
-  },
-  {
-    slug: "using-scented-air-while-brainstorming",
-    id: "c6",
-    kind: "matrix",
-    refs: ["e9", "e20", "e21"],
   },
   {
     slug: "vaccine-misinformation-correction",

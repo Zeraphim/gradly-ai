@@ -545,7 +545,8 @@ export const body: StudyBody = {
             {
               id: "sample",
               label: "University sample",
-              detail: "Graduate students from health and welfare departments.",
+              detail:
+                "Students from public health and social welfare departments.",
               at: "setup",
               provenance: {
                 kind: "source-summary",

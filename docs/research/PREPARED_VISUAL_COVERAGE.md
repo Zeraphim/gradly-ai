@@ -9,7 +9,7 @@ Future changes still require a fresh conflict check.
 ## Scope and counts
 
 The library has **53 studies and 313 required questions**. Optional bonuses are not
-included in these counts. Thirty-nine source-backed scenes were added to the other 21
+included in these counts. Thirty-five source-backed scenes were added to the other 21
 generated studies, reusing seven existing scene families and their existing controls.
 No player, renderer, motion code, schema, pipeline prompt, provider or billing setting
 was changed. Existing scene data and study text are preserved; source references are
@@ -17,8 +17,8 @@ only appended where a visual needs another already-stored excerpt.
 
 | Measure                                 | Before (`a112873`) | After |
 | --------------------------------------- | ------------------ | ----- |
-| Required questions with a scene         | 77                 | 116   |
-| Required questions without a scene      | 236                | 197   |
+| Required questions with a scene         | 77                 | 112   |
+| Required questions without a scene      | 236                | 201   |
 | Studies with no required-question scene | 18                 | 0     |
 
 These are coverage counts, not learning-benefit scores. A diagram is not mandatory
@@ -58,9 +58,9 @@ The executable inventory is `tests/fixtures/prepared-visuals.ts`.
 
 | Study                                 | Before | After | New scenes                         |
 | ------------------------------------- | ------ | ----- | ---------------------------------- |
-| anticipating-a-shock                  | 0/6    | 2/6   | c4 (`matrix`), c3 (`flow`)         |
+| anticipating-a-shock                  | 0/6    | 1/6   | c3 (`flow`)                        |
 | clinton-voter-activism                | 0/5    | 2/5   | c2 (`timeline`), c5 (`comparison`) |
-| holding-a-warm-drink                  | 0/6    | 2/6   | c1 (`flow`), c6 (`matrix`)         |
+| holding-a-warm-drink                  | 0/6    | 1/6   | c6 (`matrix`)                      |
 | imagining-survival-scenarios          | 0/6    | 2/6   | c3 (`comparison`), c6 (`flow`)     |
 | kids-eating-when-not-hungry           | 0/5    | 2/5   | c1 (`timeline`), c5 (`estimate`)   |
 | memory-training                       | 0/6    | 2/6   | c1 (`flow`), c3 (`tests`)          |
@@ -74,9 +74,9 @@ The executable inventory is `tests/fixtures/prepared-visuals.ts`.
 | sharing-money-in-public               | 0/6    | 2/6   | c2 (`flow`), c5 (`comparison`)     |
 | stroop-task-performance               | 2/5    | 3/5   | c2 (`comparison`)                  |
 | teen-social-media-use                 | 0/6    | 2/6   | c5 (`association`), c6 (`flow`)    |
-| television-viewing-habits             | 0/5    | 2/5   | c1 (`flow`), c3 (`estimate`)       |
+| television-viewing-habits             | 0/5    | 1/5   | c1 (`flow`)                        |
 | understanding-how-pumps-work          | 0/6    | 2/6   | c4 (`comparison`), c5 (`flow`)     |
-| using-scented-air-while-brainstorming | 0/6    | 2/6   | c1 (`matrix`), c6 (`matrix`)       |
+| using-scented-air-while-brainstorming | 0/6    | 1/6   | c1 (`matrix`)                      |
 | vaccine-misinformation-correction     | 1/5    | 3/5   | c3 (`comparison`), c5 (`flow`)     |
 | walking-speed-test                    | 0/6    | 2/6   | c2 (`matrix`), c5 (`flow`)         |
 

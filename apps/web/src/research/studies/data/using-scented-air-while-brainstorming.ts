@@ -482,100 +482,10 @@ export const body: StudyBody = {
         },
         explanation:
           "A between‑subjects design bars within‑person change assessment.",
-        refs: ["e9", "e20", "e21"],
+        refs: [],
         writtenReasoning: false,
         reveal: "interpretation",
-        scene: {
-          version: 1,
-          title: "Different people rather than repeated treatment",
-          instruction:
-            "Inspect the visual, then choose the interpretation supported by the study.",
-          description: "Different people rather than repeated treatment",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e9", "e20", "e21"],
-            note: "Study information paraphrased from the cited source.",
-          },
-          responses: [
-            {
-              optionId: "o1",
-              label:
-                "It prevents assessing whether the same individual shows increased creativity after placebo.",
-              targetIds: ["row0", "row1", "row2"],
-            },
-            {
-              optionId: "o2",
-              label:
-                "It makes it impossible to randomize participants to groups.",
-              targetIds: ["row0", "row1", "row2"],
-            },
-            {
-              optionId: "o3",
-              label:
-                "It eliminates the possibility of using objective physiological measures.",
-              targetIds: ["row0", "row1", "row2"],
-            },
-            {
-              optionId: "o4",
-              label:
-                "It confounds the effect of the odorant with the suggestion.",
-              targetIds: ["row0", "row1", "row2"],
-            },
-          ],
-          resolution: null,
-          kind: "matrix",
-          conditions: [
-            {
-              id: "condition0",
-              label: "Placebo group",
-            },
-            {
-              id: "condition1",
-              label: "Control group",
-            },
-          ],
-          rows: [
-            {
-              id: "row0",
-              label: "People",
-              detail: "Reported features of each condition.",
-              at: "setup",
-              provenance: {
-                kind: "source-summary",
-                refs: ["e9", "e20", "e21"],
-                note: "Study information paraphrased from the cited source.",
-              },
-              cells: ["A separate group", "A separate group"],
-            },
-            {
-              id: "row1",
-              label: "CFG timing",
-              detail: "Reported features of each condition.",
-              at: "setup",
-              provenance: {
-                kind: "source-summary",
-                refs: ["e9", "e20", "e21"],
-                note: "Study information paraphrased from the cited source.",
-              },
-              cells: ["Completed first", "Completed first"],
-            },
-            {
-              id: "row2",
-              label: "Repeated placebo comparison",
-              detail: "Reported features of each condition.",
-              at: "setup",
-              provenance: {
-                kind: "source-summary",
-                refs: ["e9", "e20", "e21"],
-                note: "Study information paraphrased from the cited source.",
-              },
-              cells: [
-                "No before/after placebo contrast",
-                "No before/after placebo contrast",
-              ],
-            },
-          ],
-        },
+        scene: null,
       },
     ],
     bonus: null,

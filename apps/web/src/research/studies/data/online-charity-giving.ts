@@ -316,9 +316,9 @@ export const body: StudyBody = {
                 note: "Study information paraphrased from the cited source.",
               },
               cells: [
-                "Assigned purpose",
-                "Participant chooses",
-                "Participant chooses with flexibility",
+                "Random condition",
+                "Earmarking condition",
+                "Earmarking with Flexibility condition",
               ],
             },
           ],

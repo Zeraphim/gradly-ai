@@ -204,13 +204,13 @@ export const body: StudyBody = {
             {
               from: "scale",
               to: "high",
-              label: "score-based grouping",
+              label: "allocated to group",
               at: "setup",
             },
             {
               from: "scale",
               to: "low",
-              label: "score-based grouping",
+              label: "allocated to group",
               at: "setup",
             },
             {

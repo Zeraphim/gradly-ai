@@ -407,7 +407,7 @@ export const body: StudyBody = {
             {
               id: "flourishing",
               label: "Flourishing",
-              detail: "Outcome measured in the same survey.",
+              detail: "Outcome measured in the study.",
               at: "setup",
               provenance: {
                 kind: "source-summary",

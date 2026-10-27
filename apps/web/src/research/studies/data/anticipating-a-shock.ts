@@ -379,82 +379,10 @@ export const body: StudyBody = {
         },
         explanation:
           "Across all explicit and implicit measures, the t‑tests showed no statistically significant difference between participants assessed under threat and those assessed under safety.",
-        refs: ["e3", "e14", "e2", "e10"],
+        refs: ["e3", "e14"],
         writtenReasoning: false,
         reveal: "results",
-        scene: {
-          version: 1,
-          title: "Two ways to measure political attitudes",
-          instruction:
-            "Inspect the visual, then choose the interpretation supported by the study.",
-          description: "Two ways to measure political attitudes",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e2", "e10"],
-            note: "Study information paraphrased from the cited source.",
-          },
-          responses: [
-            {
-              optionId: "c4-opt-a",
-              label: "A significant increase in conservatism under threat.",
-              targetIds: ["row0", "row1"],
-            },
-            {
-              optionId: "c4-opt-b",
-              label: "No significant differences between threat and safety.",
-              targetIds: ["row0", "row1"],
-            },
-            {
-              optionId: "c4-opt-c",
-              label: "A significant decrease in conservatism under threat.",
-              targetIds: ["row0", "row1"],
-            },
-            {
-              optionId: "c4-opt-d",
-              label:
-                "A mixed pattern with some measures significant and others not.",
-              targetIds: ["row0", "row1"],
-            },
-          ],
-          resolution: null,
-          kind: "matrix",
-          conditions: [
-            {
-              id: "condition0",
-              label: "Explicit tasks",
-            },
-            {
-              id: "condition1",
-              label: "Implicit task",
-            },
-          ],
-          rows: [
-            {
-              id: "row0",
-              label: "Response",
-              detail: "Reported features of each condition.",
-              at: "setup",
-              provenance: {
-                kind: "source-summary",
-                refs: ["e2", "e10"],
-                note: "Study information paraphrased from the cited source.",
-              },
-              cells: ["Report a judgement", "Classify associations"],
-            },
-            {
-              id: "row1",
-              label: "Instrument",
-              detail: "Reported features of each condition.",
-              at: "setup",
-              provenance: {
-                kind: "source-summary",
-                refs: ["e2", "e10"],
-                note: "Study information paraphrased from the cited source.",
-              },
-              cells: ["Self-report measures", "Single Target IAT"],
-            },
-          ],
-        },
+        scene: null,
       },
       {
         id: "c5",

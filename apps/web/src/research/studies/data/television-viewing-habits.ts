@@ -415,72 +415,7 @@ export const body: StudyBody = {
         refs: ["e5", "e13", "e15", "e20"],
         writtenReasoning: false,
         reveal: "results",
-        scene: {
-          version: 1,
-          title: "TV viewing and the direct question",
-          instruction:
-            "Inspect the visual, then choose the interpretation supported by the study.",
-          description: "TV viewing and the direct question",
-          provenance: {
-            kind: "reported",
-            refs: ["e13", "e20"],
-            note: "Values as printed in the cited excerpt; not individual participant records.",
-          },
-          responses: [
-            {
-              optionId: "o1",
-              label: "Yes, TV viewing was a significant predictor.",
-              targetIds: ["estimate"],
-            },
-            {
-              optionId: "o2",
-              label:
-                "No, TV viewing did not predict incorrect answers after controlling for age and education.",
-              targetIds: ["estimate"],
-            },
-            {
-              optionId: "o3",
-              label: "Only streaming predicted incorrect answers.",
-              targetIds: ["estimate"],
-            },
-            {
-              optionId: "o4",
-              label:
-                "The effect was significant only for the electric‑chair item.",
-              targetIds: ["estimate"],
-            },
-          ],
-          resolution: null,
-          kind: "estimate",
-          measure: "Correlation with direct-question performance",
-          min: -0.2,
-          max: 0.2,
-          reference: {
-            value: 0,
-            label: "No difference",
-          },
-          band: null,
-          estimates: [
-            {
-              id: "estimate",
-              label: "Correlation with direct-question performance",
-              detail: "Reported estimate and confidence interval.",
-              at: "setup",
-              provenance: {
-                kind: "reported",
-                refs: ["e13", "e20"],
-                note: "Values as printed in the cited excerpt; not individual participant records.",
-              },
-              value: -0.02,
-              lower: -0.1,
-              upper: 0.06,
-            },
-          ],
-          prediction: {
-            label: "Before reading the interval, where might the estimate lie?",
-            options: ["Below zero", "Near zero", "Above zero"],
-          },
-        },
+        scene: null,
       },
       {
         id: "c4",
