@@ -76,9 +76,9 @@ for (const width of [375, 1366]) {
       ]) {
         if (challenge === study.lesson.bonus)
           await page.getByRole("button", { name: "Try the bonus" }).click();
-        await expect(
-          page.getByRole("heading", { name: challenge.prompt, exact: true }),
-        ).toBeVisible();
+        await expect(page.locator("h1.journey-title")).toHaveText(
+          challenge.prompt,
+        );
         expect(
           await page.evaluate(
             () => document.documentElement.scrollWidth > innerWidth,

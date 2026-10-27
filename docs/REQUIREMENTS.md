@@ -4,12 +4,12 @@ The public entry must start with adding a paper, preserving both PDF upload and 
 
 ## Current prototype acceptance
 
-- The home exposes PDF, URL/DOI, sample/resume and practice points; inputs remain visible on a 1366×768 desktop viewport.
+- The home exposes PDF, URL/DOI and direct sample-library entry; inputs remain visible on a 1366×768 desktop viewport.
 - Research points award ten once per solved challenge per adventure and persist across refresh; explanation edits and duplicate requests do not create rewards.
 - The reasoning preview demonstrates choice → explanation → evidence → revision, works without API access and labels authored guidance. Custom explanations remain unassessed.
-- Retired paper-case links return to the upload home instead of loading another application.
+- Retired paper-case links recover to the Learn library.
 - Saved progress, PDF review and drafts survive supported navigation and refresh; storage failure has a recoverable fallback.
-- Home sample entry and upload-recovery prepared-study actions open the authored quest directly, without the intermediate path chooser. The prepared-study navigation page remains available separately.
+- Home sample entry and upload-recovery prepared-study actions open the single Learn library directly, without an intermediate path chooser. Individual study links open their authored quest.
 - Before answering, learners receive a concise study briefing with background and plain-language terms. Generated-paper briefings come from the verified lesson’s own context. Results, conclusions and answer keys stay gated.
 - The authored quest offers Back after its opening screen, preserves unfinished choices during in-session navigation, and restores resolved answers without another attempt or score change. Pointer selection uses the filled choice state without an extra outline; keyboard focus remains visible.
 - Responsive, keyboard, reduced-motion and automated accessibility checks cover the retained upload and learning paths.

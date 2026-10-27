@@ -58,9 +58,9 @@ for (const width of [375, 768, 1366])
         .first()
         .click();
       for (const challenge of body.lesson.challenges) {
-        await expect(
-          page.getByRole("heading", { name: challenge.prompt, exact: true }),
-        ).toBeVisible();
+        await expect(page.locator("h1.journey-title")).toHaveText(
+          challenge.prompt,
+        );
         const addition = preparedVisualAdditions.find(
           (x) => x.slug === slug && x.id === challenge.id,
         );

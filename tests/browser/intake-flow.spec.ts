@@ -175,3 +175,40 @@ test("play responds to letter keys, names linked study parts and colours the che
     ),
   ).toBe("none");
 });
+
+test("returning home with browser history does not replay an earlier upload", async ({
+  page,
+}) => {
+  let uploads = 0;
+  await page.route("**/api/research/documents", (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    uploads++;
+    return route.fulfill({
+      status: 503,
+      json: { error: "Service unavailable." },
+    });
+  });
+  await page.goto("/#/");
+  await page.locator('input[type="file"]').first().setInputFiles(pdf);
+  await expect(
+    page.getByRole("heading", { name: "We couldn’t finish checking" }),
+  ).toBeVisible();
+  const originalUploads = uploads;
+  expect(originalUploads).toBeGreaterThan(0);
+  await page.goBack();
+  await expect(
+    page.getByRole("heading", {
+      name: "Upload your research paper",
+      exact: true,
+    }),
+  ).toBeVisible();
+  // Revisit the old upload URL without selecting a new document.
+  await page.goForward();
+  await expect(page).toHaveURL(/#\/research\/upload$/);
+  await expect(page.locator('input[type="file"]').first()).toBeAttached();
+  await page.waitForTimeout(500);
+  expect(uploads).toBe(originalUploads);
+  await expect(
+    page.getByRole("heading", { name: "We couldn’t finish checking" }),
+  ).toBeHidden();
+});

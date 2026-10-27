@@ -116,7 +116,11 @@ export function ResearchApp({
       title?.setAttribute("tabindex", "-1");
       title?.focus({ preventScroll: true });
     }
-    if (/^\/(?:upload|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(path))
+    if (
+      /^\/(?:upload|learn|studies\/[a-z0-9-]+|play\/[^/]+|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(
+        path,
+      )
+    )
       setReturnPath(path);
   }, [path]);
   return (
@@ -585,9 +589,12 @@ function GradlyWorkspace({
       ? "Return to your paper"
       : resumeHref.startsWith("/processing/")
         ? "Return to processing"
-        : resumeHref.startsWith("/adventure/")
+        : resumeHref.startsWith("/adventure/") ||
+            resumeHref.startsWith("/play/")
           ? "Return to quest"
-          : "Continue learning";
+          : resumeHref.startsWith("/studies/")
+            ? "Return to study"
+            : "Continue learning";
   const reloadSavedState = () => {
     setError("");
     onRetryConfig();

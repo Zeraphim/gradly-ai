@@ -48,6 +48,9 @@ export function App() {
     return subscribeReducedMotion(sync);
   }, []);
   useEffect(() => {
+    // History navigation can return home without calling the header callback.
+    // The original File has already been handed to the mounted workspace.
+    if (!research && !retired) setFile(null);
     if (retired) {
       window.history.replaceState(null, "", "#/research/learn");
       window.dispatchEvent(new HashChangeEvent("hashchange"));

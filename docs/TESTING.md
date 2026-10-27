@@ -77,6 +77,7 @@ Format changed files with Prettier and run `git diff --check`. Browser traces ar
 case: an uploaded paper receives its distinct commuter-study briefing before
 questions. It verifies the UI handoff, not live generation or provider quality.
 `intake-flow.spec.ts` covers PDF/link sample handoff, rejection recovery,
+browser-history return without replaying a previously selected upload,
 interrupted-check retry, direct library entry and shared-player letter keys.
 The retired bespoke-quest keyboard completion/resume run and full 375×812 phone
 sweep are no longer present; prepared-player walkthroughs cover the current flow.
@@ -210,3 +211,7 @@ production deployment is required or established by the authored fixtures.
   mounting, a static header logo, live system preference and persisted user reduced
   motion, plus unchanged guide dimensions. The existing Gradly guide artwork is retained with a finite animation count;
   no additional animation library is involved.
+
+`learn-flow.spec.ts` checks that the reasoning preview returns to the most recent
+learning route after moving from intake to Learn, while retaining an active-paper
+return link when the preview was opened from intake.

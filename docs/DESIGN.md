@@ -1,8 +1,8 @@
 # Gradly design
 
-The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public home uses the original centered Gradly upload composition, refined in the blue design system. A compact mascot/speech introduction leads into one dashed document area, a direct upload heading, the PDF action and the visible URL/DOI field. Sample and resume actions sit in a compact row below. There is no outer hero frame, split-column layout, nested upload panel, decorative evidence diagram or extra disclosure. The URL/DOI field accepts any entry and the following screen says plainly that the link was noted rather than fetched.
+The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public home uses the original centered Gradly upload composition, refined in the blue design system. A compact mascot/speech introduction leads into one dashed document area, a direct upload heading, the PDF action and the visible URL/DOI field. A sample action below opens the Learn library; saved quests are in My quests. There is no outer hero frame, split-column layout, nested upload panel, decorative evidence diagram or extra disclosure. The URL/DOI field remains visible. In explicit sample mode it records a labelled link note rather than fetching a paper; otherwise its action opens the Learn library.
 
-Typography, whitespace and a single tactile upload action establish the hierarchy. At 1366×768 and 1440×900, both document inputs remain above the fold. The centered layout stacks naturally on tablet and mobile while keeping points and document navigation in the header.
+Typography, whitespace and a single tactile upload action establish the hierarchy. At 1366×768 and 1440×900, both document inputs remain above the fold. The centered layout stacks naturally on tablet and mobile while keeping shared navigation in the header.
 
 The upload home, curated adventure, and research workspace share a flexible shell
 with a dynamic viewport minimum height. Main content grows to keep the footer at
@@ -207,12 +207,12 @@ The original PNG artwork remains unchanged. `scripts/optimize-brand.mjs` generat
 
 The upload-first home keeps the original centered Gradly composition: mascot and
 speech above one upload card, the PDF action, the visible URL/DOI field and the
-sample/resume row. The interim editorial hero, its decorative paper schematic and
+sample action. The interim editorial hero, its decorative paper schematic and
 the separate "Preview details" disclosure were removed: they competed with the
-single upload action and repeated what the flow already says. The prepared study's
-DOI opens its authored quest. Other links stay on intake with a limitation message
-and choices to upload a PDF or open the prepared-study library. They never
-silently substitute another study.
+single upload action and repeated what the flow already says. Links are not fetched.
+In explicit sample mode a submitted link becomes a labelled link-note PDF for the
+saved sample preparation flow. With live AI or without sample availability, the
+link action opens the Learn library. A new paper-specific quest requires its PDF.
 
 The home is styled by `styles.css` alone. The interim `paper-home.css` and
 `paper-context.css` were deleted, and the shared paper surfaces now live in
@@ -225,16 +225,20 @@ Replacement, cancellation, OCR notices and the original-PDF link remain availabl
 The original viewer is browser-provided; a blank embedded viewer has a labeled
 open-original fallback.
 
-### Paper identity, story and source
+### Paper identity, story and source (historical curated prototype)
+
+The following identity/story components are retained as isolated prototype and
+test evidence. They are not reachable from the current public routes. Current
+uploads use `ProcessingPage` and `PreparationTrack`; sample preparation opens the
+prepared texting study through the shared `JourneyPlayer`.
 
 `PaperIdentity.tsx` shows the reference study's published identity — title,
 authors, journal issue and DOI — from the authored `paperCitation` in
 `research/paper-context.ts`. The sample job exposes no citation, so this identity
 is authored, never upload-derived. It remains part of curated preparation.
 Uploaded live and sample jobs now share `ProcessingPage` and `PreparationTrack`.
-The texting quest (`TextingQuest.tsx`) introduces and tests the prepared sample after preparation, one decision per screen (the four-chapter
-`PaperStory` remains on the classic curated route), and the upload-first home's
-sample entry opens the prepared-study library.
+The bespoke `TextingQuest.tsx` and classic route have been removed. The upload-first
+home’s sample entry opens the prepared-study library.
 The upload's source, consent and saved stages stay separate from authored
 study context. Read the [intake notes](ui/INTAKE_PROCESSING.md) for scope,
 state behavior, integration proposals and verification limits.

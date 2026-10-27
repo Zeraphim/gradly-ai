@@ -251,3 +251,28 @@ test("unavailable-study skip link focuses its main landmark", async ({
   await page.keyboard.press("Enter");
   await expect(page.locator("main#main")).toBeFocused();
 });
+
+test("reasoning preview returns to the current learning route, not an older upload", async ({
+  page,
+}) => {
+  await page.goto("/#/research/upload");
+  await expect(page.locator("main")).toBeVisible();
+  const preview = async () => {
+    await page.getByRole("link", { name: "How it works", exact: true }).click();
+    await page
+      .getByRole("link", { name: "Try the reasoning preview", exact: true })
+      .click();
+    return page.getByRole("link", { name: "Back to learning", exact: true });
+  };
+  const back = await preview();
+  await expect(back).toHaveAttribute("href", "#/research/upload");
+  await back.click();
+  await page.locator('.gr-nav a[href="#/research/learn"]').click();
+  await expect(await preview()).toHaveAttribute("href", "#/research/learn");
+  await page
+    .getByRole("link", { name: "Back to learning", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Pick a study. Make the calls." }),
+  ).toBeVisible();
+});
