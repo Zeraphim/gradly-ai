@@ -1,5 +1,6 @@
 import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { studyCards } from "../../apps/web/src/research/studies/cards.js";
 
 // One prepared challenge per scene kind, opened directly through saved progress.
 // Set SCENE_SHOTS_DIR to also save screenshots for visual review.
@@ -93,11 +94,12 @@ async function open(
   solved: boolean,
 ) {
   await page.addInitScript(
-    ({ slug, index, id, answer, solved }) => {
+    ({ slug, index, id, answer, solved, revision }) => {
       localStorage.setItem(
         "gradly-study-progress:v1",
         JSON.stringify({
           [slug]: {
+            revision,
             phase: "challenge",
             index,
             bonus: false,
@@ -112,7 +114,13 @@ async function open(
         }),
       );
     },
-    { ...scene, answer: [...scene.answer], solved },
+    {
+      ...scene,
+      answer: [...scene.answer],
+      solved,
+      revision:
+        studyCards.find((card) => card.slug === scene.slug)?.revision ?? 1,
+    },
   );
   // A fresh document each time, so the seeded progress is read again.
   await page.goto("about:blank");
