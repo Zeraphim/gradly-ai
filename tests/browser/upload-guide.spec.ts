@@ -53,8 +53,9 @@ test("system and saved reduced motion switch to a static guide without shifting 
   await expect(page.locator(".upload-guide-animated")).toHaveCount(0);
   await expect(page.locator('.home-guide [data-pose="guiding"]')).toBeVisible();
   const after = await page.locator(".home-guide .mascot").boundingBox();
-  expect(after!.width).toBe(before!.width);
-  expect(after!.height).toBe(before!.height);
+  // Bounding boxes can differ by floating-point fractions of a CSS pixel.
+  expect(after!.width).toBeCloseTo(before!.width, 2);
+  expect(after!.height).toBeCloseTo(before!.height, 2);
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await expect(page.locator(".upload-guide-animated")).toHaveCount(1);
   await page.goto("/#/research/settings");
