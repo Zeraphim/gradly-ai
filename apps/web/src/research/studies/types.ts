@@ -85,6 +85,8 @@ export type StudyCard = {
   /** Set only after Tymee's content review. */
   reviewed: boolean;
   challenges: string[];
+  /** Bump when question/answer meaning changes, so old attempts are not reused. */
+  revision?: number;
 };
 
 /** Lesson body in `data/<slug>.ts`, loaded only when the study opens. */

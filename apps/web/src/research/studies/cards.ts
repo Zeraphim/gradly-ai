@@ -73,6 +73,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "memory-training",
+    revision: 3,
     teaser: "Memory training",
     question:
       "Does believing intelligence can grow improve gains from short working memory training?",
@@ -95,6 +96,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "recalling-personal-details",
+    revision: 3,
     teaser: "Recalling personal details",
     question:
       "Does using an online self‑reference encoding task boost word recall compared to semantic encoding?",
@@ -106,6 +108,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "television-viewing-habits",
+    revision: 3,
     teaser: "Television viewing habits",
     question:
       "Does watching more television lead people to hold false beliefs about Austria’s death penalty?",
@@ -117,6 +120,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "teen-social-media-use",
+    revision: 3,
     teaser: "Teen social media use",
     question:
       "How do different types of social media experiences relate to adolescent flourishing?",
@@ -128,6 +132,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "kids-eating-when-not-hungry",
+    revision: 3,
     teaser: "Kids eating when not hungry",
     question:
       "Does a child's ability to wait for a reward predict how much they eat when not hungry a year later?",
@@ -150,6 +155,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "music-and-mood-perception",
+    revision: 3,
     teaser: "Music and mood perception",
     question:
       "Does familiarity with Western music influence whether people hear major chords as happier than minor ones?",
@@ -172,6 +178,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "imagining-survival-scenarios",
+    revision: 3,
     teaser: "Imagining survival scenarios",
     question:
       "Does imagining a survival situation improve memory for objects and their details?",
@@ -183,6 +190,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "stroop-task-performance",
+    revision: 3,
     teaser: "Stroop task performance",
     question:
       "Does ego depletion affect performance on the Stroop color-word task?",
@@ -227,6 +235,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "anticipating-a-shock",
+    revision: 3,
     teaser: "Anticipating a shock",
     question:
       "Does inducing anxiety shift people's political attitudes toward conservatism?",
@@ -238,6 +247,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "parents-viewing-vaccine-safety-info",
+    revision: 3,
     teaser: "Parents viewing vaccine safety info",
     question:
       "Does presenting vaccine safety information positively change how parents view it as a government priority?",
@@ -249,6 +259,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "reading-words-aloud",
+    revision: 3,
     teaser: "Reading words aloud",
     question:
       "Does saying words out loud improve memory compared to silent reading?",
@@ -260,6 +271,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "holding-a-warm-drink",
+    revision: 3,
     teaser: "Holding a warm drink",
     question:
       "Does holding a warm mug change how people think about relationships?",
@@ -281,6 +293,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "clinton-voter-activism",
+    revision: 3,
     teaser: "Clinton voter activism",
     question:
       "Does political activism improve well‑being only for people who strongly identify with Hillary Clinton?",
@@ -332,6 +345,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "phone-use-while-driving",
+    revision: 3,
     teaser: "Phone use while driving",
     question:
       "Does texting on a smartphone slow driver braking more than looking at images?",
@@ -398,6 +412,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "music-and-attention",
+    revision: 3,
     teaser: "Music and attention",
     question:
       "Does relaxing background music impair attention more than stimulating music or silence?",
@@ -409,6 +424,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "sharing-money-in-public",
+    revision: 3,
     teaser: "Sharing money in public",
     question:
       "Does being seen or seeing eye images make people give more money in a sharing task?",
@@ -442,6 +458,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "online-charity-giving",
+    revision: 3,
     teaser: "Online charity giving",
     question:
       "Does letting donors choose where their $5 donation goes increase the chance they will participate in the study?",
@@ -453,6 +470,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "vaccine-misinformation-correction",
+    revision: 3,
     teaser: "Vaccine misinformation correction",
     question:
       "Did the recommended correction give higher reliability and satisfaction than the common one?",
@@ -475,6 +493,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "walking-speed-test",
+    revision: 3,
     teaser: "Walking speed test",
     question: "Does seeing age‑related words cause people to walk slower?",
     group: "replication",
@@ -485,6 +504,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "using-scented-air-while-brainstorming",
+    revision: 3,
     teaser: "Using scented air while brainstorming",
     question:
       "Does believing a scent enhances creativity actually improve performance on creative tasks?",
@@ -518,6 +538,7 @@ export const studyCards: StudyCard[] = [
   },
   {
     slug: "understanding-how-pumps-work",
+    revision: 3,
     teaser: "Understanding how pumps work",
     question:
       "Do visual explanations help people learn mechanical systems better than verbal explanations?",

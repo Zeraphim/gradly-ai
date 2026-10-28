@@ -4,6 +4,7 @@ import {
   studies as cards,
 } from "../../apps/web/src/research/studies/catalog.js";
 import { rewrittenStudySlugs } from "../fixtures/rewritten-studies.js";
+import { remainingStudies } from "../fixtures/remaining-studies.js";
 
 const rewritten = await Promise.all(
   rewrittenStudySlugs.map(async (slug) => (await loadStudy(slug))!),
@@ -35,6 +36,58 @@ const singles = rewritten.flatMap((s) =>
 // Content-review guardrails for the specific PR #33 regressions. These catch
 // superficial answer strategies, not factual accuracy or learning benefit.
 describe("rewritten prepared-study choices", () => {
+  const remainingSingles = remainingStudies.flatMap(([, study]) =>
+    study.lesson.challenges.filter((challenge) => challenge.type === "single"),
+  );
+  it("keeps fixed-position shortcuts weak within the final review batch itself", () => {
+    for (let position = 0; position < 4; position++) {
+      const hits = remainingSingles.filter((challenge) =>
+        challenge.accepted.includes(challenge.options[position]?.id ?? ""),
+      ).length;
+      expect(hits / remainingSingles.length).toBeLessThanOrEqual(0.4);
+    }
+  });
+  it("keeps length shortcuts weak in each review subgroup, not just the combined batch", () => {
+    for (const batch of [
+      remainingStudies,
+      remainingStudies.slice(0, 11),
+      remainingStudies.slice(11),
+    ]) {
+      const cs = batch.flatMap(([, body]) =>
+        body.lesson.challenges.filter((c) => c.type === "single"),
+      );
+      for (const extreme of [Math.min, Math.max]) {
+        const hits = cs.filter((c) => {
+          const right = c.options.find((o) => c.accepted.includes(o.id))!;
+          return (
+            right.text.length ===
+            extreme(...c.options.map((o) => o.text.length))
+          );
+        }).length;
+        expect(hits / cs.length).toBeLessThanOrEqual(0.4);
+      }
+    }
+  });
+  it("offers at least three substantive choices throughout the final batch", () => {
+    for (const [slug, body] of remainingStudies)
+      for (const c of body.lesson.challenges)
+        expect(c.options.length, `${slug}/${c.id}`).toBeGreaterThanOrEqual(3);
+  });
+  it("does not reserve non-absolute wording for the correct answer", () => {
+    const absolute =
+      /\b(prove[sd]?|every|exactly|impossible|uniquely|necessarily|automatically|guarantee[sd]?|always|entirely|identical|eliminates?|zero|sole|never)\b/i;
+    for (const [slug, body] of remainingStudies)
+      for (const c of body.lesson.challenges.filter(
+        (c) => c.type === "single",
+      )) {
+        const wrong = c.options.filter((o) => !c.accepted.includes(o.id));
+        expect(
+          wrong.every((o) => absolute.test(o.text)),
+          `${slug}/${c.id}`,
+        ).toBe(false);
+      }
+  });
+
   it("does not reward a fixed answer position across or within studies", () => {
     for (let position = 0; position < 4; position++) {
       const hits = singles.filter((c) =>
@@ -129,6 +182,20 @@ describe("rewritten prepared-study choices", () => {
         expect(indexes, `${study.slug}/${c.id}`).toEqual(
           [...indexes].sort((a, b) => a - b),
         );
+      }
+    }
+  });
+
+  it("keeps revised scene labels identical to their answer choices", () => {
+    for (const [slug, body] of remainingStudies) {
+      for (const c of [
+        ...body.lesson.challenges,
+        ...(body.lesson.bonus ? [body.lesson.bonus] : []),
+      ]) {
+        for (const response of c.scene?.responses ?? [])
+          expect(response.label, `${slug}/${c.id}/${response.optionId}`).toBe(
+            c.options.find((option) => option.id === response.optionId)?.text,
+          );
       }
     }
   });

@@ -7,29 +7,30 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      title: "Identify Study Design",
+      title: "Classify this analysis",
       instruction: "Read the evidence before you answer.",
       description:
-        "Learner examines two pieces of evidence regarding data collection timing and mode, then connects each to the possible study designs.",
+        "Shown evidence indicates that only the Spring 2022 wave was analysed.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene designed for identifying study design based on shown evidence.",
+        kind: "source-summary",
+        refs: ["r2"],
+        note: "Only the Spring 2022 wave was analysed.",
       },
       responses: [
         {
           optionId: "opt_correct",
-          label: "Cross‑sectional design (one time point)",
-          targetIds: ["pin1", "pin2"],
+          label: "Cross‑sectional analysis of measurements from one wave.",
+          targetIds: [],
         },
         {
           optionId: "opt_distractor1",
-          label: "Longitudinal design (multiple waves)",
+          label: "Longitudinal analysis using the project’s planned waves.",
           targetIds: [],
         },
         {
           optionId: "opt_distractor2",
-          label: "Experimental design (manipulated exposure)",
+          label:
+            "Randomized intervention because the questionnaire was completed during school.",
           targetIds: [],
         },
       ],
@@ -37,203 +38,309 @@ export const scenes: Record<string, SavedScene> = {
       kind: "connections",
       anchors: [
         {
-          id: "pin1",
-          label: "First wave of longitudinal HappyB project (Spring 2022)",
-          detail:
-            "Data were collected from Swiss adolescents during the first wave of the longitudinal HappyB project in Spring 2022.",
+          id: "e1",
+          label: "Evidence",
+          detail: "Only the Spring 2022 wave was analysed.",
           at: "setup",
           provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Based on shown evidence.",
-          },
-        },
-        {
-          id: "pin2",
-          label: "Online questionnaire administered once during school hour",
-          detail:
-            "Students completed an online questionnaire via Qualtrics during a school hour with a teacher present.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Based on shown evidence.",
+            kind: "source-summary",
+            refs: ["r2"],
+            note: "From shownEvidence.",
           },
         },
       ],
-      actionLabel: "Connect evidence to design",
+      actionLabel: "Select the design that matches the evidence",
     },
   },
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Understanding covariate inclusion in hierarchical regression",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Review the steps of the analysis and consider why self‑esteem, ill‑being and other covariates were added.",
+      description:
+        "The study measured social‑media experiences, flourishing and several covariates, then entered predictors in blocks.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e1", "e3"],
-        note: "Verified excerpts from the paper.",
+        note: "Summary of the hierarchical regression procedure and covariate control.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 1",
-          detail:
-            "After applying Bonferroni’s correction, results of the hierarchical regression analyses showed that positive social media experiences (β=0.112, p<0.001) and social media inspirations from others (β=0.072, p<0.001) and for others (β=0.060, p=0.003) were positively associated with flourishing. Flourishing was inversely associated with negative social media experiences (β=−0.076, p<0.001).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e1"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 6",
-          detail:
-            "Results of the hierarchical regression analysis explained more than half of the variance in the Flourishing scale (R2 = 0.553). After applying Bonferroni’s correction (p < 0.003) and controlling for all covariates, the following social media activities positively predicted flourishing: positive social media experiences (β = 0.112, p < 0.001) and social media inspirations from others (β = 0.072, p < 0.001) and partially for others (β = 0.060, p = 0.003).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
-          optionId: "opt_correct",
-          label:
-            "Self‑esteem, ill‑being, perceived school environment, self‑reported physical activity, perceived SES, gender, high school year, age, personality (extraversion & neuroticism), perceived stress.",
-          targetIds: ["evidence_1", "evidence_2"],
+          optionId: "opt_distractor1",
+          label: "Convert experiences into random treatments",
+          targetIds: [],
         },
         {
-          optionId: "opt_distractor1",
-          label: "Self‑esteem and ill‑being only.",
-          targetIds: ["evidence_1", "evidence_2"],
+          optionId: "opt_correct",
+          label: "Estimate conditional associations, confounding may remain",
+          targetIds: ["p3", "p4"],
         },
         {
           optionId: "opt_distractor2",
-          label:
-            "Positive and negative social media experiences, self‑disclosure, and social media inspiration.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Assign full model’s explanatory power to social media",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "p1",
+          label: "Variables measured",
+          detail:
+            "Data were gathered on social‑media experiences, flourishing, self‑esteem, ill‑being, demographics and school‑related factors.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Controls for all covariates mentioned.",
+          },
+        },
+        {
+          id: "p2",
+          label: "First regression block",
+          detail:
+            "Positive and negative social‑media experiences were entered as predictors of flourishing.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1", "e3"],
+            note: "Hierarchical regression of social‑media predictors.",
+          },
+        },
+        {
+          id: "p3",
+          label: "Second regression block",
+          detail:
+            "Self‑esteem, ill‑being and other covariates were added in a subsequent block to control for their influence.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Controlling for all covariates.",
+          },
+        },
+        {
+          id: "p4",
+          label: "Interpretation after covariates",
+          detail:
+            "After controlling for covariates, positive social‑media experiences, inspirations from others and for others remained significantly associated with flourishing.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Results after Bonferroni correction and covariate control.",
+          },
+        },
+      ],
     },
   },
   c3: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Handle the correction boundary",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Examine the reported p-values and consider how they relate to the corrected threshold of p < .003.",
+      description:
+        "Three tests show the reported p-values for social‑media predictors; use them to judge which interpretation treats the threshold carefully.",
       provenance: {
-        kind: "reported",
-        refs: ["e1", "e3"],
-        note: "Verified excerpts from the paper.",
+        kind: "source-summary",
+        refs: ["r3"],
+        note: "Results of the hierarchical regression analysis with Bonferroni correction.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 1",
-          detail:
-            "After applying Bonferroni’s correction, results of the hierarchical regression analyses showed that positive social media experiences (β=0.112, p<0.001) and social media inspirations from others (β=0.072, p<0.001) and for others (β=0.060, p=0.003) were positively associated with flourishing. Flourishing was inversely associated with negative social media experiences (β=−0.076, p<0.001).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e1"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 6",
-          detail:
-            "Results of the hierarchical regression analysis explained more than half of the variance in the Flourishing scale (R2 = 0.553). After applying Bonferroni’s correction (p < 0.003) and controlling for all covariates, the following social media activities positively predicted flourishing: positive social media experiences (β = 0.112, p < 0.001) and social media inspirations from others (β = 0.072, p < 0.001) and partially for others (β = 0.060, p = 0.003).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
-          optionId: "opt_correct",
-          label:
-            "Positive social media experiences, inspiration from others, inspiration for others (all positive); negative social media experiences (inverse).",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
-        {
           optionId: "opt_distractor1",
-          label: "Positive social media experiences only.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "All three clearly pass because .003 is less than .003.",
+          targetIds: ["t1", "t2", "t3"],
         },
         {
           optionId: "opt_distractor2",
-          label: "Self‑disclosure on social media with close friends.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label:
+            "Prefer the rounded .003 result over the < .001 results because it is closest to the cutoff.",
+          targetIds: ["t3"],
+        },
+        {
+          optionId: "opt_correct",
+          label:
+            "The first two clearly pass; the rounded .003 result lies at the stated boundary.",
+          targetIds: ["t1", "t2", "t3"],
         },
       ],
       resolution: null,
+      kind: "tests",
+      alpha: 0.003,
+      tests: [
+        {
+          id: "t1",
+          label: "Positive experiences",
+          detail: "p < .001",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r3"],
+            note: "From hierarchical regression results",
+          },
+          column: 0,
+          p: 0.001,
+        },
+        {
+          id: "t2",
+          label: "Inspiration from others",
+          detail: "p < .001",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r3"],
+            note: "From hierarchical regression results",
+          },
+          column: 0,
+          p: 0.001,
+        },
+        {
+          id: "t3",
+          label: "Inspiration for others (partial)",
+          detail: "p = .003",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r3"],
+            note: "From hierarchical regression results",
+          },
+          column: 0,
+          p: 0.003,
+        },
+      ],
+      prediction: null,
     },
   },
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Hierarchical regression steps for Flourishing",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Look at the two modeling steps presented. Based on the shown evidence, decide which option correctly describes what the reported R² = .553 represents.",
+      description:
+        "The excerpt notes that the hierarchical regression included social‑media variables together with demographic, personality and well‑being covariates, and that the overall model explained 55.3% of the variance in Flourishing (R² = .553).",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e3"],
-        note: "Verified excerpts from the paper.",
+        note: "Summarizes the predictor set and the reported R² from the excerpt.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 6",
-          detail:
-            "Results of the hierarchical regression analysis explained more than half of the variance in the Flourishing scale (R2 = 0.553). After applying Bonferroni’s correction (p < 0.003) and controlling for all covariates, the following social media activities positively predicted flourishing: positive social media experiences (β = 0.112, p < 0.001) and social media inspirations from others (β = 0.072, p < 0.001) and partially for others (β = 0.060, p = 0.003).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "opt_correct",
           label:
-            "More than half of the variance in flourishing was explained (R² = 0.553).",
-          targetIds: ["evidence_1"],
+            "No; it is the explained variance of the combined model, not social media alone.",
+          targetIds: [],
         },
         {
           optionId: "opt_distractor1",
-          label: "Less than 30 % of the variance was explained.",
-          targetIds: ["evidence_1"],
+          label:
+            "Yes; final-step R² is the variance added by social-media predictors.",
+          targetIds: [],
         },
         {
           optionId: "opt_distractor2",
-          label: "Exactly 0.45 of the variance was explained.",
-          targetIds: ["evidence_1"],
+          label:
+            "Yes; R² is the percentage of participants whose flourishing social media caused.",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "designs",
+      panels: [
+        {
+          id: "base",
+          label: "Covariates only",
+          steps: [
+            {
+              id: "base_step",
+              label: "Enter demographic, personality, well‑being covariates",
+              detail:
+                "These variables are entered first in the hierarchical regression.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "From excerpt: covariates are controlled for.",
+              },
+            },
+            {
+              id: "base_out",
+              label: "Outcome: Flourishing scale",
+              detail: "The dependent variable remains Flourishing throughout.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Flourishing is the outcome variable.",
+              },
+            },
+          ],
+        },
+        {
+          id: "social",
+          label: "Add social‑media predictors",
+          steps: [
+            {
+              id: "social_step",
+              label:
+                "Add social‑media experiences, inspirations, and other activities",
+              detail:
+                "These predictors are entered in a later step after the covariates.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Excerpt lists the social‑media activities that positively predicted flourishing.",
+              },
+            },
+            {
+              id: "social_out",
+              label: "Outcome: Flourishing scale",
+              detail: "Same dependent variable as before.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Outcome unchanged.",
+              },
+            },
+          ],
+        },
+        {
+          id: "full",
+          label: "Full model R² = .553",
+          steps: [
+            {
+              id: "full_step",
+              label: "Reported explained variance",
+              detail:
+                "After all predictors are in the model, R² = .553 for the Flourishing scale.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Directly from the excerpt: Results … explained more than half of the variance (R2 = 0.553).",
+              },
+            },
+            {
+              id: "full_out",
+              label: "Outcome: Flourishing scale",
+              detail:
+                "Indicates the proportion of variance in Flourishing accounted for by the full set of predictors.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Same outcome variable.",
+              },
+            },
+          ],
+        },
+      ],
     },
   },
 };

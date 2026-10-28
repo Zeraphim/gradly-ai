@@ -35,22 +35,26 @@ export const scenes: Record<string, SavedScene> = {
       responses: [
         {
           optionId: "c2-optA",
-          label: "RT only",
+          label:
+            "The same trials make timing and error-rate findings interchangeable.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "c2-optB",
-          label: "ER only",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "c2-optC",
-          label: "Both RT and ER",
+          label:
+            "Error rates identify a physiological mechanism without any additional measurements.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "c2-optD",
-          label: "Heart rate",
+          label:
+            "A lower reaction time guarantees better attention even if errors increase sharply.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c2-optC",
+          label:
+            "A quicker response could come with more mistakes, so both outcomes matter.",
           targetIds: ["evidence_1"],
         },
       ],
@@ -60,36 +64,35 @@ export const scenes: Record<string, SavedScene> = {
   c3: {
     scene: {
       version: 1,
-      title: "Flanker Effect Across Music Conditions",
-      instruction:
-        "Review the reported flanker effect sizes for each auditory condition.",
+      title: "Interpreting the flanker gap under different music conditions",
+      instruction: "Read the evidence before you answer.",
       description:
-        "The excerpts report that the flanker effect was large for relaxing music and average for stimulating music and silence.",
+        "Review the evidence about the flanker effect size across auditory conditions and choose the implied claim.",
       provenance: {
         kind: "source-summary",
         refs: ["e17", "e5"],
-        note: "Summarizes the reported effect sizes.",
+        note: "Scene based on reported flanker effect differences.",
       },
       responses: [
         {
           optionId: "c3-optA",
-          label: "Relaxing > Stimulating = Silence",
-          targetIds: ["e1", "e2", "e3"],
+          label: "A",
+          targetIds: [],
         },
         {
           optionId: "c3-optB",
-          label: "Stimulating > Relaxing = Silence",
-          targetIds: ["e2", "e1", "e3"],
+          label: "B",
+          targetIds: [],
         },
         {
           optionId: "c3-optC",
-          label: "No difference between conditions",
-          targetIds: ["e1", "e2", "e3"],
+          label: "C",
+          targetIds: [],
         },
         {
           optionId: "c3-optD",
-          label: "Relaxing < Stimulating",
-          targetIds: ["e1", "e2"],
+          label: "D",
+          targetIds: [],
         },
       ],
       resolution: null,
@@ -97,165 +100,132 @@ export const scenes: Record<string, SavedScene> = {
       anchors: [
         {
           id: "e1",
-          label: "Large flanker effect for relaxing music",
+          label: "Flanker gap larger under relaxing music",
           detail:
-            "The excerpt reports a large flanker effect for relaxing music.",
+            "The RT flanker gap (incongruent minus congruent) is larger for relaxing music than for stimulating music or silence.",
           at: "setup",
           provenance: {
-            kind: "source-summary",
+            kind: "reported",
             refs: ["e17", "e5"],
-            note: "From e17 and e5.",
-          },
-        },
-        {
-          id: "e2",
-          label: "Average flanker effect for stimulating music",
-          detail:
-            "The excerpt reports an average flanker effect for stimulating music.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e17"],
-            note: "From e17.",
-          },
-        },
-        {
-          id: "e3",
-          label: "Average flanker effect for silence",
-          detail: "The excerpt reports an average flanker effect for silence.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e17"],
-            note: "From e17.",
+            note: "From excerpts describing greater flanker effect for relaxing music.",
           },
         },
       ],
-      actionLabel: "Match",
+      actionLabel: "Choose the implied claim",
     },
   },
   c4: {
     scene: {
       version: 1,
-      title: "Age Interaction",
-      instruction: "Highlight a passage to see what it means here.",
+      title: "Age similarity in music effect",
+      instruction:
+        "Read the brief retelling of the study's results. Use it to judge which conclusion avoids overstating equality.",
       description:
-        "The results excerpt is split into four short snippets. Select the snippet that speaks to age differences.",
+        "Two short passages describe the music effect and its similarity across age groups.",
       provenance: {
         kind: "source-summary",
         refs: ["e5"],
-        note: "Scene built from the reported results excerpt.",
+        note: "Summarizes the excerpt's statement about similar effect in older and younger adults.",
       },
       responses: [
         {
           optionId: "c4-optA",
-          label: "Effect larger in older adults",
-          targetIds: ["elem1"],
-        },
-        {
-          optionId: "c4-optB",
-          label: "Effect larger in young adults",
-          targetIds: ["elem2"],
+          label: "Age proven irrelevant",
+          targetIds: ["e1"],
         },
         {
           optionId: "c4-optC",
-          label: "No age interaction (effect same)",
-          targetIds: ["elem4"],
+          label: "No clear age-dependent difference detected",
+          targetIds: ["e2"],
+        },
+        {
+          optionId: "c4-optB",
+          label: "Age groups poolable",
+          targetIds: ["e2"],
         },
         {
           optionId: "c4-optD",
-          label: "Effect only present in older adults",
-          targetIds: ["elem3"],
+          label: "Nonsignificant means opposite interaction",
+          targetIds: ["e2"],
         },
       ],
       resolution: null,
       kind: "spot",
       passages: [
         {
-          id: "elem1",
-          label: "Opening clause",
+          id: "e1",
+          label: "Music effect",
           detail:
-            "Our results, not supported by the Arousal-Mood Theory, suggest that",
+            "Relaxing pleasant background music increased flanker effect or RT relative to stimulating music and silence.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e5"],
-            note: "Direct quote from excerpt.",
+            note: "Directly from excerpt.",
           },
         },
         {
-          id: "elem2",
-          label: "Impairment claim",
+          id: "e2",
+          label: "Age similarity",
           detail:
-            "relaxing pleasant background music can impair visuo-spatial attentional control performance",
+            "The effect was observed to be similar in older and younger adult groups.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e5"],
-            note: "Direct quote from excerpt.",
+            note: "Directly from excerpt.",
           },
         },
         {
-          id: "elem3",
-          label: "Greater effect claim",
-          detail:
-            "inducing a greater flanker effect or RT than that observed for stimulating pleasant music and silence",
+          id: "passages",
+          label: "Passages",
+          detail: "Music effect; Age similarity",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e5"],
-            note: "Direct quote from excerpt.",
-          },
-        },
-        {
-          id: "elem4",
-          label: "Age equality claim",
-          detail:
-            "This effect was the same for older and young adults despite the typical decrement in attentional control associated with healthy aging.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e5"],
-            note: "Direct quote from excerpt.",
+            kind: "authored",
+            refs: [],
+            note: "Order of passages for spot.",
           },
         },
       ],
     },
-    responseStyle: "tap",
   },
   c5: {
     scene: {
       version: 1,
-      title: "Interpreting the Arousal‑Mood Theory result",
+      title: "Is arousal isolated?",
       instruction: "Read the claims from modest to strong.",
       description:
-        "A ladder of possible conclusions about the theory, ordered from the most modest claim to the strongest.",
+        "Three possible claims about what the music manipulation shows, ordered from modest to strongest.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene built from the provided excerpt.",
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "Scene built from the study’s limitation description.",
       },
       responses: [
         {
           optionId: "c5-optA",
-          label: "Supports the theory",
-          targetIds: ["rung4"],
+          label:
+            "Yes; the relaxing‑condition label identifies the operative mechanism.",
+          targetIds: ["rung1"],
+        },
+        {
+          optionId: "c5-optC",
+          label:
+            "Yes; pleasantness and familiarity must be identical across ages because the music is classical.",
+          targetIds: ["rung1"],
         },
         {
           optionId: "c5-optB",
           label:
-            "Contradicts the theory because relaxing music impaired performance more than stimulating music",
-          targetIds: ["rung3"],
-        },
-        {
-          optionId: "c5-optC",
-          label: "Shows arousal is unrelated to performance",
+            "No; bundled stimulus differences leave the specific causal account unresolved.",
           targetIds: ["rung2"],
         },
         {
           optionId: "c5-optD",
-          label: "Are inconclusive regarding the theory",
-          targetIds: ["rung1"],
+          label:
+            "No; the observed interference contrast must therefore be a statistical impossibility.",
+          targetIds: ["rung3"],
         },
       ],
       resolution: null,
@@ -263,49 +233,41 @@ export const scenes: Record<string, SavedScene> = {
       rungs: [
         {
           id: "rung1",
-          label: "Inconclusive",
+          label:
+            "Arousal differences alone account for the relaxing vs stimulating difference",
           detail:
-            "The results are inconclusive regarding the Arousal‑Mood Theory.",
+            "Claim that only the arousal dimension of the music drives the effect.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e5"],
-            note: "Paraphrases the excerpt’s statement that results are ‘not supported by the Arousal‑Mood Theory.’",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Based on the limitation that music differed in arousal and valence.",
           },
         },
         {
           id: "rung2",
-          label: "Arousal unrelated",
-          detail: "The results show that arousal is unrelated to performance.",
+          label:
+            "Arousal and emotional valence differences together account for the difference",
+          detail:
+            "Claim that both arousal and valence of the music influence the effect.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e5"],
-            note: "Derived from the excerpt’s claim that relaxing music impairs performance relative to stimulating music and silence.",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Based on the limitation that music differed in both arousal and valence.",
           },
         },
         {
           id: "rung3",
-          label: "Contradicts theory",
+          label:
+            "Age‑related differences in pleasantness/familiarity also influence the effect",
           detail:
-            "The results contradict the Arousal‑Mood Theory because relaxing pleasant background music impaired visuo‑spatial attentional control more than stimulating pleasant music and silence.",
+            "Claim that older adults’ greater pleasantness/familiarity with the classical music could confound the results.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e5"],
-            note: "Uses the exact finding reported in the excerpt.",
-          },
-        },
-        {
-          id: "rung4",
-          label: "Supports theory",
-          detail:
-            "The results support the Arousal‑Mood Theory of background music on cognition.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Represents the opposite claim to the excerpt’s finding.",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Based on the limitation that older adults found the music more pleasant and familiar than young adults.",
           },
         },
       ],

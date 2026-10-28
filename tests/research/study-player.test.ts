@@ -184,3 +184,112 @@ it("ignores saved progress for removed studies when offering a resume", () => {
 function escape(text: string) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").slice(0, 40);
 }
+
+it("starts revised questions afresh without erasing old or unrelated saved work", async () => {
+  const old = {
+    revision: 2,
+    phase: "reveal",
+    index: 4,
+    bonus: false,
+    attempts: { c1: [{ selected: ["A"], correct: true }] },
+    retrying: null,
+    draft: null,
+    completed: true,
+    updated: 77,
+  };
+  const saved = { "memory-training": old, "sleep-school": old };
+  const library = render(view("/studies"));
+  act(() => {
+    localStorage.setItem("gradly-study-progress:v1", JSON.stringify(saved));
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: "gradly-study-progress:v1" }),
+    );
+  });
+  library.unmount();
+  const { unmount } = render(view("/studies/memory-training"));
+  const begin = await screen.findByRole("button", { name: /Begin study/ });
+  expect(screen.getByRole("status").textContent).toContain(
+    "questions have changed",
+  );
+  expect(JSON.parse(localStorage.getItem("gradly-study-progress:v1")!)).toEqual(
+    saved,
+  );
+  await userEvent.click(begin);
+  expect(screen.queryByRole("status")).toBeNull();
+  expect(screen.getByLabelText("0 practice points in this study")).toBeTruthy();
+  const next = JSON.parse(localStorage.getItem("gradly-study-progress:v1")!);
+  expect(next["memory-training"].revision).toBe(3);
+  expect(next["memory-training"].attempts).toEqual({});
+  expect(next["sleep-school"]).toEqual(old);
+  unmount();
+  render(view("/studies/memory-training"));
+  expect(
+    await screen.findByLabelText("0 practice points in this study"),
+  ).toBeTruthy();
+  expect(screen.queryByRole("button", { name: /Begin study/ })).toBeNull();
+});
+
+it("ignores a damaged saved attempt instead of crashing the library", () => {
+  render(view("/studies"));
+  act(() => {
+    localStorage.setItem(
+      "gradly-study-progress:v1",
+      JSON.stringify({
+        "sleep-school": {
+          phase: "challenge",
+          index: 0,
+          bonus: false,
+          attempts: { q1: [null] },
+          retrying: null,
+          draft: null,
+          completed: false,
+          updated: 77,
+        },
+      }),
+    );
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: "gradly-study-progress:v1" }),
+    );
+  });
+  expect(
+    screen.getByRole("heading", { name: "Pick a study. Make the calls." }),
+  ).toBeTruthy();
+  expect(
+    screen.queryByRole("region", { name: "Continue where you left off" }),
+  ).toBeNull();
+});
+
+it("reflects another tab clearing browser progress", () => {
+  render(view("/studies"));
+  act(() => {
+    localStorage.setItem(
+      "gradly-study-progress:v1",
+      JSON.stringify({
+        "memory-training": {
+          revision: 3,
+          phase: "challenge",
+          index: 0,
+          bonus: false,
+          attempts: {},
+          retrying: null,
+          draft: null,
+          completed: false,
+          updated: 77,
+        },
+      }),
+    );
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: "gradly-study-progress:v1" }),
+    );
+  });
+  expect(
+    screen.getByRole("region", { name: "Continue where you left off" }),
+  ).toBeTruthy();
+  act(() => {
+    localStorage.clear();
+    window.dispatchEvent(new StorageEvent("storage", { key: null }));
+  });
+  expect(
+    screen.queryByRole("region", { name: "Continue where you left off" }),
+  ).toBeNull();
+});

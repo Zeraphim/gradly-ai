@@ -14,7 +14,7 @@ export const scenes: Record<string, SavedScene> = {
       description: "The challenge's evidence with one response per option.",
       provenance: {
         kind: "reported",
-        refs: ["e2", "e3"],
+        refs: ["r2", "r3"],
         note: "Verified excerpts from the paper.",
       },
       actionLabel: "Connect a response",
@@ -23,11 +23,11 @@ export const scenes: Record<string, SavedScene> = {
           id: "evidence_1",
           label: "Evidence 1 · p. 4",
           detail:
-            "The two groups did not differ in pretest [B = −64, SE = 0.50, t(48) = −1.290, P = 0.203, b = 0.38) or post-test (B = −0.16, SE = 0.53, t(48) = −0.304, P = 0.762, b = 0.09).",
+            "Both interactions between time and group were not observed [ACC: B = −0.03, SE = 0.47, t(48) = −0.595, P = 0.554, d = 0.14; and RT: B = −55.34, SE = 56.98, t(48) = −0.971, P = 0.334, d = 0.20] (see Figure 5). Raven’s Advanced Progressive Matrices (Far Transfer) We analyzed the performance of RAPM between the two groups. The two groups did not differ in pretest [B = −64, SE = 0.50, t(48) = −1.290, P = 0.203, b = 0.38) or post-test (B = −0.16, SE = 0.53, t(48) = −0.304, P = 0.762, b = 0.09).",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e2"],
+            refs: ["r2"],
             note: "Verified excerpts from the paper.",
           },
         },
@@ -35,11 +35,11 @@ export const scenes: Record<string, SavedScene> = {
           id: "evidence_2",
           label: "Evidence 2 · p. 5",
           detail:
-            "the results showed that compared with the fixed mindset group, the performance of the growth mindset group was not significantly different from the pretest to the post-test in all tasks.",
+            "SE = 0.51, t(48) = 1.095, P = 0.276, d = 0.22]. And there was not an interaction between time and group [B = −0.48, SE = 0.72, t(48) = −0.664, P = 0.508, d = 0.14] (refer to Figure 6). Overall, our data showed that the growth mindset group and the fixed group did not differ in training effects, near-transfer effect, and far-transfer effect.",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e3"],
+            refs: ["r3"],
             note: "Verified excerpts from the paper.",
           },
         },
@@ -47,17 +47,17 @@ export const scenes: Record<string, SavedScene> = {
       responses: [
         {
           optionId: "o1",
-          label: "Within‑group pre‑to‑post change for each mindset group",
+          label: "Test change separately and infer a group difference.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o2",
-          label: "Between‑group difference at pretest and at posttest",
+          label: "Compare the pre-to-post change between the two groups.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o3",
-          label: "Correlation between TIS scores and training gain",
+          label: "Compare the groups only at the posttest.",
           targetIds: ["evidence_1", "evidence_2"],
         },
       ],
@@ -67,211 +67,184 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      title: "Identify the authors' conclusion about placebo effects",
-      instruction: "Highlight a passage to see what it means here.",
+      title: "Study characteristics",
+      instruction:
+        "Review the key characteristics of the experiment shown below.",
       description:
-        "Two passages from the article are shown. Choose the one that states the conclusion.",
+        "Three highlighted aspects of the study: training duration, participant sample, and measured outcome.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene description",
+        kind: "source-summary",
+        refs: ["r4"],
+        note: "Summarizes the study’s design as described in the excerpt.",
       },
       responses: [
         {
-          optionId: "o1",
-          label: "Intelligence mindset reliably produces a placebo effect",
-          targetIds: [],
-        },
-        {
           optionId: "o2",
           label:
-            "There is no evidence that intelligence mindset contributes to placebo effects in this 1‑hour working memory training.",
-          targetIds: ["s1", "s2"],
+            "No; its null findings concern these measures, groups and short training conditions.",
+          targetIds: ["e1", "e3", "e5"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "Yes; a nonsignificant group comparison applies to all training lengths.",
+          targetIds: ["e1"],
         },
         {
           optionId: "o3",
           label:
-            "The study proves that mindset has a strong causal impact on fluid intelligence gains.",
-          targetIds: [],
+            "Treat the extreme-score contrast as enough to apply the same conclusion to moderate scorers.",
+          targetIds: ["e3"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
+      kind: "sort",
+      bins: [
         {
-          id: "s1",
-          label: "Overall, we found no evidence",
-          detail:
-            "Sentence stating no evidence of placebo effects caused by intelligence mindset.",
+          id: "bin_limit",
+          label: "Limits generalization",
+        },
+        {
+          id: "bin_general",
+          label: "Does not limit generalization",
+        },
+      ],
+      cards: [
+        {
+          id: "e1",
+          label: "1‑hour training",
+          detail: "Study used a 1‑hour working memory training protocol.",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e4"],
-            note: "Direct quote",
+            refs: ["r4"],
+            note: "From excerpt: one one‑hour protocol.",
           },
         },
         {
-          id: "s2",
-          label: "No significant difference between groups",
-          detail:
-            "Sentence interpreting non‑significant results as suggesting the placebo effect does not exist and mindset may not contribute.",
+          id: "e3",
+          label: "High/low‑score volunteers",
+          detail: "Participants were high‑score or low‑score volunteers.",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e7"],
-            note: "Direct quote",
+            refs: ["r4"],
+            note: "From excerpt: 25 high-score and 25 low-score volunteers.",
           },
         },
         {
-          id: "s3",
-          label:
-            "Our findings show no significant difference between the two groups in both tasks. Therefore, these results suggest that the placebo effect does not exist in this study, which means individuals’ mindset of intelligence may not be a contributor to the placebo effect in 1 h working memory training.",
-          detail: "Full sentence from e7 providing the interpretation.",
+          id: "e5",
+          label: "Placebo‑effect outcome",
+          detail: "Outcome measured was placebo effect of mindset.",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e7"],
-            note: "Direct quote",
+            refs: ["r4"],
+            note: "From excerpt: placebo effects caused by the mindset of intelligence.",
           },
         },
       ],
+      placements: [],
     },
   },
   c5: {
     scene: {
       version: 1,
-      title: "Alternative explanations for the null mindset‑placebo finding",
+      kind: "connections",
+      title: "Connect the evidence",
       instruction:
-        "Drag each explanation to the piece of evidence that supports it, if any.",
-      description:
-        "Consider the discussion in the paper. Which alternative explanation could account for the null finding regarding mindset and placebo effects?",
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene built from the provided excerpts.",
+        kind: "reported",
+        refs: ["r4"],
+        note: "Verified excerpts from the paper.",
       },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 7",
+          detail:
+            "Overall, we found no evidence that there are placebo effects caused by the mindset of intelligence during working memory training. This study and Zhang et al.’s (2019) study reveal that neither the overt recruitment nor the mindset of intelligence contributes to placebo effects in 1 h working memory training. Two sets of explanations may account for these results. First, do participants truly believe that 1 h of training can change their fluid intelligence? Just like researchers believe that rigorous and persistent cognitive training rather than 1 h cognitive training is practical, even the hi",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r4"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
       responses: [
         {
           optionId: "o1",
           label:
-            "The growth mindset group had unexpectedly low TIS scores, eliminating group differences.",
-          targetIds: [],
+            "Measure TIS again and treat general mindset as an exact expectancy measure.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o2",
           label:
-            "Participants may not have believed that a single hour of training could meaningfully improve fluid intelligence.",
-          targetIds: ["e2"],
+            "Measure expected improvement and test whether it relates to subsequent changes.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o3",
           label:
-            "The working memory training task was too difficult, causing floor effects.",
-          targetIds: [],
+            "Add another posttest without measuring what participants expected beforehand.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "connections",
-      anchors: [
-        {
-          id: "e1",
-          label: "No improvement in fluid intelligence",
-          detail:
-            "Study found no improvement of fluid intelligence in either group (excerpt e8).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Directly from excerpt e8.",
-          },
-        },
-        {
-          id: "e2",
-          label: "Belief in 1‑hour training efficacy questioned",
-          detail:
-            "Discussion asks whether participants truly believe 1 h of training can change fluid intelligence (excerpt e7).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e7"],
-            note: "Directly from excerpt e7.",
-          },
-        },
-      ],
-      actionLabel: "Link explanation to evidence",
     },
   },
   c6: {
     scene: {
       version: 1,
-      title: "Interpreting the replication failure",
+      kind: "connections",
+      title: "Connect the evidence",
       instruction:
-        "Read the three passages below. Think about what the absence of fluid‑intelligence gains in the current study suggests about the earlier Foroughi et al. (2016) claim.",
-      description:
-        "Three short passages present the earlier study’s report of a placebo effect and the current study’s failure to replicate it. Use them to evaluate the implied role of overt recruitment.",
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "source-summary",
-        refs: ["e8", "e6"],
-        note: "Summarizes the two provided excerpts.",
+        kind: "reported",
+        refs: ["r5"],
+        note: "Verified excerpts from the paper.",
       },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 2",
+          detail:
+            "For this aim, in this study, we recruited both groups overtly by advertising fluid intelligence improvement. Importantly, before the formal experiments, participants filled in the TIS and were divided into the growth mindset group (higher TIS scores) and the fixed mindset group (lower TIS scores). Therefore, if the growth group rather than the fixed group has task performance enhancement (placebo effect), it would support that mindset of intelligence is the contributor to task performance.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r5"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
       responses: [
         {
           optionId: "o1",
-          label: "Overt recruitment alone is sufficient",
-          targetIds: ["p2"],
-        },
-        {
-          optionId: "o2",
-          label: "Failure suggests overt recruitment may not be enough",
-          targetIds: ["p3"],
+          label: "Add another group using the same improvement claim.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o3",
-          label: "Earlier results may be due to random error",
-          targetIds: ["p1"],
+          label:
+            "A larger high-mindset group recruited with the same improvement message.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "o2",
+          label: "A comparable group recruited without the improvement claim.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
-        {
-          id: "p1",
-          label: "Foroughi et al. (2016) report",
-          detail:
-            "Foroughi et al. (2016) published an infusive report confirming the placebo effects in 1 h working‑memory training.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e6"],
-            note: "Directly taken from excerpt e6.",
-          },
-        },
-        {
-          id: "p2",
-          label: "Placebo effect confirmed",
-          detail:
-            "confirming the placebo effects in 1 h working‑memory training.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e6"],
-            note: "Continuation of excerpt e6.",
-          },
-        },
-        {
-          id: "p3",
-          label: "Current study fails to replicate",
-          detail:
-            "However, we found no improvement of fluid intelligence in either group, which failed to replicate the findings of the Foroughi et al.’s (2016) study.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Directly taken from excerpt e8.",
-          },
-        },
-      ],
     },
-    responseStyle: "tap",
   },
 };

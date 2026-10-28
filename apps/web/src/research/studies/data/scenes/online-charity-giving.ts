@@ -7,71 +7,97 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      title: "Planned analytic approach",
-      instruction:
-        "Identify which option lists the pre‑registered primary analysis and the additional tests that were planned.",
+      title: "Superiority and equivalence components",
+      instruction: "Compare the panels side by side.",
       description:
-        "Two statements describe aspects of the analysis plan that were pre‑registered. Use them to determine which answer choice matches the plan.",
+        "The scene shows the directional superiority test and the equivalence bound used in the study.",
       provenance: {
         kind: "authored",
         refs: [],
-        note: "Scene built from the challenge's shownEvidence and excerpts.",
+        note: "Based on shownEvidence: proportion tests and a smallest‑effect‑of‑interest criterion.",
       },
       responses: [
         {
           optionId: "o1",
-          label: "Option o1",
-          targetIds: [],
-        },
-        {
-          optionId: "o2",
-          label: "Option o2",
-          targetIds: ["s1", "s2"],
+          label:
+            "They test the same directional hypothesis using two ways of calculating its p-value.",
+          targetIds: ["sup", "equiv"],
         },
         {
           optionId: "o3",
-          label: "Option o3",
-          targetIds: [],
+          label:
+            "They compare a 2% relative increase with a 2% decrease around each group’s own starting rate.",
+          targetIds: ["sup", "equiv"],
+        },
+        {
+          optionId: "o2",
+          label:
+            "They address evidence for an increase and evidence against effects as large as the chosen bound.",
+          targetIds: ["sup", "equiv"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
+      kind: "designs",
+      panels: [
         {
-          id: "s1",
-          label: "Separate condition tests",
-          detail:
-            "Separate comparisons of each earmarking condition vs Random were also planned.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Refers to the planned additional comparisons mentioned in the preregistration.",
-          },
+          id: "sup",
+          label: "Directional superiority test",
+          steps: [
+            {
+              id: "sup-step",
+              label: "One‑sided proportion test for an increase",
+              detail:
+                "Tests whether donation rate is higher in earmarking conditions vs random.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Based on shownEvidence: proportion tests and smallest‑effect‑of‑interest criterion.",
+              },
+            },
+            {
+              id: "equiv",
+              label: "Equivalence bound (±2 pp)",
+              detail:
+                "Two‑sided test that the difference lies within a 2‑percentage‑point smallest effect of interest.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Based on shownEvidence: proportion tests and smallest‑effect‑of‑interest criterion.",
+              },
+            },
+          ],
         },
         {
-          id: "s2",
-          label: "Equivalence tests",
-          detail:
-            "Equivalence tests with a smallest effect of interest of 2 percentage points were pre‑registered.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Refers to the pre‑registered equivalence criterion.",
-          },
-        },
-        {
-          id: "s3",
-          label: "Outcome proportion",
-          detail:
-            "The proportion of participants who donated was 7.2% (162/2,237) in the Random condition.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e3"],
-            note: "Reports donation proportion in Random condition.",
-          },
+          id: "equiv",
+          label: "Equivalence bound (±2 pp)",
+          steps: [
+            {
+              id: "equiv-step",
+              label: "Two‑sided test within ±2 pp",
+              detail:
+                "Checks whether the observed difference lies within a pre‑specified smallest effect of interest.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Based on shownEvidence: proportion tests and smallest‑effect‑of‑interest criterion.",
+              },
+            },
+            {
+              id: "sup",
+              label: "Directional superiority test",
+              detail:
+                "One‑sided proportion test for an increase in donation rate.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Based on shownEvidence: proportion tests and smallest‑effect‑of‑interest criterion.",
+              },
+            },
+          ],
         },
       ],
     },
@@ -79,53 +105,90 @@ export const scenes: Record<string, SavedScene> = {
   c3: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Start → Start Survey → Complete Survey",
+      instruction: "Follow the steps of the study in order.",
+      description:
+        "The flowchart shows the stages from being approached to finishing the survey.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e3"],
-        note: "Verified excerpts from the paper.",
+        note: "Starting rates are 7.2% and 7.5% (162 out of 2,237) from the excerpt; completion rates are 6.0% and 6.1% of starters from the shown evidence.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 6",
-          detail:
-            "The results revealed no significant difference between the 7.2% (162 out of 2,237) of the participants in the Random",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
-            "Start: Random 7.2%, Earmarking Combined 7.5%; Complete: Random 6.0%, Earmarking Combined 6.1%.",
-          targetIds: ["evidence_1"],
+            "Starting does not guarantee finishing, so the two rates answer different questions.",
+          targetIds: ["n2"],
         },
         {
           optionId: "o2",
           label:
-            "Start: Random 6.0%, Earmarking Combined 6.1%; Complete: Random 7.2%, Earmarking Combined 7.5%.",
-          targetIds: ["evidence_1"],
+            "The two rates must use only people who finished as their common denominator.",
+          targetIds: ["n3"],
         },
         {
           optionId: "o3",
           label:
-            "Start: Random 5.0%, Earmarking Combined 5.5%; Complete: Random 4.8%, Earmarking Combined 5.2%.",
-          targetIds: ["evidence_1"],
+            "A .3‑percentage‑point start gap proves a .3‑point completion gap as well.",
+          targetIds: ["n1"],
         },
       ],
       resolution: null,
+      kind: "flow",
+      nodes: [
+        {
+          id: "n1",
+          label: "Invited",
+          detail: "2,237 individuals were approached to start the survey.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Denominator for starting rates.",
+          },
+        },
+        {
+          id: "n2",
+          label: "Started survey",
+          detail:
+            "162 participants started the survey (7.2%) in the Random condition.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Numerator for starting rates; denominator for completion rates.",
+          },
+        },
+        {
+          id: "n3",
+          label: "Completed survey",
+          detail:
+            "Completion rates were 6.0% and 6.1% of starters in the Random and combined earmarking conditions.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Outcome of interest after starting.",
+          },
+        },
+      ],
+      edges: [
+        {
+          from: "n1",
+          to: "n2",
+          label: "approach → start",
+          at: "setup",
+        },
+        {
+          from: "n2",
+          to: "n3",
+          label: "start → complete",
+          at: "setup",
+        },
+      ],
     },
+    responseStyle: "tap",
   },
   c4: {
     scene: {
@@ -158,19 +221,20 @@ export const scenes: Record<string, SavedScene> = {
       responses: [
         {
           optionId: "o1",
-          label: "Both comparisons were statistically significant (p < .05).",
+          label:
+            "An estimate that the combined offer has an exactly zero effect with negligible uncertainty.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "o2",
           label:
-            "Neither comparison reached significance; equivalence tests indicated the effects were smaller than the smallest interesting effect.",
+            "Evidence against effects as large as the specified bound in this setting.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "o3",
           label:
-            "Only the completion difference was significant; the start difference was not.",
+            "Evidence that the combined offer’s starting and completion gains exceeded the stated bound.",
           targetIds: ["evidence_1"],
         },
       ],
@@ -180,89 +244,69 @@ export const scenes: Record<string, SavedScene> = {
   c5: {
     scene: {
       version: 1,
-      title: "Limitations discussed",
-      instruction:
-        "Review the statements below about the study’s limitations. Which options reflect the authors’ interpretation of why earmarking did not increase participation?",
+      title: "Identify boundary‑condition tests",
+      instruction: "Read the evidence before you answer.",
       description:
-        "Three summary statements are provided, each drawn from the paper’s discussion of limitations. Match each answer choice to the statement(s) it aligns with.",
+        "The paper notes possible limits: donation size, participant experience, thematic similarity of causes, and cue salience. Which follow‑ups address these limits by manipulating or measuring them?",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene constructed for interpretation task.",
+        kind: "source-summary",
+        refs: ["e8", "e15", "e16", "e21", "e13", "e27", "e29"],
+        note: "Limitations discussed in the paper",
       },
       responses: [
         {
           optionId: "o1",
-          label:
-            "Earmarking failed to boost participation because the $5 incentive was too small to motivate action.",
-          targetIds: ["eA"],
+          label: "Vary donation amount",
+          targetIds: [],
         },
         {
           optionId: "o2",
-          label:
-            "The null result is explained by the high familiarity of academic scholars with experiments, which dampens the incentive’s salience.",
-          targetIds: ["eA"],
+          label: "Compare experience groups",
+          targetIds: [],
         },
         {
           optionId: "o3",
-          label:
-            "The authors argue that participants’ lack of trust in the charity drove the null effect.",
-          targetIds: ["eC"],
+          label: "Declare distrust cause",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label:
-            "Limited thematic differences among the earmarking choices reduced the perceived meaningfulness of the option.",
-          targetIds: ["eB"],
+          label: "Vary thematic distance",
+          targetIds: [],
         },
         {
           optionId: "o5",
-          label:
-            "The earmarking manipulation may have been too subtle for participants to notice.",
-          targetIds: ["eB"],
+          label: "Test cue notice & salience",
+          targetIds: [],
         },
       ],
       resolution: null,
-      kind: "ladder",
-      rungs: [
+      kind: "connections",
+      anchors: [
         {
-          id: "eC",
-          label: "Design limitations noted",
-          detail:
-            "Several limitations emerge from the design, each linked to the Leverage–Saliency Theory.",
+          id: "anchor1",
+          label: "Boundary‑condition test",
+          detail: "Follow‑up manipulates or measures a suspected limit",
           at: "setup",
           provenance: {
-            kind: "source-summary",
-            refs: ["e8"],
-            note: "Generic statement of limitations.",
+            kind: "authored",
+            refs: [],
+            note: "Instructional anchor",
           },
         },
         {
-          id: "eA",
-          label: "Incentive value & salience",
-          detail:
-            "The modest $5 donation may have limited the incentive’s perceived value and salience, especially among experienced scholars.",
+          id: "anchor2",
+          label: "Assumed explanation",
+          detail: "Follow‑up asserts an unmeasured cause without measurement",
           at: "setup",
           provenance: {
-            kind: "derived",
-            refs: ["e21", "e16"],
-            note: "Combines modest donation limit and experience reducing salience.",
-          },
-        },
-        {
-          id: "eB",
-          label: "Manipulation subtlety & cause similarity",
-          detail:
-            "The earmarking manipulation may have been too subtle or the choice purposes too similar to be influential.",
-          at: "setup",
-          provenance: {
-            kind: "derived",
-            refs: ["e27", "e29"],
-            note: "Combines limited cause differentiation and manipulation subtlety.",
+            kind: "authored",
+            refs: [],
+            note: "Instructional anchor",
           },
         },
       ],
-      reach: null,
+      actionLabel: "Select follow‑ups that test boundary conditions",
     },
   },
 };

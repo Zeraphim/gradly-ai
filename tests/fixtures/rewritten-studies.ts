@@ -1,4 +1,5 @@
-// The 24 generated and two featured studies revised in PR #33.
+// The 24 generated and two featured studies from PR #33, plus the final 21
+// generated studies source-checked in the remaining-question review.
 export const rewrittenStudySlugs = [
   "being-a-later-born",
   "body-posture-judgments",
@@ -26,4 +27,25 @@ export const rewrittenStudySlugs = [
   "sleep-school",
   "social-media-and-sleep",
   "tracing-shapes-while-brainstorming",
+  "memory-training",
+  "recalling-personal-details",
+  "television-viewing-habits",
+  "teen-social-media-use",
+  "kids-eating-when-not-hungry",
+  "music-and-mood-perception",
+  "imagining-survival-scenarios",
+  "stroop-task-performance",
+  "anticipating-a-shock",
+  "parents-viewing-vaccine-safety-info",
+  "reading-words-aloud",
+  "holding-a-warm-drink",
+  "clinton-voter-activism",
+  "phone-use-while-driving",
+  "music-and-attention",
+  "sharing-money-in-public",
+  "online-charity-giving",
+  "vaccine-misinformation-correction",
+  "walking-speed-test",
+  "using-scented-air-while-brainstorming",
+  "understanding-how-pumps-work",
 ] as const;

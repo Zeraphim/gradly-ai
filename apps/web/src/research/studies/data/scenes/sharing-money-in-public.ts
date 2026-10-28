@@ -7,330 +7,322 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      title: "Identify the Experimental Conditions",
-      instruction: "Review the conditions described in the study.",
+      title: "Compare observation cues",
+      instruction: "Read the evidence before you answer.",
       description:
-        "The excerpt notes the three conditions participants were assigned to.",
+        "Three conditions are presented as pins; four candidate purpose statements are available for selection.",
       provenance: {
         kind: "source-summary",
         refs: ["e5"],
-        note: "Summarizes the conditions mentioned in the excerpt.",
+        note: "Scene based on the description of public, eyes‑image, and no‑eyes conditions.",
       },
       responses: [
         {
-          optionId: "opt_a",
-          label: "Public, Eyes, No-eyes",
-          targetIds: ["cond_public", "cond_eyes", "cond_noeyes"],
-        },
-        {
           optionId: "opt_b",
-          label: "Public, Private, Control",
-          targetIds: ["cond_public", "cond_eyes", "cond_noeyes"],
+          label:
+            "To validate the eye image as an observation‑feeling measure using only the amount allocated.",
+          targetIds: ["purpose_b"],
         },
         {
           optionId: "opt_c",
-          label: "Eyes, No-eyes, Baseline",
-          targetIds: ["cond_public", "cond_eyes", "cond_noeyes"],
+          label:
+            "To estimate the eye cue against a pooled public/no‑eyes reference.",
+          targetIds: ["purpose_c"],
         },
         {
           optionId: "opt_d",
-          label: "Public, Eyes, Baseline",
-          targetIds: ["cond_public", "cond_eyes", "cond_noeyes"],
+          label:
+            "To estimate participants’ SVO classifications from how much they allocated in each condition.",
+          targetIds: [],
+        },
+        {
+          optionId: "opt_a",
+          label:
+            "To distinguish an eye‑cue contrast from the contrast involving an actual audience.",
+          targetIds: ["purpose_a"],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "cond_public",
-          label: "Public",
-          detail: "The study examined prosocial behavior in public.",
+          id: "pin_public",
+          label: "Public observation",
+          detail:
+            "Participants made allocations while being observed by others.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e5"],
-            note: "From excerpt describing the public condition.",
+            note: "From excerpt describing conditions.",
           },
         },
         {
-          id: "cond_eyes",
-          label: "Eyes",
+          id: "pin_eyes",
+          label: "Eyes image",
           detail:
-            "The study examined prosocial behavior under ‘watching eyes’.",
+            "Participants made allocations while viewing an image of watching eyes.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e5"],
-            note: "From excerpt describing the watching‑eyes condition.",
+            note: "From excerpt describing conditions.",
           },
         },
         {
-          id: "cond_noeyes",
-          label: "No‑eyes",
+          id: "pin_noeyes",
+          label: "No-eyes control",
           detail:
-            "The study examined prosocial behavior in a control condition with no‑eyes.",
+            "Participants made allocations with no eyes image and no audience.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e5"],
-            note: "From excerpt describing the control/no‑eyes condition.",
+            note: "From excerpt describing conditions.",
+          },
+        },
+        {
+          id: "purpose_a",
+          label:
+            "Distinguish an eye‑cue contrast from the contrast involving an actual audience.",
+          detail:
+            "Compares the eye image condition to both public and no‑eyes to isolate the effect of the eye cue.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Candidate purpose statement.",
+          },
+        },
+        {
+          id: "purpose_b",
+          label:
+            "Validate the eye image as an observation‑feeling measure using only the amount allocated.",
+          detail:
+            "Uses allocation amounts to check whether the eye image functions as a feeling of being watched.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Candidate purpose statement.",
+          },
+        },
+        {
+          id: "purpose_c",
+          label:
+            "Estimate the eye cue against a pooled public/no‑eyes reference.",
+          detail:
+            "Combines public and no‑eyes conditions as a baseline to gauge the eye image effect.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Candidate purpose statement.",
           },
         },
       ],
-      actionLabel: "Tap the conditions that participants were assigned to.",
+      actionLabel: "Select purpose",
     },
-    responseStyle: "pills",
   },
   c3: {
     scene: {
       version: 1,
-      title: "Manipulation Check for Feeling Observed",
+      kind: "connections",
+      title: "Connect the evidence",
       instruction:
-        "Review the reported numbers and their roles to see how feeling observed was assessed.",
-      description:
-        "The scene shows what was sampled (items) and how each was measured (scale).",
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "source-summary",
+        kind: "reported",
         refs: ["e9", "e15"],
-        note: "Describes the manipulation check for feeling observed.",
+        note: "Verified excerpts from the paper.",
       },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 11",
+          detail:
+            "Our manipulation check found that participants felt more observed in the public condition compared to both the eyes and no eyes conditions, suggesting that our public manipulation worked.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e9"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+        {
+          id: "evidence_2",
+          label: "Evidence 2 · p. 6",
+          detail:
+            "Post-experiment questionnaire. Participants completed 17 items assessing feelings and impressions of participants during the dictator game (each measured using a 7-point Likert scale). This scale was originally developed by [28] and was presented in [29].",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e15"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
       responses: [
+        {
+          optionId: "opt_b",
+          label:
+            "It turns self-reported impressions into a perfectly objective physiological record.",
+          targetIds: ["evidence_1", "evidence_2"],
+        },
         {
           optionId: "opt_a",
           label:
-            "Post‑experiment questionnaire with Likert‑scale items about feeling observed",
-          targetIds: ["level1", "level2"],
-        },
-        {
-          optionId: "opt_b",
-          label: "Direct observation by the experimenter during the game",
-          targetIds: ["level1"],
+            "It checks the experienced manipulation, without first prompting the allocation with those items.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "opt_c",
-          label: "Measuring pupil dilation while viewing the eyes",
-          targetIds: ["level2"],
+          label:
+            "It proves that any questionnaire association caused the allocation made earlier.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "opt_d",
-          label: "Recording heart rate variability",
-          targetIds: ["level1"],
+          label:
+            "It makes the allocation and observation feeling interchangeable outcome measures.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
       ],
       resolution: null,
-      kind: "units",
-      levels: [
-        {
-          id: "level1",
-          label: "Feeling‑observed items",
-          detail:
-            "17 items assessing feelings and impressions during the dictator game",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e15"],
-            note: "From post‑experiment questionnaire description.",
-          },
-          column: 0,
-          count: 17,
-          unit: "items",
-          role: "sampled",
-        },
-        {
-          id: "level2",
-          label: "Response scale",
-          detail: "Each item measured on a 7‑point Likert scale",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e15"],
-            note: "From post‑experiment questionnaire description.",
-          },
-          column: 0,
-          count: 7,
-          unit: "scale points",
-          role: "measured",
-        },
-      ],
     },
   },
   c4: {
     scene: {
       version: 1,
-      title: "Feeling Observed: Effect Size Check",
-      instruction:
-        "Examine the reported effect size and its confidence interval for the public versus no-eyes comparison.",
+      title: "Check versus consequence",
+      instruction: "Read the two statements below about the study's results.",
       description:
-        "The excerpt provides the mean feeling of being observed in the public condition and the statistical test comparing it to the no-eyes condition, including the effect size estimate and its 95% confidence interval.",
+        "The scene presents the manipulation check result and the giving outcome result. Use them to decide what the combination shows.",
       provenance: {
         kind: "source-summary",
         refs: ["e3"],
-        note: "Summary of the statistical results reported in the paper.",
+        note: "Combines the reported observation check and the non‑significant giving contrast.",
       },
       responses: [
         {
-          optionId: "opt_a",
-          label: "Public > No‑eyes (medium effect)",
-          targetIds: ["est1"],
-        },
-        {
           optionId: "opt_b",
-          label: "Public < No‑eyes (small effect)",
-          targetIds: ["est1"],
+          label: "Manipulation failed because hypothesis unsupported",
+          targetIds: ["s1"],
         },
         {
           optionId: "opt_c",
-          label: "No difference between public and no‑eyes",
-          targetIds: ["est1"],
+          label: "Hidden increase due to small p",
+          targetIds: ["s1"],
         },
-        {
-          optionId: "opt_d",
-          label: "Public > Eyes only",
-          targetIds: ["est1"],
-        },
-      ],
-      resolution: null,
-      kind: "estimate",
-      measure: "effect size (Cohen's d)",
-      min: 0,
-      max: 1,
-      reference: {
-        value: 0,
-        label: "no effect",
-      },
-      band: null,
-      estimates: [
-        {
-          id: "est1",
-          label: "Public vs. no‑eyes",
-          detail: "d = 0.52, 95% CI [0.25, 0.83]",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Effect size and confidence interval from the t‑test comparing public and no‑eyes conditions.",
-          },
-          value: 0.52,
-          lower: 0.25,
-          upper: 0.83,
-        },
-      ],
-      prediction: null,
-    },
-  },
-  c6: {
-    scene: {
-      version: 1,
-      title: "Implication for Prosocial Disposition and Reputational Cues",
-      instruction: "Highlight a passage to see what it means here.",
-      description:
-        "Two evidence summaries describe how SVO prosocials and egoists behave in public (observed) and private (anonymous) dictator‑game conditions.",
-      provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene authoring for the challenge.",
-      },
-      responses: [
         {
           optionId: "opt_a",
-          label:
-            "Prosocials are stable across contexts; egoists are sensitive to anonymity.",
-          targetIds: ["anch_pro", "anch_ego"],
-        },
-        {
-          optionId: "opt_b",
-          label: "Both prosocials and egoists give more when observed.",
-          targetIds: ["anch_pro", "anch_ego"],
-        },
-        {
-          optionId: "opt_c",
-          label:
-            "Observation increases giving equally for prosocials and egoists.",
-          targetIds: ["anch_pro", "anch_ego"],
+          label: "Check success with null outcome",
+          targetIds: ["s1", "s2"],
         },
         {
           optionId: "opt_d",
-          label: "SVO has no influence on dictator game giving.",
-          targetIds: ["anch_pro", "anch_ego"],
+          label: "Audience never influences giving",
+          targetIds: ["s2"],
         },
       ],
       resolution: null,
       kind: "spot",
       passages: [
         {
-          id: "anch_pro",
-          label: "Prosocials' giving",
+          id: "s1",
+          label: "Observation check",
           detail:
-            "SVO prosocials gave similar amounts in both public and private conditions.",
+            "Participants felt more observed in the public condition than the no‑eyes condition (M = 3.64, SD = 1.81, p < .001).",
           at: "setup",
           provenance: {
-            kind: "source-summary",
-            refs: ["e22"],
-            note: "Reports similarity across conditions.",
+            kind: "reported",
+            refs: ["e3"],
+            note: "Public condition yielded higher felt observation than control.",
           },
         },
         {
-          id: "anch_ego",
-          label: "Egoists' giving",
+          id: "s2",
+          label: "Giving outcome",
           detail:
-            "SVO egoists gave less than prosocials in private conditions, but not in public conditions.",
+            "The contrast in giving between public and control conditions did not reach the predicted increase (non‑significant).",
           at: "setup",
           provenance: {
-            kind: "source-summary",
-            refs: ["e22", "e26"],
-            note: "Reports difference in private only.",
+            kind: "authored",
+            refs: [],
+            note: "Derived from the challenge’s shownEvidence.",
           },
         },
         {
-          id: "resp_a",
-          label:
-            "Prosocials are stable across contexts; egoists are sensitive to anonymity.",
-          detail: "Matches the pattern described in the evidence.",
-          at: "feedback",
+          id: "s3",
+          label: "Spot separator",
+          detail: "—",
+          at: "setup",
           provenance: {
-            kind: "authored",
+            kind: "illustration",
             refs: [],
-            note: "Interpretive claim.",
-          },
-        },
-        {
-          id: "resp_b",
-          label: "Both prosocials and egoists give more when observed.",
-          detail:
-            "Contradicts the evidence that prosocials do not change across conditions.",
-          at: "feedback",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Interpretive claim.",
-          },
-        },
-        {
-          id: "resp_c",
-          label:
-            "Observation increases giving equally for prosocials and egoists.",
-          detail:
-            "Contradicts the evidence that prosocials do not change across conditions.",
-          at: "feedback",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Interpretive claim.",
-          },
-        },
-        {
-          id: "resp_d",
-          label: "SVO has no influence on dictator game giving.",
-          detail:
-            "Contradicts the evidence that egoists differ in private conditions.",
-          at: "feedback",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Interpretive claim.",
+            note: "Visual separator; not a data point.",
           },
         },
       ],
+    },
+  },
+  c6: {
+    scene: {
+      version: 1,
+      kind: "connections",
+      title: "Connect the evidence",
+      instruction:
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
+      provenance: {
+        kind: "reported",
+        refs: ["r1"],
+        note: "Verified excerpts from the paper.",
+      },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 12",
+          detail:
+            "we could not match the SVOs of approximately 44% of participants due to an error in survey administration. Nevertheless, this is the third study suggesting that SVO may relate to responses to reputation-relevant stimuli and emotions; future studies should continue to investigate the role of individual differences in reputation-based responses. Notably, our results are suggestive of gender effects in response to reputation-based cues. Researchers have previously proposed gender differences in prosociality [57,58], though see meta-analysis in [59], and recent research finds that people expect wo",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
+      responses: [
+        {
+          optionId: "opt_a",
+          label:
+            "Treat it as a lead for a better-powered, preregistered moderation test.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "opt_b",
+          label:
+            "Treat it as definitive proof that all prosocials ignore every reputational cue.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "opt_c",
+          label:
+            "Treat missing SVO records as evidence that excluded people behaved like the observed subgroup.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "opt_d",
+          label:
+            "Treat a nonsignificant overall cue effect as making any moderation analysis impossible.",
+          targetIds: ["evidence_1"],
+        },
+      ],
+      resolution: null,
     },
   },
 };

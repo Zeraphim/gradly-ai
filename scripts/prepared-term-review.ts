@@ -397,6 +397,48 @@ export const removedTerms: {
     term: "randomise",
     reason: "Says children could not choose seats, the accepted reason.",
   },
+  {
+    slug: "reading-words-aloud",
+    challenge: "c5",
+    term: "interaction",
+    reason:
+      "States that the learning-mode effect depends on list proportion, which answers the revised interaction question.",
+  },
+  {
+    slug: "understanding-how-pumps-work",
+    challenge: "c3",
+    term: "interaction",
+    reason:
+      "States the explanation-format by spatial-ability conclusion asked by the revised question.",
+  },
+  {
+    slug: "music-and-attention",
+    challenge: "c6",
+    term: "success rate",
+    reason:
+      "Names the ceiling interpretation before the learner reasons about the high accuracy.",
+  },
+  {
+    slug: "anticipating-a-shock",
+    challenge: "c3",
+    term: "Bayes factor",
+    reason:
+      "Gives the model-evidence comparison that is the keyed response to the revised question.",
+  },
+  {
+    slug: "teen-social-media-use",
+    challenge: "c4",
+    term: "hierarchical regression",
+    reason:
+      "Explains the conditional social-media contribution before the learner distinguishes it from the full-model R².",
+  },
+  {
+    slug: "holding-a-warm-drink",
+    challenge: "c6",
+    term: "neutral condition",
+    reason:
+      "Names the room-temperature comparison requested by the follow-up question.",
+  },
 ];
 
 const key = (s: string) =>

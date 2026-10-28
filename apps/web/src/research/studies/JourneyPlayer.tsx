@@ -74,10 +74,12 @@ export function JourneyPlayer({
   study,
   progress,
   driver,
+  progressNotice,
 }: {
   study: PreparedStudy;
   progress: StudyProgress;
   driver?: JourneyDriver;
+  progressNotice?: string;
 }) {
   const list = journeyChallenges(study, progress.bonus);
   const main = study.lesson.challenges.length;
@@ -108,6 +110,7 @@ export function JourneyPlayer({
     return (
       <StudyIntro
         study={study}
+        progressNotice={progressNotice}
         backHref={driver?.closeHref}
         backLabel={driver ? "Your quests" : undefined}
         busy={driver?.busy}

@@ -7,59 +7,264 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      title: "Participant grouping description",
-      instruction: "Read the evidence before you answer.",
-      description:
-        "Review the study description and choose the matching statement.",
+      title: "Steps of the cross‑cultural music judgment task",
+      instruction: "Review the procedural steps described in the study.",
+      description: "A linear flow of the main actions taken in the experiment.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene layout for the grouping decision.",
+        kind: "source-summary",
+        refs: ["e2"],
+        note: "Summary of the experimental procedure and participant recruitment.",
+      },
+      responses: [
+        {
+          optionId: "optB",
+          label:
+            "Every observed community difference is a randomized effect of Western musical exposure.",
+          targetIds: ["n1", "n2", "n3", "n4"],
+        },
+        {
+          optionId: "optA",
+          label:
+            "Stimuli can be varied within the task; people’s cultural histories were not randomly assigned.",
+          targetIds: ["n1", "n2", "n3", "n4"],
+        },
+        {
+          optionId: "optC",
+          label:
+            "Listening-history differences can be estimated as within-person changes by comparing the existing groups.",
+          targetIds: ["n1", "n2", "n3", "n4"],
+        },
+        {
+          optionId: "optD",
+          label:
+            "All group differences must be caused by age because cultural exposure cannot vary.",
+          targetIds: ["n1", "n2", "n3", "n4"],
+        },
+      ],
+      resolution: null,
+      kind: "flow",
+      nodes: [
+        {
+          id: "n1",
+          label: "Judge pairs of musical examples",
+          detail:
+            "People from PNG communities and Sydney groups judged pairs of musical examples.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2"],
+            note: "Directly taken from the shown evidence.",
+          },
+        },
+        {
+          id: "n2",
+          label: "Recruit participants from five remote PNG communities",
+          detail:
+            "Experiment conducted in five remote PNG communities with participants from seven different villages.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2"],
+            note: "Taken from the excerpt describing the PNG sites.",
+          },
+        },
+        {
+          id: "n3",
+          label: "Recruit participants from two Sydney cohorts",
+          detail:
+            "Experiment conducted in two Sydney cohorts with considerable, but still differing, levels of experience with Western or Western-like music.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2"],
+            note: "Taken from the excerpt describing the Sydney cohorts.",
+          },
+        },
+        {
+          id: "n4",
+          label: "Assess prior exposure to Western-like music",
+          detail: "Groups differed in prior exposure to Western-like music.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2"],
+            note: "Taken from the shown evidence about group differences.",
+          },
+        },
+      ],
+      edges: [
+        {
+          from: "n1",
+          to: "n2",
+          label: "follows",
+          at: "setup",
+        },
+        {
+          from: "n2",
+          to: "n3",
+          label: "follows",
+          at: "setup",
+        },
+        {
+          from: "n3",
+          to: "n4",
+          label: "follows",
+          at: "setup",
+        },
+      ],
+    },
+  },
+  c2: {
+    scene: {
+      version: 1,
+      title: "Separate hypotheses",
+      instruction: "Read the two hypotheses as they appear in the paper.",
+      description:
+        "The scene shows the two adjusted hypotheses tested for cadences.",
+      provenance: {
+        kind: "source-summary",
+        refs: ["r2"],
+        note: "Summarizes the hypothesis list from the excerpt.",
       },
       responses: [
         {
           optionId: "optA",
           label:
-            "Three PNG groups (minimal, Lutheran, SDA exposure) and two Sydney groups (musicians, non‑musicians)",
-          targetIds: [],
+            "They are mathematically identical descriptions, so separating them adds no information.",
+          targetIds: ["h1", "h2"],
         },
         {
           optionId: "optB",
-          label: "Five PNG villages each treated as a separate group",
-          targetIds: [],
+          label:
+            "Separating hypotheses makes the listeners’ cultural backgrounds randomly assigned.",
+          targetIds: ["h1", "h2"],
+        },
+        {
+          optionId: "optD",
+          label:
+            "An apparent mode effect could partly reflect pitch unless the two are distinguished.",
+          targetIds: ["h1", "h2"],
         },
         {
           optionId: "optC",
           label:
-            "Only two groups: all PNG participants vs all Sydney participants",
-          targetIds: [],
+            "A preregistered hypothesis guarantees that the corresponding result will be significant.",
+          targetIds: ["h1", "h2"],
+        },
+      ],
+      resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "h1",
+          label: "Hypothesis 1",
+          detail:
+            "Test positive effect of major versus minor for cadences, adjusting for mean pitch.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
+            note: "From paper's list of hypotheses.",
+          },
+        },
+        {
+          id: "h2",
+          label: "Hypothesis 2",
+          detail:
+            "Test positive effect of increase in mean pitch for cadences, adjusting for major versus minor.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
+            note: "From paper's list of hypotheses.",
+          },
+        },
+        {
+          id: "h3",
+          label: "Hypothesis 3",
+          detail:
+            "Test positive effect of increase in mean pitch for melodies only.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
+            note: "From paper's list of hypotheses.",
+          },
+        },
+        {
+          id: "h4",
+          label: "Hypothesis 4",
+          detail:
+            "Test positive effect of increase in mean pitch on cadences and melodies combined.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
+            note: "From paper's list of hypotheses.",
+          },
+        },
+      ],
+    },
+  },
+  c3: {
+    scene: {
+      version: 1,
+      title: "Stimulus confound scenario",
+      instruction:
+        "Review the described stimulus design and decide which statement correctly describes the problem that would arise if all major cadences were higher‑pitched than all minor cadences.",
+      description:
+        "The excerpt explains how the study used several keys and balanced their occurrences to separate mean pitch from cadence type. The scene presents this design as an evidence anchor and lists four candidate statements as possible responses.",
+      provenance: {
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "Summary of the design description from the excerpt.",
+      },
+      responses: [
+        {
+          optionId: "optA",
+          label:
+            "Randomizing trial order would automatically separate mode from mean pitch.",
+          targetIds: ["e1"],
+        },
+        {
+          optionId: "optC",
+          label:
+            "More participants would separate mode from pitch in these stimuli.",
+          targetIds: ["e1"],
         },
         {
           optionId: "optD",
-          label: "Groups based on age and gender rather than music exposure",
-          targetIds: [],
+          label:
+            "The design would then test only participants’ age rather than musical properties.",
+          targetIds: ["e1"],
+        },
+        {
+          optionId: "optB",
+          label:
+            "Mode and mean pitch would be confounded in that simplified stimulus set.",
+          targetIds: ["e1"],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "ev1",
-          label: "Study description",
+          id: "e1",
+          label: "Balanced key design",
           detail:
-            "The study included five remote PNG communities with varying experience of Western music and two Sydney cohorts with considerable but differing levels of experience with Western or Western‑like music.",
+            "Several keys were used and their occurrences balanced across paired comparisons to separate mean pitch from cadence type.",
           at: "setup",
           provenance: {
-            kind: "source-summary",
-            refs: ["e2"],
-            note: "Direct sentence from the excerpt.",
+            kind: "reported",
+            refs: ["r1"],
+            note: "From excerpt describing the balanced key procedure.",
           },
         },
       ],
-      actionLabel: "Select statement",
+      actionLabel: "Select the statement that follows from the evidence",
     },
   },
-  c2: {
+  c4: {
     scene: {
       version: 1,
       kind: "connections",
@@ -69,382 +274,228 @@ export const scenes: Record<string, SavedScene> = {
       description: "The challenge's evidence with one response per option.",
       provenance: {
         kind: "reported",
-        refs: ["e2"],
+        refs: ["e1"],
         note: "Verified excerpts from the paper.",
       },
       actionLabel: "Connect a response",
       anchors: [
         {
           id: "evidence_1",
-          label: "Evidence 1 · p. 3",
+          label: "Evidence 1 · p. 1",
           detail:
-            "To ascertain whether any of these features are mediated through universal mecha-\nnisms, we conducted an identical experiment in five remote PNG communities (with partici-\npants from seven different villages) with limited but differential experience of Western music,\nand in two Sydney cohorts with considerable, but still differing, levels of experience with West-\nern or Western-like music.",
+            "Bayesian analyses show that, for cadences, there is strong evidence that greater happiness was reported for major than minor in every community except one: the community with minimal exposure to Western-like music. For melodies, there is strong evidence that greater happiness was reported for those with higher mean pitch (major melodies) than those with lower mean pitch (minor melodies) in only one of the three PNG communities and in both Sydney groups.",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e2"],
+            refs: ["e1"],
             note: "Verified excerpts from the paper.",
           },
         },
       ],
       responses: [
         {
-          optionId: "optA",
-          label: "Major cadences increase happiness more than minor cadences",
+          optionId: "optB",
+          label:
+            "Evidence differed across groups; the uncertain minimally exposed estimate does not establish an absent effect.",
           targetIds: ["evidence_1"],
         },
         {
-          optionId: "optB",
-          label: "Higher mean pitch increases happiness for cadences",
+          optionId: "optA",
+          label:
+            "The less decisive estimate is evidence that the minimally exposed population has a negligible mode effect.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "optC",
-          label: "Higher mean pitch increases happiness for melodies",
+          label:
+            "The different evidence strengths constitute a direct test that the mode effects differ between groups.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "optD",
           label:
-            "Participants with more musical training report higher happiness regardless of stimulus",
+            "Differences in group history turn the manipulated musical mode into an unmeasured observational predictor.",
           targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-    },
-  },
-  c3: {
-    scene: {
-      version: 1,
-      title: "Evidence about key balancing",
-      instruction: "Review the evidence and consider which option it supports.",
-      description:
-        "The evidence describes how cadence keys were varied across trials.",
-      provenance: {
-        kind: "source-summary",
-        refs: ["e7"],
-        note: "Summary of the evidence about key balancing.",
-      },
-      responses: [
-        {
-          optionId: "optA",
-          label: "By using the same tonic pitch for all cadences",
-          targetIds: ["e1"],
-        },
-        {
-          optionId: "optB",
-          label:
-            "By presenting cadences in multiple keys and balancing key occurrences",
-          targetIds: ["e1"],
-        },
-        {
-          optionId: "optC",
-          label:
-            "By asking participants to rate pleasantness instead of happiness",
-          targetIds: ["e1"],
-        },
-        {
-          optionId: "optD",
-          label: "By using only vocal timbre for all stimuli",
-          targetIds: ["e1"],
-        },
-      ],
-      resolution: null,
-      kind: "connections",
-      anchors: [
-        {
-          id: "e1",
-          label: "Key balancing statement",
-          detail:
-            "Cadences were presented in different keys so that each key was heard the same number of times, allowing the effect of cadence type to be disentangled from tonic pitch differences.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e7"],
-            note: "Direct quote from the excerpt.",
-          },
-        },
-      ],
-      actionLabel: "Match each option to the evidence statement",
-    },
-  },
-  c4: {
-    scene: {
-      version: 1,
-      title: "Sorting groups by evidence for cadence happiness",
-      instruction:
-        "Drag each group card into the bin that matches what the Bayesian analysis shows for major versus minor cadences.",
-      description:
-        "Use the excerpt to decide which groups have strong evidence that major cadences were reported as happier than minor cadences.",
-      provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene layout for the sort task.",
-      },
-      responses: [
-        {
-          optionId: "optA",
-          label: "All five groups",
-          targetIds: [
-            "card_syd_musician",
-            "card_syd_nonmusician",
-            "card_lutheran",
-            "card_sda",
-            "card_min_exposure",
-          ],
-        },
-        {
-          optionId: "optB",
-          label: "Both Sydney groups, the SDA group, and the Lutheran group",
-          targetIds: [
-            "card_syd_musician",
-            "card_syd_nonmusician",
-            "card_lutheran",
-            "card_sda",
-          ],
-        },
-        {
-          optionId: "optC",
-          label: "Only the Sydney musician group",
-          targetIds: ["card_syd_musician"],
-        },
-        {
-          optionId: "optD",
-          label: "Only the minimal exposure group",
-          targetIds: ["card_min_exposure"],
-        },
-      ],
-      resolution: null,
-      kind: "sort",
-      bins: [
-        {
-          id: "bin_evidence",
-          label:
-            "Has strong evidence that major > minor happiness for cadences",
-        },
-        {
-          id: "bin_exception",
-          label: "No strong evidence / exception",
-        },
-      ],
-      cards: [
-        {
-          id: "card_syd_musician",
-          label: "Sydney musician group",
-          detail:
-            "Sydney musician group is one of the participant communities.",
-          at: "setup",
-          provenance: {
-            kind: "derived",
-            refs: ["e1"],
-            note: "Derived from excerpt mentioning multiple communities and the groups listed in options",
-          },
-        },
-        {
-          id: "card_syd_nonmusician",
-          label: "Sydney non-musician group",
-          detail:
-            "Sydney non-musician group is one of the participant communities.",
-          at: "setup",
-          provenance: {
-            kind: "derived",
-            refs: ["e1"],
-            note: "Derived from excerpt mentioning multiple communities and the groups listed in options",
-          },
-        },
-        {
-          id: "card_lutheran",
-          label: "Lutheran group",
-          detail: "Lutheran group is one of the participant communities.",
-          at: "setup",
-          provenance: {
-            kind: "derived",
-            refs: ["e1"],
-            note: "Derived from excerpt mentioning multiple communities and the groups listed in options",
-          },
-        },
-        {
-          id: "card_sda",
-          label: "SDA group",
-          detail: "SDA group is one of the participant communities.",
-          at: "setup",
-          provenance: {
-            kind: "derived",
-            refs: ["e1"],
-            note: "Derived from excerpt mentioning multiple communities and the groups listed in options",
-          },
-        },
-        {
-          id: "card_min_exposure",
-          label: "Minimal exposure group",
-          detail:
-            "Minimal exposure group is the community with minimal exposure to Western-like music.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e1"],
-            note: "Direct quote",
-          },
-        },
-      ],
-      placements: [
-        {
-          cardId: "card_syd_musician",
-          binId: "bin_evidence",
-          at: "resolution",
-        },
-        {
-          cardId: "card_syd_nonmusician",
-          binId: "bin_evidence",
-          at: "resolution",
-        },
-        {
-          cardId: "card_lutheran",
-          binId: "bin_evidence",
-          at: "resolution",
-        },
-        {
-          cardId: "card_sda",
-          binId: "bin_evidence",
-          at: "resolution",
-        },
-        {
-          cardId: "card_min_exposure",
-          binId: "bin_exception",
-          at: "resolution",
-        },
-      ],
     },
   },
   c5: {
     scene: {
       version: 1,
-      title: "Melody mean pitch happiness evidence",
-      instruction: "Read the evidence before you answer.",
+      title: "Ladder of group‑effect claims",
+      instruction: "Read the claims from modest to strong.",
       description:
-        "The evidence states where the study found strong evidence linking higher mean pitch to greater happiness for melodies. Choose the claim that correctly reflects this result.",
+        "A ladder of claims about what the reported evidence establishes regarding melody‑pitch effects across groups.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene built from the challenge prompt, options, and excerpt.",
+        kind: "source-summary",
+        refs: ["e1"],
+        note: "Summarizes the reported evidence for melody‑pitch effects.",
       },
       responses: [
         {
           optionId: "optA",
-          label: "All PNG & Sydney",
-          targetIds: [],
+          label:
+            "Yes; significant in one group and not another is itself a significant interaction.",
+          targetIds: ["rung2"],
         },
         {
           optionId: "optB",
-          label: "One PNG & Sydney",
-          targetIds: [],
+          label:
+            "Not by that contrast alone; a difference between group effects needs a direct comparison.",
+          targetIds: ["rung1"],
         },
         {
           optionId: "optC",
-          label: "Sydney only",
-          targetIds: [],
+          label:
+            "Yes; the pattern demonstrates that every member of one community hears music differently.",
+          targetIds: ["rung3"],
         },
         {
           optionId: "optD",
-          label: "Sydney groups only",
-          targetIds: [],
+          label:
+            "No; analysing different groups prevents any possible group-effect comparison.",
+          targetIds: ["rung1"],
         },
       ],
       resolution: null,
-      kind: "connections",
-      anchors: [
+      kind: "ladder",
+      rungs: [
         {
-          id: "ev1",
-          label: "Evidence",
+          id: "rung1",
+          label: "Melody‑pitch effect in one PNG community",
           detail:
-            "For melodies, there is strong evidence that greater happiness was reported for those with higher mean pitch than those with lower mean pitch in only one of the three PNG communities and in both Sydney groups.",
+            "Strong evidence that higher‑pitch melodies increase happiness in that community (excerpt e1).",
           at: "setup",
           provenance: {
-            kind: "source-summary",
+            kind: "reported",
             refs: ["e1"],
-            note: "Direct excerpt reporting the result.",
+            note: "Reports strong evidence for higher‑pitch melodies in one PNG community.",
+          },
+        },
+        {
+          id: "rung2",
+          label:
+            "Difference in melody‑pitch effect between that PNG community and the other PNG communities",
+          detail:
+            "Would require showing the effect present in one group and absent in the others.",
+          at: "setup",
+          provenance: {
+            kind: "derived",
+            refs: ["e1"],
+            note: "Derived from needing a contrast to claim a group difference.",
+          },
+        },
+        {
+          id: "rung3",
+          label:
+            "Every member of that PNG community hears music differently from members of the other communities",
+          detail:
+            "Generalizes the group effect to all individuals in the community.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: ["e1"],
+            note: "Authored generalization claim.",
           },
         },
       ],
-      actionLabel: "Choose the claim that matches the evidence",
+      reach: null,
     },
   },
   c7: {
     scene: {
       version: 1,
-      title: "Why a universal effect cannot be ruled out",
-      instruction: "Read the evidence before you answer.",
+      title: "What would establish smallness?",
+      instruction: "Read the claims from modest to strong.",
       description:
-        "Review the evidence statements and select the option that best matches the reason given in the text.",
+        "Four rungs represent different pieces of evidence drawn from the excerpts. Tap the rung that best matches the additional evidence described in each answer option.",
       provenance: {
-        kind: "source-summary",
-        refs: ["e1", "e3"],
-        note: "Summary of the excerpts about community‑specific effects and universal evidence.",
+        kind: "authored",
+        refs: [],
+        note: "Scene layout based on the challenge prompt and excerpts.",
       },
       responses: [
         {
           optionId: "optA",
-          label: "Bayesian analysis showed a zero effect in all groups",
-          targetIds: ["pin2"],
+          label:
+            "A p-value above .05, treated by itself as proof of exactly zero effect.",
+          targetIds: ["r1"],
+        },
+        {
+          optionId: "optC",
+          label:
+            "A larger effect estimate in Sydney, treated as the missing PNG population estimate.",
+          targetIds: ["r3"],
+        },
+        {
+          optionId: "optD",
+          label:
+            "Dropping the uncertain group and calling the remaining sample culturally universal.",
+          targetIds: ["r4"],
         },
         {
           optionId: "optB",
           label:
-            "Credible intervals for the minimal exposure group include both positive and negative values, leaving uncertainty",
-          targetIds: ["pin1"],
-        },
-        {
-          optionId: "optC",
-          label: "Study only used major melodies, not minor",
-          targetIds: ["pin3"],
-        },
-        {
-          optionId: "optD",
-          label: "Sydney musicians showed no effect at all",
-          targetIds: ["pin2"],
+            "A more precise estimate assessed against a stated range of practically small effects.",
+          targetIds: ["r2"],
         },
       ],
       resolution: null,
-      kind: "connections",
-      anchors: [
+      kind: "ladder",
+      rungs: [
         {
-          id: "pin1",
-          label: "Cadences: major > minor except minimal exposure community",
+          id: "r1",
+          label: "Uncertain effect in minimally exposed community",
           detail:
-            "From e1: strong evidence for major > minor in every community except the one with minimal exposure to Western‑like music.",
+            "Bayesian analyses show strong evidence that greater happiness was reported for major than minor in every community except one: the community with minimal exposure to Western-like music.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e1"],
-            note: "Statement about cadences effect.",
+            note: "Cadences sentence from excerpt e1.",
           },
         },
         {
-          id: "pin2",
-          label: "Melodies: major > minor in limited groups",
+          id: "r2",
+          label: "Major > minor happiness in most communities",
           detail:
-            "From e1: strong evidence for major > minor in only one PNG community and both Sydney groups.",
+            "Bayesian analyses show strong evidence that greater happiness was reported for major than minor in every community except the minimally exposed one.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e1"],
-            note: "Statement about melodies effect.",
+            note: "Cadences sentence highlighting the majority of communities.",
           },
         },
         {
-          id: "pin3",
-          label: "Negligible evidence for universal effect",
+          id: "r3",
+          label: "Higher mean pitch happiness in specific groups",
           detail:
-            "From e3: negligible evidence for a universal effect of major versus minor music.",
+            "For melodies, there is strong evidence that greater happiness was reported for those with higher mean pitch than lower mean pitch in only one of the three PNG communities and in both Sydney groups.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e1"],
+            note: "Melodies sentence from excerpt e1.",
+          },
+        },
+        {
+          id: "r4",
+          label: "Negligible evidence for a universal effect",
+          detail:
+            "Negligible evidence for a universal effect of major versus minor music.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e3"],
-            note: "Statement about universal effect.",
+            note: "Statement from excerpt e3.",
           },
         },
       ],
-      actionLabel: "Explain",
+      reach: null,
     },
+    responseStyle: "tap",
   },
 };

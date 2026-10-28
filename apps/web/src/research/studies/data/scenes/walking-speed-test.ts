@@ -7,250 +7,327 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      title: "Design Challenge 1 – Experiment 1",
-      instruction:
-        "Review the evidence statements below. Each option describes a possible independent variable.",
-      description:
-        "Identify what the researchers changed between groups while keeping other factors constant.",
-      provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene layout based on the provided excerpts.",
-      },
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "Presence of age‑related primes in the scrambled‑sentences task (Prime vs. No‑Prime)",
-          targetIds: ["ev1", "ev2"],
-        },
-        {
-          optionId: "o2",
-          label: "Experimenter expectation about participant speed.",
-          targetIds: ["ev1", "ev2"],
-        },
-        {
-          optionId: "o3",
-          label: "Participant awareness of the prime.",
-          targetIds: ["ev1", "ev2"],
-        },
-      ],
-      resolution: null,
-      kind: "connections",
-      anchors: [
-        {
-          id: "ev1",
-          label: "Two experiments aimed at replicating the original study",
-          detail:
-            "Here, we present two experiments aimed at replicating the original study.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e1"],
-            note: "Summarises e1.",
-          },
-        },
-        {
-          id: "ev2",
-          label: "Experiment 1 used automated timing instead of manual",
-          detail:
-            "In Experiment 1, we sought to replicate the original study but used automated rather than manual chronometry.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e4"],
-            note: "Summarises e4.",
-          },
-        },
-      ],
-      actionLabel: "Select",
-    },
-  },
-  c3: {
-    scene: {
-      version: 1,
-      title: "Results Challenge 1 – Experiment 1 Walking Speed",
+      title: "Automated timing change",
       instruction: "Read the claims from modest to strong.",
       description:
-        "Three possible claims about the Prime vs. No‑Prime groups are presented as ladder rungs. Select the rung that reflects the reported results.",
+        "The ladder shows possible claims about the effect of using automated timing instead of manual chronometry. Select the claim supported by the evidence.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene author created for the challenge.",
+        kind: "source-summary",
+        refs: ["e4"],
+        note: "Experiment 1 used automated rather than manual chronometry.",
       },
       responses: [
         {
           optionId: "o1",
           label:
-            "No statistically significant difference in walking speed between the groups.",
-          targetIds: ["r1"],
+            "Reduces reliance on human timing judgement without assigning the prime",
+          targetIds: ["rung1"],
         },
         {
           optionId: "o2",
           label:
-            "The Prime group walked significantly slower than the No-Prime group.",
-          targetIds: ["r2"],
+            "Reduces expectation effects by controlling sentence-task assignment",
+          targetIds: ["rung2"],
         },
         {
           optionId: "o3",
-          label: "The effect size was large (g² > .10).",
-          targetIds: ["r3"],
+          label:
+            "Provides a within-person estimate by comparing each person’s prime and no‑prime outcomes",
+          targetIds: ["rung3"],
         },
       ],
       resolution: null,
       kind: "ladder",
       rungs: [
         {
-          id: "r1",
-          label: "No significant difference",
+          id: "rung1",
+          label:
+            "Reduces reliance on a human’s timing judgement without itself assigning the prime",
           detail:
-            "The excerpt reports no significant difference between Prime (M=6.270, SD=2.15) and No-Prime (M=6.390, SD=1.11) groups (F(1,119), g² = .01).",
+            "Automated timing replaces manual chronometry, removing human judgement in measuring walking time.",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e7"],
-            note: "Reports group means, SDs, F statistic, and effect size.",
+            refs: ["e4"],
+            note: "Automated rather than manual chronometry used.",
           },
         },
         {
-          id: "r2",
-          label: "Prime slower?",
+          id: "rung2",
+          label:
+            "Reduces expectation effects by controlling how the sentence task is assigned",
           detail:
-            "The excerpt reports Prime mean walking time M = 6.270 seconds, SD = 2.15; No-Prime mean M = 6.390 seconds, SD = 1.11.",
+            "Suggests that automated timing influences assignment of the prime.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e7"],
-            note: "Reports group means and standard deviations.",
+            kind: "authored",
+            refs: [],
+            note: "Candidate claim about expectation effects.",
           },
         },
         {
-          id: "r3",
-          label: "Large effect size?",
+          id: "rung3",
+          label:
+            "Provides a within-person estimate by comparing each person’s prime and no‑prime outcomes",
           detail:
-            "The excerpt reports the effect size g² = .01 for the walking-speed analysis.",
+            "Suggests automated timing enables within‑person comparisons.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e7"],
-            note: "Reports the effect size value.",
+            kind: "authored",
+            refs: [],
+            note: "Candidate claim about within‑person estimate.",
           },
         },
       ],
-      reach: null,
+      reach: {
+        rungId: "rung1",
+        label: "The evidence reaches here",
+        at: "resolution",
+      },
     },
-    responseStyle: "tap",
+  },
+  c3: {
+    scene: {
+      version: 1,
+      title: "Read time and uncertainty",
+      instruction:
+        "Compare the reported mean walking times for the Prime and No-Prime groups.",
+      description:
+        "Two reported means from Experiment 1 are shown. Use them to evaluate which statement about the results is justified.",
+      provenance: {
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "Scene built from the reported means in Experiment 1.",
+      },
+      responses: [
+        {
+          optionId: "o2",
+          label:
+            "The Prime group walked more slowly because its reported time was higher than the No-Prime group.",
+          targetIds: ["e1", "e2"],
+        },
+        {
+          optionId: "o3",
+          label:
+            "The nonsignificant difference supports treating the groups as equivalent for practical purposes.",
+          targetIds: ["e1", "e2"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "No clear difference was detected; the small point difference is not proof of equivalence.",
+          targetIds: ["e1", "e2"],
+        },
+      ],
+      resolution: null,
+      kind: "comparison",
+      measure: "seconds",
+      unit: "seconds",
+      min: 6.27,
+      max: 6.39,
+      values: [
+        {
+          id: "e1",
+          label: "Prime group mean time",
+          detail: "M = 6.270 seconds (SD = 2.15)",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Mean time for Prime group.",
+          },
+          column: 0,
+          value: 6.27,
+        },
+        {
+          id: "e2",
+          label: "No-Prime group mean time",
+          detail: "M = 6.390 seconds (SD = 1.11)",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Mean time for No-Prime group.",
+          },
+          column: 1,
+          value: 6.39,
+        },
+      ],
+      difference: null,
+      prediction: null,
+    },
   },
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Checking context independence",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "Three passages describe the two experiments and the observed effect. Each passage corresponds to one of the claims listed in the options.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e10"],
-        note: "Verified excerpts from the paper.",
+        note: "Summary of the experimental procedure and results from the source.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 1",
+          optionId: "o1",
+          label: "Prime works independently of testing context",
+          targetIds: ["p3"],
+        },
+        {
+          optionId: "o2",
+          label: "Manual timing error alone accounts for the result",
+          targetIds: ["p1"],
+        },
+        {
+          optionId: "o3",
+          label:
+            "Experimenter expectations have same consequence in prime and no‑prime conditions",
+          targetIds: ["p2"],
+        },
+      ],
+      resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "p1",
+          label: "Experiment 1",
           detail:
-            "Despite the use of automated timing methods and a larger sample, our first experiment failed to show priming. Our second experiment was aimed at manipulating the beliefs of the experimenters: Half were led to think that participants would walk slower when primed congruently, and the other half was led to expect the opposite. Strikingly, we obtained a walking speed effect, but only when experimenters believed participants would indeed walk slower. This suggests that both priming and experimenters’ expectations are instrumental in explaining the walking speed effect. Further, debriefing was sugg",
+            "Automated timing and a larger sample failed to detect a priming effect.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e10"],
-            note: "Verified excerpts from the paper.",
+            note: "Directly from the excerpt: first experiment failed to show priming despite automated timing and larger sample.",
+          },
+        },
+        {
+          id: "p2",
+          label: "Experiment 2 expectation manipulation",
+          detail:
+            "Half of experimenters were led to expect slower walking with congruent prime, half to expect the opposite.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e10"],
+            note: "Describes the belief manipulation in the second experiment.",
+          },
+        },
+        {
+          id: "p3",
+          label: "Observed effect",
+          detail:
+            "A walking speed effect appeared only when experimenters believed participants would walk slower.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e10"],
+            note: "States that the effect was observed only under the slower‑walking expectation.",
           },
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "Only when experimenters expected slower walking after priming.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label: "Regardless of experimenter expectations.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label: "No effect was observed in any condition.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
     },
   },
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Interpret expectation‑dependent result",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Drag each statement card into the bin that best reflects whether the evidence supports the claim that the expectation‑dependent result identifies unconscious mimicry as the unique mechanism.",
+      description:
+        "Learners sort evidence statements to decide if the result proves mimicry is the sole mechanism or merely motivates further testing.",
       provenance: {
-        kind: "reported",
-        refs: ["e9", "e10"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene for interpreting the expectation‑dependent result",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 3",
-          detail:
-            "Based on these negative results, we decided to push the investigation further and elucidate the factors that could potentially promote Bargh et al’s [1] effect on walking speed. A first possibility is simply that the effects observed by Bargh et al. results from a methodological artifact originating from the lack of accuracy of their time measurement method. There is also a second, more intriguing possibility. Studies [22] on automatic behavior have suggested that participants tend to mimic the experimenter’s behavior. Therefore, it seemed plausible that experimenters’ expectations about prime",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e9"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 1",
-          detail:
-            "Despite the use of automated timing methods and a larger sample, our first experiment failed to show priming. Our second experiment was aimed at manipulating the beliefs of the experimenters: Half were led to think that participants would walk slower when primed congruently, and the other half was led to expect the opposite. Strikingly, we obtained a walking speed effect, but only when experimenters believed participants would indeed walk slower. This suggests that both priming and experimenters’ expectations are instrumental in explaining the walking speed effect. Further, debriefing was sugg",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
-        {
-          optionId: "o1",
-          label:
-            "Experimenter expectations can act as a confound, producing a priming‑like effect via participant mimicry.",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
         {
           optionId: "o2",
           label:
-            "The effect is solely due to participants’ conscious awareness of the prime.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "Yes; the direction‑specific result separates mimicry from other forms of expectancy communication.",
+          targetIds: [],
         },
         {
           optionId: "o3",
           label:
-            "Infrared timing introduced measurement error that masked the true effect.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "Yes; the awareness check distinguishes an unconscious effect from any demand‑related explanation.",
+          targetIds: [],
+        },
+        {
+          optionId: "o1",
+          label:
+            "No; it motivates testing that pathway rather than proving it uniquely.",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "sort",
+      bins: [
+        {
+          id: "bY",
+          label: "Supports unique mechanism claim",
+        },
+        {
+          id: "bN",
+          label: "Does not support / only motivates testing",
+        },
+      ],
+      cards: [
+        {
+          id: "c1",
+          label:
+            "Experimenters' expectations influenced their own behavior, which could be communicated unconsciously to participants.",
+          detail:
+            "From e9: experimenters’ expectations about primed participants’ behavior may have altered their own behavior and that these changes were communicated unconsciously by experimenters to the participants.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e9"],
+            note: "Summarizes e9",
+          },
+        },
+        {
+          id: "c2",
+          label:
+            "When experimenters believed participants would walk slower, a walking speed effect appeared.",
+          detail:
+            "From e10: effect obtained only when experimenters believed participants would indeed walk slower.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e10"],
+            note: "Summarizes e10",
+          },
+        },
+        {
+          id: "c3",
+          label: "Debriefing suggested participants were aware of the primes.",
+          detail:
+            "From e10: debriefing was suggestive of awareness of the primes.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e10"],
+            note: "Summarizes e10",
+          },
+        },
+        {
+          id: "c4",
+          label:
+            "The authors conclude that unconscious behavioral priming is real but involves mechanisms different from those typically assumed.",
+          detail:
+            "From e10: we conclude that unconscious behavioral priming is real, while real, involves mechanisms different from those typically assumed to cause the effect.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e10"],
+            note: "Summarizes e10",
+          },
+        },
+      ],
+      placements: [],
     },
   },
 };

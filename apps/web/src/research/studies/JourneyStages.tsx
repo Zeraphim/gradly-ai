@@ -42,6 +42,7 @@ export function StudyIntro({
   busy = false,
   orientation,
   ocr = false,
+  progressNotice,
 }: {
   study: PreparedStudy;
   onBegin: () => void;
@@ -52,6 +53,7 @@ export function StudyIntro({
   orientation?: IntroOrientation;
   /** Some source pages were read with OCR. */
   ocr?: boolean;
+  progressNotice?: string;
 }) {
   const motion = useSceneMotion();
   const tone = groupTone[study.group];
@@ -91,6 +93,7 @@ export function StudyIntro({
             {study.kicker ?? designGroups[study.group].label}
           </span>
           <h1 tabIndex={-1}>{study.question}</h1>
+          {progressNotice ? <p role="status">{progressNotice}</p> : null}
           {orientation ? (
             <>
               <IntroChips study={study} ocr={ocr} />

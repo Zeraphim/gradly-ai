@@ -7,6 +7,67 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
+      title: "Priority rating means and effect size",
+      instruction:
+        "Examine the reported mean difference and effect size. Does the p‑value of .002 indicate a large practical effect?",
+      description:
+        "Shows the mean difference between groups and the reported effect size r.",
+      provenance: {
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "Means and effect size taken from the table in r1.",
+      },
+      responses: [
+        {
+          optionId: "o2",
+          label:
+            "Yes; any p‑value below .01 implies a large change on the outcome scale.",
+          targetIds: [],
+        },
+        {
+          optionId: "o3",
+          label:
+            "Yes; .002 means that 99.8% of parents changed their priority judgement.",
+          targetIds: [],
+        },
+        {
+          optionId: "o1",
+          label:
+            "No; the observed gap is .08 scale points, and practical size needs separate assessment.",
+          targetIds: [],
+        },
+        {
+          optionId: "o4",
+          label:
+            "No; the smaller p‑value proves the means are identical after rounding.",
+          targetIds: [],
+        },
+      ],
+      resolution: null,
+      kind: "association",
+      pairs: [
+        {
+          id: "pair1",
+          label: "Group → Priority rating",
+          detail: "Effect size r = .050",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Effect size r from the table.",
+          },
+          column: 0,
+          x: "Group (positive vs negative)",
+          y: "Priority rating",
+          statistic: "r",
+          value: 0.05,
+        },
+      ],
+    },
+  },
+  c3: {
+    scene: {
+      version: 1,
       kind: "connections",
       title: "Connect the evidence",
       instruction:
@@ -14,284 +75,226 @@ export const scenes: Record<string, SavedScene> = {
       description: "The challenge's evidence with one response per option.",
       provenance: {
         kind: "reported",
-        refs: ["e12", "e4"],
+        refs: ["r2", "e14"],
         note: "Verified excerpts from the paper.",
       },
       actionLabel: "Connect a response",
       anchors: [
         {
           id: "evidence_1",
-          label: "Evidence 1 · p. 1",
+          label: "Evidence 1 · p. 8",
           detail:
-            "We found that parents were more likely to regard vaccine safety as relevant to policy support and as a higher priority for government when receiving positively framed information (p = 0.002).",
+            "Gender: female Trust positive 1232 4.09 (0.880) 0.038 0.042 negative 1189 4.02 (0.931) Involvement—government priorities positive 1232 3.31 (0.721) 0.022 0.046 negative 1189 3.25 (0.739) Educational: junior college degree Trust positive 228 4.18 (0.878) 0.042 0.097 negative 208 4.00 (0.922) Educational: undergraduate degree Involvement—government priorities positive 1502 3.38 (0.709) 0.007 0.049 negative 1458 3.31 (0.725) Income: low income level Trust positive 430 4.09 (0.850) 0.016 0.084 negative 389 3.94 (0.935) Involvement—government priorities positive 430 3.30 (0.734) 0.041 0.072 negativ",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e12"],
+            refs: ["r2"],
             note: "Verified excerpts from the paper.",
           },
         },
         {
           id: "evidence_2",
-          label: "Evidence 2 · p. 9",
+          label: "Evidence 2 · p. 1",
           detail:
-            "negative frame M = 4.02 vs. positive frame M = 4.09, p = 0.038",
+            "For some specific subgroups, parents in positive framing group showed lower risk perception and higher trust (p<0.05).",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e4"],
+            refs: ["e14"],
             note: "Verified excerpts from the paper.",
           },
         },
       ],
       responses: [
         {
-          optionId: "o1",
-          label: "Positive M = 3.38, Negative M = 3.30, p = 0.002",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
-        {
           optionId: "o2",
-          label: "Positive M = 3.30, Negative M = 3.38, p = 0.002",
+          label:
+            "All parents reported significantly better receipt of information under positive framing.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o3",
-          label: "Positive M = 3.38, Negative M = 3.30, p = 0.020",
+          label:
+            "Women changed their vaccination behaviour by .07 because the trust difference was significant.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o4",
-          label: "Positive M = 3.38, Negative M = 3.30, p = 0.000",
+          label:
+            "The overall trust effect must be significant because one subgroup comparison is significant.",
           targetIds: ["evidence_1", "evidence_2"],
         },
-      ],
-      resolution: null,
-    },
-  },
-  c3: {
-    scene: {
-      version: 1,
-      title: "Compare frame means",
-      instruction: "Compare the reported values.",
-      description:
-        "Shows the reported means for negative and positive frames; the p‑value is provided in the accompanying text.",
-      provenance: {
-        kind: "source-summary",
-        refs: ["e4"],
-        note: "The scene visualizes the two means reported in the excerpt.",
-      },
-      responses: [
         {
           optionId: "o1",
-          label: "Mean negative = 4.02, Mean positive = 4.09, p = 0.038",
-          targetIds: ["m_neg", "m_pos"],
-        },
-        {
-          optionId: "o2",
-          label: "Mean negative = 4.09, Mean positive = 4.02, p = 0.038",
-          targetIds: ["m_neg", "m_pos"],
-        },
-        {
-          optionId: "o3",
-          label: "Mean negative = 4.02, Mean positive = 4.09, p = 0.002",
-          targetIds: ["m_neg", "m_pos"],
-        },
-        {
-          optionId: "o4",
-          label: "Mean negative = 4.02, Mean positive = 4.09, p = 0.050",
-          targetIds: ["m_neg", "m_pos"],
+          label:
+            "Female-subgroup trust was higher under positive framing in this reported comparison.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
       ],
       resolution: null,
-      kind: "comparison",
-      measure: "comparison",
-      unit: "response units",
-      min: 0,
-      max: 5,
-      values: [
-        {
-          id: "m_neg",
-          label: "Negative frame mean",
-          detail: "Negative frame M = 4.02 (from excerpt e4)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Reported mean for negative frame",
-          },
-          value: 4.02,
-        },
-        {
-          id: "m_pos",
-          label: "Positive frame mean",
-          detail: "Positive frame M = 4.09 (from excerpt e4)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Reported mean for positive frame",
-          },
-          value: 4.09,
-        },
-      ],
-      difference: null,
-      prediction: null,
     },
   },
   c4: {
     scene: {
       version: 1,
-      title: "Interpreting the involvement—government priorities result",
-      instruction: "Highlight a passage to see what it means here.",
+      title: "Match the claimed outcome",
+      instruction:
+        "Drag each statement to the bin that matches whether it supports the claim that a government‑priority rating difference shows more children got vaccinated.",
       description:
-        "The excerpt reports that parents who received positively framed information were more likely to regard vaccine safety as a higher priority for government.",
+        "Sort the statements about the study’s findings into the two bins according to what the evidence supports.",
       provenance: {
         kind: "source-summary",
         refs: ["e12"],
-        note: "Parents’ views of vaccine safety as a government priority increased with positive framing.",
+        note: "Scene built from the reported rating difference and framing manipulation.",
       },
       responses: [
         {
           optionId: "o1",
-          label: "Positive framing ↑ priority perception",
-          targetIds: ["p3"],
+          label:
+            "No; a survey attitude outcome does not establish subsequent vaccination behaviour.",
+          targetIds: ["c1", "c2", "c3", "c4"],
         },
         {
           optionId: "o2",
-          label: "Negative framing ↑ priority perception",
-          targetIds: ["p1"],
+          label:
+            "Yes; a statistically significant priority rating is an observed vaccination count.",
+          targetIds: ["c3"],
         },
         {
           optionId: "o3",
-          label: "No effect of framing",
-          targetIds: ["p1"],
+          label:
+            "Yes; randomizing a message makes every unmeasured behavioural outcome change as well.",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label: "Positive framing ↓ trust",
-          targetIds: ["p1"],
+          label:
+            "No; a rating can never be measured reliably in a randomized survey.",
+          targetIds: ["c4"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
+      kind: "sort",
+      bins: [
         {
-          id: "p1",
-          label: "Regard vaccine safety as relevant to policy support",
-          detail: "First part of the reported finding.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Split from the excerpt.",
-          },
-          column: 0,
+          id: "b1",
+          label:
+            "Supports claim that rating difference leads to more vaccinations",
         },
         {
-          id: "p2",
-          label: "And as a higher priority for government",
-          detail: "Second part of the reported finding.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Split from the excerpt.",
-          },
-          column: 0,
-        },
-        {
-          id: "p3",
-          label: "When receiving positively framed information (p = .002)",
-          detail:
-            "Condition and statistical significance from the reported finding.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Split from the excerpt.",
-          },
-          column: 0,
+          id: "b2",
+          label:
+            "Does not support claim that rating difference leads to more vaccinations",
         },
       ],
+      cards: [
+        {
+          id: "c1",
+          label:
+            "Parents regarded vaccine safety as relevant to policy support after positive framing.",
+          detail:
+            "From e12: parents were more likely to regard vaccine safety as relevant to policy support when receiving positively framed information.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e12"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "c2",
+          label:
+            "Parents regarded vaccine safety as a higher priority for government after positive framing.",
+          detail:
+            "From e12: parents were more likely to regard vaccine safety as a higher priority for government when receiving positively framed information.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e12"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "c3",
+          label:
+            "Priority rating difference was statistically significant (p = 0.002).",
+          detail: "From e12: the finding reached p = 0.002.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e12"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "c4",
+          label:
+            "Experiment measured survey ratings after differently framed information.",
+          detail:
+            "From shownEvidence: the experiment reports survey ratings after differently framed information, including a small priority‑rating contrast.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e12"],
+            note: "Directly from the shown evidence.",
+          },
+        },
+      ],
+      placements: [],
     },
   },
   c5: {
     scene: {
       version: 1,
-      title: "Sample recruitment evidence",
+      title: "Improving confidence in generalizability",
       instruction: "Read the evidence before you answer.",
       description:
-        "Pins show facts about how the sample was recruited and where it was drawn from.",
+        "The study used an online convenience sample of parents. Consider which recruitment‑focused change would strengthen external validity.",
       provenance: {
         kind: "source-summary",
         refs: ["e13"],
-        note: "Based on the excerpt describing the online convenience sample of Chinese parents.",
+        note: "Describes the sampling method used in the study.",
       },
       responses: [
         {
-          optionId: "o1",
-          label: "Convenience sample limits external validity",
-          targetIds: ["pin1", "pin2"],
+          optionId: "o2",
+          label: "Add more volunteers from the same panel",
+          targetIds: [],
         },
         {
-          optionId: "o2",
-          label: "Large sample size guarantees representativeness",
-          targetIds: ["pin3"],
+          optionId: "o1",
+          label:
+            "Replication with recruitment that better covers the target population",
+          targetIds: [],
         },
         {
           optionId: "o3",
-          label:
-            "Random assignment eliminates need to worry about representativeness",
-          targetIds: ["pin1"],
+          label: "Re-randomizing messages within the same recruitment panel",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label: "Results cannot be applied outside China",
-          targetIds: ["pin2"],
+          label:
+            "Reporting smaller p-values substitutes for checking recruitment and demographic coverage",
+          targetIds: [],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "pin1",
-          label: "Online convenience sample",
-          detail:
-            "The sample was derived from an online survey using convenience sampling.",
+          id: "ev1",
+          label: "Recruitment source",
+          detail: "Study recruited parents from an online convenience sample.",
           at: "setup",
           provenance: {
-            kind: "reported",
+            kind: "source-summary",
             refs: ["e13"],
-            note: "Directly from the excerpt.",
-          },
-        },
-        {
-          id: "pin2",
-          label: "China‑wide parent survey",
-          detail:
-            "The survey was conducted across China from 18 January to 1 February 2022, targeting Chinese parents whose children are under 18 years old.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Directly from the excerpt.",
-          },
-        },
-        {
-          id: "pin3",
-          label: "Survey period early 2022",
-          detail:
-            "The survey was conducted across China from 18 January to 1 February 2022.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Directly from the excerpt.",
+            note: "Taken from the excerpt describing the sample.",
           },
         },
       ],
-      actionLabel: "Connect pins to form a conclusion",
+      actionLabel: "act1",
     },
   },
 };

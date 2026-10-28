@@ -7,198 +7,103 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      title: "Participant Grouping Procedure",
-      instruction: "Follow the steps of the study in order.",
-      description:
-        "The diagram shows two possible ways participants could have been grouped. Select the one that matches the study.",
+      kind: "connections",
+      title: "Connect the evidence",
+      instruction:
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Describes the grouping procedure.",
+        kind: "reported",
+        refs: ["e2"],
+        note: "Verified excerpts from the paper.",
       },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 5",
+          detail:
+            "There\nwas also a significant interaction between spatial ability\nand explanation type F(1, 124) = 4.094, p < 0.01, see Fig. 1.\nCreating a visual explanation of the bicycle pump select-\nively helped low spatial participants.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e2"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
       responses: [
         {
           optionId: "o1",
-          label: "Median split with equal distribution",
-          targetIds: ["a1"],
+          label:
+            "No; spatial ability was measured, while explanation format was assigned.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o2",
-          label: "Random assignment regardless of scores",
-          targetIds: ["b1"],
+          label:
+            "Yes; balancing the spatial groups across formats makes spatial ability an assigned factor.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c1-review3",
+          label:
+            "No; both spatial ability and explanation format were measured without assigning either one.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "flow",
-      nodes: [
-        {
-          id: "start",
-          label: "Start: Assign spatial ability groups",
-          detail: "Beginning of the grouping procedure.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes the grouping procedure.",
-          },
-        },
-        {
-          id: "a1",
-          label: "Median split of MRT scores",
-          detail: "Calculate median of Mental Rotation Test scores.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes the grouping procedure.",
-          },
-        },
-        {
-          id: "a2",
-          label: "High/Low spatial ability groups",
-          detail: "Participants above median = high; at/below = low.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes the grouping procedure.",
-          },
-        },
-        {
-          id: "a3",
-          label: "Equal distribution across explanation conditions",
-          detail:
-            "High and low ability participants equally allocated to visual and verbal groups.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes the grouping procedure.",
-          },
-        },
-        {
-          id: "b1",
-          label: "Random assignment regardless of scores",
-          detail:
-            "Participants assigned to groups without considering MRT scores.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes the grouping procedure.",
-          },
-        },
-        {
-          id: "b2",
-          label: "End",
-          detail: "No further grouping steps.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes the grouping procedure.",
-          },
-        },
-      ],
-      edges: [
-        {
-          from: "start",
-          to: "a1",
-          label: "Path A: median split method",
-          at: "setup",
-        },
-        {
-          from: "start",
-          to: "b1",
-          label: "Path B: random assignment method",
-          at: "setup",
-        },
-        {
-          from: "a1",
-          to: "a2",
-          label: "Form ability groups",
-          at: "setup",
-        },
-        {
-          from: "a2",
-          to: "a3",
-          label: "Balance across explanation conditions",
-          at: "setup",
-        },
-        {
-          from: "b1",
-          to: "b2",
-          label: "Assignment complete",
-          at: "setup",
-        },
-      ],
     },
-    responseStyle: "tap",
   },
   c2: {
     scene: {
       version: 1,
-      title: "Identify the dependent variable",
+      kind: "connections",
+      title: "Connect the evidence",
       instruction:
-        "Place each piece of evidence into the bin that best reflects whether it could be the primary dependent variable.",
-      description:
-        "Two bins represent possible interpretations of the evidence; two cards contain statements from the study.",
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Drawn from the excerpts this question cites.",
+        kind: "reported",
+        refs: ["r1"],
+        note: "Verified excerpts from the paper.",
       },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 4",
+          detail:
+            "The post-test consisted of 16 true/false questions printed on a single sheet of paper measuring 8.5 × 11 in. Half of the questions related to the structure of the pump and the other half related to its function. The questions were adapted from Heiser and Tversky (2002) in order to be clear and comprehensible for this age group. Procedure The experiment was conducted over the course of two non-consecutive days during the normal school day and during regularly scheduled class time. On the first day, participants completed the MRT as a whole-class activ- ity. After completing an untimed practice ",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
       responses: [
         {
-          optionId: "o3",
-          label: "Post‑test performance on true/false questions",
-          targetIds: [],
+          optionId: "o4",
+          label:
+            "The completeness of the drawing, used as a substitute for the separate understanding test.",
+          targetIds: ["evidence_1"],
         },
         {
-          optionId: "o4",
-          label: "Number of steps included in the explanations",
-          targetIds: [],
+          optionId: "o3",
+          label:
+            "The pump post-test score, rather than the number of parts in the explanation.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c2-review3",
+          label:
+            "The difference between a pump pretest and posttest taken before and after explanation.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "sort",
-      bins: [
-        {
-          id: "b1",
-          label: "Could be primary dependent variable",
-        },
-        {
-          id: "b2",
-          label: "Cannot be primary dependent variable",
-        },
-      ],
-      cards: [
-        {
-          id: "c1",
-          label:
-            "Post‑test scores were used to assess understanding after explanation generation.",
-          detail: "Statement from the study.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Post‑test scores were used to assess understanding after explanation generation.",
-          },
-        },
-        {
-          id: "c2",
-          label:
-            "Scores increased following the generation of a visual or verbal explanation without further instruction.",
-          detail: "Statement from the study.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Scores increased following the generation of a visual or verbal explanation without further instruction.",
-          },
-        },
-      ],
-      placements: [],
     },
   },
   c3: {
@@ -233,13 +138,19 @@ export const scenes: Record<string, SavedScene> = {
         {
           optionId: "o5",
           label:
-            "The benefit of visual explanations depended on spatial ability, helping low spatial learners more.",
+            "The format advantage is conditional on measured spatial ability in this experiment.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "o6",
           label:
-            "Visual explanations helped high spatial learners more than low spatial learners.",
+            "The main format effect is the best description because the ability groups have different baseline scores.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c3-review3",
+          label:
+            "The interaction estimates the learning gain caused by experimentally raising spatial ability.",
           targetIds: ["evidence_1"],
         },
       ],
@@ -249,46 +160,138 @@ export const scenes: Record<string, SavedScene> = {
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Comparing format effects under different grouping strategies",
+      instruction: "Compare the panels side by side.",
+      description:
+        "Three panels illustrate alternative ways to form groups for comparing the visual and verbal explanation formats.",
       provenance: {
-        kind: "reported",
-        refs: ["e8"],
-        note: "Verified excerpts from the paper.",
+        kind: "source-summary",
+        refs: ["r2"],
+        note: "Panel descriptions are based on the response options provided in the challenge.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 7",
-          detail:
-            "The explanations were coded for the number of discrete steps used to explain the process of using the bike pump. The number of steps used by participants ranged from one to six. Participants whose explanations, whether verbal or visual, contained multiple steps scored significantly higher (M = 0.76, SD = 0.18) on the post-test than participants whose explanations consisted of a single step (M = 0.67, SD = 0.19), F(1, 126) = 5.02, p < 0.05.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
-          optionId: "o11",
-          label:
-            "High spatial participants showed no added benefit from visual explanations because they already performed well.",
-          targetIds: ["evidence_1"],
+          optionId: "o12",
+          label: "Age-band comparison",
+          targetIds: [],
         },
         {
-          optionId: "o12",
-          label:
-            "Low spatial participants could not benefit from visual explanations at all.",
-          targetIds: ["evidence_1"],
+          optionId: "o11",
+          label: "Experience-level comparison",
+          targetIds: [],
+        },
+        {
+          optionId: "c6-review3",
+          label: "Outcome comparison without experience",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "designs",
+      panels: [
+        {
+          id: "e1",
+          label: "Age-band comparison",
+          steps: [
+            {
+              id: "s1",
+              label: "Group by age band",
+              detail:
+                "Participants are split into age bands; format effects are examined within each band while pump experience is not measured.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["r2"],
+                note: "Summarises option o12.",
+              },
+            },
+            {
+              id: "s2",
+              label: "Compare format effects",
+              detail:
+                "Within each age band, compare visual vs verbal explanation outcomes.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["r2"],
+                note: "Summarises option o12.",
+              },
+            },
+          ],
+        },
+        {
+          id: "e2",
+          label: "Experience-level comparison",
+          steps: [
+            {
+              id: "s3",
+              label: "Measure prior pump experience",
+              detail:
+                "Prior hands‑on pump experience is assessed before the explanation task.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["r2"],
+                note: "Summarises option o11.",
+              },
+            },
+            {
+              id: "s4",
+              label: "Stratify by experience level",
+              detail:
+                "Participants are divided into high and low experience groups.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["r2"],
+                note: "Summarises option o11.",
+              },
+            },
+            {
+              id: "s5",
+              label: "Compare format effects",
+              detail:
+                "Within each experience level, compare visual vs verbal explanation outcomes.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["r2"],
+                note: "Summarises option o11.",
+              },
+            },
+          ],
+        },
+        {
+          id: "e3",
+          label: "Outcome comparison without experience",
+          steps: [
+            {
+              id: "s6",
+              label: "Record explanation completeness and post‑test score",
+              detail:
+                "Coded explanation completeness and post‑test scores are collected; prior pump use is not recorded.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["r2"],
+                note: "Summarises option c6-review3.",
+              },
+            },
+            {
+              id: "s7",
+              label: "Compare format effects",
+              detail:
+                "Visual and verbal groups are compared on these outcomes without accounting for experience.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["r2"],
+                note: "Summarises option c6-review3.",
+              },
+            },
+          ],
+        },
+      ],
     },
   },
 };

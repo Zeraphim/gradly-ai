@@ -1,4 +1,5 @@
-import { useSyncExternalStore } from "react";
+import { useMemo, useSyncExternalStore } from "react";
+import { studyCards } from "./cards.js";
 import type { SceneDraft } from "../scenes/InvestigationScene.js";
 import type { ChallengeAttempt } from "./journey.js";
 
@@ -8,6 +9,8 @@ import type { ChallengeAttempt } from "./journey.js";
  * current challenge only, so refresh and back navigation never lose an answer.
  */
 export type StudyProgress = {
+  /** Missing in legacy browser saves; those belong to the original questions. */
+  revision?: number;
   phase: "intro" | "challenge" | "bonus-offer" | "reveal";
   index: number;
   bonus: boolean;
@@ -32,14 +35,19 @@ function valid(value: unknown): value is StudyProgress {
     p.index >= 0 &&
     p.index < 40 &&
     typeof p.bonus === "boolean" &&
+    (p.revision === undefined ||
+      (Number.isSafeInteger(p.revision) && p.revision > 0)) &&
     !!p.attempts &&
     typeof p.attempts === "object" &&
+    !Array.isArray(p.attempts) &&
     Object.values(p.attempts).every(
       (list) =>
         Array.isArray(list) &&
         list.length <= 2 &&
         list.every(
           (a) =>
+            !!a &&
+            typeof a === "object" &&
             Array.isArray(a.selected) &&
             a.selected.every((id) => typeof id === "string") &&
             typeof a.correct === "boolean",
@@ -50,9 +58,12 @@ function valid(value: unknown): value is StudyProgress {
       (typeof p.draft === "object" &&
         typeof p.draft.challengeId === "string" &&
         Array.isArray(p.draft.selected) &&
+        p.draft.selected.every((id) => typeof id === "string") &&
         !!p.draft.scene &&
         typeof p.draft.scene === "object")) &&
-    typeof p.completed === "boolean"
+    typeof p.completed === "boolean" &&
+    (p.updated === undefined ||
+      (typeof p.updated === "number" && Number.isFinite(p.updated)))
   );
 }
 
@@ -81,7 +92,7 @@ function write(next: Store) {
 function subscribe(listener: () => void) {
   listeners.add(listener);
   const sync = (event: StorageEvent) => {
-    if (event.key === KEY) {
+    if (event.key === KEY || event.key === null) {
       memory = null;
       listener();
     }
@@ -104,8 +115,34 @@ export const freshProgress = (): StudyProgress => ({
   updated: 0,
 });
 
+const emptyStore: Store = {};
+const revisionFor = (slug: string) =>
+  studyCards.find((card) => card.slug === slug)?.revision ?? 1;
+
+function outdated(slug: string, progress: StudyProgress | undefined) {
+  return !!progress && (progress.revision ?? 1) !== revisionFor(slug);
+}
+
+/** Old answers stay stored until the learner starts the revised study. */
+export function useOutdatedProgress(slug: string | null) {
+  return useSyncExternalStore(
+    subscribe,
+    () => !!slug && outdated(slug, read()[slug]),
+    () => false,
+  );
+}
+
 export function useAllProgress() {
-  return useSyncExternalStore(subscribe, read, () => ({}) as Store);
+  const saved = useSyncExternalStore(subscribe, read, () => emptyStore);
+  return useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(saved).filter(
+          ([slug, progress]) => !outdated(slug, progress),
+        ),
+      ),
+    [saved],
+  );
 }
 
 export function updateProgress(
@@ -115,7 +152,15 @@ export function updateProgress(
   const store = read();
   write({
     ...store,
-    [slug]: { ...change(store[slug] ?? freshProgress()), updated: Date.now() },
+    [slug]: {
+      ...change(
+        outdated(slug, store[slug])
+          ? freshProgress()
+          : (store[slug] ?? freshProgress()),
+      ),
+      revision: revisionFor(slug),
+      updated: Date.now(),
+    },
   });
 }
 

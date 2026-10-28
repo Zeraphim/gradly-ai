@@ -7,122 +7,155 @@ export const scenes: Record<string, SavedScene> = {
   c3: {
     scene: {
       version: 1,
-      title: "Main Effect Result",
+      title: "Interpret the error‑contrast estimate",
       instruction: "Read the evidence before you answer.",
       description:
-        "The excerpt provides the t‑test result for the Stroop interference effect on error data.",
+        "The learner sees three pieces of reported evidence: the p‑value, the lower CI bound, and the upper CI bound. They must decide which evidence supports each answer choice.",
       provenance: {
         kind: "source-summary",
         refs: ["e15"],
-        note: "Summarizes the reported t‑test, p‑value, effect size and confidence interval.",
+        note: "Summary of the reported t‑test, p‑value, effect size and 95 % CI for the error‑contrast Stroop interference effect.",
       },
       responses: [
         {
-          optionId: "b1",
-          label: "Significant main effect with d = –0.239",
-          targetIds: ["e_anchor"],
+          optionId: "b2",
+          label: "Not significant but interval allows a range of effects",
+          targetIds: ["pinP", "pinLow", "pinHigh"],
         },
         {
-          optionId: "b2",
-          label: "Non‑significant main effect, d = –0.239",
-          targetIds: ["e_anchor"],
+          optionId: "b1",
+          label: "Groups proven identical because the interval contains zero",
+          targetIds: ["pinLow", "pinHigh"],
         },
         {
           optionId: "b3",
-          label: "Significant main effect with d = .053",
-          targetIds: ["e_anchor"],
+          label:
+            "Contrast significant because a negative estimate cannot occur by chance",
+          targetIds: ["pinP"],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "e_anchor",
-          label: "Reported statistics",
-          detail:
-            "t(185) = –1.620, p = .107, d = –0.239, 95% CI [–3.014, .296]",
+          id: "pinP",
+          label: "p = .107",
+          detail: "Reported p‑value for the error‑contrast t test.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e15"],
-            note: "Directly from the excerpt.",
+            note: "Taken directly from the excerpt.",
+          },
+        },
+        {
+          id: "pinLow",
+          label: "CI lower = –3.014",
+          detail:
+            "Lower limit of the 95 % confidence interval for the condition difference.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e15"],
+            note: "Taken directly from the excerpt.",
+          },
+        },
+        {
+          id: "pinHigh",
+          label: "CI upper = .296",
+          detail:
+            "Upper limit of the 95 % confidence interval for the condition difference.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e15"],
+            note: "Taken directly from the excerpt.",
           },
         },
       ],
-      actionLabel: "Choose the best interpretation",
+      actionLabel: "Select evidence",
     },
-    responseStyle: "pills",
   },
   c5: {
     scene: {
       version: 1,
-      title: "Identify power limitation",
+      title: "Power and sample size",
       instruction: "Read the claims from modest to strong.",
       description:
-        "Three possible claims about statistical power are presented as ladder rungs. Choose the one that matches what the article states.",
+        "Consider whether a larger sample alone guarantees adequate power for detecting small interaction effects.",
       provenance: {
         kind: "source-summary",
-        refs: ["e20"],
-        note: "Article notes the study was underpowered to detect the hypothesised moderation effect despite a larger sample.",
+        refs: ["r2"],
+        note: "Describes the replication’s sample size and power limitation.",
       },
       responses: [
         {
           optionId: "d1",
-          label: "Overpowered for main effect but underpowered for moderation",
-          targetIds: ["r2"],
-        },
-        {
-          optionId: "d2",
-          label: "Underpowered to detect hypothesised moderation effect",
-          targetIds: ["r1"],
+          label:
+            "Multiplying a sample size by three guarantees detection of every moderation effect.",
+          targetIds: ["elem_d1"],
         },
         {
           optionId: "d3",
           label:
-            "Ample power (> .90) to detect both main and moderation effects",
-          targetIds: ["r3"],
+            "An underpowered study establishes that the original finding must be false.",
+          targetIds: ["elem_d3"],
+        },
+        {
+          optionId: "d2",
+          label:
+            "A sample can be larger than an earlier one yet still have low power for small interactions.",
+          targetIds: ["elem_d2"],
         },
       ],
       resolution: null,
       kind: "ladder",
       rungs: [
         {
-          id: "r1",
-          label: "Underpowered to detect hypothesised moderation effect",
-          detail:
-            "A claim focusing on insufficient power for the moderation effect.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Claim derived from option d2",
-          },
-        },
-        {
-          id: "r2",
-          label: "Overpowered for main effect but underpowered for moderation",
-          detail: "A claim about power for main versus moderation effects.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Claim derived from option d1",
-          },
-        },
-        {
-          id: "r3",
+          id: "elem_d2",
           label:
-            "Ample power (> .90) to detect both main and moderation effects",
-          detail: "A claim asserting high power for both effects.",
+            "Larger sample may still be underpowered for small interactions",
+          detail:
+            "The replication’s sample exceeded three times the original yet was underpowered to detect smaller effects expected from recent large‑sample studies.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r2"],
+            note: "Reports sample size >3× original and underpowered for smaller effects.",
+          },
+        },
+        {
+          id: "elem_d1",
+          label:
+            "Tripling the sample size guarantees detection of any moderation effect",
+          detail:
+            "Someone might argue that multiplying the original sample by three ensures adequate power for all interaction effects.",
           at: "setup",
           provenance: {
             kind: "authored",
             refs: [],
-            note: "Claim derived from option d3",
+            note: "Illustrates a common misconception.",
+          },
+        },
+        {
+          id: "elem_d3",
+          label:
+            "An underpowered study shows the original finding must be false",
+          detail:
+            "One could claim that if a study lacks power, its null result disproves the earlier positive finding.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Illustrates a common misconception.",
           },
         },
       ],
-      reach: null,
+      reach: {
+        rungId: "elem_d2",
+        label: "Supported claim",
+        at: "resolution",
+      },
     },
   },
 };
