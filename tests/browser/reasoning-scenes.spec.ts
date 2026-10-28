@@ -142,8 +142,13 @@ for (const [device, use] of [
       // Nothing reveals the supported claim before an answer.
       await expect(page.locator(".study-ladder-reach")).toHaveCount(0);
       await expect(page.locator(".study-ladder-beyond")).toHaveCount(0);
+      // A cards-style ladder has no control of its own; its answers are the
+      // cards below, which other specs drive by keyboard.
       if (p.saved.responseStyle === "tap") {
-        await press(page, ".study-ladder-rung button[role]");
+        if (device === "desktop") {
+          await page.locator(".study-ladder-rung button[role]").first().focus();
+          await page.keyboard.press("Space");
+        } else await press(page, ".study-ladder-rung button[role]");
         await expect(
           page.locator(".study-ladder-rung button[role]").first(),
         ).toHaveAttribute("aria-checked", "true");
