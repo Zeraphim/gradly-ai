@@ -102,7 +102,7 @@ export function FailureRecovery({
     <div className="failure-choices">
       <p>Do you want to try one of our prepared studies?</p>
       <div className="actions">
-        <Link className="btn primary compact" href="/meet/featured">
+        <Link className="btn primary compact" href="/learn">
           <ActionLabel icon="research">View prepared studies</ActionLabel>
         </Link>
         {onChooseFile ? (

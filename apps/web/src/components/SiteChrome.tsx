@@ -15,20 +15,14 @@ const links: {
   {
     id: "studies",
     href: "#/research/learn",
-    label: "Prepared studies",
-    short: "Studies",
+    label: "Learn",
+    short: "Learn",
   },
   {
     id: "quests",
     href: "#/research/history",
     label: "My quests",
     short: "Quests",
-  },
-  {
-    id: "glossary",
-    href: "#/research/glossary",
-    label: "Glossary",
-    short: "Glossary",
   },
 ];
 

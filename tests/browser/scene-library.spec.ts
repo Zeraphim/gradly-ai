@@ -29,10 +29,10 @@ const scenes = [
   { kind: "timeline", slug: "sleep-school", index: 1, id: "q2", answer: ["B"] },
   {
     kind: "association",
-    slug: "dog-ownership-among-seniors",
-    index: 5,
-    id: "c6",
-    answer: ["o2"],
+    slug: "sleep-school",
+    index: 4,
+    id: "q5",
+    answer: ["B"],
   },
   {
     kind: "estimate",
@@ -42,11 +42,11 @@ const scenes = [
     answer: ["B"],
   },
   {
-    kind: "tests",
+    kind: "comparison",
     slug: "remembering-doctor-appointments",
-    index: 2,
-    id: "c3",
-    answer: ["opt1"],
+    index: 3,
+    id: "c4",
+    answer: ["o1"],
   },
   {
     kind: "tests",
@@ -58,9 +58,9 @@ const scenes = [
   {
     kind: "units",
     slug: "bus-ridership-behavior",
-    index: 4,
-    id: "c5",
-    answer: ["opt1"],
+    index: 3,
+    id: "c4",
+    answer: ["o1"],
   },
   {
     kind: "units",

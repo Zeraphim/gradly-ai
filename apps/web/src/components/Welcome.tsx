@@ -6,38 +6,20 @@ import {
   type DragEvent,
   type FormEvent,
 } from "react";
-import {
-  ArrowRight,
-  BookOpen,
-  Check,
-  FileText,
-  Link,
-  Upload,
-  Sparkles,
-  Clock3,
-} from "lucide-react";
-import { Mascot } from "./Mascot.js";
+import { ArrowRight, BookOpen, FileText, Link, Upload } from "lucide-react";
+import { UploadGuide } from "./UploadGuide.js";
 import { readActivePreparation } from "../research/client-state.js";
-import type { Session } from "@paperquest/lesson-state";
 const PAPER_DIGEST =
   "6df5c8f670f4cf8ac0044e0f26111f479a130ce62d5a7d31d763ea5beee7b178";
 export function Welcome({
   onStart,
-  session,
-  onResume,
   onResearchFile,
   onResearchLink,
-  complete = false,
-  uploadFirst = false,
 }: {
   onStart: (label: string) => void;
-  session: Session;
-  onResume: () => void;
   onResearchFile?: (file: File) => void;
   /** Upload-first home: any pasted link starts the sample journey. */
   onResearchLink?: (link: string) => void;
-  complete?: boolean;
-  uploadFirst?: boolean;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const checkVersion = useRef(0);
@@ -119,7 +101,7 @@ export function Welcome({
       return;
     }
     setError("");
-    if (uploadFirst && onResearchLink) {
+    if (onResearchLink) {
       onResearchLink(value);
       return;
     }
@@ -141,38 +123,20 @@ export function Welcome({
     void chooseFile(event.dataTransfer.files[0]);
   }
   return (
-    <main
-      id="main"
-      tabIndex={-1}
-      className={`welcome page-enter ${uploadFirst ? "upload-home" : ""}`}
-    >
-      {uploadFirst ? (
-        <section
-          className="welcome-intro home-guide"
-          aria-label="Your research guide"
-        >
-          <Mascot pose="guiding" />
-          <div className="speech">
-            <p>
-              Big paper? Small steps.
-              <br />
-              <strong>Let’s make sense of it.</strong>
-            </p>
-          </div>
-        </section>
-      ) : (
-        <div className="welcome-intro">
-          <Mascot pose="approving" />
-          <div className="speech">
-            <span className="eyebrow">MEET YOUR RESEARCH GUIDE</span>
-            <p>
-              Big paper? Small steps.
-              <br />
-              Let’s turn reading into <strong>reasoning.</strong>
-            </p>
-          </div>
+    <main id="main" tabIndex={-1} className="welcome page-enter upload-home">
+      <section
+        className="welcome-intro home-guide"
+        aria-label="Your research guide"
+      >
+        <UploadGuide />
+        <div className="speech">
+          <p>
+            Big paper? Small steps.
+            <br />
+            <strong>Let’s make sense of it.</strong>
+          </p>
         </div>
-      )}
+      </section>
       <section
         className={`upload-card ${dragging ? "dragging" : ""}`}
         onDragOver={(e) => {
@@ -185,38 +149,10 @@ export function Welcome({
       >
         <div className="paper-illustration" aria-hidden="true">
           <FileText size={58} strokeWidth={1.8} />
-          {!uploadFirst ? (
-            <>
-              <span className="floating-tag">
-                <Sparkles size={13} /> SIX QUESTS
-              </span>
-              <span className="paper-star">✦</span>
-            </>
-          ) : null}
         </div>
-        {!uploadFirst ? (
-          <span className="eyebrow green-text">
-            YOUR NEXT RESEARCH ADVENTURE
-          </span>
-        ) : null}
-        {uploadFirst ? (
-          <h1 id="welcome-title">Upload your research paper</h1>
-        ) : (
-          <h1 id="welcome-title">
-            A little curiosity.
-            <br />A lot of discovery.
-          </h1>
-        )}
+        <h1 id="welcome-title">Upload your research paper</h1>
         <p className="lede">
-          {uploadFirst ? (
-            "Explore its ideas through questions, evidence and feedback."
-          ) : (
-            <>
-              Make a choice. Explain your thinking.
-              <br />
-              Then see what the research actually says.
-            </>
-          )}
+          Explore its ideas through questions, evidence and feedback.
         </p>
         <div className="home-upload-well">
           <input
@@ -232,40 +168,18 @@ export function Welcome({
             disabled={checking}
           >
             <Upload size={20} />
-            {checking
-              ? "Checking your paper…"
-              : uploadFirst
-                ? "Upload PDF"
-                : onResearchFile
-                  ? "Choose a research PDF"
-                  : "Choose the study PDF"}
+            {checking ? "Checking your paper…" : "Upload PDF"}
           </button>
-          <p className="micro">
-            {uploadFirst ? (
-              "PDF up to 4 MB · or drag and drop"
-            ) : (
-              <>
-                Or drop it here.{" "}
-                {onResearchFile
-                  ? "Review your PDF before server extraction and external AI processing."
-                  : "Your file stays on your device."}
-              </>
-            )}
-          </p>
+          <p className="micro">PDF up to 4 MB · or drag and drop</p>
         </div>
         <div className="home-paper-link">
           <div className="divider">
             <span />
-            {uploadFirst ? "or" : "or use its paper link"}
+            or
             <span />
           </div>
-          <label
-            className={uploadFirst ? "paper-link-label" : "sr-only"}
-            htmlFor="paper-link"
-          >
-            {uploadFirst
-              ? "Paper URL or DOI"
-              : "Paper link or digital object identifier"}
+          <label className="paper-link-label" htmlFor="paper-link">
+            Paper URL or DOI
           </label>
           <form className="link-form" onSubmit={submitLink}>
             <Link size={20} aria-hidden="true" />
@@ -273,11 +187,7 @@ export function Welcome({
               id="paper-link"
               value={link}
               onChange={(e) => setLink(e.target.value)}
-              placeholder={
-                uploadFirst
-                  ? "Paste any paper link or DOI (not fetched in this preview)"
-                  : "Paste the curated paper’s link…"
-              }
+              placeholder="Paste any paper link or DOI (not fetched in this preview)"
             />
             <button
               className="icon-button blue"
@@ -288,11 +198,8 @@ export function Welcome({
             </button>
           </form>
           <p className="scope-note">
-            {uploadFirst
-              ? "Sample preview: links aren’t fetched yet. Any link opens the prepared texting study."
-              : onResearchFile
-                ? "Use a PDF for a new quest, or the curated paper’s DOI below for the eight-decision quest."
-                : "A focused pilot with one curated paper. General paper extraction is not enabled on this host."}
+            Links aren’t fetched yet. Upload the PDF, or choose a prepared
+            study.
           </p>
         </div>
         {error ? (
@@ -300,123 +207,46 @@ export function Welcome({
             <p className="error-message" role="alert">
               {error}
             </p>
-            {uploadFirst ? (
-              <div className="actions">
-                <button
-                  className="btn outline compact"
-                  onClick={() => fileInput.current?.click()}
-                >
-                  Upload a different paper
-                </button>
-                <a className="btn outline compact" href="#/research/learn">
-                  View prepared studies
-                </a>
-              </div>
-            ) : null}
+            <div className="actions">
+              <button
+                className="btn outline compact"
+                onClick={() => fileInput.current?.click()}
+              >
+                Upload a different paper
+              </button>
+              <a className="btn outline compact" href="#/research/learn">
+                View prepared studies
+              </a>
+            </div>
           </div>
         ) : null}
       </section>
-      {uploadFirst ? (
-        <div
-          className={`home-secondary-actions ${session.started || preparing ? "has-resume" : ""}`}
+      <div
+        className={`home-secondary-actions ${preparing ? "has-resume" : ""}`}
+      >
+        <button
+          className="home-sample-action"
+          onClick={() => onStart("Gingerich & Lineweaver · 2014")}
         >
-          <button
-            className="home-sample-action"
-            onClick={() => onStart("Gingerich & Lineweaver · 2014")}
+          <span className="home-sample-icon">
+            <BookOpen size={21} />
+          </span>
+          <span>
+            <small>No paper handy?</small>
+            <strong>Try a sample paper</strong>
+          </span>
+          <ArrowRight size={19} />
+        </button>
+        {preparing ? (
+          <a
+            className="home-resume-action"
+            href={`#/research/processing/${encodeURIComponent(preparing.id)}`}
           >
-            <span className="home-sample-icon">
-              <BookOpen size={21} />
-            </span>
-            <span>
-              <small>No paper handy?</small>
-              <strong>Try a sample paper</strong>
-            </span>
-            <ArrowRight size={19} />
-          </button>
-          {preparing ? (
-            <a
-              className="home-resume-action"
-              href={`#/research/processing/${encodeURIComponent(preparing.id)}`}
-            >
-              Return to your paper
-              <ArrowRight size={18} />
-            </a>
-          ) : session.started ? (
-            <button className="home-resume-action" onClick={onResume}>
-              {complete ? "Review quest" : "Resume quest"}
-              <ArrowRight size={18} />
-            </button>
-          ) : null}
-        </div>
-      ) : null}
-      {session.started && !uploadFirst ? (
-        <div className="resume-card">
-          <div>
-            <strong>
-              {complete
-                ? "You completed this quest."
-                : "You have a quest in progress."}
-            </strong>
-            <p>
-              {complete
-                ? "Revisit your answers and the evidence whenever you like."
-                : "Your answers are saved on this device."}
-            </p>
-          </div>
-          <button className="button neutral" onClick={onResume}>
-            {complete ? "Review quest" : "Resume"} <ArrowRight size={18} />
-          </button>
-        </div>
-      ) : null}
-      {!uploadFirst ? (
-        <section className="sample-section" aria-labelledby="sample-title">
-          <div className="section-label">
-            <span className="line" />
-            <h2 id="sample-title">No paper handy? Start here.</h2>
-            <span className="line" />
-          </div>
-          <button
-            className="sample-card"
-            onClick={() => onStart("Gingerich & Lineweaver · 2014")}
-          >
-            <span className="sample-icon">
-              <BookOpen size={28} />
-            </span>
-            <span className="sample-copy">
-              <span className="eyebrow blue-text">
-                COGNITIVE PSYCHOLOGY · 2014
-              </span>
-              <strong>Can you text and still learn?</strong>
-              <span>Gingerich & Lineweaver · A classroom experiment</span>
-            </span>
-            <span className="sample-arrow">
-              <ArrowRight size={23} />
-            </span>
-          </button>
-          <div className="reasoning-preview-entry">
-            <div>
-              <strong>A correct choice can still hide a misconception.</strong>
-              <p>Choose → Explain → Check evidence → Revise</p>
-              <span>Authored example · no AI calls</span>
-            </div>
-            <a href="#/research/reasoning" className="reasoning-preview-link">
-              Try the reasoning preview
-              <ArrowRight size={18} aria-hidden="true" />
-            </a>
-          </div>
-          <div className="welcome-details">
-            <span>
-              <Clock3 size={16} /> About 10 minutes
-            </span>
-            <span>
-              <Check size={16} /> Evidence after your attempt
-            </span>
-            <span>
-              <Sparkles size={16} /> Two new scenarios
-            </span>
-          </div>
-        </section>
-      ) : null}
+            Return to your paper
+            <ArrowRight size={18} />
+          </a>
+        ) : null}
+      </div>
     </main>
   );
 }

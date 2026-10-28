@@ -4,14 +4,14 @@ The public entry must start with adding a paper, preserving both PDF upload and 
 
 ## Current prototype acceptance
 
-- The home exposes PDF, URL/DOI, sample/resume and practice points; inputs remain visible on a 1366×768 desktop viewport.
+- The home exposes PDF, URL/DOI and direct sample-library entry; inputs remain visible on a 1366×768 desktop viewport.
 - Research points award ten once per solved challenge per adventure and persist across refresh; explanation edits and duplicate requests do not create rewards.
 - The reasoning preview demonstrates choice → explanation → evidence → revision, works without API access and labels authored guidance. Custom explanations remain unassessed.
-- Retired paper-case links return to the upload home instead of loading another application.
+- Retired paper-case links recover to the Learn library.
 - Saved progress, PDF review and drafts survive supported navigation and refresh; storage failure has a recoverable fallback.
-- Home sample entry and upload-recovery prepared-study actions open the authored quest directly, without the intermediate path chooser. The prepared-study navigation page remains available separately.
+- Home sample entry and upload-recovery prepared-study actions open the single Learn library directly, without an intermediate path chooser. Individual study links open their authored quest.
 - Before answering, learners receive a concise study briefing with background and plain-language terms. Generated-paper briefings come from the verified lesson’s own context. Results, conclusions and answer keys stay gated.
-- The authored quest offers Back after its opening screen, preserves unfinished choices during in-session navigation, and restores resolved answers without another attempt or score change. Pointer selection uses the filled choice state without an extra outline; keyboard focus remains visible.
+- The shared player preserves the current unfinished choice and restores checked answers on refresh or reopening, without another attempt or score change. It advances through challenges; challenge-level Back is not implemented. Pointer selection uses the filled choice state without an extra outline; keyboard focus remains visible.
 - Responsive, keyboard, reduced-motion and automated accessibility checks cover the retained upload and learning paths.
 
 `PRODUCT_DIRECTION.md` records the product reasoning and future evaluation needs. `TESTING.md` records actual verification and limits.
@@ -53,7 +53,7 @@ Do not imply this sample interaction automatically supports arbitrary research p
 
 For the authored quest's desktop question layout, the full answer choices must
 be visible above the pinned action bar without scrolling at the supported
-viewport sizes in `tests/browser/quest-motion.spec.ts`. An illustration or an
+viewport sizes covered by the shared study-player and `learn-flow.spec.ts` checks. An illustration or an
 always-expanded duplicate data table must not displace those controls. Keep long
 answer text readable and complete; preserve natural scrolling on narrow screens,
 enlarged text and deliberately expanded source material.
@@ -121,3 +121,20 @@ pilot follows the quest's rhythm: check, feedback, then the next paper, ending
 in a short summary.
 This pilot is evidence of authored rendering reuse, not automatic generation from
 arbitrary papers, proven learning benefit or production delivery.
+
+## Learn and intake consistency — issue #36
+
+Learn is the actual prepared-study library, not a picker before that library.
+Home's “Try a sample paper”, header navigation and upload recovery lead there.
+The old library index and retired classic/lab/meet entries recover using history
+replacement; individual prepared-study links remain valid. The upload home must
+not load the retired curated lesson or display its Resume quest from saved state.
+Browsing headers use the same logo, navigation, active-section behavior and tools.
+Preparation and active play can use the focused progress chrome.
+
+Uploaded orientation must keep Next/Begin visible on the tested desktop windows,
+including expanded route details and practice feedback. All prepared-study intros
+must keep Begin visible at 1366×768 and 1024×600 with background disclosures closed.
+Content stays readable, keyboard accessible and in normal flow: narrow screens,
+zoom, long predictions and deliberately expanded briefing/source content can scroll.
+Do not hide overflow or shrink the entire interface to claim that a layout fits.

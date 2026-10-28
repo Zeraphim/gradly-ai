@@ -10,10 +10,11 @@ Unassigned. Issue #14 names JC as the build owner; no design approval is recorde
 
 ## Affected Surfaces
 
-- `#/research/studies`: study library with design-group and topic filters,
-  progress and resume. Linked from the learn page's
-  "More practice" row as "Browse prepared studies" (it replaces the three-paper
-  activities link; `#/research/activities` still opens directly).
+- `#/research/learn`: the study library with design-group/topic filters and
+  prepared-study progress. Home's sample action and the shared navigation open
+  it directly. The old `#/research/studies` index redirects here.
+- `#/research/reasoning` and `#/research/activities`: optional authored practice,
+  linked from the library's quiet "More practice" row.
 - `#/research/studies/<slug>`: intro, one challenge per screen, optional bonus
   offer and final paper reveal.
 
@@ -22,8 +23,9 @@ Unassigned. Issue #14 names JC as the build owner; no design approval is recorde
 Issue #14 asks for a Duolingo-style player that serves every prepared study with
 one set of components. This is a browser-only frontend preview, like the reasoning
 preview: answers are checked against authored keys in the tab and progress lives
-in `localStorage`. The server-assessed path arrives when uploaded papers (#12)
-share this player. The existing learning rules hold: answers hidden until Check,
+in `localStorage`. Uploaded papers now share this player through the
+server-assessed `UploadedJourney` driver at `#/research/play/<sessionId>`;
+their keys and progress stay server-side. The existing learning rules hold: answers hidden until Check,
 results only from results-stage challenges, paper identity hidden until the final
 reveal, one retry then an explanation, and points once per solved challenge. No
 lives, streaks, leaderboards or shops.
@@ -228,3 +230,21 @@ Local before/after screenshots: `.data/review/choice-focus-before.png` and
 `.data/review/choice-focus-after.png`. The original checkout's rebase remains
 untouched. Codex applied the style fix directly. Broader #31/#32 content work is
 still active, and the shared excerpt proposal remains for JC's review.
+
+## Issue #36 — 27 October 2026
+
+Library and prepared/uploaded intros use the same `SiteHeader` as upload and
+support pages. The reasoning preview also uses that header; its authored-feedback
+notice and Back to learning remain in the page. Preview-only navigation bars and
+technical mode badges are removed from the study entry screens.
+
+Uploaded orientation uses side-by-side context and tap steps above 860px and
+stacks below it. Short windows use compact spacing and a wider text column;
+prepared intros reduce the artwork's share of space. Focus uses `preventScroll`
+when routes change, and navigation resets the page to its top. Nothing is clipped
+or globally scaled to force a fit; long/open background and narrow windows scroll.
+
+`learn-flow.spec.ts` guards all 53 prepared intros at 1366×768 and 1024×600,
+eleven uploaded-intro sizes including 859/860px boundaries and portrait, header
+geometry across browsing routes, draft restore, practice retries and source
+expansion. Screenshots are local ignored test artifacts, not hosted evidence.

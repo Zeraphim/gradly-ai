@@ -57,7 +57,11 @@ export function StudyIntro({
   const tone = groupTone[study.group];
   const briefing = briefingParts(study.lesson.briefing);
   return (
-    <main className="journey-intro">
+    <main
+      id="main"
+      tabIndex={-1}
+      className={`journey-intro ${orientation ? "has-orientation" : ""}`}
+    >
       <Link className="journey-back" href={backHref}>
         ← {backLabel}
       </Link>
@@ -71,12 +75,14 @@ export function StudyIntro({
             : { type: "spring", duration: 0.4, bounce: 0.15 }
         }
       >
-        <StudyArt
-          topic={study.topic}
-          group={study.group}
-          className="journey-intro-art"
-          fit="meet"
-        />
+        {!orientation ? (
+          <StudyArt
+            topic={study.topic}
+            group={study.group}
+            className="journey-intro-art"
+            fit="meet"
+          />
+        ) : null}
         <div className="journey-intro-body">
           <span
             className="study-group"

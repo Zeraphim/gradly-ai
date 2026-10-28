@@ -2342,7 +2342,8 @@ html[data-reduced-motion="true"] .research-lab button.path-card {
   margin: 0;
   font-size: 12px;
 }
-/* The paper's identity now leads the step; the story follows it. */.research-lab .briefing-trace-rows {
+/* The paper's identity now leads the step; the story follows it. */
+.research-lab .briefing-trace-rows {
   display: grid;
   gap: 15px;
 }
@@ -2483,5 +2484,61 @@ html[data-reduced-motion="true"] .research-lab button.path-card {
 @media (max-width: 720px) {
   .research-lab .path-more {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Contextual vocabulary help stays on the current question. */
+.research-lab .question-help-trigger:focus-visible {
+  outline: 3px solid var(--blue-ink);
+  outline-offset: 3px;
+}
+.research-lab .question-help-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--blue-dark);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.research-lab .question-help-terms dt {
+  font-weight: 800;
+}
+.research-lab .question-help-terms dd {
+  margin: 6px 0 18px;
+}
+@media (max-width: 600px) {
+  .research-lab .question-help-trigger span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+/* The 44px help target sits within the existing stage row's surrounding gaps,
+   so adding help does not push the evidence and answers down the screen. */
+.research-lab .journey-stage-row {
+  position: relative;
+  display: block;
+  padding-right: 220px;
+}
+.research-lab .journey-stage-row .question-help-trigger {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 22px);
+}
+@media (max-width: 600px) {
+  .research-lab .journey-stage-row {
+    padding-right: 56px;
   }
 }

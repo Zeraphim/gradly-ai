@@ -53,7 +53,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/**", (request) => request.abort("failed"));
 });
 
-test("the legacy home and research learning page expose the preview with every API unavailable", async ({
+test("retired entry recovery and Learn expose reasoning practice with every API unavailable", async ({
   page,
 }) => {
   for (const entry of ["/#/classic", "/#/research/learn"]) {

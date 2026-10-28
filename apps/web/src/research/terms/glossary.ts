@@ -16,7 +16,7 @@ export const glossary: Record<string, string> = {
   "Between-participants design":
     "Different participants contribute observations in each condition.",
   "Random assignment":
-    "A chance process assigns participants to conditions. It supports causal comparisons by reducing systematic differences between groups before the study begins.",
+    "A chance process determines which study condition each participant receives.",
   "Random sampling":
     "A chance process selects people from a population. It concerns how well a sample represents that population. It differs from random assignment to study conditions.",
   "Independent-samples t-test":

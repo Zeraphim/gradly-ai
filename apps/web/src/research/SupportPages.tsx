@@ -1,9 +1,9 @@
+import { researchTerms, termExamples } from "./research-terms.js";
 import type { RefObject } from "react";
 import { ResearchLink as Link } from "./navigation.js";
 import { ActionLabel, Icon } from "./icon.js";
 import { Speech } from "./learning-ui.js";
 import type { ResearchConfig } from "./types.js";
-import { glossary } from "./terms/glossary.js";
 
 export type SupportPagesProps = {
   route: string;
@@ -32,19 +32,22 @@ export function SupportPages({
     return (
       <>
         <h1 ref={heading} tabIndex={-1}>
-          Research glossary
+          Research terms
         </h1>
         <p>
           From interpreting an interview to comparing group scores, keep these
           ideas beside your investigation. Use the terms that fit your paper.
         </p>
-        {Object.entries(glossary).map(([term, definition]) => (
+        {Object.entries(researchTerms).map(([term, definition]) => (
           <details className="card glossary" key={term}>
             <summary className="icon-summary">
               {term}
               <Icon name="chevron" size={17} className="disclosure-chevron" />
             </summary>
             <p>{definition}</p>
+            <p>
+              <strong>Illustrative example:</strong> {termExamples[term]}
+            </p>
           </details>
         ))}
         <Link className="btn primary" href={resumeHref}>
@@ -63,6 +66,16 @@ export function SupportPages({
         <h1 ref={heading} tabIndex={-1}>
           How Gradly works
         </h1>
+        <div className="card">
+          <h2>Need a research term explained?</h2>
+          <p>
+            Open definitions while answering a question, or browse the full
+            reference here.
+          </p>
+          <Link className="btn outline" href="/glossary">
+            Research terms
+          </Link>
+        </div>
         <ol className="how-list">
           <li>
             <h2>Add your paper</h2>

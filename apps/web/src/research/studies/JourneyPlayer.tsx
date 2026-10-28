@@ -1,3 +1,4 @@
+import { QuestionHelp } from "../QuestionHelp.js";
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from "react";
 import {
   FileSearch,
@@ -492,20 +493,25 @@ function ChallengeScreen({
                 {cue.label}
               </m.p>
             ) : null}
-            <p className="journey-stage">
-              {challenge.reveal === "bonus"
-                ? "Bonus"
-                : `${position + 1} of ${total}`}{" "}
-              · {challenge.stage}
-            </p>
-            {/* The label keeps the heading's name to the prompt itself: term
-                buttons would otherwise add spaces around their text. */}
-            <h1
-              ref={heading}
-              tabIndex={-1}
-              className="journey-title"
-              aria-label={challenge.prompt}
-            >
+            <div className="journey-stage-row">
+              <p className="journey-stage">
+                {challenge.reveal === "bonus"
+                  ? "Bonus"
+                  : `${position + 1} of ${total}`}{" "}
+                · {challenge.stage}
+              </p>
+              <QuestionHelp
+                key={challenge.id}
+                text={[challenge.prompt, ...challenge.evidence].join(" ")}
+                hint={
+                  status === "retry-feedback" || status === "retrying"
+                    ? challenge.hint
+                    : null
+                }
+              />
+            </div>
+
+            <h1 ref={heading} tabIndex={-1} className="journey-title">
               <TermText text={challenge.prompt} />
             </h1>
             {challenge.evidence.length ? (
@@ -516,7 +522,7 @@ function ChallengeScreen({
                 {challenge.evidence.map((line) => (
                   <li key={line}>
                     <FileSearch size={15} aria-hidden="true" />
-                    {line}
+                    <TermText text={line} />
                   </li>
                 ))}
               </ul>

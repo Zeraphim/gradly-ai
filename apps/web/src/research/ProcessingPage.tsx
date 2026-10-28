@@ -81,7 +81,7 @@ function PreparationPage({
       const target = event.target as HTMLElement | null;
       if (event.key !== "Enter" || target?.closest("button, a, summary, input"))
         return;
-      window.location.hash = `#/research/meet/${job.id}`;
+      window.location.hash = "#/research/studies/texting-lecture";
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -284,7 +284,7 @@ function PreparationPage({
                       Press Enter or start when you’re ready.
                     </p>
                     <div className="journey-actions-buttons">
-                      <Link className="j-btn" href={`/meet/${job.id}`}>
+                      <Link className="j-btn" href="/studies/texting-lecture">
                         <ActionLabel>Start the quest</ActionLabel>
                       </Link>
                     </div>
