@@ -282,10 +282,10 @@ surviving definitions retain their original provenance. Five otherwise-empty stu
 
 The 119 single-answer questions in this batch have correct positions of
 36 / 37 / 29 / 17 across slots 1–4 (some questions have fewer options).
-Counting ties as wins, always choosing a shortest option succeeds on 47/119
-(39.5%) and a longest option on 25/119 (21.0%). The three multiple-answer questions
+Counting ties as wins, always choosing a shortest option succeeds on 31/119
+(26.1%) and a longest option on 25/119 (21.0%). The three multiple-answer questions
 are excluded. These are cue checks, not factual-accuracy or learning scores;
-regressions protect this batch separately so earlier work cannot mask a new cue.
+regressions protect this batch and its first-11/last-10 subgroups separately so one subset cannot mask a new cue.
 
 The follow-up review addresses incorrect recall-interaction and anxiety-induction
 scope, charity pairwise equivalence, the ambiguous television distractor and walking

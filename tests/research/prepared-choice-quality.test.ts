@@ -27,18 +27,25 @@ describe("rewritten prepared-study choices", () => {
       expect(hits / remainingSingles.length).toBeLessThanOrEqual(0.4);
     }
   });
-  it("does not hide a new length cue behind the earlier review batch", () => {
-    for (const extreme of [Math.min, Math.max]) {
-      const hits = remainingSingles.filter((challenge) => {
-        const right = challenge.options.find((option) =>
-          challenge.accepted.includes(option.id),
-        )!;
-        return (
-          right.text.length ===
-          extreme(...challenge.options.map((option) => option.text.length))
-        );
-      }).length;
-      expect(hits / remainingSingles.length).toBeLessThanOrEqual(0.4);
+  it("keeps length shortcuts weak in each review subgroup, not just the combined batch", () => {
+    for (const batch of [
+      remainingStudies,
+      remainingStudies.slice(0, 11),
+      remainingStudies.slice(11),
+    ]) {
+      const cs = batch.flatMap(([, body]) =>
+        body.lesson.challenges.filter((c) => c.type === "single"),
+      );
+      for (const extreme of [Math.min, Math.max]) {
+        const hits = cs.filter((c) => {
+          const right = c.options.find((o) => c.accepted.includes(o.id))!;
+          return (
+            right.text.length ===
+            extreme(...c.options.map((o) => o.text.length))
+          );
+        }).length;
+        expect(hits / cs.length).toBeLessThanOrEqual(0.4);
+      }
     }
   });
   it("offers at least three substantive choices throughout the final batch", () => {

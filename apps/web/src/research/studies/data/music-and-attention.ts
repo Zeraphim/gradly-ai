@@ -218,7 +218,7 @@ export const body: StudyBody = {
             {
               optionId: "c1-optA",
               label:
-                "Age was randomly assigned while each person received only one music condition.",
+                "Age is repeated; each person contributes one auditory condition.",
               targetIds: ["row0", "row1"],
             },
             {
@@ -294,7 +294,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c1-optA",
-            text: "Age was randomly assigned while each person received only one music condition.",
+            text: "Age is repeated; each person contributes one auditory condition.",
           },
           {
             id: "c1-optB",
@@ -314,7 +314,7 @@ export const body: StudyBody = {
         hint: "Track which conditions one person repeats and which group membership is already present.",
         misconceptions: {
           "c1-optA":
-            "Age was an existing group characteristic; auditory conditions were repeated.",
+            "Age compares different participants, whereas each person encounters the auditory conditions.",
           "c1-optB":
             "New trials do not make the person completing them a different independent participant.",
           "c1-optD":
@@ -340,7 +340,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c2-optA",
-            text: "The two measures must have the same result because they come from the same trials.",
+            text: "The same trials make timing and error-rate findings interchangeable.",
           },
           {
             id: "c2-optB",
@@ -389,7 +389,7 @@ export const body: StudyBody = {
           },
           {
             id: "c3-optB",
-            text: "The larger gap estimates a relaxing-music benefit in general speed averaged over trial types.",
+            text: "The larger gap estimates a relaxing-music benefit in general speed.",
           },
           {
             id: "c3-optC",
@@ -439,7 +439,7 @@ export const body: StudyBody = {
           },
           {
             id: "c4-optB",
-            text: "Older and younger participants must have identical hearing, vision and music preferences.",
+            text: "Age groups can be pooled as practically equivalent on this outcome.",
           },
           {
             id: "c4-optD",
@@ -453,7 +453,7 @@ export const body: StudyBody = {
           "c4-optA":
             "One task and an interaction test do not establish a universal absence of age effects.",
           "c4-optB":
-            "A null interaction does not establish equality in these characteristics.",
+            "A nonsignificant age interaction is not an equivalence result; pooling cannot be justified by that test alone.",
           "c4-optD":
             "Nonsignificance does not demonstrate a reversed interaction.",
         },
@@ -477,7 +477,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c5-optA",
-            text: "Yes; naming a condition relaxing directly measures its unique mental mechanism.",
+            text: "Yes; the relaxing-condition label identifies the operative mechanism.",
           },
           {
             id: "c5-optC",
@@ -539,7 +539,7 @@ export const body: StudyBody = {
             {
               optionId: "c6-optC",
               label:
-                "The timing analysis can be used as an estimate of how much accuracy would improve.",
+                "Timing differences estimate the accuracy gain hidden by the ceiling.",
               targetIds: ["accuracy", "room", "measure"],
             },
             {
@@ -618,7 +618,7 @@ export const body: StudyBody = {
           },
           {
             id: "c6-optC",
-            text: "The timing analysis can be used as an estimate of how much accuracy would improve.",
+            text: "Timing differences estimate the accuracy gain hidden by the ceiling.",
           },
           {
             id: "c6-optD",

@@ -249,7 +249,7 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Young-versus-old driver effects because age was randomly assigned to each task.",
+            text: "Age differences after balancing the task order within drivers.",
           },
         ],
         accepted: ["o1"],
@@ -257,7 +257,7 @@ export const body: StudyBody = {
         hint: "Identify the two planned contrasts without assuming four tasks represent every smartphone activity.",
         misconceptions: {
           o2: "Four selected tasks do not cover all apps or perfectly isolate every platform feature.",
-          o3: "Age is not a manipulated factor in this design.",
+          o3: "Balancing task order within drivers is not an age-group contrast; the design separates media and pacing comparisons.",
         },
         explanation:
           "The crossed conditions distinguish the two planned task contrasts. Differences among the chosen tasks and limited populations still constrain wider claims.",
@@ -349,7 +349,7 @@ export const body: StudyBody = {
             {
               optionId: "o3",
               label:
-                "Young-versus-old driver effects because age was randomly assigned to each task.",
+                "Age differences after balancing the task order within drivers.",
               targetIds: [],
             },
           ],
@@ -380,7 +380,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Stable headway can stand in for braking because both were measured during the same driving period.",
+            text: "Headway is a proxy for braking since both come from the same drive.",
           },
           {
             id: "o3",
@@ -537,7 +537,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Yes; a null pacing comparison supplies practical-equivalence evidence without a stated safety range.",
+            text: "Yes; the null pacing contrast supplies practical-equivalence evidence.",
           },
           {
             id: "o1",

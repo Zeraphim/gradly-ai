@@ -228,7 +228,7 @@ export const body: StudyBody = {
           },
           {
             id: "o4",
-            text: "It predicts that follow-up completion is the only outcome needed to test well-being.",
+            text: "It predicts a uniform activism slope across identification levels.",
           },
         ],
         accepted: ["o2"],
@@ -237,7 +237,7 @@ export const body: StudyBody = {
         misconceptions: {
           o1: "A uniform effect is different from the hypothesized interaction.",
           o3: "The reported activism and identification measures were observed, not assigned.",
-          o4: "Retention is a sampling issue, not a substitute for the stated well-being outcomes.",
+          o4: "An interaction predicts that the activism association varies with identification, rather than a common slope.",
         },
         explanation:
           "Moderation concerns how the activism association depends on identification. It is not a claim of one uniform effect for every voter.",
@@ -259,7 +259,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Guaranteed causality because observing people repeatedly randomizes activism.",
+            text: "Causal identification, since repeated observation controls selection.",
           },
           {
             id: "o1",
@@ -278,7 +278,7 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "Earlier measurement provides ordering, while selection into activism remains a separate question.",
         misconceptions: {
-          o2: "Longitudinal observation does not randomly assign activism.",
+          o2: "Repeated observation establishes temporal order but does not by itself control selection into activism or shared causes.",
           o3: "Repeated invitations do not ensure repeated participation.",
           o4: "The election does not erase the recorded order of the measurements.",
         },
@@ -302,7 +302,7 @@ export const body: StudyBody = {
             {
               optionId: "o2",
               label:
-                "Guaranteed causality because observing people repeatedly randomizes activism.",
+                "Causal identification, since repeated observation controls selection.",
               targetIds: ["before", "election", "after"],
             },
             {
@@ -391,7 +391,7 @@ export const body: StudyBody = {
           },
           {
             id: "o4",
-            text: "Yes; the significant conditional association can substitute for an estimated activism main effect.",
+            text: "Yes; the interaction replaces the activism main-effect estimate.",
           },
         ],
         accepted: ["o3"],

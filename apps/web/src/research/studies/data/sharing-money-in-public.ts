@@ -228,7 +228,7 @@ export const body: StudyBody = {
           },
           {
             id: "opt_c",
-            text: "To estimate the eye cue after pooling public and no-eyes decisions into one common reference.",
+            text: "To estimate the eye cue against a pooled public/no-eyes reference.",
           },
           {
             id: "opt_d",

@@ -84,7 +84,7 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "To make the first experimenter unaware of which temperature was prepared.",
+            text: "To blind the first experimenter to cup preparation and temperature.",
           },
           {
             id: "o4",
@@ -221,7 +221,7 @@ export const body: StudyBody = {
           },
           {
             id: "o16",
-            text: "Because excluded participants can be counted as if their outcomes confirmed the effect.",
+            text: "Exclusions can be counted as outcomes consistent with the prediction.",
           },
         ],
         accepted: ["o13"],
@@ -299,7 +299,7 @@ export const body: StudyBody = {
           },
           {
             id: "o22",
-            text: "Increase the sample at the same two temperatures, keeping the design.",
+            text: "Increase the sample at both existing temperatures.",
           },
           {
             id: "o23",
@@ -343,8 +343,7 @@ export const body: StudyBody = {
             },
             {
               optionId: "o22",
-              label:
-                "Increase the sample at the same two temperatures, keeping the design.",
+              label: "Increase the sample at both existing temperatures.",
               targetIds: ["row0", "row1"],
             },
             {
