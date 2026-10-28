@@ -561,6 +561,11 @@ test("a long generated briefing stays folded and the way into the study stays on
   await page.keyboard.press("Escape");
   await expect(briefing).toHaveCount(0);
   await expect(more).toBeFocused();
+  // A click on the backdrop also closes it.
+  await more.click();
+  await expect(briefing).toBeVisible();
+  await page.mouse.click(5, 5);
+  await expect(briefing).toHaveCount(0);
   await begin.click();
   await expect(
     page.getByRole("heading", { level: 1, name: lesson.challenges[0]!.prompt }),
