@@ -46,23 +46,27 @@ export const scenes: Record<string, SavedScene> = {
       ],
       responses: [
         {
-          optionId: "o1",
-          label: "5‑item: ~10 %; Direct: ~0.3 %",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
-        {
           optionId: "o2",
-          label: "5‑item: ~5 %; Direct: ~0.3 %",
+          label:
+            "Treat the direct item as the less useful measure because it produces fewer errors.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o3",
-          label: "5‑item: ~10 %; Direct: ~3 %",
+          label:
+            "Treat each indirect error as a firmly held belief, without checking response uncertainty.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o4",
-          label: "5‑item: ~20 %; Direct: ~0.3 %",
+          label:
+            "Use the gap between formats as an estimate of television’s effect on false beliefs.",
+          targetIds: ["evidence_1", "evidence_2"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "Check whether the formats measure the same belief before comparing their error rates.",
           targetIds: ["evidence_1", "evidence_2"],
         },
       ],
@@ -72,114 +76,146 @@ export const scenes: Record<string, SavedScene> = {
   c3: {
     scene: {
       version: 1,
-      title: "TV viewing and streaming associations with death‑penalty answers",
-      instruction:
-        "Review the reported correlations and decide which statement about TV viewing’s prediction of incorrect answers is correct.",
+      title: "Bound a regression result",
+      instruction: "Read the claims from modest to strong.",
       description:
-        "Two association elements show the correlation between media use and incorrect answers on the death‑penalty questionnaire.",
+        "Four candidate claims are presented as ladder rungs. Choose the rung that the evidence supports.",
       provenance: {
         kind: "source-summary",
-        refs: ["e13", "e20"],
-        note: "Scene constructed from the reported correlation coefficients and p‑values for TV viewing and online streaming with the death‑penalty question.",
+        refs: ["e5", "e13", "e15", "e20"],
+        note: "Scene built from reported correlations and regression results.",
       },
       responses: [
         {
-          optionId: "o1",
-          label: "Yes, TV viewing was a significant predictor.",
-          targetIds: ["a1"],
+          optionId: "o2",
+          label: "No clear association detected",
+          targetIds: ["r1"],
         },
         {
-          optionId: "o2",
-          label:
-            "No, TV viewing did not predict incorrect answers after controlling for age and education.",
-          targetIds: ["a1"],
+          optionId: "o1",
+          label: "TV cannot affect belief",
+          targetIds: ["r3"],
         },
         {
           optionId: "o3",
-          label: "Only streaming predicted incorrect answers.",
-          targetIds: ["a1", "a2"],
+          label: "Prefer unadjusted estimate",
+          targetIds: ["r2"],
         },
         {
           optionId: "o4",
-          label: "The effect was significant only for the electric‑chair item.",
-          targetIds: ["a1"],
+          label: "Age causes errors, replaces TV",
+          targetIds: ["r4"],
         },
       ],
       resolution: null,
-      kind: "comparison",
-      measure: "sharedMinMaxScale missing?",
-      unit: "none",
-      decimals: 2,
-      min: -0.1,
-      max: 0.1,
-      values: [
+      kind: "ladder",
+      rungs: [
         {
-          id: "a1",
-          label: "TV viewing vs incorrect answers",
-          detail: "r = −0.02, p = 0.57",
+          id: "r1",
+          label:
+            "The adjusted model found no clear association between TV viewing and questionnaire responses.",
+          detail:
+            "This reflects the reported non‑significant correlation (r = −0.02, p = 0.57).",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e13", "e20"],
-            note: "Correlation between TV viewing and the direct question on death penalty in Austria.",
+            kind: "derived",
+            refs: ["e13", "e15", "e20"],
+            note: "Based on the reported TV viewing correlation and regression.",
           },
-          column: 0,
-          value: -0.02,
         },
         {
-          id: "a2",
-          label: "Online streaming vs incorrect answers",
-          detail: "r = −0.05, p = 0.21",
+          id: "r2",
+          label:
+            "One could prefer the unadjusted model’s estimate as TV’s independent effect.",
+          detail:
+            "This claim suggests choosing the unadjusted model over the adjusted model for estimating TV’s effect.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e13", "e20"],
-            note: "Correlation between online streaming and the direct question on death penalty in Austria.",
+            kind: "authored",
+            refs: [],
+            note: "Candidate claim about model preference.",
           },
-          column: 0,
-          value: -0.05,
+        },
+        {
+          id: "r3",
+          label:
+            "Because the adjusted association was nonsignificant, TV has no effect on any belief.",
+          detail:
+            "This claim extends the non‑significant result to a universal negative effect.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Candidate claim about universal impossibility.",
+          },
+        },
+        {
+          id: "r4",
+          label:
+            "The study shows that age causes questionnaire errors and replaces TV as their cause.",
+          detail:
+            "This claim attributes causality to age and positions it as a replacement for TV influence.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Candidate causal claim.",
+          },
+        },
+        {
+          id: "reach",
+          label: "The evidence reaches here",
+          detail:
+            "The evidence supports the modest claim that the adjusted model found no clear association.",
+          at: "resolution",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e13", "e15", "e20"],
+            note: "Based on the reported non‑significant TV viewing correlation.",
+          },
         },
       ],
-      difference: null,
-      prediction: null,
+      reach: {
+        rungId: "r1",
+        label: "The evidence reaches here",
+        at: "resolution",
+      },
     },
   },
   c4: {
     scene: {
       version: 1,
-      title: "Contrasting the Direct Question and the 5‑Item Questionnaire",
+      title: "Testing the questionnaire-artifact explanation",
       instruction:
-        "Examine the two panels that describe how each measure was administered. Think about what each tells us about the questionnaire’s measurement of false beliefs.",
+        "Examine the questionnaire procedure shown below and decide which proposed design would change the feature suspected of producing the artifact.",
       description:
-        "Two panels show the procedure for the direct question about Austria’s death penalty and for the 5‑item indirect questionnaire used in the replication study.",
+        "The scene presents the procedure described in the evidence: indirect items repeatedly ask for inmate counts, and the direct item asks whether Austria currently uses capital punishment.",
       provenance: {
         kind: "source-summary",
         refs: ["e14", "e21", "e26"],
-        note: "Summary of the authors’ remarks about the direct question’s low error rate and the 5‑item questionnaire’s potential design flaw.",
+        note: "Summarizes the questionnaire artifact explanation and the evidence about the indirect and direct items.",
       },
       responses: [
         {
-          optionId: "o1",
-          label:
-            "The 5‑item questionnaire likely induced insecurity, leading participants to guess non‑zero numbers even when they knew the correct answer was zero.",
+          optionId: "o2",
+          label: "Treat consistent answers as proof of genuine false beliefs.",
           targetIds: [],
         },
         {
-          optionId: "o2",
+          optionId: "o1",
           label:
-            "Respondents genuinely believed Austria still had the death penalty, but were reluctant to admit it on a direct question.",
+            "Randomly vary question wording or order and compare error rates.",
           targetIds: [],
         },
         {
           optionId: "o3",
-          label:
-            "The low error rate proves that television viewing has no influence on any death‑penalty‑related beliefs.",
+          label: "Drop the direct question because its result differs.",
           targetIds: [],
         },
         {
           optionId: "o4",
           label:
-            "Both questionnaires are equally valid; the difference is due to random sampling variation.",
+            "Assume deception explains the difference without testing either format.",
           targetIds: [],
         },
       ],
@@ -187,61 +223,73 @@ export const scenes: Record<string, SavedScene> = {
       kind: "designs",
       panels: [
         {
-          id: "dirPanel",
-          label: "Direct question",
+          id: "p1",
+          label: "Indirect items",
           steps: [
             {
-              id: "d1",
-              label: "Ask",
+              id: "p1-s1",
+              label: "Indirect items repeatedly ask for inmate counts.",
               detail:
-                "Participants received a single yes/no question: “Does Austria have the death penalty?”",
+                "As stated in the shown evidence, the indirect items repeatedly ask for inmate counts.",
               at: "setup",
               provenance: {
-                kind: "source-summary",
-                refs: ["e21", "e26"],
-                note: "Direct question produced virtually no incorrect answers.",
+                kind: "authored",
+                refs: [],
+                note: "Describes the indirect-item procedure from the shown evidence.",
               },
             },
             {
-              id: "d2",
-              label: "Record",
+              id: "p1-s2",
+              label: "Direct item",
               detail:
-                "Nearly all participants answered correctly (no), yielding a very low error rate.",
+                "As stated in the shown evidence, the direct item asks whether Austria currently uses capital punishment.",
               at: "setup",
               provenance: {
-                kind: "source-summary",
-                refs: ["e21", "e26"],
-                note: "Observed prevalence of incorrect answers was very low.",
+                kind: "authored",
+                refs: [],
+                note: "Describes the direct-item procedure from the shown evidence.",
+              },
+            },
+            {
+              id: "p1-s3",
+              label: "Response comparison",
+              detail:
+                "Researchers compare patterns of indirect and direct responses to assess belief in nonexistent capital punishment.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Reflects the analytic step implicit in the study.",
               },
             },
           ],
         },
         {
-          id: "inqPanel",
-          label: "5‑item questionnaire",
+          id: "p2",
+          label: "Alternative designs (not shown)",
           steps: [
             {
-              id: "i1",
-              label: "Administer",
+              id: "p2-s1",
+              label:
+                "This panel is intentionally left blank to avoid revealing any specific design.",
               detail:
-                "Participants completed a multi‑item indirect measure assessing perceived prevalence of belief in capital punishment.",
+                "No specific design is depicted; the learner must reason about possible changes.",
               at: "setup",
               provenance: {
-                kind: "source-summary",
-                refs: ["e14"],
-                note: "The replication study notes the questionnaire may be faultily designed.",
+                kind: "authored",
+                refs: [],
+                note: "Placeholder to satisfy the designs kind without revealing correct answer.",
               },
             },
             {
-              id: "i2",
-              label: "Interpret",
-              detail:
-                "Responses suggested a high perceived prevalence of belief, which the authors attribute to the questionnaire’s design rather than true belief.",
+              id: "p2-s2",
+              label: "Similarly blank.",
+              detail: "No additional information is provided.",
               at: "setup",
               provenance: {
-                kind: "source-summary",
-                refs: ["e14"],
-                note: "High prevalence likely reflects a research artifact.",
+                kind: "authored",
+                refs: [],
+                note: "Placeholder.",
               },
             },
           ],
@@ -252,83 +300,96 @@ export const scenes: Record<string, SavedScene> = {
   c5: {
     scene: {
       version: 1,
-      title: "Age as Predictor and Sample Limits",
-      instruction:
-        "Review the evidence pins about age and decide which option best matches the evidence regarding the most consistent predictor of correct answers and the impact of sample age and education on generalizability.",
+      title: "Sampling direction ladder",
+      instruction: "Read the claims from modest to strong.",
       description:
-        "Three pins summarize the reported findings about age and performance. Each option below makes a claim about the predictor and about sample limitations; select the option whose claims are best supported by the pins.",
+        "Order the possible interpretations from modest to strongest claim.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene constructed for challenge.",
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "Based on the excerpt regarding age and education effects.",
       },
       responses: [
         {
-          optionId: "o1",
-          label:
-            "Age predicted correct answers; the younger, more educated sample may have underestimated the true prevalence of false beliefs.",
-          targetIds: ["p1", "p2", "p3"],
-        },
-        {
           optionId: "o2",
           label:
-            "Education predicted correct answers; the sample’s age distribution was representative of Austria.",
-          targetIds: [],
+            "Being younger and better educated must both reduce questionnaire errors",
+          targetIds: ["e3"],
         },
         {
           optionId: "o3",
           label:
-            "Suggestibility predicted correct answers; the sample limitations are irrelevant to the TV‑viewing effect.",
-          targetIds: [],
+            "Observing an age association proves the population error rate must be higher",
+          targetIds: ["e2"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "Age and education differences could affect the estimate in different directions",
+          targetIds: ["e4"],
         },
         {
           optionId: "o4",
-          label:
-            "TV viewing predicted correct answers; age and education had no influence.",
-          targetIds: [],
+          label: "Online sample is representative by definition",
+          targetIds: ["e1"],
         },
       ],
       resolution: null,
-      kind: "connections",
-      anchors: [
+      kind: "ladder",
+      rungs: [
         {
-          id: "p1",
-          label: "Age consistently linked to correct answers",
+          id: "e1",
+          label: "Online sample is representative by definition",
           detail:
-            "Only respondent age was consistently associated with correct responses on all five items and with the dichotomized sum score; older respondents were more likely to answer correctly.",
+            "Claims that no adjustment is needed because the online sample mirrors the general population.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "From intercorrelation matrix",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Reflects option o4.",
           },
         },
         {
-          id: "p2",
-          label: "Younger age predicts incorrect answers",
+          id: "e2",
+          label:
+            "Observing an age association proves the population error rate must be higher",
           detail:
-            "Younger age, but not television viewing, online streaming, suggestibility, or preferred TV genre, consistently predicted incorrect answers.",
+            "Suggests that the age pattern alone indicates a higher error rate in the wider population.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "}}, {",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Reflects option o3.",
           },
         },
         {
-          id: "p3",
-          label: "Age significantly negatively related to performance",
+          id: "e3",
+          label:
+            "Being younger and better educated both reduce questionnaire errors",
           detail:
-            "Respondent age was significantly negatively related to performance in the death penalty questionnaire.",
+            "Asserts that youth and higher education each lead to fewer errors in the sample.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e23"],
-            note: "}}]} }]}}  Note: I need to fix JSON formatting; the ",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Reflects option o2.",
+          },
+        },
+        {
+          id: "e4",
+          label:
+            "Age and education differences could affect the estimate in different directions",
+          detail:
+            "States that the age and education discrepancies might push the estimate in opposite ways, making the net bias unclear.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Reflects option o1.",
           },
         },
       ],
-      actionLabel: "...",
+      reach: null,
     },
   },
 };

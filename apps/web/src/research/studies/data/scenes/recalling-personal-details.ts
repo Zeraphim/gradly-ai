@@ -14,7 +14,7 @@ export const scenes: Record<string, SavedScene> = {
       description: "The challenge's evidence with one response per option.",
       provenance: {
         kind: "reported",
-        refs: ["e14"],
+        refs: ["r1"],
         note: "Verified excerpts from the paper.",
       },
       actionLabel: "Connect a response",
@@ -23,34 +23,38 @@ export const scenes: Record<string, SavedScene> = {
           id: "evidence_1",
           label: "Evidence 1 · p. 13",
           detail:
-            "Participants were 201 Amazon MTurk Workers (48% women, Mage = 36.47, SDage = 11.83, range 20–68) paid USD$0.85 to take part in a 3 (encoding level: self-referential, semantic, structural) 3 X 2 (recall paradigm: incidental, informed) mixed design. Participants who completed the previous studies were excluded from the study. Recall paradigm was a between-subjects variable and encoding level was a within-subjects variable.",
+            "Participants were 201 Amazon MTurk Workers (48% women, Mage = 36.47, SDage = 11.83, range 20–68) paid USD$0.85 to take part in a 3 (encoding level: self-referential, semantic, structural) 3 X 2 (recall paradigm: incidental, informed) mixed design. Participants who completed the previous studies were excluded from the study. Recall paradigm was a between-subjects variable and encoding level was a within-subjects variable. The dependent variable was the proportion of correct words recalled as a function of encoding level, except in the case of the between-subjects results, where the absolute num",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e14"],
+            refs: ["r1"],
             note: "Verified excerpts from the paper.",
           },
         },
       ],
       responses: [
         {
-          optionId: "c2-opt1",
-          label: "Encoding → Filler → Recall",
-          targetIds: ["evidence_1"],
-        },
-        {
           optionId: "c2-opt2",
-          label: "Recall → Encoding → Filler",
+          label:
+            "Compare the groups’ overall recall means after averaging over all encoding levels.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "c2-opt3",
-          label: "Filler → Encoding → Recall",
+          label:
+            "Compare encoding levels after combining observations from both recall-instruction groups.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c2-opt1",
+          label:
+            "Compare encoding-level differences between the incidental and informed recall groups.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "c2-opt4",
-          label: "Encoding → Recall → Filler",
+          label:
+            "Compare the number recalled with the total number of words presented in each list.",
           targetIds: ["evidence_1"],
         },
       ],
@@ -60,261 +64,176 @@ export const scenes: Record<string, SavedScene> = {
   c3: {
     scene: {
       version: 1,
-      title: "Recall Means for Encoding Types",
-      instruction:
-        "Identify the reported mean percentages for self‑referential and semantic encoding.",
+      title: "Expressing the recall gap",
+      instruction: "Read the evidence before you answer.",
       description:
-        "Two reported means from the study are shown. Choose the option that matches the pair as reported.",
+        "The scene shows possible ways to describe the gap using the dependent variable described in the excerpt.",
       provenance: {
         kind: "source-summary",
-        refs: ["e21"],
-        note: "Scene uses the means and standard deviations reported for the main effect of encoding.",
+        refs: ["r1"],
+        note: "Scene based on the study’s description of the dependent variable as proportion correct words recalled.",
       },
       responses: [
         {
-          optionId: "c3-opt1",
-          label: "Self‑referential 43.83% vs Semantic 29.94%",
-          targetIds: ["e_self", "e_sem"],
-        },
-        {
           optionId: "c3-opt2",
-          label: "Self‑referential 29.94% vs Semantic 43.83%",
-          targetIds: ["e_self", "e_sem"],
+          label: "About 13.89% relative to the shallower group’s recall score.",
+          targetIds: [],
         },
         {
           optionId: "c3-opt3",
-          label: "Both 35%",
+          label:
+            "About 73.77 percentage points, obtained by adding the two group percentages.",
           targetIds: [],
         },
         {
           optionId: "c3-opt4",
-          label: "Self‑referential 50% vs Semantic 20%",
+          label:
+            "About a 0.63 percentage‑point difference because the meta‑analysis reports d = .63.",
           targetIds: [],
         },
-      ],
-      resolution: null,
-      kind: "comparison",
-      measure: "%",
-      unit: "%",
-      min: 0,
-      max: 100,
-      values: [
         {
-          id: "e_self",
-          label: "Self‑referential encoding mean",
-          detail: "M = 43.83%, SD = 33.22 (from e21)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e21"],
-            note: "Mean percentage recalled for self‑referentially encoded words.",
-          },
-          value: 43.83,
-        },
-        {
-          id: "e_sem",
-          label: "Semantic encoding mean",
-          detail: "M = 29.94%, SD = 28.56 (from e21)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e21"],
-            note: "Mean percentage recalled for semantically encoded words.",
-          },
-          value: 29.94,
-        },
-      ],
-      difference: null,
-      prediction: null,
-    },
-  },
-  c4: {
-    scene: {
-      version: 1,
-      title: "Identify the reported mean weighted effect size",
-      instruction:
-        "Sort each effect-size value into the bin that matches whether it is the reported mean weighted effect size.",
-      description:
-        "Learners decide which of the candidate values corresponds to the mean weighted effect size (d) for self‑referentially encoded words over semantically encoded words as reported in the meta‑analysis.",
-      provenance: {
-        kind: "source-summary",
-        refs: ["e8"],
-        note: "The excerpt reports the mean weighted effect size and a conservative analysis value.",
-      },
-      responses: [
-        {
-          optionId: "c4-opt1",
-          label: "0.63",
-          targetIds: ["c4-opt1-card"],
-        },
-        {
-          optionId: "c4-opt2",
-          label: "0.45",
-          targetIds: ["c4-opt2-card"],
-        },
-        {
-          optionId: "c4-opt3",
-          label: "0.20",
-          targetIds: ["c4-opt3-card"],
-        },
-        {
-          optionId: "c4-opt4",
-          label: "1.00",
-          targetIds: ["c4-opt4-card"],
-        },
-      ],
-      resolution: null,
-      kind: "sort",
-      bins: [
-        {
-          id: "binCorrect",
-          label: "Matches reported mean weighted effect size",
-        },
-        {
-          id: "binIncorrect",
-          label: "Does not match reported mean weighted effect size",
-        },
-      ],
-      cards: [
-        {
-          id: "c4-opt1-card",
-          label: "0.63",
-          detail:
-            "The excerpt states: 'The mean weighted effect size (d) for self-referentially encoded words over semantically encoded words was 0.63 (0.45 with conservative analyses).'",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Value presented in the excerpt",
-          },
-        },
-        {
-          id: "c4-opt2-card",
-          label: "0.45",
-          detail:
-            "The excerpt notes a conservative analysis yielded a mean weighted effect size of 0.45.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Value presented in the excerpt",
-          },
-        },
-        {
-          id: "c4-opt3-card",
-          label: "0.20",
-          detail: "This value does not appear in the excerpt.",
-          at: "setup",
-          provenance: {
-            kind: "derived",
-            refs: ["e8"],
-            note: "Absence from the reported sentence",
-          },
-        },
-        {
-          id: "c4-opt4-card",
-          label: "1.00",
-          detail: "This value does not appear in the excerpt.",
-          at: "setup",
-          provenance: {
-            kind: "derived",
-            refs: ["e8"],
-            note: "Absence from the reported sentence",
-          },
-        },
-      ],
-      placements: [
-        {
-          cardId: "c4-opt1-card",
-          binId: "binCorrect",
-          at: "resolution",
-        },
-        {
-          cardId: "c4-opt2-card",
-          binId: "binIncorrect",
-          at: "resolution",
-        },
-        {
-          cardId: "c4-opt3-card",
-          binId: "binIncorrect",
-          at: "resolution",
-        },
-        {
-          cardId: "c4-opt4-card",
-          binId: "binIncorrect",
-          at: "resolution",
-        },
-      ],
-    },
-  },
-  c5: {
-    scene: {
-      version: 1,
-      title: "Interpretation of Persistent Self‑Reference Effect",
-      instruction:
-        "Examine the evidence pins and decide which conclusion about the online tool is best supported.",
-      description:
-        "Three evidence pins summarize the meta‑analytic expectation, the observed encoding effect, and the authors’ explanation for the online result. Two response statements correspond to the possible interpretations.",
-      provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene built from the provided excerpts.",
-      },
-      responses: [
-        {
-          optionId: "c5-opt1",
+          optionId: "c3-opt1",
           label:
-            "The online tool replicates the effect even when participants know they will be tested.",
-          targetIds: ["e18_pin", "e21_pin", "e24_pin"],
-        },
-        {
-          optionId: "c5-opt2",
-          label:
-            "The online tool fails to produce the effect when participants are informed.",
-          targetIds: ["e18_pin"],
+            "About 13.89 percentage points, not a 13.89% relative increase.",
+          targetIds: [],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "e18_pin",
-          label: "Meta‑analytic expectation",
+          id: "anc1",
+          label: "Self‑encoding recall rate",
           detail:
-            "Symons and Johnson (1997) found that an informed recall condition eliminates the usual self‑reference effect.",
+            "Proportion of correct words recalled after self‑referential encoding.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e18"],
-            note: "Directly from excerpt e18.",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Dependent variable defined as proportion correct words recalled as a function of encoding level.",
           },
         },
         {
-          id: "e21_pin",
-          label: "Overall encoding effect",
+          id: "anc2",
+          label: "Meaning‑encoding recall rate",
           detail:
-            "Participants recalled more self‑referentially encoded words than semantically or structurally encoded words (main effect of encoding, F(1,191)=33.14, p<.001).",
+            "Proportion of correct words recalled after semantic (meaning) encoding.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e21"],
-            note: "From excerpt e21.",
-          },
-        },
-        {
-          id: "e24_pin",
-          label: "Online environment explanation",
-          detail:
-            "Failure to replicate the informed vs incidental recall discrepancy may be due to unique differences in online crowdsourcing (e.g., MTurk).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e24"],
-            note: "From excerpt e24.",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Same dependent variable applied to the meaning encoding condition.",
           },
         },
       ],
-      actionLabel: "Select the conclusion that best fits the evidence",
+      actionLabel: "Compute the gap",
+    },
+  },
+  c4: {
+    scene: {
+      version: 1,
+      kind: "connections",
+      title: "Connect the evidence",
+      instruction:
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
+      provenance: {
+        kind: "reported",
+        refs: ["e8"],
+        note: "Verified excerpts from the paper.",
+      },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 15",
+          detail:
+            "The mean weighted effect size (d) for self-referentially encoded words over semantically encoded words was 0.63 (0.45 with conservative analyses).",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e8"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
+      responses: [
+        {
+          optionId: "c4-opt1",
+          label:
+            "Report both estimates and explain which word exclusions distinguish them.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c4-opt2",
+          label: "Report .63 as if every study had that same effect.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c4-opt3",
+          label:
+            "Treat .63 as the fraction of participants who improved their everyday memory.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c4-opt4",
+          label:
+            "Subtract .45 from .63 and call the remainder the causal effect of online participation.",
+          targetIds: ["evidence_1"],
+        },
+      ],
+      resolution: null,
+    },
+  },
+  c5: {
+    scene: {
+      version: 1,
+      kind: "connections",
+      title: "Connect the evidence",
+      instruction:
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
+      provenance: {
+        kind: "reported",
+        refs: ["r2"],
+        note: "Verified excerpts from the paper.",
+      },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 14",
+          detail:
+            "Our failure to replicate this discrepancy between informed and incidental recall tasks may be due to unique differences in online crowd-sourcing environments, such as MTurk. As men- tioned, we explicitly instructed participants to avoid using memory enhancement strategies, such as writing the words down during the encoding phase. Such explicit instructions were necessary given that the experiment runs unsupervised on participants’ own computers, and as such would not be necessary when running lab-based studies. We speculate that it may be this difference that caused the discrepancy in findings",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
+      responses: [
+        {
+          optionId: "c5-opt2",
+          label:
+            "Yes; the online–laboratory contrast isolates the instruction account.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c5-opt1",
+          label:
+            "No; it is a proposed explanation, not a directly isolated mechanism.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c5-review3",
+          label:
+            "Rehearsal avoidance can be read from the recall scores as though it were measured during encoding.",
+          targetIds: ["evidence_1"],
+        },
+      ],
+      resolution: null,
     },
   },
 };

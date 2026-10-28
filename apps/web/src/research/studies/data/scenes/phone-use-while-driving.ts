@@ -7,197 +7,385 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Two Distinct Driving Metrics",
+      instruction: "Compare the panels side by side.",
+      description:
+        "The study recorded two separate measures while participants followed a lead vehicle while using a smartphone.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "The excerpt states that brake reaction time and time‑headway variability were both used as performance measures.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1",
-          detail:
-            "To assess driving performance two dependent variables that have been shown to be sensitive to distraction in previous studies, BRT and TH variability were used.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-      ],
       responses: [
         {
-          optionId: "o1",
-          label: "Brake reaction time (BRT) and time‑headway (TH) variability.",
-          targetIds: ["evidence_1"],
-        },
-        {
           optionId: "o2",
-          label: "Mean speed and lane‑position standard deviation.",
-          targetIds: ["evidence_1"],
+          label: "Headway is a proxy for braking",
+          targetIds: ["e2"],
         },
         {
           optionId: "o3",
-          label: "Heart rate and subjective workload scores.",
-          targetIds: ["evidence_1"],
+          label: "Average their raw values into one score",
+          targetIds: ["e1", "e2"],
+        },
+        {
+          optionId: "o1",
+          label: "Different measures can capture different aspects",
+          targetIds: ["e1", "e2"],
         },
       ],
       resolution: null,
+      kind: "designs",
+      panels: [
+        {
+          id: "p1",
+          label: "Brake Reaction Time",
+          steps: [
+            {
+              id: "e1",
+              label: "Measure",
+              detail:
+                "Recorded as the delay between a lead‑car braking event and the participant’s brake press.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["r1"],
+                note: "Matches the excerpt’s mention of BRT being used.",
+              },
+            },
+            {
+              id: "e1b",
+              label: "Purpose",
+              detail:
+                "Captures the driver’s immediate response to a lead‑car event.",
+              at: "setup",
+              provenance: {
+                kind: "derived",
+                refs: ["r1"],
+                note: "Interpretation of the measure as described in the shownEvidence.",
+              },
+            },
+          ],
+        },
+        {
+          id: "p2",
+          label: "Time‑Headway Variability",
+          steps: [
+            {
+              id: "e2",
+              label: "Measure",
+              detail:
+                "Calculated as the variability of the distance gap to the lead car over the trial.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["r1"],
+                note: "Matches the excerpt’s mention of TH variability being used.",
+              },
+            },
+            {
+              id: "e2b",
+              label: "Purpose",
+              detail:
+                "Reflects the stability of the following distance over time.",
+              at: "setup",
+              provenance: {
+                kind: "derived",
+                refs: ["r1"],
+                note: "Interpretation of the measure as described in the shownEvidence.",
+              },
+            },
+          ],
+        },
+      ],
     },
   },
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Scope a pacing null",
+      instruction:
+        "Sort each statement into the bin that the evidence supports.",
+      description:
+        "Two bins and two statement cards let you see which claims the null result backs.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "source-summary",
+        refs: ["r2"],
+        note: "Elements based on the cited excerpt and shown evidence.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1",
-          detail: "There was no significant effect of task‑pacing.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-      ],
       responses: [
-        {
-          optionId: "o1",
-          label:
-            "No – self‑paced and experimenter‑paced tasks did not differ significantly in BRT.",
-          targetIds: ["evidence_1"],
-        },
         {
           optionId: "o2",
           label:
-            "Yes – self‑paced tasks produced significantly shorter BRTs than experimenter‑paced tasks.",
-          targetIds: ["evidence_1"],
+            "Yes; the null pacing contrast supplies practical-equivalence evidence.",
+          targetIds: ["cardUni"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "No; this null contrast does not establish universal equality or real-road safety.",
+          targetIds: ["cardNoUni"],
         },
         {
           optionId: "o3",
           label:
-            "Yes – experimenter‑paced tasks produced significantly shorter BRTs than self‑paced tasks.",
-          targetIds: ["evidence_1"],
+            "Yes; drivers’ choice of task timing supplies the real-road validity missing from the simulator.",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "sort",
+      bins: [
+        {
+          id: "binSup",
+          label: "Supported by the evidence",
+        },
+        {
+          id: "binNot",
+          label: "Not supported by the evidence",
+        },
+      ],
+      cards: [
+        {
+          id: "cardNoUni",
+          label:
+            "Null pacing contrast does not establish universal equality or real-road safety.",
+          detail: "Statement about lack of universal equality.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r2"],
+            note: "From excerpt.",
+          },
+        },
+        {
+          id: "cardUni",
+          label:
+            "Null pacing contrast shows self-pacing is equally safe across all tasks and road settings.",
+          detail: "Statement claiming universal equality.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r2"],
+            note: "From excerpt.",
+          },
+        },
+      ],
+      placements: [
+        {
+          cardId: "cardNoUni",
+          binId: "binSup",
+          at: "resolution",
+        },
+        {
+          cardId: "cardUni",
+          binId: "binNot",
+          at: "resolution",
+        },
+      ],
     },
   },
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Evaluating the picture‑superiority account",
+      instruction: "Read the claims from modest to strong.",
+      description: "Three possible claims ordered from modest to strongest.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "source-summary",
+        refs: ["r3"],
+        note: "Uses the discussion excerpt and the shown evidence about working‑memory demands.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1",
+          optionId: "o2",
+          label: "Dual coding fully explains the effect",
+          targetIds: ["e2"],
+        },
+        {
+          optionId: "o3",
+          label: "Image‑based phone use cannot impair driving",
+          targetIds: ["e3"],
+        },
+        {
+          optionId: "o1",
+          label: "Candidate explanation; mechanism not isolated",
+          targetIds: ["e1"],
+        },
+      ],
+      resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "e1",
+          label:
+            "Image tasks may reduce working‑memory demands relative to text tasks.",
           detail:
-            "According to dual coding theory, this effect is due to differences in encoding: pictures are encoded twice (first in a sensory based, visual code then in a symbolic, verbal code) while words are only coded once in a verbal code.",
+            "Reflects the discussion that remembering images places different demands on working memory than remembering text.",
           at: "setup",
           provenance: {
             kind: "authored",
             refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+            note: "Based on the shownEvidence.",
+          },
+        },
+        {
+          id: "e2",
+          label:
+            "Dual‑coding theory fully explains why image tasks produce shorter braking responses.",
+          detail:
+            "Draws on the excerpt’s description of dual coding: pictures encoded twice, words once.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: ["r3"],
+            note: "Uses the dual‑coding description in r3.",
+          },
+        },
+        {
+          id: "e3",
+          label:
+            "Image‑based phone use cannot impair any aspect of real‑world driving.",
+          detail:
+            "Extends the account to a broad claim about driving performance.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "No direct support in the excerpts.",
           },
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "Dual‑coding/picture‑superiority theory – images benefit from two independent memory codes, reducing cognitive load.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label:
-            "Simple motor‑effort differences – image tasks require less thumb movement.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label:
-            "Participants were more familiar with image apps, leading to faster responses.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
+      reach: {
+        rungId: "e1",
+        label: "The evidence reaches here",
+        at: "resolution",
+      },
     },
   },
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Follow‑up designs for testing generalization",
+      instruction: "Compare the panels side by side.",
+      description: "Three possible follow‑up designs are presented as panels.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "source-summary",
+        refs: ["r4"],
+        note: "Based on the study description in the excerpt.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1",
-          detail:
-            "however these findings have not be entirely consistent and more research is needed to determine the differences between self and other‑paced secondary tasks in driving",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label:
-            "Previous research on self‑ vs other‑paced tasks is mixed, so the null pacing effect should be interpreted cautiously.",
-          targetIds: ["evidence_1"],
+          label: "Broader sample & tasks",
+          targetIds: [],
         },
         {
           optionId: "o2",
-          label:
-            "The study conclusively proved that pacing has no effect on driving performance.",
-          targetIds: ["evidence_1"],
+          label: "Stop collecting data",
+          targetIds: [],
         },
         {
           optionId: "o3",
-          label:
-            "The authors found a strong pacing effect that contradicts earlier work.",
-          targetIds: ["evidence_1"],
+          label: "Replace measures with app popularity",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "designs",
+      panels: [
+        {
+          id: "elem1",
+          label: "Broader sample & tasks",
+          steps: [
+            {
+              id: "s1",
+              label:
+                "Recruit a more diverse participant pool beyond undergraduates.",
+              detail: "Expands the sample to increase external validity.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Derived from option o1.",
+              },
+            },
+            {
+              id: "s2",
+              label:
+                "Include a wider range of smartphone tasks in addition to the original four.",
+              detail:
+                "Adds relevant secondary tasks while keeping the driving performance outcome.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Derived from option o1.",
+              },
+            },
+          ],
+        },
+        {
+          id: "elem2",
+          label: "Stop collecting data",
+          steps: [
+            {
+              id: "s3",
+              label:
+                "Treat the null result as conclusive and cease further data collection.",
+              detail: "Does not add new participants or tasks.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Derived from option o2.",
+              },
+            },
+            {
+              id: "s4",
+              label: "Retain the original driving performance measure.",
+              detail:
+                "Keeps the outcome unchanged but does not broaden the sample or tasks.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Derived from option o2.",
+              },
+            },
+          ],
+        },
+        {
+          id: "elem3",
+          label: "Replace measures with app popularity",
+          steps: [
+            {
+              id: "s5",
+              label:
+                "Substitute driving performance with app popularity metrics.",
+              detail:
+                "Changes the outcome away from direct driving performance.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Derived from option o3.",
+              },
+            },
+            {
+              id: "s6",
+              label:
+                "Maintain the same undergraduate sample and selected simulator tasks.",
+              detail: "Does not add relevant people or tasks.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Derived from option o3.",
+              },
+            },
+          ],
+        },
+      ],
     },
   },
 };

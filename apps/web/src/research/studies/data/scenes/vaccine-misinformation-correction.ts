@@ -7,74 +7,95 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      title: "Study Design – Sample Description",
-      instruction: "Highlight a passage to see what it means here.",
+      title: "Sample versus target population",
+      instruction:
+        "Compare how the health‑related graduate‑student sample was formed with how the community‑parent target population would be formed.",
       description:
-        "Four consecutive passages retell the sample information from the excerpt.",
+        "Two panels show the recruitment information that is available from the excerpt. Tap the panel(s) that you think explain why the sample matters when applying results to community parents.",
       provenance: {
-        kind: "source-summary",
-        refs: ["e24"],
-        note: "Summary of the sample description provided in the excerpt.",
+        kind: "authored",
+        refs: [],
+        note: "Scene designed from the challenge prompt and excerpt.",
       },
       responses: [
         {
           optionId: "o1",
-          label: "Matches the sample description",
-          targetIds: ["p1", "p2", "p3", "p4"],
+          label: "Focus on the sample’s experience and selection",
+          targetIds: [],
         },
         {
           optionId: "o2",
-          label: "Does not match the sample description",
+          label: "Focus on the target population’s likely experience",
+          targetIds: [],
+        },
+        {
+          optionId: "c2-review3",
+          label: "Consider both sample and target population together",
           targetIds: [],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
+      kind: "designs",
+      panels: [
         {
           id: "p1",
-          label: "Total number of students",
-          detail: "The experiment included 243 students.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e24"],
-            note: "Direct sentence from excerpt.",
-          },
+          label: "Health‑related graduate‑student sample",
+          steps: [
+            {
+              id: "p1-s1",
+              label: "Sample size and composition",
+              detail:
+                "The experiment included 243 students, 65% of which work in health professions; 174 from the School of Public Health and 69 from other departments of the Faculty of Social Welfare and Health (Haifa University, 2017‑2018).",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e24"],
+                note: "Directly from excerpt.",
+              },
+            },
+            {
+              id: "p1-s2",
+              label: "Recruitment context",
+              detail:
+                "Students were recruited from health‑related graduate programs at Haifa University during 2017‑2018.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e24"],
+                note: "Directly from excerpt.",
+              },
+            },
+          ],
         },
         {
           id: "p2",
-          label: "Health‑profession proportion",
-          detail: "65% of which work in health professions.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e24"],
-            note: "Direct sentence from excerpt.",
-          },
-        },
-        {
-          id: "p3",
-          label: "School of Public Health count",
-          detail: "Of them, 174 were students at the School of Public Health",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e24"],
-            note: "Direct sentence from excerpt.",
-          },
-        },
-        {
-          id: "p4",
-          label: "Other departments and years",
-          detail:
-            "and 69 were in different departments of the Faculty of Social Welfare and Health at Haifa University in the years 2017–2018.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e24"],
-            note: "Direct sentence from excerpt.",
-          },
+          label: "Community parent target population",
+          steps: [
+            {
+              id: "p2-s1",
+              label: "Available information",
+              detail:
+                "The excerpt provides no recruitment or demographic information for community parents.",
+              at: "setup",
+              provenance: {
+                kind: "derived",
+                refs: ["e24"],
+                note: "Inferred from the absence of target‑population details in the excerpt.",
+              },
+            },
+            {
+              id: "p2-s2",
+              label: "Implicit assumption",
+              detail:
+                "To apply results, one must assume how community parents would be recruited or selected.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Conceptual placeholder for the target population.",
+              },
+            },
+          ],
         },
       ],
     },
@@ -111,12 +132,19 @@ export const scenes: Record<string, SavedScene> = {
         {
           optionId: "o1",
           label:
-            "Condition 2 yielded higher satisfaction scores than Condition 1",
+            "No; the assigned package does not separate its individual components.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "o2",
-          label: "Satisfaction was equal across conditions",
+          label:
+            "Yes; transparency is the most plausible component, so the package contrast estimates its contribution.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "c4-review3",
+          label:
+            "No; the significance of the package contrast is primarily a measure of component-level uncertainty.",
           targetIds: ["evidence_1"],
         },
       ],

@@ -7,38 +7,38 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      title: "Identifying the anxiety manipulation",
+      title: "Unbundle threat and content",
       instruction: "Read the evidence before you answer.",
       description:
-        "Review the evidence about the anxiety induction and select the option that corresponds to it.",
+        "Identify the rationale behind using a politically neutral anxiety induction.",
       provenance: {
         kind: "source-summary",
         refs: ["e8", "e9"],
-        note: "Description of the anxiety induction from the paper.",
+        note: "Study used threat of shock anxiety induction, a well‑established method; first use in this line of research.",
       },
       responses: [
         {
           optionId: "c1-opt-a",
           label:
-            "Threat of shock versus safety condition (electric shock possible vs none)",
+            "To test induced anxiety while reducing the political meanings bundled with other threats.",
           targetIds: [],
         },
         {
           optionId: "c1-opt-b",
           label:
-            "Exposure to political threat cues (e.g., immigration news) versus neutral cues",
+            "To establish that every kind of threat has exactly the same political consequences.",
           targetIds: [],
         },
         {
           optionId: "c1-opt-c",
           label:
-            "Mortality salience (death reminders) versus control condition",
+            "To make participants’ pre‑existing political beliefs randomly assigned treatments.",
           targetIds: [],
         },
         {
           optionId: "c1-opt-d",
           label:
-            "No manipulation; all participants experienced the same condition",
+            "To test whether political news causes anxiety using a news‑versus‑neutral comparison.",
           targetIds: [],
         },
       ],
@@ -46,94 +46,139 @@ export const scenes: Record<string, SavedScene> = {
       kind: "connections",
       anchors: [
         {
-          id: "ev1",
-          label: "Induction description",
+          id: "anchor",
+          label: "Threat of shock anxiety induction (no political content)",
           detail:
-            "We induced anxiety with a threat of shock paradigm, void of any political connotation.",
+            "Used threat of shock as anxiety induction, a well‑established method; first use in this line of research.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e8", "e9"],
-            note: "Direct description of the anxiety induction used.",
+            note: "Design element",
           },
         },
       ],
-      actionLabel: "Select the matching description",
+      actionLabel: "Select reason",
     },
   },
   c2: {
     scene: {
       version: 1,
-      title: "Measures of political attitudes",
+      title: "Why measure both explicit and implicit attitudes?",
       instruction:
-        "Read the descriptions of the measures used in the experiment.",
+        "Drag each statement into the bin that shows whether the study’s description supports it as a reason for measuring both explicit and implicit attitudes.",
       description:
-        "The scene presents the explicit and implicit measures mentioned in the study.",
+        "Learners sort purpose statements based on the study’s rationale for using two types of attitude measures.",
       provenance: {
-        kind: "source-summary",
-        refs: ["e2", "e10"],
-        note: "Scene constructed from excerpts describing explicit and implicit political attitude measures.",
+        kind: "authored",
+        refs: [],
+        note: "Instructional text for the sorting task.",
       },
       responses: [
         {
           optionId: "c2-opt-a",
-          label: "Only explicit measures",
-          targetIds: ["exp1"],
-        },
-        {
-          optionId: "c2-opt-b",
-          label: "Only implicit measures",
-          targetIds: ["imp1"],
+          label: "Combine scores into one index for the threat test",
+          targetIds: ["cardA"],
         },
         {
           optionId: "c2-opt-c",
-          label: "Both explicit and implicit measures",
-          targetIds: ["exp1", "imp1", "both1"],
+          label: "Examine direct and indirect attitude outcomes separately",
+          targetIds: ["cardC"],
+        },
+        {
+          optionId: "c2-opt-b",
+          label:
+            "Swap attitude measures for physiological arousal as the sole outcome",
+          targetIds: ["cardB"],
         },
         {
           optionId: "c2-opt-d",
-          label: "Only physiological measures",
-          targetIds: [],
+          label: "Use a change in one measure as proof for the other",
+          targetIds: ["cardD"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
+      kind: "sort",
+      bins: [
         {
-          id: "exp1",
-          label: "Explicit Self-Placement scale",
-          detail:
-            "An 11‑point Left–Right Self‑Placement scale used as a conventional explicit measure of political attitudes.",
+          id: "binSup",
+          label: "Supported by study description",
+        },
+        {
+          id: "binNot",
+          label: "Not supported by study description",
+        },
+      ],
+      cards: [
+        {
+          id: "cardA",
+          label:
+            "Combine the explicit and implicit scores into a single index to use in the threat test.",
+          detail: "Paraphrase of option a.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Describes explicit measure",
+            kind: "authored",
+            refs: [],
+            note: "Statement card for option a.",
           },
         },
         {
-          id: "imp1",
-          label: "Implicit ST‑IAT",
-          detail:
-            "Single Target Implicit Association Test (ST‑IAT) employed as an implicit measure of political attitudes.",
+          id: "cardC",
+          label:
+            "Look at how attitudes measured directly and indirectly relate to each other as separate outcomes.",
+          detail: "Paraphrase of option c.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Describes implicit measure",
+            kind: "authored",
+            refs: [],
+            note: "Statement card for option c.",
           },
         },
         {
-          id: "both1",
-          label: "Anxiety induction effects on both measures",
-          detail:
-            "The study tested whether anxiety induction influenced not only explicit but also implicit political attitudes.",
+          id: "cardB",
+          label:
+            "Swap political attitude measures for physiological arousal measures as the only outcome.",
+          detail: "Paraphrase of option b.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e2"],
-            note: "States both explicit and implicit were assessed",
+            kind: "authored",
+            refs: [],
+            note: "Statement card for option b.",
           },
+        },
+        {
+          id: "cardD",
+          label:
+            "Use a change seen in one measure as proof for the other measure.",
+          detail: "Paraphrase of option d.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Statement card for option d.",
+          },
+        },
+      ],
+      placements: [
+        {
+          cardId: "cardC",
+          binId: "binSup",
+          at: "resolution",
+        },
+        {
+          cardId: "cardA",
+          binId: "binNot",
+          at: "resolution",
+        },
+        {
+          cardId: "cardB",
+          binId: "binNot",
+          at: "resolution",
+        },
+        {
+          cardId: "cardD",
+          binId: "binNot",
+          at: "resolution",
         },
       ],
     },
@@ -141,83 +186,85 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      title: "Locating the result summary",
-      instruction:
-        "Read the passages below and identify which one summarizes the lack of evidence for the hypothesised shift.",
+      title: "Procedure of anxiety induction and attitude measurement",
+      instruction: "Review the sequence of steps in the study.",
       description:
-        "Three passages from the article are shown. Select the option that matches the passage reporting the test outcome.",
+        "Each panel describes a stage of the experiment; use them to consider what the null explicit result implies.",
       provenance: {
         kind: "source-summary",
-        refs: ["e3", "e14"],
-        note: "Passages taken directly from the cited excerpts.",
+        refs: ["e3", "e14", "r2"],
+        note: "Summarizes the experimental timeline and results.",
       },
       responses: [
         {
           optionId: "c4-opt-a",
-          label: "A",
-          targetIds: ["s2"],
-        },
-        {
-          optionId: "c4-opt-b",
-          label: "B",
-          targetIds: ["s1"],
+          label: "Induction failed because attitude outcome was nonsignificant",
+          targetIds: ["e1"],
         },
         {
           optionId: "c4-opt-c",
-          label: "C",
-          targetIds: ["s3"],
+          label: "Anxiety can never affect any political belief",
+          targetIds: ["e2"],
         },
         {
           optionId: "c4-opt-d",
-          label: "D",
-          targetIds: ["s4"],
+          label: "Explicit null best explained by unsuccessful manipulation",
+          targetIds: ["e4"],
+        },
+        {
+          optionId: "c4-opt-b",
+          label: "No explicit shift detected; implicit outcomes uncertain",
+          targetIds: ["e3"],
         },
       ],
       resolution: null,
       kind: "spot",
       passages: [
         {
-          id: "s1",
-          label: "P1",
-          detail: "Quote from page 6.",
+          id: "e1",
+          label: "Anxiety induction in explicit blocks",
+          detail: "The study experimentally induced anxiety.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Direct quote from page 6.",
+            kind: "source-summary",
+            refs: ["e14"],
+            note: "Induction described in discussion.",
           },
         },
         {
-          id: "s2",
-          label: "P2",
-          detail: "First sentence from page 10.",
+          id: "e2",
+          label: "Explicit attitude measurement",
+          detail:
+            "No significant difference was found between conditions on explicit political attitudes.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e14"],
-            note: "Direct quote from page 10.",
+            kind: "source-summary",
+            refs: ["e3", "e14"],
+            note: "Reports null explicit effect.",
           },
         },
         {
-          id: "s3",
-          label: "P3",
-          detail: "Second sentence fragment from page 10.",
+          id: "e3",
+          label: "Later blocks contain implicit attitude measures",
+          detail:
+            "Implicit political attitude assessments were administered in subsequent blocks.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e14"],
-            note: "Direct quote from page 10.",
+            kind: "source-summary",
+            refs: ["r2"],
+            note: "Identifies blocks with implicit measures.",
           },
         },
         {
-          id: "s4",
-          label: "P4",
-          detail: "Third sentence fragment from page 10.",
+          id: "e4",
+          label: "Physiological arousal subsided in later blocks",
+          detail:
+            "Physiological arousal decreased during the blocks holding implicit measures.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e14"],
-            note: "Direct quote from page 10.",
+            kind: "source-summary",
+            refs: ["r2"],
+            note: "Notes arousal decline in implicit‑measure blocks.",
           },
         },
       ],
@@ -226,55 +273,54 @@ export const scenes: Record<string, SavedScene> = {
   c5: {
     scene: {
       version: 1,
-      title: "Interpretation of the Bayes factors",
+      title: "Interpreting BF01 > 3",
       instruction: "Read the evidence before you answer.",
       description:
-        "The scene presents the authors’ comment on the Bayesian approach; the learner selects the claim that matches this comment.",
+        "One evidence anchor is shown; choose the response that best matches its meaning.",
       provenance: {
         kind: "source-summary",
-        refs: ["e13"],
-        note: "Scene based on the authors’ statement that the Bayesian approach supports the absence of any effect.",
+        refs: ["r1"],
+        note: "Reports BF01 >3 for six of eight measures.",
       },
       responses: [
         {
           optionId: "c5-opt-a",
-          label:
-            "Strong support for the null hypothesis (Bayes factors > 3 for most measures).",
-          targetIds: ["e1"],
+          label: "Null favoured over alternative",
+          targetIds: [],
         },
         {
           optionId: "c5-opt-b",
-          label: "Evidence favoring the alternative hypothesis.",
-          targetIds: ["e1"],
+          label: "Zero effect proven for all",
+          targetIds: [],
         },
         {
           optionId: "c5-opt-c",
-          label: "Inconclusive Bayes factors around 1.",
-          targetIds: ["e1"],
+          label: "Alternative three times more likely",
+          targetIds: [],
         },
         {
           optionId: "c5-opt-d",
-          label: "Bayes factors were not calculated.",
-          targetIds: ["e1"],
+          label: "Identical evidence across outcomes",
+          targetIds: [],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "e1",
-          label: "Bayesian approach statement",
+          id: "e1-evidence",
+          label: "BF01 > 3 for six of eight measures",
           detail:
-            "Moreover, the Bayesian analytical approach supports the absence of any effect of anxiety on political attitudes. This approach revealed that the non-significance of effects resulted from the circumstance that effects were truly null and not from data insensitivity (e.g., due to large standard errors because of small sample size).",
+            "Bayes factors in the direction of the null hypothesis were greater than three for six out of the eight measures.",
           at: "setup",
           provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Exact excerpt from page 10.",
+            kind: "source-summary",
+            refs: ["r1"],
+            note: "Directly from the excerpt.",
           },
         },
       ],
-      actionLabel: "Select the claim supported by the Bayesian analysis",
+      actionLabel: "Choose this interpretation",
     },
   },
   c6: {
@@ -321,24 +367,25 @@ export const scenes: Record<string, SavedScene> = {
         {
           optionId: "c6-opt-a",
           label:
-            "Anxiety by itself shifts political attitudes toward conservatism.",
+            "Yes; the nonpolitical null can be used to estimate the contribution of political threat content.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "c6-opt-b",
           label:
-            "Anxiety only influences attitudes when it occurs in a political context.",
+            "No; political context is a possible explanation that needs a direct comparison.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "c6-opt-c",
-          label: "Anxiety makes people more liberal.",
+          label:
+            "Yes; earlier political-threat findings and this null form a randomized content comparison.",
           targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "c6-opt-d",
           label:
-            "The study cannot draw any conclusion about anxiety and attitudes.",
+            "No; the study instead estimates how attitude differences depend on political content.",
           targetIds: ["evidence_1", "evidence_2"],
         },
       ],

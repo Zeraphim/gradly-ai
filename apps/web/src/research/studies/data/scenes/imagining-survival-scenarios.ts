@@ -14,46 +14,60 @@ export const scenes: Record<string, SavedScene> = {
       description: "The challenge's evidence with one response per option.",
       provenance: {
         kind: "reported",
-        refs: ["e1"],
+        refs: ["r1", "r2"],
         note: "Verified excerpts from the paper.",
       },
       actionLabel: "Connect a response",
       anchors: [
         {
           id: "evidence_1",
-          label: "Evidence 1 · p. 1",
+          label: "Evidence 1 · p. 3",
           detail:
-            "Results indicated better item memory for materials processed in the survival relative to\nmoving condition. Critically, for color context, there was a condition by plausibility interaction,\nwhere memory was best for plausibly colored items in the survival processing condition.\nThere was no difference, however, in source context memory between the survival and\nmoving conditions.",
+            "Trials were presented in four alternating mini-blocks of the survival task and moving task (12 items per mini-block; half plausible and half implausible). Within a mini-block, plausible and implausible items were randomly intermixed. Immediately following encoding, participants completed the retrieval phase of the experiment. A total of 72 objects were presented. Of those, 48 were old (studied at encoding), and 24 were new (unstudied) items5. Because we were interested in memory for the color associated with studied items, all items were shown in grayscale during retrieval.",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e1"],
+            refs: ["r1"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+        {
+          id: "evidence_2",
+          label: "Evidence 2 · p. 3",
+          detail:
+            "At encoding, participants were shown a total of 48 objects. Participants studied these objects in one of two encoding conditions: a survival condition and a moving (control) condition. For items presented in the survival processing condition, participants were instructed to rate how relevant each object would be to help them survive in a remote, foreign land without any basic supplies3. For items presented in the moving (control) condition, participants were instructed to judge how relevant each object would be to help them move to, and get settled in, a foreign land4.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
             note: "Verified excerpts from the paper.",
           },
         },
       ],
       responses: [
         {
-          optionId: "c1a",
-          label:
-            "Survival vs. Moving condition (the core manipulation of survival processing)",
-          targetIds: ["evidence_1"],
-        },
-        {
           optionId: "c1b",
-          label: "Color plausibility (plausible vs. implausible)",
-          targetIds: ["evidence_1"],
+          label:
+            "Model encoding scenario within participants but colour plausibility between independent groups.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "c1c",
           label:
-            "Item relevance ratings (very relevant, somewhat relevant, irrelevant)",
-          targetIds: ["evidence_1"],
+            "Model the scenario–colour combinations as independent participant groups.",
+          targetIds: ["evidence_1", "evidence_2"],
+        },
+        {
+          optionId: "c1a",
+          label:
+            "Model encoding scenario and colour plausibility as repeated factors within participants.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "c1d",
-          label: "Response time (fast vs. slow)",
-          targetIds: ["evidence_1"],
+          label:
+            "Model relevance ratings as assigned groups and colour memory as the encoding manipulation.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
       ],
       resolution: null,
@@ -90,22 +104,26 @@ export const scenes: Record<string, SavedScene> = {
       responses: [
         {
           optionId: "c2a",
-          label: "Item memory only",
+          label:
+            "Success on all three measures, since identifying the object supplies its context.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "c2b",
-          label: "Color context memory only",
+          label:
+            "Successful source memory with unsuccessful item memory because an apple was named.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "c2c",
-          label: "Source context memory only",
+          label:
+            "Successful colour memory because the apple has a plausible colour in everyday life.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "c2d",
-          label: "Item memory, color context memory, and source context memory",
+          label:
+            "Successful item recognition with unsuccessful colour and source context memory.",
           targetIds: ["evidence_1"],
         },
       ],
@@ -115,184 +133,128 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      title: "Color‑context interaction",
-      instruction: "Highlight a passage to see what it means here.",
-      description:
-        "Four short passages summarize the key results from the excerpt.",
+      kind: "connections",
+      title: "Connect the evidence",
+      instruction:
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "source-summary",
-        refs: ["e1"],
-        note: "Scene built from excerpt describing item memory and the interaction.",
+        kind: "reported",
+        refs: ["r3"],
+        note: "Verified excerpts from the paper.",
       },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 5",
+          detail:
+            "Color context memory estimates for both encoding conditions (survival, moving) were calculated as the proportion of color hits (correct color recognition) out of item hits (correct item recognition), which removes the influence of item memory on the context memory measures (Murnane and Bayen, 1996), as we have done before (Leshikar et al., 2014, 2016; Leshikar and Gutchess, 2015). Results of the color context analysis revealed no main effect of condition, F(1, 26) = 1.17, p = 0.288, η2 = 0.04. There was, however, a main effect of plausibility, F(1, 26) = 23.98, p =< 0.001, η2 = 0.48, reflectin",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r3"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
       responses: [
+        {
+          optionId: "c4b",
+          label:
+            "Whether both main effects reach significance when the interaction does.",
+          targetIds: ["evidence_1"],
+        },
         {
           optionId: "c4a",
           label:
-            "Higher for plausible items in survival; no difference for implausible",
-          targetIds: ["p3"],
-        },
-        {
-          optionId: "c4b",
-          label: "Higher for implausible items in survival",
-          targetIds: ["p2"],
+            "Whether the high-versus-low plausibility gap differs between the encoding tasks.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "c4c",
           label:
-            "No difference between conditions for either plausible or implausible",
-          targetIds: ["p4"],
+            "Whether colour-memory scores equal item-recognition scores for every participant.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "c4d",
-          label: "Main effect of condition with no influence of plausibility",
-          targetIds: ["p1"],
+          label:
+            "Whether all low-plausibility objects are remembered better in the moving condition.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
-        {
-          id: "p1",
-          label: "Overall memory advantage",
-          detail:
-            "Results indicated better item memory for materials processed in the survival relative to moving condition.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e1"],
-            note: "Directly from the first sentence of the excerpt.",
-          },
-        },
-        {
-          id: "p2",
-          label: "Interaction found",
-          detail:
-            "Critically, for color context, there was a condition by plausibility interaction,",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e1"],
-            note: "Directly from the second sentence of the excerpt.",
-          },
-        },
-        {
-          id: "p3",
-          label: "Peak memory for plausible‑survival",
-          detail:
-            "where memory was best for plausibly colored items in the survival processing condition.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e1"],
-            note: "Directly from the second sentence of the excerpt.",
-          },
-        },
-        {
-          id: "p4",
-          label: "No source‑context difference",
-          detail:
-            "There was no difference, however, in source context memory between the survival and moving conditions.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e1"],
-            note: "Directly from the third sentence of the excerpt.",
-          },
-        },
-      ],
     },
-    responseStyle: "tap",
   },
   c5: {
     scene: {
       version: 1,
-      title: "Scope of the survival processing advantage",
-      instruction: "Read the claims from modest to strong.",
+      title: "Limit a memory claim",
+      instruction: "Read the evidence before you answer.",
       description:
-        "Four possible claims about how far the survival processing advantage extends, ordered from most modest to strongest.",
+        "Two evidence statements are shown: one about the colour interaction, one about the null source‑context effect. Select the evidence that supports each option.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene layout for the ladder question.",
+        kind: "source-summary",
+        refs: ["e1"],
+        note: "Summarises the reported colour interaction and null source effect.",
       },
       responses: [
         {
           optionId: "c5a",
-          label: "The advantage extends to all kinds of contextual details",
-          targetIds: ["rung4"],
-        },
-        {
-          optionId: "c5b",
           label:
-            "The advantage is limited to contextual details that relate to survival relevance (e.g., color)",
-          targetIds: ["rung3"],
+            "Use the colour interaction as the best estimate of a common improvement in contextual memory.",
+          targetIds: ["e_color"],
         },
         {
           optionId: "c5c",
           label:
-            "Source context memory is actually worse in the survival condition",
-          targetIds: ["rung1"],
+            "Use the null source result to treat source memory as practically equivalent across encoding tasks.",
+          targetIds: ["e_source"],
+        },
+        {
+          optionId: "c5b",
+          label:
+            "No; the measured context outcomes showed different patterns under these conditions.",
+          targetIds: ["e_color", "e_source"],
         },
         {
           optionId: "c5d",
           label:
-            "The result is due to a floor effect that prevented any improvement",
-          targetIds: ["rung2"],
+            "Use the source null to infer a colour‑specific mechanism rather than test competing accounts.",
+          targetIds: ["e_source"],
         },
       ],
       resolution: null,
-      kind: "ladder",
-      rungs: [
+      kind: "connections",
+      anchors: [
         {
-          id: "rung1",
-          label: "Worse source memory",
+          id: "e_color",
+          label: "Colour memory showed a condition‑by‑plausibility interaction",
           detail:
-            "Claims that source context memory is poorer after survival processing than after moving processing.",
+            "From excerpt: better memory for plausibly coloured items in the survival condition.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e1"],
-            note: "Based on reported item memory and color context interaction.",
+            note: "Reports the colour interaction.",
           },
         },
         {
-          id: "rung2",
-          label: "Floor effect",
+          id: "e_source",
+          label:
+            "Source‑context memory showed no significant difference between conditions",
           detail:
-            "Claims that the lack of difference is due to a floor effect preventing any improvement in source context memory.",
+            "From excerpt: no difference in source context memory between survival and moving conditions.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e1"],
-            note: "Based on reported item memory and color context interaction.",
-          },
-        },
-        {
-          id: "rung3",
-          label: "Limited to survival-relevant details",
-          detail:
-            "Claims that the survival processing advantage applies only to contextual details tied to survival relevance, such as color.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e1"],
-            note: "Based on reported item memory and color context interaction.",
-          },
-        },
-        {
-          id: "rung4",
-          label: "Extends to all details",
-          detail:
-            "Claims that the survival processing advantage applies to all kinds of contextual details.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e1"],
-            note: "Based on reported item memory and color context interaction.",
+            note: "Reports the null source‑context effect.",
           },
         },
       ],
-      reach: null,
+      actionLabel: "Select evidence",
     },
   },
 };

@@ -7,74 +7,244 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      title: "Recall advantage in the 50–50% group",
+      title: "Recall percentages for aloud vs silent",
       instruction:
-        "Examine the reported recall percentages and the t‑test statistic.",
+        "Look at the two reported recall percentages. Determine which statement correctly describes the raw gap between them.",
       description:
-        "The scene shows the proportion of words recalled when read aloud versus silently and the reported t‑test result for the 50–50% group.",
+        "The study reports recall rates for words read aloud and silently in the balanced group.",
       provenance: {
         kind: "source-summary",
         refs: ["e1"],
-        note: "Summarises the recall percentages and t‑test from the excerpt.",
+        note: "Reports recall rates for aloud and silent conditions in the balanced group.",
+      },
+      responses: [
+        {
+          optionId: "o2",
+          label:
+            "Eight percent relative improvement because subtraction and division are interchangeable.",
+          targetIds: ["mem_aloud", "mem_silent"],
+        },
+        {
+          optionId: "o3",
+          label:
+            "Forty-six percentage points because recall rates for the two modes should be added.",
+          targetIds: ["mem_aloud", "mem_silent"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "Eight percentage points; statistical significance is a separate property of the test.",
+          targetIds: ["mem_aloud", "mem_silent"],
+        },
+      ],
+      resolution: null,
+      kind: "estimate",
+      measure: "percentage",
+      min: 0,
+      max: 100,
+      reference: {
+        value: 0,
+        label: "no difference",
+      },
+      band: null,
+      estimates: [
+        {
+          id: "mem_aloud",
+          label: "Aloud recall",
+          detail: "27% of words recalled when read aloud",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e1"],
+            note: "From excerpt e1",
+          },
+          value: 27,
+          lower: 27,
+          upper: 27,
+        },
+        {
+          id: "mem_silent",
+          label: "Silent recall",
+          detail: "19% of words recalled when read silently",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e1"],
+            note: "From excerpt e1",
+          },
+          value: 19,
+          lower: 19,
+          upper: 19,
+        },
+      ],
+      prediction: null,
+    },
+  },
+  c3: {
+    scene: {
+      version: 1,
+      title: "Sort reasoning about p-value comparison",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "Learners sort statements about comparing p-values into bins based on whether the cited evidence supports the statement.",
+      provenance: {
+        kind: "source-summary",
+        refs: ["e4"],
+        note: "Recognition contrast p<.001; recall contrast p<.05.",
       },
       responses: [
         {
           optionId: "o1",
-          label: "Yes, the difference was significant (p < .05)",
-          targetIds: ["e1_aloud"],
+          label: "Option 1",
+          targetIds: [],
         },
         {
           optionId: "o2",
-          label: "No, the difference was not significant.",
-          targetIds: ["e1_silent"],
+          label: "Option 2",
+          targetIds: [],
         },
         {
           optionId: "o3",
-          label: "The test did not provide enough information to decide.",
-          targetIds: ["e1_ttest"],
+          label: "Option 3",
+          targetIds: [],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
+      kind: "connections",
+      anchors: [
         {
-          id: "e1_aloud",
-          label: "Aloud recall",
-          detail: "27% of words were recalled when read aloud.",
+          id: "anc_recog",
+          label: "Recognition contrast",
+          detail: "p < .001",
           at: "setup",
           provenance: {
             kind: "source-summary",
-            refs: ["e1"],
+            refs: ["e4"],
             note: "From excerpt.",
           },
         },
         {
-          id: "e1_silent",
-          label: "Silent recall",
-          detail: "19% of words were recalled when read silently.",
+          id: "anc_recall",
+          label: "Recall contrast",
+          detail: "p < .05",
           at: "setup",
           provenance: {
             kind: "source-summary",
-            refs: ["e1"],
-            note: "From excerpt.",
+            refs: ["e4"],
+            note: "From shownEvidence.",
+          },
+        },
+      ],
+      actionLabel: "Connect evidence to reasoning",
+    },
+  },
+  c5: {
+    scene: {
+      version: 1,
+      title: "Interpret the interaction",
+      instruction: "Follow the steps of the study in order.",
+      description:
+        "The diagram shows the between‑subjects factor (list proportion), the within‑subjects factor (learning mode), the ANOVA that was run, and the significant interaction result.",
+      provenance: {
+        kind: "source-summary",
+        refs: ["e2", "e3"],
+        note: "Based on excerpts describing the mixed‑measures ANOVA and its interaction.",
+      },
+      responses: [
+        {
+          optionId: "o2",
+          label:
+            "An interaction is the aloud effect pooled across list compositions.",
+          targetIds: ["n2"],
+        },
+        {
+          optionId: "o3",
+          label:
+            "The experiment directly identifies a single mental mechanism from the interaction alone.",
+          targetIds: ["n3"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "The learning‑mode difference depends on how common each mode is in the list.",
+          targetIds: ["n4"],
+        },
+      ],
+      resolution: null,
+      kind: "flow",
+      nodes: [
+        {
+          id: "n1",
+          label: "List proportion (between‑subjects)",
+          detail:
+            "Subset‑size (20%, 50%, 80% aloud) was a between‑subjects variable.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "subset-size (20, 50, 80% aloud) as a between subjects variable",
           },
         },
         {
-          id: "e1_ttest",
-          label: "t‑test statistic",
-          detail: "t(19) = 2.018.",
+          id: "n2",
+          label: "Learning mode (within‑subjects)",
+          detail:
+            "Type of learning (vocal production, silent reading) was a within‑subjects variable.",
           at: "setup",
           provenance: {
             kind: "source-summary",
-            refs: ["e1"],
-            note: "From excerpt.",
+            refs: ["e3"],
+            note: "type of learning (vocal production, silent reading) as a within subjects variable",
           },
+        },
+        {
+          id: "n3",
+          label: "Mixed‑measures ANOVA",
+          detail: "A mixed‑measures ANOVA tested the two factors.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "mixed-measures ANOVA with subset-size ... and type of learning ...",
+          },
+        },
+        {
+          id: "n4",
+          label: "Significant interaction",
+          detail:
+            "The ANOVA revealed a significant interaction between list proportion and learning mode [F(2,57)=7.55, p<.001].",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "significant interaction between the two main factors [F(2,57)=7.55, p<.001]",
+          },
+        },
+      ],
+      edges: [
+        {
+          from: "n1",
+          to: "n3",
+          label: "included as factor",
+          at: "setup",
+        },
+        {
+          from: "n2",
+          to: "n3",
+          label: "included as factor",
+          at: "setup",
+        },
+        {
+          from: "n3",
+          to: "n4",
+          label: "produced",
+          at: "setup",
         },
       ],
     },
     responseStyle: "tap",
   },
-  c3: {
+  c6: {
     scene: {
       version: 1,
       kind: "connections",
@@ -84,7 +254,7 @@ export const scenes: Record<string, SavedScene> = {
       description: "The challenge's evidence with one response per option.",
       provenance: {
         kind: "reported",
-        refs: ["e4"],
+        refs: ["r1"],
         note: "Verified excerpts from the paper.",
       },
       actionLabel: "Connect a response",
@@ -93,11 +263,11 @@ export const scenes: Record<string, SavedScene> = {
           id: "evidence_1",
           label: "Evidence 1 · p. 5",
           detail:
-            "In the 50–50% group, participants recog-\nnized correctly words that were read aloud better (69.2%) than\nthey did words that were read silently (54.2%), t(19) = 3.961,\np < 0.001.",
+            "We must be circumspect though as, numerically, the reversal entailed eight items only. Replication and extension are clearly invited in future research. Because we did not attempt to test a memory strength account here, our study did not include a between-subjects pure lists manipulation. Fortunately though, the critical data do exist in the literature. The original experiments and data are construed along different lines, of course, but, upon new scrutiny augmented by the present results, they support statistical distinctiveness. In Experi- ments 1 and 2 of the Ozubko and MacLeod (2010) study",
           at: "setup",
           provenance: {
             kind: "reported",
-            refs: ["e4"],
+            refs: ["r1"],
             note: "Verified excerpts from the paper.",
           },
         },
@@ -105,155 +275,24 @@ export const scenes: Record<string, SavedScene> = {
       responses: [
         {
           optionId: "o1",
-          label: "Yes, the difference was significant (p < .001).",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label: "No, the difference was not significant.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label: "The result is inconclusive from the reported statistics.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
-    },
-  },
-  c5: {
-    scene: {
-      version: 1,
-      title: "Interaction interpretation",
-      instruction: "Read the evidence before you answer.",
-      description:
-        "Two pieces of evidence are presented: the authors’ aim to show statistical distinctiveness and the reported significant interaction between subset‑size and type of learning.",
-      provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene designed for interpretation challenge.",
-      },
-      responses: [
-        {
-          optionId: "o1",
           label:
-            "Statistical distinctiveness influences memory and can oppose encoding distinctiveness.",
-          targetIds: ["e2_elem", "e3_elem"],
+            "Few items leave the reversal sensitive to item sampling and in need of replication.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o2",
           label:
-            "Encoding distinctiveness alone accounts for all memory differences.",
-          targetIds: ["e2_elem"],
+            "The observed reversal is enough to prefer silent study whenever most list items are read aloud.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o3",
-          label: "Subset‑size has no effect on memory performance.",
-          targetIds: ["e3_elem"],
+          label:
+            "A larger participant sample can substitute for testing a wider set of silent items.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "connections",
-      anchors: [
-        {
-          id: "e2_elem",
-          label: "Study goal",
-          detail:
-            "Authors aimed to demonstrate the potency of statistical distinctiveness.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e2"],
-            note: "Paraphrased goal statement.",
-          },
-        },
-        {
-          id: "e3_elem",
-          label: "ANOVA result",
-          detail:
-            "Mixed‑measures ANOVA showed a significant interaction between subset‑size and type of learning (F(2,57)=7.55, p<.001).",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e3"],
-            note: "Paraphrased ANOVA result.",
-          },
-        },
-      ],
-      actionLabel: "Choose",
     },
-  },
-  c6: {
-    scene: {
-      version: 1,
-      title: "Identify the authors’ caution",
-      instruction: "Highlight a passage to see what it means here.",
-      description:
-        "Three candidate statements are presented. Select the one that is supported by the excerpt.",
-      provenance: {
-        kind: "source-summary",
-        refs: ["e6"],
-        note: "The excerpt provides the authors’ qualification of the reversal.",
-      },
-      responses: [
-        {
-          optionId: "o1",
-          label: "Based on only eight items",
-          targetIds: ["c1"],
-        },
-        {
-          optionId: "o2",
-          label: "Reflects a robust and reliable effect",
-          targetIds: ["c2"],
-        },
-        {
-          optionId: "o3",
-          label: "Proves statistical distinctiveness always dominates",
-          targetIds: ["c3"],
-        },
-      ],
-      resolution: null,
-      kind: "spot",
-      passages: [
-        {
-          id: "c1",
-          label: "Based on only eight items",
-          detail:
-            "This claim states that the reversal was based on only eight items, urging cautious interpretation.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Option text from challenge",
-          },
-        },
-        {
-          id: "c2",
-          label: "Reflects a robust and reliable effect",
-          detail:
-            "This claim characterizes the reversal as a robust and reliable effect across participants.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Option text from challenge",
-          },
-        },
-        {
-          id: "c3",
-          label: "Proves statistical distinctiveness always dominates",
-          detail:
-            "This claim asserts that the reversal proves statistical distinctiveness always dominates.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Option text from challenge",
-          },
-        },
-      ],
-    },
-    responseStyle: "tap",
   },
 };

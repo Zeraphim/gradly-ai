@@ -34,24 +34,27 @@ export const scenes: Record<string, SavedScene> = {
       ],
       responses: [
         {
-          optionId: "o1",
-          label:
-            "The second experimenter was blind to condition (single‑blind).",
-          targetIds: ["evidence_1"],
-        },
-        {
           optionId: "o2",
-          label: "The first experimenter was blind to condition.",
+          label:
+            "To stop participants from feeling whether their own cup was warm or cold.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "o3",
-          label: "Both experimenters were blind to condition (double‑blind).",
+          label:
+            "To blind the first experimenter to cup preparation and temperature.",
           targetIds: ["evidence_1"],
         },
         {
           optionId: "o4",
-          label: "No experimenter was blind to condition.",
+          label:
+            "To guarantee that every remaining source of measurement bias was absent.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "o1",
+          label:
+            "To reduce condition-linked cues in the participant-facing instructions.",
           targetIds: ["evidence_1"],
         },
       ],
@@ -59,6 +62,163 @@ export const scenes: Record<string, SavedScene> = {
     },
   },
   c2: {
+    scene: {
+      version: 1,
+      title: "Purpose of random temperature assignment",
+      instruction:
+        "Sort each statement into the bin that reflects whether the hint or excerpt supports it.",
+      description:
+        "Decide which claims about why random temperature assignment matters are backed by the provided hint/excerpt.",
+      provenance: {
+        kind: "authored",
+        refs: [],
+        note: "Scene author",
+      },
+      responses: [
+        {
+          optionId: "o5",
+          label: "Reduces systematic pre-existing differences",
+          targetIds: ["c5"],
+        },
+        {
+          optionId: "o6",
+          label: "Controls expectancy cues without blinding",
+          targetIds: ["c6"],
+        },
+        {
+          optionId: "o7",
+          label:
+            "Addresses volunteer‑to‑population selection like random sampling",
+          targetIds: ["c7"],
+        },
+        {
+          optionId: "o8",
+          label: "Makes post‑assignment exclusion a baseline balance check",
+          targetIds: ["c8"],
+        },
+      ],
+      resolution: null,
+      kind: "sort",
+      bins: [
+        {
+          id: "bin1",
+          label: "Supported by hint/excerpt",
+        },
+        {
+          id: "bin2",
+          label: "Not supported by hint/excerpt",
+        },
+      ],
+      cards: [
+        {
+          id: "c5",
+          label: "Reduces systematic pre-existing differences",
+          detail:
+            "Hint says randomization concerns pre‑existing group differences.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "From challenge hint",
+          },
+        },
+        {
+          id: "c6",
+          label:
+            "Controls expectancy cues in the participant instructions without requiring blinding",
+          detail: "Hint does not mention expectancy cues or blinding.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Scene author",
+          },
+        },
+        {
+          id: "c7",
+          label:
+            "Addresses volunteer‑to‑population selection in the same way as random sampling",
+          detail:
+            "Hint talks about pre‑existing differences, not volunteer selection.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Scene author",
+          },
+        },
+        {
+          id: "c8",
+          label:
+            "Makes the post‑assignment exclusion procedure a baseline balance check",
+          detail:
+            "Hint does not refer to exclusion procedures or balance checks.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Scene author",
+          },
+        },
+      ],
+      placements: [],
+    },
+  },
+  c3: {
+    scene: {
+      version: 1,
+      title: "Interpreting a null attractiveness result",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "The evidence shows that attractiveness comparisons yielded p‑values > .33. Choose the interpretation that the evidence supports.",
+      provenance: {
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "Summarizes the reported nonsignificant attractiveness contrasts.",
+      },
+      responses: [
+        {
+          optionId: "o10",
+          label: "Exact equality proven",
+          targetIds: [],
+        },
+        {
+          optionId: "o9",
+          label:
+            "No difference detected, but equivalence/mediation not established",
+          targetIds: [],
+        },
+        {
+          optionId: "o11",
+          label: "Null contrast rules out mediator",
+          targetIds: [],
+        },
+        {
+          optionId: "o12",
+          label: "Significant effect demonstrated",
+          targetIds: [],
+        },
+      ],
+      resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "e1",
+          label: "Attractiveness comparisons",
+          detail:
+            "All reported p‑values were greater than .33 (nonsignificant).",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Reports nonsignificant attractiveness contrasts.",
+          },
+        },
+      ],
+      actionLabel: "Choose",
+    },
+  },
+  c4: {
     scene: {
       version: 1,
       kind: "connections",
@@ -88,288 +248,88 @@ export const scenes: Record<string, SavedScene> = {
       ],
       responses: [
         {
-          optionId: "o5",
-          label:
-            "Random assignment by the first experimenter, out of sight of the second experimenter.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o6",
-          label:
-            "Participants chose their mug temperature based on preference.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o7",
-          label: "The second experimenter assigned the temperature condition.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o8",
-          label: "Assignment was based on attachment questionnaire scores.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
-    },
-  },
-  c3: {
-    scene: {
-      version: 1,
-      title: "Attractiveness Ratings Outcome",
-      instruction: "Read the claims from modest to strong.",
-      description:
-        "Four possible claims about the attractiveness ratings are shown; select the one backed by the reported results.",
-      provenance: {
-        kind: "source-summary",
-        refs: ["e3"],
-        note: "Scene built from the excerpt describing the consumer questions.",
-      },
-      responses: [
-        {
-          optionId: "o9",
-          label: "Not significant",
-          targetIds: ["r2"],
-        },
-        {
-          optionId: "o10",
-          label: "Sig diff warm‑cold",
-          targetIds: ["r4"],
-        },
-        {
-          optionId: "o11",
-          label: "Not collected",
-          targetIds: ["r1"],
-        },
-        {
-          optionId: "o12",
-          label: "Only warm sig",
-          targetIds: ["r3"],
-        },
-      ],
-      resolution: null,
-      kind: "ladder",
-      rungs: [
-        {
-          id: "r1",
-          label: "Ratings not collected",
-          detail: "Claim that no attractiveness ratings were gathered.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e3"],
-            note: "Claim about data collection.",
-          },
-        },
-        {
-          id: "r2",
-          label: "Ratings not significant",
-          detail:
-            "Claim that attractiveness ratings showed no significant differences (all ps > .33).",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e3"],
-            note: "Matches the reported non‑significant ps.",
-          },
-        },
-        {
-          id: "r3",
-          label: "Only warm condition significant",
-          detail:
-            "Claim that only the warm condition yielded a significant attractiveness rating.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e3"],
-            note: "A possible stronger claim.",
-          },
-        },
-        {
-          id: "r4",
-          label: "Significant difference warm vs cold",
-          detail:
-            "Claim that attractiveness ratings differed significantly between warm and cold conditions.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e3"],
-            note: "The strongest positive claim.",
-          },
-        },
-        {
-          id: "reach",
-          label: "Evidence reaches here",
-          detail:
-            "The evidence supports the claim that the attractiveness ratings were not significant.",
-          at: "resolution",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e3"],
-            note: "Based on reported non‑significant ps.",
-          },
-        },
-      ],
-      reach: {
-        rungId: "r2",
-        label: "Evidence reaches here",
-        at: "resolution",
-      },
-    },
-    responseStyle: "tap",
-  },
-  c4: {
-    scene: {
-      version: 1,
-      title: "Participant Exclusions",
-      instruction:
-        "Read the passages that describe how participants were excluded.",
-      description:
-        "Three passages report the exclusion counts and the final sample size; a fourth passage describes an unrelated procedural step.",
-      provenance: {
-        kind: "source-summary",
-        refs: ["e3"],
-        note: "The exclusion sentence and procedural text are taken from the provided excerpt.",
-      },
-      responses: [
-        {
-          optionId: "o13",
-          label:
-            "17 participants excluded: 6 due to suspicion, 11 non‑native Dutch.",
-          targetIds: ["s1", "s2", "s3"],
-        },
-        {
           optionId: "o14",
-          label: "No participants were excluded.",
-          targetIds: ["unrelated"],
+          label:
+            "Because any exclusion proves that the randomization was deliberately fraudulent.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o15",
-          label: "Only 6 participants were excluded due to suspicion.",
-          targetIds: ["s1"],
+          label:
+            "Because the final 128 are automatically a nationally representative probability sample.",
+          targetIds: ["evidence_1"],
+        },
+        {
+          optionId: "o13",
+          label:
+            "Readers need to know the analysed population and assess the exclusion procedure.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o16",
           label:
-            "Only 11 participants were excluded due to being non‑native Dutch.",
-          targetIds: ["s2"],
+            "Exclusions can be counted as outcomes consistent with the prediction.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
-        {
-          id: "s1",
-          label: "Excluded suspicion",
-          detail:
-            "Participants who indicated suspicion towards the manipulation (N = 6)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Directly from the exclusion sentence.",
-          },
-        },
-        {
-          id: "s2",
-          label: "Excluded non-native Dutch",
-          detail: "Participants who were non‑native Dutch (N = 11)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Directly from the exclusion sentence.",
-          },
-        },
-        {
-          id: "s3",
-          label: "Final sample",
-          detail: "Leaving 128 participants in the final sample.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Directly from the exclusion sentence.",
-          },
-        },
-        {
-          id: "unrelated",
-          label: "Attachment questionnaire",
-          detail:
-            "After completing an attachment questionnaire, participants read on their screen that they had to hold the paper cup, but were not allowed to drink from the cup.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Procedural description unrelated to exclusions.",
-          },
-        },
-      ],
     },
   },
   c5: {
     scene: {
       version: 1,
-      title: "Interpretation of the Warmth Effect",
+      title: "Warm versus cold relational-focus",
       instruction: "Read the evidence before you answer.",
       description:
-        "Two evidence anchors describe the study’s goal and the choice of a real warm stimulus. Each response links an interpretive claim to these anchors.",
+        "The scene shows the observed warm‑cold contrast in relational‑focus scores. Choose which statement is backed by this evidence.",
       provenance: {
         kind: "authored",
         refs: [],
-        note: "Scene built for interpretation challenge.",
+        note: "Scene authored for the challenge.",
       },
       responses: [
         {
-          optionId: "o17",
-          label: "Physical warmth cue increases relational focus.",
-          targetIds: ["aim", "cue"],
-        },
-        {
           optionId: "o18",
-          label: "Physical warmth cue decreases relational focus.",
-          targetIds: ["aim", "cue"],
+          label:
+            "Stated replication aim alone establishes the predicted result before any data analysis",
+          targetIds: ["e1"],
         },
         {
           optionId: "o19",
-          label: "The effect is due to participants’ mood, not warmth.",
-          targetIds: ["aim", "cue"],
+          label:
+            "Result in one perceptual task establishes that all warm experiences improve social behaviour",
+          targetIds: ["e1"],
         },
         {
           optionId: "o20",
-          label: "There is no effect of temperature on perception.",
-          targetIds: ["aim", "cue"],
+          label:
+            "Contrast establishes that cold must reduce focus below a neutral baseline",
+          targetIds: ["e1"],
+        },
+        {
+          optionId: "o17",
+          label:
+            "Observed warm–cold contrast supports the tested directional prediction",
+          targetIds: ["e1"],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "aim",
-          label: "Study aim",
+          id: "e1",
+          label: "Warm vs cold relational-focus means",
           detail:
-            "Investigate reproducibility of the reported effect that physical warmth leads to a greater focus on perceptual relations.",
+            "Mean warm = 1.69 (SE .03, 95% CI [1.63,1.76]); Mean cold = 1.51 (SE .03, 95% CI [1.44,1.58])",
           at: "setup",
           provenance: {
             kind: "source-summary",
-            refs: ["e1"],
-            note: "Paraphrased aim statement.",
-          },
-        },
-        {
-          id: "cue",
-          label: "Warm cue used",
-          detail:
-            "Chose to replicate a study that deals with a real warm cue (IJ&S’ Study 3).",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e4"],
-            note: "Paraphrased cue choice.",
+            refs: ["r2"],
+            note: "Summarizes reported means and confidence intervals from the excerpt.",
           },
         },
       ],
-      actionLabel: "Choose interpretation",
+      actionLabel: "indicates",
     },
   },
 };

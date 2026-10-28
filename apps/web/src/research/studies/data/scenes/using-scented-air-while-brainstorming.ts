@@ -7,117 +7,142 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Why OB depends on a reference set",
+      instruction:
+        "Look at the three steps that build the out‑of‑the‑boxness score and decide which step explains why the definition relies on a reference set.",
+      description:
+        "Three consecutive passages show how the OB score is constructed from the excerpt.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "source-summary",
+        refs: ["r1"],
+        note: "Summary of the excerpt defining the OB score.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1",
-          detail:
-            "The out‑of‑the‑boxness (OB) score for each participant was the fraction of exploitation gallery shapes that lie outside of the standard set of SCMs defined by the 100 players of Ref [43].",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2",
-          detail:
-            "We find that the OB of the placebo group was significantly higher than the control with medium‑to‑large effect size (MW U = 683, p = 0.008; D = 0.6).",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label: "Creative Foraging Game (CFG)",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Depends on how the standard set was defined",
+          targetIds: ["e1"],
         },
         {
           optionId: "o2",
-          label: "Alternate Uses Test (AUT)",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Score reflects real‑world creativity change",
+          targetIds: ["e2"],
         },
         {
           optionId: "o3",
-          label: "Torrance Test of Creative Thinking (TTCT)",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Reference set makes OB identical to verbal tests",
+          targetIds: ["e3"],
         },
         {
           optionId: "o4",
-          label: "Combined Z‑score of fluency and originality",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Score reveals the exact mental mechanism",
+          targetIds: ["e1"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "e1",
+          label: "Standard set definition",
+          detail:
+            "The standard set of shape categories (SCMs) is defined using the 100 players of Ref [43].",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "e2",
+          label: "Exploitation gallery shapes",
+          detail:
+            "Each participant creates shapes in the exploitation gallery during the game.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "e3",
+          label: "Out‑of‑the‑boxness calculation",
+          detail:
+            "OB score = fraction of gallery shapes that lie outside the standard set.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Directly from the excerpt.",
+          },
+        },
+      ],
     },
   },
   c3: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Interpret D and p",
       instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      description:
+        "Two evidence pins show the reported effect size (D) and its p‑value. Four possible interpretations are drawn as connections between the pins. Choose the connection that avoids confusing the standardized effect size with a probability or proportion.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "source-summary",
+        refs: ["r2"],
+        note: "The paper reports a standardized contrast D = .6 with p = .008.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1",
-          detail:
-            "We find that the OB of the placebo group was significantly higher than the control with medium‑to‑large effect size (MW U = 683, p = 0.008; D = 0.6).",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label: "D = 0.3",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label: "D = 0.4",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label: "D = 0.5",
-          targetIds: ["evidence_1"],
+          label: "Option o1",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label: "D = 0.6",
-          targetIds: ["evidence_1"],
+          label: "Option o4",
+          targetIds: [],
+        },
+        {
+          optionId: "o2",
+          label: "Option o2",
+          targetIds: [],
+        },
+        {
+          optionId: "o3",
+          label: "Option o3",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "e1",
+          label: "D = .6",
+          detail: "Standardized contrast effect size reported in the study.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
+            note: "Value taken directly from the excerpt.",
+          },
+        },
+        {
+          id: "e2",
+          label: "p = .008",
+          detail:
+            "Probability of obtaining the observed data under the null hypothesis.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r2"],
+            note: "Value taken directly from the excerpt.",
+          },
+        },
+      ],
+      actionLabel: "Choose interpretation",
     },
   },
   c4: {
@@ -125,48 +150,65 @@ export const scenes: Record<string, SavedScene> = {
       version: 1,
       kind: "connections",
       title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
+      instruction:
+        "Read the evidence, then connect the response you would choose.",
       description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "reported",
+        refs: ["r3", "r4"],
+        note: "Verified excerpts from the paper.",
       },
       actionLabel: "Connect a response",
       anchors: [
         {
           id: "evidence_1",
-          label: "Evidence 1",
+          label: "Evidence 1 · p. 7",
           detail:
-            "The placebo group showed higher originality than the control group both in the CFG (p<0.04, effect size = 0.5) and in the AUT (p<0.05, effect size = 0.4), but not in the Torrance test.",
+            "originality score of a participant is the mean over the infrequency score of all responses. Flexibility was scored by the number of different categories (groups) of the solutions of each object. The total flexibility score is the mean over the number of categories for each object of that participant. Torrance test of creative thinking (TTCT), figural part, circles subset. We followed the protocol of the TTCT manual[50]. Participants were given a printed page with 35 identical cir- cles with 1.27 cm (0.5 inch) radii in a 5x7 array. They were asked to draw as many different drawings/ideas as pos",
           at: "setup",
           provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+            kind: "reported",
+            refs: ["r3"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+        {
+          id: "evidence_2",
+          label: "Evidence 2 · p. 8",
+          detail:
+            "Table 1. Performance of the placebo and control groups in the three creativity tests. Test Measure Placebo median ±MAD Control median ±MAD p-value MW Effect size Creative Foraging Game (CFG) Originality 7.0±0.5 6.7±0.4 0.036* 0.46 Fluency 14±6.6 16±8.6 0.73 -- Flexibility 10±7.2 11±6.5 0.96 -- Out-of-the-boxness 0.47±0.17 0.35±0.15 0.008** 0.6 Exploitation phases 5±2 5±2.2 0.7 -- Alternate Uses Test (AUT) Originality 3.6±1.3 2.6±1.5 0.048* 0.43 Fluency 4.2±0.9 3.2±1.1 0.056† 0.43 Flexibility 3.8±0.8 3±1.1 0.06† 0.44 Torrance Test of Creative Thinking (TTCT) Originality 28±13 28±9 0.75 -- Fluen",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r4"],
+            note: "Verified excerpts from the paper.",
           },
         },
       ],
       responses: [
         {
           optionId: "o1",
-          label: "Creative Foraging Game (CFG)",
-          targetIds: ["evidence_1"],
+          label:
+            "Support concerns the reported task-specific contrasts, rather than creativity across settings.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o2",
-          label: "Alternate Uses Test (AUT)",
-          targetIds: ["evidence_1"],
+          label:
+            "Comparing the sizes of CFG and TTCT effects requires a direct between-effect comparison.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o3",
-          label: "Torrance Test of Creative Thinking (TTCT)",
-          targetIds: ["evidence_1"],
+          label:
+            "The TTCT result favours a smaller suggestion effect than CFG on the basis of their significance labels.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
         {
           optionId: "o4",
-          label: "Combined fluency‑originality Z‑score",
-          targetIds: ["evidence_1"],
+          label:
+            "Averaging the three p-values estimates the share of participants whose originality improved.",
+          targetIds: ["evidence_1", "evidence_2"],
         },
       ],
       resolution: null,
@@ -175,135 +217,174 @@ export const scenes: Record<string, SavedScene> = {
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Interpreting low AUT–TTCT correlation",
+      instruction: "Read the claims from modest to strong.",
+      description:
+        "Order the claims from modest to strongest based on the discussion of task relationships.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        kind: "source-summary",
+        refs: ["r5"],
+        note: "Summarizes discussion of relationships among performance on the three creativity tasks.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1",
-          detail:
-            "Yet, here the placebo effect was beneficial for the CFG and AUT, but not TTCT.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2",
-          detail:
-            "The two manual tests, AUT and TCTT, did not show significant correlation with each other across participants in fluency, flexibility or originality (all spearman coefficients R < 0.17, all p > 0.22).",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3",
-          detail:
-            "This suggests that each test might measure different aspects of creativity.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
-            "TTCT primarily measures fluency, which was unaffected by the placebo.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
-        },
-        {
-          optionId: "o2",
-          label:
-            "TTCT assesses a different facet of creativity (e.g., visual‑spatial originality) that is less sensitive to inhibition reduction.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+            "Low correlation makes reduced inhibition the best‑supported explanation of the TTCT difference.",
+          targetIds: ["e4"],
         },
         {
           optionId: "o3",
           label:
-            "Participants had less practice with TTCT because it was administered after the CFG, causing fatigue.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+            "The task comparison separates a verbal benefit from a figural deficit under the suggestion.",
+          targetIds: ["e3"],
         },
         {
           optionId: "o4",
           label:
-            "The verbal suggestion only influences verbal tasks, not figural ones.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+            "Low inter-test correlation implies that the suggestion groups were poorly matched.",
+          targetIds: ["e2"],
+        },
+        {
+          optionId: "o2",
+          label:
+            "Differing measured facets are a possible account, not an isolated explanation.",
+          targetIds: ["e1"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "e1",
+          label:
+            "Differing measured facets are a possible account, not an isolated explanation.",
+          detail:
+            "Based on discussion of relationships among performance on the three creativity tasks.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r5"],
+            note: "Summarizes discussion of task relationships.",
+          },
+        },
+        {
+          id: "e2",
+          label:
+            "Low inter-test correlation implies that the suggestion groups were poorly matched.",
+          detail:
+            "Based on discussion of relationships among performance on the three creativity tasks.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r5"],
+            note: "Summarizes discussion of task relationships.",
+          },
+        },
+        {
+          id: "e3",
+          label:
+            "The task comparison separates a verbal benefit from a figural deficit under the suggestion.",
+          detail:
+            "Based on discussion of relationships among performance on the three creativity tasks.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r5"],
+            note: "Summarizes discussion of task relationships.",
+          },
+        },
+        {
+          id: "e4",
+          label:
+            "Low correlation makes reduced inhibition the best‑supported explanation of the TTCT difference.",
+          detail:
+            "Based on discussion of relationships among performance on the three creativity tasks.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["r5"],
+            note: "Summarizes discussion of task relationships.",
+          },
+        },
+      ],
+      reach: null,
     },
   },
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction: "Read the evidence before you answer.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Between‑people versus within a person",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "Three short passages restate the study’s procedure as described in the evidence.",
       provenance: {
         kind: "authored",
         refs: [],
-        note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+        note: "Scene built from the shown evidence",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1",
+          optionId: "o1",
+          label: "No; between‑group contrast ≠ within‑person change",
+          targetIds: ["p3"],
+        },
+        {
+          optionId: "o2",
+          label: "Yes; comparison‑group mean substitutes pretreatment",
+          targetIds: ["p1"],
+        },
+        {
+          optionId: "o3",
+          label: "No; need reversed order within same session",
+          targetIds: ["p2"],
+        },
+        {
+          optionId: "o4",
+          label: "Yes; fixed first task supplies common baseline",
+          targetIds: ["p1"],
+        },
+      ],
+      resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "p1",
+          label: "Assignment",
           detail:
-            "Limitations of the present study include a between‑subjects design which cannot measure the ability of placebo to increase creativity within an individual.",
+            "Participants completed either the suggestion or comparison condition.",
           at: "setup",
           provenance: {
             kind: "authored",
             refs: [],
-            note: "The lesson's summary of the paper; this challenge cites no excerpt.",
+            note: "Restates study description",
+          },
+        },
+        {
+          id: "p2",
+          label: "Task completion",
+          detail:
+            "Each participant completed only the condition to which they were assigned.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Restates study description",
+          },
+        },
+        {
+          id: "p3",
+          label: "No within‑person repeat",
+          detail:
+            "The study did not repeat both conditions within any individual.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Restates study description",
           },
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "It prevents assessing whether the same individual shows increased creativity after placebo.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label: "It makes it impossible to randomize participants to groups.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label:
-            "It eliminates the possibility of using objective physiological measures.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o4",
-          label: "It confounds the effect of the odorant with the suggestion.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
     },
   },
 };

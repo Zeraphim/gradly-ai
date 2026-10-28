@@ -7,243 +7,283 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      title: "What interaction does the study test?",
-      instruction:
-        "Drag each option onto the piece of evidence from the study that best reflects what the hypothesis tests.",
+      title: "Identification‑by‑activism hypothesis",
+      instruction: "Read the evidence before you answer.",
       description:
-        "Four evidence anchors taken from the excerpts are shown. Match each answer choice to the anchor it most closely aligns with.",
+        "Two possible ways activism could relate to well‑being are shown. Choose the one that matches the hypothesis described in the text.",
       provenance: {
-        kind: "authored",
-        refs: [],
-        note: "Scene designed for interaction identification.",
+        kind: "source-summary",
+        refs: ["e13", "e8"],
+        note: "The scene illustrates the main‑effect and interaction models discussed in the excerpts.",
       },
       responses: [
         {
-          optionId: "o1",
-          label: "Activism has a direct main effect on well‑being.",
-          targetIds: ["ea1"],
+          optionId: "o2",
+          label: "Interaction",
+          targetIds: [],
         },
         {
-          optionId: "o2",
-          label:
-            "Identification with Clinton moderates the effect of activism on well‑being.",
-          targetIds: ["ea4"],
+          optionId: "o1",
+          label: "Uniform benefit",
+          targetIds: [],
         },
         {
           optionId: "o3",
-          label:
-            "Gender predicts whether participants complete the follow‑up surveys.",
-          targetIds: ["ea2"],
+          label: "Random assignment",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label: "Sleep disturbance predicts subsequent activism.",
-          targetIds: ["ea3"],
+          label: "Uniform slope",
+          targetIds: [],
         },
       ],
       resolution: null,
       kind: "connections",
       anchors: [
         {
-          id: "ea1",
-          label: "Activism",
-          detail: "pre‑election measures of political activism",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e8", "e13"],
-            note: "Describes the activist predictor.",
-          },
-        },
-        {
-          id: "ea2",
-          label: "Identification",
-          detail:
-            "level of self‑other identification between participants and Clinton",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e8", "e13"],
-            note: "Describes the identification predictor.",
-          },
-        },
-        {
-          id: "ea3",
-          label: "Well‑being",
-          detail:
-            "post‑loss well‑being/distress of Clinton voters two months later",
+          id: "act",
+          label: "Pre‑election activism",
+          detail: "Activism reported before the election.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e13", "e8"],
-            note: "Describes the outcome variable.",
+            note: "ShownEvidence states activism was reported before the election.",
           },
         },
         {
-          id: "ea4",
-          label: "Interaction",
-          detail:
-            "pre‑election activism and identification interact to predict post‑loss well‑being/distress",
+          id: "iden",
+          label: "Identification with Clinton",
+          detail: "Self‑other identification measured before the election.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e13", "e8"],
-            note: "States the hypothesised interaction.",
+            note: "ShownEvidence states identification was reported before the election.",
+          },
+        },
+        {
+          id: "wb",
+          label: "Post‑loss well‑being",
+          detail: "Well‑being modelled after the election loss.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e13", "e8"],
+            note: "ShownEvidence states well‑being was modelled after the loss.",
           },
         },
       ],
-      actionLabel: "Match",
+      actionLabel: "Tap a connection",
     },
   },
   c3: {
     scene: {
       version: 1,
-      title: "Activism and Well‑Being Results",
-      instruction: "Read the evidence before you answer.",
+      title: "Main and conditional effects",
+      instruction:
+        "Review the claims that could be drawn from the evidence and decide how far they can go.",
       description:
-        "Two pieces of evidence are shown: one tests for a main effect of activism on well‑being, the other describes a conditional effect for Clinton voters. Match each answer choice to the evidence it concerns.",
+        "Three ordered claims about activism’s effect on well‑being, ranging from the most modest to the strongest, with a marker showing which claim the evidence actually supports.",
       provenance: {
         kind: "source-summary",
         refs: ["e18", "e16"],
-        note: "Summary of the reported results about main and conditional effects.",
+        note: "Summary of the reported null main effect and the conditional prediction for highly identified Clinton voters.",
       },
       responses: [
         {
           optionId: "o1",
-          label: "Significant positive main effect on both outcomes",
-          targetIds: ["ev_main_none"],
+          label:
+            "No; any nonsignificant main effect makes an interaction mathematically impossible.",
+          targetIds: ["rung1"],
         },
         {
           optionId: "o2",
-          label: "Significant negative main effect on depressive symptoms only",
-          targetIds: ["ev_main_none"],
+          label:
+            "No; the interaction should be averaged into the main effect before either is interpreted.",
+          targetIds: ["rung1"],
         },
         {
           optionId: "o3",
-          label: "No significant main effect on either outcome",
-          targetIds: ["ev_main_none"],
+          label:
+            "Yes; the activism association can depend on the identification level.",
+          targetIds: ["rung2"],
         },
         {
           optionId: "o4",
-          label: "Significant interaction but no main effect",
-          targetIds: ["ev_main_none", "ev_conditional"],
+          label:
+            "Yes; the interaction replaces the activism main-effect estimate.",
+          targetIds: ["rung3"],
         },
       ],
       resolution: null,
-      kind: "connections",
-      anchors: [
+      kind: "ladder",
+      rungs: [
         {
-          id: "ev_main_none",
-          label: "Main effect test",
+          id: "rung1",
+          label: "Activism has no main effect on well‑being.",
           detail:
-            "we found no main effect of political activism on either well‑being outcome.",
+            "From e18: we found no main effect of political activism on either well‑being outcome.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e18"],
-            note: "Direct statement about the absence of a main effect.",
+            note: "Null main effect.",
           },
         },
         {
-          id: "ev_conditional",
-          label: "Conditional effect",
+          id: "rung2",
+          label:
+            "The association between activism and well‑being depends on identification level.",
           detail:
-            "for Clinton voters, activism negatively predicted depressive symptoms, and positively predicted sleep quality, but only when participants were highly identified with her.",
+            "From e16: for Clinton voters, activism predicted depressive symptoms and sleep quality only when participants were highly identified with her.",
           at: "setup",
           provenance: {
             kind: "source-summary",
             refs: ["e16"],
-            note: "Description of the interaction‑type effect reported for a subgroup.",
+            note: "Conditional prediction.",
+          },
+        },
+        {
+          id: "rung3",
+          label:
+            "Activism predicts well‑being outcomes for highly identified individuals.",
+          detail:
+            "Same as e16, emphasizing the prediction for the highly identified subgroup.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e16"],
+            note: "Prediction for highly identified.",
           },
         },
       ],
-      actionLabel: "Select",
+      reach: null,
     },
   },
   c4: {
     scene: {
       version: 1,
-      title: "Identifying the relationship",
-      instruction: "Highlight a passage to see what it means here.",
+      title: "Observational versus experimental design",
+      instruction: "Compare the panels side by side.",
       description:
-        "Four short passages retell the procedure and findings; select the one that contains the key relationship.",
+        "Two panels show how evidence could be gathered: one by measuring variables as they occur, the other by assigning an intervention.",
       provenance: {
         kind: "source-summary",
         refs: ["e16", "e4"],
-        note: "Retells the procedure and findings from the excerpts.",
+        note: "Scene contrasts the observational design implied by the reported associations with a possible experimental design.",
       },
       responses: [
         {
           optionId: "o1",
-          label: "More activism predicts more depressive symptoms.",
-          targetIds: ["p1"],
+          label:
+            "Yes; observing a negative slope proves a treatment benefit for every voter.",
+          targetIds: [],
         },
         {
           optionId: "o2",
-          label: "Activism is unrelated to depressive symptoms.",
-          targetIds: ["p2"],
-        },
-        {
-          optionId: "o3",
-          label: "More activism predicts fewer depressive symptoms.",
-          targetIds: ["p3"],
+          label:
+            "Yes; identification was randomly manipulated along with every person’s activism.",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label: "The relation is reversed for sleep quality.",
-          targetIds: ["p4"],
+          label:
+            "No; the association must be reversed in sign because the study was observational.",
+          targetIds: [],
+        },
+        {
+          optionId: "o3",
+          label:
+            "No; this conditional association does not establish the effect of assigning more activism.",
+          targetIds: [],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
+      kind: "designs",
+      panels: [
         {
-          id: "p1",
-          label: "Measured identification and activism",
-          detail:
-            "Participants reported their level of identification with Clinton and their activism prior to the election.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Describes baseline measures.",
-          },
+          id: "obsPanel",
+          label: "Observational design",
+          steps: [
+            {
+              id: "obsStep1",
+              label: "Measure identification",
+              detail:
+                "Assess each voter’s level of identification with Clinton.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e16", "e4"],
+                note: "Based on the reported moderation by identification.",
+              },
+            },
+            {
+              id: "obsStep2",
+              label: "Measure activism",
+              detail: "Record pre‑election activism levels.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e16", "e4"],
+                note: "Activism is a predictor in the reported models.",
+              },
+            },
+            {
+              id: "obsStep3",
+              label: "Measure outcomes",
+              detail:
+                "Assess depressive symptoms and sleep two months after the election.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e16", "e4"],
+                note: "Outcomes used in the reported predictions.",
+              },
+            },
+          ],
         },
         {
-          id: "p2",
-          label: "Assessed outcomes after election",
-          detail:
-            "Two months after the election, depressive symptoms and sleep quality were assessed.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Outcome assessment.",
-          },
-        },
-        {
-          id: "p3",
-          label: "Found negative prediction for high identifiers",
-          detail:
-            "For Clinton voters who were highly identified with her, activism negatively predicted depressive symptoms and positively predicted sleep quality.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e16"],
-            note: "Key finding for high identifiers.",
-          },
-        },
-        {
-          id: "p4",
-          label: "Tested moderation by identification",
-          detail:
-            "The moderation analysis showed that the effect of activism on outcomes depended on identification level.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Statistical test.",
-          },
+          id: "expPanel",
+          label: "Experimental design",
+          steps: [
+            {
+              id: "expStep1",
+              label: "Identify highly identified voters",
+              detail: "Select voters with high identification with Clinton.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Illustrates a possible selection step.",
+              },
+            },
+            {
+              id: "expStep2",
+              label: "Randomly assign activism increase",
+              detail:
+                "Assign half to increase their activism, half to control.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Shows the manipulation absent from the study.",
+              },
+            },
+            {
+              id: "expStep3",
+              label: "Measure outcomes",
+              detail:
+                "Assess depressive symptoms and sleep after the election.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Same outcome measurement as in the observational panel.",
+              },
+            },
+          ],
         },
       ],
     },

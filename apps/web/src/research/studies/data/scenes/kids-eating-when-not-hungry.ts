@@ -7,196 +7,188 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      title: "Association between delay of gratification and EAH calories",
+      title: "Apply the slope",
       instruction:
-        "Examine the reported association (beta coefficient) from the regression model.",
+        "Using the reported slope of −12.46 kcal per delay‑score unit, decide what the fitted difference would be for a two‑unit higher score.",
       description:
-        "The scene shows the beta coefficient linking delay of gratification score to EAH calories one year later.",
+        "The scene shows the estimated slope and its confidence interval. Choose the statement that correctly reflects the expected change for a two‑unit increase.",
       provenance: {
         kind: "source-summary",
-        refs: ["e3"],
-        note: "Regression coefficient from Table 3A.",
+        refs: ["e3", "e8"],
+        note: "Slope estimate from regression of delay of gratification on later calorie intake.",
       },
       responses: [
         {
-          optionId: "o4",
-          label: "−12.46 kcal",
-          targetIds: ["assoc1"],
-        },
-        {
           optionId: "o5",
-          label: "+12.46 kcal",
-          targetIds: ["assoc1"],
+          label:
+            "Exactly 12.46 fewer kcal for every child, irrespective of score difference.",
+          targetIds: ["elem1"],
         },
         {
           optionId: "o6",
-          label: "−0.295 kcal",
-          targetIds: ["assoc1"],
+          label: "About 24.92 more kcal, reversing the negative score slope.",
+          targetIds: ["elem1"],
+        },
+        {
+          optionId: "o4",
+          label:
+            "About 24.92 fewer kcal on average, within this fitted association.",
+          targetIds: ["elem1"],
         },
       ],
       resolution: null,
-      kind: "association",
-      pairs: [
+      kind: "estimate",
+      measure: "delayScoreToCalories",
+      min: -50,
+      max: 0,
+      reference: {
+        value: 0,
+        label: "No difference",
+      },
+      band: null,
+      estimates: [
         {
-          id: "assoc1",
-          label: "Delay of gratification → EAH calories",
-          detail:
-            "beta = −12.46 kcal per unit increase in delay of gratification (from Table 3A).",
+          id: "elem1",
+          label: "Slope (kcal per delay‑score unit)",
+          detail: "b = −12.46, 95% CI [−23.95, −0.97]",
           at: "setup",
           provenance: {
-            kind: "reported",
+            kind: "source-summary",
             refs: ["e3"],
-            note: "Coefficient and its meaning from excerpt.",
+            note: "Reported slope and confidence interval for a one‑unit increase in delay score.",
           },
-          x: "Delay of gratification",
-          y: "EAH calories",
-          statistic: "beta",
           value: -12.46,
+          lower: -23.95,
+          upper: -0.97,
         },
       ],
+      prediction: null,
     },
   },
   c3: {
     scene: {
       version: 1,
-      title: "Interpreting the Interaction",
-      instruction: "Read the evidence before you answer.",
+      title: "Interpret moderation",
+      instruction: "Read the claims from modest to strong.",
       description:
-        "Three evidence statements drawn from the excerpt are presented as pins. Each answer choice links to one of them.",
+        "Three candidate claims about the delay‑eating relationship are shown. Choose the one that is justified by the reported interaction.",
       provenance: {
         kind: "authored",
         refs: [],
-        note: "Scene built for challenge.",
+        note: "Scene for interpretation moderation",
       },
       responses: [
         {
           optionId: "o7",
-          label: "Option o7",
-          targetIds: ["elem_coeff"],
+          label:
+            "Examine the delay-score slope at different inhibitory-control levels.",
+          targetIds: ["e2"],
         },
         {
           optionId: "o8",
-          label: "Option o8",
-          targetIds: ["elem_sig"],
+          label:
+            "Use one identical delay-score effect for every inhibitory-control level.",
+          targetIds: ["e1"],
         },
         {
           optionId: "o9",
-          label: "Option o9",
-          targetIds: ["elem_vars"],
+          label:
+            "Treat inhibitory control as an assigned slope-changing treatment.",
+          targetIds: ["e3"],
         },
       ],
       resolution: null,
-      kind: "connections",
-      anchors: [
+      kind: "ladder",
+      rungs: [
         {
-          id: "elem_sig",
-          label: "Interaction significant",
+          id: "e1",
+          label: "Claim 1",
           detail:
-            "There was a significant interaction between delay of gratification and inhibitory control at Session 1 on EAH at Session 2.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Directly from the excerpt.",
-          },
-        },
-        {
-          id: "elem_coeff",
-          label: "Interaction coefficient",
-          detail:
-            "The interaction coefficient was b = 42.22 with 95% CI [3.85, 80.58].",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Directly from the excerpt.",
-          },
-        },
-        {
-          id: "elem_vars",
-          label: "Variables and sessions",
-          detail:
-            "Delay of gratification and inhibitory control were assessed at Session 1, and EAH was assessed at Session 2.",
+            "Delay of gratification predicts eating regardless of other factors.",
           at: "setup",
           provenance: {
             kind: "derived",
             refs: ["e13"],
-            note: "Derived from the same sentence in the excerpt.",
+            note: "Derived from reported interaction",
+          },
+        },
+        {
+          id: "e2",
+          label: "Claim 2",
+          detail:
+            "Delay of gratification predicts eating differently depending on a second factor.",
+          at: "setup",
+          provenance: {
+            kind: "derived",
+            refs: ["e13"],
+            note: "Derived from reported interaction",
+          },
+        },
+        {
+          id: "e3",
+          label: "Claim 3",
+          detail:
+            "The second factor changes the slope linking delay of gratification to eating.",
+          at: "setup",
+          provenance: {
+            kind: "derived",
+            refs: ["e13"],
+            note: "Derived from reported interaction",
           },
         },
       ],
-      actionLabel: "Choose",
+      reach: null,
     },
   },
   c4: {
     scene: {
       version: 1,
-      title: "Identify the limitation about generalizability",
-      instruction: "Highlight a passage to see what it means here.",
-      description:
-        "Three passages describe limitations noted by the authors. Choose the passage that directly concerns the applicability of the findings to other populations.",
+      kind: "connections",
+      title: "Connect the evidence",
+      instruction:
+        "Read the evidence, then connect the response you would choose.",
+      description: "The challenge's evidence with one response per option.",
       provenance: {
-        kind: "source-summary",
-        refs: ["e17"],
-        note: "Provides the passage about racial/ethnic homogeneity and generalizability.",
+        kind: "reported",
+        refs: ["r1"],
+        note: "Verified excerpts from the paper.",
       },
+      actionLabel: "Connect a response",
+      anchors: [
+        {
+          id: "evidence_1",
+          label: "Evidence 1 · p. 8",
+          detail:
+            "This study had some limitations. First, only 47 of the 75 families we contacted participated in Session 2. While these families did not meaningfully differ from the full set of families with regard to demographics, there may be other differences that we did not capture. Second, because these were secondary analyses, we did not run a priori power analyses to determine the necessary sample size to achieve appropriate statistical power to test our hypotheses. A post hoc sensitivity analysis in G∗Power (Faul et al., 2009) revealed that the present sample size of 47 was powered (α = 0.05, power = 0",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["r1"],
+            note: "Verified excerpts from the paper.",
+          },
+        },
+      ],
       responses: [
         {
-          optionId: "o10",
-          label: "Homogeneous racial/ethnic sample",
-          targetIds: ["p10"],
+          optionId: "o11",
+          label:
+            "The small sample guarantees that the reported relationship has the wrong sign.",
+          targetIds: ["evidence_1"],
         },
         {
-          optionId: "o11",
-          label: "Attrition (only 47 of 75 families)",
-          targetIds: ["p11"],
+          optionId: "o10",
+          label:
+            "The observed relationship may not generalize to the school’s target population.",
+          targetIds: ["evidence_1"],
         },
         {
           optionId: "o12",
-          label: "No a priori power analysis",
-          targetIds: ["p12"],
+          label:
+            "The one-year gap makes the children at follow-up independent of the original sample.",
+          targetIds: ["evidence_1"],
         },
       ],
       resolution: null,
-      kind: "spot",
-      passages: [
-        {
-          id: "p10",
-          label: "Passage 1",
-          detail:
-            "The composition of the participants in this study was relatively homogeneous with regard to race and ethnicity; as such these results may not be generalizable to other racial/ethnic groups.",
-          at: "setup",
-          provenance: {
-            kind: "source-summary",
-            refs: ["e17"],
-            note: "States homogeneity limits generalizability.",
-          },
-        },
-        {
-          id: "p11",
-          label: "Passage 2",
-          detail:
-            "Only 47 of the 75 families we contacted participated in Session 2.",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes attrition limitation.",
-          },
-        },
-        {
-          id: "p12",
-          label: "Passage 3",
-          detail:
-            "Because these were secondary analyses, we did not run a priori power analyses…",
-          at: "setup",
-          provenance: {
-            kind: "authored",
-            refs: [],
-            note: "Describes missing power analysis limitation.",
-          },
-        },
-      ],
     },
   },
 };
