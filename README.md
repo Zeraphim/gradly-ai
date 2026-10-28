@@ -1,121 +1,234 @@
-# Gradly
+<p align="center">
+  <img src="apps/web/public/brand/gradly-logo.webp" alt="Gradly" width="340">
+</p>
 
-Gradly starts with your paper. The home page keeps **PDF upload and a paper URL/DOI field visible together**, with a compact sample/resume action and your practice-point balance. The main flow is **add paper → review extracted text → learn through challenges → review the evidence**. Both `/` and the previously shared `/#/research/lab` open this upload-first home.
+<p align="center">
+  <strong>Learn to question. Grow with evidence.</strong><br>
+  Gradly turns a research paper into a short run of research decisions, checked against the paper's own words.
+</p>
 
-PDF validation, text extraction, review, saved processing and learning history work through the local application service. With no AI credential, an explicit sample-preview action continues into a separately labeled lesson. It never claims to analyze the uploaded document. Link entry currently opens only the curated texting paper’s DOI; other paper links receive an honest limitation and can be supplied as PDFs instead.
+<p align="center">
+  <a href="https://nebius-hackathon-submission.vercel.app"><strong>Try the live app</strong></a>
+  ·
+  <a href="#how-it-works">How it works</a>
+  ·
+  <a href="#built-with-nebius-and-nvidia">Nebius and NVIDIA</a>
+  ·
+  <a href="#run-it-locally">Run it locally</a>
+</p>
 
-Research adventures award **10 practice points per solved challenge**, once per challenge in that adventure, including successful retries and an optional bonus. Refreshing, duplicate submissions and explanation edits cannot duplicate that reward. Points derive from saved answer records; they do not grade free-form writing or certify learning. The home balance includes these saved research-adventure points and the existing curated-session points.
+<p align="center">
+  <img alt="Nebius Token Factory" src="https://img.shields.io/badge/inference-Nebius%20Token%20Factory-0b3d91">
+  <img alt="NVIDIA Nemotron 3 Super" src="https://img.shields.io/badge/model-NVIDIA%20Nemotron%203%20Super-76b900">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-React%20%2B%20Express-3178c6">
+  <img alt="MIT license" src="https://img.shields.io/badge/license-MIT-green">
+</p>
 
-The separate paper-case prototype has been removed to keep one primary workflow. Its old links return to the upload home. See [PRODUCT_DIRECTION.md](docs/PRODUCT_DIRECTION.md) for scope and [RESEARCH_LEARNING_DESIGN.md](docs/RESEARCH_LEARNING_DESIGN.md) for the learning rationale and limits.
+<p align="center">
+  <img src="docs/ui/readme/home.png" alt="Gradly home page with the mascot, PDF upload and paper link field" width="860">
+</p>
 
-## Learning workspaces
+## The problem
 
-The prepared-study library is `/#/research/learn`; the old `/#/research/studies` index redirects there. Individual `/#/research/studies/<slug>` links still open their study. The home sample action opens this library directly. Classic, lab and meet entry points recover to Learn instead of mounting an older quest or another picker. Uploaded studies retain their server-backed player at `/#/research/play/<sessionId>`, and the authored explanation showcase remains at `/#/research/reasoning`.
+Students are told to "read the literature," but a research paper is a dense wall of methods, numbers and hedged claims. Summaries skip the part that matters: deciding what a study can and cannot show. Most students never practise that judgment until a professor marks it wrong.
 
-The research API retains PDF extraction/OCR, guest history and reviewed generation. Its prompts now adapt to a paper’s research approach without requiring statistical tests for qualitative or conceptual material. This orchestration is tested with synthetic fixtures; new live generation remains unverified. See [RESEARCH_INTEGRATION.md](docs/RESEARCH_INTEGRATION.md) for configuration and [REASONING_PREVIEW.md](docs/REASONING_PREVIEW.md) for future live-review guardrails.
+Gradly makes that judgment the activity. Instead of summarising a paper, it asks you to make the calls the researchers made. Which question can this design answer? Does this result support a causal claim? What would change your mind? You commit to an answer, see the evidence, and get feedback before the paper's findings are revealed.
 
-Design, module boundaries, acceptance and verification are in [DESIGN.md](docs/DESIGN.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [REQUIREMENTS.md](docs/REQUIREMENTS.md) and [TESTING.md](docs/TESTING.md).
+**Who it is for:** undergraduates and early graduate students in research-methods, psychology, education and health courses, and anyone who wants to read studies more critically.
 
-## Contributors and agents
+## Meet the guide
 
-Open this repository root in Codex or Google Antigravity. Shared rules live in
-[AGENTS.md](AGENTS.md), reusable project skills in `.agents/skills/`, and the
-maintained documentation index in [docs/CONTEXT.md](docs/CONTEXT.md). No personal
-agent setup or private planning checkout is required. See [docs/README.md](docs/README.md)
-for documentation provenance and context-maintenance commands.
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="apps/web/public/brand/mascot-teaching.webp" alt="Gradly mascot teaching" width="120"><br><sub>Explains each step</sub></td>
+    <td align="center" width="25%"><img src="apps/web/public/brand/mascot-thinking.webp" alt="Gradly mascot thinking" width="120"><br><sub>Asks you to commit first</sub></td>
+    <td align="center" width="25%"><img src="apps/web/public/brand/mascot-approving.webp" alt="Gradly mascot approving" width="120"><br><sub>Gives feedback on the call</sub></td>
+    <td align="center" width="25%"><img src="apps/web/public/brand/mascot-celebrating.webp" alt="Gradly mascot celebrating" width="120"><br><sub>Celebrates a finished study</sub></td>
+  </tr>
+</table>
 
-## Run
+Gradly's mascot is a book in a graduation cap. It reacts to each stage of a study: it frames the question, waits while you decide, then explains why a claim is or is not supported.
 
-Requires Node.js **22.18 or newer within version 22** and npm.
+## Screenshots
 
-For the complete local upload and learning preview:
+<table>
+  <tr>
+    <td width="50%"><img src="docs/ui/readme/library.png" alt="Prepared-study library with topic and design filters"><br><sub><strong>Learn.</strong> 53 prepared studies on real, openly available papers, filterable by topic and study design.</sub></td>
+    <td width="50%"><img src="docs/ui/readme/intro.png" alt="Study introduction with the mascot and a Begin study button"><br><sub><strong>Study briefing.</strong> A plain-language setup of the study. The paper's identity is revealed at the end.</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/ui/readme/step1.png" alt="A challenge asking which question a longitudinal design can address"><br><sub><strong>Make the call.</strong> Each challenge quotes the paper's own evidence and asks for a research decision.</sub></td>
+    <td width="50%"><img src="docs/ui/readme/feedback.png" alt="Feedback marking two claims as beyond the evidence and one as supported"><br><sub><strong>See why.</strong> Claims beyond the evidence are marked, and the guide explains the design's limit.</sub></td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/ui/readme/home-mobile.png" alt="Gradly home page on a phone" width="260"><br>
+  <sub>Every screen is built for phone, tablet and desktop widths.</sub>
+</p>
+
+## Features
+
+- **Upload any research PDF.** Gradly validates the file, extracts each page, runs bounded English OCR on scanned pages, and shows the extracted text beside the original so you can check it before anything is sent to a model.
+- **Paper-grounded challenges.** Nemotron drafts 3 to 8 challenges per paper. Every challenge cites exact excerpts from the paper, and the server rejects any lesson whose quotes do not match the extracted text word for word.
+- **Decide before you see the results.** Findings, statistics and the paper's identity stay hidden on the server until the learning engine allows them. You reason about the design first, then check your call.
+- **Interactive scenes.** Thirteen scene types, including claim ladders, sorting, timelines, comparisons and design matrices, turn a multiple-choice question into something you inspect and manipulate.
+- **Explanation feedback.** Write why you chose an answer. Nemotron reviews your reasoning against only the evidence you have already seen and asks one targeted follow-up question. Replies that cite other evidence or name the paper are rejected, and feedback never changes your score.
+- **Terms explained in context.** Tap a highlighted term such as "parent-reported" or "confound" for a definition written for this study, without giving away the answer.
+- **One retry, then an explanation.** A wrong answer gets a hint and a second attempt. After that, the guide explains the reasoning.
+- **Prepared-study library.** 53 ready-made studies on openly licensed or free-to-read papers, so anyone can try Gradly without uploading a file.
+- **Practice points and saved progress.** Each solved challenge earns 10 points, once. Progress is saved to a private guest profile, and **My quests** lets you resume or delete any paper.
+- **Accessible and calm.** Full keyboard support, automated accessibility checks, and a reduced-motion setting that turns animation off.
+
+## How it works
+
+```mermaid
+flowchart LR
+  A[Upload PDF] --> B[Extract text and OCR]
+  B --> C[Learner reviews the text and consents]
+  C --> D[Nemotron preparation pipeline]
+  D --> E[Deterministic verification]
+  E --> F[Study player]
+  F --> G[Feedback and reveal]
+  G --> H[Findings and history]
+```
+
+1. **Add a paper.** Upload a PDF (up to 4 MB). The server checks its contents, extracts up to 80 pages and OCRs up to six low-text pages. The original PDF bytes are never stored.
+2. **Review and consent.** You inspect the extracted text page by page. Nothing goes to an AI model until you confirm.
+3. **Preparation.** The server runs seven sequential stages, each a separate role prompt to Nemotron on Nebius. The browser shows each stage's real saved status.
+4. **Play.** The browser receives one challenge at a time, with no answer keys. Answers are scored on the server.
+5. **Reveal and review.** After you commit, Gradly reveals the evidence, the findings and finally the paper itself.
+
+### The preparation pipeline
+
+| Stage | Role | What it does |
+| --- | --- | --- |
+| 0 | Evidence Analyst | Pulls exact excerpts for the question, design, findings and limits, and lists what the paper does not report |
+| 1 | Lesson Architect | Drafts 3 to 8 challenges that cite those excerpts, with a hint and explanation for each |
+| 2 | Scene Designer | Drafts one interactive scene per challenge from its prompt and evidence, never its answer key, then runs a leak check |
+| 3 | Terms Guide | Writes study-specific definitions for unfamiliar terms and drops any that leak an answer |
+| 4 | Methods Reviewer | Reviews the lesson for methodological errors and overreach |
+| 5 | Learning Coach | Reviews clarity and teaching quality |
+| 6 | Verification | Code, not a model. Checks every quote, page and reference, and blocks play if anything fails |
+
+Document text is treated as untrusted data. Prompts forbid following instructions embedded in the paper, the pipeline has no tools or URL fetching, and model output renders as escaped text.
+
+## Built with Nebius and NVIDIA
+
+| | |
+| --- | --- |
+| **Inference** | [Nebius Token Factory](https://tokenfactory.nebius.com), OpenAI-compatible endpoint `https://api.tokenfactory.us-central1.nebius.com/v1` |
+| **Model** | `nvidia/nemotron-3-super-120b-a12b` (NVIDIA Nemotron 3 Super) for every pipeline stage and for explanation feedback |
+| **Structured output** | Each stage sends a JSON Schema. Replies are parsed again with Zod, and the model ID and finish reason are checked |
+| **Guardrails** | One retry on timeouts and selected transient errors, per-guest and shared request budgets, and explicit "unavailable" states. A provider failure never silently becomes sample content |
+
+### Why Nemotron 3 Super
+
+We did not pick the model by name. We ran a [240-run evaluation](docs/research/NEMOTRON_EVALUATION.md) of four Nemotron models on Nebius, with thinking on and off, across two papers in five variants (short excerpt, full paper, results removed, OCR scan, and prompt injection). The full run cost **$4.35**.
+
+- **Super was the only model whose outputs always parsed** and never hit the token limit. It quoted the paper exactly most often and invented no numbers with thinking on.
+- **Ultra passed the evidence gate in 0 of 60 runs** and cost about five times as much, so we moved off it.
+- **No model followed the injected instruction** in any of the 48 injection runs.
+- **Exact quoting falls with length.** Super quoted exactly 91% of the time on two-page excerpts (up to about 15,000 characters) and 35% on full papers. That result is why every quote is verified in code before a learner sees it.
+
+### Feedback on Nebius Token Factory and Nemotron
+
+- **What worked.** The OpenAI-compatible API meant a small adapter. JSON Schema output and published per-token prices made a large, cheap model comparison practical. Nemotron 3 Super was consistent enough to run a seven-stage pipeline on every upload.
+- **What needs work.** Nebius rejected the JSON Schema `propertyNames` keyword (HTTP 400 on Ultra, 500 on Super) before generation. We now strip it from requests and keep it in local validation. Models also tended to answer a schema's `https://` URL pattern with the bare string `"https://"`.
+- **Would we use it again?** Yes. The main lesson was to verify citations in code rather than trust any model to quote long documents exactly.
+
+## Hackathon
+
+Built for the **[Nebius Global AI Hackathon](https://nebiusglobalaihackathon.devpost.com/)** with NVIDIA.
+
+- **Track:** Best Apps and Agents
+- **Built during the submission period.** The first commit is dated October 14, 2026.
+- **Team:** [@Zeraphim](https://github.com/Zeraphim), [@marcxxv](https://github.com/marcxxv), [@jananonuevo](https://github.com/jananonuevo), [@mcjakey1](https://github.com/mcjakey1)
+
+## Run it locally
+
+Requires **Node.js 22** (22.18 or newer) and npm.
+
+### Preview without an AI key
 
 ```sh
 npm ci
 npm run dev:preview
 ```
 
-Open **http://127.0.0.1:5173**. The command starts both the frontend and local PDF/learning service, uses local SQLite, and explicitly disables external AI calls. No environment file or AI credential is needed. It preserves the existing local preview database.
+Open **http://127.0.0.1:5173**. This starts the web app and the local API with SQLite and disables all external AI calls. Real PDF extraction still runs. The prepared-study library works fully, and uploads can continue into a clearly labeled sample lesson.
 
-For your own environment configuration:
+### Live mode with Nemotron
 
 ```sh
 cp .env.example .env
-npm run dev
 ```
 
-`DEMO_MODE=true` enables the separate sample lesson after real PDF extraction. This sample path is refused on Vercel/in production and never silently replaces failed live inference. `npm run dev:prototype` runs only the frontend, including the authored reasoning preview; it does not provide the upload service.
-
-For live reasoning assessment, set these values in the ignored root `.env`:
+Set these values in `.env`, then run `npm run dev`:
 
 ```dotenv
-NEBIUS_API_KEY=your_server_only_credential
+NEBIUS_API_KEY=your_server_only_key
 PREVIEW_MODE=false
+DEMO_MODE=false
 ```
 
-Restart the server. The live route uses `nvidia/nemotron-3-super-120b-a12b` at Nebius Token Factory’s [documented regional endpoint](https://github.com/nebius/token-factory-cookbook/blob/main/models/nemotron/nemotron3-super-120B.md); pipeline stages may run larger models such as `nvidia/Nemotron-3-Ultra-550b-a55b` via `NEBIUS_PIPELINE_MODEL`. An absent credential with preview disabled produces an explicit unavailable state. Provider failure never silently switches to preview.
+The key stays on the server and is never sent to the browser. To override the model, set `NEBIUS_PIPELINE_MODEL` or `NEBIUS_FEEDBACK_MODEL`. The full variable list is in [RESEARCH_INTEGRATION.md](docs/RESEARCH_INTEGRATION.md#vercel-configuration).
 
-## Workspaces
-
-```text
-apps/web                React learner interface, Vite, responsive styles and motion
-apps/api                Express server, trusted content and bounded model adapter
-packages/contracts      Shared request, response and lesson types
-packages/lesson-state   Attempts, reveal timing, progression and unique rewards
-scripts                 Development orchestration and opt-in live verification
-tests                   Service, state and simulated learner interaction checks
-```
-
-In the compatibility curated workspace, the browser requests the public lesson from `GET /api/lesson` and submits only its version, question identifier, attempt identifier, choice, and explanation to `POST /api/feedback`. `GET /api/health` reports server health and feedback configuration. Initial lesson payloads omit answer criteria and authored solutions. The server supplies trusted evidence and criteria to the model, validates its single-field assessment, and selects authored teaching text. Model-generated teaching copy or citations never pass directly to learners.
-
-The original six quests cover separate groups, method assumptions, percentage points, missing evidence, and two original transfer scenarios. Five correct quests award 10 points each, once. The missing-evidence checkpoint reveals an evidence boundary after an attempt and awards no points. Revisions stay in the same quest. New scenarios have separate answers.
-
-## Production and verification
+### Checks and production build
 
 ```sh
-npm run check
+npm run check      # type checks, unit and research tests, production build
+npm run test:e2e   # Playwright browser tests
 npm run build
-npm start
+npm start          # serves the built app and API at http://127.0.0.1:3001
 ```
 
-The production server serves the built interface and routes together at **http://127.0.0.1:3001**. Set `HOST=0.0.0.0` and the host-provided `PORT` when deploying. Keep `.env` and credentials out of the browser and source control. Vercel hosting uses the root `server.ts` adapter and `vercel.json`. The existing local server remains available with `npm start`.
+[TESTING.md](docs/TESTING.md) lists every suite and the opt-in live checks, which make billed model calls.
 
-An opt-in live check makes up to seven billed model requests plus one curated missing-evidence response, with no automatic retries:
+<details>
+<summary><strong>Deploy to Vercel</strong></summary>
 
-```sh
-npm run test:live
-```
+The repository root deploys with the static and Node builders in `vercel.json`. `npm run build:vercel` builds the interface into a generated `public/` directory, and `server.ts` exports the Express app as the function. The function allows 240 seconds for OCR and pipeline stages.
 
-Verified October 14, 2026: type checking, production builds, and 15 automated checks passed. The simulated learner flow covers initial answer hiding, a failed request and retry, wrong-answer revision, saved-progress resumption, six completed quests, independent transfer answers, and dialog cancellation. All eight live cases produced the expected outcomes. Seven model-request durations ranged from 0.595 to 1.900 seconds in that run. This small check does not establish statistical teaching quality or a learning benefit.
-
-See [TESTING.md](docs/TESTING.md) for the retained test suites and hosted/live acceptance requirements. Unsubmitted research answers stay in this tab; submitted decisions use the guest profile. Upload review includes an original-PDF link when the embedded preview is unavailable.
-
-## Scope and data
-
-The teaching content is a draft awaiting expert review. Research facts are attributed to [Gingerich & Lineweaver (2014)](https://doi.org/10.1177/0098628313514177), with [author metadata](https://butler.elsevierpure.com/en/publications/omg-texting-in-class-u-fail-empirical-evidence-that-text-messagin-2/). Evidence is curated and paraphrased, not extracted automatically. Fictional transfer examples are labeled. The original copyrighted paper is not redistributed. Publisher access may be required.
-
-The original curated path accepts the sample card or the paper’s digital object identifier `10.1177/0098628313514177`, and checks the supplied PDF version’s fingerprint in the browser. The research extension accepts general PDFs, parses them on the application server, and retains extracted text for up to 30 days; original PDF bytes are not retained there. Reviewed lesson generation uses external AI only after confirmation, while local sample preview uses a separate labeled study. Accounts, leaderboards and shops remain outside the application.
-
-In the original six-quest path, answers and progress use versioned browser-local storage. Uploaded files are not stored. Downloadable notes include your explanations. Live mode sends explanations to Nebius for assessment. The application keeps a bounded, in-memory request cache for 15 minutes and does not persist learner answers on the server. Local progress is for a pilot, not tamper-resistant assessment.
-
-Repeated identical attempts share a request and cached result within one server process. Edited text must use a new attempt identifier. Failures preserve the answer, award no progress, and remain retryable where appropriate. Limits are 2,000 explanation characters, two concurrent model calls, 20 feedback submissions per client per 15 minutes, and 120 model calls per process per hour. Cache, concurrency, and budget limits reset on restart and are not shared across replicas. Vercel can run multiple function instances. These in-memory limits and duplicate-request protection apply separately to each instance, not across the whole deployment.
-
-Motion includes button compression, quest entrances, evidence reveals, progress updates, a dialog transition, and a once-only completion celebration. Movement uses transforms and opacity. Reduced-motion preferences disable motion. Typography is self-hosted Plus Jakarta Sans.
-
-Application code is licensed under MIT. Third-party fonts, packages, and the referenced paper retain their own licenses.
-
-## Deploy to Vercel
-
-Deploy this repository root using the explicit static and Node builders in `vercel.json`. `npm run build:vercel` builds the learner interface and copies its assets into a generated, ignored `public/` directory for Vercel static hosting. The shared contracts package is compiled to JavaScript before bundling so the hosted function imports a runtime file instead of TypeScript source. The exported server adapter supplies the existing lesson and feedback routes without opening a local port. The function now has a 240-second execution limit for bounded document/OCR work; the original model request retains its 45-second timeout.
-
-Configure `NEBIUS_API_KEY` as a sensitive production environment variable and `PREVIEW_MODE=false` for live reasoning feedback. Credentials stay on the server. Preview deployments can explicitly use `PREVIEW_MODE=true` without a model credential. The adapter trusts Vercel's immediate proxy so per-client request limits use the forwarded client address.
+Hosted research features need `RESEARCH_ENABLED=true`, a remote libSQL `DATABASE_URL` and `DATABASE_AUTH_TOKEN`, a `SESSION_SECRET`, a `CRON_SECRET` for retention cleanup, and `NEBIUS_API_KEY` with `PREVIEW_MODE=false`. Sample mode is refused on Vercel and in production.
 
 ```sh
 npx vercel link --yes --project nebius-hackathon-submission --scope <your-workspace>
-npm run build:vercel
 npx vercel deploy --prod
 ```
 
-Vercel runs the `vercel-build` script and collects `public/` after generation, including on a clean checkout. The local build command above is optional preparation, not a prerequisite for Git-based deployment. The local `.vercel/` link, pulled environment files, and generated assets are ignored by source control.
+See [RESEARCH_INTEGRATION.md](docs/RESEARCH_INTEGRATION.md) for the setup sequence and the [delivery skill](.agents/skills/vercel-delivery/SKILL.md) for release checks.
 
-Production hosting verified October 14, 2026: the public page, lesson, and real reasoning feedback are accessible without sign-in. Seven hosted feedback cases covered all six quests and incorrect reasoning, followed by a separate anonymous production check. The hosting changes passed 16 automated checks. That dated result does not verify the current release. For Git-triggered deployments, inspect the current project integration and contributor access; verify the actual commit, static assets and function behavior using the repository’s [delivery skill](.agents/skills/vercel-delivery/SKILL.md).
+</details>
+
+## Architecture
+
+```text
+apps/web               React and Vite learner interface, scenes, motion and styles
+apps/api               Express server: PDF extraction, OCR, Nemotron pipeline, storage
+packages/contracts     Shared request, response, lesson and scene types
+packages/lesson-state  Attempts, reveal timing, progression and unique rewards
+scripts                Dev orchestration, model evaluation and study generation
+tests                  Unit, research and Playwright browser tests
+```
+
+TypeScript throughout, with npm workspaces. SQLite locally, remote libSQL when hosted. Guests are identified by signed HttpOnly cookies, not accounts.
+
+More detail: [Architecture](docs/ARCHITECTURE.md) · [Design](docs/DESIGN.md) · [Requirements](docs/REQUIREMENTS.md) · [Learning design](docs/RESEARCH_LEARNING_DESIGN.md) · [Scene authoring](docs/SCENE_AUTHORING.md) · [Documentation index](docs/CONTEXT.md)
+
+## Limits and data
+
+- **Points measure participation, not mastery.** Gradly has not been tested in a learner study. Automated tests show the software works, not that students learn more.
+- **Prepared studies are marked "Not reviewed"** until a subject expert checks them.
+- **Verification catches bad quotes, not every bad inference.** Code checks quotes, pages and references. Reviewer stages check meaning, and a model can still misread a supported excerpt.
+- **OCR is English only** and limited to six scanned pages per paper. Compare transcriptions with the original.
+- **Paper links are not fetched yet.** Upload the PDF instead.
+- **Data retention.** Extracted text and progress expire after 30 days. Original PDFs are never stored. You can delete any paper and its sessions from My quests.
+
+## Contributing
+
+Shared agent and contributor rules live in [AGENTS.md](AGENTS.md), project skills in `.agents/skills/`, and the documentation index in [docs/CONTEXT.md](docs/CONTEXT.md). See [docs/README.md](docs/README.md) for documentation provenance and context checks.
+
+## License
+
+Application code is released under the [MIT License](LICENSE). Fonts, packages and the referenced papers keep their own licenses. See [docs/research/papers/README.md](docs/research/papers/README.md) for each stored paper's source and license.
