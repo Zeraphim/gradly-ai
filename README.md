@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="apps/web/public/brand/gradly-logo.webp" alt="Gradly" width="340">
+  <img src="docs/ui/readme/gradly-logo.png" alt="Gradly" width="340">
 </p>
 
 <p align="center">
