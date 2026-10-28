@@ -9,7 +9,7 @@ npm run test:e2e
 npm run build:vercel
 ```
 
-`check` runs TypeScript, Node/interface tests, Vitest research tests and production builds. Playwright starts both services with local SQLite, explicit sample flags and an empty model key. Chromium is required. Stop an existing development server before running the browser suite.
+`check` runs TypeScript, Node service/state and Welcome tests, Vitest research tests and production builds. Playwright starts both services with local SQLite, explicit sample flags and an empty model key. Chromium is required. Stop an existing development server before running the browser suite.
 
 ## Retained coverage
 
@@ -215,3 +215,8 @@ production deployment is required or established by the authored fixtures.
 `learn-flow.spec.ts` checks that the reasoning preview returns to the most recent
 learning route after moving from intake to Learn, while retaining an active-paper
 return link when the preview was opened from intake.
+
+`tests/welcome.test.ts` retains both delayed-PDF unmount regressions: a late header
+check and a successful late curated digest cannot navigate after leaving Welcome.
+The public home uses only the upload-first presentation; the bounded curated
+validator remains covered while the classic-retirement decision is pending.

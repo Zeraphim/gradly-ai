@@ -276,3 +276,19 @@ test("reasoning preview returns to the current learning route, not an older uplo
     page.getByRole("heading", { name: "Pick a study. Make the calls." }),
   ).toBeVisible();
 });
+
+test("an unavailable study is not offered as the Help return destination", async ({
+  page,
+}) => {
+  await page.goto("/#/research/studies/removed-paper");
+  await expect(
+    page.getByRole("heading", { name: "This study isn’t available" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "How it works", exact: true }).click();
+  await expect(
+    page.getByRole("link", { name: "Return to study", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Continue learning", exact: true }),
+  ).toHaveAttribute("href", "#/research/learn");
+});

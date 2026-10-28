@@ -11,7 +11,7 @@ The public entry must start with adding a paper, preserving both PDF upload and 
 - Saved progress, PDF review and drafts survive supported navigation and refresh; storage failure has a recoverable fallback.
 - Home sample entry and upload-recovery prepared-study actions open the single Learn library directly, without an intermediate path chooser. Individual study links open their authored quest.
 - Before answering, learners receive a concise study briefing with background and plain-language terms. Generated-paper briefings come from the verified lesson’s own context. Results, conclusions and answer keys stay gated.
-- The authored quest offers Back after its opening screen, preserves unfinished choices during in-session navigation, and restores resolved answers without another attempt or score change. Pointer selection uses the filled choice state without an extra outline; keyboard focus remains visible.
+- The shared player preserves the current unfinished choice and restores checked answers on refresh or reopening, without another attempt or score change. It advances through challenges; challenge-level Back is not implemented. Pointer selection uses the filled choice state without an extra outline; keyboard focus remains visible.
 - Responsive, keyboard, reduced-motion and automated accessibility checks cover the retained upload and learning paths.
 
 `PRODUCT_DIRECTION.md` records the product reasoning and future evaluation needs. `TESTING.md` records actual verification and limits.

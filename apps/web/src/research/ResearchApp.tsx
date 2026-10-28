@@ -19,6 +19,7 @@ import {
   useResearchPath,
   useResearchRouter,
 } from "./navigation.js";
+import { studyCards } from "./studies/cards.js";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome.js";
 import { FocusBar, libraryJourneySteps, type JourneyStep } from "./FocusBar.js";
 import "./journey.css";
@@ -116,8 +117,13 @@ export function ResearchApp({
       title?.setAttribute("tabindex", "-1");
       title?.focus({ preventScroll: true });
     }
-    if (
-      /^\/(?:upload|learn|studies\/[a-z0-9-]+|play\/[^/]+|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(
+    const prepared = /^\/studies\/([a-z0-9-]+)\/?$/.exec(path);
+    if (prepared)
+      setReturnPath(
+        studyCards.some((card) => card.slug === prepared[1]) ? path : "/learn",
+      );
+    else if (
+      /^\/(?:upload|learn|play\/[^/]+|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(
         path,
       )
     )
@@ -214,7 +220,7 @@ function GradlyWorkspace({
 }) {
   const router = useResearchRouter();
   const parts = path.split("/").filter(Boolean);
-  const route = parts[0] || "home";
+  const route = parts[0] || "learn";
   const id = parts[1];
   const [session, setSession] = useState<Session | null>(null);
   const [job, setJob] = useState<Job | null>(null);
@@ -372,8 +378,6 @@ function GradlyWorkspace({
     const previousTitle = document.title;
     const titles: Record<string, string> = {
       learn: "Choose your learning path",
-      home: "Choose your learning path",
-      featured: "Featured quest",
       upload: "Upload your paper",
       history: "Your quests",
       glossary: "Research terms",
@@ -641,7 +645,7 @@ function GradlyWorkspace({
       ) : (
         <SiteHeader
           current={
-            ["home", "learn", "featured"].includes(route)
+            route === "learn"
               ? "studies"
               : route === "history"
                 ? "quests"
@@ -657,7 +661,7 @@ function GradlyWorkspace({
       )}
       <main
         id="main"
-        className={`main ${focus && route !== "adventure" ? "journey-main" : ""} ${route === "adventure" ? "scene-motion-page" : ""} ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
+        className={`main ${focus && route !== "adventure" ? "journey-main" : ""} ${route === "adventure" ? "scene-motion-page" : ""} ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${route === "learn" ? "path-page" : ""}`}
       >
         {/* Preparation shows its own recovery surface once the job is loaded. */}
         <ErrorMessage
@@ -692,32 +696,13 @@ function GradlyWorkspace({
           <div className="notice">
             <h1>This learning path is unavailable</h1>
             <p>
-              The research workspace is not available right now. Continue with
-              Gradly’s guided quest while it is being prepared.
+              The research workspace is not available right now. Choose a
+              prepared study while the upload workspace is being prepared.
             </p>
             <button className="btn primary" onClick={onExit}>
-              Return to curated adventure
+              Return to upload home
             </button>
           </div>
-        ) : null}
-        {!config?.storage && ["home", "learn", "featured"].includes(route) ? (
-          <aside
-            className="reasoning-preview-invitation"
-            aria-label="Research reasoning preview"
-          >
-            <div>
-              <strong>
-                Explore the reasoning loop while the workspace is unavailable.
-              </strong>
-              <p>
-                Choose, explain, inspect evidence and revise. Authored example ·
-                no AI calls.
-              </p>
-            </div>
-            <Link className="btn primary compact" href="/reasoning">
-              Try the reasoning preview
-            </Link>
-          </aside>
         ) : null}
         {route === "upload" ? (
           <UploadPage
@@ -1678,9 +1663,7 @@ function GradlyWorkspace({
           </div>
         ) : null}
         {![
-          "home",
           "learn",
-          "featured",
           "upload",
           "processing",
           "adventure",

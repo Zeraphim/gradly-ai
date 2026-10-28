@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import React, { useSyncExternalStore } from "react";
 import { Mascot } from "./Mascot.js";
 import {
   readReducedMotion,

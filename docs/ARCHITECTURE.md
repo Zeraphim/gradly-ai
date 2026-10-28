@@ -92,10 +92,10 @@ responses are `rejected`; network, timeout, cancel and 5xx are `interrupted`.
 or the prepared-study library as a choice. `ProcessingPage.tsx` uses one layout
 for live and sample jobs. `PreparationTrack.tsx` reads saved audit roles,
 statuses and summaries; its document advances only when the saved stage
-advances. A ready sample job, and the library's Start quest, open the texting quest
-(`texting-quest.ts` script, `quest-visuals.tsx` visuals). It checks answers in the
-browser against the authored key and keeps progress in `sessionStorage`; it calls
-no API. A ready live job starts a session with `lessonId` and opens
+advances. A ready sample job opens the prepared texting study in the shared
+`studies/JourneyPlayer.tsx`. It checks authored answers in the browser and keeps
+prepared progress in local storage. The library opens the chosen prepared study
+directly; it does not load a separate bespoke texting screen. A ready live job starts a session with `lessonId` and opens
 `#/research/play/<sessionId>`: the prepared-study `JourneyPlayer` driven by the
 saved session (`studies/UploadedJourney.tsx`, adapter `studies/uploaded.ts`).
 The browser receives one public challenge at a time and no answer keys.

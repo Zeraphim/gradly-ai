@@ -157,10 +157,10 @@ Fifth pass: Upload → Prepare → Understand → Play.
 - **Paper brief** (fifth pass) was replaced by the quest below and is no longer
   routed.
 
-Sixth pass (current flow): Upload → Prepare → Investigate. Library entry:
+Sixth pass (historical bespoke prototype, retired in this candidate): Upload → Prepare → Investigate. Library entry:
 Choose a study → Investigate.
 
-- **Texting quest** (`TextingQuest.tsx`, script in `texting-quest.ts`, visuals in
+- **Historical texting quest** (`TextingQuest.tsx`, script in `texting-quest.ts`, visuals in
   `quest-visuals.tsx`, styles in `quest.css`, route `#/research/meet/:id`). A
   teammate's step-by-step quest document replaced the long brief: two short story
   screens, then one decision per screen with its own small interactive visual,
@@ -338,9 +338,9 @@ limits are in [TESTING.md](../TESTING.md).
 - `apps/web/src/research/UploadPage.tsx`, `useDocumentUpload.ts`
 - `apps/web/src/research/ProcessingPage.tsx`, `PreparationTrack.tsx`,
   `preparation-track.css`, `FailureRecovery.tsx`, `IntakeSteps.tsx`
-- `apps/web/src/research/TextingQuest.tsx`, `texting-quest.ts`,
-  `quest-visuals.tsx`, `quest.css`
-- `apps/web/src/research/ResearchApp.tsx` (`startFirstChallenge`, `/meet` and
+- Current prepared sample: `apps/web/src/research/studies/JourneyPlayer.tsx` and
+  `studies/data/texting-lecture.ts`; the bespoke texting modules above are historical.
+- `apps/web/src/research/ResearchApp.tsx` (`startFirstChallenge`, `/adventure` compatibility and
   `/play` routes)
 - `apps/web/src/research/PreparationOutline.tsx`, `PreparationWarmup.tsx`,
   `warmup.ts`, `ReadyHandoff.tsx`, `studies/Burst.tsx`
@@ -348,7 +348,7 @@ limits are in [TESTING.md](../TESTING.md).
   `ReasoningCoach.tsx`, `uploaded-journey.css`
 - `apps/api/src/research/study-card.ts`; `publicJob().outline` and
   `publicSession()` `study`, `takeaway`, `lessonId` and `feedback.accepted`
-- `apps/web/src/LegacyApp.tsx` (home chrome and sample entry)
+- `apps/web/src/App.tsx` and `components/Welcome.tsx` (upload home and sample entry)
 
 Verification is local sample mode only. No live generation or hosted preview
 (#4) has been checked for this change. The seventh pass was checked with mocked

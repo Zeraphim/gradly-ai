@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="375" height="372" viewBox="-18 -18 375 372" overflow="hidden">
   <title>Gradly guide greeting</title>
-  <desc>A slow sway with a breathing float, a tassel that trails the body and a soft blink. One 4.8 s loop.</desc>
+  <desc>A slow sway with a breathing float, a tassel that trails the body and a soft blink. One 4.8 s greeting, holding its final pose.</desc>
   <style type="text/css"><![CDATA[
       @keyframes gradly-float {
         0% { transform: translate(0px, -0.00px) rotate(-0.00deg) scale(1, 1.0060); }
@@ -372,9 +372,9 @@
         99.17% { transform: scaleY(1.000); }
         100% { transform: scaleY(1.000); }
       }
-      #gradly-body { animation: gradly-float 4.8s linear 1; transform-origin: 169.5px 320px; }
-      #gradly-tassel { animation: gradly-tassel 4.8s linear 1; transform-origin: 30px 104px; }
-      .gradly-eye { animation: gradly-blink 4.8s linear 1; }
+      #gradly-body { animation: gradly-float 4.8s linear 1 forwards; transform-origin: 169.5px 320px; }
+      #gradly-tassel { animation: gradly-tassel 4.8s linear 1 forwards; transform-origin: 30px 104px; }
+      .gradly-eye { animation: gradly-blink 4.8s linear 1 forwards; }
       @media (prefers-reduced-motion: reduce) {
         #gradly-body, #gradly-tassel, .gradly-eye { animation: none; }
       }

@@ -95,7 +95,6 @@ export function App() {
       </a>
       <SiteHeader current="upload" onHome={home} />
       <Welcome
-        uploadFirst
         onStart={library}
         onResearchFile={upload}
         onResearchLink={(link) =>

@@ -72,14 +72,11 @@ or a relaxation of the server release gates below.
 
 ## Contract and boundaries
 
-The authored sample's study-design activity also uses
-`apps/web/src/research/scenes/StudyDesignVisual.tsx`. It accepts a bounded grouping
-rule, group labels, outcome and description from `quest-visuals.tsx`, retains the
-same diagram across choices and resolves active paths immediately for reduced
-motion. Its source procedure summary is supplied only after the sample decision is
-resolved. The diagram has a textual equivalent and is explicitly schematic.
-This is a reusable presentation pilot, **not** a `sceneSchema` family or an
-automatic template-selection feature for generated papers. The shared scene
+The retired bespoke texting prototype used a separate StudyDesignVisual pilot.
+That orphan implementation has been removed from this candidate. Current prepared
+and uploaded investigations use the shared scene families below; no automatic
+sample-to-generated template selection follows from the historical pilot.
+The shared scene
 contract and its evidence gates below remain the authority for generation.
 
 `packages/contracts/src/scenes.ts` exports `sceneSchema`, `Scene`, `sceneProblems`

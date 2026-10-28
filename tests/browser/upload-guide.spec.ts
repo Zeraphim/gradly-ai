@@ -65,3 +65,31 @@ test("system and saved reduced motion switch to a static guide without shifting 
   await page.reload();
   await expect(page.locator('.home-guide [data-pose="guiding"]')).toBeVisible();
 });
+
+test("the guide's last animation frame holds instead of snapping to the SVG rest pose", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/brand/mascot-guiding-animated.svg");
+  await expect
+    .poll(() => page.evaluate(() => document.getAnimations().length))
+    .toBe(6);
+  const poseAt = (time: number) =>
+    page.evaluate((time) => {
+      for (const animation of document.getAnimations()) {
+        animation.pause();
+        animation.currentTime = time;
+      }
+      return ["gradly-body", "gradly-tassel"].map((id) => {
+        const matrix = new DOMMatrix(
+          getComputedStyle(document.getElementById(id)!).transform,
+        );
+        return [matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f];
+      });
+    }, time);
+  const lastFrame = await poseAt(4799.999);
+  const finished = await poseAt(4800.001);
+  for (const [i, values] of lastFrame.entries())
+    for (const [j, value] of values.entries())
+      expect(Math.abs(value - finished[i]![j]!)).toBeLessThan(0.001);
+});
