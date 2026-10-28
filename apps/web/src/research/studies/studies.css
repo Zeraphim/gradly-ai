@@ -356,19 +356,6 @@
   transform-origin: 50% 60%;
   transition: transform 260ms var(--motion-ease, ease-out);
 }
-.research-lab .studies .library-card-flag {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.92);
-  color: var(--s-slate);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
 .research-lab .studies .library-card-done {
   position: absolute;
   top: 10px;

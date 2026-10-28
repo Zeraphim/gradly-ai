@@ -209,9 +209,6 @@ function StudyCard({
     >
       <div className="library-card-art">
         <StudyArt topic={study.topic} group={study.group} />
-        {!study.reviewed ? (
-          <span className="library-card-flag">Not reviewed</span>
-        ) : null}
         {state === "done" ? (
           <span className="library-card-done" aria-hidden="true">
             <Check size={16} strokeWidth={3} />
