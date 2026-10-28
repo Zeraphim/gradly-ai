@@ -512,8 +512,8 @@ time and reveal, plus a "Scanned pages" badge whose note opens when the session'
 `ocr` flag is set. Three tap steps (`studies/StudyOrientation.tsx`) replace the
 briefing text: a hunch saved as the learner's prediction, a route built from the
 session's `stages` (stage names only) and a practice question with one retry. "Skip
-to study" begins at any step, and the briefing stays behind "Read the full
-briefing". Written-reasoning challenges add an optional
+to study" begins at any step, and "Read the full briefing" opens the briefing in a
+modal dialog rather than expanding below the card. Written-reasoning challenges add an optional
 "Explain your thinking" field sent with the answer. After the check, "Ask the AI
 coach" requests the saved live feedback, labelled as AI output that can be wrong.
 The reveal adds the learner's prediction and replaces the library actions with

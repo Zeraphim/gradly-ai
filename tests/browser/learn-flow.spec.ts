@@ -210,6 +210,7 @@ for (const [width, height] of [
         .analyze();
       expect(audit.violations.map((v) => v.id)).toEqual([]);
     }
+    await page.getByRole("button", { name: "Close dialog" }).click();
     await page
       .getByRole("button", { name: "Skip to study", exact: true })
       .click();

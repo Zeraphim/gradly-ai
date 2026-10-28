@@ -11,9 +11,9 @@ import {
   ScanText,
   Sparkles,
 } from "lucide-react";
+import { Dialog } from "../../components/Dialog.js";
 import { Mascot } from "../../components/Mascot.js";
 import { ResearchLink as Link } from "../navigation.js";
-import { SceneDisclosure } from "../scenes/SceneDisclosure.js";
 import {
   AnimatePresence,
   PresenceBlock,
@@ -58,6 +58,7 @@ export function StudyIntro({
   const motion = useSceneMotion();
   const tone = groupTone[study.group];
   const briefing = briefingParts(study.lesson.briefing);
+  const [briefingOpen, setBriefingOpen] = useState(false);
   return (
     <main
       id="main"
@@ -103,17 +104,28 @@ export function StudyIntro({
                 onBegin={onBegin}
               />
               {briefing.lead.length ? (
-                <SceneDisclosure
-                  title="Read the full briefing"
-                  reduced={motion.still}
-                  className="journey-intro-briefing"
+                <button
+                  type="button"
+                  className="journey-skip journey-intro-briefing"
+                  aria-haspopup="dialog"
+                  onClick={() => setBriefingOpen(true)}
                 >
-                  {[...briefing.lead, ...briefing.more].map(
-                    (paragraph, index) => (
-                      <p key={index}>{paragraph}</p>
-                    ),
-                  )}
-                </SceneDisclosure>
+                  Read the full briefing
+                </button>
+              ) : null}
+              {briefingOpen ? (
+                <Dialog
+                  title="The full briefing"
+                  onClose={() => setBriefingOpen(false)}
+                >
+                  <div className="journey-briefing-text">
+                    {[...briefing.lead, ...briefing.more].map(
+                      (paragraph, index) => (
+                        <p key={index}>{paragraph}</p>
+                      ),
+                    )}
+                  </div>
+                </Dialog>
               ) : null}
             </>
           ) : (
