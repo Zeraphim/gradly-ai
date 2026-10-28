@@ -255,7 +255,7 @@ export const body: StudyBody = {
           },
           {
             id: "o6",
-            text: "About 24.92 more kcal on average because a negative slope reverses the score scale.",
+            text: "About 24.92 more kcal, reversing the negative score slope.",
           },
           {
             id: "o4",
@@ -297,7 +297,7 @@ export const body: StudyBody = {
           },
           {
             id: "o9",
-            text: "Interpret inhibitory control as a randomized treatment that changes the slope.",
+            text: "Treat inhibitory control as an assigned slope-changing treatment.",
           },
         ],
         accepted: ["o7"],
@@ -376,13 +376,13 @@ export const body: StudyBody = {
             {
               optionId: "o14",
               label:
-                "Assume the univariate confidence interval already adjusts for every other domain.",
+                "Use the smallest separate-domain p-value as the adjusted result.",
               targetIds: ["estimate"],
             },
             {
               optionId: "o15",
               label:
-                "Exclude the other domains because nonsignificant individual tests prove no confounding.",
+                "Drop domains with nonsignificant individual slopes before interpreting the univariate delay estimate.",
               targetIds: ["estimate"],
             },
             {
@@ -426,11 +426,11 @@ export const body: StudyBody = {
         options: [
           {
             id: "o14",
-            text: "Assume the univariate confidence interval already adjusts for every other domain.",
+            text: "Use the smallest separate-domain p-value as the adjusted result.",
           },
           {
             id: "o15",
-            text: "Exclude the other domains because nonsignificant individual tests prove no confounding.",
+            text: "Drop domains with nonsignificant individual slopes before interpreting the univariate delay estimate.",
           },
           {
             id: "o13",
@@ -441,8 +441,8 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "A result from one model does not automatically include adjustment made only in a different model.",
         misconceptions: {
-          o14: "An interval for one model does not include adjustment that was never fitted.",
-          o15: "A nonsignificant separate test is not proof a variable is irrelevant in a joint model.",
+          o14: "Separate single-domain tests do not estimate the delay association conditional on the other domains.",
+          o15: "An individual nonsignificant slope does not establish that excluding that covariate leaves the delay estimate unchanged.",
         },
         explanation:
           "The discussion reports that the delay effect was not significant after controlling attentional and inhibitory control together. This limits claims of a uniquely robust delay contribution; it does not prove no association.",

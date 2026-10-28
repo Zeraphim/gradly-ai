@@ -17,6 +17,10 @@ and the relevant checks in [TESTING.md](../../docs/TESTING.md).
 - Preserve document-bound upload callbacks and version/challenge-bound drafts.
   Late requests must not redirect or overwrite a learner's newer work. Server-saved
   progress is authoritative; explanation edits do not duplicate practice points.
+  Prepared answers are also bound to `StudyCard.revision`: bump it when question
+  or answer meaning changes, keeping it for copy-only edits. Legacy browser saves
+  are revision 1. Show the restart notice before replacing that study’s old save
+  on Begin; keep other study saves and server-owned uploaded sessions separate.
 - Keep browser-only authored reasoning feedback separate from live assessment.
   Custom writing remains unassessed in that preview. Preserve source provenance
   and evidence-reveal ordering. Do not put provider keys in client code or Vite

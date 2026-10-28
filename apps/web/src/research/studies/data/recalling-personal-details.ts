@@ -196,6 +196,12 @@ export const body: StudyBody = {
         excerpt:
           "Our failure to replicate this discrepancy between informed and incidental recall tasks may be due to unique differences in online crowd-sourcing environments, such as MTurk. As men- tioned, we explicitly instructed participants to avoid using memory enhancement strategies, such as writing the words down during the encoding phase. Such explicit instructions were necessary given that the experiment runs unsupervised on participants’ own computers, and as such would not be necessary when running lab-based studies. We speculate that it may be this difference that caused the discrepancy in findings. That is, participants in the online con- text were given instructions designed to avoid conscious rehearsal, which may have eradicated the expected effect of rehearsal strategies on non self-referential encoding. Meta-analysis Having conducted four independent studies to examine the capacity of our online paradigm to reproduce the self-reference effect, we conducted a meta-analysis to establish the overall reli- ability and size of this effect.",
       },
+      {
+        id: "r3",
+        page: 13,
+        excerpt:
+          "The interaction between encoding level and recall type was not significant,\nF(2,382) = 1.38, p = .253",
+      },
     ],
     challenges: [
       {
@@ -204,9 +210,9 @@ export const body: StudyBody = {
         title: "Locate the repeated measures",
         type: "single",
         prompt:
-          "In Study 4, why would treating every observation as coming from a different person misdescribe the design?",
+          "What should the error structure account for when estimating encoding effects in Study 4?",
         evidence: [
-          "Each person completed self, meaning and structure encoding tasks. People were separately allocated to incidental or informed recall instructions.",
+          "People made self, meaning and structure judgements on word lists, under one assigned set of recall instructions.",
         ],
         scene: {
           version: 1,
@@ -223,25 +229,25 @@ export const body: StudyBody = {
             {
               optionId: "c1-opt2",
               label:
-                "Both encoding and recall instructions compare entirely separate groups of people.",
+                "Use each encoding observation as an independent unit, like the recall-instruction groups.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "c1-opt1",
               label:
-                "Encoding comparisons repeat within people; recall instructions compare different groups.",
+                "Encoding observations are clustered within a person; recall-instruction groups compare people.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "c1-opt3",
               label:
-                "Both encoding and recall instructions repeat within every individual participant.",
+                "Pair people across recall-instruction groups using their observed encoding scores.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "c1-opt4",
               label:
-                "The absence of a drug treatment makes every comparison purely correlational.",
+                "Reduce each recall-instruction group to one observation before estimating encoding effects.",
               targetIds: ["row0", "row1"],
             },
           ],
@@ -290,30 +296,31 @@ export const body: StudyBody = {
         options: [
           {
             id: "c1-opt2",
-            text: "Both encoding and recall instructions compare entirely separate groups of people.",
+            text: "Use each encoding observation as an independent unit, like the recall-instruction groups.",
           },
           {
             id: "c1-opt1",
-            text: "Encoding comparisons repeat within people; recall instructions compare different groups.",
+            text: "Encoding observations are clustered within a person; recall-instruction groups compare people.",
           },
           {
             id: "c1-opt3",
-            text: "Both encoding and recall instructions repeat within every individual participant.",
+            text: "Pair people across recall-instruction groups using their observed encoding scores.",
           },
           {
             id: "c1-opt4",
-            text: "The absence of a drug treatment makes every comparison purely correlational.",
+            text: "Reduce each recall-instruction group to one observation before estimating encoding effects.",
           },
         ],
         accepted: ["c1-opt1"],
         alternatives: [],
         hint: "Track which conditions the same person completes and which instructions differ between people.",
         misconceptions: {
-          "c1-opt2": "The same people performed all three encoding tasks.",
+          "c1-opt2":
+            "Several encoding observations come from the same person; treating them as independent loses that dependence.",
           "c1-opt3":
-            "A participant received one recall-instruction condition, not both.",
+            "The source does not describe matched pairs across recall groups; the repeated encoding observations belong to each participant.",
           "c1-opt4":
-            "Experiments can manipulate tasks and instructions without administering a drug.",
+            "The two recall groups are not the two independent observations: participants supply the sampling units.",
         },
         explanation:
           "Study 4 used a mixed design: encoding level within participants, recall paradigm between participants.",
@@ -326,42 +333,43 @@ export const body: StudyBody = {
         stage: "Read the design",
         title: "Identify the factors",
         type: "single",
-        prompt: "Which pair of factors was varied in Study 4?",
+        prompt:
+          "Which comparison tests whether pooling recall-instruction groups hides a difference in the self-encoding advantage?",
         evidence: [
-          "Participants completed three kinds of word judgement and received one of two sets of recall instructions.",
+          "Study 4 combined three encoding tasks with incidental or informed recall instructions.",
         ],
         scene: null,
         options: [
           {
             id: "c2-opt2",
-            text: "Task order (encoding, filler, recall) and the amount paid after participation.",
+            text: "Compare the groups’ overall recall means after averaging over all encoding levels.",
           },
           {
             id: "c2-opt3",
-            text: "Participant age (young, old) and gender (women, men) assigned by the researchers.",
+            text: "Compare encoding levels after combining observations from both recall-instruction groups.",
           },
           {
             id: "c2-opt1",
-            text: "Encoding level (self, meaning, structure) and recall instructions (incidental, informed).",
+            text: "Compare encoding-level differences between the incidental and informed recall groups.",
           },
           {
             id: "c2-opt4",
-            text: "Memory accuracy (correct, incorrect) and the number of words recalled at the test.",
+            text: "Compare the number recalled with the total number of words presented in each list.",
           },
         ],
         accepted: ["c2-opt1"],
         alternatives: [],
-        hint: "An experimental factor has alternative levels set before the outcome is measured.",
+        hint: "Compare encoding contrasts across the two recall-instruction groups, not just either main effect.",
         misconceptions: {
           "c2-opt2":
-            "The procedure sequence is not the pair of experimental factors described here.",
+            "That tests an overall recall-instruction difference, not whether encoding contrasts differ between instruction groups.",
           "c2-opt3":
-            "Demographic characteristics were measured, not assigned experimental factors.",
+            "Pooling tests an overall encoding difference while discarding the interaction the question asks about.",
           "c2-opt4":
-            "Those describe measured outcomes, not the manipulated encoding and instruction factors.",
+            "That is a recall-rate comparison rather than a comparison of encoding effects across instruction groups.",
         },
         explanation:
-          "Study 4 varied encoding level and recall paradigm. The sequence of encoding, filler and recall is a procedure, not that pair of experimental factors.",
+          "The encoding-by-recall-instruction interaction compares encoding contrasts across the groups, rather than either main effect. It is the analysis needed to check whether pooling hides a different self-encoding advantage.",
         refs: ["r1"],
         writtenReasoning: false,
         reveal: "design",
@@ -380,7 +388,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c3-opt2",
-            text: "About a 13.89% relative increase, with percentage points meaning the same thing.",
+            text: "About 13.89% relative to the shallower group’s recall score.",
           },
           {
             id: "c3-opt3",
@@ -472,11 +480,15 @@ export const body: StudyBody = {
         options: [
           {
             id: "c5-opt2",
-            text: "Yes; any difference from an earlier meta-analysis identifies its unique cause.",
+            text: "Yes; the online–laboratory contrast isolates the instruction account.",
           },
           {
             id: "c5-opt1",
             text: "No; it is a proposed explanation, not a directly isolated mechanism.",
+          },
+          {
+            id: "c5-review3",
+            text: "Rehearsal avoidance can be read from the recall scores as though it were measured during encoding.",
           },
         ],
         accepted: ["c5-opt1"],
@@ -484,7 +496,9 @@ export const body: StudyBody = {
         hint: "A difference between settings can have several explanations unless a proposed pathway is isolated.",
         misconceptions: {
           "c5-opt2":
-            "Several setting and procedure differences can separate studies; the rehearsal explanation was explicitly speculative.",
+            "A cross-study contrast mixes instruction differences with sampling and procedural differences.",
+          "c5-review3":
+            "Outcome scores do not directly measure whether participants rehearsed or followed the instruction.",
         },
         explanation:
           "The discussion says the discrepancy may arise from online conditions and anti-rehearsal instructions. It does not experimentally isolate that explanation.",
@@ -523,8 +537,14 @@ export const body: StudyBody = {
             {
               optionId: "c6-opt2",
               label:
-                "It makes the sample representative because increasing size removes selection bias.",
+                "The larger sample mainly improves representativeness rather than precision.",
               targetIds: ["online", "earlier"],
+            },
+            {
+              optionId: "c6-review3",
+              targetIds: ["online", "earlier"],
+              label:
+                "Age and education coverage supply probability-sample weights for extending the result to nonvolunteers.",
             },
           ],
           resolution: null,
@@ -573,7 +593,11 @@ export const body: StudyBody = {
           },
           {
             id: "c6-opt2",
-            text: "It makes the sample representative because increasing size removes selection bias.",
+            text: "The larger sample mainly improves representativeness rather than precision.",
+          },
+          {
+            id: "c6-review3",
+            text: "Age and education coverage supply probability-sample weights for extending the result to nonvolunteers.",
           },
         ],
         accepted: ["c6-opt1"],
@@ -581,7 +605,9 @@ export const body: StudyBody = {
         hint: "Sample size addresses a different issue from how volunteers enter the sample.",
         misconceptions: {
           "c6-opt2":
-            "Increasing size improves precision without automatically eliminating how volunteers were selected.",
+            "Increasing a volunteer sample can improve precision without repairing its selection mechanism.",
+          "c6-review3":
+            "Demographic coverage does not supply the selection probabilities needed for probability-sample weighting.",
         },
         explanation:
           "The paper argues that online recruitment broadens access and power. It does not turn MTurk recruitment into probability sampling of every population.",
@@ -593,5 +619,5 @@ export const body: StudyBody = {
     bonus: null,
   },
   takeaway:
-    "The four online studies generally reproduced a self-encoding recall advantage, with recognition and recall instructions revealing important boundary conditions. In Study 4 the advantage persisted despite advance notice of recall. The anti-rehearsal explanation is speculative; online access and a larger volunteer sample do not establish universal generalizability.",
+    "The online studies supported a self-reference advantage over semantic encoding. Recognition instructions in Study 3 qualified that pattern; Study 4 did not detect an encoding-by-recall-instruction interaction (p = .253). Proposed instruction and rehearsal explanations remain hypotheses rather than isolated mechanisms.",
 };

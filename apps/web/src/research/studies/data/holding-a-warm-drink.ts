@@ -127,24 +127,24 @@ export const body: StudyBody = {
           },
           {
             id: "o6",
-            text: "It guarantees both groups have identical observed and unobserved traits in this sample.",
+            text: "It controls expectancy cues in the participant instructions without requiring blinding.",
           },
           {
             id: "o7",
-            text: "It ensures cup temperature represents every possible real-world warmth experience.",
+            text: "It addresses volunteer-to-population selection in the same way as random sampling.",
           },
           {
             id: "o8",
-            text: "It proves every excluded participant would show the same perceptual response.",
+            text: "It makes the post-assignment exclusion procedure a baseline balance check.",
           },
         ],
         accepted: ["o5"],
         alternatives: [],
         hint: "Randomization concerns pre-existing group differences, not the range of settings to which results transfer.",
         misconceptions: {
-          o6: "Random assignment balances in expectation, not with guaranteed exact equality.",
-          o7: "Random assignment does not establish transfer to other warmth manipulations.",
-          o8: "Assignment cannot establish unobserved outcomes of excluded participants.",
+          o6: "Assignment targets pre-existing group differences; blinding separately reduces condition-linked instruction cues.",
+          o7: "Random assignment and probability sampling address different problems.",
+          o8: "Exclusions occur after recruitment and require their own assessment; assignment does not turn them into a balance check.",
         },
         explanation:
           "Random assignment strengthens the within-study comparison while leaving sampling, exclusions and population transfer as separate concerns.",
@@ -290,7 +290,7 @@ export const body: StudyBody = {
         prompt:
           "Which extra comparison would separate a warm-cup increase from a cold-cup decrease?",
         evidence: [
-          "The study includes warm and cold cups, with no room-temperature condition.",
+          "Participants briefly held an assigned cup before completing a perceptual-focus task.",
         ],
         options: [
           {
@@ -299,7 +299,7 @@ export const body: StudyBody = {
           },
           {
             id: "o22",
-            text: "Add more participants to the same two temperatures without adding a baseline.",
+            text: "Increase the sample at the same two temperatures, keeping the design.",
           },
           {
             id: "o23",
@@ -344,7 +344,7 @@ export const body: StudyBody = {
             {
               optionId: "o22",
               label:
-                "Add more participants to the same two temperatures without adding a baseline.",
+                "Increase the sample at the same two temperatures, keeping the design.",
               targetIds: ["row0", "row1"],
             },
             {

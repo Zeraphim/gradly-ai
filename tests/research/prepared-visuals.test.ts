@@ -40,3 +40,26 @@ describe("prepared-study visual coverage", () => {
     },
   );
 });
+
+// These interpretations used to be visible before the learner's first attempt.
+it.each([
+  ["music-and-attention", "c6", "Limited room to improve"],
+  ["reading-words-aloud", "c1", "Different participants"],
+  ["using-scented-air-while-brainstorming", "c1", "Creativity suggestion"],
+])(
+  "%s/%s reveals derived comparison text only after assessment",
+  (slug, id, label) => {
+    const c = loaded
+      .find((s) => s.slug === slug)!
+      .lesson.challenges.find((c) => c.id === id)!;
+    const options = c.options.map((o) => o.id);
+    for (const status of ["answering", "retrying", "retry-feedback"] as const) {
+      const projected = visibleScene(c.scene, options, status);
+      expect(projected).not.toBeNull();
+      expect(JSON.stringify(projected)).not.toContain(label);
+    }
+    expect(JSON.stringify(visibleScene(c.scene, options, "solved"))).toContain(
+      label,
+    );
+  },
+);

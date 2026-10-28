@@ -118,7 +118,7 @@ export const body: StudyBody = {
           },
           {
             id: "optC",
-            text: "The task cannot compare stimuli because no participant heard any pair of musical examples.",
+            text: "Listening-history differences can be estimated as within-person changes by comparing the existing groups.",
           },
           {
             id: "optD",
@@ -130,7 +130,7 @@ export const body: StudyBody = {
         hint: "Ask which features the experiment could vary and which participants brought with them.",
         misconceptions: {
           optB: "The researchers did not randomly assign lifetime musical exposure.",
-          optC: "Participants explicitly made paired musical judgements.",
+          optC: "The groups differ between people and communities; comparing them does not observe a person’s change in listening history.",
           optD: "Exposure histories varied; no single measured group characteristic is proven causal.",
         },
         explanation:
@@ -200,7 +200,7 @@ export const body: StudyBody = {
           },
           {
             id: "optC",
-            text: "More participants would remove the overlap between mode and pitch in the stimuli.",
+            text: "More participants would separate mode from pitch in these stimuli.",
           },
           {
             id: "optD",
@@ -232,38 +232,38 @@ export const body: StudyBody = {
         title: "Assess a universal claim",
         type: "single",
         prompt:
-          "Strong major-cadence evidence appears in most groups but not the minimally exposed group. Which claim is too strong?",
+          "Which report distinguishes differing evidence strength from a demonstrated absence of a mode effect?",
         evidence: [
-          "The pattern differs across existing listener groups. An uncertain estimate remains in the minimally exposed group.",
+          "Major-cadence estimates varied in precision across existing listener groups, including a minimally exposed group.",
         ],
         options: [
           {
             id: "optB",
-            text: "That major cadences are proven to make every listener happier regardless of experience.",
+            text: "Evidence differed across groups; the uncertain minimally exposed estimate does not establish an absent effect.",
           },
           {
             id: "optA",
-            text: "That evidence strength differs across the listener groups represented in this sample.",
+            text: "The less decisive estimate is evidence that the minimally exposed population has a negligible mode effect.",
           },
           {
             id: "optC",
-            text: "That the minimally exposed group’s effect requires attention to its uncertainty.",
+            text: "The different evidence strengths constitute a direct test that the mode effects differ between groups.",
           },
           {
             id: "optD",
-            text: "That the task measures judgements of musical happiness rather than lifetime well-being.",
+            text: "Differences in group history turn the manipulated musical mode into an unmeasured observational predictor.",
           },
         ],
         accepted: ["optB"],
         alternatives: [],
-        hint: "Check whether the claim goes beyond the sampled groups and their uncertain estimates.",
+        hint: "Distinguish an imprecise estimate from a precise estimate of a small effect.",
         misconceptions: {
-          optA: "That is a cautious description of the reported pattern, rather than the overclaim requested.",
-          optC: "An uncertain result should be considered with its interval and prior evidence.",
-          optD: "The outcome is the judgement in this task, not a clinical or lifetime well-being measure.",
+          optA: "An uncertain estimate does not establish a practically negligible effect without an appropriate precision or equivalence assessment.",
+          optC: "Comparing evidence labels is not a direct comparison of the group effects.",
+          optD: "Musical stimuli were varied in the task; observational cultural-history grouping does not make the stimulus mode unmeasured.",
         },
         explanation:
-          "The cross-group pattern does not establish an identical universal effect, nor does a weak estimate prove zero. Participants judged the feeling represented by musical examples.",
+          "Evidence strength differed among the sampled groups, but the minimally exposed estimate remained uncertain. Neither absence there nor a direct between-group difference follows just from contrasting evidence labels.",
         refs: ["e1"],
         writtenReasoning: false,
         reveal: "results",
@@ -325,11 +325,11 @@ export const body: StudyBody = {
         options: [
           {
             id: "optA",
-            text: "It proves familiarity is the only cause because exposure was randomly assigned.",
+            text: "The gradient estimates the exposure effect after holding demographic and acoustic differences constant.",
           },
           {
             id: "optC",
-            text: "It proves that no common perceptual influence is possible in any community.",
+            text: "It identifies prior exposure as the mediator of the community contrast.",
           },
           {
             id: "optB",
@@ -337,16 +337,16 @@ export const body: StudyBody = {
           },
           {
             id: "optD",
-            text: "It proves timbre explains the entire gradient without needing any additional tests.",
+            text: "The gradient separates a timbre explanation from familiarity because mode varied within the task.",
           },
         ],
         accepted: ["optB"],
         alternatives: [],
         hint: "Consider other differences that might travel with an existing group’s listening history.",
         misconceptions: {
-          optA: "Lifetime exposure was not randomly assigned and could covary with other group differences.",
-          optC: "The paper explicitly says the estimates cannot rule out a universal effect.",
-          optD: "The gradient alone does not identify a unique explanatory mechanism.",
+          optA: "Exposure histories were not randomly assigned or isolated from the other differences between communities.",
+          optC: "A gradient across existing groups does not isolate a mediating pathway.",
+          optD: "Varying mode does not by itself distinguish timbre and familiarity accounts of the between-group pattern.",
         },
         explanation:
           "Familiarity and learned emotional associations are proposed explanations. The existing-group comparison does not uniquely identify their causal contribution.",
@@ -368,13 +368,13 @@ export const body: StudyBody = {
             {
               optionId: "optA",
               label:
-                "It proves familiarity is the only cause because exposure was randomly assigned.",
+                "The gradient estimates the exposure effect after holding demographic and acoustic differences constant.",
               targetIds: ["experience", "ratings", "inference"],
             },
             {
               optionId: "optC",
               label:
-                "It proves that no common perceptual influence is possible in any community.",
+                "It identifies prior exposure as the mediator of the community contrast.",
               targetIds: ["experience", "ratings", "inference"],
             },
             {
@@ -386,7 +386,7 @@ export const body: StudyBody = {
             {
               optionId: "optD",
               label:
-                "It proves timbre explains the entire gradient without needing any additional tests.",
+                "The gradient separates a timbre explanation from familiarity because mode varied within the task.",
               targetIds: ["experience", "ratings", "inference"],
             },
           ],

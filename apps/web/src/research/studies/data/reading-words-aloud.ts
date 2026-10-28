@@ -73,33 +73,33 @@ export const body: StudyBody = {
         title: "Track people across conditions",
         type: "single",
         prompt:
-          "Why is the 20/50/80% comparison between participants but aloud versus silent learning within participants?",
+          "Which analysis respects how word-list composition and learning mode were assigned?",
         evidence: [
-          "Each person completed one word-list proportion condition, containing both aloud and silent words.",
+          "A participant studied one list composition, reading selected words aloud and the remaining words silently.",
         ],
         options: [
           {
             id: "o2",
-            text: "Every participant completed all proportion groups but learned only in one mode.",
+            text: "Use repeated composition contrasts within people but independent groups for learning mode.",
           },
           {
             id: "o1",
-            text: "Proportion groups contain different people; learning modes repeat within each person.",
+            text: "Treat list composition as between participants and learning mode as repeated within a participant.",
           },
           {
             id: "o3",
-            text: "Both contrasts use independent people because each word can be recalled only once.",
+            text: "Use independent participant groups for both contrasts because individual words are recalled separately.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Separate the list proportion assigned to a person from the learning modes used within that list.",
+        hint: "Identify which comparison shares a participant, rather than treating every word as a new person.",
         misconceptions: {
-          o2: "The allocation and learning-mode structure are the reverse of that description.",
-          o3: "Repeated words or trials remain clustered within the same learner.",
+          o2: "Each person had one composition and both learning modes, which is the reverse of that analysis.",
+          o3: "Different word responses do not make the participant’s aloud and silent observations independent groups.",
         },
         explanation:
-          "The mixed design combines a between-person proportion manipulation with a within-person learning-mode contrast.",
+          "Each participant received one list-composition condition and both learning modes. The analysis therefore combines a between-participant composition comparison with a within-participant learning-mode comparison.",
         refs: ["e3"],
         writtenReasoning: false,
         reveal: "design",
@@ -107,7 +107,7 @@ export const body: StudyBody = {
           version: 1,
           title: "How the word lists differ",
           instruction:
-            "Inspect the visual, then choose the interpretation supported by the study.",
+            "Make your call, then inspect the comparison alongside the explanation.",
           description: "How the word lists differ",
           provenance: {
             kind: "source-summary",
@@ -118,19 +118,19 @@ export const body: StudyBody = {
             {
               optionId: "o2",
               label:
-                "Every participant completed all proportion groups but learned only in one mode.",
+                "Use repeated composition contrasts within people but independent groups for learning mode.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "o1",
               label:
-                "Proportion groups contain different people; learning modes repeat within each person.",
+                "Treat list composition as between participants and learning mode as repeated within a participant.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "o3",
               label:
-                "Both contrasts use independent people because each word can be recalled only once.",
+                "Use independent participant groups for both contrasts because individual words are recalled separately.",
               targetIds: ["row0", "row1"],
             },
           ],
@@ -155,7 +155,7 @@ export const body: StudyBody = {
               id: "row0",
               label: "List allocation",
               detail: "Reported features of each condition.",
-              at: "setup",
+              at: "resolution",
               provenance: {
                 kind: "source-summary",
                 refs: ["e3"],
@@ -171,7 +171,7 @@ export const body: StudyBody = {
               id: "row1",
               label: "Within a list",
               detail: "Reported features of each condition.",
-              at: "setup",
+              at: "resolution",
               provenance: {
                 kind: "source-summary",
                 refs: ["e3"],
@@ -181,6 +181,34 @@ export const body: StudyBody = {
                 "Aloud and silent words",
                 "Aloud and silent words",
                 "Aloud and silent words",
+              ],
+            },
+            {
+              id: "raw-composition",
+              label: "Words read aloud",
+              detail: "Word-list composition before classifying the analysis.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Composition expressed as complementary percentages.",
+              },
+              cells: ["20% of the list", "50% of the list", "80% of the list"],
+            },
+            {
+              id: "raw-silent",
+              label: "Remaining words",
+              detail: "Word-list composition before classifying the analysis.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Composition expressed as complementary percentages.",
+              },
+              cells: [
+                "80% read silently",
+                "50% read silently",
+                "20% read silently",
               ],
             },
           ],
@@ -243,7 +271,7 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "No; significance makes it impossible to compare the outcomes in any analysis.",
+            text: "No; average the two p-values to test their outcome-effect difference.",
           },
         ],
         accepted: ["o1"],
@@ -251,7 +279,7 @@ export const body: StudyBody = {
         hint: "Ordering p-values is not a direct test of the difference between two effects.",
         misconceptions: {
           o2: "P-values depend on variability and design as well as effect size.",
-          o3: "Outcome contrasts can be compared with an appropriate direct analysis, not by p-value ordering.",
+          o3: "Averaging p-values does not test the difference between recognition and recall advantages.",
         },
         explanation:
           "The two outcomes have different scales and variability. Neither relative p-values nor isolated significance labels directly test the difference between their effects.",
@@ -414,12 +442,12 @@ export const body: StudyBody = {
         prompt:
           "What does an interaction between list proportion and learning mode add beyond an overall aloud advantage?",
         evidence: [
-          "The aloud–silent contrast changes across the 20%, 50% and 80% list-proportion conditions.",
+          "The experiment reports learning-mode comparisons for each of three list compositions.",
         ],
         options: [
           {
             id: "o2",
-            text: "An average aloud effect must be identical in every list because the same words are used.",
+            text: "An interaction is the aloud effect pooled across list compositions.",
           },
           {
             id: "o3",
@@ -434,7 +462,7 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "Ask whether a single learning-mode gap can describe all the list-proportion conditions.",
         misconceptions: {
-          o2: "The interaction specifically contradicts a constant-gap interpretation.",
+          o2: "An interaction concerns variation in the aloud–silent contrast across compositions, not the pooled main effect.",
           o3: "The pattern can support a theoretical account without uniquely isolating a mental process.",
         },
         explanation:
@@ -461,19 +489,19 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Eight items establish that silently studying always produces superior memory.",
+            text: "The observed reversal is enough to prefer silent study whenever most list items are read aloud.",
           },
           {
             id: "o3",
-            text: "The uncertainty means the separate balanced-list findings must also be discarded automatically.",
+            text: "A larger participant sample can substitute for testing a wider set of silent items.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Consider how much evidence a small set of items gives for a broad memory rule.",
         misconceptions: {
-          o2: "A limited item subset cannot establish a universal memory rule.",
-          o3: "A limitation of one result does not invalidate every different condition and outcome.",
+          o2: "A reversal based on a small item set needs replication before that list-composition recommendation is treated as stable.",
+          o3: "More people cannot by itself establish that the small set of items represents the broader item domain.",
         },
         explanation:
           "The paper calls for replication and extension. Keep the item-limited recall reversal separate from the nonsignificant recognition contrast.",

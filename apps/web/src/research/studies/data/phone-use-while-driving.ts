@@ -380,11 +380,11 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Stable headway proves that every other driving outcome is completely unaffected.",
+            text: "Stable headway can stand in for braking because both were measured during the same driving period.",
           },
           {
             id: "o3",
-            text: "Two outcomes must be identical because both were collected in the same simulator.",
+            text: "Average their raw values into one score so both are expressed on the same distraction scale.",
           },
           {
             id: "o1",
@@ -395,8 +395,8 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "Think about responding to a lead-car event versus stability of following over time.",
         misconceptions: {
-          o2: "One unaffected measure does not establish safety on all other outcomes.",
-          o3: "Shared setting does not make distinct operational measures interchangeable.",
+          o2: "Measurements from the same period need not be interchangeable indicators of performance.",
+          o3: "Different units and constructs cannot be made interchangeable by averaging their raw values.",
         },
         explanation:
           "BRT and headway variability address different performance features. A result on one should not silently substitute for the other.",
@@ -537,7 +537,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Yes; a nonsignificant test proves the two pacing rules have identical effects everywhere.",
+            text: "Yes; a null pacing comparison supplies practical-equivalence evidence without a stated safety range.",
           },
           {
             id: "o1",
@@ -545,15 +545,15 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Yes; self-paced use is safe because drivers always choose a risk-free moment.",
+            text: "Yes; drivers’ choice of task timing supplies the real-road validity missing from the simulator.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "A limited null comparison is not an equivalence test across all tasks and road settings.",
         misconceptions: {
-          o2: "Nonsignificance is not proof of equivalence across settings.",
-          o3: "The experiment neither establishes zero risk nor verifies that behaviour in real traffic.",
+          o2: "A nonsignificant difference test is not an equivalence test, and a simulator contrast is not a real-road safety estimate.",
+          o3: "Self-pacing within the simulated tasks does not establish real-road validity or universal safety.",
         },
         explanation:
           "The pacing finding is limited to the measured outcomes and tasks. It should not become a general safety endorsement.",

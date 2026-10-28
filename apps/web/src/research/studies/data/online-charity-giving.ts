@@ -204,6 +204,12 @@ export const body: StudyBody = {
         excerpt:
           "However, it is important to recognize a potentially fundamental distinction between donations paid with one’s own\nmoney and externally funded donations that may attenuate the effectiveness of donation incentives in general—and of\nearmarking in particular: participants’ psychological ownership of the funds that are donated [40,41].",
       },
+      {
+        id: "r1",
+        page: 7,
+        excerpt:
+          "Earmarking vs. Earmarking with Flexibility \tSurvey begun \t7.9% vs. 7.2%\n(p = .363, peq = .052)\nEarmarking vs. Earmarking with Flexibility \tCompletion \t6.4% vs. 5.7%\n(p = .318, peq = .036)",
+      },
     ],
     challenges: [
       {
@@ -331,18 +337,18 @@ export const body: StudyBody = {
         title: "Superiority and equivalence",
         type: "single",
         prompt:
-          "Why predefine both a directional superiority test and a 2-percentage-point equivalence bound?",
+          "Why use both a directional superiority test and a stated 2-percentage-point equivalence bound?",
         evidence: [
-          "The authors planned proportion comparisons and an additional smallest-effect-of-interest criterion.",
+          "The analysis strategy includes proportion tests and a smallest-effect-of-interest criterion.",
         ],
         options: [
           {
             id: "o1",
-            text: "They guarantee that a nonsignificant superiority test automatically establishes equivalence.",
+            text: "They test the same directional hypothesis using two ways of calculating its p-value.",
           },
           {
             id: "o3",
-            text: "They turn 2 percentage points into a 2% relative increase at every starting rate.",
+            text: "They compare a 2% relative increase with a 2% decrease around each group’s own starting rate.",
           },
           {
             id: "o2",
@@ -353,8 +359,8 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "A test for a predicted increase differs from a test against a stated minimum effect size.",
         misconceptions: {
-          o1: "Equivalence needs its own bound and analysis; it does not follow from nonsignificance alone.",
-          o3: "A percentage-point difference is not a constant relative percentage change.",
+          o1: "Superiority and equivalence ask different questions: evidence for an increase versus evidence against effects as large as a chosen bound.",
+          o3: "Two percentage points is a raw rate difference, not a relative percentage change.",
         },
         explanation:
           "The planned tests answer different questions. The bound states what would count as meaningfully large in this context.",
@@ -407,14 +413,14 @@ export const body: StudyBody = {
         title: "Interpret bounded equivalence",
         type: "single",
         prompt:
-          "What can the significant equivalence tests add to the nonsignificant superiority tests?",
+          "For combined earmarking versus Random, what do the significant equivalence tests add to the nonsignificant superiority tests?",
         evidence: [
-          "Superiority p-values are .345 and .444; equivalence p-values are .005 and .001 using the preregistered bound.",
+          "Superiority p-values are .345 and .444; equivalence p-values are .005 and .001 using the stated bound.",
         ],
         options: [
           {
             id: "o1",
-            text: "Proof of an exactly zero effect for every donation amount and participant population.",
+            text: "An estimate that the combined offer has an exactly zero effect with negligible uncertainty.",
           },
           {
             id: "o2",
@@ -422,15 +428,15 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Proof that earmarking significantly increased both starting and completion rates.",
+            text: "Evidence that the combined offer’s starting and completion gains exceeded the stated bound.",
           },
         ],
         accepted: ["o2"],
         alternatives: [],
         hint: "The chosen bound defines which sizes are being ruled out in this particular setting.",
         misconceptions: {
-          o1: "Bounded equivalence in one setting does not establish exact or universal zero.",
-          o3: "The directional superiority comparisons did not detect the predicted increase.",
+          o1: "Equivalence to a bound is not an estimate of exact zero or negligible sampling uncertainty.",
+          o3: "The equivalence results support effects smaller than the bound, not gains exceeding it.",
         },
         explanation:
           "The equivalence conclusions are bound- and setting-specific. They are stronger than treating nonsignificance alone as proof of no meaningful effect, but do not rule out every smaller effect.",
@@ -622,5 +628,5 @@ export const body: StudyBody = {
     bonus: null,
   },
   takeaway:
-    "Earmarking did not clearly increase survey starting (7.2% versus 7.5%) or completion (6.0% versus 6.1%). Equivalence tests supported effects smaller than the preregistered 2-percentage-point bound in this setting. Donation size, sample experience and cue design are proposed boundaries requiring direct tests, not established explanations of the result.",
+    "Earmarking did not clearly increase starting or completion. The combined-earmarking versus Random contrasts met the stated 2-percentage-point equivalence criterion, but not all pairwise tests did: survey starting between the two earmarking groups had p_eq = .052. Donation size, invitee experience and cue design remain proposed boundaries requiring direct tests.",
 };

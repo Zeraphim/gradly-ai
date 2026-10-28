@@ -201,7 +201,7 @@ export const body: StudyBody = {
         prompt:
           "Why is age group a different kind of comparison from the music and congruency conditions?",
         evidence: [
-          "Each person completed music and flanker conditions; older and younger adults formed separate groups.",
+          "Participants completed auditory and flanker task blocks; the sample included younger and older adults.",
         ],
         scene: {
           version: 1,
@@ -389,15 +389,15 @@ export const body: StudyBody = {
           },
           {
             id: "c3-optB",
-            text: "Relaxing music necessarily improved attention because relaxing stimuli are pleasant.",
+            text: "The larger gap estimates a relaxing-music benefit in general speed averaged over trial types.",
           },
           {
             id: "c3-optC",
-            text: "Stimulating music and silence are proven exactly equivalent in the population.",
+            text: "Stimulating music and silence can be merged as an equivalent reference condition on this evidence.",
           },
           {
             id: "c3-optD",
-            text: "The result establishes that all background music harms every kind of cognition.",
+            text: "The larger gap shows a bigger music effect on errors than on response time in this task.",
           },
         ],
         accepted: ["c3-optA"],
@@ -405,11 +405,11 @@ export const body: StudyBody = {
         hint: "The gap compares incongruent with congruent trials; consider what a larger cost means.",
         misconceptions: {
           "c3-optB":
-            "Pleasantness does not override the observed larger interference cost.",
+            "The flanker gap is a difference between trial types; it is not the average processing-speed main effect.",
           "c3-optC":
-            "A nonsignificant contrast between them does not establish equivalence.",
+            "Similar observed contrasts do not by themselves establish equivalence of those conditions.",
           "c3-optD":
-            "The task, auditory examples and measured contrast define the scope.",
+            "The stated contrast concerns reaction time and does not compare error and timing effect sizes.",
         },
         explanation:
           "A larger incongruent–congruent gap indicates greater interference under this operational measure. Do not replace a nonsignificant stimulating-versus-silence contrast with exact equality.",
@@ -526,26 +526,26 @@ export const body: StudyBody = {
           description: "When accuracy is near the top of a scale",
           provenance: {
             kind: "source-summary",
-            refs: ["e21"],
+            refs: ["e21", "e3"],
             note: "Study information paraphrased from the cited source.",
           },
           responses: [
             {
               optionId: "c6-optA",
               label:
-                "Near-perfect accuracy proves that every response-time difference is meaningless.",
+                "A high base success rate makes errors especially sensitive to a small general-speed benefit.",
               targetIds: ["accuracy", "room", "measure"],
             },
             {
               optionId: "c6-optC",
               label:
-                "A ceiling makes every error-rate contrast automatically significant.",
+                "The timing analysis can be used as an estimate of how much accuracy would improve.",
               targetIds: ["accuracy", "room", "measure"],
             },
             {
               optionId: "c6-optD",
               label:
-                "A high success rate means error data were never collected in the experiment.",
+                "Replacing error rates with correct-response counts removes the upper limit on performance.",
               targetIds: ["accuracy", "room", "measure"],
             },
             {
@@ -574,7 +574,7 @@ export const body: StudyBody = {
               id: "room",
               label: "Limited room to improve",
               detail: "A near-top score leaves little upward range.",
-              at: "setup",
+              at: "resolution",
               provenance: {
                 kind: "authored",
                 refs: ["e21"],
@@ -584,13 +584,14 @@ export const body: StudyBody = {
             },
             {
               id: "measure",
-              label: "Read timing alongside accuracy",
-              detail: "Reaction time offers a different performance measure.",
+              label: "Response time recorded",
+              detail:
+                "Milliseconds on successful trials, alongside the error-rate measure.",
               at: "setup",
               provenance: {
-                kind: "authored",
-                refs: ["e21"],
-                note: "Authored reasoning guidance based on the source; not a measured causal mechanism.",
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Reported outcome measures, without interpreting their sensitivity.",
               },
               column: 0,
             },
@@ -600,28 +601,28 @@ export const body: StudyBody = {
               from: "accuracy",
               to: "room",
               label: "measurement constraint",
-              at: "setup",
+              at: "resolution",
             },
             {
               from: "room",
               to: "measure",
               label: "interpretation context",
-              at: "setup",
+              at: "resolution",
             },
           ],
         },
         options: [
           {
             id: "c6-optA",
-            text: "Near-perfect accuracy proves that every response-time difference is meaningless.",
+            text: "A high base success rate makes errors especially sensitive to a small general-speed benefit.",
           },
           {
             id: "c6-optC",
-            text: "A ceiling makes every error-rate contrast automatically significant.",
+            text: "The timing analysis can be used as an estimate of how much accuracy would improve.",
           },
           {
             id: "c6-optD",
-            text: "A high success rate means error data were never collected in the experiment.",
+            text: "Replacing error rates with correct-response counts removes the upper limit on performance.",
           },
           {
             id: "c6-optB",
@@ -633,15 +634,15 @@ export const body: StudyBody = {
         hint: "How much room remains to improve an already near-perfect score?",
         misconceptions: {
           "c6-optA":
-            "Accuracy and response time capture different aspects of performance.",
+            "A near-ceiling accuracy score can constrain visible accuracy improvements rather than amplify sensitivity to every speed benefit.",
           "c6-optC":
-            "A restricted outcome range can make differences harder, not guaranteed, to detect.",
+            "Timing and accuracy are separate measures; a timing contrast does not estimate an accuracy gain.",
           "c6-optD":
-            "The paper recorded and analysed errors; the concern is their limited range.",
+            "Counts of correct responses remain bounded by the number of trials; changing the label does not remove the ceiling.",
         },
         explanation:
           "A ceiling is a sensitivity limitation, not proof of exactly equal latent performance or a reason to discard all other outcomes.",
-        refs: ["e21"],
+        refs: ["e21", "e3"],
         writtenReasoning: false,
         reveal: "interpretation",
       },

@@ -374,7 +374,7 @@ export const body: StudyBody = {
         prompt:
           "Can a nonsignificant activism main effect coexist with an identification-by-activism interaction?",
         evidence: [
-          "The results report no significant activism main effect and an association among highly identified voters.",
+          "The model included activism, identification and their interaction as predictors of later well-being.",
         ],
         options: [
           {
@@ -383,7 +383,7 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "No; a significant interaction proves that every identification subgroup has the same benefit.",
+            text: "No; the interaction should be averaged into the main effect before either is interpreted.",
           },
           {
             id: "o3",
@@ -391,7 +391,7 @@ export const body: StudyBody = {
           },
           {
             id: "o4",
-            text: "Yes; that combination proves activism has no relationship at any identification level.",
+            text: "Yes; the significant conditional association can substitute for an estimated activism main effect.",
           },
         ],
         accepted: ["o3"],
@@ -399,8 +399,8 @@ export const body: StudyBody = {
         hint: "An overall model term and a slope at a particular moderator level need not give the same result.",
         misconceptions: {
           o1: "Interaction and main-effect tests ask different questions.",
-          o2: "An interaction indicates dependence on the other variable, not a uniform benefit.",
-          o4: "The conditional association is precisely what the interaction addresses.",
+          o2: "A main effect and a conditional effect answer different questions; averaging them is not their interpretation.",
+          o4: "A conditional association does not replace the distinct overall/main-effect estimate.",
         },
         explanation:
           "The model’s main and conditional effects should not be conflated. A detected interaction can coexist with a nonsignificant main effect.",
@@ -598,5 +598,5 @@ export const body: StudyBody = {
     bonus: null,
   },
   takeaway:
-    "Observed activism predicted better later well-being chiefly among highly identified Clinton voters, rather than as a uniform association. The longitudinal order supports prediction without establishing a treatment effect. Differential follow-up and the single-item sleep measure remain limitations; the paper does report limitations.",
+    "Observed activism predicted better later well-being chiefly among highly identified Clinton voters, rather than as a uniform association. The longitudinal order supports prediction without establishing a treatment effect. Differential follow-up and the single-item sleep measure remain limitations.",
 };

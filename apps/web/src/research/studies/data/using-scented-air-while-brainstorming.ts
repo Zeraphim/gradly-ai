@@ -191,75 +191,75 @@ export const body: StudyBody = {
         title: "Identify what differed",
         type: "single",
         prompt:
-          "Because both groups received the odorant, what contrast does the suggestion manipulation test?",
+          "With odor exposure shared, what extra comparison would isolate a chemical odor effect?",
         evidence: [
-          "The placebo message claimed creativity benefits; the comparison group received the procedure without that message.",
+          "The experiment combined an odor procedure with different messages before creativity tasks.",
         ],
         options: [
           {
             id: "o2",
-            text: "The chemical effect of adding odor because the comparison group received no odorant.",
+            text: "Compare stronger and weaker creativity suggestions while keeping odor exposure in both groups.",
           },
           {
             id: "o3",
-            text: "The effect of changing test order because each group received a different first task.",
+            text: "Compare the first and last creativity tasks within the same odor-exposed participants.",
           },
           {
             id: "o4",
-            text: "The effect of increasing payment because the placebo group received a larger incentive.",
+            text: "Compare high and low game scorers after they receive the same odor and suggestion procedure.",
           },
           {
             id: "o1",
-            text: "The added message under a common odor procedure, not odor versus no odor.",
+            text: "Compare odor with no odor under the same neutral instructions and otherwise matched conditions.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
-        hint: "Check whether odor exposure changed between groups or was common to both.",
+        hint: "Vary the proposed chemical cause while holding the message and other procedures constant.",
         misconceptions: {
-          o2: "The procedures included the odorant in both groups.",
-          o3: "Test order was not the manipulated group difference.",
-          o4: "Payment was not the stated manipulation.",
+          o2: "That tests suggestion strength under common odor exposure, not the effect of odor itself.",
+          o3: "Task order or habituation is not an odor-versus-no-odor contrast.",
+          o4: "Grouping by a measured outcome does not manipulate odor exposure.",
         },
         explanation:
-          "The comparison changes the suggestion, with odor exposure held common. It does not estimate a chemical odor effect.",
-        refs: ["e6", "e7"],
+          "The original comparison varied the suggestion under a shared odor procedure. A matched odor-versus-no-odor comparison with common instructions is needed to isolate a chemical odor contrast.",
+        refs: ["e6", "e7", "e3", "e21"],
         writtenReasoning: false,
         reveal: "design",
         scene: {
           version: 1,
           title: "What differs between the two groups?",
           instruction:
-            "Inspect the visual, then choose the interpretation supported by the study.",
+            "Make your call, then inspect the comparison alongside the explanation.",
           description: "What differs between the two groups?",
           provenance: {
             kind: "source-summary",
-            refs: ["e6", "e7"],
+            refs: ["e6", "e7", "e3", "e21"],
             note: "Study information paraphrased from the cited source.",
           },
           responses: [
             {
               optionId: "o2",
               label:
-                "The chemical effect of adding odor because the comparison group received no odorant.",
+                "Compare stronger and weaker creativity suggestions while keeping odor exposure in both groups.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "o3",
               label:
-                "The effect of changing test order because each group received a different first task.",
+                "Compare the first and last creativity tasks within the same odor-exposed participants.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "o4",
               label:
-                "The effect of increasing payment because the placebo group received a larger incentive.",
+                "Compare high and low game scorers after they receive the same odor and suggestion procedure.",
               targetIds: ["row0", "row1"],
             },
             {
               optionId: "o1",
               label:
-                "The added message under a common odor procedure, not odor versus no odor.",
+                "Compare odor with no odor under the same neutral instructions and otherwise matched conditions.",
               targetIds: ["row0", "row1"],
             },
           ],
@@ -280,7 +280,7 @@ export const body: StudyBody = {
               id: "row0",
               label: "Odour exposure",
               detail: "Reported features of each condition.",
-              at: "setup",
+              at: "resolution",
               provenance: {
                 kind: "source-summary",
                 refs: ["e6", "e7"],
@@ -292,13 +292,40 @@ export const body: StudyBody = {
               id: "row1",
               label: "Message",
               detail: "Reported features of each condition.",
-              at: "setup",
+              at: "resolution",
               provenance: {
                 kind: "source-summary",
                 refs: ["e6", "e7"],
                 note: "Study information paraphrased from the cited source.",
               },
               cells: ["Creativity suggestion", "No creativity suggestion"],
+            },
+            {
+              id: "tasks",
+              label: "Creativity tasks",
+              detail: "Common task procedure.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e3"],
+                note: "Reported procedure; no interpretation of the odor comparison.",
+              },
+              cells: ["CFG, AUT and TTCT", "CFG, AUT and TTCT"],
+            },
+            {
+              id: "order",
+              label: "Task order",
+              detail: "Common task procedure.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e21"],
+                note: "Reported procedure; no interpretation of the odor comparison.",
+              },
+              cells: [
+                "CFG first; AUT/TTCT counterbalanced",
+                "CFG first; AUT/TTCT counterbalanced",
+              ],
             },
           ],
         },
@@ -395,37 +422,37 @@ export const body: StudyBody = {
         title: "Compare the reported tests",
         type: "multiple",
         prompt:
-          "Select the tests whose reported originality contrasts meet the .05 threshold.",
+          "CFG and AUT originality contrasts meet .05 while TTCT does not. Which conclusions are justified? Select all.",
         evidence: [
-          "The paper reports originality contrasts of p = .036 for CFG and p = .048 for AUT; TTCT did not detect that contrast. No combined score was reported for this question.",
+          "The study compared originality outcomes from three distinct creativity tasks between the suggestion and comparison groups.",
         ],
         options: [
           {
             id: "o1",
-            text: "Creative Foraging Game (CFG)",
+            text: "Support concerns the reported task-specific contrasts, rather than creativity across settings.",
           },
           {
             id: "o2",
-            text: "Alternate Uses Test (AUT)",
+            text: "Comparing the sizes of CFG and TTCT effects requires a direct between-effect comparison.",
           },
           {
             id: "o3",
-            text: "Torrance Test of Creative Thinking (TTCT)",
+            text: "The TTCT result favours a smaller suggestion effect than CFG on the basis of their significance labels.",
           },
           {
             id: "o4",
-            text: "Combined fluency‑originality Z‑score",
+            text: "Averaging the three p-values estimates the share of participants whose originality improved.",
           },
         ],
         accepted: ["o1", "o2"],
         alternatives: [],
-        hint: "Check each test’s reported threshold result without inventing an unreported composite.",
+        hint: "Task-specific significance and differences between task effects are separate claims.",
         misconceptions: {
-          o3: "The text explicitly says the placebo effect was *not* significant in TTCT.",
-          o4: "The combined Z‑score was used for correlation, not for testing originality differences.",
+          o3: "Significant in one task and nonsignificant in another is not a direct test of the difference between effects.",
+          o4: "P-values do not measure the proportion of participants who improved.",
         },
         explanation:
-          "The CFG and AUT originality comparisons were below .05; the TTCT comparison was not. This does not establish that the difference between the tests’ effects is itself significant.",
+          "The reported CFG and AUT originality contrasts met .05, but that does not establish a universal creativity effect. A direct comparison is needed to establish that the size of an effect differs between tasks.",
         refs: ["r3", "r4"],
         writtenReasoning: false,
         reveal: "results",
@@ -439,20 +466,20 @@ export const body: StudyBody = {
         prompt:
           "Do low AUT–TTCT correlations establish why TTCT did not show the same originality result?",
         evidence: [
-          "The authors report low inter-test correlations and explicitly say the reason for the differing outcomes is unclear.",
+          "The discussion considers relationships among performance on the three creativity tasks.",
         ],
         options: [
           {
             id: "o1",
-            text: "Yes; a low correlation proves the TTCT is uniquely insensitive to inhibition reduction.",
+            text: "Yes; low correlation makes reduced inhibition the best-supported explanation of the TTCT difference.",
           },
           {
             id: "o3",
-            text: "Yes; TTCT is the only figural task, so the suggestion can only affect verbal creativity.",
+            text: "Yes; the task comparison separates a verbal benefit from a figural deficit under the suggestion.",
           },
           {
             id: "o4",
-            text: "No; low correlations prove that the groups never differed on any creativity outcome.",
+            text: "No; low inter-test correlation instead implies that the suggestion groups were poorly matched.",
           },
           {
             id: "o2",
@@ -463,9 +490,9 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "Low score correlations and differing test results do not uniquely establish a process account.",
         misconceptions: {
-          o1: "The paper does not establish that specific mechanism or sensitivity claim.",
-          o3: "CFG is also nonverbal; this proposed verbal-only explanation does not fit the tests.",
-          o4: "Relations among test scores do not erase the reported between-group contrasts.",
+          o1: "Low correlation does not isolate an inhibition mechanism, which was not directly tested.",
+          o3: "The battery includes distinct tasks and does not isolate a simple verbal-versus-figural mechanism.",
+          o4: "A correlation between task scores is not a test of comparability between the assigned groups.",
         },
         explanation:
           "The paper explicitly says the reason for the task difference is unclear. Different measured facets are a possibility, while a TTCT-specific inhibition mechanism was not isolated.",
@@ -491,24 +518,24 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Yes; every participant’s unobserved baseline equals the comparison-group mean exactly.",
+            text: "Yes; the comparison-group mean is an adequate substitute for each person’s pretreatment score.",
           },
           {
             id: "o3",
-            text: "No; between-group allocation makes random assignment mathematically impossible.",
+            text: "No; estimating individual change mainly requires reversing the task order within the same single session.",
           },
           {
             id: "o4",
-            text: "Yes; always administering CFG first eliminates learning and order effects from every test.",
+            text: "Yes; the fixed first task supplies the same creativity baseline for the other two tasks.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which observations would be needed to estimate each individual’s own change?",
         misconceptions: {
-          o2: "A group mean cannot supply each person’s missing individual baseline.",
-          o3: "Between-group experiments can assign conditions randomly.",
-          o4: "A fixed order leaves order-related transfer as a possible limitation.",
+          o2: "A between-group mean cannot reconstruct an individual’s unobserved baseline.",
+          o3: "Counterbalancing order does not supply a separate pretreatment score for each participant.",
+          o4: "Different tasks do not provide interchangeable pretreatment baselines.",
         },
         explanation:
           "The authors avoided repeated CFG testing because of learning or habituation concerns. That choice prevents direct within-person comparison and leaves fixed-order limitations.",

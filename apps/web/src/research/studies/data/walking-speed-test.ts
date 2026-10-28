@@ -124,19 +124,19 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "It makes experimenter expectations impossible in every part of the study.",
+            text: "It reduces expectation effects by controlling how the sentence task is assigned.",
           },
           {
             id: "o3",
-            text: "It changes the treatment from sentence content to a randomized age of participants.",
+            text: "It provides a within-person estimate by comparing each person’s prime and no-prime outcomes.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "A timing device records an outcome; ask what was assigned to create the prime comparison.",
         misconceptions: {
-          o2: "Automating timing does not remove all possible experimenter–participant interactions.",
-          o3: "Timing is measurement; the prime contrast concerns the sentence task.",
+          o2: "Infrared timing concerns outcome measurement, not assignment of sentence content.",
+          o3: "An automated outcome measure does not give each participant both treatment conditions.",
         },
         explanation:
           "The independent contrast is sentence priming; the infrared device is an outcome-measurement safeguard, not the treatment.",
@@ -158,7 +158,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "To ensure participants deliberately selected their own experimental prime condition.",
+            text: "To compare stopwatch accuracy while keeping experimenters unaware of a predicted direction.",
           },
           {
             id: "o1",
@@ -166,15 +166,15 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "To prove that any observed walking effect must be an unconscious mimicry mechanism.",
+            text: "To estimate the average sentence-prime effect after pooling over experimenter expectations.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Identify whose expectations were changed and which contrast that manipulation makes possible.",
         misconceptions: {
-          o2: "The manipulation concerns experimenters’ expectations, not participant self-assignment.",
-          o3: "Expectation dependence does not uniquely identify how cues reached participants.",
+          o2: "Experimenters were given directional expectations; that manipulation was not simply a blinded stopwatch check.",
+          o3: "The separate expectation conditions test dependency on expectations; pooling can obscure that dependency.",
         },
         explanation:
           "This probes an experimenter-related boundary on the prime contrast. The precise interpersonal mechanism still needs evidence.",
@@ -196,7 +196,7 @@ export const body: StudyBody = {
             {
               optionId: "o2",
               label:
-                "To ensure participants deliberately selected their own experimental prime condition.",
+                "To compare stopwatch accuracy while keeping experimenters unaware of a predicted direction.",
               targetIds: ["row0", "row1"],
             },
             {
@@ -208,7 +208,7 @@ export const body: StudyBody = {
             {
               optionId: "o3",
               label:
-                "To prove that any observed walking effect must be an unconscious mimicry mechanism.",
+                "To estimate the average sentence-prime effect after pooling over experimenter expectations.",
               targetIds: ["row0", "row1"],
             },
           ],
@@ -261,18 +261,18 @@ export const body: StudyBody = {
         title: "Read time and uncertainty",
         type: "single",
         prompt:
-          "Experiment 1 reports mean walking times 6.270 and 6.390 seconds, with F < 1. Which reading is justified?",
+          "Experiment 1 reports Prime = 6.270 seconds and No-Prime = 6.390 seconds, with F < 1. Which reading is justified?",
         evidence: [
-          "The Prime and No-Prime comparison was not statistically significant. These values measure time, not speed units.",
+          "The outcome is the time taken to traverse the hallway, measured with infrared timing.",
         ],
         options: [
           {
             id: "o2",
-            text: "The prime reliably slowed walking because its displayed walking time is larger.",
+            text: "The Prime group walked more slowly because its reported time was higher than the No-Prime group.",
           },
           {
             id: "o3",
-            text: "The groups are proven identical because a nonsignificant F test is an equivalence test.",
+            text: "The nonsignificant difference supports treating the groups as equivalent for practical purposes.",
           },
           {
             id: "o1",
@@ -283,8 +283,8 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "A smaller time means faster travel; a nonsignificant comparison is not proof of equivalence.",
         misconceptions: {
-          o2: "Its point mean is actually lower, and the contrast was not significant.",
-          o3: "Nonsignificance alone does not establish equivalence.",
+          o2: "The displayed Prime mean is lower, not higher; less time over the same distance corresponds to faster travel.",
+          o3: "A nonsignificant difference test without a stated equivalence range does not establish practical equivalence.",
         },
         explanation:
           "The reported F(1,119) < 1 and small η² do not establish a clear difference. A lower walking time would mean faster, not slower, travel; the point contrast is not an equivalence result.",
@@ -310,19 +310,19 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "A claim that every participant’s behaviour was necessarily driven by conscious deception.",
+            text: "A claim that manual timing error alone accounts for the expectation-dependent result.",
           },
           {
             id: "o3",
-            text: "A claim that precise timing can ever be useful in a behavioural experiment.",
+            text: "A claim that experimenter expectations have the same consequence in prime and no-prime conditions.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Would a result conditional on testing context justify a claim that context never matters?",
         misconceptions: {
-          o2: "The result does not establish conscious motives in each participant.",
-          o3: "Timing safeguards remain useful even when the effect depends on context.",
+          o2: "The finding limits a context-independent prime interpretation, while it does not isolate manual timing error as the sole explanation.",
+          o3: "An overall consequence of expectations is different from the question of whether a prime effect is independent of testing context.",
         },
         explanation:
           "The conditional pattern limits a context-independent priming interpretation. It does not resolve the mechanism or every expectancy condition.",
@@ -344,7 +344,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Declare all behavioural priming false from one outcome and one attempted replication.",
+            text: "Treat the larger replication as a replacement for the original and conclude the effect has reversed.",
           },
           {
             id: "o1",
@@ -352,15 +352,15 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Discard the null and report only the original positive result as established fact.",
+            text: "Average the two reports’ p-values and use the result to decide whether priming is reliable.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Keep this protocol’s evidence separate from a universal claim about all priming effects.",
         misconceptions: {
-          o2: "One study cannot disprove every effect in a broader research class.",
-          o3: "Ignoring contrary evidence prevents a fair assessment of robustness.",
+          o2: "The reported null does not establish a reversal; comparing results and testing procedural boundaries is more defensible.",
+          o3: "Averaging p-values is not a robustness analysis or an effect-size synthesis.",
         },
         explanation:
           "The null is evidence about replicability under these procedures. It neither settles every priming claim nor justifies suppressing the failed replication.",
@@ -382,7 +382,7 @@ export const body: StudyBody = {
             {
               optionId: "o2",
               label:
-                "Declare all behavioural priming false from one outcome and one attempted replication.",
+                "Treat the larger replication as a replacement for the original and conclude the effect has reversed.",
               targetIds: ["earlier", "replication", "inference"],
             },
             {
@@ -394,7 +394,7 @@ export const body: StudyBody = {
             {
               optionId: "o3",
               label:
-                "Discard the null and report only the original positive result as established fact.",
+                "Average the two reports’ p-values and use the result to decide whether priming is reliable.",
               targetIds: ["earlier", "replication", "inference"],
             },
           ],
@@ -467,11 +467,11 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Yes; once a result depends on expectations, no other interpersonal pathway is possible.",
+            text: "Yes; the direction-specific result separates mimicry from other forms of expectancy communication.",
           },
           {
             id: "o3",
-            text: "Yes; forced-choice awareness checks prove every participant had no awareness of the primes.",
+            text: "Yes; the awareness check distinguishes an unconscious effect from any demand-related explanation.",
           },
           {
             id: "o1",
@@ -482,8 +482,8 @@ export const body: StudyBody = {
         alternatives: [],
         hint: "Dependence on expectations does not uniquely identify how they reached participants.",
         misconceptions: {
-          o2: "Dependence on expectations does not uniquely identify the mediating process.",
-          o3: "The debriefing raised awareness concerns rather than eliminating them.",
+          o2: "Expectation dependency can motivate mimicry as a hypothesis without distinguishing it from alternative pathways.",
+          o3: "An awareness measure does not by itself isolate the mechanism behind the conditional outcome.",
         },
         explanation:
           "The paper discusses possible expectancy communication and awareness. A mechanism claim requires more than observing a condition-dependent outcome.",

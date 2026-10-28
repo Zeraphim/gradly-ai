@@ -224,7 +224,7 @@ export const body: StudyBody = {
         prompt:
           "Were high and low spatial ability experimentally created by the explanation assignment?",
         evidence: [
-          "A spatial test supplied a median split; high and low scorers were distributed across visual and verbal explanation conditions.",
+          "Participants took a spatial test and then produced a visual or verbal explanation of a bicycle pump.",
         ],
         options: [
           {
@@ -233,14 +233,20 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Yes; receiving a visual explanation randomly assigned participants to high spatial ability.",
+            text: "Yes; balancing the spatial groups across formats makes spatial ability an assigned factor.",
+          },
+          {
+            id: "c1-review3",
+            text: "No; both spatial ability and explanation format were measured without assigning either one.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Track which classification came from an existing test score and which condition was assigned.",
         misconceptions: {
-          o2: "The spatial classification came from the earlier MRT score, not the explanation treatment.",
+          o2: "Balancing measured ability across assigned formats does not manipulate the ability itself.",
+          "c1-review3":
+            "The spatial factor was measured, but explanation format was an assigned condition.",
         },
         explanation:
           "The design combines a measured moderator with an assigned explanation condition. A format contrast should not be described as a randomized effect of spatial ability.",
@@ -257,23 +263,29 @@ export const body: StudyBody = {
         prompt:
           "Which outcome directly measures understanding in the bicycle-pump experiment?",
         evidence: [
-          "After generating an explanation, participants answered 16 true/false items about pump structure and function.",
+          "Researchers recorded post-explanation test performance and coded the content of participants’ explanations.",
         ],
         options: [
           {
             id: "o4",
-            text: "The number of drawn parts alone, treated as identical to correct answers on the test.",
+            text: "The completeness of the drawing, used as a substitute for the separate understanding test.",
           },
           {
             id: "o3",
             text: "The pump post-test score, rather than the number of parts in the explanation.",
+          },
+          {
+            id: "c2-review3",
+            text: "The difference between a pump pretest and posttest taken before and after explanation.",
           },
         ],
         accepted: ["o3"],
         alternatives: [],
         hint: "Distinguish coded explanation content from answers on the pump understanding test.",
         misconceptions: {
-          o4: "Explanation content and tested understanding are different measures.",
+          o4: "Explanation content and performance on the understanding test are different measured outcomes.",
+          "c2-review3":
+            "The pump experiment did not include that prior-knowledge pretest; do not import the chemical-bonding experiment’s measurements.",
         },
         explanation:
           "The pump experiment assessed understanding with its 16-item post-test. It did not establish a pump pre-to-post gain; the separate chemical-bonding experiment used different measurements.",
@@ -299,14 +311,20 @@ export const body: StudyBody = {
           },
           {
             id: "o6",
-            text: "Visual format must benefit high and low spatial groups by exactly the same amount.",
+            text: "The main format effect is the best description because the ability groups have different baseline scores.",
+          },
+          {
+            id: "c3-review3",
+            text: "The interaction estimates the learning gain caused by experimentally raising spatial ability.",
           },
         ],
         accepted: ["o5"],
         alternatives: [],
         hint: "Ask whether the reported format advantage is constant across the measured ability groups.",
         misconceptions: {
-          o6: "That constant-effect interpretation does not describe the reported interaction.",
+          o6: "Baseline group differences do not remove the reported format-by-ability interaction.",
+          "c3-review3":
+            "Ability was measured, not manipulated; the interaction concerns the conditional format contrast.",
         },
         explanation:
           "The reported pattern is a conditional format advantage. It does not mean spatial ability was manipulated or that every learner benefits identically.",
@@ -328,18 +346,24 @@ export const body: StudyBody = {
         options: [
           {
             id: "o8",
-            text: "About 1.78 more correct post-test answers because parts and learning scores are interchangeable.",
+            text: "About 1.78 more correct post-test answers, using the content contrast as the learning-score contrast.",
           },
           {
             id: "o7",
             text: "About 1.78 more coded components, not 1.78 more correct post-test answers.",
+          },
+          {
+            id: "c4-review3",
+            text: "About 1.78 standard deviations, using the unstandardized component gap as an effect size.",
           },
         ],
         accepted: ["o7"],
         alternatives: [],
         hint: "Subtract the coded component counts without relabelling them as test-score units.",
         misconceptions: {
-          o8: "Those are different operational measures; the arithmetic cannot relabel the outcome.",
+          o8: "The plotted unit is coded components, not correct answers on the post-test.",
+          "c4-review3":
+            "Subtracting these means produces a difference in component counts, not a standardized effect.",
         },
         explanation:
           "The difference is 6.05 minus 4.27 = 1.78 components. It does not by itself identify how much the content difference causes learning.",
@@ -361,7 +385,7 @@ export const body: StudyBody = {
             {
               optionId: "o8",
               label:
-                "About 1.78 more correct post-test answers because parts and learning scores are interchangeable.",
+                "About 1.78 more correct post-test answers, using the content contrast as the learning-score contrast.",
               targetIds: ["visual", "verbal"],
             },
             {
@@ -369,6 +393,12 @@ export const body: StudyBody = {
               label:
                 "About 1.78 more coded components, not 1.78 more correct post-test answers.",
               targetIds: ["visual", "verbal"],
+            },
+            {
+              optionId: "c4-review3",
+              targetIds: ["visual", "verbal"],
+              label:
+                "About 1.78 standard deviations, using the unstandardized component gap as an effect size.",
             },
           ],
           resolution: null,
@@ -428,14 +458,20 @@ export const body: StudyBody = {
           },
           {
             id: "o10",
-            text: "Yes; any correlation between explanation content and post-test scores proves mediation.",
+            text: "Yes; explanation completeness and post-test performance form a causal chain in the proposed account.",
+          },
+          {
+            id: "c5-review3",
+            text: "No; the format advantage should instead be attributed to spatial ability alone.",
           },
         ],
         accepted: ["o9"],
         alternatives: [],
         hint: "A relation between content and learning does not by itself identify a unique mediator.",
         misconceptions: {
-          o10: "Correlated content and outcomes can reflect multiple processes and do not isolate a unique mediator.",
+          o10: "A proposed chain and associations in its measures do not isolate the mediating contribution of completeness.",
+          "c5-review3":
+            "Measured ability qualifies the format effect but does not by itself explain or eliminate the format contrast.",
         },
         explanation:
           "The authors offer a theoretical explanation. The format comparison and content coding do not uniquely establish one mediating process.",
@@ -463,8 +499,14 @@ export const body: StudyBody = {
             {
               optionId: "o10",
               label:
-                "Yes; any correlation between explanation content and post-test scores proves mediation.",
+                "Yes; explanation completeness and post-test performance form a causal chain in the proposed account.",
               targetIds: ["parts", "check", "inference"],
+            },
+            {
+              optionId: "c5-review3",
+              targetIds: ["parts", "check", "inference"],
+              label:
+                "No; the format advantage should instead be attributed to spatial ability alone.",
             },
           ],
           resolution: null,
@@ -529,28 +571,34 @@ export const body: StudyBody = {
         title: "What the design leaves open",
         type: "single",
         prompt:
-          "High-spatial groups performed similarly across explanation formats. What remains uncertain?",
+          "Which comparison would most directly check whether prior pump experience masks a format advantage among high-spatial participants?",
         evidence: [
-          "The authors note no detailed explanation instructions and no prior-knowledge pretest in the pump experiment.",
+          "The authors discuss prior hands-on pump experience as one explanation of the small high-spatial format contrast.",
         ],
         options: [
           {
             id: "o12",
-            text: "That low-spatial learners could not benefit from visual explanation under these conditions.",
+            text: "Compare format effects within age bands while leaving pump experience unmeasured.",
           },
           {
             id: "o11",
-            text: "Why the high-spatial contrast was small, including prior knowledge and task experience.",
+            text: "Compare format effects within experience levels measured before the explanation task.",
+          },
+          {
+            id: "c6-review3",
+            text: "Compare coded explanation completeness and post-test scores without recording prior pump use.",
           },
         ],
         accepted: ["o11"],
         alternatives: [],
-        hint: "Check what was known about participants before assigning the explanation formats.",
+        hint: "Measure the proposed prior-experience difference before comparing the format outcomes.",
         misconceptions: {
-          o12: "The reported interaction instead describes a selective low-spatial benefit.",
+          o12: "Age is not a direct measure of the proposed pump-experience difference.",
+          "c6-review3":
+            "Those post-task measures do not test the proposed role of prior pump experience.",
         },
         explanation:
-          "The paper suggests that prior hands-on pump experience may already have been sufficient for high-spatial participants, but the experiment does not resolve that explanation.",
+          "Measuring prior pump experience before the explanation task would let a follow-up compare format effects at different experience levels. The original pump experiment did not resolve that proposed explanation or measure a prior-knowledge pretest.",
         refs: ["r2"],
         writtenReasoning: false,
         reveal: "interpretation",

@@ -428,7 +428,7 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Yes; selecting extreme scores eliminates uncertainty about all other learners.",
+            text: "Treat the extreme-score contrast as enough to apply the same conclusion to moderate scorers.",
           },
         ],
         accepted: ["o2"],
@@ -436,7 +436,7 @@ export const body: StudyBody = {
         hint: "List the training duration, population and outcomes that this experiment actually tested.",
         misconceptions: {
           o1: "A limited protocol cannot establish a universal absence of effects.",
-          o3: "Extreme-score selection narrows the sampled comparison; it does not make it universal.",
+          o3: "Extreme-score selection does not establish the response of people with intermediate mindset scores.",
         },
         explanation:
           "The study found no detected mindset-related advantage under this short protocol. It did not test every training duration or population.",
@@ -453,7 +453,7 @@ export const body: StudyBody = {
         prompt:
           "Which follow-up would best test the proposed explanation that one hour did not seem credible to participants?",
         evidence: [
-          "The recruitment poster advertised improvement, but the authors did not examine participants’ actual expectations for that hour.",
+          "The recruitment message and one-hour training duration were common to both selected mindset groups.",
         ],
         options: [
           {

@@ -157,7 +157,7 @@ export const body: StudyBody = {
           },
           {
             id: "o4",
-            text: "A large sample guarantees that every parent had an equal chance of recruitment.",
+            text: "A large sample mainly strengthens the condition comparison by making the recruitment probability known.",
           },
         ],
         accepted: ["o1"],
@@ -166,7 +166,7 @@ export const body: StudyBody = {
         misconceptions: {
           o2: "Random assignment to conditions and random sampling from a population are different processes.",
           o3: "A nonrepresentative sample can still support a valid within-sample randomized contrast.",
-          o4: "A large convenience sample still lacks known equal recruitment probabilities.",
+          o4: "Sample size does not supply the unknown recruitment probabilities of a convenience sample.",
         },
         explanation:
           "The experiment can test assigned framing among the sampled parents. Generalization beyond that sample needs separate evidence.",
@@ -206,7 +206,7 @@ export const body: StudyBody = {
             {
               optionId: "o4",
               label:
-                "A large sample guarantees that every parent had an equal chance of recruitment.",
+                "A large sample mainly strengthens the condition comparison by making the recruitment probability known.",
               targetIds: ["row0", "row1"],
             },
           ],
@@ -403,7 +403,7 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Re-randomizing messages without changing recruitment guarantees population representation.",
+            text: "Re-randomizing messages within the same recruitment panel.",
           },
           {
             id: "o4",
@@ -415,7 +415,7 @@ export const body: StudyBody = {
         hint: "Which proposal changes who is recruited rather than only precision or condition allocation?",
         misconceptions: {
           o2: "More observations from the same recruitment process do not guarantee broader coverage.",
-          o3: "Condition assignment does not determine who was sampled.",
+          o3: "Re-randomization improves a new internal comparison, not coverage of parents absent from the panel.",
           o4: "Precision and significance are different from external validity.",
         },
         explanation:

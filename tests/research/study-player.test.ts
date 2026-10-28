@@ -184,6 +184,7 @@ function escape(text: string) {
 
 it("starts revised questions afresh without erasing old or unrelated saved work", async () => {
   const old = {
+    revision: 2,
     phase: "reveal",
     index: 4,
     bonus: false,
@@ -214,7 +215,7 @@ it("starts revised questions afresh without erasing old or unrelated saved work"
   expect(screen.queryByRole("status")).toBeNull();
   expect(screen.getByLabelText("0 practice points in this study")).toBeTruthy();
   const next = JSON.parse(localStorage.getItem("gradly-study-progress:v1")!);
-  expect(next["memory-training"].revision).toBe(2);
+  expect(next["memory-training"].revision).toBe(3);
   expect(next["memory-training"].attempts).toEqual({});
   expect(next["sleep-school"]).toEqual(old);
   unmount();
@@ -262,7 +263,7 @@ it("reflects another tab clearing browser progress", () => {
       "gradly-study-progress:v1",
       JSON.stringify({
         "memory-training": {
-          revision: 2,
+          revision: 3,
           phase: "challenge",
           index: 0,
           bonus: false,

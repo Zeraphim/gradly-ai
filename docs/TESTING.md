@@ -9,7 +9,7 @@ npm run test:e2e
 npm run build:vercel
 ```
 
-`check` runs TypeScript, Node/interface tests, Vitest research tests and production builds. Playwright starts both services with local SQLite, explicit sample flags and an empty model key. Chromium is required. Stop an existing development server before running the browser suite.
+`check` runs TypeScript, Node service and state tests, Vitest research tests and production builds. Playwright starts both services with local SQLite, explicit sample flags and an empty model key. Chromium is required. Stop an existing development server before running the browser suite.
 
 ## Retained coverage
 
@@ -75,9 +75,7 @@ explains that a fresh attempt is needed; the old save remains stored until Begin
 and other studies are preserved. Uploaded sessions retain their server-owned version
 and are unaffected. `study-player.test.ts` covers revision restore, explicit restart,
 unrelated saves and damaged cached attempts. `study-revisions.spec.ts` exercises
-that restart at 375×812, 1024×600 and 1366×768. Desktop intro compaction is
-covered separately by the UI branch’s `learn-flow.spec.ts`; this saved-answer
-regression also runs on the content branch alone. The final 21-study batch uses revision 2.
+that restart at 375×812, 1024×600 and 1366×768. The saved-answer regression covers both legacy saves without a revision and the previous revision 2. The final 21-study batch uses revision 3.
 
 `tests/browser/prepared-rewrites.spec.ts` walks all 26 revised studies at 375×812 and
 1366×768 through the paper reveal, including optional bonuses and multiple-answer

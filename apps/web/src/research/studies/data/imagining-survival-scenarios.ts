@@ -85,38 +85,38 @@ export const body: StudyBody = {
         title: "Identify both factors",
         type: "single",
         prompt:
-          "Which pair describes the factors varied within participants during encoding?",
+          "Which analysis matches the assignment of encoding tasks and colours in this experiment?",
         evidence: [
-          "Each participant saw objects across alternating survival and moving blocks, with plausible and implausible colours intermixed.",
+          "People alternated survival and moving task blocks; objects of both colour-plausibility levels were mixed through the blocks.",
         ],
         options: [
           {
             id: "c1b",
-            text: "Encoding scenario and participant gender, both assigned anew on each object trial.",
+            text: "Model encoding scenario within participants but colour plausibility between independent groups.",
           },
           {
             id: "c1c",
-            text: "Relevance ratings and response times, both fixed by the researcher before each trial.",
+            text: "Model the scenario–colour combinations as independent participant groups.",
           },
           {
             id: "c1a",
-            text: "Encoding scenario (survival/moving) and colour plausibility (high/low).",
+            text: "Model encoding scenario and colour plausibility as repeated factors within participants.",
           },
           {
             id: "c1d",
-            text: "Colour memory and source memory, both assigned before the objects were studied.",
+            text: "Model relevance ratings as assigned groups and colour memory as the encoding manipulation.",
           },
         ],
         accepted: ["c1a"],
         alternatives: [],
         hint: "Separate the encoding conditions set by the researcher from the responses measured afterward.",
         misconceptions: {
-          c1b: "Gender was not an object-level experimental factor.",
-          c1c: "Ratings and response times were recorded responses, not the manipulated factor pair.",
-          c1d: "These are measured memory outcomes rather than the encoding manipulations.",
+          c1b: "Participants encountered both plausibility levels as well as both encoding tasks.",
+          c1c: "Condition observations repeat within the same participants rather than come from four independent participant groups.",
+          c1d: "Ratings and memory responses are measured outcomes, not the two encoding assignments.",
         },
         explanation:
-          "Both encoding condition and colour plausibility varied within participants. The original single-answer question incorrectly treated the presence of the second manipulation as a distractor.",
+          "The encoding task and colour-plausibility factors both repeat within participants. An analysis should preserve that repeated structure rather than treat the condition observations as independent groups.",
         refs: ["r1", "r2"],
         writtenReasoning: false,
         reveal: "design",
@@ -135,7 +135,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c2a",
-            text: "Successful performance on all three measures because recognising the object is sufficient.",
+            text: "Success on all three measures, since identifying the object supplies its context.",
           },
           {
             id: "c2b",
@@ -296,7 +296,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c4b",
-            text: "Whether the two main effects must each be significant whenever an interaction occurs.",
+            text: "Whether both main effects reach significance when the interaction does.",
           },
           {
             id: "c4a",
@@ -339,11 +339,11 @@ export const body: StudyBody = {
         options: [
           {
             id: "c5a",
-            text: "Yes; any positive memory result automatically extends to unmeasured contextual details.",
+            text: "Use the colour interaction as the best estimate of a common improvement in contextual memory.",
           },
           {
             id: "c5c",
-            text: "Yes; a null source result proves that source memory was already perfect.",
+            text: "Use the null source result to treat source memory as practically equivalent across encoding tasks.",
           },
           {
             id: "c5b",
@@ -351,16 +351,16 @@ export const body: StudyBody = {
           },
           {
             id: "c5d",
-            text: "No; the source result proves that survival encoding harms all source memory.",
+            text: "Use the source null to infer a colour-specific mechanism rather than test competing accounts.",
           },
         ],
         accepted: ["c5b"],
         alternatives: [],
         hint: "Compare the outcomes that showed a pattern with those that did not; avoid extending beyond both.",
         misconceptions: {
-          c5a: "The result is specific to tested measures and conditions.",
-          c5c: "A null contrast does not establish perfect performance or a ceiling effect.",
-          c5d: "Failure to detect an advantage is not proof of a harmful effect.",
+          c5a: "A colour interaction does not estimate a shared benefit across differently measured context outcomes.",
+          c5c: "A nonsignificant source test without equivalence evidence does not establish practical equality.",
+          c5d: "The differing outcome pattern does not isolate a unique mechanism for the colour finding.",
         },
         explanation:
           "The results limit a blanket claim of context improvement. They do not establish that survival relevance is the sole causal mechanism or that every source effect is zero.",

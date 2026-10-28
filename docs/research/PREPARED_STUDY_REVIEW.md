@@ -190,47 +190,47 @@ because a paraphrase can be right or wrong and only a reader can tell which.
 | natural-light-at-work                 | generated | Rewritten and checked against the PDF                             | 2 → 0 of 5 | 10 of 10          | —                                                         |
 | dog-ownership-among-seniors           | generated | Rewritten and checked against the PDF                             | 1 → 1 of 6 | 12 of 12          | —                                                         |
 | hand-washing-in-restrooms             | generated | Rewritten and checked against the PDF                             | 0 → 0 of 6 | 13 of 13          | —                                                         |
-| memory-training                       | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| memory-training                       | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | stress-affirmation                    | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 7 | n/a               | —                                                         |
-| recalling-personal-details            | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| television-viewing-habits             | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| teen-social-media-use                 | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| kids-eating-when-not-hungry           | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| recalling-personal-details            | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| television-viewing-habits             | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| teen-social-media-use                 | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| kids-eating-when-not-hungry           | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | clicking-phishing-links               | generated | Rewritten and checked against the PDF                             | 2 → 0 of 5 | 11 of 11          | —                                                         |
-| music-and-mood-perception             | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| music-and-mood-perception             | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | food-warning-labels                   | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 13 of 13          | —                                                         |
-| imagining-survival-scenarios          | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| stroop-task-performance               | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| imagining-survival-scenarios          | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| stroop-task-performance               | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | morning-people-and-life-satisfaction  | generated | Rewritten and checked against the PDF                             | 3 → 0 of 6 | 13 of 13          | —                                                         |
 | daily-gratitude-and-well-being        | generated | Rewritten and checked against the PDF                             | 4 → 1 of 6 | 13 of 13          | —                                                         |
 | bus-ridership-behavior                | generated | Rewritten and checked against the PDF                             | 1 → 0 of 6 | 12 of 12          | —                                                         |
-| anticipating-a-shock                  | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| parents-viewing-vaccine-safety-info   | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| reading-words-aloud                   | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| holding-a-warm-drink                  | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| anticipating-a-shock                  | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| parents-viewing-vaccine-safety-info   | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| reading-words-aloud                   | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| holding-a-warm-drink                  | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | managing-personal-debt                | generated | Rewritten and checked against the PDF                             | 2 → 0 of 5 | 10 of 10          | —                                                         |
-| clinton-voter-activism                | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| clinton-voter-activism                | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | selecting-a-beverage                  | generated | Rewritten 26 Oct (earlier pass); excerpts checked against the PDF | 4 → 1 of 6 | 9 of 9            | —                                                         |
 | body-posture-judgments                | generated | Rewritten and checked against the PDF                             | 1 → 0 of 6 | 11 of 13          | —                                                         |
 | science-video-trust                   | generated | Rewritten and checked against the PDF                             | 2 → 1 of 6 | 14 of 14          | —                                                         |
-| phone-use-while-driving               | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| phone-use-while-driving               | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | tracing-shapes-while-brainstorming    | generated | Rewritten and checked against the PDF                             | 4 → 0 of 6 | 15 of 15          | —                                                         |
 | daily-conversation-hearing            | generated | Rewritten and checked against the PDF                             | 3 → 0 of 6 | 12 of 12          | —                                                         |
 | building-daily-habits                 | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 14 of 14          | —                                                         |
 | judging-statement-truthfulness        | generated | Rewritten and checked against the PDF                             | 3 → 1 of 6 | 16 of 16          | —                                                         |
 | remembering-doctor-appointments       | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 12 of 12          | —                                                         |
-| music-and-attention                   | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| sharing-money-in-public               | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| music-and-attention                   | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| sharing-money-in-public               | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | social-media-and-sleep                | generated | Rewritten and checked against the PDF                             | 3 → 1 of 6 | 13 of 13          | —                                                         |
 | being-a-later-born                    | generated | Rewritten and checked against the PDF                             | 4 → 0 of 6 | 14 of 14          | —                                                         |
-| online-charity-giving                 | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| vaccine-misinformation-correction     | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| online-charity-giving                 | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| vaccine-misinformation-correction     | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | cursing-while-in-pain                 | generated | Rewritten and checked against the PDF                             | 1 → 0 of 6 | 12 of 12          | —                                                         |
-| walking-speed-test                    | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
-| using-scented-air-while-brainstorming | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| walking-speed-test                    | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| using-scented-air-while-brainstorming | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | puzzle-solving-after-motivation       | generated | Rewritten and checked against the PDF                             | 2 → 0 of 6 | 12 of 12          | —                                                         |
 | reasoning-and-belief-study            | generated | Rewritten and checked against the PDF                             | 3 → 1 of 6 | 13 of 13          | —                                                         |
-| understanding-how-pumps-work          | generated | Rewritten and source-checked (28 Oct agent pass)                  | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
+| understanding-how-pumps-work          | generated | Rewritten and source-checked                                      | not rerun  | not rerun         | See 28 Oct register below; content-owner approval pending |
 | breakfast-grades                      | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 6 | n/a               | —                                                         |
 | sleep-school                          | featured  | Hand-authored proof set; no independent content review            | 0 → 0 of 6 | n/a               | —                                                         |
 | basketball-maths                      | featured  | Hand-authored proof set; no independent content review            | 1 → 1 of 6 | n/a               | —                                                         |
@@ -272,22 +272,30 @@ within each study, and scene response labels/order follow it. Existing numerical
 scenes and source links are retained; survival’s scene now identifies its
 supplementary analysis and the activism timeline places identification before
 the election. Scoring rules, excerpt timing and provider configuration are unchanged.
-The follow-up integration audit gives these 21 cards question revision 2: old
+The follow-up integration audit gives these 21 cards question revision 3: old
 browser attempts cannot answer the revised questions. The intro explains the
 restart, old saves remain until Begin, and other studies and uploaded sessions
 are preserved. Current-revision drafts and answers still restore on refresh.
 Added excerpts are verbatim on their cited PDF pages. Saved definitions that no
 longer match the revised question wording or its permitted citations are removed;
-surviving definitions retain their original provenance. Five otherwise-empty
-studies receive a neutral, source-derived operational definition for the new
-wording. General glossary fallback remains available; no term generation was run.
+surviving definitions retain their original provenance. Five otherwise-empty studies initially received source-derived definitions; the follow-up review removes a further eight unsafe or no-longer-applicable entries, leaving 23 saved definitions in this batch. General glossary fallback remains available; no term generation was run.
 
 The 119 single-answer questions in this batch have correct positions of
 36 / 37 / 29 / 17 across slots 1–4 (some questions have fewer options).
-Counting ties as wins, always choosing a shortest option succeeds on 52/119
-(43.7%) and a longest option on 38/119 (31.9%). The three multiple-answer questions
+Counting ties as wins, always choosing a shortest option succeeds on 47/119
+(39.5%) and a longest option on 25/119 (21.0%). The three multiple-answer questions
 are excluded. These are cue checks, not factual-accuracy or learning scores;
 regressions protect this batch separately so earlier work cannot mask a new cue.
+
+The follow-up review addresses incorrect recall-interaction and anxiety-induction
+scope, charity pairwise equivalence, the ambiguous television distractor and walking
+condition labels. All 13 two-choice questions now have at least three plausible
+choices; alternatives across the batch were reviewed for grammatical and absolute-word
+cues. Six known leaking definitions are blocked from regeneration, including the
+warm-drink baseline clue. Derived matrix/ceiling interpretations wait for resolution.
+Stroop c4 now asks about predicted direction and outlier sensitivity; its raw p-value
+plot remains visible because it no longer supplies the requested interpretation.
+These safeguards reduce shortcuts; they cannot certify the absence of semantic clues.
 
 Historical detector and word-match counts above have **not** been rerun on the
 new questions. `not rerun` replaces obsolete counts for these 21 rows; no automatic
@@ -326,17 +334,7 @@ as rendered PDF pages. The pump paper itself prints F(1,124) = 4.094 with p < .0
 the revised question describes the reported qualitative interaction instead of
 presenting that inconsistent pair as a newly verified statistic.
 
-## Next steps
-
-1. The content-review owner reads the revised studies with their papers and
-   approves or requests further changes. Set `reviewed: true` only after approval.
-2. Review the six other hand-authored featured studies independently; they were
-   outside the 45-generated-study revision work.
-3. The shared-player summary/quotation-label decision remains separate; these
-   content changes do not alter excerpt timing.
-
-
-### Follow-up source spot checks
+## Follow-up source spot checks
 
 Rendered PDFs confirm that Liu p. 4 actually prints `B = −64` next to SE = 0.50
 and t = −1.290; the excerpt is retained verbatim, and the final limitations flag
@@ -350,3 +348,12 @@ separates it from overall outcomes; the older page-9/page-11 explanation is gone
 All challenge reference IDs already have an existence guard. Follow-up tests also
 check scene-label/answer-text alignment for this batch and orphaned saved-term
 question keys across the library.
+
+## Next steps
+
+1. The content-review owner reads the revised studies with their papers and
+   approves or requests further changes. Set `reviewed: true` only after approval.
+2. Review the six other hand-authored featured studies independently; they were
+   outside the 45-generated-study revision work.
+3. The shared-player summary/quotation-label decision remains separate; these
+   content changes do not alter excerpt timing.

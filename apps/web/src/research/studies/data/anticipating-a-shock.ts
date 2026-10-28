@@ -20,6 +20,7 @@ export const body: StudyBody = {
         "The pandemic stopped recruitment before the planned sample size (p. 5).",
         "Few right-leaning participants limited subgroup model sensitivity; arousal also declined across later blocks.",
         "No political-threat comparison was included, so a requirement for political context was not directly tested.",
+        "Physiological arousal subsided in the later implicit-measure blocks; those null findings need additional manipulation caution (p. 11).",
       ],
     },
     evidence: [
@@ -113,6 +114,12 @@ export const body: StudyBody = {
         excerpt:
           "the Bayes factors in the direction of the null hypothesis were greater than three for six out of the eight measures. These results provided substantive support for the null hypothesis relative to the conservative shift hypothesis. For the test of the ideological intensification hypothesis among the left-leaning participants, the Bayes factors in the direction of the null hypothesis were greater than three for six out of the eight measures. These results again provided substantive support for the null hypothesis relative to the ideological intensification hypothesis. The Bayes factors for the test of the ideological intensification hypothesis among the few right-leaning participants in our sample indicated, unsurprisingly, data insensitivity for six of the eight measures. Hence, the Bayes factors show that the left-leaning participants did not shift to the left under threat while the data did not provide evidence about Block 4: IAT − Right Block 5: IAT − Econ. Cons. Block 1: Left−Right Placement Block 2: SECS Block 3: IAT − Social Cons.",
       },
+      {
+        id: "r2",
+        page: 11,
+        excerpt:
+          "we found that physiological arousal\nsubsided in later blocks. Since these blocks contained the implicit\nmeasures of political attitudes, our findings regarding the effects\non implicit political attitudes need to be interpreted with caution.",
+      },
     ],
     challenges: [
       {
@@ -174,7 +181,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c2-opt-a",
-            text: "To guarantee that the two methods measure identical constructs without error.",
+            text: "To pool the methods into one attitude score for the threat test.",
           },
           {
             id: "c2-opt-c",
@@ -186,7 +193,7 @@ export const body: StudyBody = {
           },
           {
             id: "c2-opt-d",
-            text: "To make any single significant result sufficient to establish every attitude hypothesis.",
+            text: "To treat a change in one method as a substitute for evidence on the other method.",
           },
         ],
         accepted: ["c2-opt-c"],
@@ -194,11 +201,11 @@ export const body: StudyBody = {
         hint: "Think about what direct ratings and response-association tasks each operationalize.",
         misconceptions: {
           "c2-opt-a":
-            "Different operational measures need not be interchangeable or error-free.",
+            "The study assessed distinct explicit and implicit outcomes; their inclusion is not itself a justification for pooling them.",
           "c2-opt-b":
             "Physiology checked arousal; the attitude outcomes remained explicit and implicit.",
           "c2-opt-d":
-            "Different outcomes require their own results and attention to multiple tests.",
+            "Distinct methods can respond differently; a finding on one is not interchangeable evidence for the other.",
         },
         explanation:
           "Using more than one method broadens the operational tests; it does not guarantee identical constructs or universally validate an attitude shift.",
@@ -224,7 +231,7 @@ export const body: StudyBody = {
           },
           {
             id: "c3-opt-c",
-            text: "Whether missing participants can be replaced without making any modelling assumptions.",
+            text: "The posterior probability that the null is true, without any prior odds for the competing models.",
           },
           {
             id: "c3-opt-b",
@@ -242,7 +249,7 @@ export const body: StudyBody = {
           "c3-opt-a":
             "Relative model evidence does not establish universal certainty.",
           "c3-opt-c":
-            "Bayes factors are model comparisons, not automatic missing-data imputation.",
+            "A Bayes factor is a relative model-evidence ratio; converting it to posterior model odds also needs prior odds.",
           "c3-opt-d": "Assignment does not guarantee the hypothesized outcome.",
         },
         explanation:
@@ -271,7 +278,7 @@ export const body: StudyBody = {
             {
               optionId: "c3-opt-c",
               label:
-                "Whether missing participants can be replaced without making any modelling assumptions.",
+                "The posterior probability that the null is true, without any prior odds for the competing models.",
               targetIds: ["observed", "small", "uncertain"],
             },
             {
@@ -349,9 +356,9 @@ export const body: StudyBody = {
         title: "Successful induction, null outcome",
         type: "single",
         prompt:
-          "What is the narrow conclusion from no significant threat–safety attitude differences here?",
+          "When anxiety was induced in the explicit blocks but no explicit-attitude difference was detected, what is the narrow conclusion?",
         evidence: [
-          "The checks supported successful anxiety induction; the attitude comparisons did not detect a shift.",
+          "Physiological arousal subsided in the later blocks that contained the implicit measures.",
         ],
         options: [
           {
@@ -364,11 +371,11 @@ export const body: StudyBody = {
           },
           {
             id: "c4-opt-d",
-            text: "The threat condition proves that all participants became more liberal instead.",
+            text: "The explicit null is best explained by an unsuccessful manipulation across the whole session.",
           },
           {
             id: "c4-opt-b",
-            text: "This induction did not provide clear evidence of the predicted attitude shift.",
+            text: "No explicit shift was detected here; later implicit outcomes carry additional induction uncertainty.",
           },
         ],
         accepted: ["c4-opt-b"],
@@ -380,11 +387,11 @@ export const body: StudyBody = {
           "c4-opt-c":
             "The study does not test every induction, setting or population.",
           "c4-opt-d":
-            "No detected conservative shift is not proof of a liberal shift.",
+            "The explicit blocks had evidence of an effective induction; later decline should not be used to relabel the entire manipulation as unsuccessful.",
         },
         explanation:
-          "The reported outcome concerns this nonpolitical induction and sampled participants. Successful induction does not require a positive downstream attitude effect.",
-        refs: ["e3", "e14"],
+          "The explicit-block induction did not yield clear evidence of the predicted explicit-attitude shift. The authors caution that arousal subsided in the later implicit blocks. Physiological habituation need not mean all subjective anxiety disappeared, but the implicit nulls require that additional caution.",
+        refs: ["e3", "e14", "r2"],
         writtenReasoning: false,
         reveal: "results",
         scene: null,
@@ -448,7 +455,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "c6-opt-a",
-            text: "Yes; a null nonpolitical condition proves that political context is necessary.",
+            text: "Yes; the nonpolitical null can be used to estimate the contribution of political threat content.",
           },
           {
             id: "c6-opt-b",
@@ -456,11 +463,11 @@ export const body: StudyBody = {
           },
           {
             id: "c6-opt-c",
-            text: "Yes; it proves political threat will cause a shift although that condition was not tested.",
+            text: "Yes; earlier political-threat findings and this null form a randomized content comparison.",
           },
           {
             id: "c6-opt-d",
-            text: "No; the null result instead proves every participant had identical political attitudes.",
+            text: "No; the study instead estimates how attitude differences depend on political content.",
           },
         ],
         accepted: ["c6-opt-b"],
@@ -468,11 +475,11 @@ export const body: StudyBody = {
         hint: "A claim that one context is necessary needs a comparison involving that context.",
         misconceptions: {
           "c6-opt-a":
-            "A null in one setting does not establish necessity in all settings.",
+            "Political and nonpolitical contents were not experimentally crossed, so this comparison does not identify that contribution.",
           "c6-opt-c":
-            "An untested condition cannot be assigned a demonstrated effect.",
+            "Cross-study differences do not become a randomized content contrast.",
           "c6-opt-d":
-            "Absence of a condition difference is not identity among participants.",
+            "The study did not manipulate political content, so it does not estimate that dependency either.",
         },
         explanation:
           "The experiment did not include a political-threat condition. Political context is a proposed boundary condition, not a necessary condition established by the nonpolitical result.",
@@ -485,5 +492,5 @@ export const body: StudyBody = {
     bonus: null,
   },
   takeaway:
-    "The nonpolitical threat induction produced anxiety without clear explicit or implicit attitude shifts. Several Bayes factors favoured the specified null models, but evidence was limited for the small right-leaning subgroup. Political context is a proposed explanation for differences from prior work, not a demonstrated necessary condition.",
+    "Anxiety induction was supported in the explicit blocks, which showed no clear predicted political-attitude shift. Several Bayes factors favoured specified null models, with limited subgroup evidence. Physiological arousal subsided in later implicit blocks, so their nulls need additional caution. Political context remains a proposed explanation requiring a direct comparison.",
 };

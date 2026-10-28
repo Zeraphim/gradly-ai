@@ -218,23 +218,29 @@ export const body: StudyBody = {
         type: "single",
         prompt: "What does random allocation strengthen in this experiment?",
         evidence: [
-          "The two groups received common or recommended corrections of the same misinformation scenario.",
+          "Participants received one of two response versions after reading a common misinformation scenario.",
         ],
         options: [
           {
             id: "o2",
-            text: "The claim that a health-student sample represents the entire vaccine-hesitant public.",
+            text: "The precision of estimated long-term behavioural effects in a broader parent population.",
           },
           {
             id: "o1",
             text: "The within-sample comparison of the assigned correction packages.",
+          },
+          {
+            id: "c1-review3",
+            text: "The conclusion that the response versions differed only in their use of transparency.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Separate the condition contrast among participants from how the wider public was sampled.",
         misconceptions: {
-          o2: "Assignment to conditions does not establish representative population sampling.",
+          o2: "Assignment of the response version does not establish long-term outcomes or precision in a different population.",
+          "c1-review3":
+            "Random allocation strengthens the package comparison; it does not remove differences between components inside each package.",
         },
         explanation:
           "Random assignment supports the treatment-package contrast among these participants. Generalization is a separate question.",
@@ -318,7 +324,7 @@ export const body: StudyBody = {
             {
               optionId: "o2",
               label:
-                "The claim that a health-student sample represents the entire vaccine-hesitant public.",
+                "The precision of estimated long-term behavioural effects in a broader parent population.",
               targetIds: ["placement"],
             },
             {
@@ -326,6 +332,12 @@ export const body: StudyBody = {
               label:
                 "The within-sample comparison of the assigned correction packages.",
               targetIds: ["placement"],
+            },
+            {
+              optionId: "c1-review3",
+              targetIds: ["placement"],
+              label:
+                "The conclusion that the response versions differed only in their use of transparency.",
             },
           ],
           resolution: {
@@ -359,14 +371,20 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Studying students automatically proves that the correction cannot work for any parent.",
+            text: "Professional familiarity makes a smaller effect in community parents the most likely extension.",
+          },
+          {
+            id: "c2-review3",
+            text: "The sample composition primarily changes assignment validity rather than the populations to which results apply.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Compare the participants’ experience and recruitment with the target population.",
         misconceptions: {
-          o2: "Limited generalizability is uncertainty about transfer, not proof of no transfer.",
+          o2: "A professional student sample does not establish the direction or magnitude of the effect in community parents.",
+          "c2-review3":
+            "Sample selection limits transport to other populations; random allocation addresses the internal treatment contrast separately.",
         },
         explanation:
           "The paper explicitly states that the sample was not intended to represent the entire pro-vaccination and hesitant publics.",
@@ -383,23 +401,29 @@ export const body: StudyBody = {
         prompt:
           "Reliability ratings averaged 5.68 versus 4.64. Does this establish that the recommended response was objectively more accurate?",
         evidence: [
-          "Participants rated perceived reliability of the assigned response. The figure shows the reported means.",
+          "After reading a response, participants rated its reliability on a questionnaire scale; the figure shows group means.",
         ],
         options: [
           {
             id: "o2",
-            text: "A higher reliability rating is itself independent verification of every statement’s accuracy.",
+            text: "Random allocation makes the rating contrast a test of the factual accuracy of the response versions.",
           },
           {
             id: "o1",
             text: "It establishes a higher perceived rating, not an independent fact-checking outcome.",
+          },
+          {
+            id: "c3-review3",
+            text: "The 1.04-point gap estimates how much more likely recipients were to follow the vaccine advice.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Identify what participants rated, rather than relabelling it as a different outcome.",
         misconceptions: {
-          o2: "A perception measure and verification of factual accuracy are different outcomes.",
+          o2: "Randomization supports a causal comparison of the measured rating, not independent validation of factual accuracy.",
+          "c3-review3":
+            "Scale points on a reliability item are not probabilities of later behaviour.",
         },
         explanation:
           "The numerical contrast concerns perceived reliability. It should not be relabelled objective accuracy or later real-world behaviour.",
@@ -421,7 +445,7 @@ export const body: StudyBody = {
             {
               optionId: "o2",
               label:
-                "A higher reliability rating is itself independent verification of every statement’s accuracy.",
+                "Random allocation makes the rating contrast a test of the factual accuracy of the response versions.",
               targetIds: ["common", "recommended"],
             },
             {
@@ -429,6 +453,12 @@ export const body: StudyBody = {
               label:
                 "It establishes a higher perceived rating, not an independent fact-checking outcome.",
               targetIds: ["common", "recommended"],
+            },
+            {
+              optionId: "c3-review3",
+              targetIds: ["common", "recommended"],
+              label:
+                "The 1.04-point gap estimates how much more likely recipients were to follow the vaccine advice.",
             },
           ],
           resolution: null,
@@ -479,7 +509,7 @@ export const body: StudyBody = {
         prompt:
           "Satisfaction was higher under the recommended response. Can that identify which component of the response caused the difference?",
         evidence: [
-          "The recommended version combined addressing concerns with a more transparent response, rather than isolating each component.",
+          "The experiment compared two complete response versions and recorded post-response satisfaction.",
         ],
         options: [
           {
@@ -488,14 +518,20 @@ export const body: StudyBody = {
           },
           {
             id: "o2",
-            text: "Yes; a significant package contrast uniquely identifies transparency as the sole active component.",
+            text: "Yes; transparency is the most plausible component, so the package contrast estimates its contribution.",
+          },
+          {
+            id: "c4-review3",
+            text: "No; the significance of the package contrast is primarily a measure of component-level uncertainty.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "When several components change together, what contrast would identify just one of them?",
         misconceptions: {
-          o2: "Bundled components require additional contrasts to identify separate effects.",
+          o2: "A plausible component account is not identified by a comparison in which several components change together.",
+          "c4-review3":
+            "The package test does not partition component effects or provide component-specific uncertainty estimates.",
         },
         explanation:
           "The experiment compares correction packages. A factorial or component-focused follow-up could investigate which features account for the difference.",
@@ -512,23 +548,29 @@ export const body: StudyBody = {
         prompt:
           "What would most directly address the gap between immediate satisfaction and durable effects in the public?",
         evidence: [
-          "The experiment measured immediate student reactions to assigned responses.",
+          "The study collected questionnaire responses after presentation of a vaccine-misinformation scenario.",
         ],
         options: [
           {
             id: "o2",
-            text: "Repeat only the immediate student rating and treat significance as proof of durable public effects.",
+            text: "Use repeated ratings in the same student sample to settle transport to community parents.",
           },
           {
             id: "o1",
             text: "Replicate with the target public and follow outcomes beyond the immediate response.",
+          },
+          {
+            id: "c5-review3",
+            text: "Recruit community parents for one immediate rating and treat sample diversity as evidence of persistence.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "Which follow-up changes the recruitment population and adds later observations?",
         misconceptions: {
-          o2: "The same sample and immediate measure do not address either population transfer or persistence.",
+          o2: "Repeated student ratings address persistence in that sample, not transport to a distinct target public.",
+          "c5-review3":
+            "A more relevant sample helps transport, but one immediate assessment does not establish durability.",
         },
         explanation:
           "The paper identifies representativeness and maintenance over time as limitations. Neither is settled by the immediate response contrast.",
@@ -550,7 +592,7 @@ export const body: StudyBody = {
             {
               optionId: "o2",
               label:
-                "Repeat only the immediate student rating and treat significance as proof of durable public effects.",
+                "Use repeated ratings in the same student sample to settle transport to community parents.",
               targetIds: ["sample", "response", "later"],
             },
             {
@@ -558,6 +600,12 @@ export const body: StudyBody = {
               label:
                 "Replicate with the target public and follow outcomes beyond the immediate response.",
               targetIds: ["sample", "response", "later"],
+            },
+            {
+              optionId: "c5-review3",
+              targetIds: ["sample", "response", "later"],
+              label:
+                "Recruit community parents for one immediate rating and treat sample diversity as evidence of persistence.",
             },
           ],
           resolution: null,

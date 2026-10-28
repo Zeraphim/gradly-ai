@@ -221,7 +221,7 @@ export const body: StudyBody = {
         prompt:
           "Why would a statistically significant interaction alone be insufficient to replicate the original mindset claim?",
         evidence: [
-          "A letter-cancellation task preceded Stroop performance. The target claim predicts that willpower beliefs change the depletion effect in a particular direction.",
+          "A letter-cancellation task preceded Stroop performance; the replication targeted willpower-mindset moderation.",
         ],
         scene: {
           version: 1,
@@ -229,7 +229,7 @@ export const body: StudyBody = {
           instruction:
             "Identify the element that describes the study’s purpose.",
           description:
-            "A simple flowchart with two nodes: ‘Goal’ and ‘Methods’. The ‘Goal’ node is labeled ‘Replicate original ego‑depletion effect’. The ‘Methods’ node lists the tasks used.",
+            "The target is moderation by willpower mindset, assessed after the depletion/control task.",
           provenance: {
             kind: "authored",
             refs: [],
@@ -257,9 +257,9 @@ export const body: StudyBody = {
           ],
           resolution: {
             id: "r1",
-            label: "Correct choice",
+            label: "Match the target moderation",
             detail:
-              "The authors explicitly state they attempted to replicate the original results.",
+              "The target concerned moderation by willpower mindset. Statistical significance in a different direction or outcome does not reproduce the target claim.",
             at: "resolution",
             provenance: {
               kind: "derived",
@@ -271,8 +271,9 @@ export const body: StudyBody = {
           nodes: [
             {
               id: "goal-node",
-              label: "Replicate original ego‑depletion effect",
-              detail: "Study purpose",
+              label: "Test mindset moderation of depletion",
+              detail:
+                "Mindset was included alongside depletion condition in the Stroop analyses.",
               at: "setup",
               provenance: {
                 kind: "authored",
@@ -489,16 +490,17 @@ export const body: StudyBody = {
         stage: "Read the results",
         title: "Separate significance and direction",
         type: "multiple",
-        prompt: "Select all statements warranted by the two interaction tests.",
+        prompt:
+          "RT interaction p = .778; error interaction p = .038, opposite to prediction and .162 without one extreme outlier. Which conclusions are warranted? Select all.",
         evidence: [
-          "RT interaction: B = .001, p = .778. Error interaction: B = .875, p = .038; the paper reports the error pattern opposite to the target prediction.",
+          "The replication block reports separate reaction-time and error interactions.",
         ],
         scene: {
           version: 1,
           kind: "tests",
           title: "Two tests of the moderation",
           instruction:
-            "Place each reported interaction against the .05 threshold, then judge what the pair shows.",
+            "Compare the reported tests with the predicted moderation and the outlier analysis.",
           description:
             "The willpower-mindset interaction in the replication block, tested once for reaction times and once for errors.",
           provenance: {
@@ -538,25 +540,25 @@ export const body: StudyBody = {
             {
               optionId: "c1",
               label:
-                "The RT interaction confirms the predicted moderation at the .05 threshold.",
-              targetIds: ["rt"],
+                "The error p-value by itself supplies a conceptual replication of the predicted moderation.",
+              targetIds: ["err"],
             },
             {
               optionId: "c2",
               label:
-                "The RT analysis did not detect an interaction at the .05 threshold.",
+                "The RT result does not provide corroborating evidence for the predicted moderation.",
               targetIds: ["rt"],
             },
             {
               optionId: "c3",
               label:
-                "The error analysis detected an interaction at the .05 threshold.",
+                "An error interaction crossing .05 can still fail to support the predicted direction.",
               targetIds: ["err"],
             },
             {
               optionId: "c4",
               label:
-                "The error interaction’s direction conflicts with the target prediction.",
+                "Sensitivity to the extreme outlier should qualify the interpretation of the error interaction.",
               targetIds: ["err"],
             },
           ],
@@ -576,29 +578,29 @@ export const body: StudyBody = {
         options: [
           {
             id: "c1",
-            text: "The RT interaction confirms the predicted moderation at the .05 threshold.",
+            text: "The error p-value by itself supplies a conceptual replication of the predicted moderation.",
           },
           {
             id: "c2",
-            text: "The RT analysis did not detect an interaction at the .05 threshold.",
+            text: "The RT result does not provide corroborating evidence for the predicted moderation.",
           },
           {
             id: "c3",
-            text: "The error analysis detected an interaction at the .05 threshold.",
+            text: "An error interaction crossing .05 can still fail to support the predicted direction.",
           },
           {
             id: "c4",
-            text: "The error interaction’s direction conflicts with the target prediction.",
+            text: "Sensitivity to the extreme outlier should qualify the interpretation of the error interaction.",
           },
         ],
         accepted: ["c2", "c3", "c4"],
         alternatives: [],
-        hint: "Evaluate each outcome’s test, then compare the observed pattern with the target prediction.",
+        hint: "A replication interpretation needs the target direction, relevant outcome and robustness, not just one p-value.",
         misconceptions: {
-          c1: "The reported RT p = .778 is not below .05.",
+          c1: "Statistical significance without the target direction and robustness does not replicate the predicted moderation.",
         },
         explanation:
-          "The RT interaction was not significant. The error interaction was significant but reversed relative to the directional prediction, so it is not confirmation of the original moderation pattern.",
+          "The RT result did not corroborate the predicted moderation. The error interaction crossed .05 in the opposite direction and was sensitive to the extreme outlier; neither feature supports a firm replication of the target pattern.",
         refs: ["e17", "e19", "e21"],
         writtenReasoning: false,
         reveal: "results",

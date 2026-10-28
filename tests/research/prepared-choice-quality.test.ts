@@ -38,9 +38,29 @@ describe("rewritten prepared-study choices", () => {
           extreme(...challenge.options.map((option) => option.text.length))
         );
       }).length;
-      expect(hits / remainingSingles.length).toBeLessThanOrEqual(0.45);
+      expect(hits / remainingSingles.length).toBeLessThanOrEqual(0.4);
     }
   });
+  it("offers at least three substantive choices throughout the final batch", () => {
+    for (const [slug, body] of remainingStudies)
+      for (const c of body.lesson.challenges)
+        expect(c.options.length, `${slug}/${c.id}`).toBeGreaterThanOrEqual(3);
+  });
+  it("does not reserve non-absolute wording for the correct answer", () => {
+    const absolute =
+      /\b(prove[sd]?|every|exactly|impossible|uniquely|necessarily|automatically|guarantee[sd]?|always|entirely|identical|eliminates?|zero|sole|never)\b/i;
+    for (const [slug, body] of remainingStudies)
+      for (const c of body.lesson.challenges.filter(
+        (c) => c.type === "single",
+      )) {
+        const wrong = c.options.filter((o) => !c.accepted.includes(o.id));
+        expect(
+          wrong.every((o) => absolute.test(o.text)),
+          `${slug}/${c.id}`,
+        ).toBe(false);
+      }
+  });
+
   it("does not reward a fixed answer position across or within studies", () => {
     for (let position = 0; position < 4; position++) {
       const hits = singles.filter((c) =>

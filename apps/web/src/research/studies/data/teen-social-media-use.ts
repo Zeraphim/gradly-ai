@@ -96,7 +96,7 @@ export const body: StudyBody = {
           },
           {
             id: "opt_distractor1",
-            text: "A longitudinal change analysis because the parent project plans repeated waves.",
+            text: "A longitudinal analysis using the project’s planned waves.",
           },
           {
             id: "opt_distractor2",
@@ -140,7 +140,7 @@ export const body: StudyBody = {
           },
           {
             id: "opt_distractor2",
-            text: "To guarantee that no unmeasured factor could explain the estimated associations.",
+            text: "To isolate the social-media contribution by assigning the full model’s explanatory power to it.",
           },
         ],
         accepted: ["opt_correct"],
@@ -150,7 +150,7 @@ export const body: StudyBody = {
           opt_distractor1:
             "Regression adjustment does not change how exposure was assigned.",
           opt_distractor2:
-            "The model controls recorded covariates, not every possible shared cause.",
+            "A covariate-adjusted coefficient and the explanatory power of the entire model are different quantities.",
         },
         explanation:
           "Covariates can address measured differences. They do not establish causal independence from unmeasured variables or rule out reverse direction.",
@@ -176,7 +176,7 @@ export const body: StudyBody = {
           },
           {
             id: "opt_distractor2",
-            text: "None passes because correction requires every p-value to equal zero.",
+            text: "Prefer the rounded .003 result over the < .001 results because it is closest to the cutoff.",
           },
           {
             id: "opt_correct",
@@ -189,7 +189,8 @@ export const body: StudyBody = {
         misconceptions: {
           opt_distractor1:
             "Equality at the displayed precision is not strictly below the threshold.",
-          opt_distractor2: "The corrected threshold is .003, not zero.",
+          opt_distractor2:
+            "Closeness to a threshold is not stronger evidence; a strict boundary also requires care with rounding.",
         },
         explanation:
           "The paper describes inspiration for others as partially predictive. Its displayed p = .003 is on the stated p < .003 boundary, so the rounded value does not unambiguously fall below that strict threshold.",
@@ -215,7 +216,7 @@ export const body: StudyBody = {
           },
           {
             id: "opt_distractor1",
-            text: "Yes; every predictor in a hierarchical regression receives the full model R².",
+            text: "Yes; final-step R² is the variance added by social-media predictors.",
           },
           {
             id: "opt_distractor2",
@@ -227,7 +228,7 @@ export const body: StudyBody = {
         hint: "Check which predictors are included before assigning the model’s explained variation to one subset.",
         misconceptions: {
           opt_distractor1:
-            "The same explained variance cannot be uniquely credited to each included predictor.",
+            "The full model R² includes predictors entered earlier; the increment requires a separate model comparison.",
           opt_distractor2:
             "R² concerns outcome variation fitted by a model, not causal improvement in participants.",
         },
@@ -262,7 +263,7 @@ export const body: StudyBody = {
             {
               optionId: "opt_distractor1",
               label:
-                "Adjustment proves that changing online experiences will improve an individual’s flourishing.",
+                "Mainly sampling error, since covariate adjustment addresses shared causes.",
               targetIds: ["positive", "negative", "from", "for"],
             },
             {
@@ -274,7 +275,7 @@ export const body: StudyBody = {
             {
               optionId: "opt_distractor2",
               label:
-                "A significant coefficient means every adolescent with positive experiences is flourishing.",
+                "The adjusted coefficient estimates how much flourishing would change after a social-media intervention.",
               targetIds: ["positive", "negative", "from", "for"],
             },
           ],
@@ -284,7 +285,7 @@ export const body: StudyBody = {
             {
               id: "positive",
               label: "Positive experiences / Flourishing",
-              detail: "Adjusted association, not a demonstrated causal effect.",
+              detail: "Coefficient from the covariate-adjusted regression.",
               at: "setup",
               provenance: {
                 kind: "reported",
@@ -299,7 +300,7 @@ export const body: StudyBody = {
             {
               id: "negative",
               label: "Negative experiences / Flourishing",
-              detail: "Adjusted association, not a demonstrated causal effect.",
+              detail: "Coefficient from the covariate-adjusted regression.",
               at: "setup",
               provenance: {
                 kind: "reported",
@@ -314,7 +315,7 @@ export const body: StudyBody = {
             {
               id: "from",
               label: "Inspiration from others / Flourishing",
-              detail: "Adjusted association, not a demonstrated causal effect.",
+              detail: "Coefficient from the covariate-adjusted regression.",
               at: "setup",
               provenance: {
                 kind: "reported",
@@ -329,7 +330,7 @@ export const body: StudyBody = {
             {
               id: "for",
               label: "Inspiration for others / Flourishing",
-              detail: "Adjusted association, not a demonstrated causal effect.",
+              detail: "Coefficient from the covariate-adjusted regression.",
               at: "setup",
               provenance: {
                 kind: "reported",
@@ -346,7 +347,7 @@ export const body: StudyBody = {
         options: [
           {
             id: "opt_distractor1",
-            text: "Adjustment proves that changing online experiences will improve an individual’s flourishing.",
+            text: "Mainly sampling error, since covariate adjustment addresses shared causes.",
           },
           {
             id: "opt_correct",
@@ -354,7 +355,7 @@ export const body: StudyBody = {
           },
           {
             id: "opt_distractor2",
-            text: "A significant coefficient means every adolescent with positive experiences is flourishing.",
+            text: "The adjusted coefficient estimates how much flourishing would change after a social-media intervention.",
           },
         ],
         accepted: ["opt_correct"],
@@ -362,9 +363,9 @@ export const body: StudyBody = {
         hint: "Ask whether observing all variables at one wave identifies which one changed first.",
         misconceptions: {
           opt_distractor1:
-            "An adjusted association is not an intervention effect.",
+            "Measured covariates do not settle direction or unmeasured shared causes in a one-wave analysis.",
           opt_distractor2:
-            "A sample-level relationship does not apply deterministically to every participant.",
+            "An observational adjusted coefficient is not an intervention effect.",
         },
         explanation:
           "The coefficient is conditional on the fitted model. Flourishing could shape online experiences, shared factors could shape both, or both directions could operate.",

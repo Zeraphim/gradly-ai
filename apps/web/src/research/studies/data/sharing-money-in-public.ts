@@ -224,15 +224,15 @@ export const body: StudyBody = {
         options: [
           {
             id: "opt_b",
-            text: "To guarantee that everyone feels equally observed in all three conditions.",
+            text: "To validate the eye image as an observation-feeling measure using only the amount allocated.",
           },
           {
             id: "opt_c",
-            text: "To establish that an image and an actual audience are identical treatments.",
+            text: "To estimate the eye cue after pooling public and no-eyes decisions into one common reference.",
           },
           {
             id: "opt_d",
-            text: "To measure national generosity by randomly sampling every resident of the country.",
+            text: "To estimate participants’ SVO classifications from how much they allocated in each condition.",
           },
           {
             id: "opt_a",
@@ -244,11 +244,11 @@ export const body: StudyBody = {
         hint: "An image of eyes and an actual audience need not create the same experience.",
         misconceptions: {
           opt_b:
-            "The manipulation check instead assesses whether observation feelings differ.",
+            "Giving is the decision outcome, not a direct observation-feeling check.",
           opt_c:
-            "The design compares the treatments rather than assuming equivalence.",
+            "Pooling those references obscures the distinction between an eye cue and an actual audience.",
           opt_d:
-            "Condition comparisons do not create a national probability sample.",
+            "The condition comparison concerns observation cues, not recovery of a separately measured disposition from giving.",
         },
         explanation:
           "The conditions test related but distinct reputational cues. Their similarities or differences must be assessed, not assumed.",

@@ -347,28 +347,28 @@ export const body: StudyBody = {
         options: [
           {
             id: "o2",
-            text: "Whether the direct question secretly randomized participants into different legal systems.",
+            text: "Treat the direct item as the less useful measure because it produces fewer errors.",
           },
           {
             id: "o3",
-            text: "Whether every indirect error can be treated as a firmly held false belief.",
+            text: "Treat each indirect error as a firmly held belief, without checking response uncertainty.",
           },
           {
             id: "o4",
-            text: "Whether a 10% sample response proves that 10% of the national population believes it.",
+            text: "Use the gap between formats as an estimate of television’s effect on false beliefs.",
           },
           {
             id: "o1",
-            text: "Whether the two question formats actually measure the same belief.",
+            text: "Check whether the formats measure the same belief before comparing their error rates.",
           },
         ],
         accepted: ["o1"],
         alternatives: [],
         hint: "The two formats ask about related ideas; consider whether a wrong response means the same thing in each.",
         misconceptions: {
-          o2: "The survey changed measurement format, not the country’s legal system.",
-          o3: "That is the disputed assumption; the format difference calls it into question.",
-          o4: "A sample statistic and a contested measure do not establish a population prevalence.",
+          o2: "A lower error rate does not establish that the direct question is less valid; the constructs and formats must be checked.",
+          o3: "The paper raises insecurity or induced uncertainty as an alternative explanation; an incorrect response need not be a firmly held belief.",
+          o4: "The formats were not a randomized television intervention; the format gap is not a television effect estimate.",
         },
         explanation:
           "The discrepancy raises a construct-validity concern. The indirect measure may induce insecurity or guessing; the survey does not establish that every error reflects a genuine belief.",
@@ -398,7 +398,7 @@ export const body: StudyBody = {
           },
           {
             id: "o3",
-            text: "Television is proven harmless because adjustment removes every possible confounder.",
+            text: "Prefer the unadjusted association as the estimate of television’s independent effect.",
           },
           {
             id: "o4",
@@ -410,7 +410,7 @@ export const body: StudyBody = {
         hint: "Keep the tested model and outcome separate from a claim about every possible belief.",
         misconceptions: {
           o1: "A null observational result for one outcome cannot rule out every effect.",
-          o3: "Adjusting recorded covariates does not establish the absence of unmeasured confounding.",
+          o3: "Potential covariate overlap is a reason to interpret model contrasts, not to replace the adjusted result with a causal reading of the unadjusted one.",
           o4: "A measured predictor does not become a demonstrated cause by entering a regression.",
         },
         explanation:
