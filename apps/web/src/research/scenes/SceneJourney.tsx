@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { SceneMotion, m, useSceneMotion } from "./scene-motion.js";
 import {
+  ArrowUpNarrowWide,
   ChartNoAxesColumn,
+  Columns3,
   FlaskConical,
   GitBranch,
   Grid3x3,
+  Highlighter,
   History,
   Layers,
   Network,
@@ -32,6 +35,9 @@ const icons: Record<SceneKind, typeof GitBranch> = {
   tests: FlaskConical,
   units: Layers,
   matrix: Grid3x3,
+  ladder: ArrowUpNarrowWide,
+  sort: Columns3,
+  spot: Highlighter,
 };
 
 export function SceneJourney({

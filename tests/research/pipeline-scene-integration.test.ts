@@ -2,7 +2,13 @@ import { asDraft } from "./fixtures/draft.js";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { POST as jobsPost } from "../../apps/api/src/research/routes/jobs.js";
 import { POST as learningPost } from "../../apps/api/src/research/routes/learning.js";
-import { newJob } from "../../apps/api/src/research/pipeline.js";
+import {
+  newJob,
+  READY_STAGE,
+  STAGES,
+} from "../../apps/api/src/research/pipeline.js";
+import { isEvidenceScene } from "../../apps/api/src/research/scene-stage.js";
+import { isSceneCall, sceneReplyFrom } from "./fixtures/scene-reply.js";
 import { insert, read, db } from "../../apps/api/src/research/store.js";
 import { requestContext } from "../../apps/api/src/research/auth.js";
 import { type Job } from "../../apps/api/src/research/contracts.js";
@@ -101,7 +107,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     expect(consentedJob.mode).toBe("live");
   });
 
-  it("advances sequentially through all 6 stages to produce a ready lesson with interactive scenes", async () => {
+  it("advances sequentially through all 7 stages to produce a ready lesson with interactive scenes", async () => {
     const jobId = "full-" + Math.random().toString(36).slice(2);
     const pages = sceneFixturePages(quantitativeSceneLesson);
     const job = newJob(jobId, "quantitative-paper.pdf", pages);
@@ -119,32 +125,35 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       },
       // Stage 1: Lesson Architect
       { ...quantitativeSceneLesson, id: jobId },
-      // Stage 2: Terms Guide
+      // Stage 2: the Scene Designer answers per challenge, outside this queue.
+      // Stage 3: Terms Guide
       { challenges: [] },
-      // Stage 3: Methods Reviewer
+      // Stage 4: Methods Reviewer
       {
         approved: true,
         issues: [],
         summary: "Methodological design and statistical assumptions verified.",
       },
-      // Stage 4: Learning Coach
+      // Stage 5: Learning Coach
       {
         approved: true,
         issues: [],
         summary: "Hints and guided feedback promote critical reasoning.",
       },
-      // Stage 5: Deterministic validator runs locally without provider call
+      // Stage 6: Deterministic validator runs locally without provider call
     ];
+    const scene = sceneReplyFrom(quantitativeSceneLesson);
 
     const mockProvider: ModelProvider = {
-      async generate(_role, _task, _input, schema) {
+      async generate(role, _task, input, schema) {
+        if (isSceneCall(role)) return schema.parse(scene(input));
         const next = stageOutputs.shift();
         return schema.parse(asDraft(next));
       },
     };
 
-    // Execute each of the 6 stages sequentially via route
-    for (let s = 0; s < 6; s++) {
+    // Execute each of the 7 stages sequentially via route
+    for (let s = 0; s < READY_STAGE; s++) {
       const req = new Request("http://localhost/api/research/jobs", {
         method: "POST",
         headers: {
@@ -156,7 +165,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       const res = await withGuest(testGuest, () => jobsPost(req, mockProvider));
       expect(res.status).toBe(200);
       const payload = await res.json();
-      if (s < 5) {
+      if (s < READY_STAGE - 1) {
         expect(payload.stage).toBe(s + 1);
       }
     }
@@ -166,20 +175,27 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       read<Job>(testGuest, "job", job.id),
     );
     expect(finalJob.status).toBe("ready");
-    expect(finalJob.stage).toBe(6);
+    expect(finalJob.stage).toBe(READY_STAGE);
     expect(finalJob.lesson).toBeDefined();
     expect(finalJob.lesson?.title).toBe(quantitativeSceneLesson.title);
 
     // Verify all audits are completed and reflect honest models
     expect(finalJob.audits.every((a) => a.status === "Completed")).toBe(true);
-    expect(finalJob.audits[5]!.model).toBe("Deterministic validator");
-
-    // Verify that the generated scene stores cleanly and is valid
-    const comparisonChallenge = finalJob.lesson!.challenges.find(
-      (c) => c.scene?.kind === "comparison",
+    expect(finalJob.audits[STAGES.verify]!.model).toBe(
+      "Deterministic validator",
     );
-    expect(comparisonChallenge).toBeDefined();
-    expect(sceneSchema.safeParse(comparisonChallenge!.scene).success).toBe(true);
+
+    // Every challenge has a drafted scene that stores cleanly and is valid.
+    // The first position allows flow, so the fixture's own scene is kept.
+    expect(finalJob.lesson!.challenges[0]!.scene?.kind).toBe("flow");
+    for (const c of finalJob.lesson!.challenges)
+      expect(sceneSchema.safeParse(c.scene).success).toBe(true);
+    // Neighbours never share a kind.
+    const kinds = finalJob.lesson!.challenges.map((c) => c.scene!.kind);
+    expect(kinds.every((k, i) => i === 0 || k !== kinds[i - 1])).toBe(true);
+    expect(finalJob.audits[STAGES.scenes]!.summary).toMatch(
+      /^Interactive scenes on 3 of 3 challenges: 3 written for this paper/,
+    );
   });
 
   it("continues past a Methods Reviewer rejection and records its notes", async () => {
@@ -244,9 +260,9 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       ),
     );
 
-    // Stages 2–5: the terms call and coach call that fail here and the
+    // Stages 2–6: the scene, terms and coach calls that fail here and the
     // advisory rejection do not stop the lesson.
-    for (let s = 0; s < 4; s++)
+    for (let s = 0; s < 5; s++)
       await withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
@@ -265,14 +281,20 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       read<Job>(testGuest, "job", job.id),
     );
     expect(reviewedJob.status).toBe("ready");
-    expect(reviewedJob.audits[3]!.status).toBe("Completed");
-    expect(reviewedJob.audits[3]!.summary).toContain(
+    expect(reviewedJob.audits[STAGES.methods]!.status).toBe("Completed");
+    expect(reviewedJob.audits[STAGES.methods]!.summary).toContain(
       "Advisory notes: Association cannot be framed as causal",
     );
-    expect(reviewedJob.audits[2]!.summary).toContain(
+    expect(reviewedJob.audits[STAGES.terms]!.summary).toContain(
       "Term definitions unavailable",
     );
-    expect(reviewedJob.audits[4]!.summary).toContain("Review unavailable");
+    expect(reviewedJob.audits[STAGES.coach]!.summary).toContain(
+      "Review unavailable",
+    );
+    // Failed scene calls left every challenge with its evidence scene.
+    expect(reviewedJob.audits[STAGES.scenes]!.summary).toContain(
+      "built from the cited evidence",
+    );
 
     const startReq = new Request("http://localhost/api/research/learning", {
       method: "POST",
@@ -346,7 +368,7 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     const job = newJob(jobId, "quantitative.pdf", pages);
     job.consented = true;
     job.status = "ready";
-    job.stage = 6;
+    job.stage = READY_STAGE;
     job.lesson = { ...quantitativeSceneLesson, id: jobId };
     await withGuest(testGuest, () => insert(testGuest, "job", job.id, job));
 
@@ -442,8 +464,8 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       },
     };
 
-    // Run stages 0–5
-    for (let s = 0; s < 6; s++) {
+    // Run stages 0–6
+    for (let s = 0; s < READY_STAGE; s++) {
       await withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
@@ -463,13 +485,13 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
       read<Job>(testGuest, "job", job.id),
     );
     expect(reviewedJob.status).toBe("ready");
-    expect(reviewedJob.audits[4]!.status).toBe("Completed");
-    expect(reviewedJob.audits[4]!.summary).toContain(
+    expect(reviewedJob.audits[STAGES.coach]!.status).toBe("Completed");
+    expect(reviewedJob.audits[STAGES.coach]!.summary).toContain(
       "Hint reveals the correct answer",
     );
   });
 
-  it("fails explicitly when model outputs malformed scene schema", async () => {
+  it("replaces a malformed drafted scene with the evidence scene instead of failing", async () => {
     const jobId = "malformed-scene-" + Math.random().toString(36).slice(2);
     const pages = sceneFixturePages(quantitativeSceneLesson);
     const job = newJob(jobId, "quantitative.pdf", pages);
@@ -477,12 +499,9 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
     job.mode = "live";
     await withGuest(testGuest, () => insert(testGuest, "job", job.id, job));
 
-    const malformedLesson = structuredClone(quantitativeSceneLesson);
-    // Malformed scene version
-    (malformedLesson.challenges[0]!.scene as any).version = 999;
-
+    const sceneInputs: { previousProblems?: string[] }[] = [];
     const mockProvider: ModelProvider = {
-      async generate(_role, task, _input, schema) {
+      async generate(role, task, input, schema) {
         if (task.includes("Locate exact page-linked evidence")) {
           return schema.parse(asDraft({
             paperSummary: "Evidence",
@@ -491,30 +510,21 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
           }));
         }
         if (task.includes("Create a sequential investigation")) {
-          return malformedLesson as any;
+          return schema.parse(asDraft({ ...quantitativeSceneLesson, id: jobId }));
+        }
+        if (isSceneCall(role)) {
+          sceneInputs.push(input as { previousProblems?: string[] });
+          // A scene with an unknown version, returned without schema checks.
+          const scene = structuredClone(
+            quantitativeSceneLesson.challenges[0]!.scene,
+          ) as { version: number };
+          scene.version = 999;
+          return { scene, responseStyle: "cards" } as never;
         }
         throw new Error("Unexpected stage");
       },
     };
-
-    // Stage 0 completes
-    await withGuest(testGuest, () =>
-      jobsPost(
-        new Request("http://localhost/api/research/jobs", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Origin: "http://localhost",
-          },
-          body: JSON.stringify({ id: job.id }),
-        }),
-        mockProvider,
-      ),
-    );
-
-    // Stage 1 encounters malformed scene schema, retries automatically
-    // three times, then stops for the learner.
-    const post = (retry = false) =>
+    const post = () =>
       withGuest(testGuest, () =>
         jobsPost(
           new Request("http://localhost/api/research/jobs", {
@@ -523,34 +533,31 @@ describe("Issue No. 6: Sequential Pipeline & Scene Generation Lifecycle", () => 
               "Content-Type": "application/json",
               Origin: "http://localhost",
             },
-            body: JSON.stringify({ id: job.id, retry }),
+            body: JSON.stringify({ id: job.id }),
           }),
           mockProvider,
         ),
       );
-    const current = () =>
-      withGuest(testGuest, () => read<Job>(testGuest, "job", job.id));
-    for (let n = 1; n <= 3; n++) {
-      expect((await post()).status).toBe(200);
-      const retrying = await current();
-      expect(retrying.status).toBe("pending");
-      expect(retrying.audits[1]!.status).toBe("Retrying");
-      expect(retrying.audits[1]!.summary).toContain(
-        `Retrying automatically (${n} of 3)`,
-      );
-    }
-    expect((await post()).status).toBe(200);
-
-    const failedJob = await current();
-    expect(failedJob.status).toBe("failed");
-    expect(failedJob.stage).toBe(1);
-    expect(failedJob.audits[1]!.status).toBe("Failed");
-
-    // A learner's retry starts a fresh set of automatic retries.
-    await post(true);
-    const retried = await current();
-    expect(retried.status).toBe("pending");
-    expect(retried.autoRetries).toBe(1);
+    for (let s = 0; s <= STAGES.scenes; s++) expect((await post()).status).toBe(200);
+    const scened = await withGuest(testGuest, () =>
+      read<Job>(testGuest, "job", job.id),
+    );
+    expect(scened.status).toBe("pending");
+    expect(scened.stage).toBe(STAGES.terms);
+    const n = scened.lesson!.challenges.length + (scened.lesson!.bonus ? 1 : 0);
+    // Each challenge was drafted twice, the second time with its problems.
+    expect(sceneInputs).toHaveLength(n * 2);
+    expect(
+      sceneInputs.slice(n).every((i) =>
+        i.previousProblems?.some((p) => p.includes("malformed scene")),
+      ),
+    ).toBe(true);
+    expect(
+      scened.lesson!.challenges.every((c) => isEvidenceScene(c.scene)),
+    ).toBe(true);
+    expect(scened.audits[STAGES.scenes]!.summary).toContain(
+      "0 written for this paper",
+    );
   });
 
   it("preserves stage progress and live mode across provider transport failure and retry", async () => {

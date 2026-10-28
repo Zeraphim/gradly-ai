@@ -173,6 +173,35 @@ export const sceneSchema = z.discriminatedUnion("kind", [
       .min(2)
       .max(6),
   }),
+  // Claims from the most modest (first) to the strongest (last). `reach` marks
+  // the strongest claim the cited evidence supports, so it waits for the answer.
+  z.strictObject({
+    ...base,
+    kind: z.literal("ladder"),
+    rungs: z.array(item).min(2).max(5),
+    reach: z.strictObject({ rungId: id, label: text, at: gate }).nullable(),
+  }),
+  // Statements the learner sorts into two or three bins before answering. The
+  // sort is unscored; where the paper places each statement waits for the answer.
+  z.strictObject({
+    ...base,
+    kind: z.literal("sort"),
+    bins: z
+      .array(z.strictObject({ id, label: text }))
+      .min(2)
+      .max(3),
+    cards: z.array(item).min(2).max(6),
+    placements: z
+      .array(z.strictObject({ cardId: id, binId: id, at: gate }))
+      .max(6),
+  }),
+  // A procedure or argument as consecutive passages, read like the paper's
+  // own text, so the learner can find the step a decision turns on.
+  z.strictObject({
+    ...base,
+    kind: z.literal("spot"),
+    passages: z.array(item).min(3).max(8),
+  }),
 ]);
 export type Scene = z.infer<typeof sceneSchema>;
 export type SceneKind = Scene["kind"];
@@ -183,6 +212,23 @@ export type SceneGate = z.infer<typeof gate>;
 export const sceneKinds = sceneSchema.options.map(
   (option) => option.shape.kind.value,
 ) as SceneKind[];
+
+/** Title and note of the server-built evidence scene, the same for any challenge. */
+export const EVIDENCE_SCENE_TITLE = "Connect the evidence";
+export const EVIDENCE_SCENE_NOTE = "Verified excerpts from the paper.";
+/** The note when a challenge cites no excerpt and shows the lesson's own lines. */
+export const EVIDENCE_SUMMARY_NOTE =
+  "The lesson's summary of the paper; this challenge cites no excerpt.";
+/** The server-built evidence scene, which the no-repeat rule exempts. */
+export function isEvidenceScene(scene: unknown) {
+  if (!scene || typeof scene !== "object") return false;
+  const s = scene as Scene;
+  return (
+    s.kind === "connections" &&
+    s.title === EVIDENCE_SCENE_TITLE &&
+    [EVIDENCE_SCENE_NOTE, EVIDENCE_SUMMARY_NOTE].includes(s.provenance?.note)
+  );
+}
 
 /** How a challenge collects its answer. Every style submits the same option ids. */
 export const responseStyles = ["cards", "pills", "tap"] as const;
@@ -195,6 +241,8 @@ export const tapKinds: SceneKind[] = [
   "tests",
   "units",
   "matrix",
+  "ladder",
+  "spot",
 ];
 
 export function sceneItems(scene: Scene): SceneItem[] {
@@ -217,7 +265,13 @@ export function sceneItems(scene: Scene): SceneItem[] {
                     ? scene.tests
                     : scene.kind === "units"
                       ? scene.levels
-                      : scene.rows;
+                      : scene.kind === "matrix"
+                        ? scene.rows
+                        : scene.kind === "ladder"
+                          ? scene.rungs
+                          : scene.kind === "sort"
+                            ? scene.cards
+                            : scene.passages;
   return [...items, ...(scene.resolution ? [scene.resolution] : [])];
 }
 
@@ -362,6 +416,27 @@ export function sceneProblems(
     if (scene.rows.some((row) => row.cells.length !== scene.conditions.length))
       issues.push("each matrix row needs one cell per condition");
   }
+  if (scene.kind === "ladder" && scene.reach) {
+    if (!scene.rungs.some((rung) => rung.id === scene.reach!.rungId))
+      issues.push("unknown ladder rung");
+    // The supported rung often is the answer, so it waits past the retry.
+    if (scene.reach.at !== "resolution")
+      issues.push("the ladder reach must wait for the answer explanation");
+  }
+  if (scene.kind === "sort") {
+    const bins = new Set(scene.bins.map((bin) => bin.id));
+    if (bins.size !== scene.bins.length) issues.push("duplicate sort bins");
+    const cards = new Set(scene.cards.map((card) => card.id));
+    const placed = scene.placements.map((p) => p.cardId);
+    if (new Set(placed).size !== placed.length)
+      issues.push("a sort card is placed more than once");
+    for (const p of scene.placements) {
+      if (!cards.has(p.cardId) || !bins.has(p.binId))
+        issues.push("unknown sort card or bin");
+      if (p.at !== "resolution")
+        issues.push("sort placements must wait for the answer explanation");
+    }
+  }
   return [...new Set(issues)];
 }
 
@@ -430,7 +505,22 @@ export function projectScene(
     scene.band = scene.band && visible(scene.band.at) ? scene.band : null;
   } else if (scene.kind === "tests") scene.tests = shown(scene.tests);
   else if (scene.kind === "units") scene.levels = shown(scene.levels);
-  else scene.rows = shown(scene.rows);
+  else if (scene.kind === "matrix") scene.rows = shown(scene.rows);
+  else if (scene.kind === "ladder") {
+    scene.rungs = shown(scene.rungs);
+    scene.reach =
+      scene.reach &&
+      visible(scene.reach.at) &&
+      scene.rungs.some((rung) => rung.id === scene.reach!.rungId)
+        ? scene.reach
+        : null;
+  } else if (scene.kind === "sort") {
+    scene.cards = shown(scene.cards);
+    const cards = new Set(scene.cards.map((card) => card.id));
+    scene.placements = scene.placements.filter(
+      (p) => visible(p.at) && cards.has(p.cardId),
+    );
+  } else scene.passages = shown(scene.passages);
   const ids = new Set(sceneItems(scene).map((item) => item.id));
   scene.responses = scene.responses.map((response) => ({
     ...response,

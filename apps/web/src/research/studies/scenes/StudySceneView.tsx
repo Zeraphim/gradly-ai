@@ -2,11 +2,14 @@ import type { SceneItem } from "@paperquest/contracts";
 import {
   ArrowDown,
   ArrowRight,
+  ArrowUpNarrowWide,
   Check,
   ChartColumn,
+  Columns3,
   FlaskConical,
   GitFork,
   Grid3x3,
+  Highlighter,
   History,
   Layers,
   Link2,
@@ -23,7 +26,11 @@ import "../../scenes/scenes.css";
 import type { StudyScene } from "../types.js";
 import { AssociationScene } from "./AssociationScene.js";
 import { EstimateScene } from "./EstimateScene.js";
+import { LadderScene } from "./LadderScene.js";
 import { MatrixScene } from "./MatrixScene.js";
+import { SortScene } from "./SortScene.js";
+import { SpotScene } from "./SpotScene.js";
+import "./reasoning-scenes.css";
 import { TapNode, type TapProps } from "./TapNode.js";
 import { TestsScene } from "./TestsScene.js";
 import { TimelineScene } from "./TimelineScene.js";
@@ -41,6 +48,9 @@ const kinds: Record<StudyScene["kind"], { label: string; icon: typeof Link2 }> =
     tests: { label: "Tests", icon: FlaskConical },
     units: { label: "Units", icon: Layers },
     matrix: { label: "Conditions", icon: Grid3x3 },
+    ladder: { label: "Claims", icon: ArrowUpNarrowWide },
+    sort: { label: "Sort", icon: Columns3 },
+    spot: { label: "Close reading", icon: Highlighter },
   };
 
 /**
@@ -123,7 +133,13 @@ export function StudySceneView({
         layout={motion.layout}
         className="study-scene-body"
         role={tap ? (tap.multiple ? "group" : "radiogroup") : undefined}
-        aria-label={tap ? "Answer by choosing a diagram step" : undefined}
+        aria-label={
+          tap
+            ? scene.kind === "spot"
+              ? "Answer by choosing a passage"
+              : "Answer by choosing a diagram step"
+            : undefined
+        }
       >
         {scene.kind === "flow" ? (
           <>
@@ -211,6 +227,20 @@ export function StudySceneView({
         ) : null}
         {scene.kind === "matrix" ? (
           <MatrixScene scene={scene} answered={answered} tap={tap} />
+        ) : null}
+        {scene.kind === "ladder" ? (
+          <LadderScene scene={scene} tap={tap} />
+        ) : null}
+        {scene.kind === "sort" ? (
+          <SortScene
+            scene={scene}
+            draft={draft}
+            onDraft={onDraft}
+            answered={answered}
+          />
+        ) : null}
+        {scene.kind === "spot" ? (
+          <SpotScene scene={scene} draft={draft} onDraft={onDraft} tap={tap} />
         ) : null}
       </m.div>
       {/* Resolution has no exit presence: withdrawn content leaves immediately. */}

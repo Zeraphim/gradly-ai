@@ -212,9 +212,10 @@ test("PDF preview, real extraction, no-key recovery and document deletion", asyn
   expect((await unconfirmed.json()).error).toContain("Confirm sending");
   await page.locator(".prep-more > summary").click();
   await page
-    .getByText("View all 6 preparation stages", { exact: true })
+    .getByText("View all 7 preparation stages", { exact: true })
     .click();
   await expect(page.locator(".preparation-audits summary small")).toHaveText([
+    "Pending",
     "Pending",
     "Pending",
     "Pending",
@@ -528,10 +529,10 @@ test("no-key sample flow is explicit, resumable and separate from uploaded evide
   ).toBeVisible({ timeout: 20000 });
   await page.locator(".prep-more > summary").click();
   await page
-    .getByText("View all 6 preparation stages", { exact: true })
+    .getByText("View all 7 preparation stages", { exact: true })
     .click();
   await expect(page.locator(".preparation-audits summary small")).toHaveText(
-    Array(6).fill("Completed"),
+    Array(7).fill("Completed"),
   );
   await page.reload();
   await expect(

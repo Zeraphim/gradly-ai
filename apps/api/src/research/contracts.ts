@@ -305,14 +305,11 @@ export function sceneFaults(c: Challenge, evidence: Lesson["evidence"]) {
   }
   return problems;
 }
-/** Fewest required challenges with a valid scene in a generated lesson. */
-export const MIN_GENERATED_SCENES = 1;
-/**
- * Generated lessons must be interactive: at least one required challenge carries
- * a scene that passes validation. `connections` fits any paper with evidence.
- */
-export function sceneCoverageProblems(lesson: Lesson): string[] {
-  const valid = lesson.challenges.filter((c) => {
+/** Share of required challenges a generated lesson must play as a scene. */
+export const SCENE_COVERAGE = 0.9;
+/** Challenges with a scene that passes validation, out of those given. */
+export function sceneCoverage(challenges: Challenge[]) {
+  return challenges.filter((c) => {
     const parsed = sceneSchema.safeParse(c.scene);
     return (
       parsed.success &&
@@ -323,10 +320,19 @@ export function sceneCoverageProblems(lesson: Lesson): string[] {
       ).length
     );
   }).length;
-  return valid >= MIN_GENERATED_SCENES
+}
+/**
+ * Generated lessons must be interactive: at least 90% of required challenges
+ * carry a scene that passes validation. The Scene Designer stage reaches it
+ * with an evidence scene wherever a drafted one fails.
+ */
+export function sceneCoverageProblems(lesson: Lesson): string[] {
+  const valid = sceneCoverage(lesson.challenges);
+  const needed = Math.ceil(lesson.challenges.length * SCENE_COVERAGE);
+  return valid >= needed
     ? []
     : [
-        `The lesson has ${valid} valid interactive scene${valid === 1 ? "" : "s"}; at least ${MIN_GENERATED_SCENES} required challenge needs one. A connections scene fits any paper with evidence.`,
+        `The lesson has ${valid} valid interactive scene${valid === 1 ? "" : "s"} for ${lesson.challenges.length} required challenges; at least ${needed} are needed.`,
       ];
 }
 /**

@@ -26,8 +26,18 @@ import {
   sceneRepeatProblems,
 } from "../../scripts/prepared-study-checks.js";
 import type {} from "./papers-setup.js";
-import { termProblems } from "@paperquest/contracts";
+import {
+  isEvidenceScene,
+  termProblems,
+  type Scene,
+} from "@paperquest/contracts";
 import { isRemoved, removedTerms } from "../../scripts/prepared-term-review.js";
+import { removedScenes } from "../../scripts/prepared-scene-review.js";
+import {
+  SCENE_COVERAGE,
+  type Challenge,
+} from "../../apps/api/src/research/contracts.js";
+import { stageSceneProblems } from "../../apps/api/src/research/scene-stage.js";
 
 const studies = await Promise.all(
   cards.map(async (card) => (await loadStudy(card.slug))!),
@@ -270,6 +280,64 @@ describe("prepared-study terms", () => {
         ...(study.lesson.bonus ? [study.lesson.bonus] : []),
       ])
         expect(termProblems(c, ids), `${study.slug} ${c.id}`).toEqual([]);
+    }
+  });
+});
+
+describe("prepared-study scenes", () => {
+  const sceneDir = fileURLToPath(
+    new URL("../../apps/web/src/research/studies/data/scenes", import.meta.url),
+  );
+  const playable = (study: (typeof studies)[number]) => [
+    ...study.lesson.challenges,
+    ...(study.lesson.bonus ? [study.lesson.bonus] : []),
+  ];
+
+  it("ships a saved scenes file for every prepared study", () => {
+    const saved = readdirSync(sceneDir)
+      .filter((f) => f.endsWith(".ts"))
+      .map((f) => f.replace(/\.ts$/, ""));
+    expect(saved.sort()).toEqual(cards.map((c) => c.slug).sort());
+  });
+
+  it("plays at least 90% of every study's challenges, bonus included, as a scene", () => {
+    for (const study of studies) {
+      const all = playable(study);
+      const scened = all.filter((c) => c.scene).length;
+      expect(scened / all.length, study.slug).toBeGreaterThanOrEqual(
+        SCENE_COVERAGE,
+      );
+    }
+  });
+
+  it("passes every saved scene through the Scene Designer's checks", async () => {
+    for (const study of studies) {
+      const saved = (
+        await import(
+          `../../apps/web/src/research/studies/data/scenes/${study.slug}.ts`
+        )
+      ).scenes as Record<string, unknown>;
+      for (const c of playable(study)) {
+        if (!saved[c.id]) continue;
+        expect(
+          stageSceneProblems(
+            c as Challenge,
+            c.scene as Scene,
+            study.lesson.evidence,
+          ),
+          `${study.slug} ${c.id}`,
+        ).toEqual([]);
+      }
+    }
+  });
+
+  it("replaces scenes removed after review with the evidence scene", () => {
+    for (const r of removedScenes) {
+      const study = studies.find((s) => s.slug === r.slug);
+      expect(study, r.slug).toBeTruthy();
+      const c = playable(study!).find((x) => x.id === r.challenge);
+      expect(c, `${r.slug} ${r.challenge}`).toBeTruthy();
+      expect(isEvidenceScene(c!.scene), `${r.slug} ${r.challenge}`).toBe(true);
     }
   });
 });

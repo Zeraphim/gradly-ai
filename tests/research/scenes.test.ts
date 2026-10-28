@@ -1,4 +1,5 @@
 import { asDraft } from "./fixtures/draft.js";
+import { isSceneCall, sceneReplyFrom } from "./fixtures/scene-reply.js";
 import { describe, it, expect } from "vitest";
 import {
   sceneSchema,
@@ -18,7 +19,11 @@ import {
   transition,
   learningPoints,
 } from "../../apps/api/src/research/engine.js";
-import { newJob, runStage } from "../../apps/api/src/research/pipeline.js";
+import {
+  newJob,
+  READY_STAGE,
+  runStage,
+} from "../../apps/api/src/research/pipeline.js";
 import {
   fieldTrialSceneLesson,
   quantitativeSceneLesson,
@@ -176,15 +181,23 @@ for (const fixture of [
         "authored-fixture.pdf",
         sceneFixturePages(fixture),
       );
-      for (let i = 0; i < 6; i++)
+      const scene = sceneReplyFrom(fixture, { anyKind: true });
+      const sceneTasks: string[] = [];
+      for (let i = 0; i < READY_STAGE; i++)
         job = await runStage(job, {
-          async generate(_role, task, _input, schema) {
+          async generate(role, task, input, schema) {
+            // The fixture's own scenes stand in for the Scene Designer.
+            if (isSceneCall(role)) {
+              sceneTasks.push(task);
+              return scene(input) as never;
+            }
             tasks.push(task);
             return schema.parse(asDraft(outputs.shift()));
           },
         });
       expect(job.status).toBe("ready");
-      expect(tasks[1]).toContain("Scenes are required.");
+      expect(tasks[1]).not.toContain("connections fits any paper");
+      expect(sceneTasks[0]).toContain("Design one interactive scene");
       expect(tasks[3]).toContain("Review all scene text");
       let s = transition(
         newSession(job.lesson!, "fixture"),
@@ -207,21 +220,41 @@ for (const fixture of [
     });
   });
 
-it("fails malformed model scene output explicitly instead of publishing a lesson", async () => {
+it("never publishes a malformed model scene", async () => {
   const job = newJob(
     "malformed",
     "fixture.pdf",
     sceneFixturePages(qualitativeSceneLesson),
   );
   job.stage = 1;
+  job.evidence = {
+    findings: "Fixture",
+    refs: qualitativeSceneLesson.evidence,
+    missing: [],
+  };
   const malformed = structuredClone(qualitativeSceneLesson);
   (malformed.challenges[0]!.scene as unknown as { version: number }).version =
     42;
-  const result = await runStage(job, {
-    async generate() {
-      return malformed as never;
+  // The lesson draft has no scene field, so a drafted scene is dropped.
+  const drafted = await runStage(job, {
+    async generate(_role, _task, _input, schema) {
+      return schema.parse(asDraft(malformed));
     },
   });
-  expect(result.status).toBe("failed");
-  expect(result.stage).toBe(1);
+  expect(drafted.status).toBe("pending");
+  expect(drafted.lesson!.challenges.every((c) => c.scene === null)).toBe(true);
+  // A malformed Scene Designer reply is replaced by the evidence scene.
+  const scened = await runStage(drafted, {
+    async generate() {
+      return {
+        scene: malformed.challenges[0]!.scene,
+        responseStyle: "cards",
+      } as never;
+    },
+  });
+  expect(scened.status).toBe("pending");
+  for (const c of scened.lesson!.challenges) {
+    expect(c.scene?.kind).toBe("connections");
+    expect((c.scene as { version: number }).version).toBe(1);
+  }
 });

@@ -59,6 +59,9 @@ export type IntervalEstimate = EstimateScene["estimates"][number];
 export type TestsScene = SceneOf<"tests">;
 export type UnitsScene = SceneOf<"units">;
 export type MatrixScene = SceneOf<"matrix">;
+export type LadderScene = SceneOf<"ladder">;
+export type SortScene = SceneOf<"sort">;
+export type SpotScene = SceneOf<"spot">;
 export type StudyScene = Scene;
 export type { ResponseStyle };
 

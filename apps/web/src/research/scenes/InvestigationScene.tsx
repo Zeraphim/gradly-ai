@@ -23,6 +23,8 @@ export type SceneDraft = {
   prediction: string | null;
   pinnedIds?: string[];
   revealed?: boolean;
+  /** Bin per card in a sort scene; unscored exploration. */
+  sorted?: Record<string, string>;
 };
 export const emptySceneDraft: SceneDraft = {
   inspectedId: null,

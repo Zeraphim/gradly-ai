@@ -22,6 +22,7 @@ export function runDemoStage(job: Job): Job {
   const summaries = [
     `Your ${j.pages.length}-page upload was extracted, but is not analyzed in this preview. Loaded separate evidence from the reference study.`,
     "Loaded the authored eight-challenge sample, including hints, retries and optional bonus. These questions are not generated from your upload.",
+    "Kept the sample's authored scenes. No scenes were designed for your upload, and no AI call was made.",
     "Kept the sample's authored wording. No term definitions were generated, and no AI call was made.",
     "Using the reference study’s authored answer guide and statistical explanations. No AI reviewer was called.",
     "Loaded reference feedback and revision prompts. Written reasoning is saved without claiming an AI assessment.",

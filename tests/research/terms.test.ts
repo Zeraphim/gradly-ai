@@ -242,15 +242,17 @@ describe("terms stage", () => {
     expect(STAGES).toEqual({
       evidence: 0,
       lesson: 1,
-      terms: 2,
-      methods: 3,
-      coach: 4,
-      verify: 5,
+      scenes: 2,
+      terms: 3,
+      methods: 4,
+      coach: 5,
+      verify: 6,
     });
-    expect(READY_STAGE).toBe(6);
+    expect(READY_STAGE).toBe(7);
     expect(newJob("j", "p.pdf", []).audits.map((a) => a.role)).toEqual([
       "Research Evidence Analyst",
       "Lesson Architect",
+      "Scene Designer",
       "Terms Guide",
       "Research Methods Reviewer",
       "Learning Coach",
@@ -362,19 +364,38 @@ describe("terms stage", () => {
     expect(review.removed).toBe(1);
   });
 
-  it("upgrades a five-stage job saved before the terms stage", () => {
-    const legacy = newJob("old", "p.pdf", []);
-    legacy.audits.splice(STAGES.terms, 1);
-    legacy.stage = 2; // was the Methods Reviewer
-    const upgraded = upgradeJob(legacy);
-    expect(upgraded.stage).toBe(STAGES.methods);
+  it("upgrades a five-stage job saved before the terms and scene stages", () => {
+    // Five audits: evidence, lesson, methods, coach, verify.
+    const five = () => {
+      const j = newJob("old", "p.pdf", []);
+      j.audits.splice(STAGES.scenes, 2);
+      return j;
+    };
+    const ready = five();
+    ready.stage = 5;
+    ready.status = "ready";
+    const upgraded = upgradeJob(ready);
+    expect(upgraded.stage).toBe(READY_STAGE);
     expect(upgraded.audits).toHaveLength(READY_STAGE);
     expect(upgraded.audits[STAGES.terms]).toMatchObject({
       role: "Terms Guide",
       status: "Completed",
+      model: "Not run",
     });
-    const early = newJob("early", "p.pdf", []);
-    early.audits.splice(STAGES.terms, 1);
+    expect(upgraded.audits[STAGES.scenes]).toMatchObject({
+      role: "Scene Designer",
+      status: "Completed",
+      model: "Not run",
+    });
+    // An unfinished job past the lesson goes back to draft its scenes.
+    const running = five();
+    running.stage = 2; // was the Methods Reviewer
+    const rewound = upgradeJob(running);
+    expect(rewound.stage).toBe(STAGES.scenes);
+    expect(rewound.audits.slice(STAGES.scenes).map((a) => a.status)).toEqual(
+      Array(READY_STAGE - STAGES.scenes).fill("Pending"),
+    );
+    const early = five();
     early.stage = 1;
     expect(upgradeJob(early)).toMatchObject({ stage: 1 });
     expect(upgradeJob(early).audits[STAGES.terms]!.status).toBe("Pending");

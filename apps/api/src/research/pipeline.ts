@@ -6,7 +6,6 @@ import {
   termIn,
   termSchema,
   validTerms,
-  type SceneOf,
 } from "@paperquest/contracts";
 import { nebiusConfig } from "../nebius-config.js";
 import {
@@ -17,8 +16,6 @@ import {
   generatedLessonSchema,
   MAX_GENERATED_CHALLENGES,
   refSchema,
-  sceneCoverageProblems,
-  sceneFaults,
   verifyLesson,
   type Challenge,
   type Job,
@@ -26,7 +23,13 @@ import {
   type Audit,
 } from "./contracts.js";
 import { ProviderError, type ModelProvider } from "./provider.js";
-import { sceneAuthoringInstructions } from "./scene-authoring.js";
+import {
+  designScenes,
+  evidenceScene,
+  SCENE_ROLE,
+  SCENE_TASK,
+  scenesSummary,
+} from "./scene-stage.js";
 const roles: [string, string][] = [
   [
     "Research Evidence Analyst",
@@ -36,6 +39,7 @@ const roles: [string, string][] = [
     "Lesson Architect",
     "Create a sequential investigation from verified evidence.",
   ],
+  [SCENE_ROLE, SCENE_TASK],
   [
     "Terms Guide",
     "Define the research terms in each challenge as this paper uses them, without giving away answers or findings.",
@@ -55,10 +59,11 @@ const roles: [string, string][] = [
 export const STAGES = {
   evidence: 0,
   lesson: 1,
-  terms: 2,
-  methods: 3,
-  coach: 4,
-  verify: 5,
+  scenes: 2,
+  terms: 3,
+  methods: 4,
+  coach: 5,
+  verify: 6,
 } as const;
 /** The stage index a finished job reaches. */
 export const READY_STAGE = roles.length;
@@ -86,7 +91,9 @@ export function lessonDraftSchema(evidenceIds: string[]) {
   // learners saw as evidence. The server shows the cited excerpts instead.
   // No `type`: drafts chose "multiple" for one correct option, so the server
   // derives it from the correct flags.
-  // No `terms`: the terms stage writes them, so drafts keep their budget.
+  // No `terms` or `scene`: later stages write them one challenge at a time,
+  // so drafts keep their budget. With scenes optional here, drafts left them
+  // out entirely.
   const challenge = challengeSchema
     .omit({
       alternatives: true,
@@ -94,6 +101,8 @@ export function lessonDraftSchema(evidenceIds: string[]) {
       evidence: true,
       type: true,
       terms: true,
+      scene: true,
+      responseStyle: true,
     })
     .extend({
       options: z
@@ -171,42 +180,6 @@ function attachAddedExcerpts(
       .filter((id) => c.reveal !== "design" || !resultsRef.test(id))
       .map((id) => evidence.find((r) => r.id === id)!.excerpt),
     alternatives: [],
-  };
-}
-/**
- * A connections scene for one challenge. It shows the challenge's evidence
- * excerpts, which the player already shows before an answer when a challenge
- * has no scene.
- */
-function evidenceScene(c: Challenge): SceneOf<"connections"> {
-  const provenance = {
-    kind: "reported" as const,
-    refs: c.refs,
-    note: "Verified excerpts from the paper.",
-  };
-  const anchors = c.evidence.slice(0, 6).map((detail, i) => ({
-    id: `evidence_${i + 1}`,
-    label: `Evidence ${i + 1}`,
-    detail: detail.slice(0, 600),
-    at: "setup" as const,
-    provenance,
-  }));
-  return {
-    version: 1,
-    kind: "connections",
-    title: "Connect the evidence",
-    instruction:
-      "Read the evidence, then connect the response you would choose.",
-    description: "The challenge's evidence with one response per option.",
-    provenance,
-    actionLabel: "Connect a response",
-    anchors,
-    responses: c.options.map((o) => ({
-      optionId: o.id,
-      label: o.text.slice(0, 600),
-      targetIds: anchors.map((a) => a.id),
-    })),
-    resolution: null,
   };
 }
 /** Every challenge a learner can open, bonus included. */
@@ -393,7 +366,7 @@ export async function reviewLesson(
   // drafts for having none, so it is told what it reviews.
   const assessment = await provider.generate(
     role,
-    `${task}${kind === "coach" ? coachBrief : ""} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Review the briefing too: it must provide source-supported background and explain unfamiliar terms without leaking findings, conclusions or challenge answers. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Review all scene text, values, edges, response labels and reveal gates too. Reject unsupported visual relationships, findings or answer leakage in setup metadata, invented numerical data, misleading provenance, or diagrams that imply unavailable observations. Review every challenge's term definitions too: a learner can open them before answering, so reject a definition that names or paraphrases an accepted option, states or hints at a finding before its challenge's reveal stage, makes a claim the evidence does not support, or has the wrong source (source=paper needs cited excerpts that support it; source=model cites none). List each rejected definition in rejectedTerms with its challenge id and term. Return approved=false when uncertain.`,
+    `${task}${kind === "coach" ? coachBrief : ""} Reject claims or interpretations not supported by document evidence. Respect the research approach: participant accounts or qualitative themes do not establish population prevalence, association alone does not establish causation, and an argument alone is not an empirical finding. Do not demand statistical tests or numerical findings where they are inapplicable. Review the briefing too: it must provide source-supported background and explain unfamiliar terms without leaking findings, conclusions or challenge answers. Reject paper identity revealed before final reveal and findings leaked in design-stage prompts/hints. Review every accepted response and alternative, including defensible uncertainty when evidence is missing. Review all scene text, values, edges, response labels and reveal gates too. Reject unsupported visual relationships, findings or answer leakage in setup metadata, invented numerical data, misleading provenance, or diagrams that imply unavailable observations. Review every challenge's term definitions too: a learner can open them before answering, so reject a definition that names or paraphrases an accepted option, states or hints at a finding before its challenge's reveal stage, makes a claim the evidence does not support, or has the wrong source (source=paper needs cited excerpts that support it; source=model cites none). List each rejected definition in rejectedTerms with its challenge id and term. List in rejectedScenes the id of every challenge whose scene leaks its answer or a finding before its reveal stage, misstates the evidence, or implies observations the paper does not report; the server replaces it with the challenge's cited excerpts. Return approved=false when uncertain.`,
     { lesson, pages },
     z.object({
       approved: z.boolean(),
@@ -408,12 +381,28 @@ export async function reviewLesson(
           }),
         )
         .default([]),
+      rejectedScenes: z
+        .array(z.object({ challenge: z.string(), reason: z.string() }))
+        .default([]),
     }),
     model,
     { tier: "pipeline" },
   );
   const l = structuredClone(lesson);
   let removed = 0;
+  let replaced = 0;
+  const rejectedScenes = new Set(
+    (assessment.rejectedScenes ?? []).map((r) => r.challenge),
+  );
+  for (const c of lessonChallenges(l)) {
+    if (!c.scene || !rejectedScenes.has(c.id)) continue;
+    const fallback = evidenceScene(c, l.evidence);
+    if (fallback && JSON.stringify(fallback) === JSON.stringify(c.scene))
+      continue;
+    c.scene = fallback;
+    delete c.responseStyle;
+    replaced++;
+  }
   for (const c of lessonChallenges(l)) {
     if (!c.terms) continue;
     const rejected = new Set(
@@ -439,31 +428,63 @@ export async function reviewLesson(
     issues: assessment.issues.filter(readable),
     summary: readable(assessment.summary) ? assessment.summary.trim() : "",
     rejectedTerms: assessment.rejectedTerms ?? [],
+    rejectedScenes: assessment.rejectedScenes ?? [],
     removed,
+    replaced,
   };
 }
+/** Stages added after jobs were first saved, with how an older job meets them. */
+const addedStages: Record<string, { skipped: string; rerun: boolean }> = {
+  // Terms are optional help, so a job past the lesson goes on without them.
+  "Terms Guide": {
+    skipped: "Not run: this lesson was prepared before term definitions.",
+    rerun: false,
+  },
+  // Scenes count toward the lesson's coverage check, so an unfinished job
+  // goes back to draft them; a finished lesson keeps the scenes it has.
+  [SCENE_ROLE]: {
+    skipped: "Not run: this lesson was prepared before the Scene Designer.",
+    rerun: true,
+  },
+};
 /**
- * Jobs saved before the terms stage have five audits. The terms audit is
- * inserted at its position; a job already past lesson generation records it
- * as not run and keeps its place in the stages that follow.
+ * Saved jobs from before a stage existed lack its audit. Each missing audit is
+ * inserted at its position, by role. A finished job records it as not run;
+ * an unfinished job past that position either records it as not run or, for
+ * a stage that must run, goes back to it.
  */
 export function upgradeJob(job: Job): Job {
-  if (job.audits.length !== READY_STAGE - 1) return job;
+  if (job.audits.length === roles.length) return job;
   const j = structuredClone(job);
-  const [role, task] = roles[STAGES.terms]!;
-  const passed = j.stage >= STAGES.terms;
-  j.audits.splice(STAGES.terms, 0, {
-    role,
-    task,
-    status: passed ? "Completed" : "Pending",
-    summary: passed
-      ? "Not run: this lesson was prepared before term definitions."
-      : "Waiting for this stage.",
-    refs: [],
-    model: passed ? "Not run" : nebiusConfig().pipelineModelId,
-  });
-  if (passed) j.stage++;
-  return j;
+  for (const [i, [role, task]] of roles.entries()) {
+    if (j.audits[i]?.role === role) continue;
+    const added = addedStages[role];
+    if (!added) return job;
+    const passed = j.stage >= i;
+    const finished = j.status === "ready";
+    const back = passed && !finished && added.rerun;
+    j.audits.splice(i, 0, {
+      role,
+      task,
+      status: passed && !back ? "Completed" : "Pending",
+      summary: passed && !back ? added.skipped : "Waiting for this stage.",
+      refs: [],
+      model: passed && !back ? "Not run" : nebiusConfig().pipelineModelId,
+    });
+    if (back) {
+      // A running request keeps its lease; its stale result is upgraded again.
+      j.stage = i;
+      if (j.status !== "processing") j.status = "pending";
+      delete j.error;
+      for (const later of j.audits.slice(i + 1)) {
+        later.status = "Pending";
+        later.summary = "Waiting for this stage.";
+        delete later.error;
+        delete later.errorCode;
+      }
+    } else if (passed) j.stage++;
+  }
+  return j.audits.length === roles.length ? j : job;
 }
 export function newJob(id: string, name: string, pages: Job["pages"]): Job {
   return {
@@ -568,7 +589,7 @@ export async function runStage(
       const draftSchema = lessonDraftSchema(j.evidence!.refs.map((r) => r.id));
       const draft = await provider.generate(
         audit.role,
-        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. The learner has read only the briefing, so frame each question as a decision made from the briefing and the challenge's evidence, such as which design, measure or interpretation fits and why. Never ask the learner to identify or restate the paper's research question, aim, design, sample or a number. State every fact the decision needs in the prompt, so a learner who has not read the paper can answer from the prompt, briefing and evidence, and ask which choice fits best, such as which design would rule out a named alternative explanation. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Give every challenge at least three options, optional reasoning, correct=true on each accepted option and false on every other option, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Write briefing as a concise, plain-language orientation before any quiz: explain the topic and why it matters, the setting and participants or source material where supported, and unfamiliar terms needed to read the paper. Use short paragraphs separated by newlines, aiming for 150–220 words when source evidence supports it. Do not reveal findings, conclusions, correct choices, statistical test selections, or details the learner must decide in the challenges. Omit unavailable context instead of inventing it. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence. ${sceneAuthoringInstructions}`,
+        `${audit.task} Use 3–${MAX_GENERATED_CHALLENGES} challenges depending on evidence, adapting to this paper's research approach. Build meaningful decisions around research questions, study design, sampling or evidence selection, interpretation, competing explanations, and limits where supported. The learner has read only the briefing, so frame each question as a decision made from the briefing and the challenge's evidence, such as which design, measure or interpretation fits and why. Never ask the learner to identify or restate the paper's research question, aim, design, sample or a number. State every fact the decision needs in the prompt, so a learner who has not read the paper can answer from the prompt, briefing and evidence, and ask which choice fits best, such as which design would rule out a named alternative explanation. Statistical test selection and numerical results belong only in papers that support those decisions; do not turn qualitative themes into prevalence estimates or conceptual arguments into causal findings. Give every challenge at least three options, optional reasoning, correct=true on each accepted option and false on every other option, a hint for every challenge, misconception notes keyed by wrong option id, source refs and staged findings reveals. Hints and misconception notes must not name, quote or paraphrase an accepted option; only the explanation may state the answer. When a challenge's prompt, options, hint, misconceptions or explanation use a detail its refs do not state, copy the sentence stating it into that challenge's addedExcerpts with its physical PDF page number: one to three consecutive sentences from a single page, exact, not paraphrased. Leave addedExcerpts empty when the refs state every detail. Set writtenReasoning=true on at least one interpretation or limits challenge so the learner can explain their thinking. Use reveal=design before showing findings, reveal=results when findings or claims become available, and reveal=interpretation for judging their meaning or limits; reserve reveal=significance for a supported statistical-significance question. Write briefing as a concise, plain-language orientation before any quiz: explain the topic and why it matters, the setting and participants or source material where supported, and unfamiliar terms needed to read the paper. Use short paragraphs separated by newlines, aiming for 150–220 words when source evidence supports it. Do not reveal findings, conclusions, correct choices, statistical test selections, or details the learner must decide in the challenges. Omit unavailable context instead of inventing it. Do not put paper title/authors in briefing, questions, hints, or options. Set source=generated. lesson.evidence must include every item from the provided evidence input, preserving their exact ids. Each challenge.refs array must contain only evidence ids present in lesson.evidence — no invented references. paper.url must be a DOI link extracted from the supplied pages (e.g., https://doi.org/10.xxxx/...); if no DOI appears, set paper.url=null. Do not invent participants, quotes or results. Frame each question so its accepted options are the only answer the evidence supports. Fill every required field, including title and briefing, and keep each one brief to fit the output budget: prompts and explanations at most two sentences, options and hints one short sentence, misconception notes one sentence.`,
         {
           evidence: j.evidence,
           evidenceRule:
@@ -617,39 +638,25 @@ export async function runStage(
         throw new ContentCheckError(
           `The draft has no hint for ${hintless.join(", ")}. Retry this stage.`,
         );
-      // Scenes are optional per challenge, so a broken one is removed rather
-      // than stopping the lesson at verification.
-      let removed = 0;
-      for (const c of all)
-        if (c.scene && sceneFaults(c, j.lesson.evidence).length) {
-          c.scene = null;
-          if (c.responseStyle === "tap") delete c.responseStyle;
-          removed++;
-        }
-      // When no drafted scene survives, one challenge gets a scene built from
-      // its evidence, installed only if it passes the same checks.
-      let built = false;
-      if (sceneCoverageProblems(j.lesson).length)
-        for (const c of j.lesson.challenges) {
-          const scene = evidenceScene(c);
-          if (
-            !scene.anchors.length ||
-            sceneFaults({ ...c, scene }, j.lesson.evidence).length
-          )
-            continue;
-          c.scene = scene;
-          if (c.responseStyle === "tap") delete c.responseStyle;
-          built = true;
-          break;
-        }
-      // A lesson without a usable scene fails here, where a retry redraws the
-      // lesson, rather than after two reviewer calls.
-      const coverage = sceneCoverageProblems(j.lesson);
-      if (coverage.length)
-        throw new ContentCheckError(`${coverage.join(" ")} Retry this stage.`);
+      // The Scene Designer stage writes every scene.
+      for (const c of all) c.scene = null;
       if (j.pages.some((p) => p.method === "ocr")) j.lesson.ocr = true;
       const added = evidence.length - j.evidence!.refs.length;
-      audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${unkeyed ? ` Removed ${unkeyed} challenge${unkeyed === 1 ? "" : "s"} without a usable answer.` : ""}${removed ? ` Removed ${removed} scene${removed === 1 ? "" : "s"} that failed checks.` : ""}${built ? " Added a server-built scene." : ""}`;
+      audit.summary = `Drafted ${j.lesson.challenges.length} challenges${added ? ` with ${added} added excerpt${added === 1 ? "" : "s"}` : ""}.${unkeyed ? ` Removed ${unkeyed} challenge${unkeyed === 1 ? "" : "s"} without a usable answer.` : ""}`;
+      audit.refs = j.lesson.evidence.map((r) => r.id);
+    } else if (j.stage === STAGES.scenes) {
+      // Each call fails on its own into the evidence scene, so this stage
+      // never stops the lesson. Its budget leaves room inside the job lease.
+      const result = await designScenes(j.lesson!, provider, pipelineModel);
+      j.lesson = result.lesson;
+      audit.summary = scenesSummary(result);
+      console.info(
+        `[Research Pipeline] Job ${j.id} scenes — written: ${result.written}, fallback: ${result.fallback}, plain: ${result.plain}, redrafted: ${result.retried}, duration: ${result.durationMs}ms${Object.values(
+          result.problems,
+        )
+          .map((p) => ` | ${p.join(" ").slice(0, 200)}`)
+          .join("")}`,
+      );
       audit.refs = j.lesson.evidence.map((r) => r.id);
     } else if (j.stage === STAGES.terms) {
       // Terms are optional help, so a failed call leaves the lesson without
@@ -685,9 +692,15 @@ export async function runStage(
         );
         j.lesson = review.lesson;
         if (j.stage === STAGES.methods) j.review = review.assessment;
-        const removed = review.removed
-          ? ` Removed ${review.removed} term definition${review.removed === 1 ? "" : "s"}.`
-          : "";
+        const removed = `${
+          review.removed
+            ? ` Removed ${review.removed} term definition${review.removed === 1 ? "" : "s"}.`
+            : ""
+        }${
+          review.replaced
+            ? ` Replaced ${review.replaced} scene${review.replaced === 1 ? "" : "s"} with the cited evidence.`
+            : ""
+        }`;
         if (review.assessment.approved && !review.issues.length)
           audit.summary = `${review.summary || "Approved."}${removed}`;
         else {

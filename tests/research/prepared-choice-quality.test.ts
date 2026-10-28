@@ -8,6 +8,26 @@ import { rewrittenStudySlugs } from "../fixtures/rewritten-studies.js";
 const rewritten = await Promise.all(
   rewrittenStudySlugs.map(async (slug) => (await loadStudy(slug))!),
 );
+/** Challenges whose scene came from scripts/define-prepared-scenes.ts, by study. */
+const designed = new Map<string, Set<string>>(
+  await Promise.all(
+    rewrittenStudySlugs.map(
+      async (slug) =>
+        [
+          slug,
+          new Set(
+            Object.keys(
+              (
+                await import(
+                  `../../apps/web/src/research/studies/data/scenes/${slug}.ts`
+                ).catch(() => ({ scenes: {} }))
+              ).scenes,
+            ),
+          ),
+        ] as const,
+    ),
+  ),
+);
 const singles = rewritten.flatMap((s) =>
   s.lesson.challenges.filter((c) => c.type === "single"),
 );
@@ -76,7 +96,10 @@ describe("rewritten prepared-study choices", () => {
         ...(study.lesson.bonus ? [study.lesson.bonus] : []),
       ]) {
         if (!c.scene?.responses) continue;
-        if (c.responseStyle === "tap") {
+        // Authored tap diagrams list their answers in option order. A designed
+        // scene keeps its diagram's own order (a procedure, modest to strong
+        // claims), so only its responses are checked below.
+        if (c.responseStyle === "tap" && !designed.get(study.slug)?.has(c.id)) {
           const scene = c.scene;
           const targetIds =
             scene.kind === "designs"
