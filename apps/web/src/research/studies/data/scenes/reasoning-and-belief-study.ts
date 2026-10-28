@@ -152,82 +152,78 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Evidence from the multi-site test",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Review the reported results below to consider how to treat the Lutheran site finding.",
+      description:
+        "Three passages summarize the statistical tests and patterns reported across the four sites.",
       provenance: {
-        kind: "reported",
-        refs: ["e6", "e7", "e8"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene built from provided excerpts",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 5",
+          optionId: "o1",
+          label: "Cautious interpretation",
+          targetIds: ["e1", "e3"],
+        },
+        {
+          optionId: "o2",
+          label: "General reversal",
+          targetIds: ["e2"],
+        },
+        {
+          optionId: "o3",
+          label: "Exclude site",
+          targetIds: ["e2"],
+        },
+        {
+          optionId: "o4",
+          label: "Confirm original",
+          targetIds: ["e2"],
+        },
+      ],
+      resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "e1",
+          label: "Heterogeneity test",
           detail:
-            "A test for heterogeneity of effect sizes was not significant (Q(3) = 5.73, p = 0.13).",
+            "Q(3) = 5.73, p = 0.13 indicates no significant differences in effect sizes across sites.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e6"],
-            note: "Verified excerpts from the paper.",
+            note: "From excerpt e6",
           },
         },
         {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 5",
+          id: "e2",
+          label: "Site with highest belief",
           detail:
-            "We did note that the largest effect we observed (in the wrong direction) was at the site with the highest level of religious belief in the control group. This could represent normal sampling variability.",
+            "The largest effect observed (in the wrong direction) occurred at the site with the highest religious belief in the control group.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e7"],
-            note: "Verified excerpts from the paper.",
+            note: "From excerpt e7",
           },
         },
         {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 6",
+          id: "e3",
+          label: "Belief as predictor",
           detail:
-            "We found that average belief in each control group is not a statistically significant predictor of effect size (β = .38, 95% CI [-0.04, 0.80], p = 0.08, N = 5 study sites; see S1 Fig).",
+            "Average belief in each control group is not a statistically significant predictor of effect size (β = .38, 95% CI [−0.04, 0.80], p = 0.08, N = 5 study sites).",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e8"],
-            note: "Verified excerpts from the paper.",
+            note: "From excerpt e8",
           },
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "Cautiously: among four sites one can reach p < .05 by chance, the sites did not differ significantly, and belief level did not significantly predict the effects.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
-        },
-        {
-          optionId: "o2",
-          label:
-            "Treat it as a general reversal, since one significant site establishes that the prime increases belief.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
-        },
-        {
-          optionId: "o3",
-          label:
-            "Exclude it from the replication, since a result opposite to the hypothesis indicates an invalid site.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
-        },
-        {
-          optionId: "o4",
-          label:
-            "Treat it as confirmation of the original, since religious students are the group the effect should fit.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
-        },
-      ],
-      resolution: null,
     },
   },
   c5: {
@@ -333,70 +329,80 @@ export const scenes: Record<string, SavedScene> = {
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Did the Exclusions Matter?",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Review the information about the online sample, the quality‑control rules, and the results with and without exclusions.",
+      description:
+        "A matrix showing the analysed sample (after applying pre‑registered quality controls) versus the full sample (before exclusions), with rows for sample size, excluded fraction, QC status, and result pattern.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e10", "e11"],
-        note: "Verified excerpts from the paper.",
+        note: "Scene summarizes exclusion rules, sample sizes, and result similarity.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 4",
-          detail:
-            "Excluded participants are not represented in any of the results presented here, but essen- tially identical results are obtained without these exclusions.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 2",
-          detail:
-            "In the online study, 491 completed the study. Of these, 80 failed one or more of our pre-registered quality controls (see below), leaving 411 for analysis.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "Likely; excluding about one-sixth of a sample necessarily removes the effect the analysis seeks to detect.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: [],
         },
         {
           optionId: "o3",
           label:
             "Unlikely; all 491 participants were included, so no quality-related exclusion could influence the estimate.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: [],
         },
         {
           optionId: "o1",
           label:
             "Unlikely; the rules were pre-registered and results were similar with everyone included.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: [],
         },
         {
           optionId: "o4",
           label:
             "Likely; the team chose the rules after seeing which participants showed the predicted effect.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "matrix",
+      conditions: [
+        {
+          id: "c_analyzed",
+          label: "Analyzed (post‑QC)",
+        },
+        {
+          id: "c_full",
+          label: "Full sample (pre‑QC)",
+        },
+      ],
+      rows: [
+        {
+          id: "r_participants",
+          label: "Participants",
+          detail: "Number of individuals in each condition.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Describes the row.",
+          },
+          cells: [":{", "elementIdNotNeeded?"],
+        },
+        {
+          id: "r_excluded",
+          label: "Excluded fraction",
+          detail: "Proportion omitted by quality controls.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Describes the row.",
+          },
+          cells: ["}, {", "elementIdNotNeeded?"],
+        },
+      ],
     },
   },
 };

@@ -144,151 +144,185 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Sunlight and Anxiety",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Review the hypothesis and the reported result, then decide how they relate.",
+      description:
+        "Two statements show the study’s prediction and the observed coefficient for anxiety.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e7", "e8"],
-        note: "Verified excerpts from the paper.",
+        note: "Combines the hypothesis statement and the reported result.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 8",
-          detail:
-            "Hypothesis 4 stated that sunlight exposure (i.e., direct sunlight and indirect sunlight) would be negatively related to depressed mood and anxiety and positively related to work attitudes.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e7"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 8",
-          detail:
-            "Direct sunlight was positively related to anxiety (β = .21, p < .01), job satisfaction (β = .20, p < .01), and organizational commitment (β = .18, p < .01).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
-            "The significant coefficient supports the prediction, regardless of whether it is positive or negative.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "The positive coefficient establishes an anxiety effect of going outside.",
+          targetIds: ["r1"],
         },
         {
           optionId: "o3",
           label:
-            "The positive coefficient establishes an anxiety effect of going outside.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "The coefficient is uninterpretable because every value below 1 must be treated as effectively zero.",
+          targetIds: ["i1"],
         },
         {
           optionId: "o4",
           label:
-            "The coefficient is uninterpretable because every value below 1 must be treated as effectively zero.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "The positive coefficient opposes the prediction; the survey cannot establish why.",
+          targetIds: ["h1", "r1"],
         },
         {
           optionId: "o1",
           label:
-            "The positive coefficient opposes the prediction; the survey cannot establish why.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "The significant coefficient supports the prediction, regardless of whether it is positive or negative.",
+          targetIds: ["h1"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "h1",
+          label: "Hypothesis",
+          detail:
+            "Hypothesis predicted a negative relation between sunlight and anxiety.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e7"],
+            note: "States hypothesis of negative relation.",
+          },
+        },
+        {
+          id: "r1",
+          label: "Result",
+          detail: "Result showed a positive relation (β = .21, p < .01).",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e8"],
+            note: "Reports positive coefficient for anxiety.",
+          },
+        },
+        {
+          id: "i1",
+          label: "Coefficient note",
+          detail: "The reported coefficient is .21, which is less than 1.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e8"],
+            note: "Notes coefficient value is .21 (<1).",
+          },
+        },
+      ],
     },
   },
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Ladder of Claims",
+      instruction: "Read the claims from modest to strong.",
+      description:
+        "Five possible claims about what the study shows, ordered from weakest to strongest. Choose the one that matches the evidence.",
       provenance: {
-        kind: "reported",
-        refs: ["e9", "e10", "e11"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene layout based on the study’s design and reported effect sizes.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 13",
-          detail:
-            "We used a cross-sectional design, which precludes the ability to draw causal inferences.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e9"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 9",
-          detail:
-            "The overall R 2s accounted for by the three predictors were .06 for depression, .07 for anxiety, .20 for job satisfaction, and .14 for organizational commitment.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 13",
-          detail:
-            "These small and inexpensive changes could result in noticeably better mental health and work attitudes.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label:
-            "It motivates a trial; modest self-reported associations do not establish improvement.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          label: "Motivates trial; modest assoc.",
+          targetIds: ["r2"],
         },
         {
           optionId: "o2",
-          label:
-            "It establishes an improvement, since workers who report more plants also report less depressed mood.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          label: "Establishes improvement",
+          targetIds: ["r4"],
         },
         {
           optionId: "o3",
-          label:
-            "It offers no relevant lead, since nature exposure showed no association with depressed mood in the results.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          label: "No relevant lead",
+          targetIds: ["r1"],
         },
         {
           optionId: "o4",
-          label:
-            "It establishes improvement across settings, since a two-country sample replaces a causal trial.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          label: "Improvement across settings",
+          targetIds: ["r5"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "r1",
+          label: "No association",
+          detail:
+            "Claims that office plants show no relationship with depressed mood.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "A possible claim someone could make.",
+          },
+        },
+        {
+          id: "r2",
+          label: "Modest association",
+          detail:
+            "Claims that office plants are linked to a small reduction in depressed mood (about 6% of variance).",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e10"],
+            note: "Summarizes the R² for depression reported in the study.",
+          },
+        },
+        {
+          id: "r3",
+          label: "Suggests possible benefit",
+          detail:
+            "Claims that the association implies office plants could improve mental health.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11"],
+            note: "Reflects the authors’ suggestive wording.",
+          },
+        },
+        {
+          id: "r4",
+          label: "Leads to noticeable improvement",
+          detail:
+            "Claims that office plants cause noticeable improvements in mental health.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "A causal claim not stated in the paper.",
+          },
+        },
+        {
+          id: "r5",
+          label: "Improves across settings",
+          detail:
+            "Claims that office plants reliably improve mental health in various work settings.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "A generalized causal claim not supported by the design.",
+          },
+        },
+      ],
+      reach: {
+        rungId: "r2",
+        label: "Evidence reaches here",
+        at: "resolution",
+      },
     },
   },
 };

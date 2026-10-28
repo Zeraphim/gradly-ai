@@ -121,162 +121,169 @@ export const scenes: Record<string, SavedScene> = {
   q4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Opposite Directions?",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Examine the odds ratios and confidence intervals for men and women.",
+      description:
+        "Two reported odds ratios with 95% confidence intervals for high distress comparing birth order 4+ versus first‑born.",
       provenance: {
-        kind: "reported",
-        refs: ["e8", "e9", "e10"],
-        note: "Verified excerpts from the paper.",
+        kind: "source-summary",
+        refs: ["e8", "e9"],
+        note: "Values taken from Model 5 in the table.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 9",
-          detail:
-            "4+ 1.11 (0.88, 1.40) 1.11 (0.84, 1.47) 1.09 (0.83, 1.44) 1.11 (0.80, 1.54) 1.10 (0.79, 1.53)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 9",
-          detail:
-            "4+ 0.87 (0.68, 1.12) 0.76 (0.57, 1.02) 0.74 (0.55, 1.05) 0.75 (0.53, 1.06) 0.75 (0.53, 1.07)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e9"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 9",
-          detail:
-            "There was little evidence to indicate differences in effect estimates when stratified by gender.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
             "Yes: estimates on opposite sides of 1 establish different effects in men and women.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["e_men", "e_women"],
         },
         {
           optionId: "o3",
           label:
-            "Yes: the estimate further from 1 identifies the sex with the stronger birth-order effect.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+            "Yes: the estimate further from 1 identifies the sex with the stronger birth‑order effect.",
+          targetIds: ["e_men", "e_women"],
         },
         {
           optionId: "o4",
           label:
             "No: odds ratios lose their interpretation when the same model is fitted separately by sex.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["e_men", "e_women"],
         },
         {
           optionId: "o2",
           label:
             "No: these uncertain estimates do not establish a sex difference; test that directly.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["e_men", "e_women"],
         },
       ],
       resolution: null,
+      kind: "association",
+      pairs: [
+        {
+          id: "e_men",
+          label: "Men, birth order 4+ vs first‑born, high distress",
+          detail: "OR 1.10 (95% CI 0.79 to 1.53)",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e8"],
+            note: "Model 5 estimate.",
+          },
+          x: "birth order 4+",
+          y: "high distress",
+          statistic: "OR",
+          value: 1.1,
+        },
+        {
+          id: "e_women",
+          label: "Women, birth order 4+ vs first‑born, high distress",
+          detail: "OR 0.75 (95% CI 0.53 to 1.07)",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9"],
+            note: "Model 5 estimate.",
+          },
+          x: "birth order 4+",
+          y: "high distress",
+          statistic: "OR",
+          value: 0.75,
+        },
+      ],
     },
   },
   q5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Interpreting selective attrition",
+      instruction: "Read the claims from modest to strong.",
+      description:
+        "Consider how missing data related to birth order and disadvantage could affect the interpretation of a null result.",
       provenance: {
-        kind: "reported",
-        refs: ["e11", "e12", "e13"],
-        note: "Verified excerpts from the paper.",
+        kind: "source-summary",
+        refs: ["e11", "e12"],
+        note: "Scene built from challenge text and excerpts.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 4",
-          detail:
-            "Within the BCS70 there were 8,578 respondents with valid data on the Malaise Index at and 8,070 with valid data on the WEMWBS at forty-two.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 4",
-          detail:
-            "whose parents were single at birth, who were of birth order four and above, and those whose parents were unskilled or partly skilled.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 4",
-          detail: "Weights were therefore not used within this study.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
-            "The loss affects precision, but cannot bias the birth-order estimate.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+            "The loss affects precision, but cannot bias the birth‑order estimate.",
+          targetIds: ["eA"],
         },
         {
           optionId: "o3",
           label:
-            "The missing later-born adults must have lower wellbeing, so the null hides a real effect.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+            "The missing later‑born adults must have lower wellbeing, so the null hides a real effect.",
+          targetIds: ["eC"],
         },
         {
           optionId: "o4",
           label:
             "Losing half the cohort makes even associations among the remaining adults uninterpretable.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["eD"],
         },
         {
           optionId: "o2",
           label:
             "Selective dropout could distort the pattern, so the null needs caution.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["eB"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "eA",
+          label: "Attrition reduces precision",
+          detail:
+            "About half of the original cohort had outcome data at age 42.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11"],
+            note: "Reports number with valid outcome data.",
+          },
+        },
+        {
+          id: "eB",
+          label: "Selective loss could distort pattern",
+          detail:
+            "Dropouts were more often later‑born (birth order ≥ 4) and from disadvantaged families (single parents, unskilled/partly skilled parents).",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e12"],
+            note: "Describes characteristics of missing participants.",
+          },
+        },
+        {
+          id: "eC",
+          label: "Missing later‑born may have lower wellbeing",
+          detail:
+            "If missing later‑born adults had lower wellbeing, the null finding could conceal a true adverse effect.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Possible scenario derived from attrition pattern.",
+          },
+        },
+        {
+          id: "eD",
+          label: "Half missing may render associations uninterpretable",
+          detail:
+            "With half the cohort missing, associations among the remaining adults may be uninterpretable due to potential bias.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11", "e12"],
+            note: "Combines attrition amount and selective loss.",
+          },
+        },
+      ],
+      reach: null,
     },
   },
   q6: {

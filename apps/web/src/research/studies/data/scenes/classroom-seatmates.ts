@@ -7,58 +7,98 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Why Randomise Seats?",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "Select the piece of evidence from the study description that supports the reason for random assignment.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e1"],
-        note: "Verified excerpts from the paper.",
+        note: "Seating charts were randomized for the fall semester and outcomes were later collected via student surveys.",
       },
-      actionLabel: "Connect a response",
+      responses: [
+        {
+          optionId: "o1",
+          label: "Randomized seating",
+          targetIds: ["p1"],
+        },
+        {
+          optionId: "o2",
+          label: "Fall semester period",
+          targetIds: ["p2"],
+        },
+        {
+          optionId: "o3",
+          label: "Outcome collection",
+          targetIds: ["p3"],
+        },
+        {
+          optionId: "o4",
+          label: "Student surveys",
+          targetIds: ["p4"],
+        },
+      ],
+      resolution: null,
+      kind: "connections",
       anchors: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 3",
-          detail:
-            "Classroom-seating charts were randomized for the duration of the fall semester (September 2017 through January 2018). Outcome variables were collected through student surveys between February and April 2018.",
+          id: "p1",
+          label: "Randomized seating",
+          detail: "Seating charts were randomized.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e1"],
-            note: "Verified excerpts from the paper.",
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "p2",
+          label: "Fall semester period",
+          detail:
+            "for the duration of the fall semester (September 2017 through January 2018)",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e1"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "p3",
+          label: "Outcome collection",
+          detail: "Outcome variables were collected.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e1"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "p4",
+          label: "Student surveys",
+          detail: "through student surveys",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e1"],
+            note: "Directly from the excerpt.",
+          },
+        },
+        {
+          id: "p5",
+          label: "Feb‑Apr 2018 timing",
+          detail: "between February and April 2018",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e1"],
+            note: "Directly from the excerpt.",
           },
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "Random seating separates proximity from children choosing to sit with existing friends.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label:
-            "Random seating exposes each child to every partner during the semester.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label:
-            "Random seating balances the final number of friendships by assigning a friend to each child.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o4",
-          label:
-            "Random seating identifies the quietest classrooms by letting teachers select compatible pairs.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
+      actionLabel: "Choose the evidence that justifies randomizing seats.",
     },
   },
   c2: {

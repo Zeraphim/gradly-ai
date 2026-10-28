@@ -156,268 +156,300 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Sorting the Interpretations",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Drag each statement into the bin that best matches what the evidence shows.",
+      description:
+        "Two bins: one for statements supported by the results, another for statements that go beyond or are unsupported. Four cards correspond to the answer options.",
       provenance: {
-        kind: "reported",
-        refs: ["e9", "e10"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene layout for the sort activity.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 7",
-          detail:
-            "The analysis showed that only speech-frequency hearing was associated with loneliness, not with the high frequency.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e9"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 7",
-          detail:
-            "It is difficult to explain why this was not found in this study, but it may be because only speech frequencies substantially impact daily conversation, and lead to potential loneliness.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
-          label:
-            "High-frequency loss has no role in speech understanding because 3HFA did not enter these models.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "High‑frequency loss has no role in speech understanding",
+          targetIds: ["c2"],
         },
         {
           optionId: "o3",
-          label:
-            "Speech-frequency loss causes loneliness because its measure was retained after the others were dropped.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Speech‑frequency loss causes loneliness",
+          targetIds: ["c3"],
         },
         {
           optionId: "o1",
-          label:
-            "Only 4FA entered the models; the daily-conversation explanation remains a hypothesis.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Only speech‑frequency average entered the model",
+          targetIds: ["c1"],
         },
         {
           optionId: "o4",
-          label:
-            "The high-frequency measure must be invalid, since the final model did not retain it.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "High‑frequency measure must be invalid",
+          targetIds: ["c4"],
         },
       ],
       resolution: null,
+      kind: "sort",
+      bins: [
+        {
+          id: "b1",
+          label: "Supported by the results",
+        },
+        {
+          id: "b2",
+          label: "Not supported or overreaches the evidence",
+        },
+      ],
+      cards: [
+        {
+          id: "c1",
+          label:
+            "Only speech‑frequency avg entered model; daily‑conversation idea remains hypothesis",
+          detail:
+            "Matches result that only speech‑frequency predicted loneliness and authors’ note that this may be due to daily conversation.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9", "e10"],
+            note: "Combines e9 (only speech‑frequency associated) with e10 (authors’ suggestion about daily conversation).",
+          },
+          column: 0,
+        },
+        {
+          id: "c2",
+          label:
+            "High‑freq loss has no role in speech understanding because 3HFA didn’t enter model",
+          detail:
+            "Extends the finding to speech understanding and assumes a mechanistic role not tested.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9", "e10"],
+            note: "Adds unsupported claim about speech understanding beyond loneliness.",
+          },
+          column: 0,
+        },
+        {
+          id: "c3",
+          label:
+            "Speech‑freq loss causes loneliness because its measure was kept",
+          detail: "Implies causation from an associative result.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9", "e10"],
+            note: "Adds causal claim not supported by the analysis.",
+          },
+          column: 0,
+        },
+        {
+          id: "c4",
+          label: "High‑freq measure must be invalid because it wasn’t retained",
+          detail: "Assumes measurement invalidity without evidence.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9", "e10"],
+            note: "Adds invalidity claim not examined in the study.",
+          },
+          column: 0,
+        },
+      ],
+      placements: [
+        {
+          cardId: "c1",
+          binId: "b1",
+          at: "resolution",
+        },
+        {
+          cardId: "c2",
+          binId: "b2",
+          at: "resolution",
+        },
+        {
+          cardId: "c3",
+          binId: "b2",
+          at: "resolution",
+        },
+        {
+          cardId: "c4",
+          binId: "b2",
+          at: "resolution",
+        },
+      ],
     },
   },
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Treat Loneliness First?",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "The clinic assumes reducing loneliness will lower depression, anxiety, and stress based on a cross‑sectional study. Identify what most limits that inference.",
       provenance: {
-        kind: "reported",
-        refs: ["e11", "e12"],
-        note: "Verified excerpts from the paper.",
+        kind: "source-summary",
+        refs: ["e11"],
+        note: "Summary of the limitation noted in the paper.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 7",
-          detail:
-            "One of the limitations of the current study is that results are based on cross-sectional analyses rather than longitudinal assessments of hearing, loneliness, and mental health over time.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 7",
-          detail:
-            "previous studies have demonstrated that stress is causally related to loneliness",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
-            "One-time measurements leave open whether loneliness precedes or follows distress.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "One‑time measurements leave open whether loneliness precedes or follows distress.",
+          targetIds: [],
         },
         {
           optionId: "o2",
           label:
             "Current hearing-aid users were mixed with non-users, so treatment explains the mood link.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: [],
         },
         {
           optionId: "o3",
           label:
             "The emotional subscore had only one item, so it could not separate types of loneliness.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: [],
         },
         {
           optionId: "o4",
           label:
             "Negative coefficients imply that less loneliness predicted more distress, reversing the clinic's claim.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "anchor",
+          label: "Baseline assessment",
+          detail:
+            "Hearing tests, the loneliness scale and the DASS‑21 were completed at baseline.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11"],
+            note: "Summarises the baseline measurement described in the paper.",
+          },
+        },
+      ],
+      actionLabel: "Identify the limitation",
     },
   },
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Reading the Study Details",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "Six consecutive passages retell the study’s procedure, participant characteristics and key results as reported in the paper.",
       provenance: {
-        kind: "reported",
-        refs: ["e13", "e14", "e15", "e16", "e17"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene constructed for the interpretation challenge.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 6",
-          detail:
-            "The mean hearing threshold in the better ear in this current study was 36.94 dB HL. Therefore, whether more severe levels of hearing loss contribute to clinically significant depression, anxiety, or stress levels needs to be explored.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 7",
-          detail:
-            "Another limitation is that there were relatively fewer participants with untreated severe-to-profound hearing loss.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e14"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 7",
-          detail:
-            "The study had a gender imbalance and had a relatively small sample size.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e15"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_4",
-          label: "Evidence 4 · p. 3",
-          detail:
-            "Participants were recruited at the Beijing Institute of Otolaryngology, through social media advertisements, flyers, and community events.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e16"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_5",
-          label: "Evidence 5 · p. 1",
-          detail:
-            "four-frequency average hearing loss (β=0.149, p=0.010) and DASS stress scores (β=0.123, p=0.034) significantly predicted social loneliness scale",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e17"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "The non-significant mood tests support the claim across older adults, including those with severe loss.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-          ],
+          targetIds: ["p6"],
         },
         {
           optionId: "o3",
           label:
             "The social-loneliness association directly proves that hearing loss worsens depression and stress.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-          ],
+          targetIds: ["p5", "p6"],
         },
         {
           optionId: "o1",
           label:
             "The sample was small, healthy and had few people with severe loss, so mild to moderate losses showed no link here but severe loss was barely tested.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-          ],
+          targetIds: ["p2", "p4", "p6"],
         },
         {
           optionId: "o4",
           label:
             "The cross-sectional design prevents interpreting even the measured associations in this sample.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-          ],
+          targetIds: ["p2"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "p1",
+          label: "Recruitment setting",
+          detail:
+            "Participants were recruited at the Beijing Institute of Otolaryngology through social media advertisements, flyers, and community events.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e16"],
+            note: "Summarises recruitment description.",
+          },
+        },
+        {
+          id: "p2",
+          label: "Sample limitations",
+          detail:
+            "The study had a relatively small sample size and a gender imbalance.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e15"],
+            note: "Summarises sample size and gender imbalance.",
+          },
+        },
+        {
+          id: "p3",
+          label: "Average hearing loss",
+          detail:
+            "The mean hearing threshold in the better ear was 36.94 dB HL.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e13"],
+            note: "Reports the mean hearing threshold.",
+          },
+        },
+        {
+          id: "p4",
+          label: "Severe loss scarcity",
+          detail:
+            "There were relatively fewer participants with untreated severe-to-profound hearing loss.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e14"],
+            note: "Notes the limited number of severe‑loss participants.",
+          },
+        },
+        {
+          id: "p5",
+          label: "Loneliness prediction",
+          detail:
+            "Four-frequency average hearing loss and DASS stress scores significantly predicted social loneliness (β=0.149, p=0.010; β=0.123, p=0.034).",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e17"],
+            note: "Combines the two significant predictors reported.",
+          },
+        },
+        {
+          id: "p6",
+          label: "Need to explore severe effects",
+          detail:
+            "Authors note that whether more severe levels of hearing loss contribute to clinically significant depression, anxiety, or stress needs to be explored.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e13"],
+            note: "Reflects the call for further research on severe loss.",
+          },
+        },
+      ],
     },
   },
 };

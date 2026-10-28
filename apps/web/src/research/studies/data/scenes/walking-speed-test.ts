@@ -7,113 +7,139 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Design Challenge 1 – Experiment 1",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Review the evidence statements below. Each option describes a possible independent variable.",
+      description:
+        "Identify what the researchers changed between groups while keeping other factors constant.",
       provenance: {
-        kind: "reported",
-        refs: ["e1", "e4"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene layout based on the provided excerpts.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 1",
-          detail:
-            "Here, we present two experiments aimed at replicating the original study.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e1"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 2",
-          detail:
-            "In Experiment 1, we sought to replicate the original study but used automated rather than manual chronometry.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
-            "Presence of age‑related primes in the scrambled‑sentences task (Prime vs. No‑Prime).",
-          targetIds: ["evidence_1", "evidence_2"],
+            "Presence of age‑related primes in the scrambled‑sentences task (Prime vs. No‑Prime)",
+          targetIds: ["ev1", "ev2"],
         },
         {
           optionId: "o2",
           label: "Experimenter expectation about participant speed.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["ev1", "ev2"],
         },
         {
           optionId: "o3",
           label: "Participant awareness of the prime.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["ev1", "ev2"],
         },
       ],
       resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "ev1",
+          label: "Two experiments aimed at replicating the original study",
+          detail:
+            "Here, we present two experiments aimed at replicating the original study.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1"],
+            note: "Summarises e1.",
+          },
+        },
+        {
+          id: "ev2",
+          label: "Experiment 1 used automated timing instead of manual",
+          detail:
+            "In Experiment 1, we sought to replicate the original study but used automated rather than manual chronometry.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e4"],
+            note: "Summarises e4.",
+          },
+        },
+      ],
+      actionLabel: "Select",
     },
   },
   c3: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Results Challenge 1 – Experiment 1 Walking Speed",
+      instruction: "Read the claims from modest to strong.",
+      description:
+        "Three possible claims about the Prime vs. No‑Prime groups are presented as ladder rungs. Select the rung that reflects the reported results.",
       provenance: {
-        kind: "reported",
-        refs: ["e7"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene author created for the challenge.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 3",
-          detail:
-            "The results show no significant difference between the Prime (M = 6.270 SD = 2.15) and the No-Prime group (M = 6.390 SD = 1.11) in the time necessary to walk along the hallway after the priming manipulation (F (1, 119),1, g2 = .01).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e7"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
             "No statistically significant difference in walking speed between the groups.",
-          targetIds: ["evidence_1"],
+          targetIds: ["r1"],
         },
         {
           optionId: "o2",
           label:
-            "The Prime group walked significantly slower than the No‑Prime group.",
-          targetIds: ["evidence_1"],
+            "The Prime group walked significantly slower than the No-Prime group.",
+          targetIds: ["r2"],
         },
         {
           optionId: "o3",
-          label: "The effect size was large (g² > .10).",
-          targetIds: ["evidence_1"],
+          label: "The effect size was large (g² > .10).",
+          targetIds: ["r3"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "r1",
+          label: "No significant difference",
+          detail:
+            "The excerpt reports no significant difference between Prime (M=6.270, SD=2.15) and No-Prime (M=6.390, SD=1.11) groups (F(1,119), g² = .01).",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e7"],
+            note: "Reports group means, SDs, F statistic, and effect size.",
+          },
+        },
+        {
+          id: "r2",
+          label: "Prime slower?",
+          detail:
+            "The excerpt reports Prime mean walking time M = 6.270 seconds, SD = 2.15; No-Prime mean M = 6.390 seconds, SD = 1.11.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e7"],
+            note: "Reports group means and standard deviations.",
+          },
+        },
+        {
+          id: "r3",
+          label: "Large effect size?",
+          detail:
+            "The excerpt reports the effect size g² = .01 for the walking-speed analysis.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e7"],
+            note: "Reports the effect size value.",
+          },
+        },
+      ],
+      reach: null,
     },
+    responseStyle: "tap",
   },
   c4: {
     scene: {

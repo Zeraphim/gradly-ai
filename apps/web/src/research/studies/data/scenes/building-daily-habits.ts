@@ -152,70 +152,82 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Interpreting Linear and Quadratic Trends",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Examine the reported linear and quadratic time‑trend results and think about the implied shape of habit strength over the study.",
+      description:
+        "The scene shows three short passages describing the linear trend, the quadratic trend, and their combined interpretation.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e9", "e10"],
-        note: "Verified excerpts from the paper.",
+        note: "Summarizes the reported significant linear and quadratic trends.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 5",
-          detail:
-            "Figure 3 shows a significant increase of about 0.8 SD (a large effect size according to Cohen, 1992) in habit strength over a period of 110 days with a stronger increase in beginning of the study period, leveling off at the end.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e9"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 5",
-          detail:
-            "Both the linear trend (t = 15.30, p < 0.001) and the quadratic trend (t = −3.39, p < 0.001) were significant.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "Habit strength increases by a constant amount at each time point.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["p1"],
         },
         {
           optionId: "o3",
           label:
             "Habit strength rises, with larger gains at later measurements than at the start.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["p2"],
         },
         {
           optionId: "o4",
           label:
             "Habit strength declines, with the largest drops occurring near the end of the study.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["p2"],
         },
         {
           optionId: "o1",
           label:
             "Habit strength rises, with the rate of increase slowing over the study.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["p1", "p2"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "p1",
+          label: "Linear trend",
+          detail:
+            "Positive linear coefficient indicates habit strength increases over time.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e10"],
+            note: "From the significant linear trend (t=15.30, p<.001).",
+          },
+        },
+        {
+          id: "p2",
+          label: "Quadratic trend",
+          detail:
+            "Negative quadratic coefficient indicates the increase slows down (downward curvature).",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e10"],
+            note: "From the significant quadratic trend (t=-3.39, p<.001).",
+          },
+        },
+        {
+          id: "p3",
+          label: "Combined interpretation",
+          detail:
+            "Together they describe a rise whose rate of growth diminishes across the study.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e9", "e10"],
+            note: "Combines the linear and quadratic trends described in the excerpts.",
+          },
+        },
+      ],
     },
   },
   c5: {

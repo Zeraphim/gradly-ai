@@ -172,70 +172,78 @@ export const scenes: Record<string, SavedScene> = {
   c4i: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "A Graded Pattern",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Read the study description and decide which statement best fits the evidence.",
+      description:
+        "Three short statements summarize what the authors say about the dose‑response pattern and the limits of the cross‑sectional design.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e12", "e13"],
-        note: "Verified excerpts from the paper.",
+        note: "Scene built from the challenge excerpts.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 8",
-          detail:
-            "This is important given that dose-response is widely accepted as a factor to consider when judging whether an effect is causal [27].",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 9",
-          detail:
-            "the data utilized in the current study was cross-sectional and thus, inferences regarding causality are prohibited. Thus, it is not possible to ascertain whether concerns regarding debt manageability preceded mental health difficulties and mental health help seek- ing or vice versa.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
-          label:
-            "The gradient establishes debt as the cause, since increasing exposure cannot track a non-causal factor.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Debt causes mental illness",
+          targetIds: ["s1"],
         },
         {
           optionId: "o3",
-          label:
-            "The gradient rules out any link, since a cross-sectional design cannot describe an association.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "No link due to cross-sectional design",
+          targetIds: ["s2"],
         },
         {
           optionId: "o1",
-          label:
-            "The gradient fits causation, but the one-time survey leaves reverse causation open.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Gradient fits causation but reverse causation possible",
+          targetIds: ["s1", "s3"],
         },
         {
           optionId: "o4",
-          label:
-            "The gradient establishes mental illness as the cause, ruling out debt as the initiating factor.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Mental illness causes debt",
+          targetIds: ["s3"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "s1",
+          label: "Dose-response consideration",
+          detail:
+            "Dose-response is widely accepted as a factor to consider when judging whether an effect is causal.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e12"],
+            note: "Directly from excerpt e12.",
+          },
+        },
+        {
+          id: "s2",
+          label: "Cross-sectional limitation",
+          detail:
+            "The data were cross-sectional, so inferences regarding causality are prohibited.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e13"],
+            note: "Directly from excerpt e13.",
+          },
+        },
+        {
+          id: "s3",
+          label: "Direction indeterminate",
+          detail:
+            "It is not possible to ascertain whether debt problems preceded mental health difficulties or vice versa.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e13"],
+            note: "Directly from excerpt e13.",
+          },
+        },
+      ],
     },
   },
   c5i: {

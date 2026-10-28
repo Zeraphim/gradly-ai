@@ -137,108 +137,179 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Age Interaction",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "The results excerpt is split into four short snippets. Select the snippet that speaks to age differences.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e5"],
-        note: "Verified excerpts from the paper.",
+        note: "Scene built from the reported results excerpt.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 9",
-          detail:
-            "Our results, not supported by the Arousal-Mood Theory, suggest that relaxing pleasant background music can impair visuo-spatial attentional control performance, inducing a greater flanker effect or RT than that observed for stimulating pleasant music and silence. This effect was the same for older and young adults despite the typical decrement in attentional control associated with healthy aging.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e5"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "c4-optA",
           label: "Effect larger in older adults",
-          targetIds: ["evidence_1"],
+          targetIds: ["elem1"],
         },
         {
           optionId: "c4-optB",
           label: "Effect larger in young adults",
-          targetIds: ["evidence_1"],
+          targetIds: ["elem2"],
         },
         {
           optionId: "c4-optC",
           label: "No age interaction (effect same)",
-          targetIds: ["evidence_1"],
+          targetIds: ["elem4"],
         },
         {
           optionId: "c4-optD",
           label: "Effect only present in older adults",
-          targetIds: ["evidence_1"],
+          targetIds: ["elem3"],
         },
       ],
       resolution: null,
-    },
-  },
-  c5: {
-    scene: {
-      version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
-      provenance: {
-        kind: "reported",
-        refs: ["e5"],
-        note: "Verified excerpts from the paper.",
-      },
-      actionLabel: "Connect a response",
-      anchors: [
+      kind: "spot",
+      passages: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 9",
+          id: "elem1",
+          label: "Opening clause",
           detail:
-            "Our results, not supported by the Arousal-Mood Theory, suggest that relaxing pleasant background music can impair visuo-spatial attentional control performance, inducing a greater flanker effect or RT than that observed for stimulating pleasant music and silence. This effect was the same for older and young adults despite the typical decrement in attentional control associated with healthy aging.",
+            "Our results, not supported by the Arousal-Mood Theory, suggest that",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e5"],
-            note: "Verified excerpts from the paper.",
+            note: "Direct quote from excerpt.",
+          },
+        },
+        {
+          id: "elem2",
+          label: "Impairment claim",
+          detail:
+            "relaxing pleasant background music can impair visuo-spatial attentional control performance",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e5"],
+            note: "Direct quote from excerpt.",
+          },
+        },
+        {
+          id: "elem3",
+          label: "Greater effect claim",
+          detail:
+            "inducing a greater flanker effect or RT than that observed for stimulating pleasant music and silence",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e5"],
+            note: "Direct quote from excerpt.",
+          },
+        },
+        {
+          id: "elem4",
+          label: "Age equality claim",
+          detail:
+            "This effect was the same for older and young adults despite the typical decrement in attentional control associated with healthy aging.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e5"],
+            note: "Direct quote from excerpt.",
           },
         },
       ],
+    },
+    responseStyle: "tap",
+  },
+  c5: {
+    scene: {
+      version: 1,
+      title: "Interpreting the Arousal‑Mood Theory result",
+      instruction: "Read the claims from modest to strong.",
+      description:
+        "A ladder of possible conclusions about the theory, ordered from the most modest claim to the strongest.",
+      provenance: {
+        kind: "authored",
+        refs: [],
+        note: "Scene built from the provided excerpt.",
+      },
       responses: [
         {
           optionId: "c5-optA",
-          label: "Results support the theory",
-          targetIds: ["evidence_1"],
+          label: "Supports the theory",
+          targetIds: ["rung4"],
         },
         {
           optionId: "c5-optB",
           label:
-            "Results contradict the theory because relaxing music impaired performance more than stimulating music",
-          targetIds: ["evidence_1"],
+            "Contradicts the theory because relaxing music impaired performance more than stimulating music",
+          targetIds: ["rung3"],
         },
         {
           optionId: "c5-optC",
-          label: "Results show arousal is unrelated to performance",
-          targetIds: ["evidence_1"],
+          label: "Shows arousal is unrelated to performance",
+          targetIds: ["rung2"],
         },
         {
           optionId: "c5-optD",
-          label: "Results are inconclusive regarding the theory",
-          targetIds: ["evidence_1"],
+          label: "Are inconclusive regarding the theory",
+          targetIds: ["rung1"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "rung1",
+          label: "Inconclusive",
+          detail:
+            "The results are inconclusive regarding the Arousal‑Mood Theory.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e5"],
+            note: "Paraphrases the excerpt’s statement that results are ‘not supported by the Arousal‑Mood Theory.’",
+          },
+        },
+        {
+          id: "rung2",
+          label: "Arousal unrelated",
+          detail: "The results show that arousal is unrelated to performance.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e5"],
+            note: "Derived from the excerpt’s claim that relaxing music impairs performance relative to stimulating music and silence.",
+          },
+        },
+        {
+          id: "rung3",
+          label: "Contradicts theory",
+          detail:
+            "The results contradict the Arousal‑Mood Theory because relaxing pleasant background music impaired visuo‑spatial attentional control more than stimulating pleasant music and silence.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e5"],
+            note: "Uses the exact finding reported in the excerpt.",
+          },
+        },
+        {
+          id: "rung4",
+          label: "Supports theory",
+          detail:
+            "The results support the Arousal‑Mood Theory of background music on cognition.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Represents the opposite claim to the excerpt’s finding.",
+          },
+        },
+      ],
+      reach: null,
     },
   },
 };

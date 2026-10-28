@@ -169,69 +169,78 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Interpreting the odds ratios",
+      instruction: "Read each reported association.",
+      description:
+        "The scene presents the two odds ratios as reported in the study.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e6", "e12"],
-        note: "Verified excerpts from the paper.",
+        note: "Describes the two odds ratios reported in the study.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 7",
-          detail:
-            "Note. On continuous variables, OR refers to the change in likelihood for having sleep problems for each unit increase in the predictor variable.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e6"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 4",
-          detail: "(possible score range 0–36)",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "Odds ratios cannot be interpreted together, even if their predictors use comparable measurement units.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["assocGender", "assocDistress"],
         },
         {
           optionId: "o3",
           label:
             "The smaller odds ratio identifies the more important predictor because its distance from 1 is smaller.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["assocGender", "assocDistress"],
         },
         {
           optionId: "o4",
           label:
             "The distress ratio has no interpretation because that predictor failed the significance test after adjustment.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["assocGender", "assocDistress"],
         },
         {
           optionId: "o1",
           label:
-            "They describe different kinds of difference: one compares two groups, the other is the change for a single step on a 36-step scale.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "They describe different kinds of difference: one compares two groups, the other is the change for a single step on a 36‑step scale.",
+          targetIds: ["assocGender", "assocDistress"],
         },
       ],
       resolution: null,
+      kind: "association",
+      pairs: [
+        {
+          id: "assocGender",
+          label: "Gender OR",
+          detail: "Odds ratio for female vs male = 1.69 (binary comparison).",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e6", "e12"],
+            note: "Matches the definition of OR for a binary predictor.",
+          },
+          column: 0,
+          x: "female vs male",
+          y: "sleep problems",
+          statistic: "OR",
+          value: 1.69,
+        },
+        {
+          id: "assocDistress",
+          label: "Distress OR",
+          detail:
+            "Odds ratio for each unit increase in distress score (0–36) = 1.20.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e6", "e12"],
+            note: "Matches the definition of OR for a continuous predictor.",
+          },
+          column: 1,
+          x: "distress score (per unit)",
+          y: "sleep problems",
+          statistic: "OR",
+          value: 1.2,
+        },
+      ],
     },
   },
   c5: {

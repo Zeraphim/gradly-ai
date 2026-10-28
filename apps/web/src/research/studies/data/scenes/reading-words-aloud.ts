@@ -7,50 +7,72 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Recall advantage in the 50–50% group",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Examine the reported recall percentages and the t‑test statistic.",
+      description:
+        "The scene shows the proportion of words recalled when read aloud versus silently and the reported t‑test result for the 50–50% group.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e1"],
-        note: "Verified excerpts from the paper.",
+        note: "Summarises the recall percentages and t‑test from the excerpt.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 4",
-          detail:
-            "In the 50–50% group, participants remem-\nbered words that were read aloud better (27%) than words which\nwere read silently (19%), t(19) = 2.018, p < 0.05.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e1"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label: "Yes, the difference was significant (p < .05).",
-          targetIds: ["evidence_1"],
+          label: "Yes, the difference was significant (p < .05)",
+          targetIds: ["e1_aloud"],
         },
         {
           optionId: "o2",
           label: "No, the difference was not significant.",
-          targetIds: ["evidence_1"],
+          targetIds: ["e1_silent"],
         },
         {
           optionId: "o3",
           label: "The test did not provide enough information to decide.",
-          targetIds: ["evidence_1"],
+          targetIds: ["e1_ttest"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "e1_aloud",
+          label: "Aloud recall",
+          detail: "27% of words were recalled when read aloud.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1"],
+            note: "From excerpt.",
+          },
+        },
+        {
+          id: "e1_silent",
+          label: "Silent recall",
+          detail: "19% of words were recalled when read silently.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1"],
+            note: "From excerpt.",
+          },
+        },
+        {
+          id: "e1_ttest",
+          label: "t‑test statistic",
+          detail: "t(19) = 2.018.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1"],
+            note: "From excerpt.",
+          },
+        },
+      ],
     },
+    responseStyle: "tap",
   },
   c3: {
     scene: {
@@ -165,52 +187,73 @@ export const scenes: Record<string, SavedScene> = {
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Identify the authors’ caution",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "Three candidate statements are presented. Select the one that is supported by the excerpt.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e6"],
-        note: "Verified excerpts from the paper.",
+        note: "The excerpt provides the authors’ qualification of the reversal.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 5",
-          detail:
-            "We must be circumspect though as, numerically, the reversal entailed eight items only.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e6"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label:
-            "The reversal was based on only eight items, so the result should be interpreted cautiously.",
-          targetIds: ["evidence_1"],
+          label: "Based on only eight items",
+          targetIds: ["c1"],
         },
         {
           optionId: "o2",
-          label:
-            "The reversal reflects a robust and reliable effect across participants.",
-          targetIds: ["evidence_1"],
+          label: "Reflects a robust and reliable effect",
+          targetIds: ["c2"],
         },
         {
           optionId: "o3",
-          label:
-            "The authors concluded that the reversal proves statistical distinctiveness always dominates.",
-          targetIds: ["evidence_1"],
+          label: "Proves statistical distinctiveness always dominates",
+          targetIds: ["c3"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "c1",
+          label: "Based on only eight items",
+          detail:
+            "This claim states that the reversal was based on only eight items, urging cautious interpretation.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Option text from challenge",
+          },
+        },
+        {
+          id: "c2",
+          label: "Reflects a robust and reliable effect",
+          detail:
+            "This claim characterizes the reversal as a robust and reliable effect across participants.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Option text from challenge",
+          },
+        },
+        {
+          id: "c3",
+          label: "Proves statistical distinctiveness always dominates",
+          detail:
+            "This claim asserts that the reversal proves statistical distinctiveness always dominates.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Option text from challenge",
+          },
+        },
+      ],
     },
+    responseStyle: "tap",
   },
 };

@@ -76,70 +76,99 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Sorting what the control holder rules out",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Drag each statement into the bin that matches what the control holder tells us about that aspect.",
+      description:
+        "Learners sort statements about the holder into ‘Ruled out’ or ‘Still possible’ based on what the control condition reveals.",
       provenance: {
-        kind: "reported",
-        refs: ["e3", "e4"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene design for the challenge.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 2",
-          detail:
-            "On three other bus lines, passengers received a standard card holder distributed by the public transport operator, which displayed no message.",
+          optionId: "o1",
+          label: "Rules out free holder, leaves open any positive message",
+          targetIds: ["c1", "c4"],
+        },
+        {
+          optionId: "o2",
+          label: "Claims sustainable label isolated from other features",
+          targetIds: ["c1", "c2", "c3", "c4"],
+        },
+        {
+          optionId: "o3",
+          label: "Claims holder sameness removes treatment difference",
+          targetIds: ["c2"],
+        },
+        {
+          optionId: "o4",
+          label: "Claims test compares free holder vs no holder",
+          targetIds: ["c1"],
+        },
+      ],
+      resolution: null,
+      kind: "sort",
+      bins: [
+        {
+          id: "b1",
+          label: "Ruled out",
+        },
+        {
+          id: "b2",
+          label: "Still possible",
+        },
+      ],
+      cards: [
+        {
+          id: "c1",
+          label: "Receiving a free holder",
+          detail: "Both groups got a holder at no cost.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e3"],
-            note: "Verified excerpts from the paper.",
+            note: "Standard holder with no message.",
           },
         },
         {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 5",
+          id: "c2",
+          label: "Holder design",
+          detail: "The physical holder is the same in both groups.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e3"],
+            note: "Standard holder described.",
+          },
+        },
+        {
+          id: "c3",
+          label: "Seeing a sustainability message",
           detail:
-            "We therefore cannot be sure whether the intervention will also increase bus use compared to a control condition that receives card holders with a positive message, similar to the one we used, but that does not rely on social labeling.",
+            "Only the intervention group’s holder displayed the sustainability message.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e4"],
-            note: "Verified excerpts from the paper.",
+            note: "Positive message similar to the one used.",
+          },
+        },
+        {
+          id: "c4",
+          label: "Receiving any positive message",
+          detail:
+            "The intervention group’s holder had a positive message; the control group’s holder had none.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e3", "e4"],
+            note: "Control holder no message; intervention holder positive message.",
           },
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "It rules out the free gift itself as the cause, but not whether any positive message would work as well as calling riders sustainable.",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
-        {
-          optionId: "o2",
-          label:
-            "It isolates the sustainable label from every other feature, including receiving any positive message.",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
-        {
-          optionId: "o3",
-          label:
-            "It removes the treatment difference because both groups received the same kind of physical holder.",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
-        {
-          optionId: "o4",
-          label:
-            "It tests whether free holders work, by comparing recipients with riders given no holder at all.",
-          targetIds: ["evidence_1", "evidence_2"],
-        },
-      ],
-      resolution: null,
+      placements: [],
     },
   },
   c3: {
@@ -217,139 +246,151 @@ export const scenes: Record<string, SavedScene> = {
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Checking robustness across time windows",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "The study examined whether the estimated effect persisted when the post‑intervention window was varied in length.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e11"],
-        note: "Verified excerpts from the paper.",
+        note: "Based on the reported results and the shown evidence about varying window lengths.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 5",
-          detail:
-            "Results show that the interaction between condition and period is significantly positive in the period immediately after the intervention, for almost every possible length of the period immediately after the intervention, lowering the likelihood that the effect is due to a random event such as construction works on the control line (unless this happened right after the intervention).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
-            "The positive estimate across many follow-up windows weakens a single-event explanation.",
-          targetIds: ["evidence_1"],
+            "The positive estimate across many follow-up windows weakens a single‑event explanation.",
+          targetIds: ["e1"],
         },
         {
           optionId: "o2",
           label:
             "The many hourly observations rule out roadworks by averaging away changes on individual routes.",
-          targetIds: ["evidence_1"],
+          targetIds: [],
         },
         {
           optionId: "o3",
           label:
             "The separate message pre-test excludes changes caused by roadworks.",
-          targetIds: ["evidence_1"],
+          targetIds: [],
         },
         {
           optionId: "o4",
           label:
             "The matching of routes before treatment rules out any later disruption affecting only one route.",
-          targetIds: ["evidence_1"],
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "e1",
+          label: "Varying post‑intervention window lengths",
+          detail:
+            "The team re‑ran the analysis with many different lengths for the period right after the intervention.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11"],
+            note: "From the shown evidence about re‑running the analysis with different window lengths.",
+          },
+        },
+      ],
+      actionLabel: "Select the check that addresses the one‑off concern",
     },
   },
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Bus Promotion Study Procedure",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "Four consecutive passages describe the study’s participants, intervention, outcome measurement, and a limitation of the follow‑up survey.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e12", "e13", "e14"],
-        note: "Verified excerpts from the paper.",
+        note: "Combines rider frequency, future‑test suggestion, and post‑intervention survey detail from the excerpts.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 2",
-          detail:
-            "This survey showed that most passengers took the bus five times per week or more (63.2%) or one to four times per week (26.7%).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 5",
-          detail:
-            "It would be interesting to test whether increases in bus use can be obtained with people who take the bus less often.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 5",
-          detail:
-            "First, after the intervention, the survey only asked passengers whether they had received a card holder in the week before, not which card holder they had received.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e14"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "The rise in ride counts estimates how many former drivers switched to taking the bus each day.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["e2"],
         },
         {
           optionId: "o3",
           label:
             "The small average increase shows that car drivers would be less responsive than existing riders.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["e3"],
         },
         {
           optionId: "o4",
           label:
             "The distance between routes ensures that drivers encountered the label outside the bus system.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["e4"],
         },
         {
           optionId: "o1",
           label:
             "Little: the riders were mostly regular bus users, and the study counted rides, not people switching from cars.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["e1"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "e1",
+          label: "Rider frequency and outcome",
+          detail:
+            "Most passengers rode five or more times per week (63.2%) or one to four times per week (26.7%), and the study’s outcome was the number of rides on each line.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e12"],
+            note: "Combines frequency data from e12 with outcome information from the shown evidence.",
+          },
+        },
+        {
+          id: "e2",
+          label: "Card holder receipt question",
+          detail:
+            "After the intervention, passengers were asked whether they had received a card holder in the week before.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e14"],
+            note: "Directly reflects the limitation described in e14.",
+          },
+        },
+        {
+          id: "e3",
+          label: "Future test suggestion",
+          detail:
+            "It would be interesting to test whether increases in bus use can be obtained with people who take the bus less often.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e13"],
+            note: "Taken verbatim from e13.",
+          },
+        },
+        {
+          id: "e4",
+          label: "Post‑intervention survey limitation",
+          detail:
+            "After the intervention the survey only asked if passengers had received a card holder, not which holder they received.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e14"],
+            note: "Restates the same limitation in different wording for clarity.",
+          },
+        },
+      ],
     },
+    responseStyle: "tap",
   },
 };

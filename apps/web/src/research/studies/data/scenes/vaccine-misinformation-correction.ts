@@ -7,45 +7,76 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Study Design – Sample Description",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "Four consecutive passages retell the sample information from the excerpt.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e24"],
-        note: "Verified excerpts from the paper.",
+        note: "Summary of the sample description provided in the excerpt.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 7",
-          detail:
-            "The experiment included 243 students, 65% of which work in health professions. Of them, 174\nwere students at the School of Public Health and 69 were in different departments of the Fac-\nulty of Social Welfare and Health at Haifa University in the years 2017–2018.",
+          optionId: "o1",
+          label: "Matches the sample description",
+          targetIds: ["p1", "p2", "p3", "p4"],
+        },
+        {
+          optionId: "o2",
+          label: "Does not match the sample description",
+          targetIds: [],
+        },
+      ],
+      resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "p1",
+          label: "Total number of students",
+          detail: "The experiment included 243 students.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e24"],
-            note: "Verified excerpts from the paper.",
+            note: "Direct sentence from excerpt.",
+          },
+        },
+        {
+          id: "p2",
+          label: "Health‑profession proportion",
+          detail: "65% of which work in health professions.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e24"],
+            note: "Direct sentence from excerpt.",
+          },
+        },
+        {
+          id: "p3",
+          label: "School of Public Health count",
+          detail: "Of them, 174 were students at the School of Public Health",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e24"],
+            note: "Direct sentence from excerpt.",
+          },
+        },
+        {
+          id: "p4",
+          label: "Other departments and years",
+          detail:
+            "and 69 were in different departments of the Faculty of Social Welfare and Health at Haifa University in the years 2017–2018.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e24"],
+            note: "Direct sentence from excerpt.",
           },
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "Graduate students from Haifa University, mostly in health‑related fields",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label: "Parents of young children recruited from community clinics",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
     },
   },
   c4: {

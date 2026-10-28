@@ -174,6 +174,35 @@ export const removedScenes: {
     reason:
       "Element text cites evidence ids such as (e11) instead of reading as prose.",
   },
+  {
+    slug: "bus-ridership-behavior",
+    challenge: "c1",
+    reason:
+      "Says geographic separation reduces spillover, the accepted reason.",
+  },
+  {
+    slug: "classroom-mindfulness-practice",
+    challenge: "c2",
+    reason:
+      "Each card names its own placement, which lays out the clean comparison.",
+  },
+  {
+    slug: "music-and-attention",
+    challenge: "c2",
+    reason: "Says heart rate was not measured, ruling an option out.",
+  },
+  {
+    slug: "natural-light-at-work",
+    challenge: "c2",
+    reason:
+      "Passages reason through to merging being justified, the accepted answer.",
+  },
+  {
+    slug: "reasoning-and-belief-study",
+    challenge: "c2",
+    reason:
+      "States the positive control's purpose, the answer, and its result before the results stage.",
+  },
 ];
 
 export function isRemovedScene(slug: string, challenge: string) {

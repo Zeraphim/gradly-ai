@@ -220,82 +220,81 @@ export const scenes: Record<string, SavedScene> = {
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Understanding the Measure",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "The scene outlines the definition of the outcome, what the sensor counts, and the caution about interpreting the ratio as compliance.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e16", "e17", "e18"],
-        note: "Verified excerpts from the paper.",
+        note: "Scene builds on the paper’s description of the dependent variable and its limitations.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 6",
-          detail:
-            "The dependent variable was the percentage (ratio) of hand hygiene events (HHE, i.e., using the hand-rub dispenser) among all motion sensor activations, which covers every entrance and exit of the rooms.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e16"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 7",
-          detail:
-            "Thus, the total number of activations also includes the traffic between beds and bathrooms.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e17"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 11",
-          detail:
-            "Therefore, HHE ratios measured in this study must not be misunderstood as a compliance rate, which is usually the dependent measure to evaluate interventions.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e18"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "It is guideline compliance, since each sensor activation records one occasion requiring hand cleaning.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["s3"],
         },
         {
           optionId: "o3",
           label:
             "It cannot measure dispenser use, since the sensors did not identify whether each user was a patient.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["s1"],
         },
         {
           optionId: "o4",
           label:
             "It necessarily underestimates compliance, since every sensor activation represents a missed cleaning event.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["s2"],
         },
         {
           optionId: "o1",
           label:
             "The measure shows more dispenser use per sensor activation, not compliance with guidelines or the quality of cleaning.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["s1", "s2", "s3"],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "s1",
+          label: "Outcome definition",
+          detail:
+            "Dispenser uses divided by motion-sensor activations, expressed as a percentage.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e16", "e17", "e18"],
+            note: "Defines the dependent variable as ratio of hand‑rub events to sensor triggers.",
+          },
+        },
+        {
+          id: "s2",
+          label: "Sensor activation scope",
+          detail:
+            "Each activation records any movement past the dispenser, including trips between bed and bathroom.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e17"],
+            note: "Clarifies what counts as an activation.",
+          },
+        },
+        {
+          id: "s3",
+          label: "Interpretation caution",
+          detail:
+            "The ratio must not be mistaken for a compliance rate, which evaluates guideline adherence.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e18"],
+            note: "Warns against interpreting the ratio as a compliance measure.",
+          },
+        },
+      ],
     },
   },
 };

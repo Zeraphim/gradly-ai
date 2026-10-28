@@ -7,100 +7,122 @@ export const scenes: Record<string, SavedScene> = {
   c3: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Main Effect Result",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "The excerpt provides the t‑test result for the Stroop interference effect on error data.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e15"],
-        note: "Verified excerpts from the paper.",
+        note: "Summarizes the reported t‑test, p‑value, effect size and confidence interval.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 13",
-          detail:
-            "Block 1. As summarized in the top panel of Table 3, a t test for the Stroop interference effect for the error data failed to reveal a significant difference between the two conditions, t(185) = –1.620, p = .107, d = –0.239, 95% CI for the condition difference [–3.014, .296]. Similarly, the condition difference for the Stroop interference effect was not significant for the log RT data, either, t(185) = –0.360, p = .719, d = –0.053, 95% CI for the condition difference [–.025, .017].",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e15"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "b1",
           label: "Significant main effect with d = –0.239",
-          targetIds: ["evidence_1"],
+          targetIds: ["e_anchor"],
         },
         {
           optionId: "b2",
           label: "Non‑significant main effect, d = –0.239",
-          targetIds: ["evidence_1"],
+          targetIds: ["e_anchor"],
         },
         {
           optionId: "b3",
           label: "Significant main effect with d = .053",
-          targetIds: ["evidence_1"],
+          targetIds: ["e_anchor"],
         },
       ],
       resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "e_anchor",
+          label: "Reported statistics",
+          detail:
+            "t(185) = –1.620, p = .107, d = –0.239, 95% CI [–3.014, .296]",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e15"],
+            note: "Directly from the excerpt.",
+          },
+        },
+      ],
+      actionLabel: "Choose the best interpretation",
     },
+    responseStyle: "pills",
   },
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Identify power limitation",
+      instruction: "Read the claims from modest to strong.",
+      description:
+        "Three possible claims about statistical power are presented as ladder rungs. Choose the one that matches what the article states.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e20"],
-        note: "Verified excerpts from the paper.",
+        note: "Article notes the study was underpowered to detect the hypothesised moderation effect despite a larger sample.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 19",
-          detail:
-            "the results of our replication study are consistent with those of recent relevant studies.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e20"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "d1",
-          label:
-            "The study was overpowered for the main effect but underpowered for the moderation effect",
-          targetIds: ["evidence_1"],
+          label: "Overpowered for main effect but underpowered for moderation",
+          targetIds: ["r2"],
         },
         {
           optionId: "d2",
-          label:
-            "The study was underpowered to detect the hypothesised moderation effect",
-          targetIds: ["evidence_1"],
+          label: "Underpowered to detect hypothesised moderation effect",
+          targetIds: ["r1"],
         },
         {
           optionId: "d3",
           label:
-            "The study had ample power (> .90) to detect both main and moderation effects",
-          targetIds: ["evidence_1"],
+            "Ample power (> .90) to detect both main and moderation effects",
+          targetIds: ["r3"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "r1",
+          label: "Underpowered to detect hypothesised moderation effect",
+          detail:
+            "A claim focusing on insufficient power for the moderation effect.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Claim derived from option d2",
+          },
+        },
+        {
+          id: "r2",
+          label: "Overpowered for main effect but underpowered for moderation",
+          detail: "A claim about power for main versus moderation effects.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Claim derived from option d1",
+          },
+        },
+        {
+          id: "r3",
+          label:
+            "Ample power (> .90) to detect both main and moderation effects",
+          detail: "A claim asserting high power for both effects.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Claim derived from option d3",
+          },
+        },
+      ],
+      reach: null,
     },
   },
 };

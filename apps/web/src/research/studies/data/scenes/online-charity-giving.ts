@@ -7,76 +7,73 @@ export const scenes: Record<string, SavedScene> = {
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Planned analytic approach",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Identify which option lists the pre‑registered primary analysis and the additional tests that were planned.",
+      description:
+        "Two statements describe aspects of the analysis plan that were pre‑registered. Use them to determine which answer choice matches the plan.",
       provenance: {
-        kind: "reported",
-        refs: ["e11", "e4", "e3"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene built from the challenge's shownEvidence and excerpts.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 4",
-          detail:
-            "To test our hypothesis, we conducted a large-scale field experiment targeting a time-constrained population with high\nopportunity costs—academic scholars—for whom, as previously outlined, a donation incentive is particularly appropri-\nate. The study used real incentives that were paid out to a designated charity organization. Our experiment employed a\none-factorial between-participants design with three conditions: Random condition, Earmarking condition, Earmarking with\nFlexibility condition (see below). This study was preregistered at https://aspredicted.org/5zj6r.pdf.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 7",
-          detail:
-            "As further preregistered, we investigated whether there are differences between the three experimental conditions without conflating the two earmarking groups.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 6",
-          detail:
-            "The results revealed no significant difference between the 7.2% (162 out of 2,237) of the participants in the Random",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label:
-            "Primary: two‑tailed t‑test of means; Additional: chi‑square of demographics.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          label: "Option o1",
+          targetIds: [],
         },
         {
           optionId: "o2",
-          label:
-            "Primary: one‑tailed z‑test of proportions (combined earmarking vs Random); Additional: separate condition tests and equivalence tests (Δ=2%).",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          label: "Option o2",
+          targetIds: ["s1", "s2"],
         },
         {
           optionId: "o3",
-          label:
-            "Primary: ANOVA across three groups; Additional: post‑hoc Tukey.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          label: "Option o3",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "s1",
+          label: "Separate condition tests",
+          detail:
+            "Separate comparisons of each earmarking condition vs Random were also planned.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Refers to the planned additional comparisons mentioned in the preregistration.",
+          },
+        },
+        {
+          id: "s2",
+          label: "Equivalence tests",
+          detail:
+            "Equivalence tests with a smallest effect of interest of 2 percentage points were pre‑registered.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Refers to the pre‑registered equivalence criterion.",
+          },
+        },
+        {
+          id: "s3",
+          label: "Outcome proportion",
+          detail:
+            "The proportion of participants who donated was 7.2% (162/2,237) in the Random condition.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Reports donation proportion in Random condition.",
+          },
+        },
+      ],
     },
   },
   c3: {
@@ -183,159 +180,89 @@ export const scenes: Record<string, SavedScene> = {
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Limitations discussed",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Review the statements below about the study’s limitations. Which options reflect the authors’ interpretation of why earmarking did not increase participation?",
+      description:
+        "Three summary statements are provided, each drawn from the paper’s discussion of limitations. Match each answer choice to the statement(s) it aligns with.",
       provenance: {
-        kind: "reported",
-        refs: ["e8", "e15", "e16", "e21", "e13", "e27"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene constructed for interpretation task.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 8",
-          detail:
-            "Despite the strengths of our large-scale field experiment, several limitations emerge from our design—each of which can be meaningfully linked to Leverage–Saliency Theory of Survey Participation.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 8",
-          detail:
-            "Our results suggest that earmarking did not increase study participation.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e15"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 9",
-          detail:
-            "According to the Leverage–Saliency Theory of Survey Participation framework, experience may therefore reduce the salience of the incentive and its design variations, thereby diminishing their potential to influence participation.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e16"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_4",
-          label: "Evidence 4 · p. 8",
-          detail:
-            "First, the modest donation amount of $5 may have limited the incentive’s perceived value (i.e., leverage), thereby weak-\nening its ability to motivate participation.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e21"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_5",
-          label: "Evidence 5 · p. 9",
-          detail:
-            "Second, our sample—academic scholars—represents a highly distinct population. This group regularly designs and engages with studies and experiments, which might lead to different reactions to experimental stimuli.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_6",
-          label: "Evidence 6 · p. 9",
-          detail:
-            "Fourth, related to the previous limitation, the different purposes to choose from for donations on SIPS (i.e., a preprinting platform and two types of travel funds) are arguably closely related and participants may have felt smaller differences between these purposes than, for instance, different projects supported by the Red Cross, due to its much broader mission and more diverse projects.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e27"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
             "Earmarking failed to boost participation because the $5 incentive was too small to motivate action.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-            "evidence_6",
-          ],
+          targetIds: ["eA"],
         },
         {
           optionId: "o2",
           label:
             "The null result is explained by the high familiarity of academic scholars with experiments, which dampens the incentive’s salience.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-            "evidence_6",
-          ],
+          targetIds: ["eA"],
         },
         {
           optionId: "o3",
           label:
             "The authors argue that participants’ lack of trust in the charity drove the null effect.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-            "evidence_6",
-          ],
+          targetIds: ["eC"],
         },
         {
           optionId: "o4",
           label:
             "Limited thematic differences among the earmarking choices reduced the perceived meaningfulness of the option.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-            "evidence_6",
-          ],
+          targetIds: ["eB"],
         },
         {
           optionId: "o5",
           label:
             "The earmarking manipulation may have been too subtle for participants to notice.",
-          targetIds: [
-            "evidence_1",
-            "evidence_2",
-            "evidence_3",
-            "evidence_4",
-            "evidence_5",
-            "evidence_6",
-          ],
+          targetIds: ["eB"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "eC",
+          label: "Design limitations noted",
+          detail:
+            "Several limitations emerge from the design, each linked to the Leverage–Saliency Theory.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e8"],
+            note: "Generic statement of limitations.",
+          },
+        },
+        {
+          id: "eA",
+          label: "Incentive value & salience",
+          detail:
+            "The modest $5 donation may have limited the incentive’s perceived value and salience, especially among experienced scholars.",
+          at: "setup",
+          provenance: {
+            kind: "derived",
+            refs: ["e21", "e16"],
+            note: "Combines modest donation limit and experience reducing salience.",
+          },
+        },
+        {
+          id: "eB",
+          label: "Manipulation subtlety & cause similarity",
+          detail:
+            "The earmarking manipulation may have been too subtle or the choice purposes too similar to be influential.",
+          at: "setup",
+          provenance: {
+            kind: "derived",
+            refs: ["e27", "e29"],
+            note: "Combines limited cause differentiation and manipulation subtlety.",
+          },
+        },
+      ],
+      reach: null,
     },
   },
 };

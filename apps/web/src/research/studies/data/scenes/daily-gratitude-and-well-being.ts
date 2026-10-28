@@ -7,195 +7,234 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Measuring Both Constructs Each Wave",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "A single fact about the measurement schedule is shown. Choose the rationale that matches this fact.",
       provenance: {
-        kind: "reported",
-        refs: ["e1", "e2"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene created for challenge.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 6",
-          detail:
-            "we collected full panel data in a three-wave cross-lagged longitudinal design with 1 month between waves, among a wide sample of Chilean working adults.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e1"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 7",
-          detail:
-            "Thus, all constructs were represented as potential antecedents and as potential consequences of the other constructs, while controlling for stability effects.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e2"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "To randomise gratitude, turning the repeated survey into an experiment.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["anchor1"],
         },
         {
           optionId: "o1",
           label:
             "To test both directions, with each measure acting as predictor and outcome.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["anchor1"],
         },
         {
           optionId: "o3",
           label:
             "To average all waves into one score, removing the need to distinguish earlier and later values.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["anchor1"],
         },
         {
           optionId: "o4",
           label:
             "To prevent dropout by requiring each participant to complete every wave before joining the study.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["anchor1"],
         },
       ],
       resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "anchor1",
+          label: "Both gratitude and life satisfaction measured at each wave",
+          detail:
+            "Participants completed both gratitude and life satisfaction surveys at Wave 1, Wave 2, and Wave 3.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1", "e2"],
+            note: "Describes three‑wave panel with repeated measures of both constructs.",
+          },
+        },
+      ],
+      actionLabel: "Choose the reason that fits the measurement plan",
     },
   },
   c2: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Why Include Stability?",
+      instruction: "Compare the panels side by side.",
+      description:
+        "Two alternative specifications of the cross‑lagged panel model are shown.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e2", "e3"],
-        note: "Verified excerpts from the paper.",
+        note: "Excerpts describe controlling for stability and autoregressive/cross‑lagged effects.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 7",
-          detail:
-            "Thus, all constructs were represented as potential antecedents and as potential consequences of the other constructs, while controlling for stability effects.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e2"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 5",
-          detail:
-            "CLPM allows “looking at autoregressive effects (linking a variable at earlier time points to itself at later time points) and cross-lagged effects (linking two different variables across time)”",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
-          label:
-            "To combine gratitude and satisfaction into one construct before estimating their later association.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Combine gratitude and satisfaction into one construct",
+          targetIds: [],
         },
         {
           optionId: "o3",
           label:
-            "To increase the cross-lagged coefficients by leaving earlier levels out of the prediction model.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "Increase cross‑lagged coefficients by omitting earlier levels",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label: "To remove every shared cause of gratitude and satisfaction.",
-          targetIds: ["evidence_1", "evidence_2"],
+          label: "Remove every shared cause of gratitude and satisfaction",
+          targetIds: [],
         },
         {
           optionId: "o1",
           label:
-            "To separate a cross-lagged link from each measure's own stability over time.",
-          targetIds: ["evidence_1", "evidence_2"],
+            "Separate a cross‑lagged link from each measure's own stability",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "designs",
+      panels: [
+        {
+          id: "panelA",
+          label: "Model with stability paths",
+          steps: [
+            {
+              id: "stepA1",
+              label: "Autoregressive paths",
+              detail:
+                "Arrows from gratitude T1 → gratitude T2 and satisfaction T1 → satisfaction T2.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3"],
+                note: "Stability effects are modeled.",
+              },
+            },
+            {
+              id: "stepA2",
+              label: "Cross‑lagged paths",
+              detail: "Arrows linking gratitude and satisfaction across waves.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3"],
+                note: "Cross‑lagged effects are estimated.",
+              },
+            },
+          ],
+        },
+        {
+          id: "panelB",
+          label: "Model without stability paths",
+          steps: [
+            {
+              id: "stepB1",
+              label: "No autoregressive paths",
+              detail:
+                "Gratitude and satisfaction at T1 do not predict themselves at T2.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3"],
+                note: "Stability is not controlled.",
+              },
+            },
+            {
+              id: "stepB2",
+              label: "Cross‑lagged paths",
+              detail:
+                "Arrows linking gratitude and satisfaction across waves remain.",
+              at: "setup",
+              provenance: {
+                kind: "source-summary",
+                refs: ["e2", "e3"],
+                note: "Only cross‑lagged effects are estimated.",
+              },
+            },
+          ],
+        },
+      ],
     },
   },
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "Cross‑lagged path strengths",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Compare the two reported standardized betas and the p‑value for testing equality of the paths.",
+      description:
+        "The matrix shows the estimated effect of gratitude on later satisfaction, the effect of satisfaction on later gratitude, and the p‑value from the model comparison that forced the two paths to be equal.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e7"],
-        note: "Verified excerpts from the paper.",
+        note: "Summarizes the excerpt and shownEvidence.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 8",
-          detail:
-            "Thus, the strength of the link from gratitude to life satisfaction is not significantly different from the strength of the link from life satisfaction to gratitude.",
+          optionId: "o1",
+          label: "Data do not distinguish; equality unproven",
+          targetIds: [],
+        },
+        {
+          optionId: "o2",
+          label: "True effects identical",
+          targetIds: [],
+        },
+        {
+          optionId: "o3",
+          label: "Only gratitude predicts satisfaction",
+          targetIds: [],
+        },
+        {
+          optionId: "o4",
+          label: "Constrained model should be rejected",
+          targetIds: [],
+        },
+      ],
+      resolution: null,
+      kind: "matrix",
+      conditions: [
+        {
+          id: "c1",
+          label: "Gratitude → Satisfaction",
+        },
+        {
+          id: "c2",
+          label: "Satisfaction → Gratitude",
+        },
+      ],
+      rows: [
+        {
+          id: "r1",
+          label: "Estimated β",
+          detail: "Standardized beta coefficient from shownEvidence.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e7"],
-            note: "Verified excerpts from the paper.",
+            note: "From shownEvidence.",
           },
+          cells: ["> m1", "> m2"],
+        },
+        {
+          id: "r2",
+          label: "Equality test p",
+          detail: "p‑value for model comparison forcing equal paths.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e7"],
+            note: "From shownEvidence.",
+          },
+          cells: ["> m3", "> m4"],
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "The data do not distinguish the two path strengths; exact equality is unproven.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label:
-            "The true effects are identical, since the equality constraint was not rejected.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label:
-            "Only gratitude predicts satisfaction, since the reverse path disappeared under the constraint.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o4",
-          label:
-            "The constrained model should be rejected, since any numerical fit loss is decisive.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
     },
   },
   c6: {

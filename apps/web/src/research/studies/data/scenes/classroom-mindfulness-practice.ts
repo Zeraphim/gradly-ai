@@ -7,82 +7,96 @@ export const scenes: Record<string, SavedScene> = {
   c1: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Drawing Classes From a Hat",
+      instruction: "Read the evidence before you answer.",
+      description:
+        "Evidence pins show how classes were allocated, how many classes there were, and baseline gender differences.",
       provenance: {
-        kind: "reported",
-        refs: ["e1", "e2", "e3"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene constructed from the provided excerpts and shown evidence.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 4",
-          detail:
-            "Classes within the participant primary school were randomly allocated via a hat draw to participate in CalmSpace in both",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e1"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 4",
-          detail:
-            "Classes randomly allocated to CalmSpace Terms 3 and 4 consisted of a single preparatory class of 18 children; a Grade 1 class of 24 children and a composite Grades 1 and 2 class of 26 children. Classes randomly allocated to the waitlist control group consisted of a single preparatory class of 17 children and a Grade 2 class of 28,",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e2"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 4",
-          detail:
-            "∗Significant gender differences at baseline, t(89) = 2.737, p = 0.007.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e3"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "Random assignment balances gender and grade closely enough to remove the need for adjustment.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["eD"],
         },
         {
           optionId: "o1",
           label:
             "Random assignment helps, but five classes can still differ substantially by chance.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["eB"],
         },
         {
           optionId: "o3",
           label:
             "Each child was independently assigned, balancing class differences.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["eA1"],
         },
         {
           optionId: "o4",
           label:
             "The teachers' preferences determined which classes started, making this a self-selected comparison.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3"],
+          targetIds: ["eA2"],
         },
       ],
       resolution: null,
+      kind: "connections",
+      anchors: [
+        {
+          id: "eA1",
+          label:
+            "Classes were allocated as whole units, not individual children",
+          detail:
+            "Classes within the participant primary school were randomly allocated via a hat draw to participate in CalmSpace in both terms 3 and 4.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1"],
+            note: "Summary of random class-level allocation.",
+          },
+        },
+        {
+          id: "eA2",
+          label:
+            "Allocation was random via hat draw, not based on teacher preference",
+          detail:
+            "Classes within the participant primary school were randomly allocated via a hat draw to participate in CalmSpace in both terms 3 and 4.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e1"],
+            note: "Summary of random allocation method.",
+          },
+        },
+        {
+          id: "eB",
+          label: "Five classes total: three intervention, two control",
+          detail:
+            "Five classes in one school: three started in Term 3, two waited until Term 4.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e2"],
+            note: "Count of classes in each condition.",
+          },
+        },
+        {
+          id: "eD",
+          label: "Significant gender differences at baseline",
+          detail:
+            "∗Significant gender differences at baseline, t(89) = 2.737, p = 0.007.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e3"],
+            note: "Baseline gender imbalance reported.",
+          },
+        },
+      ],
+      actionLabel: "Choose",
     },
   },
   c2: {

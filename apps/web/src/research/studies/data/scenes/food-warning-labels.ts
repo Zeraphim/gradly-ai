@@ -222,256 +222,292 @@ export const scenes: Record<string, SavedScene> = {
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Does Wording Matter?",
+      instruction: "Compare what differs between the conditions.",
+      description:
+        "Compare the reported ranges of PME scores for health and environmental harms and note any single harm that is rated lowest.",
       provenance: {
-        kind: "reported",
-        refs: ["e7", "e8", "e9", "e10"],
-        note: "Verified excerpts from the paper.",
+        kind: "authored",
+        refs: [],
+        note: "Scene built from the provided excerpts.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 10",
-          detail:
-            "Specific health harms elicited PME scores ranging from 2.46 to 2.75 (Table 5).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e7"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 10",
-          detail:
-            "A narrower range of PME was observed across different environmental messages (range, 2.20 to 2.32).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e8"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 10",
-          detail:
-            "The diabetes message elic- ited lower PME ratings than all other messages (p<0.001 for all 7 comparisons).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e9"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_4",
-          label: "Evidence 4 · p. 10",
-          detail:
-            "After adjusting for multiple comparisons, there were three statistically significant differences between environmental harms (p<0.05).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e10"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label:
             "Among health messages: ratings spread more widely, and one message, diabetes, was rated lower than all the others.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          targetIds: [],
         },
         {
           optionId: "o2",
           label:
             "Environmental messages varied more, with several clearly separated harms driving their average rating.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          targetIds: [],
         },
         {
           optionId: "o3",
           label:
             "Both types varied equally, so choosing the specific harm matters just as much in either category.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          targetIds: [],
         },
         {
           optionId: "o4",
           label:
             "Neither type needs harm-specific testing, since the category averages determine every message's rating.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "matrix",
+      conditions: [
+        {
+          id: "health",
+          label: "Health",
+        },
+        {
+          id: "environment",
+          label: "Environmental",
+        },
+      ],
+      rows: [
+        {
+          id: "range",
+          label: "Range width (PME)",
+          detail: "Reported minimum–maximum values.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Describes the matrix row.",
+          },
+          column: 0,
+          cells: ["/m1", "/m2"],
+        },
+        {
+          id: "lowest",
+          label: "Lowest‑rated harm",
+          detail: "Indicates whether a single harm is lowest.",
+          at: "setup",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Describes the matrix row.",
+          },
+          column: 0,
+          cells: ["/m3", "/m4"],
+        },
+      ],
     },
   },
   c5: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Interpreting the Association",
+      instruction: "Read the claims from modest to strong.",
+      description:
+        "A ladder of possible interpretations, ordered from modest to strongest claim.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e11", "e12"],
-        note: "Verified excerpts from the paper.",
+        note: "Scene based on reported measures of warning effectiveness and self‑reported meat‑change.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 11",
-          detail:
-            "Messages also elicited higher PME among participants who had reduced their red meat consumption over the past year compared to those who had not reduced their consumption (b = 0.57 and 0.68 for health and environment, respectively, p < .001).",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e11"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 7",
-          detail:
-            "After completing the experiment, participants answered a series of questions on demo- graphic characteristics as well as political affiliation and change in red meat consumption over the past 12 months.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e12"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o2",
           label:
             "The warnings caused prior reductions, because people who cut back subsequently rated them more highly.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["r3"],
         },
         {
           optionId: "o3",
           label:
             "High meat consumers will respond most, because the coefficients measure the effect of baseline consumption.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["r2"],
         },
         {
           optionId: "o1",
           label:
             "Prior reducers rated warnings higher; effects on people yet to change remain untested.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["r1"],
         },
         {
           optionId: "o4",
           label:
             "Warnings cannot change purchases, because the observed association concerns people who already reduced meat.",
-          targetIds: ["evidence_1", "evidence_2"],
+          targetIds: ["r4"],
         },
       ],
       resolution: null,
+      kind: "ladder",
+      rungs: [
+        {
+          id: "r1",
+          label: "Prior reducers rated warnings higher",
+          detail:
+            "Participants who reduced red meat over the past year gave higher effectiveness ratings for health and environmental messages.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11", "e12"],
+            note: "Based on the reported association.",
+          },
+        },
+        {
+          id: "r2",
+          label: "High meat consumers respond most",
+          detail:
+            "The coefficients suggest that individuals with higher baseline meat intake show larger warning effectiveness.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11", "e12"],
+            note: "Interpretation of the size of the coefficients.",
+          },
+        },
+        {
+          id: "r3",
+          label: "Warnings caused prior reductions",
+          detail:
+            "Claims that the warnings led participants to cut back their red meat consumption before rating them.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11", "e12"],
+            note: "Causal directional claim.",
+          },
+        },
+        {
+          id: "r4",
+          label: "Warnings cannot change purchases",
+          detail:
+            "Asserts that the warnings are ineffective at altering meat purchases because the observed link involves only prior reducers.",
+          at: "setup",
+          provenance: {
+            kind: "source-summary",
+            refs: ["e11", "e12"],
+            note: "Strong negative causal claim.",
+          },
+        },
+        {
+          id: "reach",
+          label: "Evidence reaches here",
+          detail:
+            "The evidence supports the modest association claim (first rung).",
+          at: "resolution",
+          provenance: {
+            kind: "authored",
+            refs: [],
+            note: "Indicator of the rung supported by the cited evidence.",
+          },
+        },
+      ],
+      reach: {
+        rungId: "r1",
+        label: "The evidence reaches here",
+        at: "resolution",
+      },
     },
+    responseStyle: "tap",
   },
   c6: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
+      title: "From Study to Policy",
       instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+        "Look at the two study panels and decide which option best matches what the evidence supports.",
+      description:
+        "The scene shows an exploratory panel measuring ratings and intention, and a behavioral panel that would measure actual purchasing/consumption. Each option refers to one of these panels.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e13", "e14", "e15", "e16"],
-        note: "Verified excerpts from the paper.",
+        note: "Scene depicts the exploratory study measuring message ratings and intention (no power calc, convenience sample) and notes that future research should measure behavioral impact.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 5",
-          detail:
-            "No a priori power calculations were conducted for this exploratory study.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e13"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_2",
-          label: "Evidence 2 · p. 1",
-          detail:
-            "A national convenience sample of US red meat consumers (n = 1,199; mean age 45 years) completed an online survey in 2020 for this exploratory study.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e14"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_3",
-          label: "Evidence 3 · p. 17",
-          detail:
-            "Although perceived effectiveness is a marker for messages’ potential to change behavior, more research is needed to assess whether red meat warnings influence red meat purchasing and consumption behaviors.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e15"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-        {
-          id: "evidence_4",
-          label: "Evidence 4 · p. 2",
-          detail:
-            "Future studies should measure the impact of these messages on behavioral outcomes.",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e16"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
-          label:
-            "Use the ratings to choose messages for a behavioural trial before a mandate.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          label: "Use ratings for trial before mandate",
+          targetIds: [],
         },
         {
           optionId: "o2",
-          label:
-            "Require health warnings now, since the small p-values establish a change in purchasing behaviour.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          label: "Require warnings now",
+          targetIds: [],
         },
         {
           optionId: "o3",
-          label:
-            "Set the findings aside, since a non-random sample prevents even comparing ratings within the study.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          label: "Set aside findings",
+          targetIds: [],
         },
         {
           optionId: "o4",
-          label:
-            "End environmental-warning trials, since their lower ratings establish that they cannot change purchases.",
-          targetIds: ["evidence_1", "evidence_2", "evidence_3", "evidence_4"],
+          label: "End environmental-warning trials",
+          targetIds: [],
         },
       ],
       resolution: null,
+      kind: "designs",
+      panels: [
+        {
+          id: "eA",
+          label: "Exploratory study",
+          steps: [
+            {
+              id: "step1",
+              label: "Sample",
+              detail:
+                "Online convenience sample of US red meat consumers (n=1,199) rated messages and reported intention to cut red meat.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e14"],
+                note: "Describes sample and outcomes.",
+              },
+            },
+            {
+              id: "step2",
+              label: "Power",
+              detail:
+                "No a priori power calculations were conducted for this exploratory study.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e13"],
+                note: "Notes lack of power calculation.",
+              },
+            },
+          ],
+        },
+        {
+          id: "eB",
+          label: "Behavioral trial",
+          steps: [
+            {
+              id: "step3",
+              label: "Future need",
+              detail:
+                "Future studies should measure the impact of these messages on red meat purchasing and consumption behaviors.",
+              at: "setup",
+              provenance: {
+                kind: "reported",
+                refs: ["e15", "e16"],
+                note: "Highlights need for behavioral outcomes.",
+              },
+            },
+            {
+              id: "step4",
+              label: "Trial purpose",
+              detail:
+                "A behavioral trial would test actual purchasing/consumption after exposure to warnings.",
+              at: "setup",
+              provenance: {
+                kind: "authored",
+                refs: [],
+                note: "Describes what a behavioral trial would do, based on the need expressed in excerpts.",
+              },
+            },
+          ],
+        },
+      ],
     },
   },
 };

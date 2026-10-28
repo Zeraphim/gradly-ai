@@ -72,111 +72,148 @@ export const scenes: Record<string, SavedScene> = {
   c3: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Compare frame means",
+      instruction: "Compare the reported values.",
+      description:
+        "Shows the reported means for negative and positive frames; the p‑value is provided in the accompanying text.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e4"],
-        note: "Verified excerpts from the paper.",
+        note: "The scene visualizes the two means reported in the excerpt.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
-        {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 9",
-          detail:
-            "negative frame M = 4.02 vs. positive frame M = 4.09, p = 0.038",
-          at: "setup",
-          provenance: {
-            kind: "reported",
-            refs: ["e4"],
-            note: "Verified excerpts from the paper.",
-          },
-        },
-      ],
       responses: [
         {
           optionId: "o1",
           label: "Mean negative = 4.02, Mean positive = 4.09, p = 0.038",
-          targetIds: ["evidence_1"],
+          targetIds: ["m_neg", "m_pos"],
         },
         {
           optionId: "o2",
           label: "Mean negative = 4.09, Mean positive = 4.02, p = 0.038",
-          targetIds: ["evidence_1"],
+          targetIds: ["m_neg", "m_pos"],
         },
         {
           optionId: "o3",
           label: "Mean negative = 4.02, Mean positive = 4.09, p = 0.002",
-          targetIds: ["evidence_1"],
+          targetIds: ["m_neg", "m_pos"],
         },
         {
           optionId: "o4",
           label: "Mean negative = 4.02, Mean positive = 4.09, p = 0.050",
-          targetIds: ["evidence_1"],
+          targetIds: ["m_neg", "m_pos"],
         },
       ],
       resolution: null,
+      kind: "comparison",
+      measure: "comparison",
+      unit: "response units",
+      min: 0,
+      max: 5,
+      values: [
+        {
+          id: "m_neg",
+          label: "Negative frame mean",
+          detail: "Negative frame M = 4.02 (from excerpt e4)",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e4"],
+            note: "Reported mean for negative frame",
+          },
+          value: 4.02,
+        },
+        {
+          id: "m_pos",
+          label: "Positive frame mean",
+          detail: "Positive frame M = 4.09 (from excerpt e4)",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e4"],
+            note: "Reported mean for positive frame",
+          },
+          value: 4.09,
+        },
+      ],
+      difference: null,
+      prediction: null,
     },
   },
   c4: {
     scene: {
       version: 1,
-      kind: "connections",
-      title: "Connect the evidence",
-      instruction:
-        "Read the evidence, then connect the response you would choose.",
-      description: "The challenge's evidence with one response per option.",
+      title: "Interpreting the involvement—government priorities result",
+      instruction: "Highlight a passage to see what it means here.",
+      description:
+        "The excerpt reports that parents who received positively framed information were more likely to regard vaccine safety as a higher priority for government.",
       provenance: {
-        kind: "reported",
+        kind: "source-summary",
         refs: ["e12"],
-        note: "Verified excerpts from the paper.",
+        note: "Parents’ views of vaccine safety as a government priority increased with positive framing.",
       },
-      actionLabel: "Connect a response",
-      anchors: [
+      responses: [
         {
-          id: "evidence_1",
-          label: "Evidence 1 · p. 1",
-          detail:
-            "We found that parents were more likely to regard vaccine safety as relevant to policy support and as a higher priority for government when receiving positively framed information (p = 0.002).",
+          optionId: "o1",
+          label: "Positive framing ↑ priority perception",
+          targetIds: ["p3"],
+        },
+        {
+          optionId: "o2",
+          label: "Negative framing ↑ priority perception",
+          targetIds: ["p1"],
+        },
+        {
+          optionId: "o3",
+          label: "No effect of framing",
+          targetIds: ["p1"],
+        },
+        {
+          optionId: "o4",
+          label: "Positive framing ↓ trust",
+          targetIds: ["p1"],
+        },
+      ],
+      resolution: null,
+      kind: "spot",
+      passages: [
+        {
+          id: "p1",
+          label: "Regard vaccine safety as relevant to policy support",
+          detail: "First part of the reported finding.",
           at: "setup",
           provenance: {
             kind: "reported",
             refs: ["e12"],
-            note: "Verified excerpts from the paper.",
+            note: "Split from the excerpt.",
           },
+          column: 0,
+        },
+        {
+          id: "p2",
+          label: "And as a higher priority for government",
+          detail: "Second part of the reported finding.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e12"],
+            note: "Split from the excerpt.",
+          },
+          column: 0,
+        },
+        {
+          id: "p3",
+          label: "When receiving positively framed information (p = .002)",
+          detail:
+            "Condition and statistical significance from the reported finding.",
+          at: "setup",
+          provenance: {
+            kind: "reported",
+            refs: ["e12"],
+            note: "Split from the excerpt.",
+          },
+          column: 0,
         },
       ],
-      responses: [
-        {
-          optionId: "o1",
-          label:
-            "Positive framing increased parents’ perception that vaccine safety should be a high government priority.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o2",
-          label:
-            "Negative framing increased parents’ perception that vaccine safety should be a high government priority.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o3",
-          label:
-            "Framing had no effect on parents’ views of government priority.",
-          targetIds: ["evidence_1"],
-        },
-        {
-          optionId: "o4",
-          label:
-            "Positive framing decreased parents’ trust in government vaccine safety reporting.",
-          targetIds: ["evidence_1"],
-        },
-      ],
-      resolution: null,
     },
   },
   c5: {
