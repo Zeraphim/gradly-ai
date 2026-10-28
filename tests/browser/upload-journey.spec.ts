@@ -510,8 +510,8 @@ test("a long generated briefing stays folded and the way into the study stays on
   page,
 }) => {
   // Reported on 27 October 2026: a one-block generated briefing pushed the
-  // Begin button below the screen. Uploads now fold the whole briefing behind
-  // a disclosure under the tap steps, and "Skip to study" begins from any step.
+  // Begin button below the screen. Uploads now move the whole briefing into a
+  // modal dialog under the tap steps, and "Skip to study" begins from any step.
   const lesson = lessonFixture();
   lesson.briefing = Array.from(
     { length: 12 },
@@ -534,7 +534,7 @@ test("a long generated briefing stays folded and the way into the study stays on
     await page.setViewportSize({ width, height });
     await page.evaluate(() => window.scrollTo(0, 0));
     await noOverflow(page);
-    await expect(more).toHaveAttribute("aria-expanded", "false");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
     await expect(page.getByText("Sentence 12 explains")).toBeHidden();
     await page.screenshot({ path: `${shots}/player-intro-long-${width}.png` });
     if (width > 400) {
@@ -550,16 +550,17 @@ test("a long generated briefing stays folded and the way into the study stays on
   // The rest is one keyboard press away, and nothing is lost.
   await more.focus();
   await page.keyboard.press("Enter");
-  await expect(more).toHaveAttribute("aria-expanded", "true");
-  await expect(page.getByText("Sentence 12 explains")).toBeVisible();
-  // Axe reads colour, so let the disclosure's short fade settle first.
-  await expect(page.locator(".scene-disclosure-content")).toHaveCSS(
-    "opacity",
-    "1",
-  );
+  const briefing = page.getByRole("dialog", { name: "The full briefing" });
+  await expect(briefing.getByText("Sentence 12 explains")).toBeVisible();
+  // Axe reads colour, so let the dialog's short fade settle first.
+  await expect(briefing).toHaveCSS("opacity", "1");
   expect(
     (await new AxeBuilder({ page }).include(".studies").analyze()).violations,
   ).toEqual([]);
+  // Escape closes the dialog and returns focus to its trigger.
+  await page.keyboard.press("Escape");
+  await expect(briefing).toHaveCount(0);
+  await expect(more).toBeFocused();
   await begin.click();
   await expect(
     page.getByRole("heading", { level: 1, name: lesson.challenges[0]!.prompt }),

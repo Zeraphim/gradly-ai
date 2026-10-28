@@ -1788,15 +1788,19 @@
   font-weight: 600;
 }
 .research-lab .studies .journey-intro-briefing {
+  justify-self: start;
   padding: 0 4px;
-  color: var(--s-blue-ink);
 }
-.research-lab .studies .journey-intro-briefing .scene-disclosure-content {
-  padding-top: 4px;
+.research-lab .studies .journey-briefing-text {
   color: var(--s-body);
+  font-size: 15px;
+  line-height: 1.6;
 }
-.research-lab .studies .journey-intro-briefing p {
-  margin: 0 0 10px;
+.research-lab .studies .journey-briefing-text p {
+  margin: 0 0 12px;
+}
+.research-lab .studies .journey-briefing-text p:last-child {
+  margin-bottom: 0;
 }
 .research-lab .studies .orient {
   display: grid;
