@@ -71,8 +71,16 @@ async function run(file: string): Promise<Row> {
   const provider = new NebiusProvider();
   let sceneSeconds: number | null = null;
   // The browser runs each pending stage; failures retry and a rejected lesson
-  // is redrafted once, as autoRecover decides.
-  for (let steps = 0; job.status === "pending" && steps < 30; steps++) {
+  // is redrafted once, as autoRecover decides. A stage that stops for the
+  // learner, such as after a timeout, is retried twice as a learner would.
+  let learnerRetries = 0;
+  for (let steps = 0; steps < 30; steps++) {
+    if (job.status === "failed" && learnerRetries < 2) {
+      learnerRetries++;
+      job = { ...job, status: "pending" };
+      delete job.autoRetries;
+    }
+    if (job.status !== "pending") break;
     const before = job;
     const t = performance.now();
     job = autoRecover(before, await runStage(before, provider));

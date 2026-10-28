@@ -8,6 +8,7 @@
 //
 //   npm run define:scenes                          every study without a scenes file
 //   npm run define:scenes -- --slugs a,b --force   only these, replacing their files
+//   npm run define:scenes -- --fill                redraft only evidence scenes, keeping the rest
 //   npm run define:scenes -- report                print saved scenes for review
 //   npm run define:scenes -- prune                 apply reviewed removals to saved files
 //   npm run define:scenes -- coverage              print scene coverage per study
@@ -45,6 +46,7 @@ const { values, positionals } = parseArgs({
   options: {
     slugs: { type: "string" },
     force: { type: "boolean", default: false },
+    fill: { type: "boolean", default: false },
     concurrency: { type: "string", default: "3" },
   },
 });
@@ -95,9 +97,17 @@ function replaced(c: Challenge, lesson: Lesson): SavedScene | null {
   return scene ? { scene } : null;
 }
 
-async function define(slug: string, model: string) {
+async function define(slug: string, model: string, fill = false) {
   const started = Date.now();
   const lesson = (await body(slug)).lesson as Lesson;
+  // Filling keeps every saved scene except an evidence scene the stage
+  // stood in with; a scene replaced after review stays replaced.
+  const previous = fill ? await savedScenes(slug) : {};
+  const keep = (id: string) =>
+    !!previous[id] &&
+    (!isEvidenceScene(previous[id]!.scene) || isRemovedScene(slug, id));
+  for (const c of challengesOf(lesson))
+    if (!c.scene && keep(c.id)) Object.assign(c, previous[c.id]);
   const provider = new NebiusProvider();
   // No route limit here, so each challenge gets more drafts before the
   // evidence scene stands in.
@@ -122,7 +132,9 @@ async function define(slug: string, model: string) {
   const rejected = new Set(
     (review?.rejectedScenes ?? []).map((r) => r.challenge),
   );
-  const scenes: Record<string, SavedScene> = {};
+  const scenes: Record<string, SavedScene> = Object.fromEntries(
+    Object.entries(previous).filter(([id]) => keep(id)),
+  );
   let reviewerReplaced = 0;
   for (const c of challengesOf(designed.lesson)) {
     const outcome = designed.outcomes[c.id];
@@ -280,14 +292,15 @@ else {
   if (!process.env.NEBIUS_API_KEY) throw Error("NEBIUS_API_KEY is not set.");
   const model = nebiusConfig().pipelineModelId;
   const queue = chosen.filter(
-    (slug) => values.force || !existsSync(join(OUT, `${slug}.ts`)),
+    (slug) =>
+      values.force || values.fill || !existsSync(join(OUT, `${slug}.ts`)),
   );
   console.log(`Designing scenes for ${queue.length} studies with ${model}.`);
   const failed: string[] = [];
   const worker = async () => {
     for (let slug = queue.shift(); slug; slug = queue.shift())
       try {
-        await define(slug, model);
+        await define(slug, model, values.fill);
       } catch (e) {
         failed.push(slug);
         console.error(`${slug}: failed: ${e instanceof Error ? e.message : e}`);

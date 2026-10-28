@@ -430,7 +430,7 @@ export async function designScenes(
       const remaining = deadline - now();
       // A redraft needs enough time to be worth starting.
       if (remaining < (drafted++ ? 40_000 : 15_000)) break;
-      const timeoutMs = Math.min(callMs, remaining - 3_000);
+      const timeoutMs = Math.floor(Math.min(callMs, remaining - 3_000));
       const results = await Promise.all(
         pending.map(async (c) => {
           const i = all.indexOf(c);
@@ -517,7 +517,7 @@ export async function designScenes(
     );
     if (!unchecked.length || deadline - now() < 35_000) break;
     const flagged = await sceneLeakCheck(unchecked, provider, model, {
-      timeoutMs: Math.min(callMs, deadline - now() - 3_000),
+      timeoutMs: Math.floor(Math.min(callMs, deadline - now() - 3_000)),
     }).catch(() => ({}) as Record<string, string>);
     for (const c of unchecked) {
       if (!(c.id in flagged)) {

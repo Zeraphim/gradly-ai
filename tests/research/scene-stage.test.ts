@@ -229,6 +229,28 @@ describe("Scene Designer stage", () => {
     expect(once.fallback).toBe(3);
   });
 
+  it("passes whole-millisecond timeouts when the clock is fractional", async () => {
+    let clock = 0.25;
+    const timeouts: unknown[] = [];
+    const p: ModelProvider = {
+      async generate<T>(
+        role: string,
+        _task: string,
+        input: unknown,
+        _schema: unknown,
+        _model?: string,
+        options?: { timeoutMs?: number },
+      ) {
+        clock += 60_000.7;
+        timeouts.push(options?.timeoutMs);
+        return (role === SCENE_ROLE ? sceneReply(input) : { flagged: [] }) as T;
+      },
+    };
+    await designScenes(lesson, p, "model", { now: () => clock });
+    expect(timeouts.length).toBeGreaterThan(1);
+    expect(timeouts.every((t) => Number.isInteger(t))).toBe(true);
+  });
+
   it("limits kinds by position and kept neighbours, and the schema enforces them", async () => {
     expect(allowedKinds(0, [null, null])).toEqual(sceneKindSets[0]);
     expect(allowedKinds(1, [null, null])).toEqual(sceneKindSets[1]);

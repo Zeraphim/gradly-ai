@@ -55,7 +55,11 @@ export class NebiusProvider implements ModelProvider {
     const tier = options?.tier ?? "feedback";
     const isPipeline = tier === "pipeline";
     // Two pipeline attempts (2 x 110s) stay inside the 230s job lease.
-    const timeoutMs = options?.timeoutMs ?? (isPipeline ? 110000 : 45000);
+    // AbortSignal.timeout takes whole milliseconds only.
+    const timeoutMs = Math.max(
+      1,
+      Math.floor(options?.timeoutMs ?? (isPipeline ? 110000 : 45000)),
+    );
     const maxTokens = isPipeline ? 32000 : 8000;
     // Zod emits `propertyNames` for `z.record` keys; some Nebius models
     // (super-120b) reject it server-side with a bare 500. The wire schema
