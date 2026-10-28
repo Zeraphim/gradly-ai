@@ -141,7 +141,6 @@ We did not pick the model by name. We ran a [240-run evaluation](docs/research/N
 
 Built for the **[Nebius Global AI Hackathon](https://nebiusglobalaihackathon.devpost.com/)** with NVIDIA.
 
-- **Track:** Best Apps and Agents
 - **Built during the submission period.** The first commit is dated October 14, 2026.
 - **Team:** [@Zeraphim](https://github.com/Zeraphim), [@marcxxv](https://github.com/marcxxv), [@jananonuevo](https://github.com/jananonuevo), [@mcjakey1](https://github.com/mcjakey1)
 
