@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://nebius-hackathon-submission.vercel.app"><strong>Try the live app</strong></a>
+  <a href="https://gradly-ai.vercel.app"><strong>Try the live app</strong></a>
   ·
   <a href="#how-it-works">How it works</a>
   ·
