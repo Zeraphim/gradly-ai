@@ -209,9 +209,9 @@
       ],
       "implementationRefs": [],
       "review": {
-        "commit": null,
-        "at": null,
-        "by": null
+        "commit": "c7d252a1f97edc9279cbf7f29fb060d192574f0f",
+        "at": "2026-10-27T20:27:31Z",
+        "by": "marcxxv"
       }
     },
     {
@@ -386,9 +386,9 @@
         "apps/api/src/research/contracts.ts"
       ],
       "review": {
-        "commit": null,
-        "at": null,
-        "by": null
+        "commit": "7c6c25419b24039e5016cbed65eb8d822be12b47",
+        "at": "2026-10-27T21:51:02Z",
+        "by": "marcxxv"
       }
     },
     {
@@ -433,9 +433,9 @@
         "apps/web/src/research/styles.css"
       ],
       "review": {
-        "commit": null,
-        "at": null,
-        "by": null
+        "commit": "7c6c25419b24039e5016cbed65eb8d822be12b47",
+        "at": "2026-10-27T21:51:02Z",
+        "by": "marcxxv"
       }
     },
     {
@@ -1074,10 +1074,6 @@
         "tests/browser/intake-flow.spec.ts",
         "tests/browser/preparation.spec.ts",
         "apps/web/src/research/FocusBar.tsx",
-        "apps/web/src/research/TextingQuest.tsx",
-        "apps/web/src/research/texting-quest.ts",
-        "apps/web/src/research/quest-visuals.tsx",
-        "apps/web/src/research/quest.css",
         "apps/web/src/research/journey.css",
         "apps/web/src/research/play.css",
         "apps/web/src/research/link-note.ts",
@@ -1085,7 +1081,9 @@
         "apps/web/src/research/activity-pilot.ts",
         "apps/web/src/research/activity-pilot.css",
         "tests/browser/activity-pilot.spec.ts",
-        "tests/research/activity-pilot.test.ts"
+        "tests/research/activity-pilot.test.ts",
+        "apps/web/src/research/studies/JourneyPlayer.tsx",
+        "apps/web/src/research/studies/data/texting-lecture.ts"
       ],
       "review": {
         "commit": null,

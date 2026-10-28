@@ -1,8 +1,13 @@
 import { asDraft } from "./fixtures/draft.js";
+import { isSceneCall, sceneReplyFrom } from "./fixtures/scene-reply.js";
 import { it, expect, vi } from "vitest";
 import express from "express";
 import { researchRouter } from "../../apps/api/src/research/router.js";
-import { newJob, runStage } from "../../apps/api/src/research/pipeline.js";
+import {
+  newJob,
+  READY_STAGE,
+  runStage,
+} from "../../apps/api/src/research/pipeline.js";
 import { insert, read } from "../../apps/api/src/research/store.js";
 import type { Job } from "../../apps/api/src/research/contracts.js";
 import {
@@ -111,9 +116,12 @@ it("delivers a scene through the real learning route, submits mapped answers, re
       { approved: true, issues: [], summary: "Mocked methods review" },
       { approved: true, issues: [], summary: "Mocked teaching review" },
     ];
-    for (let i = 0; i < 6; i++)
+    const scene = sceneReplyFrom(quantitativeSceneLesson, { anyKind: true });
+    for (let i = 0; i < READY_STAGE; i++)
       job = await runStage(job, {
-        async generate(_role, _task, _input, schema) {
+        async generate(role, _task, input, schema) {
+          // The fixture's own scenes stand in for the Scene Designer.
+          if (isSceneCall(role)) return scene(input) as never;
           return schema.parse(asDraft(outputs.shift()));
         },
       });

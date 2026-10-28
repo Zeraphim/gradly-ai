@@ -35,7 +35,10 @@ it("lists every study, reviewed or not, without a flag", async () => {
       .getAllByRole("link", { name: /./ })
       .filter((a) => a.className === "library-card-link"),
   ).toHaveLength(studies.length);
-  await userEvent.click(screen.getByRole("button", { name: /Longitudinal/ }));
+  await userEvent.selectOptions(
+    screen.getByRole("combobox", { name: "Study design" }),
+    "longitudinal",
+  );
   expect(
     screen.getByRole("link", { name: "Restless nights and grades" }),
   ).toBeTruthy();

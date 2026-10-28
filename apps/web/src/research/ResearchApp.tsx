@@ -19,9 +19,9 @@ import {
   useResearchPath,
   useResearchRouter,
 } from "./navigation.js";
+import { studyCards } from "./studies/cards.js";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome.js";
 import { FocusBar, libraryJourneySteps, type JourneyStep } from "./FocusBar.js";
-import { TextingQuest } from "./TextingQuest.js";
 import "./journey.css";
 import "./play.css";
 import { AppLoading } from "../components/AppLoading.js";
@@ -63,7 +63,6 @@ import type {
   DocumentRecord as Doc,
   UploadDraft,
 } from "./types.js";
-import { PathPicker } from "./PathPicker.js";
 import { UploadPage } from "./UploadPage.js";
 import { ProcessingPage } from "./ProcessingPage.js";
 import {
@@ -116,9 +115,18 @@ export function ResearchApp({
         ".research-lab main h1",
       );
       title?.setAttribute("tabindex", "-1");
-      title?.focus();
+      title?.focus({ preventScroll: true });
     }
-    if (/^\/(?:upload|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(path))
+    const prepared = /^\/studies\/([a-z0-9-]+)\/?$/.exec(path);
+    if (prepared)
+      setReturnPath(
+        studyCards.some((card) => card.slug === prepared[1]) ? path : "/learn",
+      );
+    else if (
+      /^\/(?:upload|learn|play\/[^/]+|adventure\/[^/]+|processing\/[^/]+)\/?$/.test(
+        path,
+      )
+    )
       setReturnPath(path);
   }, [path]);
   return (
@@ -140,7 +148,7 @@ export function ResearchApp({
             <PaperActivityPilot onExit={onExit} />
           </Suspense>
         </ChunkBoundary>
-      ) : /^\/studies(?:\/[a-z0-9-]+)?\/?$/.test(path) ? (
+      ) : /^\/(?:learn\/?|studies(?:\/[a-z0-9-]+)?\/?)$/.test(path) ? (
         <ChunkBoundary label="Prepared studies">
           <Suspense fallback={<AppLoading label="Opening prepared studies…" />}>
             <StudyPreview path={path} onExit={onExit} />
@@ -212,7 +220,7 @@ function GradlyWorkspace({
 }) {
   const router = useResearchRouter();
   const parts = path.split("/").filter(Boolean);
-  const route = parts[0] || "home";
+  const route = parts[0] || "learn";
   const id = parts[1];
   const [session, setSession] = useState<Session | null>(null);
   const [job, setJob] = useState<Job | null>(null);
@@ -370,17 +378,14 @@ function GradlyWorkspace({
     const previousTitle = document.title;
     const titles: Record<string, string> = {
       learn: "Choose your learning path",
-      home: "Choose your learning path",
-      featured: "Featured quest",
       upload: "Upload your paper",
       history: "Your quests",
-      glossary: "Research glossary",
+      glossary: "Research terms",
       help: "How Gradly works",
       settings: "Learning settings",
       privacy: "Privacy & AI processing",
       processing: "Read the paper",
       adventure: "Your quest",
-      meet: "Texting study quest",
     };
     document.title = `${titles[route] ?? "Find your quest"} · Gradly`;
     return () => {
@@ -564,7 +569,7 @@ function GradlyWorkspace({
     (route === "adventure" && session?.phase === "challenge") ||
     (route === "adventure" && session?.phase === "bonus");
   const reviewMode = showReview && !!session?.review;
-  // The paper journey (review → prepare → meet → play) runs in focus mode:
+  // The paper journey (review → prepare → play) runs in focus mode:
   // a slim bar with the stepper replaces the site header and footer.
   const focusStep: JourneyStep | null =
     route === "upload" && uploadDraft.file
@@ -573,13 +578,12 @@ function GradlyWorkspace({
         ? job && !job.consented
           ? 0
           : 1
-        : route === "meet" || route === "adventure"
+        : route === "adventure"
           ? 2
           : null;
   // A prepared study chosen from the library skips upload and preparation.
   const libraryJourney =
-    (route === "meet" && id === "featured") ||
-    (route === "adventure" && session?.source === "featured");
+    route === "adventure" && session?.source === "featured";
   const focus = focusStep !== null;
   const lastAdventure = readLastAdventure();
   const resumeHref =
@@ -589,9 +593,12 @@ function GradlyWorkspace({
       ? "Return to your paper"
       : resumeHref.startsWith("/processing/")
         ? "Return to processing"
-        : resumeHref.startsWith("/adventure/")
+        : resumeHref.startsWith("/adventure/") ||
+            resumeHref.startsWith("/play/")
           ? "Return to quest"
-          : "Continue learning";
+          : resumeHref.startsWith("/studies/")
+            ? "Return to study"
+            : "Continue learning";
   const reloadSavedState = () => {
     setError("");
     onRetryConfig();
@@ -616,7 +623,7 @@ function GradlyWorkspace({
         <FocusBar
           step={libraryJourney ? 1 : focusStep}
           steps={libraryJourney ? libraryJourneySteps : undefined}
-          sample={demo || route === "meet"}
+          sample={demo}
           onExit={
             route === "adventure" ? () => router.push("/history") : onExit
           }
@@ -638,7 +645,7 @@ function GradlyWorkspace({
       ) : (
         <SiteHeader
           current={
-            ["home", "learn", "featured"].includes(route)
+            route === "learn"
               ? "studies"
               : route === "history"
                 ? "quests"
@@ -654,7 +661,7 @@ function GradlyWorkspace({
       )}
       <main
         id="main"
-        className={`main ${focus && route !== "adventure" ? "journey-main" : ""} ${route === "adventure" ? "scene-motion-page" : ""} ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${["home", "learn", "featured"].includes(route) ? "path-page" : ""}`}
+        className={`main ${focus && route !== "adventure" ? "journey-main" : ""} ${route === "adventure" ? "scene-motion-page" : ""} ${bottom ? "learning" : ""} ${route === "upload" ? `upload-page ${uploadDraft.uploaded ? "reviewing" : ""}` : route === "processing" ? "processing-page" : ""} ${route === "learn" ? "path-page" : ""}`}
       >
         {/* Preparation shows its own recovery surface once the job is loaded. */}
         <ErrorMessage
@@ -689,40 +696,13 @@ function GradlyWorkspace({
           <div className="notice">
             <h1>This learning path is unavailable</h1>
             <p>
-              The research workspace is not available right now. Continue with
-              Gradly’s guided quest while it is being prepared.
+              The research workspace is not available right now. Choose a
+              prepared study while the upload workspace is being prepared.
             </p>
             <button className="btn primary" onClick={onExit}>
-              Return to curated adventure
+              Return to upload home
             </button>
           </div>
-        ) : null}
-        {!config?.storage && ["home", "learn", "featured"].includes(route) ? (
-          <aside
-            className="reasoning-preview-invitation"
-            aria-label="Research reasoning preview"
-          >
-            <div>
-              <strong>
-                Explore the reasoning loop while the workspace is unavailable.
-              </strong>
-              <p>
-                Choose, explain, inspect evidence and revise. Authored example ·
-                no AI calls.
-              </p>
-            </div>
-            <Link className="btn primary compact" href="/reasoning">
-              Try the reasoning preview
-            </Link>
-          </aside>
-        ) : null}
-        {config?.storage && ["home", "learn", "featured"].includes(route) ? (
-          <PathPicker
-            config={config}
-            busy={busy}
-            heading={heading}
-            onStart={() => router.push("/meet/featured")}
-          />
         ) : null}
         {route === "upload" ? (
           <UploadPage
@@ -732,15 +712,7 @@ function GradlyWorkspace({
             onDraftChange={setUploadDraft}
             busy={busy}
             heading={heading}
-            onStart={() => router.push("/meet/featured")}
-          />
-        ) : null}
-        {route === "meet" && id ? (
-          <TextingQuest
-            key={id}
-            sessionKey={id}
-            reduced={reduced}
-            heading={heading}
+            onStart={() => router.push("/learn")}
           />
         ) : null}
         {route === "processing" && id ? (
@@ -1560,7 +1532,7 @@ function GradlyWorkspace({
                           >
                             Restart quest
                           </button>
-                          <Link className="btn outline" href="/">
+                          <Link className="btn outline" href="#/">
                             Return Home
                           </Link>
                         </div>
@@ -1691,9 +1663,7 @@ function GradlyWorkspace({
           </div>
         ) : null}
         {![
-          "home",
           "learn",
-          "featured",
           "upload",
           "processing",
           "adventure",
@@ -1702,11 +1672,10 @@ function GradlyWorkspace({
           "help",
           "settings",
           "privacy",
-          "meet",
         ].includes(route) ? (
           <div className="center">
             <h1>Let’s get you back on track.</h1>
-            <Link className="btn primary" href="/">
+            <Link className="btn primary" href="#/">
               Return Home
             </Link>
           </div>

@@ -5,6 +5,8 @@ import type { ProcessingJob } from "../../apps/web/src/research/types.js";
 const roles = [
   "Research Evidence Analyst",
   "Lesson Architect",
+  "Scene Designer",
+  "Terms Guide",
   "Research Methods Reviewer",
   "Learning Coach",
   "Evidence Verification",
@@ -109,9 +111,9 @@ test("processing waits for saved state, stops on failure, retries and resumes wi
   });
   await page.goto("/#/research/processing/preparation-fixture");
   const track = page.getByRole("region", { name: "Saved preparation stages" });
-  await expect(track).toContainText("2/5 · Lesson Architect");
+  await expect(track).toContainText("2/7 · Lesson Architect");
   await expect.poll(() => polls).toBeGreaterThanOrEqual(2);
-  await expect(track).toContainText("2/5 · Lesson Architect");
+  await expect(track).toContainText("2/7 · Lesson Architect");
   await expect(
     page.getByRole("button", { name: "Start the first challenge" }),
   ).toHaveCount(0);
@@ -132,9 +134,9 @@ test("processing waits for saved state, stops on failure, retries and resumes wi
     .getByRole("button", { name: "Retry this stage", exact: true })
     .click();
   await expect.poll(() => retries).toBe(1);
-  await expect(track).toContainText("2/5 · Lesson Architect");
+  await expect(track).toContainText("2/7 · Lesson Architect");
   await page.reload();
-  await expect(track).toContainText("2/5 · Lesson Architect");
+  await expect(track).toContainText("2/7 · Lesson Architect");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(
     page.locator(".scene-motion-scope").filter({ has: track }).first(),
@@ -148,7 +150,7 @@ test("processing waits for saved state, stops on failure, retries and resumes wi
     ).toBe(false);
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   }
-  job = { ...job, stage: 5, status: "ready", ready: true };
+  job = { ...job, stage: roles.length, status: "ready", ready: true };
   job.audits.forEach((audit) => {
     audit.status = "Completed";
   });

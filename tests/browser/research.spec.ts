@@ -212,9 +212,10 @@ test("PDF preview, real extraction, no-key recovery and document deletion", asyn
   expect((await unconfirmed.json()).error).toContain("Confirm sending");
   await page.locator(".prep-more > summary").click();
   await page
-    .getByText("View all 6 preparation stages", { exact: true })
+    .getByText("View all 7 preparation stages", { exact: true })
     .click();
   await expect(page.locator(".preparation-audits summary small")).toHaveText([
+    "Pending",
     "Pending",
     "Pending",
     "Pending",
@@ -303,7 +304,7 @@ test("desktop, tablet, mobile layouts and keyboard access", async ({
   await page.goto("/#/research/learn");
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Think like a researcher." }),
+    page.getByRole("heading", { name: "Pick a study. Make the calls." }),
   ).toBeVisible();
   await page.keyboard.press("Tab");
   await expect(
@@ -436,67 +437,6 @@ test("scanned PDF OCR warning and no-key reasoning fallback are honest", async (
   await expect(page.locator(".feedback")).toContainText("Your choice matches");
 });
 
-test("legacy hero composition, responsive scaling, color contrast and PDF handoff", async ({
-  page,
-}) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  for (const width of [1440, 768, 390]) {
-    await page.setViewportSize({ width, height: 1000 });
-    await page.goto("/#/classic");
-    await expect(
-      page.getByRole("heading", {
-        name: "A little curiosity. A lot of discovery.",
-      }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "Choose a research PDF" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("textbox", {
-        name: "Paper link or digital object identifier",
-      }),
-    ).toBeVisible();
-    const bounds = await page.evaluate(() => {
-      const pdf = document
-        .querySelector(".upload-button")!
-        .getBoundingClientRect();
-      const link = document
-        .querySelector(".link-form")!
-        .getBoundingClientRect();
-      return {
-        pdfY: pdf.bottom,
-        linkY: link.top,
-        overflow: document.documentElement.scrollWidth > innerWidth,
-      };
-    });
-    expect(bounds.linkY).toBeGreaterThan(bounds.pdfY);
-    expect(bounds.overflow).toBe(false);
-    const audit = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
-      .analyze();
-    expect(
-      audit.violations.map((v) => ({
-        id: v.id,
-        nodes: v.nodes.map((n) => n.target),
-      })),
-    ).toEqual([]);
-    await page.screenshot({
-      path: `test-results/hero-${width}.png`,
-      fullPage: true,
-      animations: "disabled",
-    });
-  }
-  await page.locator("input[type=file]").setInputFiles({
-    name: "hero-study.pdf",
-    mimeType: "application/pdf",
-    buffer: pdfBytes(),
-  });
-  // The home handoff checks the PDF and, in sample mode, goes straight to
-  // preparation with the uploaded file named.
-  await page.waitForURL(/#\/research\/processing\//, { timeout: 60000 });
-  await expect(page.getByText("hero-study.pdf", { exact: true })).toBeVisible();
-});
-
 test("no-key sample flow is explicit, resumable and separate from uploaded evidence", async ({
   page,
 }) => {
@@ -528,21 +468,21 @@ test("no-key sample flow is explicit, resumable and separate from uploaded evide
   ).toBeVisible({ timeout: 20000 });
   await page.locator(".prep-more > summary").click();
   await page
-    .getByText("View all 6 preparation stages", { exact: true })
+    .getByText("View all 7 preparation stages", { exact: true })
     .click();
   await expect(page.locator(".preparation-audits summary small")).toHaveText(
-    Array(6).fill("Completed"),
+    Array(7).fill("Completed"),
   );
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "Your investigation is ready" }),
   ).toBeVisible();
-  // Ready samples hand off to the authored texting quest.
+  // Ready samples use the prepared player, with no second picker or old quest.
   await page.getByRole("link", { name: "Start the quest" }).click();
-  await expect(page).toHaveURL(/#\/research\/meet\//);
-  await expect(page.getByLabel("Sample preview mode")).toContainText(
-    "no AI calls",
-  );
+  await expect(page).toHaveURL(/#\/research\/studies\/texting-lecture$/);
+  await expect(
+    page.getByRole("button", { name: "Begin study", exact: true }),
+  ).toBeVisible();
   // The sample job's lesson still plays through the shared challenge player.
   const jobId = processingUrl.split("/").pop()!;
   await openAdventureBriefing(page, jobId);
@@ -594,7 +534,7 @@ test("learning paths and nine-page document review fit desktop, tablet and mobil
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/#/research/learn");
     await expect(
-      page.getByRole("heading", { name: "Think like a researcher." }),
+      page.getByRole("heading", { name: "Pick a study. Make the calls." }),
     ).toBeVisible();
     expect(
       await page.evaluate(
@@ -688,49 +628,6 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
     "data-reduced-motion",
     "false",
   );
-  const start = page.locator(".featured-card button");
-  await expect(start).toBeEnabled();
-  await page.locator(".main").evaluate(async (element) => {
-    await Promise.all(
-      element
-        .getAnimations({ subtree: true })
-        .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
-        .map((a) => a.finished.catch(() => {})),
-    );
-  });
-  expect(
-    await page
-      .locator(".main")
-      .evaluate((el) => getComputedStyle(el).animationName),
-  ).toBe("gradly-arrive");
-  const other = page.locator(".path-card").nth(1);
-  // Hover may scroll a taller page. Compare document coordinates for layout stability.
-  const initialY =
-    (await other.boundingBox())!.y + (await page.evaluate(() => scrollY));
-  const height = await start.evaluate((el) => (el as HTMLElement).offsetHeight);
-  await start.hover();
-  await expect
-    .poll(() =>
-      start
-        .locator(".action-icon")
-        .evaluate((el) => getComputedStyle(el).transform),
-    )
-    .not.toBe("none");
-  await page.mouse.down();
-  await expect
-    .poll(() => start.evaluate((el) => getComputedStyle(el).scale))
-    .toBe("0.96");
-  expect(await start.evaluate((el) => (el as HTMLElement).offsetHeight)).toBe(
-    height,
-  );
-  expect(
-    (await other.boundingBox())!.y + (await page.evaluate(() => scrollY)),
-  ).toBe(initialY);
-  await page.mouse.move(4, 4);
-  await page.mouse.up();
-  // The library start opens the authored quest; the briefing start saves state.
-  await start.click();
-  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
   await openAdventureBriefing(page);
   const briefingStart = page.getByRole("button", { name: "Start quest" });
   let release!: () => void;
@@ -760,18 +657,20 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
   expect(consoleErrors).toEqual([]);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#/research/learn");
-  await expect(start).toBeEnabled();
+  const start = page.getByRole("link", {
+    name: "Restless nights and grades",
+    exact: true,
+  });
+  await expect(start).toBeVisible();
   expect(
     await page
-      .locator(".main")
+      .locator(".library")
       .evaluate((el) => getComputedStyle(el).animationName),
   ).toBe("none");
   await start.hover();
-  expect(
-    await start
-      .locator(".action-icon")
-      .evaluate((el) => getComputedStyle(el).transform),
-  ).toBe("none");
+  expect(await start.evaluate((el) => getComputedStyle(el).transform)).toBe(
+    "none",
+  );
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/#/research/settings");
   await page.getByLabel("Reduce interface motion").check();
@@ -782,7 +681,7 @@ test("tactile actions stay stable, show real loading, and honor both motion pref
   );
   expect(
     await page
-      .locator(".main")
+      .locator(".library")
       .evaluate((el) => getComputedStyle(el).animationName),
   ).toBe("none");
 });

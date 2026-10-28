@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Lightbulb } from "lucide-react";
 import { AppLoading } from "../../components/AppLoading.js";
-import { BrandLogo } from "../../components/BrandLogo.js";
+import { SiteHeader } from "../../components/SiteChrome.js";
 import { readDraft, readReducedMotion, writeDraft } from "../client-state.js";
 import { ResearchLink as Link, useResearchRouter } from "../navigation.js";
 import { api, ResearchRequestError } from "../request.js";
@@ -316,17 +316,7 @@ export function UploadedJourney({ sessionId }: { sessionId: string }) {
       <div
         className={`studies uploaded-journey ${playing ? "is-playing" : ""}`}
       >
-        {playing ? null : (
-          <header className="header">
-            <div className="nav preview-nav">
-              <a className="brand" href="#/">
-                <BrandLogo />
-              </a>
-              <Link href="/history">Your quests</Link>
-              <span className="mode-pill">Checked by Gradly’s server</span>
-            </div>
-          </header>
-        )}
+        {playing ? null : <SiteHeader current="quests" />}
         {actionError ? (
           <p className="uploaded-alert" role="alert">
             {actionError}

@@ -21,6 +21,7 @@ function trackState(job: ProcessingJob): TrackState {
 const stageIcons: IconName[] = [
   "research",
   "layout",
+  "sparkle",
   "book",
   "verify",
   "coach",

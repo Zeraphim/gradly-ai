@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BrandLogo } from "../components/BrandLogo.js";
+import { SiteHeader, SiteFooter } from "../components/SiteChrome.js";
 import { ResearchLink as Link } from "./navigation.js";
 import { ActionLabel, Icon } from "./icon.js";
 import { readReducedMotion } from "./client-state.js";
@@ -151,29 +151,15 @@ export function ReasoningPreview({
       >
         Skip to reasoning preview
       </a>
-      <header className="header">
-        <div className="nav preview-nav">
-          <a
-            className="brand"
-            href="#"
-            onClick={(event) => {
-              event.preventDefault();
-              onExit();
-            }}
-          >
-            <BrandLogo />
-          </a>
-          <Link href={returnHref}>
-            <Icon name="back" size={18} /> Back to learning
-          </Link>
-          <span className="mode-pill">Frontend preview</span>
-        </div>
-      </header>
+      <SiteHeader current="studies" onHome={onExit} />
       <main
         id="reasoning-main"
         className="main reasoning-preview"
         tabIndex={-1}
       >
+        <Link className="btn outline compact" href={returnHref}>
+          <Icon name="back" size={18} /> Back to learning
+        </Link>
         <aside className="preview-provenance" aria-label="Authored preview">
           <Icon name="layout" size={22} />
           <div>
@@ -649,11 +635,7 @@ export function ReasoningPreview({
           </button>
         </div>
       </main>
-      <footer className="site-footer">
-        <span>Gradly · Learn to question. Grow with evidence.</span>
-        <Link href="/privacy">Privacy</Link>
-        <Link href={returnHref}>Back to learning</Link>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

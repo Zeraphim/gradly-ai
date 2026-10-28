@@ -39,7 +39,7 @@ test("incomplete saved-investigation links offer a recovery path", async ({
     await expect(learn).toBeVisible();
     await learn.click();
     await expect(
-      page.getByRole("heading", { name: "Think like a researcher." }),
+      page.getByRole("heading", { name: "Pick a study. Make the calls." }),
     ).toBeVisible();
   }
   expect(savedStateRequests).toEqual([]);
@@ -64,7 +64,8 @@ test("unfinished choices and explanations survive help, refresh and exit", async
   await response(page, "A").check();
   await response(page, "B").check();
   await page.getByLabel("Defend your decision").fill(draft);
-  await page.getByRole("link", { name: "Glossary", exact: true }).click();
+  await page.getByRole("link", { name: "How it works", exact: true }).click();
+  await page.getByRole("link", { name: "Research terms", exact: true }).click();
   await page.getByRole("link", { name: "Return to quest" }).click();
   await expect(page.getByLabel("Defend your decision")).toHaveValue(draft);
   await page.reload();
@@ -228,7 +229,7 @@ test("adventure history distinguishes loading, errors, and successful retry", as
   }
 });
 
-test("the library start opens the authored quest without a saved-session request", async ({
+test("the library opens a prepared study without a saved-session request", async ({
   page,
 }) => {
   const errors: string[] = [];
@@ -242,14 +243,16 @@ test("the library start opens the authored quest without a saved-session request
       learningPosts.push(request.url());
   });
   await page.goto("/#/research/learn");
-  await page.getByRole("button", { name: "Start quest" }).click();
-  await expect(page).toHaveURL(/#\/research\/meet\/featured$/);
+  await page
+    .getByRole("link", { name: "Restless nights and grades", exact: true })
+    .click();
+  await expect(page).toHaveURL(/#\/research\/studies\/sleep-school$/);
   await expect(
-    page.getByRole("heading", { name: "Can students text and still keep up?" }),
+    page.getByRole("button", { name: "Begin study", exact: true }),
   ).toBeVisible();
   await page.goto("/#/research/glossary");
   await expect(
-    page.getByRole("heading", { name: "Research glossary" }),
+    page.getByRole("heading", { name: "Research terms" }),
   ).toBeVisible();
   expect(learningPosts).toEqual([]);
   expect(errors).toEqual([]);
@@ -323,12 +326,8 @@ test("successful deletion clears document review even when history refresh fails
   await expect(page.getByRole("alert")).toContainText(
     "History refresh interrupted",
   );
-  await page
-    .getByRole("link", { name: "Prepared studies", exact: true })
-    .click();
-  await page
-    .getByRole("link", { name: "Upload a research paper", exact: true })
-    .click();
+  await page.getByRole("link", { name: "Learn", exact: true }).click();
+  await page.getByRole("link", { name: "Upload a paper", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Upload your research paper" }),
   ).toBeVisible();
@@ -353,7 +352,10 @@ test("touch layouts avoid stuck hover motion and answer selections stay immediat
   const page = await context.newPage();
   try {
     await page.goto("/#/research/learn");
-    const start = page.getByRole("button", { name: "Start quest" });
+    const start = page.getByRole("link", {
+      name: "Restless nights and grades",
+      exact: true,
+    });
     await expect(start).toBeVisible();
     expect(
       await page.evaluate(() => matchMedia("(hover: hover)").matches),
@@ -447,9 +449,12 @@ test("AI availability stays honest during recovery and settings are reused acros
     await expect(
       page.getByRole("heading", { name: "How Gradly works" }),
     ).toBeVisible();
-    await page.getByRole("link", { name: "Glossary", exact: true }).click();
+    await page.getByRole("link", { name: "How it works", exact: true }).click();
+    await page
+      .getByRole("link", { name: "Research terms", exact: true })
+      .click();
     await expect(
-      page.getByRole("heading", { name: "Research glossary" }),
+      page.getByRole("heading", { name: "Research terms" }),
     ).toBeVisible();
     await page.getByRole("link", { name: "Guest settings" }).click();
     await expect(page.getByText("sample-test", { exact: true })).toBeVisible();
@@ -465,7 +470,7 @@ test("research support explains qualitative and causal limits without backend ac
   await page.route("**/api/**", (route) => route.abort());
   await page.goto("/#/research/glossary");
   await expect(
-    page.getByRole("heading", { name: "Research glossary" }),
+    page.getByRole("heading", { name: "Research terms" }),
   ).toBeVisible();
   await page.getByText("Qualitative theme", { exact: true }).click();
   await expect(

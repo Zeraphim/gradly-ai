@@ -1,8 +1,8 @@
 # Gradly design
 
-The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public home uses the original centered Gradly upload composition, refined in the blue design system. A compact mascot/speech introduction leads into one dashed document area, a direct upload heading, the PDF action and the visible URL/DOI field. Sample and resume actions sit in a compact row below. There is no outer hero frame, split-column layout, nested upload panel, decorative evidence diagram or extra disclosure. The URL/DOI field accepts any entry and the following screen says plainly that the link was noted rather than fetched.
+The deployed repository supplies the Gradly logo, blue book mascot, Plus Jakarta Sans, rounded surfaces and tactile actions. The public home uses the original centered Gradly upload composition, refined in the blue design system. A compact mascot/speech introduction leads into one dashed document area, a direct upload heading, the PDF action and the visible URL/DOI field. A sample action below opens the Learn library; saved quests are in My quests. There is no outer hero frame, split-column layout, nested upload panel, decorative evidence diagram or extra disclosure. The URL/DOI field remains visible. In explicit sample mode it records a labelled link note rather than fetching a paper; otherwise its action opens the Learn library.
 
-Typography, whitespace and a single tactile upload action establish the hierarchy. At 1366×768 and 1440×900, both document inputs remain above the fold. The centered layout stacks naturally on tablet and mobile while keeping points and document navigation in the header.
+Typography, whitespace and a single tactile upload action establish the hierarchy. At 1366×768 and 1440×900, both document inputs remain above the fold. The centered layout stacks naturally on tablet and mobile while keeping shared navigation in the header.
 
 The upload home, curated adventure, and research workspace share a flexible shell
 with a dynamic viewport minimum height. Main content grows to keep the footer at
@@ -187,7 +187,7 @@ Window sizes and verification limits are recorded in [TESTING.md](TESTING.md).
 
 Research controls use the same Lucide SVG family as the original application, including actions, agent roles, selection marks and page navigation. Icons remain decorative beside descriptive text; icon-only controls retain accessible labels.
 
-Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops are introduced. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
+Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops are introduced. The upload-home Gradly guide is a scoped exception for one finite 4.8-second introductory flourish; it holds its final pose and does not loop continuously. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
 
 OS reduced-motion preferences and the saved interface setting disable entrances, spinners and hover/press movement. Text labels and progress values remain available when motion is disabled.
 
@@ -207,12 +207,12 @@ The original PNG artwork remains unchanged. `scripts/optimize-brand.mjs` generat
 
 The upload-first home keeps the original centered Gradly composition: mascot and
 speech above one upload card, the PDF action, the visible URL/DOI field and the
-sample/resume row. The interim editorial hero, its decorative paper schematic and
+sample action. The interim editorial hero, its decorative paper schematic and
 the separate "Preview details" disclosure were removed: they competed with the
-single upload action and repeated what the flow already says. The prepared study's
-DOI opens its authored quest. Other links stay on intake with a limitation message
-and choices to upload a PDF or open the prepared-study library. They never
-silently substitute another study.
+single upload action and repeated what the flow already says. Links are not fetched.
+In explicit sample mode a submitted link becomes a labelled link-note PDF for the
+saved sample preparation flow. With live AI or without sample availability, the
+link action opens the Learn library. A new paper-specific quest requires its PDF.
 
 The home is styled by `styles.css` alone. The interim `paper-home.css` and
 `paper-context.css` were deleted, and the shared paper surfaces now live in
@@ -225,16 +225,20 @@ Replacement, cancellation, OCR notices and the original-PDF link remain availabl
 The original viewer is browser-provided; a blank embedded viewer has a labeled
 open-original fallback.
 
-### Paper identity, story and source
+### Paper identity, story and source (historical curated prototype)
+
+The following identity/story components are retained as isolated prototype and
+test evidence. They are not reachable from the current public routes. Current
+uploads use `ProcessingPage` and `PreparationTrack`; sample preparation opens the
+prepared texting study through the shared `JourneyPlayer`.
 
 `PaperIdentity.tsx` shows the reference study's published identity — title,
 authors, journal issue and DOI — from the authored `paperCitation` in
 `research/paper-context.ts`. The sample job exposes no citation, so this identity
 is authored, never upload-derived. It remains part of curated preparation.
 Uploaded live and sample jobs now share `ProcessingPage` and `PreparationTrack`.
-The texting quest (`TextingQuest.tsx`) introduces and tests the prepared sample after preparation, one decision per screen (the four-chapter
-`PaperStory` remains on the classic curated route), and the upload-first home's
-sample entry opens the prepared-study library.
+The bespoke `TextingQuest.tsx` and classic route have been removed. The upload-first
+home’s sample entry opens the prepared-study library.
 The upload's source, consent and saved stages stay separate from authored
 study context. Read the [intake notes](ui/INTAKE_PROCESSING.md) for scope,
 state behavior, integration proposals and verification limits.
@@ -458,7 +462,7 @@ quality. The next evaluation is independent content review and observed learner 
 
 ## Upload waiting and uploaded-study player
 
-Preparing a live upload takes several minutes: six stages, most of them model calls; in the recorded Super runs a
+Preparing a live upload takes several minutes: seven stages, most of them model calls; in the recorded Super runs a
 stage took from about 20 seconds to over two minutes. The waiting screen now gives
 the learner honest progress, a small win at each real milestone and something
 useful to do. A ready lesson then plays in the prepared-study player (#14)
@@ -516,6 +520,63 @@ The reveal adds the learner's prediction and replaces the library actions with
 "Try a prepared study", "Back to your quests" and "Replay this study". Prepared
 studies under `/studies` keep their browser-only behaviour.
 
+## Learn and intro consistency — 27 October 2026, issue #36
+
+The upload sample action and Prepared studies navigation open the library at
+`#/research/learn`. The old `/studies` index and classic/lab/meet entry points
+recover there, while individual study URLs remain. The upload home no longer
+offers the classic saved Resume quest. The classic UI, separate path picker and
+standalone bespoke texting quest are retired; the texting paper remains in the
+prepared shared-player library. A sample-mode upload's ready
+action opens the prepared texting study directly in the shared player.
+
+Library, reasoning preview and prepared/uploaded intros use `SiteHeader`, with no preview-only header
+or technical mode badges. Active play retains focused progress chrome. Uploaded
+orientation replaces the tall illustration with side-by-side context and tap steps
+on desktop, stacking on narrow screens. Short desktop windows use tighter spacing;
+text, targets and source disclosures remain readable. Prepared intros use a wider
+text column and smaller artwork on short screens. Expanded details and zoom keep
+normal scrolling. Earlier classic/path-picker descriptions above are historical,
+not current routes. The retired bespoke-quest browser assertions and classic UI test are replaced by
+shared-player, choice-focus, study and route/viewport coverage; curated API and
+lesson-state tests remain separate from the retired UI.
+
+## Contextual help and calmer library filters — 28 October 2026
+
+Primary navigation is Upload a paper, Learn and My quests. Research terms are a
+reference reached through Help; the existing `/research/glossary` URL remains
+valid. One general glossary supplies the reference and question-level help, with
+clearly illustrative examples. Definitions describe terms without supplying
+study-specific answer reasoning; random assignment defines allocation by chance. The shared term popover handles marked question/evidence and answer terms;
+the separate Help dialog retains general wording help and the gated hint. Matching never reads
+answer choices, accepted keys, hidden excerpts, scene resolutions or takeaways.
+The existing hint becomes available in help only during first-miss feedback and
+retry; opening help itself does not submit, score, call a model or change drafts.
+Escape/Close returns focus to the trigger. The help target fits into the existing
+stage row without increasing its height.
+
+The study library replaces the wrapped design/topic chip wall with labelled Topic
+and Study design selects, a single live result count and conditional Reset filters.
+Desktop uses one quiet toolbar; narrow screens stack the fields. Both filters
+still combine, every existing category remains available, and an empty result has
+the same visible Reset action. Native selects provide keyboard and touch behavior;
+existing filtered-card motion and inert exiting cards remain. Dropdown focus uses
+a darker existing border and a pale fill, with no outer ring or shadow for mouse,
+touch or keyboard. A single decorative chevron replaces platform arrow styling;
+the control remains a native select. Forced-colour mode restores platform arrows
+and an inset system focus indicator.
+
+## Gradly upload-guide integration — 28 October 2026
+
+The existing Gradly `mascot-guiding-animated.svg` is reused through
+`UploadGuide.tsx`, mounted only in the upload-first home's introduction. The
+header wordmark and guides on other pages stay static. The animation uses the
+SVG's CSS transforms for one 4.8-second cycle, with no JavaScript frame loop. System or saved reduced
+motion selects the existing static guiding pose; hidden documents also release
+the animated image. Both variants keep the same box dimensions. The integration
+is a narrow edit to the current Welcome component, preserving the newer upload,
+Learn, header and recovery behavior rather than copying an older Welcome file.
+
 ## Term definitions in questions and answers
 
 Research terms in a challenge's prompt, answer options, hint, explanation and feedback carry a dotted underline. Hovering with a mouse, tapping, or reaching a term with the keyboard opens one popover that says what the term means in this study (#39). Lesson definitions come from the pipeline's Terms Guide stage for uploads and from saved files for prepared studies. Terms the lesson does not define fall back to the general glossary, and a lesson definition always wins.
@@ -535,3 +596,13 @@ Research terms in a challenge's prompt, answer options, hint, explanation and fe
 - **Reduced motion.** With reduced motion (system or saved setting), the popover only fades and the marks change colour without animating.
 
 The application has no dark theme, so under a dark colour preference the popover keeps the light tokens, matching the page.
+
+## Claim ladder, sort and close-reading scenes
+
+Three scene kinds serve interpretation and limits decisions, where the earlier kinds fit poorly (#42). Like every scene, they sit above the answers in the study player and use the shared motion primitives (`useSceneMotion`, `sceneTiming`) and the scene card frame.
+
+- **Claim ladder (`ladder`).** Claims stack from the most modest at the bottom to the strongest at the top, numbered in reading order. Rungs enter from below with a short stagger. With tap answers, each rung is a radio or checkbox answer, like a tap node. After the explanation, a rail beside the ladder fills with a spring up to the strongest claim the evidence supports. A blue "reach" flag slides in at that rung, and every rung above it turns dashed amber with "Beyond what the evidence shows". Nothing about the reach shows before the answer is resolved.
+- **Sort (`sort`).** Statement cards start in a dashed "To sort" tray above two or three bins. Each card has one pill per bin. Pressing a pill moves the card into that bin with a shared layout glide, and pressing the active pill returns it to the tray. Bin counts update, a polite live region announces each move, and the tray says when everything is sorted. The sort is unscored. After the explanation, cards glide to where the paper places them, and each card the learner sorted says "Matches your sort" or which bin they chose. Bins stack on phones.
+- **Close reading (`spot`).** The study's procedure or argument reads line by line, like a numbered methods excerpt, with each passage underlined in dotted blue. Hover sweeps a highlighter under a passage. Pressing it fills the highlight and opens a note below on what that step means here, swapping notes with a short cross-fade. With tap answers, passages are the answers: the selected one takes a sky fill with an underline bar, and the marked answers take the best and missed colours after an attempt.
+- **Reduced motion.** With reduced motion (system or saved setting), the rail fill, glides, highlights and flags settle in place, and only colours change.
+- **Keyboard and screen readers.** Every control is a native button with a visible focus ring. Rungs and passages announce their role and checked state, and sort pills announce their pressed state.

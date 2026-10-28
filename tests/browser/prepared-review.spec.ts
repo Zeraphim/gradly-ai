@@ -28,9 +28,9 @@ for (const width of [375, 768, 1366]) {
     );
     await page.goto("/#/research/studies/selecting-a-beverage");
     for (const [index, challenge] of body.lesson.challenges.entries()) {
-      await expect(
-        page.getByRole("heading", { name: challenge.prompt, exact: true }),
-      ).toBeVisible();
+      await expect(page.locator("h1.journey-title")).toHaveText(
+        challenge.prompt,
+      );
       await expect(
         page.getByRole("button", { name: "Check", exact: true }),
       ).toBeDisabled();

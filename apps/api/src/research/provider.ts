@@ -19,6 +19,10 @@ export class ProviderError extends Error {
 export interface StageRequestOptions {
   /** Pipeline stages need the large output budget; feedback stays compact. */
   tier?: "pipeline" | "feedback";
+  /** A shorter limit for a call that must fit a stage's own time budget. */
+  timeoutMs?: number;
+  /** False skips the in-request retry after a timeout. */
+  retryTimeout?: boolean;
 }
 
 export interface ModelProvider {
@@ -51,7 +55,11 @@ export class NebiusProvider implements ModelProvider {
     const tier = options?.tier ?? "feedback";
     const isPipeline = tier === "pipeline";
     // Two pipeline attempts (2 x 110s) stay inside the 230s job lease.
-    const timeoutMs = isPipeline ? 110000 : 45000;
+    // AbortSignal.timeout takes whole milliseconds only.
+    const timeoutMs = Math.max(
+      1,
+      Math.floor(options?.timeoutMs ?? (isPipeline ? 110000 : 45000)),
+    );
     const maxTokens = isPipeline ? 32000 : 8000;
     // Zod emits `propertyNames` for `z.record` keys; some Nebius models
     // (super-120b) reject it server-side with a bare 500. The wire schema
@@ -160,11 +168,21 @@ export class NebiusProvider implements ModelProvider {
           );
           // Two pipeline attempts (2 x 110s) stay inside the 230s job
           // lease, so a queued-away request gets one in-process retry.
-          if (attempt < 1) continue;
+          if (attempt < 1 && options?.retryTimeout !== false) continue;
           throw new ProviderError(
             "timeout",
             "The AI request timed out. Your document is saved; retry this stage.",
           );
+        }
+        // A dropped connection, seen when many scene calls run at once,
+        // gets the same single retry as an overloaded server.
+        if (
+          e instanceof TypeError &&
+          /fetch failed/i.test(e.message) &&
+          attempt < 1
+        ) {
+          await sleep(1000);
+          continue;
         }
         if (e instanceof SyntaxError)
           throw Error("The AI returned malformed JSON. Retry this stage.");

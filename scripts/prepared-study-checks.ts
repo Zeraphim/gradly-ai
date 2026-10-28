@@ -1,7 +1,7 @@
 // Pure checks for prepared studies, shared by tests/research/prepared-studies.test.ts
 // and the dev-only generator (scripts/generate-prepared-studies.ts) as its per-study
 // gate. Each check returns problems; an empty list passes. Never import from apps/.
-import { sceneProblems } from "@paperquest/contracts";
+import { isEvidenceScene, sceneProblems } from "@paperquest/contracts";
 import {
   journeyChallenges,
   tapTargets,
@@ -154,10 +154,13 @@ export function gateProblems(study: PreparedStudy) {
   return problems;
 }
 
-/** Consecutive challenges should not repeat a scene kind. */
+/**
+ * Consecutive challenges should not repeat a scene kind. The server-built
+ * evidence scene is the same for any challenge, so it is exempt.
+ */
 export function sceneRepeatProblems(study: PreparedStudy) {
-  const kinds = journeyChallenges(study, true).map(
-    (c) => c.scene?.kind ?? null,
+  const kinds = journeyChallenges(study, true).map((c) =>
+    c.scene && !isEvidenceScene(c.scene) ? c.scene.kind : null,
   );
   const problems: string[] = [];
   for (let i = 1; i < kinds.length; i++)

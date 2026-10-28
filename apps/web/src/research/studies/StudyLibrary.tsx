@@ -1,7 +1,7 @@
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useMemo, useRef, useState } from "react";
 import { ArrowRight, Check, Clock, Play } from "lucide-react";
 import { ResearchLink as Link } from "../navigation.js";
-import { LayoutGroup, useIsPresent, type HTMLMotionProps } from "motion/react";
+import { useIsPresent, type HTMLMotionProps } from "motion/react";
 import { AnimatePresence, m, useSceneMotion } from "../scenes/scene-motion.js";
 import { studies } from "./catalog.js";
 import { studyState, useAllProgress, type StudyProgress } from "./progress.js";
@@ -19,6 +19,7 @@ export function StudyLibrary() {
   const all = useAllProgress();
   const [group, setGroup] = useState<DesignGroup | "all">("all");
   const [topic, setTopic] = useState<StudyTopic | "all">("all");
+  const topicControl = useRef<HTMLSelectElement>(null);
   const available = studies;
   const shown = available.filter(
     (s) =>
@@ -37,7 +38,7 @@ export function StudyLibrary() {
   const groups = [...new Set(available.map((s) => s.group))];
   const usedTopics = [...new Set(available.map((s) => s.topic))];
   return (
-    <main className="library">
+    <main id="main" tabIndex={-1} className="library">
       <header className="library-head">
         <div>
           <p className="library-eyebrow">Prepared studies</p>
@@ -54,48 +55,64 @@ export function StudyLibrary() {
       ) : null}
 
       <>
-        <nav className="library-filters" aria-label="Filter studies">
-          <LayoutGroup id="groups">
-            <div className="library-chips" role="group" aria-label="Design">
-              {(["all", ...groups] as const).map((value) => (
-                <Chip
-                  key={value}
-                  active={group === value}
-                  onClick={() => setGroup(value)}
-                  count={
-                    value === "all"
-                      ? available.length
-                      : available.filter((s) => s.group === value).length
-                  }
-                  pill="group"
-                >
-                  {value === "all" ? "All designs" : designGroups[value].label}
-                </Chip>
-              ))}
-            </div>
-          </LayoutGroup>
-          <LayoutGroup id="topics">
-            <div
-              className="library-chips small"
-              role="group"
-              aria-label="Topic"
+        <section className="library-filters" aria-label="Filter studies">
+          <div className="library-filter-field">
+            <label htmlFor="library-topic">Topic</label>
+            <select
+              id="library-topic"
+              ref={topicControl}
+              value={topic}
+              onChange={(event) =>
+                setTopic(event.target.value as StudyTopic | "all")
+              }
             >
-              {(["all", ...usedTopics] as const).map((value) => (
-                <Chip
-                  key={value}
-                  active={topic === value}
-                  onClick={() => setTopic(value)}
-                  pill="topic"
-                >
-                  {value === "all" ? "Any topic" : studyTopics[value].short}
-                </Chip>
+              <option value="all">All topics</option>
+              {usedTopics.map((value) => (
+                <option key={value} value={value}>
+                  {studyTopics[value].short}
+                </option>
               ))}
-            </div>
-          </LayoutGroup>
-        </nav>
-        <p className="sr-only" aria-live="polite">
-          {shown.length} {shown.length === 1 ? "study" : "studies"} shown
-        </p>
+            </select>
+          </div>
+          <div className="library-filter-field">
+            <label htmlFor="library-design">Study design</label>
+            <select
+              id="library-design"
+              value={group}
+              onChange={(event) =>
+                setGroup(event.target.value as DesignGroup | "all")
+              }
+            >
+              <option value="all">All designs</option>
+              {groups.map((value) => (
+                <option key={value} value={value}>
+                  {designGroups[value].label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="library-filter-summary">
+            <p role="status" aria-live="polite" aria-atomic="true">
+              {group !== "all" || topic !== "all"
+                ? `${shown.length} of ${available.length}`
+                : shown.length}{" "}
+              {shown.length === 1 ? "study" : "studies"}
+            </p>
+            {group !== "all" || topic !== "all" ? (
+              <button
+                type="button"
+                className="library-filter-reset"
+                onClick={() => {
+                  setGroup("all");
+                  setTopic("all");
+                  topicControl.current?.focus({ preventScroll: true });
+                }}
+              >
+                Reset filters
+              </button>
+            ) : null}
+          </div>
+        </section>
         <m.ul className="library-grid" layout={motion.position}>
           <AnimatePresence initial={false} mode="popLayout">
             {shown.map((study) => (
@@ -122,20 +139,21 @@ export function StudyLibrary() {
         </m.ul>
         {!shown.length ? (
           <div className="library-empty small">
-            <p>No study matches both filters.</p>
-            <button
-              type="button"
-              className="journey-skip"
-              onClick={() => {
-                setGroup("all");
-                setTopic("all");
-              }}
-            >
-              Clear filters
-            </button>
+            <p>
+              No studies match these filters. Try a different combination or
+              reset the filters above.
+            </p>
           </div>
         ) : null}
       </>
+      <nav className="library-practice" aria-label="More practice">
+        <Link className="journey-skip" href="/reasoning">
+          Try the reasoning preview
+        </Link>
+        <Link className="journey-skip" href="/activities">
+          Explore paper activities
+        </Link>
+      </nav>
     </main>
   );
 }
@@ -154,50 +172,6 @@ const LibraryItem = forwardRef<HTMLLIElement, HTMLMotionProps<"li">>(
     );
   },
 );
-
-function Chip({
-  active,
-  onClick,
-  count,
-  pill,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  count?: number;
-  pill: string;
-  children: React.ReactNode;
-}) {
-  const motion = useSceneMotion();
-  return (
-    <m.button
-      type="button"
-      className={`library-chip ${active ? "active" : ""}`}
-      aria-pressed={active}
-      onClick={onClick}
-      data-scene-motion-control
-      style={{ borderRadius: 999 }}
-      {...motion.gestures()}
-    >
-      {active ? (
-        <m.span
-          layoutId={`chip-${pill}`}
-          className="library-chip-bg"
-          style={{ borderRadius: 999 }}
-          transition={
-            motion.still
-              ? { duration: 0 }
-              : { type: "spring", duration: 0.3, bounce: 0.15 }
-          }
-        />
-      ) : null}
-      <span className="library-chip-label">
-        {children}
-        {count !== undefined ? <small>{count}</small> : null}
-      </span>
-    </m.button>
-  );
-}
 
 function progressShare(study: Card, progress: StudyProgress | undefined) {
   if (!progress) return 0;

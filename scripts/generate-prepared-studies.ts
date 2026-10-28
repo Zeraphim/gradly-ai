@@ -731,7 +731,7 @@ async function attempt(
     job = {
       ...job,
       lesson: { ...repaired, id, source: "generated" },
-      stage: STAGES.terms,
+      stage: STAGES.scenes,
       status: "pending",
       error: undefined,
     };
@@ -750,7 +750,7 @@ async function attempt(
   fixes.push("paper title, authors, journal and DOI set from papers/README.md");
   job.lesson = repairReferences(job.lesson, refs, lessonPages, fixes);
 
-  // Terms, methods review, learning coach, deterministic verification.
+  // Scenes, terms, methods review, learning coach, deterministic verification.
   while (job.stage < READY_STAGE && job.status === "pending")
     job = await runStage(job, provider);
   if (job.status !== "ready") {

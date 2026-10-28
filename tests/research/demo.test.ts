@@ -14,7 +14,7 @@ import {
   demoAvailable,
   runDemoStage,
 } from "../../apps/api/src/research/demo.js";
-import { newJob } from "../../apps/api/src/research/pipeline.js";
+import { newJob, READY_STAGE } from "../../apps/api/src/research/pipeline.js";
 import { insert, read } from "../../apps/api/src/research/store.js";
 import { NebiusProvider } from "../../apps/api/src/research/provider.js";
 let server: Server;
@@ -62,7 +62,7 @@ it("validates a separately labeled sample without inventing findings from an upl
   ]);
   expect(() => runDemoStage(original)).toThrow("Confirm");
   let job = { ...original, mode: "demo" as const, consented: true };
-  for (let n = 0; n < 6; n++) job = runDemoStage(job) as typeof job;
+  for (let n = 0; n < READY_STAGE; n++) job = runDemoStage(job) as typeof job;
   expect(job.status).toBe("ready");
   expect(job.lesson?.source).toBe("demo");
   expect(job.lesson?.briefing).toContain("do not describe it");
@@ -109,7 +109,7 @@ it("persists the full sample flow, denies mode changes and calls no model", asyn
   expect((await post("/api/research/jobs", { id, mode: "live" })).status).toBe(
     400,
   );
-  for (let n = 0; n < 6; n++)
+  for (let n = 0; n < READY_STAGE; n++)
     expect((await post("/api/research/jobs", { id })).status).toBe(200);
   const saved = await read<{ status: string; lesson: { source: string } }>(
     who,

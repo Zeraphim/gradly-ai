@@ -15,6 +15,9 @@ import {
 } from "@paperquest/contracts";
 import {
   responseStyleProblems,
+  SCENE_COVERAGE,
+  sceneCoverage,
+  sceneCoverageProblems,
   verifyLesson,
   type Lesson,
 } from "../../apps/api/src/research/contracts.js";
@@ -226,20 +229,40 @@ describe("new and promoted scene kinds", () => {
 
 describe("generated lesson verification", () => {
   const pages = sceneFixturePages(trial);
-  it("requires at least one valid scene in a generated lesson only", () => {
+  it("requires a valid scene on at least 90% of a generated lesson's required challenges", () => {
     expect(verifyLesson(trial, pages)).toEqual([]);
-    const plain: Lesson = {
+    const n = trial.challenges.length;
+    const needed = Math.ceil(n * SCENE_COVERAGE);
+    expect(sceneCoverage(trial.challenges)).toBe(n);
+    const without = (count: number): Lesson => ({
       ...structuredClone(trial),
-      challenges: trial.challenges.map((c) => ({
-        ...c,
-        scene: null,
-        responseStyle: undefined,
-      })),
-    };
+      challenges: trial.challenges.map((c, i) =>
+        i < count ? { ...c, scene: null, responseStyle: undefined } : c,
+      ),
+    });
+    // Below ten required challenges, 90% means every one.
+    expect(needed).toBe(n);
+    expect(verifyLesson(without(1), pages).join(" ")).toContain(
+      `The lesson has ${n - 1} valid interactive scenes for ${n} required challenges; at least ${needed} are needed.`,
+    );
+    const plain = without(n);
     expect(verifyLesson(plain, pages).join(" ")).toContain(
-      "at least 1 required challenge needs one",
+      `The lesson has 0 valid interactive scenes for ${n} required challenges`,
     );
     expect(verifyLesson({ ...plain, source: "demo" }, pages)).toEqual([]);
+    // Ten required challenges allow one without a scene.
+    const ten = Array.from({ length: 10 }, (_, i) => ({
+      ...trial.challenges[0]!,
+      id: `c${i}`,
+      scene: i ? trial.challenges[0]!.scene : null,
+    }));
+    expect(sceneCoverageProblems({ ...trial, challenges: ten })).toEqual([]);
+    expect(
+      sceneCoverageProblems({
+        ...trial,
+        challenges: ten.map((c, i) => (i < 2 ? { ...c, scene: null } : c)),
+      }),
+    ).toHaveLength(1);
   });
 
   it("checks every reported scene number against its cited excerpts", () => {
