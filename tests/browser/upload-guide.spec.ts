@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("the Gradly guide animates once only on Upload a paper", async ({
+test("the Gradly guide loops only on Upload a paper and moves after returning", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -17,12 +17,25 @@ test("the Gradly guide animates once only on Upload a paper", async ({
     false,
   );
   await page.waitForTimeout(5000);
-  const settled = await guide.screenshot();
+  const later = await guide.screenshot();
   await page.waitForTimeout(350);
   expect(
-    settled.equals(await guide.screenshot()),
-    "the guide settles after one cycle",
-  ).toBe(true);
+    later.equals(await guide.screenshot()),
+    "the guide continues beyond its first cycle",
+  ).toBe(false);
+  for (const route of ["Learn", "How it works"]) {
+    if (route === "Learn")
+      await page.getByRole("link", { name: route, exact: true }).click();
+    else await page.getByRole("link", { name: route }).click();
+    await page.getByRole("link", { name: "Gradly home", exact: true }).click();
+    await expect(guide).toBeVisible();
+    const returned = await guide.screenshot();
+    await page.waitForTimeout(350);
+    expect(
+      returned.equals(await guide.screenshot()),
+      "cached image must move on return",
+    ).toBe(false);
+  }
   await expect(page.locator(".gr-brand .brand-logo")).toHaveCSS(
     "animation-name",
     "none",
@@ -66,7 +79,7 @@ test("system and saved reduced motion switch to a static guide without shifting 
   await expect(page.locator('.home-guide [data-pose="guiding"]')).toBeVisible();
 });
 
-test("the guide's last animation frame holds instead of snapping to the SVG rest pose", async ({
+test("the guide loops seamlessly across the cycle boundary", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -74,6 +87,13 @@ test("the guide's last animation frame holds instead of snapping to the SVG rest
   await expect
     .poll(() => page.evaluate(() => document.getAnimations().length))
     .toBe(6);
+  expect(
+    await page.evaluate(() =>
+      document
+        .getAnimations()
+        .every((a) => a.effect!.getTiming().iterations === Infinity),
+    ),
+  ).toBe(true);
   const poseAt = (time: number) =>
     page.evaluate((time) => {
       for (const animation of document.getAnimations()) {
