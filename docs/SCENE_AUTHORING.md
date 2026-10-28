@@ -42,16 +42,23 @@ design-stage challenge sees no results-side excerpt, and no call sees the answer
 key. Each call may use only its position's kind set (`sceneKindSets`), minus kinds
 a kept neighbouring scene uses, so neighbours never repeat a kind.
 
-Each draft is settled without a model call: responses are matched to the options,
-unknown targets dropped, the resolution removed, a ladder reach that marks only a
-wrong option dropped and an unusable `tap` or `pills` style turned into cards. It
-must then pass `stageSceneProblems`: the shared validation, no results-side
-reference on a design question and no accepted option quoted in setup text. A
-failing draft is redrafted once with its problems listed. A "Scene Leak Check"
-call then reads every written scene beside the answer key. Whatever still fails
+Each draft is settled without a model call. Responses are matched to the options,
+unknown targets and references dropped, the resolution removed and a ladder reach
+that marks only a wrong option dropped. An instruction that says how to answer or
+names another kind's controls takes the kind's default, a source note naming
+evidence ids takes a plain one, trailing JSON debris is trimmed from bin labels,
+and an unusable `tap` or `pills` style turns into cards. The draft must then pass
+`stageSceneProblems`: the shared validation, no results-side reference on a
+design question, no accepted option quoted in setup text that the prompt and
+evidence lines do not already quote, no repeated element and no garbled or
+meta text. A failing draft is redrafted with its problems listed. A "Scene Leak
+Check" call then reads every written scene beside the answer key and the
+evidence lines the learner already reads. A flagged scene is redrafted once with
+the reason, while the budget allows, and checked again. Whatever still fails
 gets the server-built evidence scene: the challenge's cited excerpts as anchors
 with one response per option, titled "Connect the evidence" (`isEvidenceScene`).
-It is the same for any challenge, so the no-repeat rule exempts it.
+A prepared challenge that cites no excerpt shows its evidence lines instead,
+marked as the lesson's summary. It is the same for any challenge, so the no-repeat rule exempts it.
 
 `sceneCoverageProblems` in `apps/api/src/research/contracts.ts` requires a valid
 scene on at least 90% of required challenges (`SCENE_COVERAGE`), and
@@ -63,7 +70,9 @@ Prepared studies get the same stage once through
 `npm run define:scenes` (dev-only, billed). It drafts scenes only for
 challenges without an authored one and saves them to
 `apps/web/src/research/studies/data/scenes/<slug>.ts`, which `catalog.loadStudy`
-merges. Scenes replaced after a human read are listed with reasons in
+merges. `--fill` redrafts only the evidence scenes the stage stood in with,
+`settle` reapplies the model-free repairs and `coverage` prints the share of
+challenges with a scene per study. Scenes replaced after a human read are listed with reasons in
 `scripts/prepared-scene-review.ts`.
 
 `responseStyle` is optional on every challenge: `cards` (default), `pills` for
