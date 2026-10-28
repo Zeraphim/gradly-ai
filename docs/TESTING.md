@@ -9,7 +9,7 @@ npm run test:e2e
 npm run build:vercel
 ```
 
-`check` runs TypeScript, Node service and state tests, Vitest research tests and production builds. Playwright starts both services with local SQLite, explicit sample flags and an empty model key. Chromium is required. Stop an existing development server before running the browser suite.
+`check` runs TypeScript, Node tests, Vitest research tests and production builds. Playwright starts both services with local SQLite, explicit sample flags and an empty model key. Chromium is required. Stop an existing development server before running the browser suite.
 
 ## Retained coverage
 
