@@ -46,7 +46,7 @@ Model `nvidia/nemotron-3-super-120b-a12b`, endpoint `https://api.tokenfactory.us
 | 2   | 8.8 s, 1,726 (1,641)                                     | 15.3 s, 2,986 (1,296)                                | `paper.url: Invalid URL`, fixed by coercion                                                                                 |
 | 3   | 5.1 s, 1,276 (1,073)                                     | 9.8 s, 1,941 (1,056)                                 | Pass, 3 challenges, empty title/briefing, fixed by `min(1)`                                                                 |
 
-`npm run test:flow` (6 stages, learner session, one feedback request, local server):
+`npm run test:flow` (7 stages, learner session, one feedback request, local server):
 
 | Run | Outcome                                                                                                                                                                                                                                        |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

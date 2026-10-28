@@ -10,42 +10,65 @@ keep the original choice interface.
 
 ## Choose a scene
 
-| Kind          | Teaching task                                              | Required support                                         | Avoid                                                                       |
-| ------------- | ---------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `flow`        | Trace a process or branching research design               | Supported nodes and labeled relationships                | Invented mechanisms, pairing or participant records                         |
-| `connections` | Assemble evidence, select methods, connect a claim         | Evidence anchors and candidate response mappings         | Treating an interpretation as uniquely correct without support              |
-| `comparison`  | Inspect reported numerical measurements on a shared scale  | Values, units, scale and references for each measurement | Invented raw data, distributions or causal effects                          |
-| `designs`     | Compare group formation or evidence-gathering processes    | At least two supported steps per panel                   | Suggesting equivalent participants or identical procedures without evidence |
-| `timeline`    | Order waves or events and show attrition                   | Reported `when` labels and optional reported n           | Implying causal order from timing alone                                     |
-| `association` | Judge strength versus significance or causation            | A reported r, β or OR, exactly as stated, optional n     | Deriving coefficients the paper does not state                              |
-| `estimate`    | Read precision, null and equivalence results               | Reported estimates with interval bounds on one scale     | Treating a nonsignificant interval as evidence of no effect                 |
-| `tests`       | Weigh multiple comparisons and marginal results            | Every reported p in the family and the threshold α       | Listing only the significant tests                                          |
-| `units`       | Compare what was assigned or sampled with what was counted | Reported counts per level and a role for each            | Treating nested records as independent participants                         |
-| `matrix`      | Spot what else differs between conditions                  | One short, supported cell per condition and feature      | Inventing features the method does not describe                             |
+| Kind          | Teaching task                                                | Required support                                                        | Avoid                                                                            |
+| ------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `flow`        | Trace a process or branching research design                 | Supported nodes and labeled relationships                               | Invented mechanisms, pairing or participant records                              |
+| `connections` | Assemble evidence, select methods, connect a claim           | Evidence anchors and candidate response mappings                        | Treating an interpretation as uniquely correct without support                   |
+| `comparison`  | Inspect reported numerical measurements on a shared scale    | Values, units, scale and references for each measurement                | Invented raw data, distributions or causal effects                               |
+| `designs`     | Compare group formation or evidence-gathering processes      | At least two supported steps per panel                                  | Suggesting equivalent participants or identical procedures without evidence      |
+| `timeline`    | Order waves or events and show attrition                     | Reported `when` labels and optional reported n                          | Implying causal order from timing alone                                          |
+| `association` | Judge strength versus significance or causation              | A reported r, β or OR, exactly as stated, optional n                    | Deriving coefficients the paper does not state                                   |
+| `estimate`    | Read precision, null and equivalence results                 | Reported estimates with interval bounds on one scale                    | Treating a nonsignificant interval as evidence of no effect                      |
+| `tests`       | Weigh multiple comparisons and marginal results              | Every reported p in the family and the threshold α                      | Listing only the significant tests                                               |
+| `units`       | Compare what was assigned or sampled with what was counted   | Reported counts per level and a role for each                           | Treating nested records as independent participants                              |
+| `matrix`      | Spot what else differs between conditions                    | One short, supported cell per condition and feature                     | Inventing features the method does not describe                                  |
+| `ladder`      | Judge how far a claim may go: overreach, causation, scope    | Claims worded as claims, modest to strong; reach at resolution          | Wording a rung as what the study found, or marking the answer before it is given |
+| `sort`        | Sort statements into two or three bins before answering      | Short neutral cards; placements at resolution                           | Card details that judge a statement, or bins named for the answer                |
+| `spot`        | Find the step of a procedure or argument a decision turns on | Consecutive passages retelling the cited method, read as numbered lines | Passages that add steps the paper does not describe                              |
 
-A paper need not use every family. Use `scene: null` on a challenge when no honest
-visual fits it, but a generated lesson needs at least one valid scene (see
+A paper need not use every family. When no honest visual fits a challenge, the
+server's evidence scene stands in, and a generated lesson needs a valid scene on
+at least 90% of its required challenges (see
 [Required scenes and response styles](#required-scenes-and-response-styles)). For
 qualitative work, prefer processes, accounts and bounded interpretations. Themes do
 not establish prevalence. A conceptual argument is not an observed mechanism.
 
 ## Required scenes and response styles
 
-The Lesson Architect is asked for a scene on at least two required challenges,
-including one design-stage challenge, wherever the evidence supports one.
-`sceneCoverageProblems` in `apps/api/src/research/contracts.ts` enforces at least
-one valid scene. Right after drafting, the pipeline removes drafted scenes that
-fail validation. If none remains, it builds a `connections` scene for one
-challenge from that challenge's evidence, which the server sets to its cited
-excerpts, and keeps it only if it passes the same checks. Only when no scene can be built does
-the stage fail with "Retry this stage", so the existing retry redrafts the lesson
-before any reviewer call. `verifyLesson` repeats the check for generated lessons. Demo and
-featured lessons are exempt. `connections` fits any paper with evidence, so a
-qualitative or conceptual paper can always meet the rule without numbers.
+The Lesson Architect no longer drafts scenes. The Scene Designer stage
+(`apps/api/src/research/scene-stage.ts`) drafts one per challenge, in parallel,
+from the challenge's prompt, hint, options and the excerpts it cites. A
+design-stage challenge sees no results-side excerpt, and no call sees the answer
+key. Each call may use only its position's kind set (`sceneKindSets`), minus kinds
+a kept neighbouring scene uses, so neighbours never repeat a kind.
+
+Each draft is settled without a model call: responses are matched to the options,
+unknown targets dropped, the resolution removed, a ladder reach that marks only a
+wrong option dropped and an unusable `tap` or `pills` style turned into cards. It
+must then pass `stageSceneProblems`: the shared validation, no results-side
+reference on a design question and no accepted option quoted in setup text. A
+failing draft is redrafted once with its problems listed. A "Scene Leak Check"
+call then reads every written scene beside the answer key. Whatever still fails
+gets the server-built evidence scene: the challenge's cited excerpts as anchors
+with one response per option, titled "Connect the evidence" (`isEvidenceScene`).
+It is the same for any challenge, so the no-repeat rule exempts it.
+
+`sceneCoverageProblems` in `apps/api/src/research/contracts.ts` requires a valid
+scene on at least 90% of required challenges (`SCENE_COVERAGE`), and
+`verifyLesson` repeats the check for generated lessons. Demo and featured lessons
+are exempt. The Methods Reviewer and Learning Coach may list leaking scenes in
+`rejectedScenes`, which are replaced with the evidence scene.
+
+Prepared studies get the same stage once through
+`npm run define:scenes` (dev-only, billed). It drafts scenes only for
+challenges without an authored one and saves them to
+`apps/web/src/research/studies/data/scenes/<slug>.ts`, which `catalog.loadStudy`
+merges. Scenes replaced after a human read are listed with reasons in
+`scripts/prepared-scene-review.ts`.
 
 `responseStyle` is optional on every challenge: `cards` (default), `pills` for
 short labels, or `tap`. `tap` needs a `flow`, `designs`, `timeline`, `tests`,
-`units` or `matrix` scene whose responses each target exactly one distinct element
+`units`, `matrix`, `ladder` or `spot` scene whose responses each target exactly one distinct element
 that is visible before the first attempt. `tapTargets` in the contract package is
 the single rule. The server rejects anything else in `responseStyleProblems`, and
 the player falls back to cards if a stored scene stops qualifying. The public
@@ -202,8 +225,9 @@ a generated lesson containing at least three challenges. Its lesson evidence con
 }
 ```
 
-1. The existing Lesson Architect receives `sceneAuthoringInstructions` and
-   `lessonSchema`. A backend developer adds no new route for this paper.
+1. The Lesson Architect drafts the challenge and the Scene Designer drafts its
+   scene from `challengeSceneInstructions`. A backend developer adds no new route
+   for this paper.
 2. The existing provider parses the result. The methods and learning reviewers
    inspect scenes as well as the lesson text. Final verification checks source
    excerpts, reference membership, response mappings, scale validity and reported

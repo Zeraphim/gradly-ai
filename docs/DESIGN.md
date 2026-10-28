@@ -458,7 +458,7 @@ quality. The next evaluation is independent content review and observed learner 
 
 ## Upload waiting and uploaded-study player
 
-Preparing a live upload takes several minutes: six stages, most of them model calls; in the recorded Super runs a
+Preparing a live upload takes several minutes: seven stages, most of them model calls; in the recorded Super runs a
 stage took from about 20 seconds to over two minutes. The waiting screen now gives
 the learner honest progress, a small win at each real milestone and something
 useful to do. A ready lesson then plays in the prepared-study player (#14)
@@ -535,3 +535,13 @@ Research terms in a challenge's prompt, answer options, hint, explanation and fe
 - **Reduced motion.** With reduced motion (system or saved setting), the popover only fades and the marks change colour without animating.
 
 The application has no dark theme, so under a dark colour preference the popover keeps the light tokens, matching the page.
+
+## Claim ladder, sort and close-reading scenes
+
+Three scene kinds serve interpretation and limits decisions, where the earlier kinds fit poorly (#42). Like every scene, they sit above the answers in the study player and use the shared motion primitives (`useSceneMotion`, `sceneTiming`) and the scene card frame.
+
+- **Claim ladder (`ladder`).** Claims stack from the most modest at the bottom to the strongest at the top, numbered in reading order. Rungs enter from below with a short stagger. With tap answers, each rung is a radio or checkbox answer, like a tap node. After the explanation, a rail beside the ladder fills with a spring up to the strongest claim the evidence supports. A blue "reach" flag slides in at that rung, and every rung above it turns dashed amber with "Beyond what the evidence shows". Nothing about the reach shows before the answer is resolved.
+- **Sort (`sort`).** Statement cards start in a dashed "To sort" tray above two or three bins. Each card has one pill per bin. Pressing a pill moves the card into that bin with a shared layout glide, and pressing the active pill returns it to the tray. Bin counts update, a polite live region announces each move, and the tray says when everything is sorted. The sort is unscored. After the explanation, cards glide to where the paper places them, and each card the learner sorted says "Matches your sort" or which bin they chose. Bins stack on phones.
+- **Close reading (`spot`).** The study's procedure or argument reads line by line, like a numbered methods excerpt, with each passage underlined in dotted blue. Hover sweeps a highlighter under a passage. Pressing it fills the highlight and opens a note below on what that step means here, swapping notes with a short cross-fade. With tap answers, passages are the answers: the selected one takes a sky fill with an underline bar, and the marked answers take the best and missed colours after an attempt.
+- **Reduced motion.** With reduced motion (system or saved setting), the rail fill, glides, highlights and flags settle in place, and only colours change.
+- **Keyboard and screen readers.** Every control is a native button with a visible focus ring. Rungs and passages announce their role and checked state, and sort pills announce their pressed state.
