@@ -96,7 +96,7 @@ copy, gestures, non-bouncing layout springs, challenge arrivals, charts and conn
 emphasis. Reuse these choices through shared primitives rather than accumulating
 per-screen timing variants. Prefer Motion for coordinated layout, presence and
 gestures. Simple existing style transitions can remain when they follow this
-convention. Avoid decorative loops, long staggers, artificial input delays and
+convention. Avoid decorative loops outside the upload-guide exception below, long staggers, artificial input delays and
 animation-driven progression.
 
 The operating-system and saved application preferences both apply live. Enabling
@@ -187,7 +187,7 @@ Window sizes and verification limits are recorded in [TESTING.md](TESTING.md).
 
 Research controls use the same Lucide SVG family as the original application, including actions, agent roles, selection marks and page navigation. Icons remain decorative beside descriptive text; icon-only controls retain accessible labels.
 
-Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. No background decorative loops are introduced. The upload-home Gradly guide is a scoped exception for one finite 4.8-second introductory flourish; it holds its final pose and does not loop continuously. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
+Use short transform-based arrivals for route/question changes, immediate response-choice states, and a one-off mascot flourish at the paper reveal. Real pending actions show a loading icon; status icons correspond to saved backend states. Buttons press to scale 0.96 over 150ms with ease-out, alongside the existing tactile extrusion, without changing layout size or moving neighboring controls. Disabled and keyboard-focused actions do not scale; data-static opts out. Hover cues apply to fine pointers. Keep background decoration static. At Marc’s explicit request, the upload-home Gradly guide is a scoped exception: a seamless 4.8-second loop while its introduction is visible, including after returning to the page. The later Fresh Adventure layer uses Motion as described above; the 150-millisecond scale treatment describes existing style-based controls, not a second timing standard for new shared components.
 
 OS reduced-motion preferences and the saved interface setting disable entrances, spinners and hover/press movement. Text labels and progress values remain available when motion is disabled.
 
@@ -571,7 +571,7 @@ and an inset system focus indicator.
 The existing Gradly `mascot-guiding-animated.svg` is reused through
 `UploadGuide.tsx`, mounted only in the upload-first home's introduction. The
 header wordmark and guides on other pages stay static. The animation uses the
-SVG's CSS transforms for one 4.8-second cycle, with no JavaScript frame loop. System or saved reduced
+SVG's CSS transforms for a continuous, seamless 4.8-second loop, with no JavaScript frame loop. Returning to the introduction keeps the guide moving even when the image is cached. System or saved reduced
 motion selects the existing static guiding pose; hidden documents also release
 the animated image. Both variants keep the same box dimensions. The integration
 is a narrow edit to the current Welcome component, preserving the newer upload,
