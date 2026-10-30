@@ -14,7 +14,9 @@ coverage/
 
 .data/
 test-results/
+apps/video/out/
 playwright-report/
 
 # Nemotron evaluation outputs (raw model output, scores, timings)
 .eval/
+apps/video/public/music/

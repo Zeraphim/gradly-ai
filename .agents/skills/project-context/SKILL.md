@@ -36,6 +36,9 @@ anywhere; it does not depend on a parent context repository or personal skill pa
   `docs/SCENE_AUTHORING.md` for the data, generation and projection contract.
   `packages/lesson-state`: curated attempts, progress, and unique rewards.
   Keep the existing `@paperquest/*` package identifiers despite Gradly branding.
+- `apps/video`: Remotion 4 promotional film (`Gradly90`, `GradlyWalkthrough`),
+  isolated from the web bundle and root typecheck. App footage is real Playwright
+  captures; see `apps/video/README.md` for render commands and asset provenance.
 - `server.ts`: hosted Express export. `vercel.json`: explicit static and server
   builders. `scripts/prepare-vercel.mjs`: frontend output copied to generated
   `public/`. Load vercel-delivery for packaging or hosting changes.

@@ -1,0 +1,24 @@
+{
+  "name": "@paperquest/video",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render:90": "remotion render src/index.ts Gradly90 out/gradly-90.mp4",
+    "render:full": "remotion render src/index.ts GradlyWalkthrough out/gradly-walkthrough.mp4",
+    "still": "remotion still src/index.ts Gradly90",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "remotion": "4.0.539"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.539",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "4.5.4"
+  }
+}
