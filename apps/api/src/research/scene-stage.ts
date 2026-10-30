@@ -194,6 +194,12 @@ export function sceneLeaks(c: Challenge, scene: Scene) {
 
 const garbled =
   /['"”’]\s*[,}\]]+\s*$|\}\s*\]|\b(?:label|detail|optionId|targetIds)\s*:|\/\w+_\w+|\((?:e|ref)\d+\)|prompt\/hint|\boptions? (?:o|opt)?\d+\b/i;
+/**
+ * Placeholders a draft left unfilled: a bare field name as visible text
+ * ("actionLabel") or a template slot such as ":element:m_A_F2".
+ */
+const placeholder =
+  /^\s*(?:actionLabel|label|detail|title|caption|instruction|note)\s*$|:\s*element\s*:|\b[a-z]_[A-Z]_[A-Z]\d+\b/;
 /** A closing quote, comma or bracket left at the end of a bin label. */
 const trailingDebris = /\s*['"”’]\s*[,}\]]*\s*$/;
 
@@ -221,6 +227,10 @@ export function stageSceneProblems(
   // Debris from a broken JSON string, such as "label', " or a field name.
   if (setupText(scene, c).some((t) => garbled.test(t)))
     problems.push(`${c.id}: scene text carries stray JSON characters.`);
+  if (setupText(scene, c).some((t) => placeholder.test(t)))
+    problems.push(
+      `${c.id}: scene text carries an unfilled placeholder; write the real label.`,
+    );
   const texts = sceneItems(scene).map(
     (item) => `${normal(item.label)}|${normal(item.detail)}`,
   );

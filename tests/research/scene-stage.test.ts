@@ -418,6 +418,23 @@ describe("scene checks and repairs", () => {
     ).toContain("may cite only method excerpts");
   });
 
+  it("rejects unfilled placeholders shown as scene text", () => {
+    const named = reply(["approach_1"]);
+    named.anchors[0]!.label = "actionLabel";
+    expect(stageSceneProblems(c0, named, evidence).join(" ")).toContain(
+      "unfilled placeholder",
+    );
+    const slot = reply(["approach_1"]);
+    slot.anchors[0]!.detail = ":element:m_A_F2";
+    expect(stageSceneProblems(c0, slot, evidence).join(" ")).toContain(
+      "unfilled placeholder",
+    );
+    // Ordinary labels that mention a field-like word still pass.
+    const fine = reply(["approach_1"]);
+    fine.anchors[0]!.label = "Detail of the lecture";
+    expect(stageSceneProblems(c0, fine, evidence)).toEqual([]);
+  });
+
   it("flags a setup element that quotes an accepted option", () => {
     const scene = reply(["approach_1"]);
     expect(sceneLeaks(c0, scene)).toEqual([]);
