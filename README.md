@@ -131,6 +131,15 @@ We did not pick the model by name. We ran a [240-run evaluation](docs/research/N
 - **No model followed the injected instruction** in any of the 48 injection runs.
 - **Exact quoting falls with length.** Super quoted exactly 91% of the time on two-page excerpts (up to about 15,000 characters) and 35% on full papers. That result is why every quote is verified in code before a learner sees it.
 
+### Where Token Factory accelerated our workflow
+
+- **Model choice in an afternoon.** One API key exposed all four Nemotron 3 models (Ultra, Super, Nano and Lightning), so we compared them on our real pipeline in 240 runs for $4.35 instead of deploying and hosting each one.
+- **No infrastructure to run.** We used no GPU instances. Our Vercel-hosted server calls Token Factory's OpenAI-compatible endpoint, and Nebius handles serving and scaling.
+- **Small integration.** The OpenAI-compatible API needed only a thin adapter (`apps/api/src/research/provider.ts`), and JSON Schema output plugged straight into our Zod validation.
+- **Cheap to iterate.** Per-token pricing kept development and every learner upload at a few cents, so we could rerun the full seven-stage pipeline freely while improving prompts and checks.
+
+**Nebius services used:** Nebius Token Factory (serverless inference of NVIDIA Nemotron 3 Super). No other Nebius services were used. **NVIDIA open models used:** Nemotron 3 Super in production; Nemotron 3 Ultra, Nano and Lightning in the evaluation only.
+
 ### Feedback on Nebius Token Factory and Nemotron
 
 - **What worked.** The OpenAI-compatible API meant a small adapter. JSON Schema output and published per-token prices made a large, cheap model comparison practical. Nemotron 3 Super was consistent enough to run a seven-stage pipeline on every upload.
@@ -142,6 +151,7 @@ We did not pick the model by name. We ran a [240-run evaluation](docs/research/N
 Built for the **[Nebius Global AI Hackathon](https://nebiusglobalaihackathon.devpost.com/)** with NVIDIA.
 
 - **Built during the submission period.** The first commit is dated October 14, 2026.
+- **Demo video:** a 2-minute walkthrough recorded from the live app, built with [Remotion](https://www.remotion.dev) in [`apps/video`](apps/video/README.md).
 - **Team:** [@Zeraphim](https://github.com/Zeraphim), [@marcxxv](https://github.com/marcxxv), [@jananonuevo](https://github.com/jananonuevo), [@mcjakey1](https://github.com/mcjakey1)
 
 ## Run it locally
