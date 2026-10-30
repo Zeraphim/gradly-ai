@@ -10,6 +10,8 @@
 <p align="center">
   <a href="https://gradly-ai.vercel.app"><strong>Try the live app</strong></a>
   ·
+  <a href="https://www.youtube.com/watch?v=_Z3_OLUyXOE"><strong>Watch the demo</strong></a>
+  ·
   <a href="#how-it-works">How it works</a>
   ·
   <a href="#built-with-nebius-and-nvidia">Nebius and NVIDIA</a>
@@ -26,6 +28,16 @@
 
 <p align="center">
   <img src="docs/ui/readme/home.png" alt="Gradly home page with the mascot, PDF upload and paper link field" width="860">
+</p>
+
+## Demo video
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=_Z3_OLUyXOE">
+    <img src="https://img.youtube.com/vi/_Z3_OLUyXOE/maxresdefault.jpg" alt="Watch the Gradly demo video on YouTube" width="860">
+  </a>
+  <br>
+  <sub><a href="https://www.youtube.com/watch?v=_Z3_OLUyXOE">Watch the 2-minute demo on YouTube</a>: uploading a real paper, the Nemotron-prepared quest, and the paper reveal.</sub>
 </p>
 
 ## The problem
@@ -151,7 +163,7 @@ We did not pick the model by name. We ran a [240-run evaluation](docs/research/N
 Built for the **[Nebius Global AI Hackathon](https://nebiusglobalaihackathon.devpost.com/)** with NVIDIA.
 
 - **Built during the submission period.** The first commit is dated October 14, 2026.
-- **Demo video:** a 2-minute walkthrough recorded from the live app, built with [Remotion](https://www.remotion.dev) in [`apps/video`](apps/video/README.md).
+- **Demo video:** [watch on YouTube](https://www.youtube.com/watch?v=_Z3_OLUyXOE). A 2-minute walkthrough recorded from the live app, built with [Remotion](https://www.remotion.dev) in [`apps/video`](apps/video/README.md).
 - **Team:** [@Zeraphim](https://github.com/Zeraphim), [@marcxxv](https://github.com/marcxxv), [@jananonuevo](https://github.com/jananonuevo), [@mcjakey1](https://github.com/mcjakey1)
 
 ## Run it locally

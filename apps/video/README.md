@@ -1,6 +1,7 @@
 # Gradly video
 
-Remotion promotional film for Gradly. Kept in its own workspace so the web bundle,
+Remotion promotional film for Gradly. The published submission cut is on
+[YouTube](https://www.youtube.com/watch?v=_Z3_OLUyXOE). Kept in its own workspace so the web bundle,
 root typecheck and Vercel build never load Remotion.
 
 | Composition | Length | Output |

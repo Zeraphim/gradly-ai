@@ -5,6 +5,9 @@ requirements, runtime documentation, design evidence, and references. Use
 [../README.md](../README.md) for setup and [../AGENTS.md](../AGENTS.md) for agent routing.
 Unlinked code paths in these documents are relative to the repository root.
 
+The [demo video](https://www.youtube.com/watch?v=_Z3_OLUyXOE) shows the upload-first flow end to end; its source
+is the Remotion workspace in [../apps/video](../apps/video/README.md).
+
 ## Merge readiness
 
 [MERGE_GUARDRAILS.md](MERGE_GUARDRAILS.md) records the upload-first integration's
