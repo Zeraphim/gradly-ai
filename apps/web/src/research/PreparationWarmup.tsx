@@ -6,14 +6,18 @@ import {
   m,
   useSceneMotion,
 } from "./scenes/scene-motion.js";
-import { readPrediction, warmupCards, writePrediction } from "./warmup.js";
+import {
+  getSelectedWarmupCards,
+  readPrediction,
+  writePrediction,
+} from "./warmup.js";
 
 const stepKey = (jobId: string) => `gradly-warmup:${jobId}`;
 
-function readStep(jobId: string) {
+function readStep(jobId: string, maxSteps: number) {
   try {
     const step = Number(sessionStorage.getItem(stepKey(jobId)));
-    return Number.isInteger(step) && step >= 0 && step <= warmupCards.length
+    return Number.isInteger(step) && step >= 0 && step <= maxSteps
       ? step
       : 0;
   } catch {
@@ -22,14 +26,16 @@ function readStep(jobId: string) {
 }
 
 /**
- * Something to do while agents work: four authored research-habit cards, then
+ * Something to do while agents work: five randomized research-habit cards, then
  * an optional prediction about the uploaded paper that comes back at the
  * reveal. Never scored, never sent anywhere, and unrelated to the paper's
  * findings, so it cannot spoil a decision. Leaving it alone changes nothing.
  */
 export function PreparationWarmup({ jobId }: { jobId: string }) {
   const motion = useSceneMotion();
-  const [step, setStep] = useState(() => readStep(jobId));
+  // Randomly select 5 cards for this session, stored in sessionStorage
+  const cards = getSelectedWarmupCards(jobId);
+  const [step, setStep] = useState(() => readStep(jobId, cards.length));
   const [choice, setChoice] = useState<string | null>(null);
   const [prediction, setPrediction] = useState(() => readPrediction(jobId));
   const feedback = useRef<HTMLParagraphElement>(null);
@@ -42,12 +48,12 @@ export function PreparationWarmup({ jobId }: { jobId: string }) {
     // Keep the keyboard in the card after Next, but never steal focus on load.
     if (moved.current) heading.current?.focus({ preventScroll: true });
   }, [step, jobId]);
-  const card = warmupCards[step];
-  const total = warmupCards.length + 1;
+  const card = cards[step];
+  const total = cards.length + 1;
   const next = () => {
     moved.current = true;
     setChoice(null);
-    setStep((s) => Math.min(s + 1, warmupCards.length));
+    setStep((s) => Math.min(s + 1, cards.length));
   };
   return (
     <section className="warmup" aria-label="Warm-up while you wait">
@@ -138,7 +144,7 @@ export function PreparationWarmup({ jobId }: { jobId: string }) {
                       className="warmup-next"
                       onClick={next}
                     >
-                      {step + 1 < warmupCards.length
+                      {step + 1 < cards.length
                         ? "Next card"
                         : "One last thing"}
                     </button>

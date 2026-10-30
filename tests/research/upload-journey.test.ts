@@ -45,8 +45,8 @@ import {
   readActivePreparation,
 } from "../../apps/web/src/research/client-state.js";
 import {
+  getSelectedWarmupCards,
   readPrediction,
-  warmupCards,
 } from "../../apps/web/src/research/warmup.js";
 import type {
   ProcessingJob,
@@ -594,7 +594,9 @@ describe("waiting experience", () => {
       name: "Warm-up while you wait",
     });
     expect(within(warmup).getByText("Warm-up · not scored")).toBeTruthy();
-    for (const card of warmupCards) {
+    // Get the 5 cards selected for this session (same as the component uses)
+    const cards = getSelectedWarmupCards(JOB_ID);
+    for (const card of cards) {
       const option = card.options.find((o) => o.id === card.answer)!;
       await userEvent.click(
         within(warmup).getByRole("button", {
